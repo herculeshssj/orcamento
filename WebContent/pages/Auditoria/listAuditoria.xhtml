@@ -1,0 +1,153 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{auditoriaMB}" />
+	
+	<ui:define name="botoes"></ui:define>
+	
+	<ui:define name="pesquisa">
+		Usuário:
+		<h:selectOneMenu value="#{managedBean.criterio.usuario}" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
+			<f:selectItem itemLabel="Todos"/>
+			<f:selectItems value="#{managedBean.listaUsuarios}" var="item" itemLabel="#{item.login}" itemValue="#{item.login}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{managedBean.criterio.usuario}" rendered="#{managedBean.usuarioLogado.login != 'admin'}">
+			<f:selectItems value="#{managedBean.listaUsuarios}" var="item" itemLabel="#{item.login}" itemValue="#{item.login}"/>
+		</h:selectOneMenu>
+		&nbsp;
+		Início:
+		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.inicio}">
+	    	<f:converter converterId="dateConverter"/>
+	    </p:inputMask>
+		&nbsp;
+		Fim:
+		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.fim}">
+	    	<f:converter converterId="dateConverter"/>
+	    </p:inputMask>
+		&nbsp;
+		Classe:
+		<h:selectOneMenu value="#{managedBean.criterio.classe}">
+			<f:selectItem itemLabel="Todos"/>
+			<f:selectItems value="#{managedBean.listaClasses}"/>
+		</h:selectOneMenu>
+		&nbsp;
+		Transação:
+		<h:selectOneMenu value="#{managedBean.criterio.transacao}">
+			<f:selectItem itemLabel="Todos"/>
+			<f:selectItem itemLabel="Inserção" itemValue="INSERT"/>
+			<f:selectItem itemLabel="Alteração" itemValue="UPDATE"/>
+			<f:selectItem itemLabel="Exclusão" itemValue="DELETE"/>
+		</h:selectOneMenu>
+		&nbsp;
+	</ui:define>
+
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Usuário" />
+			</f:facet>
+			<h:outputText value="#{item.usuario}" />
+		</p:column>
+
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Classe" />
+			</f:facet>
+			<h:outputText value="#{item.classe}" />
+		</p:column>
+
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Data" />
+			</f:facet>
+			<h:outputText value="#{item.dataHora}" />
+		</p:column>
+		
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Transação" />
+			</f:facet>
+			<h:outputText value="#{item.transacao}" />
+		</p:column>
+
+	</ui:define>
+
+	<ui:define name="acoes">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandButton title="Visualizar" image="/resources/images/pesquisar.png" action="#{managedBean.view}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>
+			&nbsp;&nbsp;&nbsp;			
+			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.delete}" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>
+		</p:column>
+	</ui:define>
+	
+	<ui:define name="outras_opcoes">
+		<h:commandLink title="Exportar para MS-Excel">
+			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
+			<p:dataExporter type="xls" target="tableListEntity" fileName="auditoria" /> 
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+		<h:commandButton title="Excluir registros" image="/resources/images/lixeira.png" action="#{managedBean.excluirLog}" rendered="#{managedBean.usuarioLogado.login == 'admin'}"/>
+	</ui:define>
+
+</ui:composition>
+</html>

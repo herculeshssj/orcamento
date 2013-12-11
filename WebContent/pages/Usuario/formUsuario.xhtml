@@ -1,0 +1,106 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{usuarioMB}" />
+
+	<ui:define name="campos">
+
+		<h:panelGrid columns="3">
+			
+				* Nome:
+				<p:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50"
+				maxLength="100" required="true"
+				requiredMessage="Informe o nome do usuário!"
+				disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}" />
+			<p:message for="txtNome" />
+				
+				* Login:
+				<p:inputText id="txtLogin" value="#{managedBean.entity.login}"
+				size="50" maxLength="50" required="true"
+				requiredMessage="Informe o login do usuário!"
+				disabled="#{!managedBean.entity.ativo  || managedBean.entity.login == 'admin' || managedBean.operation == 'edit'}" />
+			<p:message for="txtLogin" />
+				
+				* E-Mail:
+				<p:inputText id="txtEmail" value="#{managedBean.entity.email}" required="true" requiredMessage="Informe um e-mail válido!" size="30" maxLength="40" disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}">
+					<f:validator validatorId="emailValidator"/>
+				</p:inputText>
+				<p:message for="txtEmail" />
+					
+				Senha:
+				<p:password id="txtSenha" value="#{managedBean.novaSenha}" size="30"
+				disabled="#{!managedBean.entity.ativo}" />
+			<p:message for="txtSenha" />
+				
+				Confirme a senha:
+				<p:password id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}"
+				size="30" disabled="#{!managedBean.entity.ativo}" />
+			<p:message for="txtSenha" />
+				
+				<h:outputText value="Data de criação:" rendered="#{managedBean.operation == 'edit'}"/>				
+				<h:outputText id="txtDataCriacao" rendered="#{managedBean.operation == 'edit'}" value="#{managedBean.entity.dataCriacao}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+				<h:outputText value="" rendered="#{managedBean.operation == 'edit'}"/>
+				
+				<h:outputText value="Ativo:" rendered="#{managedBean.operation == 'edit' and managedBean.usuarioLogado.login == 'admin'}"/>				
+				<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="#{managedBean.entity.login == 'admin'}" rendered="#{managedBean.operation == 'edit' and managedBean.usuarioLogado.login == 'admin'}"/>
+				<h:outputText value="" rendered="#{managedBean.operation == 'edit' and managedBean.usuarioLogado.login == 'admin'}"/>
+
+		</h:panelGrid>
+
+	</ui:define>
+</ui:composition>
+</html>

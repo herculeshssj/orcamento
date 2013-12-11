@@ -1,0 +1,128 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/visualizar.xhtml">
+
+	<ui:param name="managedBean" value="#{contaMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="4">
+			
+			Usuário:
+			<h:outputText value="#{managedBean.entity.usuario.nome}" />
+			
+			Banco:
+			<h:outputText value="#{managedBean.entity.banco.nome}" />
+			
+			Tipo de Conta:
+			<h:outputText value="#{managedBean.entity.tipoConta}"/>
+			
+			Descrição:
+			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}" />
+						
+			Agência:
+			<h:outputText id="txtAgencia" value="#{managedBean.entity.agencia}" />				
+						
+			Conta corrente:
+			<h:outputText id="txtContaCorrente" value="#{managedBean.entity.contaCorrente}" />				
+						
+			Conta poupança:
+			<h:outputText id="txtContaPoupanca" value="#{managedBean.entity.contaPoupanca}" />				
+						
+			Variação:
+			<h:outputText id="txtVariacao" value="#{managedBean.entity.variacao}" />
+						
+	    	<h:outputText value="Saldo inicial:" rendered="#{!managedBean.entity.ativo}"/>
+			<p:inputText value="#{managedBean.entity.saldoInicial}" rendered="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o saldo inicial!">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</p:inputText>			
+			
+			<h:outputText value="Data de abertura:" rendered="#{!managedBean.entity.ativo}"/>
+			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataAbertura}" rendered="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe a data de abertura!">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>				
+	    	
+			<h:outputText value="Data de fechamento:" rendered="#{managedBean.entity.ativo}"/>
+			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataFechamento}" rendered="#{managedBean.entity.ativo}" required="true" requiredMessage="Informe a data de fechamento!">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>
+	    	
+	    	<h:outputText value="Lançamentos após data de fechamento:" rendered="#{managedBean.entity.ativo}"/>
+	    	<p:selectOneRadio value="#{managedBean.opcaoLancamentos}" rendered="#{managedBean.entity.ativo}" layout="pageDirection" required="true" requiredMessage="Informe a situação dos lançamentos agendados!">
+	    		<f:selectItem itemLabel="Quitar" itemValue="QUITAR"/>
+	    		<f:selectItem itemLabel="Excluir" itemValue="EXCLUIR"/>
+	    	</p:selectOneRadio>
+	    	
+	    	<h:outputText value="Arquivar dados da conta" />
+	    	<p:selectBooleanCheckbox value="#{managedBean.entity.arquivado}"/>
+	    	
+	    	<h:outputText value=""/>
+	    	<h:outputText value=""/>
+									
+		</h:panelGrid>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+ 		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp; 		
+ 		<h:commandButton title="Ativar conta" image="/resources/images/habilitar.png" action="#{managedBean.ativarConta}" rendered="#{!managedBean.entity.ativo}"/>			
+		<h:commandButton title="Desativar conta" image="/resources/images/fechar.png" action="#{managedBean.desativarConta}" rendered="#{managedBean.entity.ativo}"/>
+ 	</ui:define>
+	
+</ui:composition>
+</html>

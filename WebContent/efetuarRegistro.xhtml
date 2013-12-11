@@ -1,0 +1,99 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/acesso.xhtml">
+
+	<ui:param name="managedBean" value="#{efetuarRegistroMB}" />
+
+	<ui:define name="titulo">
+		<h3>Registro de Usuário</h3>
+	</ui:define>
+
+	<ui:define name="conteudo">
+ 
+            <h:form>
+            	
+            	<p:messages />
+            	
+            	<h:panelGrid columns="3" cellpadding="5">
+            	
+            		* Informe o nome:
+            		<p:inputText id="txtNome" value="#{managedBean.entity.nome}" required="true" requiredMessage="Informe o nome!" size="50"/>
+            		<p:message for="txtNome"/>
+            		
+                    * Informe o e-mail:
+                    <p:inputText id="txtEmail" value="#{managedBean.entity.email}" required="true" requiredMessage="Informe o e-mail!" size="30">
+                    	<f:validator validatorId="emailValidator"/>
+                    </p:inputText>
+                    <p:message for="txtEmail"/>
+                    
+                    * Informe o login desejado:
+                    <p:inputText id="txtLogin" value="#{managedBean.entity.login}" required="true" requiredMessage="Informe o login!"/>
+                    <p:message for="txtLogin"/>              
+                    
+                </h:panelGrid>
+                <br/>
+                <h:commandLink title="Voltar" action="login" immediate="true">
+     				<p:graphicImage value="/resources/images/voltar.png" />
+     			</h:commandLink>
+				&nbsp;&nbsp;&nbsp;
+     			<h:commandLink title="Efetuar registro" action="#{managedBean.efetuarRegistro}">
+     				<p:graphicImage value="/resources/images/gravar.png" />
+     			</h:commandLink>           
+            </h:form>
+     
+	</ui:define>
+	
+</ui:composition>
+</html>

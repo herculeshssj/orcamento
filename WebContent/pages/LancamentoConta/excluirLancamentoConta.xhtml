@@ -1,0 +1,102 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{movimentacaoLancamentoContaMB}" />
+	
+	<ui:define name="campos">
+			
+		<h3><font color="#FF0000"><strong>Tem certeza que deseja excluir estes lançamentos? Esta operação não pode ser desfeita!</strong></font></h3>
+		
+		<p:dataTable id="tableListEntity" width="100%" value="#{managedBean.lancamentosSelecionados}" var="item" style="font-size: 16px;">     		
+     		<p:column style="vertical-align: middle;">
+     			<f:facet name="header">
+     				<h:outputText value="Histórico"/>
+     			</f:facet>
+     			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+     				<f:converter converterId="dateConverter"/>
+     			</h:outputText>
+     			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+     			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+     			<h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
+     			<br/>
+     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+     			</h:outputText>     			
+     		</p:column>	     		
+     		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Ações"/>
+				</f:facet>				
+				<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirLancamentoListaSelecionados}">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.lancamentoSelecionado}"/>
+				</h:commandButton>							
+  			</p:column>  			
+  		</p:dataTable>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;    	
+    	<h:commandLink title="Confirmar" action="#{managedBean.movimentarLancamentos}">
+    		<p:graphicImage value="/resources/images/ativar.png" />
+    	</h:commandLink>    	
+	</ui:define>
+
+</ui:composition>
+</html>

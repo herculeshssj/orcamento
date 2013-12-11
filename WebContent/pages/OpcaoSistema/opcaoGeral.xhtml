@@ -1,0 +1,116 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<ui:param name="managedBean" value="#{opcaoSistemaMB}" />
+
+	<p:tab title="Geral">
+	
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações gerais</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Exibir as buscas realizadas:
+				<p:selectBooleanCheckbox value="#{managedBean.opcoesUser['GERAL_EXIBIR_BUSCAS_REALIZADAS']}"/>
+				
+				Suprimir texto longo no meio:
+				<p:selectBooleanCheckbox value="#{managedBean.opcoesUser['GERAL_SUPRIMIR_TEXTO_MEIO']}"/>
+			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+		
+		<h:panelGroup rendered="#{managedBean.usuarioLogado.login == 'admin'}">
+		<fieldset>
+			<legend>Configurações de e-mail</legend>
+			
+			<h:panelGrid columns="4">
+			
+				Servidor SMTP:
+				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_SERVIDOR']}"/>
+				
+				Porta SMTP:
+				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_PORTA']}"/>
+				
+				Usuário:
+				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_USUARIO']}"/>
+				
+				Senha:
+				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_SENHA']}"/>
+				
+				Nome do remetente:
+				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_REMETENTE']}"/>
+				
+				E-Mail do remetente:
+				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_EMAIL_REMETENTE']}"/>
+				
+				Usar SSL/TLS:
+				<p:selectBooleanCheckbox value="#{managedBean.opcoesGlobalAdmin['EMAIL_SSL_TLS']}"/>
+				
+				Charset:
+				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_CHARSET']}"/>
+			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>	
+	</p:tab>
+		
+</ui:composition>
+</html>

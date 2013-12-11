@@ -1,0 +1,153 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{contaMB}" />
+	
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="3">
+							
+			Banco:
+			<h:selectOneMenu id="txtBanco" value="#{managedBean.entity.banco}" disabled="#{!managedBean.entity.ativo}" converter="entityConverter">
+				<f:selectItem itemLabel="Nenhum"/>
+				<f:selectItems value="#{managedBean.listaBanco}"/>
+			</h:selectOneMenu>
+			<h:inputHidden/>
+			
+			Tipo de Conta:
+			<p:selectOneRadio id="txtTipoConta" value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de conta!">
+				<f:selectItems value="#{managedBean.listaTipoConta}"/>
+			</p:selectOneRadio>
+			<p:message for="txtTipoConta"/>
+			
+			Descrição:
+			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe a descrição!"/>
+			<p:message for="txtDescricao"/>
+			
+			Agência:
+			<p:inputText id="txtAgencia" value="#{managedBean.entity.agencia}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputHidden/>
+			
+			Conta corrente:
+			<p:inputText id="txtContaCorrente" value="#{managedBean.entity.contaCorrente}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputHidden/>
+			
+			Conta poupança:
+			<p:inputText id="txtContaPoupanca" value="#{managedBean.entity.contaPoupanca}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputHidden/>
+			
+			Variação:
+			<p:inputText id="txtVariacao" value="#{managedBean.entity.variacao}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputHidden/>	
+			 
+			<h:outputText value="Saldo inicial:" rendered="#{managedBean.operation == 'create'}"/>
+			<p:inputText id="txtSaldoInicial" value="#{managedBean.entity.saldoInicial}" rendered="#{managedBean.operation == 'create'}" required="true" requiredMessage="Informe o saldo inicial!">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</p:inputText>				
+			<p:tooltip for="txtSaldoInicial" rendered="#{managedBean.operation == 'create'}">
+				<h:outputText value="Valor negativo indica saldo negativo na conta."/>
+			</p:tooltip>
+			
+			<h:outputText value="Data de abertura:" rendered="#{managedBean.operation == 'create'}"/>
+			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataAbertura}" rendered="#{managedBean.operation == 'create'}" required="true" requiredMessage="Informe a data de abertura!">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask> 			
+			<h:outputText value="" rendered="#{managedBean.operation == 'create'}"/>
+			
+			<h:commandLink id="lnkExcluir" value="Excluir conta" action="#{managedBean.delete}" rendered="#{managedBean.operation == 'edit'}" style="color: red; font-weight: bold;"/>				
+			<h:outputText value="" rendered="#{managedBean.operation == 'edit'}"/>
+			<p:tooltip for="lnkExcluir" rendered="#{managedBean.operation == 'edit'}">
+				<h:outputText value="Esta operação não pode ser desfeita!"/>
+			</p:tooltip>
+			
+		</h:panelGrid>
+		<h:panelGrid columns="4" rendered="#{managedBean.operation != 'create'}">
+			
+			Data de abertura:
+			<h:outputText value="#{managedBean.entity.dataAbertura}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Data de fechamento:
+			<h:outputText value="#{managedBean.entity.dataFechamento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Saldo de abertura:
+			<h:outputText value="#{managedBean.entity.saldoInicial}">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+			
+			Saldo de fechamento:
+			<h:outputText value="#{managedBean.entity.saldoFinal}">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+			
+		</h:panelGrid>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+    	<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
+    		<p:graphicImage value="/resources/images/gravar.png" rendered="#{managedBean.entity.ativo}"/>
+    	</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>

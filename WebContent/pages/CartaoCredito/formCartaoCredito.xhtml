@@ -1,0 +1,144 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{cartaoCreditoMB}" />
+	
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+		
+			Banco:	     		
+			<h:selectOneMenu value="#{managedBean.entity.banco}" converter="entityConverter" disabled="#{!managedBean.entity.ativo}">
+				<f:selectItem itemLabel="Nenhum banco"/>
+				<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+			</h:selectOneMenu>
+					
+			Descrição:				
+			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" maxlength="50" size="50" required="true" requiredMessage="Informe a descrição!" disabled="#{!managedBean.entity.ativo}"/>			
+			
+			Tipo de cartão:
+			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.entity.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!" disabled="#{!managedBean.entity.ativo}">
+				<f:selectItems value="#{managedBean.listaTipoCartao}"/>
+			</p:selectOneRadio>			
+			
+			Bandeira:
+			<h:selectOneMenu id="txtBandeira" value="#{managedBean.entity.bandeira}" required="true" requiredMessage="Informe o bandeira do cartão!" disabled="#{!managedBean.entity.ativo}">
+				<f:selectItems value="#{managedBean.listaBandeira}"/>
+			</h:selectOneMenu>			
+			
+			Abrangência:
+			<p:selectOneRadio id="txtAbrangencia" value="#{managedBean.entity.abrangencia}" required="true" requiredMessage="Informe o abrangência do cartão!" disabled="#{!managedBean.entity.ativo}">
+				<f:selectItems value="#{managedBean.listaAbrangencia}"/>
+			</p:selectOneRadio>			
+			
+			Limite do cartão:
+			<p:inputText id="txtLimiteCartao" value="#{managedBean.entity.limiteCartao}" size="10" required="true" requiredMessage="Informe o limite do cartão!" disabled="#{!managedBean.entity.ativo}">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</p:inputText>			
+			
+			Limite para saque:
+			<p:inputText value="#{managedBean.entity.limiteSaque}" size="10" disabled="#{!managedBean.entity.ativo}">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</p:inputText>			
+			
+			Juros (%):
+			<p:inputText value="#{managedBean.entity.juros}" size="10" disabled="#{!managedBean.entity.ativo}">
+				<f:convertNumber type="percent" pattern="###.##"/>
+			</p:inputText>			
+			
+			Multa (%):
+			<p:inputText value="#{managedBean.entity.multa}" size="10" disabled="#{!managedBean.entity.ativo}">
+				<f:convertNumber type="percent" pattern="###.##"/>
+			</p:inputText>			
+			
+			Dia de vencimento da fatura:
+			<p:inputText id="txtDiaVencimentoFatura" value="#{managedBean.entity.diaVencimentoFatura}" size="5" required="true" requiredMessage="Informe o dia de vencimento da fatura!" disabled="#{!managedBean.entity.ativo}"/>			
+			
+			Dia de fechamento da fatura:
+			<p:inputText id="txtDiaFechamentoFatura" value="#{managedBean.entity.diaFechamentoFatura}" size="5" required="true" requiredMessage="Informe o dia de fechamento da fatura!" disabled="#{!managedBean.entity.ativo}"/>			
+			
+			Nome do cliente (escrito no cartão):
+			<p:inputText value="#{managedBean.entity.nomeCliente}" size="30" disabled="#{!managedBean.entity.ativo}"/>
+			
+			Número do cartão:
+			<p:inputText value="#{managedBean.entity.numeroCartao}" size="20" disabled="#{!managedBean.entity.ativo}"/>
+			
+			Código de segurança:
+			<p:inputText value="#{managedBean.entity.codigoSeguranca}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>
+			
+			Validade:
+			<p:inputMask id="txtValidade" value="#{managedBean.entity.validade}" size="10" required="true" requiredMessage="Informe a data de validade do cartão!" disabled="#{!managedBean.entity.ativo}" mask="99/99/9999">
+				<f:converter converterId="dateConverter"/>
+			</p:inputMask>
+			
+			<h:outputText value="Cartão substituto:" rendered="#{managedBean.operation == 'edit'}"/>			
+			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}" rendered="#{managedBean.operation == 'edit'}"/>
+						
+		</h:panelGrid>
+	
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+		<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
+			<p:graphicImage value="/resources/images/gravar.png" />
+		</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>

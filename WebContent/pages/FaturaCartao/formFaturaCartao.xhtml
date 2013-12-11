@@ -1,0 +1,188 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="3">
+		
+			Cartão:
+			<h:outputText value="#{managedBean.entity.conta.cartaoCredito.label}"/>
+			<h:outputText />
+			
+			Data de vencimento:
+			<p:inputMask value="#{managedBean.entity.dataVencimento}" size="10" required="true" requiredMessage="Informe a data de vencimento da fatura!" mask="99/99/9999">
+				<f:converter converterId="dateConverter"/>
+			</p:inputMask>
+			<h:outputText />
+			
+			Moeda da fatura:
+			<h:outputText value="#{managedBean.entity.moeda.label}"/>
+			<h:outputText />
+			
+			Anexar fatura:			
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>
+				<h:panelGroup>			
+				<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
+				&nbsp;&nbsp;&nbsp;
+				<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png"/>				
+			</h:panelGroup>
+			
+		</h:panelGrid>
+		
+		<hr/>
+		
+		<h:panelGrid columns="5">
+		
+			Lançado em:
+			<p:inputMask value="#{managedBean.criterioBusca.lancadoEm}" size="10" mask="99/99/9999">
+				<f:converter converterId="dateConverter"/>
+			</p:inputMask>
+			
+			Descrição:
+			<p:inputText value="#{managedBean.criterioBusca.descricao}" size="30"/>
+			
+			<h:commandButton action="#{managedBean.pesquisarLancamento}" title="Pesquisar" image="/resources/images/pesquisar.png"/>
+			
+			Valor:
+			<p:inputText value="#{managedBean.criterioBusca.valor}" size="10">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</p:inputText>
+			
+			Parcela:
+			<p:inputText value="#{managedBean.criterioBusca.parcela}" size="7"/>
+			
+			<h:commandButton action="#{managedBean.incluirLancamento}" title="Adicionar" image="/resources/images/adicionar.png"/>
+			
+			Tipo:
+			<h:selectOneMenu value="#{managedBean.criterioBusca.tipo}">
+				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
+			</h:selectOneMenu>
+			
+			Moeda:
+			<h:selectOneMenu value="#{managedBean.criterioBusca.moeda}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>			
+			
+			<h:outputText />
+			
+		</h:panelGrid>
+		
+		<i>Lançamentos encontrados:</i>
+		
+		<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}">
+			<p:column style="vertical-align: middle;">
+				<f:facet name="header">
+			    	<h:outputText value="Histórico"/>
+			    </f:facet>
+			    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+			    	<f:converter converterId="dateConverter"/>
+			    </h:outputText>
+			    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value=" - #{item.parcela}" rendered="#{not empty item.parcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
+			    <br/>
+			    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+			    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			    </h:outputText>
+			</p:column>
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Ações"/>
+				</f:facet>
+				<h:commandButton action="#{managedBean.adicionarLancamento}" title="Adicionar à fatura" image="/resources/images/adicionar.png" rendered="#{!item.quitado}">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.lancamento}" />
+				</h:commandButton>
+			</p:column>
+		</p:dataTable>
+		
+		<i>Lançamentos adicionados à fatura:</i>
+		
+		<p:dataTable var="item" value="#{managedBean.lancamentosAdicionados}">
+			<p:column style="vertical-align: middle;">
+				<f:facet name="header">
+			    	<h:outputText value="Histórico"/>
+			    </f:facet>
+			    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+			    	<f:converter converterId="dateConverter"/>
+			    </h:outputText>
+			    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value=" - #{item.parcela}" rendered="#{not empty item.parcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
+			    <br/>
+			    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+			    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			    </h:outputText>
+			</p:column>
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Ações"/>
+				</f:facet>
+				<h:commandButton action="#{managedBean.excluirLancamento}" title="Excluir da fatura" image="/resources/images/excluir.png">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.lancamento}" />
+				</h:commandButton>
+			</p:column>
+		</p:dataTable>
+	
+	</ui:define>
+		
+</ui:composition>
+</html>

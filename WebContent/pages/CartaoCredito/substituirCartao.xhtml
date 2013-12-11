@@ -1,0 +1,112 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{cartaoCreditoMB}" />
+	
+	<ui:define name="campos">
+	
+		<strong>Cartão de crédito:&nbsp;</strong>
+		<h:outputText value="#{managedBean.entity.label}"/>
+		<br/><br/>
+		<h:panelGrid columns="2">
+			<f:facet name="header">
+				<h:outputText value="Dados do novo cartão" />
+			</f:facet>		
+								
+			Descrição:				
+			<p:inputText id="txtDescricao" value="#{managedBean.novoCartao.descricao}" maxlength="50" size="50" required="true" requiredMessage="Informe a descrição!"/>			
+			
+			Tipo de cartão:
+			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.novoCartao.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!">
+				<f:selectItems value="#{managedBean.listaTipoCartao}"/>
+			</p:selectOneRadio>			
+			
+			Bandeira:
+			<h:selectOneMenu id="txtBandeira" value="#{managedBean.novoCartao.bandeira}" required="true" requiredMessage="Informe o bandeira do cartão!">
+				<f:selectItems value="#{managedBean.listaBandeira}"/>
+			</h:selectOneMenu>			
+			
+			Abrangência:
+			<p:selectOneRadio id="txtAbrangencia" value="#{managedBean.novoCartao.abrangencia}" required="true" requiredMessage="Informe o abrangência do cartão!">
+				<f:selectItems value="#{managedBean.listaAbrangencia}"/>
+			</p:selectOneRadio>			
+			
+			Dia de vencimento da fatura:
+			<p:inputText id="txtDiaVencimentoFatura" value="#{managedBean.novoCartao.diaVencimentoFatura}" size="5" required="true" requiredMessage="Informe o dia de vencimento da fatura!"/>			
+			
+			Dia de fechamento da fatura:
+			<p:inputText id="txtDiaFechamentoFatura" value="#{managedBean.novoCartao.diaFechamentoFatura}" size="5" required="true" requiredMessage="Informe o dia de fechamento da fatura!"/>			
+			
+			Validade:
+			<p:inputMask id="txtValidade" value="#{managedBean.novoCartao.validade}" size="10" required="true" requiredMessage="Informe a data de validade do cartão!" mask="99/99/9999">
+				<f:converter converterId="dateConverter"/>
+			</p:inputMask>			
+						
+		</h:panelGrid>
+	
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+		<h:commandLink title="Substituir cartão" action="#{managedBean.substituirCartao}">
+			<p:graphicImage value="/resources/images/substituir.png" />
+		</h:commandLink>
+	</ui:define>
+	
+</ui:composition>
+</html>

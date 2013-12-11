@@ -1,0 +1,126 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{itemDespensaMB}" />
+	
+	<ui:define name="pesquisa">
+		Despensa:
+	    <h:selectOneMenu value="#{managedBean.despensa}" converter="entityConverter">
+	    	<f:selectItem itemLabel="Todos os itens"/>
+	    	<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+	    </h:selectOneMenu>
+	    &nbsp;
+	    Só arquivados:
+	    <p:selectBooleanCheckbox value="#{managedBean.arquivado}"/>
+	</ui:define>
+	
+	<ui:define name="pesquisa_avancada">
+		<h:commandLink value="Gerar lista de compras" action="#{managedBean.gerarListaCompras}"/>		
+	</ui:define>
+
+	<ui:define name="colunas">
+	
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição"/>
+			</f:facet>
+			<h:outputText value="#{item.descricao}" />
+		</p:column>
+		
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Em estoque" />
+			</f:facet>
+			<h:outputText value="#{item.quantidadeAtual}" style="#{item.arquivado == true ? 'text-decoration: line-through;' : 'text-decoration: none;'}" /> &nbsp;
+			<h:outputText value="#{item.unidadeMedida.sigla}" style="#{item.arquivado == true ? 'text-decoration: line-through;' : 'text-decoration: none;'}" />
+		</p:column>
+		
+		<p:column style="text-align: center; vertical-align: middle;" exportable="false">
+			<f:facet name="header">
+				<h:outputText value="Nível" />
+			</f:facet>
+			<h:panelGroup rendered="#{!item.arquivado}">
+				<h:graphicImage name="greenlight.png" library="images" rendered="#{item.quantidadeAtual > item.quantidadeAmarelo}" />
+				<h:graphicImage name="yellowlight.png" library="images" rendered="#{item.quantidadeAtual > item.quantidadeVermelho and item.quantidadeAmarelo >= item.quantidadeAtual}" />
+				<h:graphicImage name="redlight.png" library="images" rendered="#{item.quantidadeVermelho >= item.quantidadeAtual}" />
+			</h:panelGroup>
+		</p:column>
+		
+		<p:column style="text-align: center; vertical-align: middle;"  exportable="false">
+			<f:facet name="header">
+				<h:outputText value="Registrar"/>
+			</f:facet>
+			<h:commandButton title="Registrar compra/consumo" rendered="#{!item.arquivado}" image="/resources/images/baixa.png" action="#{managedBean.registrarCompraConsumoView}">
+				<f:setPropertyActionListener value="#{item.id}"	target="#{managedBean.idEntity}" />
+			</h:commandButton>
+		</p:column>
+		
+	</ui:define>
+	
+	<ui:define name="outras_opcoes">
+		<h:commandLink title="Exportar para MS-Excel">
+			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
+			<p:dataExporter type="xls" target="tableListEntity" fileName="inventario" encoding="iso-8859-1"/> 
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+		<h:commandLink title="Exportar para PDF">
+			<p:graphicImage value="/resources/images/pdf.png" width="32" height="32"/>
+			<p:dataExporter type="pdf" target="tableListEntity" fileName="inventario" encoding="iso-8859-1"/> 
+		</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>
