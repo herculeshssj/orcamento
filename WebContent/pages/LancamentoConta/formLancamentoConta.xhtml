@@ -70,13 +70,7 @@
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.conta.descricao}" rendered="#{managedBean.entity.quitado}"/>
 			<h:inputHidden/>
-			
-			Data de lançamento:
-			<h:outputText value="#{managedBean.entity.dataLancamento}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			<h:inputHidden/>
-			
+						
 			Tipo de Lançamento:
 			<p:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" rendered="#{!managedBean.entity.quitado}">
 				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>

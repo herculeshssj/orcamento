@@ -270,7 +270,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		// Vincula o lançamento à fatura
 		LancamentoConta lancamento = new LancamentoConta();
 		lancamento.setConta(conta);
-		lancamento.setDataLancamento(fechamento.getTime());
 		lancamento.setDataPagamento(fechamento.getTime());
 		lancamento.setDescricao("Lançamento inicial - " + fatura.getLabel());
 		lancamento.setMoeda(moedaRepository.findDefaultByUsuario(entity.getUsuario()));

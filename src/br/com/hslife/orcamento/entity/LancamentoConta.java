@@ -82,11 +82,11 @@ public class LancamentoConta extends EntityPersistence {
 	private Long id;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private Date dataLancamento;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private Date dataPagamento;
 	
 	@Column(length=100, nullable=false)
@@ -161,14 +161,13 @@ public class LancamentoConta extends EntityPersistence {
 	private LancamentoImportado lancamentoImportado;
 	
 	public LancamentoConta() {
-		dataLancamento = new Date();
 		conta = new Conta();
 		arquivo = new Arquivo();
 	}
 	
 	public LancamentoConta(LancamentoConta lancamento) {
 		descricao = lancamento.getDescricao();
-		dataLancamento = new Date();
+		dataLancamento = lancamento.getDataLancamento();
 		valorPago = lancamento.getValorPago();
 		dataPagamento = lancamento.getDataPagamento();
 		observacao = lancamento.getObservacao();

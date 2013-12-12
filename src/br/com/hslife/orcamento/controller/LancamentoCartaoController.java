@@ -183,12 +183,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	}
 	
 	@Override
-	public String save() {
-		entity.setDataPagamento(entity.getDataLancamento());
-		return super.save();
-	}
-	
-	@Override
 	public String edit() {
 		String goToPage = super.edit();
 		if (goToPage.equals(goToFormPage)) {

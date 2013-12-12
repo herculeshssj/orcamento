@@ -49,3 +49,10 @@
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('DEZ2013.1', true);
+
+-- Lançamento da conta
+alter table lancamentoconta change column `dataPagamento` `dataPagamento` date null;
+alter table lancamentoconta change column `dataLancamento` `dataLancamento` date null;
+
+update lancamentoconta set dataPagamento = null where idConta in (select id from conta where tipoConta = 'CARTAO');
+update lancamentoconta set dataLancamento = null where idConta not in (select id from conta where tipoConta = 'CARTAO');
