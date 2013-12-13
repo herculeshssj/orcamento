@@ -490,7 +490,10 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 					lancamentoDuplicado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 				if (incrementarData != null) {
 					Calendar temp = Calendar.getInstance();
-					temp.setTime(lancamentoDuplicado.getDataPagamento());
+					if (lancamentoDuplicado.getConta().getTipoConta().equals(TipoConta.CARTAO))
+						temp.setTime(lancamentoDuplicado.getDataLancamento());
+					else
+						temp.setTime(lancamentoDuplicado.getDataPagamento());
 					if (incrementarData.equals("DIA")) {						
 						temp.add(Calendar.DAY_OF_YEAR, i);						
 					}
@@ -500,7 +503,10 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 					if (incrementarData.equals("ANO")) {						
 						temp.add(Calendar.YEAR, i);						
 					}
-					lancamentoDuplicado.setDataPagamento(temp.getTime());
+					if (lancamentoDuplicado.getConta().getTipoConta().equals(TipoConta.CARTAO))
+						lancamentoDuplicado.setDataLancamento(temp.getTime());
+					else
+						lancamentoDuplicado.setDataPagamento(temp.getTime());
 				}
 				getRepository().save(lancamentoDuplicado);
 			}

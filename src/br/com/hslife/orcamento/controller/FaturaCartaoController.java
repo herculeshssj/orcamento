@@ -137,6 +137,7 @@ public class FaturaCartaoController extends AbstractController {
 		entity = new FaturaCartao();
 		lancamentosEncontrados.clear();
 		moedas = new ArrayList<Moeda>();
+		criterioBusca = new CriterioLancamentoConta();
 	}
 
 	@Override
