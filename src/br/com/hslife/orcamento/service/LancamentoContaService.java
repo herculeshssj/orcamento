@@ -149,6 +149,14 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 
 	@Override
 	public void validar(LancamentoConta entity) throws BusinessException {
+		if (entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+			if (entity.getDataLancamento() == null)
+				throw new BusinessException("Informe a data de lançamento!");
+		} else {
+			if (entity.getDataPagamento() == null)
+				throw new BusinessException("Informe a data de pagamento!");
+		}
+		
 		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
 			if (entity.getDataPagamento().before(entity.getConta().getDataAbertura())) {
 				throw new BusinessException("Data de lançamento deve ser posterior a data de abertura da conta!");

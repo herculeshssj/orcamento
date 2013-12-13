@@ -330,6 +330,7 @@ public class FaturaCartaoController extends AbstractController {
 			warnMessage("Lançamento já foi adicionado na fatura!");
 		} else {
 			lancamentosAdicionados.add(lancamento);
+			lancamentosEncontrados.remove(lancamento);
 		}
 		lancamento = new LancamentoConta();
 	}

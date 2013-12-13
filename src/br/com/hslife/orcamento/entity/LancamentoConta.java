@@ -202,10 +202,6 @@ public class LancamentoConta extends EntityPersistence {
 		if (this.conta == null) {
 			throw new BusinessException("Informe a conta!");
 		}
-		
-		if (this.dataPagamento == null) {
-			throw new BusinessException("Informe a data de pagamento!");
-		}
 	}
 
 	public Long getId() {
