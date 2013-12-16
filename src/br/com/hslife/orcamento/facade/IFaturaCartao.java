@@ -52,6 +52,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
@@ -72,4 +73,6 @@ public interface IFaturaCartao extends ICRUDService<FaturaCartao>{
 	public void quitarFaturaParcelamento() throws BusinessException;
 	
 	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) throws BusinessException;
+	
+	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario) throws BusinessException;
 }

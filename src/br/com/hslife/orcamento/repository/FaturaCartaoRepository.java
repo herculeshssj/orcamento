@@ -55,6 +55,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 
 @Repository
@@ -113,5 +114,13 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("statusFaturaCartao", StatusFaturaCartao.FUTURA));
 		return (FaturaCartao)criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).setMaxResults(1).uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<FaturaCartao> findAllByUsuario(Usuario usuario) {
+		String hql = "SELECT f FROM FaturaCartao f INNER JOIN  f.conta c WHERE c.usuario.id = :idUsuario ORDER BY f.dataVencimento ASC";
+		Query query = getSession().createQuery(hql);
+		query.setLong("idUsuario", usuario.getId());
+		return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
 }

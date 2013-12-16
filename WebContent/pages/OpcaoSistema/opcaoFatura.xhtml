@@ -51,27 +51,28 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition>
 
 	<ui:param name="managedBean" value="#{opcaoSistemaMB}" />
 
-	<ui:define name="campos">
-
-		<p:tabView activeIndex="0">
-			<ui:include src="opcaoGeral.xhtml"/>
-			<ui:include src="opcaoConta.xhtml"/>
-			<ui:include src="opcaoFatura.xhtml"/> 
-		</p:tabView>
+	<p:tab title="Faturas">
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações de faturas do cartão</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Exibir faturas quitadas:
+				<p:selectBooleanCheckbox value="#{managedBean.opcoesUser['FATURA_EXIBIR_QUITADAS']}"/>
+				
+				Exibir faturas vencidas:
+				<p:selectBooleanCheckbox value="#{managedBean.opcoesUser['FATURA_EXIBIR_VENCIDAS']}"/>
+				
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>	
+	</p:tab>
 		
-		<br/>
-
-	</ui:define>
-
-	<ui:define name="acoes">
-    	<h:commandLink title="Salvar registro" action="#{managedBean.save}">
-			<p:graphicImage value="/resources/images/gravar.png" />
-		</h:commandLink>
-	</ui:define>
-	
 </ui:composition>
 </html>

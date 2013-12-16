@@ -57,6 +57,7 @@ import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -312,5 +313,10 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	@Override
 	public List<FaturaCartao> buscarTodos() throws BusinessException {
 		return getRepository().findAll();
+	}
+	
+	@Override
+	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario) throws BusinessException {
+		return getRepository().findAllByUsuario(usuario);
 	}
 }

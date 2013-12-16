@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -558,16 +559,41 @@ public class FaturaCartaoController extends AbstractController {
 	}
 	
 	public List<FaturaCartao> getListaFaturaCartao() {
+		List<FaturaCartao> listaFaturas = new ArrayList<FaturaCartao>();
 		try {
+			OpcaoSistema opcaoQuitado = getOpcoesSistema().buscarPorChaveEUsuario("FATURA_EXIBIR_QUITADAS", getUsuarioLogado());
+			OpcaoSistema opcaoVencida = getOpcoesSistema().buscarPorChaveEUsuario("FATURA_EXIBIR_VENCIDAS", getUsuarioLogado());
+			
+			boolean valorOpcaoQuitado = opcaoQuitado != null && Boolean.valueOf(opcaoQuitado.getValor());
+			boolean valorOpcaoVencida = opcaoVencida != null && Boolean.valueOf(opcaoVencida.getValor());
+			
 			if (cartaoSelecionado == null) {
-				return getService().buscarTodos();
+				listaFaturas = getService().buscarTodosPorUsuario(getUsuarioLogado());
 			} else {
-				return getService().buscarTodosPorCartaoCredito(cartaoSelecionado.getConta());
+				listaFaturas = getService().buscarTodosPorCartaoCredito(cartaoSelecionado.getConta());
 			}
+			
+			// Se a opção for falsa (não exibir) as faturas com o status de QUITADA são removidas da listagem
+			if (!valorOpcaoQuitado)
+				for (Iterator<FaturaCartao> it = listaFaturas.iterator(); it.hasNext(); ) {
+					FaturaCartao fatura = it.next();
+					if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.QUITADA)) {
+						it.remove();
+					}
+				}
+			
+			// Se a opção for falsa (não exibir) as faturas com o status de VENCIDA são removidas da listagem
+			if (!valorOpcaoVencida)
+				for (Iterator<FaturaCartao> it = listaFaturas.iterator(); it.hasNext(); ) {
+					FaturaCartao fatura = it.next();
+					if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.VENCIDA)) {
+						it.remove();
+					}
+				}			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<FaturaCartao>();
+		return listaFaturas;
 	}
 	
 	public List<Conta> getListaConta() {
