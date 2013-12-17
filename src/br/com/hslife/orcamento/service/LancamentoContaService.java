@@ -58,11 +58,13 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -70,6 +72,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
@@ -89,6 +92,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
+	
+	@Autowired
+	private FaturaCartaoRepository faturaCartaoRepository;
 
 	public LancamentoContaRepository getRepository() {
 		return repository;
@@ -116,6 +122,11 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		this.lancamentoImportadoRepository = lancamentoImportadoRepository;
 	}
 	
+	public void setFaturaCartaoRepository(
+			FaturaCartaoRepository faturaCartaoRepository) {
+		this.faturaCartaoRepository = faturaCartaoRepository;
+	}
+
 	@Override
 	public void alterar(LancamentoConta entity) throws BusinessException {
 		if (entity.getLancamentoImportado() != null) {
@@ -546,5 +557,47 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException {
 		return lancamentoImportadoRepository.findByConta(conta);
+	}
+	
+	@Override
+	public void vincularAFaturaAtual(LancamentoConta lancamento) throws BusinessException {
+		FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(lancamento.getConta());
+		faturaAtual.getDetalheFatura().add(lancamento);
+		faturaCartaoRepository.update(faturaAtual);		
+	}
+	
+	@Override
+	public void vincularAProximaFatura(LancamentoConta lancamento) throws BusinessException {
+		FaturaCartao faturaFutura = faturaCartaoRepository.findNextFaturaCartaoFutura(lancamento.getConta());
+		if (faturaFutura == null) {
+			// Busca a fatura atual
+			FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(lancamento.getConta());
+			
+			// Instancia uma nova fatura futura
+			faturaFutura = new FaturaCartao();
+			
+			// Preenche os atributos da fatura futura
+			faturaFutura.setConta(lancamento.getConta());
+			faturaFutura.setMoeda(lancamento.getMoeda());
+			faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
+			
+			// Data de vencimento da próxima fatura
+			Calendar vencimento = Calendar.getInstance();
+			vencimento.setTime(faturaAtual.getDataVencimento());		
+			vencimento.add(Calendar.MONTH, 1);		
+			faturaFutura.setDataVencimento(vencimento.getTime());
+					
+			// Salva a nova fatura
+			faturaCartaoRepository.save(faturaFutura);
+			
+			// Adiciona o lançamento criado a fatura
+			faturaFutura.getDetalheFatura().add(lancamento);
+			
+			// Atualiza a nova fatura
+			faturaCartaoRepository.update(faturaFutura);
+		} else {
+			faturaFutura.getDetalheFatura().add(lancamento);
+			faturaCartaoRepository.update(faturaFutura);
+		}		
 	}
 }

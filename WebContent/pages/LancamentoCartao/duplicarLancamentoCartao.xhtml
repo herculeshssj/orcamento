@@ -93,6 +93,14 @@
 			</h:selectOneMenu>			
 			<h:outputText value=""/>
 			
+			Vincular:
+			<h:selectOneMenu value="#{managedBean.vincularFatura}" rendered="#{managedBean.operation == 'create'}">
+				<f:selectItem itemLabel="Não vincular" />
+				<f:selectItem itemLabel="Fatura atual" itemValue="ATUAL"/>
+				<f:selectItem itemLabel="Próxima fatura" itemValue="FUTURA"/>
+			</h:selectOneMenu>
+			<h:inputHidden/>
+			
 		</h:panelGrid>
 		
 		<p:dataTable id="tableListEntity" width="100%" value="#{managedBean.lancamentosSelecionados}" var="item" style="font-size: 16px;">     		

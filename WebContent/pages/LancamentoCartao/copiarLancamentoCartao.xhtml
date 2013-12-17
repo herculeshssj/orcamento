@@ -78,6 +78,14 @@
 				<f:selectItem itemLabel="Não alterar"/>
 				<f:selectItems value="#{managedBean.listaFavorecidoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
+			<h:inputHidden/>
+			
+			Vincular:
+			<h:selectOneMenu value="#{managedBean.vincularFatura}" rendered="#{managedBean.operation == 'create'}">
+				<f:selectItem itemLabel="Não vincular" />
+				<f:selectItem itemLabel="Fatura atual" itemValue="ATUAL"/>
+				<f:selectItem itemLabel="Próxima fatura" itemValue="FUTURA"/>
+			</h:selectOneMenu>
 			<h:inputHidden/>	
 			
 		</h:panelGrid>

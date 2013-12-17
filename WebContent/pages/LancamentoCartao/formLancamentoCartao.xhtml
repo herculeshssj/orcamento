@@ -71,7 +71,7 @@
 			<h:inputHidden/>
 			
 			Tipo de Lançamento:
-			<p:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" rendered="#{!managedBean.entity.quitado}">
+			<p:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" rendered="#{!managedBean.entity.quitado}" required="true" requiredMessage="Informe o tipo de lançamento!">
 				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
 				<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>				
 			</p:selectOneRadio>
@@ -117,6 +117,14 @@
 			<p:inputTextarea value="#{managedBean.entity.observacao}" size="70" rows="3" rendered="#{managedBean.entity.conta.ativo}"/>
 			<h:outputText value="#{managedBean.entity.observacao}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
+			
+			<h:outputText value="Vincular:" rendered="#{managedBean.operation == 'create'}"/>
+			<h:selectOneMenu value="#{managedBean.vincularFatura}" rendered="#{managedBean.operation == 'create'}">
+				<f:selectItem itemLabel="Não vincular" />
+				<f:selectItem itemLabel="Fatura atual" itemValue="ATUAL"/>
+				<f:selectItem itemLabel="Próxima fatura" itemValue="FUTURA"/>
+			</h:selectOneMenu>
+			<h:outputText rendered="#{managedBean.operation == 'create'}" />
 						
 			Categoria:
 			<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoria}"  converter="entityConverter" rendered="#{managedBean.entity.conta.ativo}">

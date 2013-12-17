@@ -104,6 +104,7 @@ public class MovimentacaoLancamentoCartaoController extends AbstractController {
 	
 	private String goToListPage = "/pages/LancamentoCartao/listLancamentoCartao";
 	
+	private String vincularFatura;
 
 	@Override
 	public String startUp() {
@@ -510,5 +511,13 @@ public class MovimentacaoLancamentoCartaoController extends AbstractController {
 
 	public void setLancamentoATransferir(LancamentoConta lancamentoATransferir) {
 		this.lancamentoATransferir = lancamentoATransferir;
+	}
+
+	public String getVincularFatura() {
+		return vincularFatura;
+	}
+
+	public void setVincularFatura(String vincularFatura) {
+		this.vincularFatura = vincularFatura;
 	}
 }
