@@ -76,6 +76,7 @@ import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
+import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("lancamentoContaService")
@@ -95,6 +96,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private FaturaCartaoRepository faturaCartaoRepository;
+	
+	@Autowired
+	private MoedaRepository moedaRepository;
 
 	public LancamentoContaRepository getRepository() {
 		return repository;
@@ -125,6 +129,10 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	public void setFaturaCartaoRepository(
 			FaturaCartaoRepository faturaCartaoRepository) {
 		this.faturaCartaoRepository = faturaCartaoRepository;
+	}
+
+	public void setMoedaRepository(MoedaRepository moedaRepository) {
+		this.moedaRepository = moedaRepository;
 	}
 
 	@Override
@@ -457,6 +465,10 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public void copiarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
 		LancamentoConta lancamentoCopiado;
+		
+		// Pega a conta que será setada na fatura
+		Conta conta = parametros.get("CONTA_DESTINO") ==  null ? lancamentos.get(0).getConta() : (Conta)parametros.get("CONTA_DESTINO");
+		
 		for (LancamentoConta l : lancamentos) {
 			lancamentoCopiado = new LancamentoConta(l);
 			if (parametros.get("CONTA_DESTINO") != null)
@@ -474,6 +486,52 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
 				lancamentoCopiado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 			getRepository().save(lancamentoCopiado);
+			
+			/*** Vincular lançamentos copiados à fatura atual ou a futura ***/			
+			// Verifica qual fatura irá receber o lançamento copiado
+			if (((String)parametros.get("VINCULAR_FATURA")).equalsIgnoreCase("ATUAL")) {
+				
+				// Armazena na fatura atual			
+				FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+				faturaAtual.getDetalheFatura().add(lancamentoCopiado);
+				faturaCartaoRepository.update(faturaAtual);
+				
+			} else if (((String)parametros.get("VINCULAR_FATURA")).equalsIgnoreCase("FUTURA")) {
+				// Armazena na fatura futura
+				FaturaCartao faturaFutura = faturaCartaoRepository.findNextFaturaCartaoFutura(conta);
+				if (faturaFutura == null) {
+					// Busca a fatura atual
+					FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+					
+					// Instancia uma nova fatura futura
+					faturaFutura = new FaturaCartao();
+					
+					// Preenche os atributos da fatura futura
+					faturaFutura.setConta(conta);
+					faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
+					faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
+					
+					// Data de vencimento da próxima fatura
+					Calendar vencimento = Calendar.getInstance();
+					vencimento.setTime(faturaAtual.getDataVencimento());		
+					vencimento.add(Calendar.MONTH, 1);		
+					faturaFutura.setDataVencimento(vencimento.getTime());
+							
+					// Salva a nova fatura
+					faturaCartaoRepository.save(faturaFutura);
+					
+					// Adiciona o lançamento criado a fatura
+					faturaFutura.getDetalheFatura().add(lancamentoCopiado);
+					
+					// Atualiza a nova fatura
+					faturaCartaoRepository.update(faturaFutura);
+				} else {
+					faturaFutura.getDetalheFatura().add(lancamentoCopiado);
+					faturaCartaoRepository.update(faturaFutura);
+				}
+				
+			}			
+			/*** Vincular lançamentos copiados à fatura atual ou a futura ***/
 		}
 	}
 	

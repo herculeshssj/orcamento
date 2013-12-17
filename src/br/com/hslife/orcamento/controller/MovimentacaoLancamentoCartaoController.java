@@ -192,6 +192,7 @@ public class MovimentacaoLancamentoCartaoController extends AbstractController {
 	public String copiarLancamentos() {
 		try {
 			Map<String, Object> parametros = new HashMap<String, Object>();
+			parametros.put("VINCULAR_FATURA", vincularFatura);
 			if (contaSelecionada != null)
 				parametros.put("CONTA_DESTINO", contaSelecionada);
 			if (categoriaSelecionada != null) 
@@ -200,8 +201,9 @@ public class MovimentacaoLancamentoCartaoController extends AbstractController {
 				parametros.put("FAVORECIDO_DESTINO", favorecidoSelecionado);
 			if (meioPagamentoSelecionado != null) 
 				parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
-			getService().copiarLancamentos(lancamentosSelecionados, parametros);
+			getService().copiarLancamentos(lancamentosSelecionados, parametros);			
 			infoMessage("Lançamentos copiados com sucesso!");
+			vincularFatura = "";
 			return goToListPage;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());

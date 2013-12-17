@@ -81,7 +81,7 @@
 			<h:inputHidden/>
 			
 			Vincular:
-			<h:selectOneMenu value="#{managedBean.vincularFatura}" rendered="#{managedBean.operation == 'create'}">
+			<h:selectOneMenu value="#{managedBean.vincularFatura}">
 				<f:selectItem itemLabel="Não vincular" />
 				<f:selectItem itemLabel="Fatura atual" itemValue="ATUAL"/>
 				<f:selectItem itemLabel="Próxima fatura" itemValue="FUTURA"/>
