@@ -247,7 +247,8 @@ public class FaturaCartaoController extends AbstractController {
 				try {
 					getService().excluir(faturaSelecionada);
 					infoMessage("Fatura excluída com sucesso!");
-					initializeEntity();
+										
+					this.reprocessarBusca();
 				} catch (BusinessException be) {
 					errorMessage(be.getMessage());
 				}
@@ -268,7 +269,9 @@ public class FaturaCartaoController extends AbstractController {
 			getService().validar(entity);
 			getService().alterar(entity);
 			infoMessage("Fatura salva com sucesso!");
-			initializeEntity();
+			
+			this.reprocessarBusca();
+			
 			return "/pages/FaturaCartao/listFaturaCartao";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -278,7 +281,11 @@ public class FaturaCartaoController extends AbstractController {
 	
 	public String cancel() {
 		actionTitle = "";
-		initializeEntity();
+		try {
+			this.reprocessarBusca();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 		return "/pages/FaturaCartao/listFaturaCartao";
 	}
 	
@@ -415,7 +422,9 @@ public class FaturaCartaoController extends AbstractController {
 		try {
 			getService().fecharFatura(faturaSelecionada, moedas);
 			infoMessage("Fatura fechada com sucesso!");
-			initializeEntity();
+			
+			this.reprocessarBusca();
+			
 			return "/pages/FaturaCartao/listFaturaCartao";			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -431,7 +440,9 @@ public class FaturaCartaoController extends AbstractController {
 			}
 			getService().reabrirFatura(faturaSelecionada);
 			infoMessage("Fatura reaberta com sucesso!");
-			initializeEntity();			
+			
+			this.reprocessarBusca();
+			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -487,7 +498,9 @@ public class FaturaCartaoController extends AbstractController {
 				default : throw new BusinessException("Opção inválida!");
 			}			
 			infoMessage("Fatura quitada com sucesso!");
-			initializeEntity();
+
+			this.reprocessarBusca();
+						
 			return "/pages/FaturaCartao/listFaturaCartao";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -556,6 +569,25 @@ public class FaturaCartaoController extends AbstractController {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
+	}
+	
+	private void reprocessarBusca() throws BusinessException {
+		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
+		if (listEntity != null && !listEntity.isEmpty()) {
+			// Inicializa os objetos
+			initializeEntity();
+			
+			// Obtém o valor da opção do sistema
+			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
+						
+			// Determina se a busca será executada novamente
+			if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
+				find();
+			}
+		} else {
+			initializeEntity();
+		}
+
 	}
 	
 	public List<FaturaCartao> getListaFaturaCartao() {
