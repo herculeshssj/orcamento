@@ -464,11 +464,49 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Override
 	public void copiarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
+		// Instanciação das variáveis
 		LancamentoConta lancamentoCopiado;
+		List<LancamentoConta> lancamentosCopiados = new ArrayList<LancamentoConta>(); 
+		FaturaCartao faturaAtual = new FaturaCartao();
+		FaturaCartao faturaFutura = new FaturaCartao();
+		
+		// Pega o tipo de vinculação da fatura
+		String vincularFatura = (String)parametros.get("VINCULAR_FATURA") == null ? "ATUAL" : (String)parametros.get("VINCULAR_FATURA");
 		
 		// Pega a conta que será setada na fatura
 		Conta conta = parametros.get("CONTA_DESTINO") ==  null ? lancamentos.get(0).getConta() : (Conta)parametros.get("CONTA_DESTINO");
 		
+		// Verifica qual tipo de vinculação será usado e carrega a fatura correspondente
+		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
+			faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {			
+			faturaFutura = faturaCartaoRepository.findNextFaturaCartaoFutura(conta);
+			
+			// Se não existir fatura futura uma nova é criada
+			if (faturaFutura == null) {
+				// Traz a fatura atual para determinar a data de vencimento da fatura futura
+				faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+				
+				// Instancia uma nova fatura futura
+				faturaFutura = new FaturaCartao();
+				
+				// Preenche os atributos da fatura futura
+				faturaFutura.setConta(conta);
+				faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
+				faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
+				
+				// Data de vencimento da próxima fatura
+				Calendar vencimento = Calendar.getInstance();
+				vencimento.setTime(faturaAtual.getDataVencimento());		
+				vencimento.add(Calendar.MONTH, 1);		
+				faturaFutura.setDataVencimento(vencimento.getTime());
+						
+				// Salva a nova fatura
+				faturaCartaoRepository.save(faturaFutura);
+			}
+		}
+		
+		// Realiza a cópia dos lançamentos		
 		for (LancamentoConta l : lancamentos) {
 			lancamentoCopiado = new LancamentoConta(l);
 			if (parametros.get("CONTA_DESTINO") != null)
@@ -486,52 +524,16 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
 				lancamentoCopiado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 			getRepository().save(lancamentoCopiado);
-			
-			/*** Vincular lançamentos copiados à fatura atual ou a futura ***/			
-			// Verifica qual fatura irá receber o lançamento copiado
-			if (((String)parametros.get("VINCULAR_FATURA")).equalsIgnoreCase("ATUAL")) {
-				
-				// Armazena na fatura atual			
-				FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
-				faturaAtual.getDetalheFatura().add(lancamentoCopiado);
-				faturaCartaoRepository.update(faturaAtual);
-				
-			} else if (((String)parametros.get("VINCULAR_FATURA")).equalsIgnoreCase("FUTURA")) {
-				// Armazena na fatura futura
-				FaturaCartao faturaFutura = faturaCartaoRepository.findNextFaturaCartaoFutura(conta);
-				if (faturaFutura == null) {
-					// Busca a fatura atual
-					FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
-					
-					// Instancia uma nova fatura futura
-					faturaFutura = new FaturaCartao();
-					
-					// Preenche os atributos da fatura futura
-					faturaFutura.setConta(conta);
-					faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
-					faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
-					
-					// Data de vencimento da próxima fatura
-					Calendar vencimento = Calendar.getInstance();
-					vencimento.setTime(faturaAtual.getDataVencimento());		
-					vencimento.add(Calendar.MONTH, 1);		
-					faturaFutura.setDataVencimento(vencimento.getTime());
-							
-					// Salva a nova fatura
-					faturaCartaoRepository.save(faturaFutura);
-					
-					// Adiciona o lançamento criado a fatura
-					faturaFutura.getDetalheFatura().add(lancamentoCopiado);
-					
-					// Atualiza a nova fatura
-					faturaCartaoRepository.update(faturaFutura);
-				} else {
-					faturaFutura.getDetalheFatura().add(lancamentoCopiado);
-					faturaCartaoRepository.update(faturaFutura);
-				}
-				
-			}			
-			/*** Vincular lançamentos copiados à fatura atual ou a futura ***/
+			lancamentosCopiados.add(lancamentoCopiado);
+		}
+		
+		// Determina o tipo de vinculação com a fatura, adiciona os lançamentos copiados e salva
+		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
+			faturaAtual.getDetalheFatura().addAll(lancamentosCopiados);
+			faturaCartaoRepository.update(faturaAtual);
+		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
+			faturaFutura.getDetalheFatura().addAll(lancamentosCopiados);
+			faturaCartaoRepository.update(faturaFutura);
 		}
 	}
 	

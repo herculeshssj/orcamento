@@ -112,6 +112,11 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 			throw new BusinessException("Data de vencimento não pode ser igual ou anterior ao vencimento da última fatura fechada!");
 		}
 		
+		// Impede que haja mais de uma fatura com a mesma data de vencimento para o cartão selecionado
+		List<FaturaCartao> faturas = getRepository().findByVencimentoAndStatusFatura(entity.getConta(), entity.getDataVencimento(), entity.getStatusFaturaCartao());
+		if (faturas != null && faturas.size() > 1) {
+			throw new BusinessException("Data de vencimento já informada para uma fatura cadastrada!");
+		}
 	}
 	
 	public double saldoDevedorUltimaFatura(CartaoCredito cartao) throws BusinessException {

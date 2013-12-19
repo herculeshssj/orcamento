@@ -178,6 +178,7 @@ public class LancamentoConta extends EntityPersistence {
 		tipoLancamento = lancamento.getTipoLancamento();
 		agendado = lancamento.isAgendado();
 		moeda = lancamento.getMoeda();
+		parcela = lancamento.getParcela();
 	}
 
 	@Override

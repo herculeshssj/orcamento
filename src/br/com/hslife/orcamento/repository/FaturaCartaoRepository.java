@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.repository;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -109,11 +110,16 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 		return (FaturaCartao)criteria.addOrder(Order.desc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).uniqueResult();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public FaturaCartao findNextFaturaCartaoFutura(Conta conta) {		
 		Criteria criteria = getSession().createCriteria(FaturaCartao.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("statusFaturaCartao", StatusFaturaCartao.FUTURA));
-		return (FaturaCartao)criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).setMaxResults(1).uniqueResult();
+		List<FaturaCartao> resultado = criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		if (resultado != null) {
+			return resultado.get(0);
+		}
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -122,5 +128,27 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 		Query query = getSession().createQuery(hql);
 		query.setLong("idUsuario", usuario.getId());
 		return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public FaturaCartao findNextFaturaCartaoFuturaByVencimento(Conta conta, Date dataVencimento) {
+		Criteria criteria = getSession().createCriteria(FaturaCartao.class);
+		criteria.add(Restrictions.eq("conta.id", conta.getId()));
+		criteria.add(Restrictions.eq("dataVencimento", dataVencimento));
+		criteria.add(Restrictions.eq("statusFaturaCartao", StatusFaturaCartao.FUTURA));
+		List<FaturaCartao> resultado = criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		if (resultado != null) {
+			return resultado.get(0);
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<FaturaCartao> findByVencimentoAndStatusFatura(Conta conta, Date dataVencimento, StatusFaturaCartao status) {
+		Criteria criteria = getSession().createCriteria(FaturaCartao.class);
+		criteria.add(Restrictions.eq("conta.id", conta.getId()));
+		criteria.add(Restrictions.eq("dataVencimento", dataVencimento));
+		criteria.add(Restrictions.eq("statusFaturaCartao", status));
+		return criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
 }
