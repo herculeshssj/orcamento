@@ -227,6 +227,7 @@ public class MovimentacaoLancamentoCartaoController extends AbstractController {
 			Map<String, Object> parametros = new HashMap<String, Object>();
 			parametros.put("QUANT_DUPLICAR", quantADuplicar);
 			parametros.put("INCREMENTAR_DATA", incrementarData);
+			parametros.put("VINCULAR_FATURA", vincularFatura);
 			if (contaSelecionada != null)
 				parametros.put("CONTA_DESTINO", contaSelecionada);						
 			if (categoriaSelecionada != null) 
@@ -237,6 +238,7 @@ public class MovimentacaoLancamentoCartaoController extends AbstractController {
 				parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
 			getService().duplicarLancamentos(lancamentosSelecionados, parametros);
 			infoMessage("Lançamentos duplicados com sucesso!");
+			vincularFatura = "";
 			return goToListPage;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());

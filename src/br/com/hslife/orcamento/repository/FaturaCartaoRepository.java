@@ -151,4 +151,12 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 		criteria.add(Restrictions.eq("statusFaturaCartao", status));
 		return criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<FaturaCartao> findAllByStatusFatura(Conta conta, StatusFaturaCartao status) {
+		Criteria criteria = getSession().createCriteria(FaturaCartao.class);
+		criteria.add(Restrictions.eq("conta.id", conta.getId()));
+		criteria.add(Restrictions.eq("statusFaturaCartao", status));
+		return criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+	}
 }

@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -542,7 +543,47 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		LancamentoConta lancamentoDuplicado;
 		Integer quantADuplicar = (Integer)parametros.get("QUANT_DUPLICAR");		
 		String incrementarData = parametros.get("INCREMENTAR_DATA") == null ? null : (String)parametros.get("INCREMENTAR_DATA");
+		
+		// Map que armazenará as faturas futuras. A chave é uma representação String da data de vencimento da fatura
+		Map<String, FaturaCartao> faturasFuturas = new HashMap<String, FaturaCartao>();
+		
+		FaturaCartao faturaAtual = new FaturaCartao();
+		FaturaCartao faturaFutura = new FaturaCartao();
+		Date dataVencimentoFaturaAtual = new Date();
+		
+		// Pega o tipo de vinculação da fatura
+		String vincularFatura = (String)parametros.get("VINCULAR_FATURA") == null ? "ATUAL" : (String)parametros.get("VINCULAR_FATURA");
+		
+		// Pega a conta que será setada na fatura
+		Conta conta = parametros.get("CONTA_DESTINO") ==  null ? lancamentos.get(0).getConta() : (Conta)parametros.get("CONTA_DESTINO");
+		
+		// Verifica qual tipo de vinculação será usado e carrega a fatura correspondente
+		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
+			faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {			
+			// Popula o Map com as fatura futuras encontradas
+			for (FaturaCartao fc : faturaCartaoRepository.findAllByStatusFatura(conta, StatusFaturaCartao.FUTURA)) {
+				faturasFuturas.put(Util.formataDataHora(fc.getDataVencimento(), Util.DATA), fc);
+			}
+			
+			// Armazena a data de vencimento da fatura atual para uso futuro no método
+			faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+			dataVencimentoFaturaAtual = faturaAtual.getDataVencimento();			
+		}
+	
+		// Realiza a duplicação dos lançamentos
 		for (LancamentoConta l : lancamentos) {
+			
+			// Prepara a data de vencimento da fatura
+			Calendar tempFatura = Calendar.getInstance();
+			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {			
+				tempFatura.setTime(dataVencimentoFaturaAtual);			
+				if (!incrementarData.equals("MES") || !incrementarData.equals("ANO")) {
+					tempFatura.add(Calendar.MONTH, 1);
+				}
+			}
+			
+			// Duplica os lançamentos incrementando por dia, mês ou ano
 			for (int i = 1; i <= quantADuplicar; i++) {
 				lancamentoDuplicado = new LancamentoConta(l);
 				if (parametros.get("CONTA_DESTINO") != null)
@@ -559,20 +600,26 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 					lancamentoDuplicado.setFavorecido((Favorecido)parametros.get("FAVORECIDO_DESTINO"));
 				if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
 					lancamentoDuplicado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
+
+				// Prepara os contadores
+				Calendar temp = Calendar.getInstance();				
+				if (lancamentoDuplicado.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+					temp.setTime(lancamentoDuplicado.getDataLancamento());					
+				} else
+					temp.setTime(lancamentoDuplicado.getDataPagamento());
+				
 				if (incrementarData != null) {
-					Calendar temp = Calendar.getInstance();
-					if (lancamentoDuplicado.getConta().getTipoConta().equals(TipoConta.CARTAO))
-						temp.setTime(lancamentoDuplicado.getDataLancamento());
-					else
-						temp.setTime(lancamentoDuplicado.getDataPagamento());
+					
 					if (incrementarData.equals("DIA")) {						
 						temp.add(Calendar.DAY_OF_YEAR, i);						
 					}
 					if (incrementarData.equals("MES")) {						
-						temp.add(Calendar.MONTH, i);						
+						temp.add(Calendar.MONTH, i);
+						tempFatura.add(Calendar.MONTH, 1);
 					}
 					if (incrementarData.equals("ANO")) {						
-						temp.add(Calendar.YEAR, i);						
+						temp.add(Calendar.YEAR, i);
+						tempFatura.add(Calendar.YEAR, 1);
 					}
 					if (lancamentoDuplicado.getConta().getTipoConta().equals(TipoConta.CARTAO))
 						lancamentoDuplicado.setDataLancamento(temp.getTime());
@@ -580,7 +627,42 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 						lancamentoDuplicado.setDataPagamento(temp.getTime());
 				}
 				getRepository().save(lancamentoDuplicado);
+				
+				// Adiciona o lançamento duplicado do Map, criando novas faturas caso não haja
+				if (vincularFatura.equalsIgnoreCase("FUTURA")) {
+					if (faturasFuturas.containsKey(Util.formataDataHora(tempFatura.getTime(), Util.DATA))) {
+						faturasFuturas.get(Util.formataDataHora(tempFatura.getTime(), Util.DATA)).getDetalheFatura().add(lancamentoDuplicado);
+					} else {
+						// Instancia uma nova fatura futura
+						faturaFutura = new FaturaCartao();
+						
+						// Preenche os atributos da fatura futura
+						faturaFutura.setConta(conta);
+						faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
+						faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
+						faturaFutura.setDataVencimento(tempFatura.getTime());
+						faturaFutura.getDetalheFatura().add(lancamentoDuplicado);
+						
+						faturasFuturas.put(Util.formataDataHora(tempFatura.getTime(), Util.DATA), faturaFutura);
+					}
+				} else if (vincularFatura.equalsIgnoreCase("ATUAL")) {
+					faturaAtual.getDetalheFatura().add(lancamentoDuplicado);
+				}
 			}
+		}
+		
+		// Salva as faturas
+		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
+			faturaCartaoRepository.update(faturaAtual);
+		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
+			for (FaturaCartao fc : faturasFuturas.values()) {
+				if (fc.getId() == null) {
+					faturaCartaoRepository.save(fc);
+				} else {
+					faturaCartaoRepository.update(fc);
+				}
+			}
+			
 		}
 	}
 	

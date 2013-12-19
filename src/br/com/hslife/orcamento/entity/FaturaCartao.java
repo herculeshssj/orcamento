@@ -128,7 +128,7 @@ public class FaturaCartao extends EntityPersistence {
 	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<ConversaoMoeda> conversoesMoeda;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=false)
+	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=false)
 	@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")})
 	private Set<LancamentoConta> detalheFatura;
 	
