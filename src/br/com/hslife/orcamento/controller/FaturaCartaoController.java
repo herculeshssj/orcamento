@@ -134,7 +134,7 @@ public class FaturaCartaoController extends AbstractController {
 
 	@Override
 	protected void initializeEntity() {
-		listEntity.clear();
+		listEntity = new ArrayList<LancamentoConta>();
 		entity = new FaturaCartao();
 		lancamentosEncontrados.clear();
 		moedas = new ArrayList<Moeda>();
@@ -247,8 +247,7 @@ public class FaturaCartaoController extends AbstractController {
 				try {
 					getService().excluir(faturaSelecionada);
 					infoMessage("Fatura excluída com sucesso!");
-										
-					this.reprocessarBusca();
+					initializeEntity();				
 				} catch (BusinessException be) {
 					errorMessage(be.getMessage());
 				}
@@ -335,13 +334,22 @@ public class FaturaCartaoController extends AbstractController {
 	}
 	
 	public void adicionarLancamento() {
-		if (lancamento == null || lancamentosAdicionados.contains(lancamento)) {
-			warnMessage("Lançamento já foi adicionado na fatura!");
-		} else {
-			lancamentosAdicionados.add(lancamento);
-			lancamentosEncontrados.remove(lancamento);
+		try {
+			if (lancamento == null || lancamentosAdicionados.contains(lancamento)) {
+				warnMessage("Lançamento já foi adicionado na fatura!");
+			} else {
+				if (lancamentoContaService.existeVinculoFaturaCartao(lancamento)) {
+					warnMessage("O lançamento selecionado já está vinculado a uma outra fatura!");
+				} else {
+					lancamentosAdicionados.add(lancamento);
+					lancamentosEncontrados.remove(lancamento);
+				}
+			}
+			lancamento = new LancamentoConta();
 		}
-		lancamento = new LancamentoConta();
+		catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void incluirLancamento() {

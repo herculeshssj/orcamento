@@ -742,4 +742,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			faturaCartaoRepository.update(faturaFutura);
 		}		
 	}
+	
+	@Override
+	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException {
+		return getRepository().existsLinkageFaturaCartao(lancamento);
+	}
 }

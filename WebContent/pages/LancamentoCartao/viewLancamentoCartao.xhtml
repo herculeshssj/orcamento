@@ -104,6 +104,16 @@
 		</h:panelGrid>
 		
 	</ui:define>
+	
+  	<ui:insert name="acoes">
+    	<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+     	<h:commandLink title="Excluir registro" action="#{managedBean.delete}" rendered="#{managedBean.entity.faturaCartao == null}">
+     		<p:graphicImage value="/resources/images/apagar.png" />
+     	</h:commandLink>				
+     </ui:insert>
 
 </ui:composition>
 </html>

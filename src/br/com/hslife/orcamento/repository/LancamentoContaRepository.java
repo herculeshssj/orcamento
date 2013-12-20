@@ -44,6 +44,7 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -175,5 +176,21 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		String sqlQuerySetNull = "update lancamentoconta set idMeioPagamento = null where idConta = " + conta.getId() + " and dataPagamento >= '" + Util.formataDataHora(conta.getDataAbertura(),Util.DATABASE) + "' and dataPagamento <= '" + Util.formataDataHora(conta.getDataFechamento(),Util.DATABASE) + "'";		
 		Query querySetNull = getSession().createSQLQuery(sqlQuerySetNull);
 		querySetNull.executeUpdate();
+	}
+	
+	public boolean existsLinkageFaturaCartao(LancamentoConta lancamento) {
+		boolean result = true;
+		
+		String sqlLancamento = "select count(*) from detalhefatura where idLancamento = " + lancamento.getId();
+		
+		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
+		
+		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
+		
+		if (queryResultLancamento.longValue() == 0) {
+			return false;
+		}
+		
+		return result;
 	}
 }

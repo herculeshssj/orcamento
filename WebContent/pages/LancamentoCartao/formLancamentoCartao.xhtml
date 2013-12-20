@@ -64,10 +64,10 @@
 		<h:panelGrid columns="3" style="font-size: 15px;">
 		
 			Cartão:		
-			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{!managedBean.entity.quitado}">
+			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{!managedBean.entity.quitado and managedBean.entity.faturaCartao ==  null}">
 				<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>							
 			</h:selectOneMenu>
-			<h:outputText value="#{managedBean.entity.conta.descricao}" rendered="#{managedBean.entity.quitado}"/>
+			<h:outputText value="#{managedBean.entity.conta.descricao}" rendered="#{managedBean.entity.quitado or managedBean.entity.faturaCartao != null}"/>
 			<h:inputHidden/>
 			
 			Tipo de Lançamento:

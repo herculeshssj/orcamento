@@ -308,7 +308,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		movimentacaoLancamentoCartaoMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
 		if (listEntity != null && !listEntity.isEmpty()) {
 			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado() && !l.isQuitado()) {
+				if (l.isSelecionado() && !l.isQuitado() && l.getFaturaCartao() == null) {
 					movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().add(l);
 				}
 			}

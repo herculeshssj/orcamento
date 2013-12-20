@@ -55,6 +55,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -156,6 +157,10 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idArquivo", nullable=true)
 	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;
+	
+	@ManyToOne(optional=true)
+	@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")})
+	private FaturaCartao faturaCartao;
 	
 	@Transient
 	private LancamentoImportado lancamentoImportado;
@@ -395,5 +400,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setDataLancamento(Date dataLancamento) {
 		this.dataLancamento = dataLancamento;
+	}
+
+	public FaturaCartao getFaturaCartao() {
+		return faturaCartao;
+	}
+
+	public void setFaturaCartao(FaturaCartao faturaCartao) {
+		this.faturaCartao = faturaCartao;
 	}
 }
