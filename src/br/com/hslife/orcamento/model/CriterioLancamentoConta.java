@@ -73,8 +73,11 @@ public class CriterioLancamentoConta {
 	
 	private LancamentoAgendado lancamentoAgendado;
 	
+	private LancamentoAgendado lancamentoQuitado;
+	
 	public CriterioLancamentoConta() {
 		lancamentoAgendado = LancamentoAgendado.COM;
+		lancamentoQuitado = LancamentoAgendado.COM;
 	}
 	
 	public int getAgendado() {
@@ -86,8 +89,25 @@ public class CriterioLancamentoConta {
 		}
 	}
 	
+	public int getQuitado() {
+		switch (lancamentoQuitado) {
+			case COM : return 0;
+			case SEM : return -1;
+			case SOMENTE : return 1;
+			default : return 0;
+		}
+	}
+	
 	public Boolean getAgendadoBoolean() {
 		switch (lancamentoAgendado) {
+			case SEM : return false;
+			case SOMENTE : return true;
+			default : return false;
+		}
+	}
+	
+	public Boolean getQuitadoBoolean() {
+		switch (lancamentoQuitado) {
 			case SEM : return false;
 			case SOMENTE : return true;
 			default : return false;
@@ -104,8 +124,22 @@ public class CriterioLancamentoConta {
 		}
 	}
 	
+	public void setQuitado(int quitado) {
+		if (quitado == 0) {
+			lancamentoQuitado = LancamentoAgendado.COM;
+		} else if (quitado == 1) {
+			lancamentoQuitado = LancamentoAgendado.SOMENTE;
+		} else {
+			lancamentoQuitado = LancamentoAgendado.SEM;
+		}
+	}
+	
 	public void setAgendado(LancamentoAgendado agendado) {
 		this.lancamentoAgendado = agendado;
+	}
+	
+	public void setQuitado(LancamentoAgendado quitado) {
+		this.lancamentoQuitado = quitado;
 	}
 	
 	public void setAgendado(boolean agendado) {
@@ -114,6 +148,14 @@ public class CriterioLancamentoConta {
 			lancamentoAgendado = LancamentoAgendado.SOMENTE;
 		else
 			lancamentoAgendado = LancamentoAgendado.SEM;
+	}
+	
+	public void setQuitado(boolean quitado) {
+		lancamentoQuitado = LancamentoAgendado.COM;
+		if (quitado)
+			lancamentoQuitado = LancamentoAgendado.SOMENTE;
+		else
+			lancamentoQuitado = LancamentoAgendado.SEM;
 	}
 
 	public Conta getConta() {

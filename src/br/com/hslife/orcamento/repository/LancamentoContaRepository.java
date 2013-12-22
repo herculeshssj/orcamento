@@ -99,6 +99,10 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(Restrictions.eq("agendado", criterio.getAgendadoBoolean()));
 		}
 		
+		if (criterio.getQuitado() == 1 || criterio.getQuitado() == -1) {
+			criteria.add(Restrictions.eq("quitado", criterio.getQuitadoBoolean()));
+		}
+		
 		if (criterio.getLancadoEm() != null) {
 			criteria.add(Restrictions.ge("dataLancamento", criterio.getLancadoEm()));
 			criteria.add(Restrictions.le("dataLancamento", criterio.getLancadoEm()));

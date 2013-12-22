@@ -384,6 +384,7 @@ public class FaturaCartaoController extends AbstractController {
 	public void pesquisarLancamento() {
 		try {
 			criterioBusca.setConta(contaService.buscarPorID(entity.getConta().getId()));
+			criterioBusca.setQuitado(false);
 			lancamentosEncontrados.clear();
 			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
 			lancamentosEncontrados.removeAll(lancamentosAdicionados);
