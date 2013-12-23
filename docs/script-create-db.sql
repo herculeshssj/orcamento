@@ -49,7 +49,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: mysql06.kinghost.net
--- Tempo de Geração: Dez 22, 2013 as 10:14 PM
+-- Tempo de Geração: Dez 22, 2013 as 10:19 PM
 -- Versão do Servidor: 5.1.70
 -- Versão do PHP: 5.2.9
 
