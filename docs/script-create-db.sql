@@ -49,7 +49,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: mysql06.kinghost.net
--- Tempo de Geração: Dez 15, 2013 as 02:16 PM
+-- Tempo de Geração: Dez 22, 2013 as 10:14 PM
 -- Versão do Servidor: 5.1.70
 -- Versão do PHP: 5.2.9
 
@@ -480,8 +480,8 @@ CREATE TABLE IF NOT EXISTS `itemdespensa_movimentoitemdespensa` (
 
 CREATE TABLE IF NOT EXISTS `lancamentoconta` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `dataLancamento` date NOT NULL,
-  `dataPagamento` date NOT NULL,
+  `dataLancamento` date DEFAULT NULL,
+  `dataPagamento` date DEFAULT NULL,
   `descricao` varchar(100) NOT NULL,
   `historico` varchar(255) DEFAULT NULL,
   `origem` varchar(20) DEFAULT NULL,
@@ -527,7 +527,7 @@ CREATE TABLE IF NOT EXISTS `lancamentoimportado` (
   `idConta` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_conta_lancamentoimportado` (`idConta`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -683,148 +683,173 @@ CREATE TABLE IF NOT EXISTS `versao` (
 --
 -- Restrições para a tabela `aberturafechamentoconta`
 --
-ALTER TABLE `aberturafechamentoconta` ADD CONSTRAINT `FKB806F0BD7DD97C50` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
+ALTER TABLE `aberturafechamentoconta`
+  ADD CONSTRAINT `FKB806F0BD7DD97C50` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
 
 --
 -- Restrições para a tabela `auditoria_auditoriadados`
 --
-ALTER TABLE `auditoria_auditoriadados` ADD CONSTRAINT `FKF2BF5F9E7D80A527` FOREIGN KEY (`auditoria_id`) REFERENCES `auditoria` (`id`);
-ALTER TABLE `auditoria_auditoriadados` ADD CONSTRAINT `FKF2BF5F9E8841B637` FOREIGN KEY (`dadosAuditoria_id`) REFERENCES `auditoriadados` (`id`);
+ALTER TABLE `auditoria_auditoriadados`
+  ADD CONSTRAINT `FKF2BF5F9E7D80A527` FOREIGN KEY (`auditoria_id`) REFERENCES `auditoria` (`id`),
+  ADD CONSTRAINT `FKF2BF5F9E8841B637` FOREIGN KEY (`dadosAuditoria_id`) REFERENCES `auditoriadados` (`id`);
 
 --
 -- Restrições para a tabela `banco`
 --
-ALTER TABLE `banco` ADD CONSTRAINT `FK592C0BB7083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `banco`
+  ADD CONSTRAINT `FK592C0BB7083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `buscasalva`
 --
-ALTER TABLE `buscasalva` ADD CONSTRAINT `FK129C7AEB7DD97C50` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
+ALTER TABLE `buscasalva`
+  ADD CONSTRAINT `FK129C7AEB7DD97C50` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
 
 --
 -- Restrições para a tabela `cartaocredito`
 --
-ALTER TABLE `cartaocredito` ADD CONSTRAINT `cartaocredito_ibfk_1` FOREIGN KEY (`idCartaoSubstituto`) REFERENCES `cartaocredito` (`id`);
-ALTER TABLE `cartaocredito` ADD CONSTRAINT `cartaocredito_ibfk_2` FOREIGN KEY (`idCartaoSubstituto`) REFERENCES `cartaocredito` (`id`);
-ALTER TABLE `cartaocredito` ADD CONSTRAINT `FK9BFA41887083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
-ALTER TABLE `cartaocredito` ADD CONSTRAINT `FK9BFA4188A36EA1C` FOREIGN KEY (`idBanco`) REFERENCES `banco` (`id`);
+ALTER TABLE `cartaocredito`
+  ADD CONSTRAINT `cartaocredito_ibfk_1` FOREIGN KEY (`idCartaoSubstituto`) REFERENCES `cartaocredito` (`id`),
+  ADD CONSTRAINT `cartaocredito_ibfk_2` FOREIGN KEY (`idCartaoSubstituto`) REFERENCES `cartaocredito` (`id`),
+  ADD CONSTRAINT `FK9BFA41887083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`),
+  ADD CONSTRAINT `FK9BFA4188A36EA1C` FOREIGN KEY (`idBanco`) REFERENCES `banco` (`id`);
 
 --
 -- Restrições para a tabela `categoria`
 --
-ALTER TABLE `categoria` ADD CONSTRAINT `FK5D54E1337083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `categoria`
+  ADD CONSTRAINT `FK5D54E1337083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `categoriadocumento`
 --
-ALTER TABLE `categoriadocumento` ADD CONSTRAINT `FKD0771AE17083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `categoriadocumento`
+  ADD CONSTRAINT `FKD0771AE17083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `conta`
 --
-ALTER TABLE `conta` ADD CONSTRAINT `FK5A7376F2CE1B172` FOREIGN KEY (`idCartao`) REFERENCES `cartaocredito` (`id`);
-ALTER TABLE `conta` ADD CONSTRAINT `FK5A7376F7083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
-ALTER TABLE `conta` ADD CONSTRAINT `FK5A7376FA36EA1C` FOREIGN KEY (`idBanco`) REFERENCES `banco` (`id`);
+ALTER TABLE `conta`
+  ADD CONSTRAINT `FK5A7376F2CE1B172` FOREIGN KEY (`idCartao`) REFERENCES `cartaocredito` (`id`),
+  ADD CONSTRAINT `FK5A7376F7083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`),
+  ADD CONSTRAINT `FK5A7376FA36EA1C` FOREIGN KEY (`idBanco`) REFERENCES `banco` (`id`);
 
 --
 -- Restrições para a tabela `conversaomoeda`
 --
-ALTER TABLE `conversaomoeda` ADD CONSTRAINT `fk_faturacartao_conversaomoeda` FOREIGN KEY (`idFaturaCartao`) REFERENCES `faturacartao` (`id`);
+ALTER TABLE `conversaomoeda`
+  ADD CONSTRAINT `fk_faturacartao_conversaomoeda` FOREIGN KEY (`idFaturaCartao`) REFERENCES `faturacartao` (`id`);
 
 --
 -- Restrições para a tabela `despensa`
 --
-ALTER TABLE `despensa` ADD CONSTRAINT `fk_despensa` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `despensa`
+  ADD CONSTRAINT `fk_despensa` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `detalhefatura`
 --
-ALTER TABLE `detalhefatura` ADD CONSTRAINT `fk_faturacartao_detalhefatura` FOREIGN KEY (`idFaturaCartao`) REFERENCES `faturacartao` (`id`);
-ALTER TABLE `detalhefatura` ADD CONSTRAINT `fk_lancamentoconta_detalhefatura` FOREIGN KEY (`idLancamento`) REFERENCES `lancamentoconta` (`id`);
+ALTER TABLE `detalhefatura`
+  ADD CONSTRAINT `fk_lancamentoconta_detalhefatura` FOREIGN KEY (`idLancamento`) REFERENCES `lancamentoconta` (`id`),
+  ADD CONSTRAINT `fk_faturacartao_detalhefatura` FOREIGN KEY (`idFaturaCartao`) REFERENCES `faturacartao` (`id`);
 
 --
 -- Restrições para a tabela `documento`
 --
-ALTER TABLE `documento` ADD CONSTRAINT `FK383D52B428C1FC80` FOREIGN KEY (`idArquivo`) REFERENCES `arquivo` (`id`);
-ALTER TABLE `documento` ADD CONSTRAINT `FK383D52B46CA8AABC` FOREIGN KEY (`idCategoriaDocumento`) REFERENCES `categoriadocumento` (`id`);
-ALTER TABLE `documento` ADD CONSTRAINT `FK383D52B47083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `documento`
+  ADD CONSTRAINT `FK383D52B428C1FC80` FOREIGN KEY (`idArquivo`) REFERENCES `arquivo` (`id`),
+  ADD CONSTRAINT `FK383D52B46CA8AABC` FOREIGN KEY (`idCategoriaDocumento`) REFERENCES `categoriadocumento` (`id`),
+  ADD CONSTRAINT `FK383D52B47083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `faturacartao`
 --
-ALTER TABLE `faturacartao` ADD CONSTRAINT `fk_arquivo_faturacartao` FOREIGN KEY (`idArquivo`) REFERENCES `arquivo` (`id`);
-ALTER TABLE `faturacartao` ADD CONSTRAINT `fk_conta_faturacartao` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
-ALTER TABLE `faturacartao` ADD CONSTRAINT `fk_lancamentoconta_faturacartao` FOREIGN KEY (`idLancamento`) REFERENCES `lancamentoconta` (`id`);
-ALTER TABLE `faturacartao` ADD CONSTRAINT `fk_moeda_faturacartao` FOREIGN KEY (`idMoeda`) REFERENCES `moeda` (`id`);
+ALTER TABLE `faturacartao`
+  ADD CONSTRAINT `fk_arquivo_faturacartao` FOREIGN KEY (`idArquivo`) REFERENCES `arquivo` (`id`),
+  ADD CONSTRAINT `fk_conta_faturacartao` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`),
+  ADD CONSTRAINT `fk_lancamentoconta_faturacartao` FOREIGN KEY (`idLancamento`) REFERENCES `lancamentoconta` (`id`),
+  ADD CONSTRAINT `fk_moeda_faturacartao` FOREIGN KEY (`idMoeda`) REFERENCES `moeda` (`id`);
 
 --
 -- Restrições para a tabela `favorecido`
 --
-ALTER TABLE `favorecido` ADD CONSTRAINT `FK1D15D5D87083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `favorecido`
+  ADD CONSTRAINT `FK1D15D5D87083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `fechamentoperiodo`
 --
-ALTER TABLE `fechamentoperiodo` ADD CONSTRAINT `FKEC523EC8BA3900C1` FOREIGN KEY (`idContaBancaria`) REFERENCES `conta` (`id`);
+ALTER TABLE `fechamentoperiodo`
+  ADD CONSTRAINT `FKEC523EC8BA3900C1` FOREIGN KEY (`idContaBancaria`) REFERENCES `conta` (`id`);
 
 --
 -- Restrições para a tabela `identidade`
 --
-ALTER TABLE `identidade` ADD CONSTRAINT `fk_identidade` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `identidade`
+  ADD CONSTRAINT `fk_identidade` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `itemdespensa`
 --
-ALTER TABLE `itemdespensa` ADD CONSTRAINT `FK3D6214555F6482A2` FOREIGN KEY (`idUnidadeMedida`) REFERENCES `unidademedida` (`id`);
-ALTER TABLE `itemdespensa` ADD CONSTRAINT `FK3D621455EC275F4E` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `itemdespensa`
+  ADD CONSTRAINT `FK3D6214555F6482A2` FOREIGN KEY (`idUnidadeMedida`) REFERENCES `unidademedida` (`id`),
+  ADD CONSTRAINT `FK3D621455EC275F4E` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `itemdespensa_movimentoitemdespensa`
 --
-ALTER TABLE `itemdespensa_movimentoitemdespensa` ADD CONSTRAINT `fk_itemdespensa` FOREIGN KEY (`itemDespensa_id`) REFERENCES `itemdespensa` (`id`);
-ALTER TABLE `itemdespensa_movimentoitemdespensa` ADD CONSTRAINT `fk_movimentoitemdespensa` FOREIGN KEY (`movimentacao_id`) REFERENCES `movimentoitemdespensa` (`id`);
+ALTER TABLE `itemdespensa_movimentoitemdespensa`
+  ADD CONSTRAINT `fk_itemdespensa` FOREIGN KEY (`itemDespensa_id`) REFERENCES `itemdespensa` (`id`),
+  ADD CONSTRAINT `fk_movimentoitemdespensa` FOREIGN KEY (`movimentacao_id`) REFERENCES `movimentoitemdespensa` (`id`);
 
 --
 -- Restrições para a tabela `lancamentoconta`
 --
-ALTER TABLE `lancamentoconta` ADD CONSTRAINT `fk_arquivo_lancamentoconta` FOREIGN KEY (`idArquivo`) REFERENCES `arquivo` (`id`);
-ALTER TABLE `lancamentoconta` ADD CONSTRAINT `fk_categoria_lancamentoconta` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`id`);
-ALTER TABLE `lancamentoconta` ADD CONSTRAINT `fk_conta_lancamentoconta` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
-ALTER TABLE `lancamentoconta` ADD CONSTRAINT `fk_favorecido_lancamentoconta` FOREIGN KEY (`idFavorecido`) REFERENCES `favorecido` (`id`);
-ALTER TABLE `lancamentoconta` ADD CONSTRAINT `fk_meiopagamento_lancamentoconta` FOREIGN KEY (`idMeioPagamento`) REFERENCES `meiopagamento` (`id`);
-ALTER TABLE `lancamentoconta` ADD CONSTRAINT `fk_moeda_lancamentoconta` FOREIGN KEY (`idMoeda`) REFERENCES `moeda` (`id`);
+ALTER TABLE `lancamentoconta`
+  ADD CONSTRAINT `fk_arquivo_lancamentoconta` FOREIGN KEY (`idArquivo`) REFERENCES `arquivo` (`id`),
+  ADD CONSTRAINT `fk_categoria_lancamentoconta` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`id`),
+  ADD CONSTRAINT `fk_conta_lancamentoconta` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`),
+  ADD CONSTRAINT `fk_favorecido_lancamentoconta` FOREIGN KEY (`idFavorecido`) REFERENCES `favorecido` (`id`),
+  ADD CONSTRAINT `fk_meiopagamento_lancamentoconta` FOREIGN KEY (`idMeioPagamento`) REFERENCES `meiopagamento` (`id`),
+  ADD CONSTRAINT `fk_moeda_lancamentoconta` FOREIGN KEY (`idMoeda`) REFERENCES `moeda` (`id`);
 
 --
 -- Restrições para a tabela `lancamentoimportado`
 --
-ALTER TABLE `lancamentoimportado` ADD CONSTRAINT `fk_conta_lancamentoimportado` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
+ALTER TABLE `lancamentoimportado`
+  ADD CONSTRAINT `fk_conta_lancamentoimportado` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
 
 --
 -- Restrições para a tabela `meiopagamento`
 --
-ALTER TABLE `meiopagamento` ADD CONSTRAINT `FKC31F74287083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `meiopagamento`
+  ADD CONSTRAINT `FKC31F74287083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `moeda`
 --
-ALTER TABLE `moeda` ADD CONSTRAINT `fk_usuario_moeda` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `moeda`
+  ADD CONSTRAINT `fk_usuario_moeda` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `opcaosistema`
 --
-ALTER TABLE `opcaosistema` ADD CONSTRAINT `fk_opcaosistema` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `opcaosistema`
+  ADD CONSTRAINT `fk_opcaosistema` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `previsaolancamentoconta`
 --
-ALTER TABLE `previsaolancamentoconta` ADD CONSTRAINT `fk_conta_previsaolancamentoconta` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
+ALTER TABLE `previsaolancamentoconta`
+  ADD CONSTRAINT `fk_conta_previsaolancamentoconta` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
 
 --
 -- Restrições para a tabela `unidademedida`
 --
-ALTER TABLE `unidademedida` ADD CONSTRAINT `FK2F2C0D88EC275F4E` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+ALTER TABLE `unidademedida`
+  ADD CONSTRAINT `FK2F2C0D88EC275F4E` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
-
+  
 --
 -- Extraindo dados da tabela `opcaosistema`
 --
