@@ -124,7 +124,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(Restrictions.ge("valorPago", criterio.getValor()));
 		}
 		
-		return criteria.addOrder(Order.asc("dataPagamento")).list();
+		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
 	}
 	
 	public LancamentoConta findLastLancamentoContaByConta(Conta conta) {
