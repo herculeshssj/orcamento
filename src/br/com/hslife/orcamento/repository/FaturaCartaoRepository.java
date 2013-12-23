@@ -116,7 +116,7 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("statusFaturaCartao", StatusFaturaCartao.FUTURA));
 		List<FaturaCartao> resultado = criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-		if (resultado != null) {
+		if (resultado != null && resultado.size() >= 1) {
 			return resultado.get(0);
 		}
 		return null;
@@ -137,7 +137,7 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 		criteria.add(Restrictions.eq("dataVencimento", dataVencimento));
 		criteria.add(Restrictions.eq("statusFaturaCartao", StatusFaturaCartao.FUTURA));
 		List<FaturaCartao> resultado = criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-		if (resultado != null) {
+		if (resultado != null && resultado.size() >= 1) {
 			return resultado.get(0);
 		}
 		return null;
