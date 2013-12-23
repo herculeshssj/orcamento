@@ -105,44 +105,50 @@ public class AuditoriaAspect {
 	}
 	
 	@Around("execution(public void br.com.hslife.orcamento.repository..update(..)) && args(entity)")
-	public void afterUpdate(ProceedingJoinPoint executaMetodo, EntityPersistence entity) throws Throwable {
-		System.out.println("Atualização detectada. Auditoria executada!");
-		System.out.println("Classe detectada: " + entity.getClass().getName());
-		
-		Auditoria auditoria  = new Auditoria();
-		
-		auditoria.setClasse(entity.getClass().getSimpleName());
-		auditoria.setTransacao("UPDATE");
-		//auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
-		
-		/*
-		 * Mudança realizada em virtude do caso de uso de registro de usuário. Ainda é necessário pensar em uma forma de registrar
-		 * quem está efetuando o registro para gravar na auditoria. Por enquanto será gravado o mesmo IP do computador que efetuou
-		 * o registro
-		 */
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
-			auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
-		} else {
-			auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+	public void afterUpdate(ProceedingJoinPoint executaMetodo, EntityPersistence entity) {
+		try {
+			System.out.println("Atualização detectada. Auditoria executada!");
+			System.out.println("Classe detectada: " + entity.getClass().getName());
+			
+			Auditoria auditoria  = new Auditoria();
+			
+			auditoria.setClasse(entity.getClass().getSimpleName());
+			auditoria.setTransacao("UPDATE");
+			//auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+			
+			/*
+			 * Mudança realizada em virtude do caso de uso de registro de usuário. Ainda é necessário pensar em uma forma de registrar
+			 * quem está efetuando o registro para gravar na auditoria. Por enquanto será gravado o mesmo IP do computador que efetuou
+			 * o registro
+			 */
+			if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
+				auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+			} else {
+				auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+			}
+			
+			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+			
+			EntityPersistence entityBefore = (EntityPersistence) sessionFactory.getCurrentSession().get(entity.getClass(), entity.getId());
+			
+			for (String s : entity.getFieldValues().keySet()) {
+				auditoria.getDadosAuditoria().add(new AuditoriaDados(entityBefore.getFieldValues().get(s), s, "BEFORE"));
+			}
+			
+			
+				executaMetodo.proceed();
+			
+			
+			for (String s : entity.getFieldValues().keySet()) {
+				auditoria.getDadosAuditoria().add(new AuditoriaDados(entity.getFieldValues().get(s), s, "AFTER"));
+			}
+			
+			sessionFactory.getCurrentSession().persist(auditoria);
+			
+			System.out.println("Auditoria realizada!");
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
-		
-		auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
-		
-		EntityPersistence entityBefore = (EntityPersistence) sessionFactory.getCurrentSession().get(entity.getClass(), entity.getId());
-		
-		for (String s : entity.getFieldValues().keySet()) {
-			auditoria.getDadosAuditoria().add(new AuditoriaDados(entityBefore.getFieldValues().get(s), s, "BEFORE"));
-		}
-		
-		executaMetodo.proceed();
-		
-		for (String s : entity.getFieldValues().keySet()) {
-			auditoria.getDadosAuditoria().add(new AuditoriaDados(entity.getFieldValues().get(s), s, "AFTER"));
-		}
-		
-		sessionFactory.getCurrentSession().persist(auditoria);
-		
-		System.out.println("Auditoria realizada!");
 	}
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..delete(..)) && args(entity)")

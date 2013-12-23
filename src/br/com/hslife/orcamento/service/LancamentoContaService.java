@@ -628,25 +628,27 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 				}
 				getRepository().save(lancamentoDuplicado);
 				
-				// Adiciona o lançamento duplicado do Map, criando novas faturas caso não haja
-				if (vincularFatura.equalsIgnoreCase("FUTURA")) {
-					if (faturasFuturas.containsKey(Util.formataDataHora(tempFatura.getTime(), Util.DATA))) {
-						faturasFuturas.get(Util.formataDataHora(tempFatura.getTime(), Util.DATA)).getDetalheFatura().add(lancamentoDuplicado);
-					} else {
-						// Instancia uma nova fatura futura
-						faturaFutura = new FaturaCartao();
-						
-						// Preenche os atributos da fatura futura
-						faturaFutura.setConta(conta);
-						faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
-						faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
-						faturaFutura.setDataVencimento(tempFatura.getTime());
-						faturaFutura.getDetalheFatura().add(lancamentoDuplicado);
-						
-						faturasFuturas.put(Util.formataDataHora(tempFatura.getTime(), Util.DATA), faturaFutura);
+				if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
+					// Adiciona o lançamento duplicado do Map, criando novas faturas caso não haja
+					if (vincularFatura.equalsIgnoreCase("FUTURA")) {
+						if (faturasFuturas.containsKey(Util.formataDataHora(tempFatura.getTime(), Util.DATA))) {
+							faturasFuturas.get(Util.formataDataHora(tempFatura.getTime(), Util.DATA)).getDetalheFatura().add(lancamentoDuplicado);
+						} else {
+							// Instancia uma nova fatura futura
+							faturaFutura = new FaturaCartao();
+							
+							// Preenche os atributos da fatura futura
+							faturaFutura.setConta(conta);
+							faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
+							faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
+							faturaFutura.setDataVencimento(tempFatura.getTime());
+							faturaFutura.getDetalheFatura().add(lancamentoDuplicado);
+							
+							faturasFuturas.put(Util.formataDataHora(tempFatura.getTime(), Util.DATA), faturaFutura);
+						}
+					} else if (vincularFatura.equalsIgnoreCase("ATUAL")) {
+						faturaAtual.getDetalheFatura().add(lancamentoDuplicado);
 					}
-				} else if (vincularFatura.equalsIgnoreCase("ATUAL")) {
-					faturaAtual.getDetalheFatura().add(lancamentoDuplicado);
 				}
 			}
 		}
