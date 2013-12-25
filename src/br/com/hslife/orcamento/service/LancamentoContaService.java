@@ -529,12 +529,14 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		}
 		
 		// Determina o tipo de vinculação com a fatura, adiciona os lançamentos copiados e salva
-		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
-			faturaAtual.getDetalheFatura().addAll(lancamentosCopiados);
-			faturaCartaoRepository.update(faturaAtual);
-		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
-			faturaFutura.getDetalheFatura().addAll(lancamentosCopiados);
-			faturaCartaoRepository.update(faturaFutura);
+		if (parametros.get("CONTA_DESTINO") != null && ((Conta)parametros.get("CONTA_DESTINO")).getTipoConta().equals(TipoConta.CARTAO)) {
+			if (vincularFatura.equalsIgnoreCase("ATUAL")) {
+				faturaAtual.getDetalheFatura().addAll(lancamentosCopiados);
+				faturaCartaoRepository.update(faturaAtual);
+			} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
+				faturaFutura.getDetalheFatura().addAll(lancamentosCopiados);
+				faturaCartaoRepository.update(faturaFutura);
+			}
 		}
 	}
 	
@@ -577,10 +579,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			// Prepara a data de vencimento da fatura
 			Calendar tempFatura = Calendar.getInstance();
 			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {			
-				tempFatura.setTime(dataVencimentoFaturaAtual);			
-				if (!incrementarData.equals("MES") || !incrementarData.equals("ANO")) {
-					tempFatura.add(Calendar.MONTH, 1);
-				}
+				tempFatura.setTime(dataVencimentoFaturaAtual);				
 			}
 			
 			// Duplica os lançamentos incrementando por dia, mês ou ano
@@ -611,7 +610,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 				if (incrementarData != null) {
 					
 					if (incrementarData.equals("DIA")) {						
-						temp.add(Calendar.DAY_OF_YEAR, i);						
+						temp.add(Calendar.DAY_OF_YEAR, i);
 					}
 					if (incrementarData.equals("MES")) {						
 						temp.add(Calendar.MONTH, i);

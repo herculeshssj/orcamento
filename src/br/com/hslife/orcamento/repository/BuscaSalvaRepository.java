@@ -86,7 +86,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findAllByContaAndUsuario(Conta conta, Usuario usuario) {
-		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta and c.id = :idConta where c.idUsuario = :idUsuario and not c.tipoConta = 'CARTAO' order by b.descricao asc";
+		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta and c.id = :idConta where c.idUsuario = :idUsuario order by b.descricao asc";
 		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId()).setLong("idConta", conta.getId());
 		return query.list();
 	}
