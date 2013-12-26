@@ -607,7 +607,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 				} else
 					temp.setTime(lancamentoDuplicado.getDataPagamento());
 				
-				if (incrementarData != null) {
+				if (incrementarData != null && !incrementarData.isEmpty()) {
 					
 					if (incrementarData.equals("DIA")) {						
 						temp.add(Calendar.DAY_OF_YEAR, i);
@@ -624,6 +624,8 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 						lancamentoDuplicado.setDataLancamento(temp.getTime());
 					else
 						lancamentoDuplicado.setDataPagamento(temp.getTime());
+				} else {
+					tempFatura.add(Calendar.MONTH, 1);
 				}
 				getRepository().save(lancamentoDuplicado);
 				
