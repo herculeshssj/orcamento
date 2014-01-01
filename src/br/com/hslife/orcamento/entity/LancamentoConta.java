@@ -153,7 +153,7 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(length=20, nullable=true)
 	private String parcela;
 		
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.LAZY, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=true)
 	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;

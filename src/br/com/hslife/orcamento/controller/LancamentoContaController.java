@@ -115,6 +115,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private String agrupamentoSelecionado;
 	private boolean exibirSaldoUltimoFechamento;
 	private TipoCategoria tipoCategoriaSelecionada;
+	private boolean selecionarTodosLancamentos;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
@@ -184,20 +185,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public void carregarArquivo(FileUploadEvent event) {
 		if (event.getFile() != null) {
-			if (event.getFile().getSize() > 16777216) {
-				errorMessage("Arquivo excedeu o tamanho máximo de 16 MB!");
-			} else {
-				if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
-				entity.getArquivo().setDados(event.getFile().getContents());
-				entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
-				entity.getArquivo().setContentType(event.getFile().getContentType());
-				entity.getArquivo().setTamanho(event.getFile().getSize());
-				//entity.setArquivo(arquivo);
-				infoMessage("Arquivo anexado com sucesso!");
-			}
-		} else {
-			infoMessage("Nenhum arquivo anexado!");
-		}
+			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
+			entity.getArquivo().setDados(event.getFile().getContents());
+			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			entity.getArquivo().setContentType(event.getFile().getContentType());
+			entity.getArquivo().setTamanho(event.getFile().getSize());			
+		} 
 	}
 	
 	public void baixarArquivo() {
@@ -222,7 +215,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
 			warnMessage("Nenhum arquivo adicionado!");
 		} else {
-			entity.setArquivo(new Arquivo());
+			entity.setArquivo(null);
 			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
 		}
 	}
@@ -246,6 +239,17 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			buscasSalvas = buscaSalvaService.buscarPorConta(criterioBusca.getConta());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void selecionarTodos() {
+		if (listEntity != null && listEntity.size() > 0)
+		for (LancamentoConta l : listEntity) {
+			if (selecionarTodosLancamentos) {
+				l.setSelecionado(true);
+			} else {
+				l.setSelecionado(false);
+			}
 		}
 	}
 	
@@ -653,5 +657,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setBuscaSalvaService(IBuscaSalva buscaSalvaService) {
 		this.buscaSalvaService = buscaSalvaService;
+	}
+
+	public boolean isSelecionarTodosLancamentos() {
+		return selecionarTodosLancamentos;
+	}
+
+	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
+		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 }

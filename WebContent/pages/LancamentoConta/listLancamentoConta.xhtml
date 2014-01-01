@@ -102,22 +102,22 @@
 			<h:panelGrid columns="2">
 				<h:panelGroup>
 		  			Agrupar por:     			
-		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}">
+		  			<h:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}">
 		  				<f:selectItem itemLabel="Nenhum"/>
 		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
 						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
 						<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
 						<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
-					</p:selectOneRadio>
+					</h:selectOneRadio>
 				</h:panelGroup>				
 				<h:panelGroup>   				
 					Exibir:
-					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.agendado}">
+					<h:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.agendado}">
 		  				<f:selectItem itemLabel="Sem lançamentos agendados" itemValue="-1"/>
 						<f:selectItem itemLabel="Com lançamentos agendados" itemValue="0"/>
 						<f:selectItem itemLabel="Somente lançamentos agendados" itemValue="1"/>   					
-					</p:selectOneRadio>
-					<p:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
+					</h:selectOneRadio>
+					<h:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
 					Exibir saldo anterior
 				</h:panelGroup>
 				
@@ -130,9 +130,11 @@
 		     	<p:dataTable id="tableListEntity" width="100%" value="#{managedBean.listEntity}" var="item" style="font-size: 16px;">
 		     		<p:column style="text-align: center; vertical-align: middle;">
 		     			<f:facet name="header">
-		     				<h:outputText value="Selecionar"/>
+		     				<h:selectBooleanCheckbox value="#{managedBean.selecionarTodosLancamentos}">
+		     					<p:ajax update="tableListEntity" listener="#{managedBean.selecionarTodos}" />
+		     				</h:selectBooleanCheckbox>
 		     			</f:facet>
-		     			<p:selectBooleanCheckbox value="#{item.selecionado}"/>
+		     			<h:selectBooleanCheckbox value="#{item.selecionado}"/>
 		     		</p:column>
 		     		<p:column style="vertical-align: middle;">
 		     			<f:facet name="header">
@@ -149,6 +151,7 @@
 		     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 		     			</h:outputText>
 		     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+		     			<p:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
 		     		</p:column>	     		
 		     		<p:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
@@ -194,7 +197,8 @@
 			     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 			     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 			     			</h:outputText>
-			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>     				     			
+			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+			     			<p:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     				     			
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
@@ -245,7 +249,8 @@
 			     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 			     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 			     			</h:outputText>	
-			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>     				     			
+			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+			     			<p:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     				     			
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
@@ -296,7 +301,8 @@
 			     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 			     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 			     			</h:outputText>
-			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>	
+			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+			     			<p:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>	
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
@@ -347,7 +353,8 @@
 			     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 			     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 			     			</h:outputText>
-			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>	     				     			
+			     			<p:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+			     			<p:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>	     				     			
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
