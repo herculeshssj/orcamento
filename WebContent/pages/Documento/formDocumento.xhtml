@@ -59,7 +59,7 @@
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="3" style="font-size: 16px;">
 				
 				Categoria:
 				<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoriaDocumento}" converter="entityConverter">									
@@ -75,15 +75,19 @@
 				<p:inputTextarea id="txtDescricao" value="#{managedBean.entity.descricao}" rows="3" cols="50"/>
 				<h:inputHidden/>
 												
-				Arquivo:
-				<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>
-				<h:panelGroup>
-					<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
-					&nbsp;&nbsp;&nbsp;
-					<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png"/>
-				</h:panelGroup>				
-				
-			</h:panelGrid>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			Arquivo:
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>			
+			<h:panelGroup>
+				<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
+				&nbsp;&nbsp;&nbsp;
+				<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png"/>				
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<hr/>
 		
 	</ui:define>
 

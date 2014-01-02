@@ -167,7 +167,6 @@ public class LancamentoConta extends EntityPersistence {
 	
 	public LancamentoConta() {
 		conta = new Conta();
-		arquivo = new Arquivo();
 	}
 	
 	public LancamentoConta(LancamentoConta lancamento) {

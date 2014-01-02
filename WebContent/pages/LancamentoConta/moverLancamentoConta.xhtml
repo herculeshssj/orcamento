@@ -103,7 +103,9 @@
      			<br/>
      			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
      				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-     			</h:outputText>     			
+     			</h:outputText>
+     			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+		     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     			
      		</p:column>	     		
      		<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">

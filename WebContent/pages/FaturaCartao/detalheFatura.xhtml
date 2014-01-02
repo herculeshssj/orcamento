@@ -162,6 +162,8 @@
 		    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 		     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		    </h:outputText>
+		    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+		    <h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
 		</p:column>		
 	</p:dataTable>
 	

@@ -58,7 +58,7 @@
 	
 	<ui:define name="campos">
 	
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="3" style="font-size: 16px;">
 		
 			Cartão:
 			<h:outputText value="#{managedBean.entity.conta.cartaoCredito.label}"/>
@@ -74,19 +74,21 @@
 			<h:outputText value="#{managedBean.entity.moeda.label}"/>
 			<h:outputText />
 			
-			Anexar fatura:			
-			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>
-				<h:panelGroup>			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			Anexar fatura:
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" rendered="#{managedBean.entity.conta.ativo}"/>			
+			<h:panelGroup>
 				<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
 				&nbsp;&nbsp;&nbsp;
-				<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png"/>				
+				<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png" rendered="#{managedBean.entity.conta.ativo}"/>				
 			</h:panelGroup>
-			
 		</h:panelGrid>
 		
 		<hr/>
 		
-		<h:panelGrid columns="5">
+		<h:panelGrid columns="5" style="font-size: 16px;">
 		
 			Lançado em:
 			<p:inputMask value="#{managedBean.criterioBusca.lancadoEm}" size="10" mask="99/99/9999">
@@ -141,6 +143,8 @@
 			    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			    </h:outputText>
+			    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+		     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
 			</p:column>
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
@@ -171,6 +175,8 @@
 			    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			    </h:outputText>
+			    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+		     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
 			</p:column>
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">

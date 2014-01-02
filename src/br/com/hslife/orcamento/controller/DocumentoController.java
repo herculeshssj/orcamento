@@ -170,20 +170,12 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 	
 	public void carregarArquivo(FileUploadEvent event) {
 		if (event.getFile() != null) {
-			if (event.getFile().getSize() > 16777216) {
-				errorMessage("Arquivo excedeu o tamanho máximo de 16 MB!");
-			} else {
-				if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
-				entity.getArquivo().setDados(event.getFile().getContents());
-				entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
-				entity.getArquivo().setContentType(event.getFile().getContentType());
-				entity.getArquivo().setTamanho(event.getFile().getSize());
-				//entity.setArquivo(arquivo);
-				infoMessage("Arquivo anexado com sucesso!");
-			}
-		} else {
-			infoMessage("Nenhum arquivo anexado!");
-		}
+			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
+			entity.getArquivo().setDados(event.getFile().getContents());
+			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			entity.getArquivo().setContentType(event.getFile().getContentType());
+			entity.getArquivo().setTamanho(event.getFile().getSize());			
+		} 
 	}
 	
 	public void baixarArquivo() {

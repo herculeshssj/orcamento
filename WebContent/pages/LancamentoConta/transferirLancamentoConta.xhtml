@@ -73,11 +73,11 @@
 			<p:message for="txtContaDestino"/>
 			
 			Descrição:
-			<p:inputText id="txtDescricao" value="#{managedBean.lancamentoATransferir.descricao}" size="50" />
+			<h:inputText id="txtDescricao" value="#{managedBean.lancamentoATransferir.descricao}" size="50" />
 			<h:outputText/>			
 			
 			Número do documento:
-			<p:inputText id="txtNumeroDocumento" value="#{managedBean.lancamentoATransferir.numeroDocumento}" />
+			<h:inputText id="txtNumeroDocumento" value="#{managedBean.lancamentoATransferir.numeroDocumento}" />
 			<h:outputText/>
 			
 			Data de pagamento:
@@ -87,17 +87,17 @@
 	    	<h:outputText/>
 	    					
 			Valor Pago:
-	    	<p:inputText id="txtValorPago" value="#{managedBean.lancamentoATransferir.valorPago}" size="10">
+	    	<h:inputText id="txtValorPago" value="#{managedBean.lancamentoATransferir.valorPago}" size="10">
 				<f:convertNumber type="currency" pattern="###.##"/>
-			</p:inputText>
+			</h:inputText>
 			<h:outputText/>
 			
 			Observação:
-			<p:inputTextarea value="#{managedBean.lancamentoATransferir.observacao}" size="70" rows="3"/>
+			<h:inputTextarea value="#{managedBean.lancamentoATransferir.observacao}" size="70" rows="3"/>
 			<h:outputText/>
 			
 			Lançamento agendado:
-			<p:selectBooleanCheckbox value="#{managedBean.lancamentoATransferir.agendado}"/>
+			<h:selectBooleanCheckbox value="#{managedBean.lancamentoATransferir.agendado}"/>
 			<h:outputText/>
 			
 			Categoria de origem:

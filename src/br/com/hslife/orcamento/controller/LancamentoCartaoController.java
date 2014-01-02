@@ -120,6 +120,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	private String agrupamentoSelecionado;
 	private boolean exibirSaldoUltimoFechamento;
 	private TipoCategoria tipoCategoriaSelecionada;
+	private boolean selecionarTodosLancamentos;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
@@ -238,20 +239,12 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	
 	public void carregarArquivo(FileUploadEvent event) {
 		if (event.getFile() != null) {
-			if (event.getFile().getSize() > 16777216) {
-				errorMessage("Arquivo excedeu o tamanho máximo de 16 MB!");
-			} else {
-				if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
-				entity.getArquivo().setDados(event.getFile().getContents());
-				entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
-				entity.getArquivo().setContentType(event.getFile().getContentType());
-				entity.getArquivo().setTamanho(event.getFile().getSize());
-				//entity.setArquivo(arquivo);
-				infoMessage("Arquivo anexado com sucesso!");
-			}
-		} else {
-			infoMessage("Nenhum arquivo anexado!");
-		}
+			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
+			entity.getArquivo().setDados(event.getFile().getContents());
+			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			entity.getArquivo().setContentType(event.getFile().getContentType());
+			entity.getArquivo().setTamanho(event.getFile().getSize());			
+		} 
 	}
 	
 	public void baixarArquivo() {
@@ -287,6 +280,16 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 				tipoCategoriaSelecionada = TipoCategoria.CREDITO;
 			} else {
 				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
+			}
+		}
+	}	
+	public void selecionarTodos() {
+		if (listEntity != null && listEntity.size() > 0)
+		for (LancamentoConta l : listEntity) {
+			if (selecionarTodosLancamentos) {
+				l.setSelecionado(true);
+			} else {
+				l.setSelecionado(false);
 			}
 		}
 	}
@@ -702,5 +705,13 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 
 	public void setVincularFatura(String vincularFatura) {
 		this.vincularFatura = vincularFatura;
+	}
+
+	public boolean isSelecionarTodosLancamentos() {
+		return selecionarTodosLancamentos;
+	}
+
+	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
+		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 }

@@ -132,7 +132,7 @@ public class FaturaCartao extends EntityPersistence {
 	@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")})
 	private Set<LancamentoConta> detalheFatura;
 	
-	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=true)
 	private Arquivo arquivo;
 	

@@ -73,7 +73,7 @@ public class Documento extends EntityPersistence {
 	@Column
 	private String descricao;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.LAZY, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=false)
 	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;
