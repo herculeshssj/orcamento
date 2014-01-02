@@ -49,3 +49,10 @@
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('DEZ2013.2', true);
+
+-- Eliminação de instâncias de arquivo sem anexo.
+update documento set idArquivo = null where idArquivo in (select id from arquivo where dados is null);
+update faturacartao set idArquivo = null where idArquivo in (select id from arquivo where dados is null);
+update lancamentoconta set idArquivo = null where idArquivo in (select id from arquivo where dados is null);
+
+delete from arquivo where dados is null;

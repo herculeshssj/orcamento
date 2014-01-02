@@ -138,7 +138,6 @@ public class FaturaCartao extends EntityPersistence {
 	
 	public FaturaCartao() {
 		conversoesMoeda = new ArrayList<ConversaoMoeda>();
-		arquivo = new Arquivo();
 		detalheFatura = new HashSet<LancamentoConta>();
 	}
 	
