@@ -186,6 +186,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		// Quita todos os lançamentos vinculados à fatura
 		for (LancamentoConta lancamento : faturaCartao.getDetalheFatura()) {
 			LancamentoConta l = lancamentoContaRepository.findById(lancamento.getId());
+			l.setDataPagamento(faturaCartao.getDataVencimento());
 			l.setQuitado(true);
 			lancamentoContaRepository.update(l);
 		}

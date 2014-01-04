@@ -82,4 +82,4 @@ CREATE TABLE IF NOT EXISTS `panoramalancamentocartao` (
   KEY `fk_moeda_panoramalancamentocartao` (`idMoeda`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-update lancamentoconta lc set lc.dataPagamento = (select fc.dataVencimento from faturacartao fc inner join detalhefatura df on df.idFaturaCartao = fc.id where df.idLancamento = lc.id);
+update lancamentoconta lc set lc.dataPagamento = (select fc.dataVencimento from faturacartao fc inner join detalhefatura df on df.idFaturaCartao = fc.id where df.idLancamento = lc.id) where dataPagamento is null;
