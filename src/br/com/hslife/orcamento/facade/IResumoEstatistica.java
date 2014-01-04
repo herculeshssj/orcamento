@@ -47,6 +47,8 @@ package br.com.hslife.orcamento.facade;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
@@ -62,5 +64,9 @@ public interface IResumoEstatistica {
 	public List<PrevisaoLancamentoConta> visualizarRelatorioPrevisaoLancamentoConta(Conta conta, int ano, TipoAgrupamentoBusca agrupamento) throws BusinessException;
 	
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean lancamentoAgendado, Usuario usuario) throws BusinessException;
+	
+	public void gerarRelatorioPanoramaLancamentoCartao(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException;
+	
+	public List<PanoramaLancamentoCartao> visualizarRelatorioPanoramaLancamentoCartao(Conta conta, int ano, Moeda moeda) throws BusinessException;
 
 }

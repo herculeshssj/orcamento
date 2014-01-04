@@ -56,3 +56,30 @@ update faturacartao set idArquivo = null where idArquivo in (select id from arqu
 update lancamentoconta set idArquivo = null where idArquivo in (select id from arquivo where dados is null);
 
 delete from arquivo where dados is null;
+
+-- Panorama dos Lançamentos do Cartão
+CREATE TABLE IF NOT EXISTS `panoramalancamentocartao` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ano` int(11) DEFAULT NULL,
+  `descricao` varchar(255) NOT NULL,
+  `janeiro` decimal(18,2) NOT NULL,
+  `fevereiro` decimal(18,2) NOT NULL,
+  `marco` decimal(18,2) NOT NULL,
+  `abril` decimal(18,2) NOT NULL,
+  `maio` decimal(18,2) NOT NULL,
+  `junho` decimal(18,2) NOT NULL,
+  `julho` decimal(18,2) NOT NULL,
+  `agosto` decimal(18,2) NOT NULL,
+  `setembro` decimal(18,2) NOT NULL,
+  `outubro` decimal(18,2) NOT NULL,
+  `novembro` decimal(18,2) NOT NULL,
+  `dezembro` decimal(18,2) NOT NULL,
+  `idConta` bigint(20) NOT NULL,
+  `idMoeda` bigint(20) NOT NULL,
+  `indice` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_conta_panoramalancamentocartao` (`idConta`),
+  KEY `fk_moeda_panoramalancamentocartao` (`idMoeda`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+update lancamentoconta lc set lc.dataPagamento = (select fc.dataVencimento from faturacartao fc inner join detalhefatura df on df.idFaturaCartao = fc.id where df.idLancamento = lc.id);
