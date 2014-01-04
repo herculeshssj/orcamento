@@ -284,4 +284,63 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			lancamentoImportadoRepository.delete(li);
 		}
 	}
+	
+	@Override
+	public void importarLancamento(LancamentoImportado entity) throws BusinessException {
+		LancamentoConta l = lancamentoContaRepository.findByHash(entity.getHash());
+		if (l == null) {
+			// Cria um novo lançamento
+			l = new LancamentoConta();
+			
+			if (entity.getData().after(new Date())) {
+				l.setAgendado(true);
+			} else {
+				l.setAgendado(false);
+			}
+			
+			if (entity.getValor() > 0) {
+				l.setTipoLancamento(TipoLancamento.RECEITA);
+			} else {
+				l.setTipoLancamento(TipoLancamento.DESPESA);
+			}
+			
+			l.setConta(entity.getConta());
+			l.setDataPagamento(entity.getData());
+			l.setDescricao(entity.getHistorico());
+			l.setHistorico(entity.getHistorico());
+			l.setNumeroDocumento(entity.getDocumento());
+			l.setValorPago(Math.abs(entity.getValor()));
+			l.setHashImportacao(entity.getHash());
+			
+			// Salva o lançamento
+			lancamentoContaRepository.save(l);
+			
+			// Exclui o lançamento importado
+			lancamentoImportadoRepository.delete(entity);
+		} else {
+			// Atualiza o lançamento existente
+			
+			l.setDataPagamento(entity.getData());
+			l.setHistorico(entity.getHistorico());
+			l.setNumeroDocumento(entity.getDocumento());
+			l.setValorPago(Math.abs(entity.getValor()));
+			
+			if (entity.getData().after(new Date())) {
+				l.setAgendado(true);
+			} else {
+				l.setAgendado(false);
+			}
+			
+			if (entity.getValor() > 0) {
+				l.setTipoLancamento(TipoLancamento.RECEITA);
+			} else {
+				l.setTipoLancamento(TipoLancamento.DESPESA);
+			}
+			
+			lancamentoContaRepository.update(l);
+			
+			// Exclui o lançamento importado
+			lancamentoImportadoRepository.delete(entity);
+		}
+	}
 }

@@ -206,6 +206,17 @@ public class ImportacaoLancamentoController extends AbstractController {
 		}
 	}
 	
+	public void importarLancamento() {
+		try {
+			entity = getService().buscarPorID(idEntity);
+			getService().importarLancamento(entity);
+			infoMessage("Lançamento importado com sucesso!");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
 	public String processarLancamentos() {
 		try {
 			getService().processarLancamentosImportados(contaSelecionada, gerarNovosLancamentos);

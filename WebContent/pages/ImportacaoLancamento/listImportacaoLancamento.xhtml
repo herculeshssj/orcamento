@@ -103,7 +103,11 @@
 		<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
-			</f:facet>						
+			</f:facet>			
+			<h:commandButton value="Importar" image="/resources/images/importar.png" action="#{managedBean.importarLancamento}" title="Importar">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>			
+			&nbsp;&nbsp;&nbsp;
 			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirLancamentoImportado}" title="Excluir">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>

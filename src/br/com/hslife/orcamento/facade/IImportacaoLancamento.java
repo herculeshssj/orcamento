@@ -68,4 +68,6 @@ public interface IImportacaoLancamento {
 	public List<LancamentoConta> gerarLancamentoContaAInserir(List<LancamentoImportado> lancamentosImportados) throws BusinessException;
 	
 	public void processarLancamentosImportados(Conta conta, boolean gerarNovosLancamentos) throws BusinessException;
+	
+	public void importarLancamento(LancamentoImportado entity) throws BusinessException;
 }
