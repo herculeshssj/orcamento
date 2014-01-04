@@ -147,13 +147,7 @@
 				
 				<i>Lançamentos encontrados:</i>
 		
-				<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}">
-					<p:column style="text-align: center; vertical-align: middle;">
-		     			<f:facet name="header">
-		     				<h:outputText value="Selecionar"/>
-		     			</f:facet>
-		     			<p:selectBooleanCheckbox value="#{item.selecionado}"/>
-		     		</p:column>
+				<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
 					<p:column style="vertical-align: middle;">
 						<f:facet name="header">
 					    	<h:outputText value="Histórico"/>

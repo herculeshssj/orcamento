@@ -388,7 +388,10 @@ public class FaturaCartaoController extends AbstractController {
 	public double getSaldoDevedor() {
 		try {
 			if (cartaoSelecionado != null)
-				return getService().saldoDevedorUltimaFatura(cartaoSelecionado);
+				if (getService().saldoDevedorUltimaFatura(cartaoSelecionado) == 0.0)
+					return faturaSelecionada.getSaldoDevedor() + getService().saldoDevedorUltimaFatura(cartaoSelecionado);
+				else
+					return getService().saldoDevedorUltimaFatura(cartaoSelecionado);			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -477,14 +480,7 @@ public class FaturaCartaoController extends AbstractController {
 	public String quitarFatura() {
 		try {
 			if (formaPagamentoFatura == 3) {
-				// Verifica se um lançamento foi selecionado na listagem
-				for (LancamentoConta l : lancamentosEncontrados) {
-					if (l.isSelecionado()) {
-						lancamento = l;
-						break;
-					}
-				}
-				
+				// Verifica se um lançamento foi selecionado na listagem				
 				if(lancamento ==  null || lancamento.getConta() == null) {
 					warnMessage("Selecione um lançamento!");
 					return "";
