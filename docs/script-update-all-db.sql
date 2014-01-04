@@ -1328,3 +1328,43 @@ alter table lancamentoconta change column `dataLancamento` `dataLancamento` date
 
 update lancamentoconta set dataPagamento = null where idConta in (select id from conta where tipoConta = 'CARTAO');
 update lancamentoconta set dataLancamento = null where idConta not in (select id from conta where tipoConta = 'CARTAO');
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO DEZ2013.2 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('DEZ2013.2', true);
+
+-- Eliminação de instâncias de arquivo sem anexo.
+update documento set idArquivo = null where idArquivo in (select id from arquivo where dados is null);
+update faturacartao set idArquivo = null where idArquivo in (select id from arquivo where dados is null);
+update lancamentoconta set idArquivo = null where idArquivo in (select id from arquivo where dados is null);
+
+delete from arquivo where dados is null;
+
+-- Panorama dos Lançamentos do Cartão
+CREATE TABLE IF NOT EXISTS `panoramalancamentocartao` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ano` int(11) DEFAULT NULL,
+  `descricao` varchar(255) NOT NULL,
+  `janeiro` decimal(18,2) NOT NULL,
+  `fevereiro` decimal(18,2) NOT NULL,
+  `marco` decimal(18,2) NOT NULL,
+  `abril` decimal(18,2) NOT NULL,
+  `maio` decimal(18,2) NOT NULL,
+  `junho` decimal(18,2) NOT NULL,
+  `julho` decimal(18,2) NOT NULL,
+  `agosto` decimal(18,2) NOT NULL,
+  `setembro` decimal(18,2) NOT NULL,
+  `outubro` decimal(18,2) NOT NULL,
+  `novembro` decimal(18,2) NOT NULL,
+  `dezembro` decimal(18,2) NOT NULL,
+  `idConta` bigint(20) NOT NULL,
+  `idMoeda` bigint(20) NOT NULL,
+  `indice` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_conta_panoramalancamentocartao` (`idConta`),
+  KEY `fk_moeda_panoramalancamentocartao` (`idMoeda`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+update lancamentoconta lc set lc.dataPagamento = (select fc.dataVencimento from faturacartao fc inner join detalhefatura df on df.idFaturaCartao = fc.id where df.idLancamento = lc.id) where dataPagamento is null;
