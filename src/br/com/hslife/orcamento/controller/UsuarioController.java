@@ -46,10 +46,13 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 
+import javax.faces.context.FacesContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
@@ -67,6 +70,9 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 
 	@Autowired
 	private IUsuario service;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 	
 	private String loginUsuario;	
 	
@@ -154,6 +160,40 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		}
 		return "";
 	}
+	
+	public void logarComo() {
+		try {
+			Usuario u = getService().buscarPorID(idEntity);
+			Usuario logadoComo = new Usuario();
+			logadoComo.setAtivo(u.isAtivo());
+			logadoComo.setDataCriacao(u.getDataCriacao());
+			logadoComo.setEmail(u.getEmail());
+			logadoComo.setId(u.getId());
+			logadoComo.setLogin(u.getLogin());
+			logadoComo.setNome(u.getNome() + "(" + getUsuarioLogado().getLogin() + ")");
+			logadoComo.setTipoUsuario(u.getTipoUsuario());
+			logadoComo.setLogado(true);
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", logadoComo);
+			
+			infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
+			
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}
+	}
+	
+	public void deslogarComo() {
+		try {
+			Usuario u = getService().buscarPorID(idEntity);
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioComponent.getUsuarioLogado());
+			
+			infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}
+	}
 
 	public String getLoginUsuario() {
 		return loginUsuario;
@@ -185,5 +225,9 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 
 	public void setService(IUsuario service) {
 		this.service = service;
+	}
+
+	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
+		this.usuarioComponent = usuarioComponent;
 	}
 }
