@@ -62,7 +62,7 @@
 			<p:messages />
 
 			<h:commandLink action="#{managedBean.create}" title="Novo registro">
-				<p:graphicImage value="/resources/images/novo.png" />
+				<h:graphicImage value="/resources/images/novo.png" />
 			</h:commandLink>     		
      		&nbsp;
      				
@@ -74,7 +74,7 @@
 			</h:selectOneMenu>     		
      		&nbsp;
      		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
-				<p:graphicImage value="/resources/images/pesquisar.png" />
+				<h:graphicImage value="/resources/images/pesquisar.png" />
 			</h:commandLink>
 
 			<br />
@@ -101,26 +101,26 @@
 					<f:facet name="header">
 						<h:outputText value="Ativo" />
 					</f:facet>
-					<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
+					<h:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
 				</p:column>
 
 				<p:column style="text-align: center; vertical-align: middle;">
 					<f:facet name="header">
 						<h:outputText value="Ações"/>
 					</f:facet>
-					<h:commandButton value="Editar"
+					<h:commandButton title="Editar"
 						image="/resources/images/alterar.png" action="#{managedBean.edit}">
 						<f:setPropertyActionListener value="#{item.id}"
 							target="#{managedBean.idEntity}" />
 					</h:commandButton>
 					&nbsp;&nbsp;&nbsp;
-					<h:commandButton value="Ativar conta"
+					<h:commandButton title="Ativar conta"
 						image="/resources/images/habilitar.png"
 						action="#{managedBean.ativarConta}" rendered="#{!item.ativo and !item.arquivado}">
 						<f:setPropertyActionListener value="#{item.id}"
 							target="#{managedBean.idEntity}" />
 					</h:commandButton>					
-					<h:commandButton value="Desativar conta"
+					<h:commandButton title="Desativar conta"
 						image="/resources/images/fechar.png"
 						action="#{managedBean.desativarContaView}"
 						rendered="#{item.ativo}">

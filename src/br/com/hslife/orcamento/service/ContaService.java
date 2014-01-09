@@ -54,21 +54,25 @@ import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.AberturaFechamentoConta;
 import br.com.hslife.orcamento.entity.Banco;
+import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
+import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.repository.AberturaFechamentoContaRepository;
+import br.com.hslife.orcamento.repository.BuscaSalvaRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
+import br.com.hslife.orcamento.repository.PrevisaoLancamentoContaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("contaService")
@@ -94,6 +98,12 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
+	
+	@Autowired
+	private PrevisaoLancamentoContaRepository previsaoLancamentoContaRepository;
+	
+	@Autowired
+	private BuscaSalvaRepository buscaSalvaRepository;
 	
 	public ContaComponent getComponent() {
 		return component;
@@ -133,6 +143,15 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	public void setFechamentoPeriodoRepository(
 			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
 		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
+	}
+
+	public void setPrevisaoLancamentoContaRepository(
+			PrevisaoLancamentoContaRepository previsaoLancamentoContaRepository) {
+		this.previsaoLancamentoContaRepository = previsaoLancamentoContaRepository;
+	}
+
+	public void setBuscaSalvaRepository(BuscaSalvaRepository buscaSalvaRepository) {
+		this.buscaSalvaRepository = buscaSalvaRepository;
 	}
 
 	@Override
@@ -245,8 +264,18 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	@Override
 	public void excluir(Conta entity) throws BusinessException {
 		if (getRepository().existsLinkages(entity)) {
-			throw new BusinessException("Não é possível excluir! Existem lançamentos e fechamentos relacionamentos com a conta!");
+			throw new BusinessException("Não é possível excluir! Existem registros relacionamentos com a conta!");
 		} else {
+			// Exclui as previsões dos lançamentos da conta
+			for (PrevisaoLancamentoConta previsao : previsaoLancamentoContaRepository.findByConta(entity)) {
+				previsaoLancamentoContaRepository.delete(previsao);
+			}
+			
+			// Exclui as buscas salvas
+			for (BuscaSalva busca : buscaSalvaRepository.findByConta(entity)) {
+				buscaSalvaRepository.delete(busca);
+			}
+			
 			// Exclui os lançamentos importados
 			for (LancamentoImportado importado : lancamentoImportadoRepository.findByConta(entity)) {
 				lancamentoImportadoRepository.delete(importado);
