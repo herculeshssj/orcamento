@@ -45,6 +45,8 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
@@ -78,6 +80,8 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	
 	private String novaSenha;
 	private String confirmaSenha;
+	
+	private Map<String, Long> mapAtividadeUsuario = new HashMap<String, Long>();
 
 	public UsuarioController() {
 		super(new Usuario());
@@ -161,6 +165,17 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		return "";
 	}
 	
+	@Override
+	public String view() {
+		try {
+			// Obtém o relatório de atividades do usuário
+			mapAtividadeUsuario = getService().buscarAtividadeUsuario(getService().buscarPorID(idEntity));
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return super.view();
+	}
+	
 	public void logarComo() {
 		try {
 			Usuario u = getService().buscarPorID(idEntity);
@@ -229,5 +244,13 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
 		this.usuarioComponent = usuarioComponent;
+	}
+
+	public Map<String, Long> getMapAtividadeUsuario() {
+		return mapAtividadeUsuario;
+	}
+
+	public void setMapAtividadeUsuario(Map<String, Long> mapAtividadeUsuario) {
+		this.mapAtividadeUsuario = mapAtividadeUsuario;
 	}
 }

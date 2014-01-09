@@ -112,4 +112,11 @@ public class OpcaoSistemaRepository extends AbstractRepository implements IRepos
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<OpcaoSistema> findByUsuario(Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.list();
+	}
 }

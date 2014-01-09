@@ -44,7 +44,10 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
@@ -77,5 +80,60 @@ public class UsuarioRepository extends AbstractCRUDRepository<Usuario> {
 		Criteria criteria = getSession().createCriteria(Usuario.class);
 		criteria.add(Restrictions.ilike("login", login, MatchMode.ANYWHERE));
 		return criteria.addOrder(Order.asc("nome")).list();
+	}
+	
+	public Map<String, Long> findUserActivity(Usuario usuario) {
+		Map<String, Long> usuarioAtividade = new HashMap<String, Long>();
+		BigInteger resultado = new BigInteger("0");
+		
+		// Traz a quantidade de bancos do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from banco where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("BANCO", resultado.longValue());
+		
+		// Traz a quantidade de categorias do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from categoria where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("CATEGORIA", resultado.longValue());
+		
+		// Traz a quantidade de categorias de documento do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from categoriadocumento where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("CATEGORIA_DOCUMENTO", resultado.longValue());
+		
+		// Traz a quantidade de contas do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from conta where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("CONTA", resultado.longValue());
+		
+		// Traz a quantidade de despensas do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from despensa where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("DESPENSA", resultado.longValue());
+		
+		// Traz a quantidade de favorecidos do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from favorecido where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("FAVORECIDO", resultado.longValue());
+		
+		// Traz a quantidade de meios de pagemento do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from meiopagamento where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("MEIO_PAGAMENTO", resultado.longValue());
+		
+		// Traz a quantidade de moedas do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from moeda where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("MOEDA", resultado.longValue());
+		
+		// Traz a quantidade de opções do sistema do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from opcaosistema where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("OPCAO_SISTEMA", resultado.longValue());
+		
+		// Traz a quantidade de documentos de identidade do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from identidade where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("IDENTIDADE", resultado.longValue());
+		
+		// Traz a quantidade de registros de auditoria do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from auditoria where usuario = '" + usuario.getLogin() + "'").uniqueResult(); 
+		usuarioAtividade.put("AUDITORIA", resultado.longValue());
+		
+		// Traz a quantidade de unidades de medida do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from unidademedida where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("UNIDADE_MEDIDA", resultado.longValue());
+		
+		return usuarioAtividade;
 	}
 }

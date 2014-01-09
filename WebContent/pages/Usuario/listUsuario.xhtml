@@ -57,13 +57,13 @@
 	
 	<ui:define name="botoes">
 	    <h:commandLink action="#{managedBean.create}" title="Novo registro" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
-	    	<p:graphicImage value="/resources/images/novo.png"/>
+	    	<h:graphicImage value="/resources/images/novo.png"/>
 	 	</h:commandLink>
      </ui:define>
 
 	<ui:define name="pesquisa">
 		Login:
-	    <p:inputText value="#{managedBean.loginUsuario}" />
+	    <h:inputText value="#{managedBean.loginUsuario}" />
 	</ui:define>
 
 	<ui:define name="pesquisa_avancada"></ui:define>

@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.facade;
 
 import java.util.List;
+import java.util.Map;
 
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -66,5 +67,7 @@ public interface IUsuario extends ICRUDService<Usuario> {
 	public void efetuarRegistro(Usuario entity) throws BusinessException;
 	
 	public void recuperarSenha(Usuario entity) throws BusinessException;
+	
+	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) throws BusinessException;
 	
 }

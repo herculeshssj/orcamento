@@ -74,7 +74,51 @@
 			</h:outputText>
 			
 			Ativo:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>				
+			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+						
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			
+			<f:facet name="header">
+				<h:outputText value="Atividade do usuário"/>
+			</f:facet>
+			
+			Bancos cadastrados:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['BANCO']}"/>
+			
+			Categorias cadastradas:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['CATEGORIA']}"/>
+			
+			Categorias de documento:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['CATEGORIA_DOCUMENTO']}"/>
+			
+			Contas existentes:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['CONTA']}"/>
+			
+			Despensas existentes:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['DESPENSA']}"/>
+			
+			Favorecidos cadastrados:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['FAVORECIDO']}"/>
+			
+			Meios de pagamentos cadastrados:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['MEIO_PAGAMENTO']}"/>
+			
+			Moedas cadastradas:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['MOEDA']}"/>
+			
+			Opções do usuário cadastradas:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['OPCAO_SISTEMA']}"/>
+			
+			Documentos de identidade:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['IDENTIDADE']}"/>
+						
+			Registros de auditoria:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['AUDITORIA']}"/>
+			
+			Unidades de medidas cadastradas:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['UNIDADE_MEDIDA']}"/>
 			
 		</h:panelGrid>
 		
