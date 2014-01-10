@@ -111,13 +111,13 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	
 	public String list() {
 		operation = "list";
-		moduleTitle = "Usuários";
+		actionTitle = "";  
 		return "/pages/" + entity.getClass().getSimpleName() + "/list" + entity.getClass().getSimpleName(); 
 	}
 	
 	public String create() {
 		operation = "create";
-		moduleTitle = "Usuários - Novo";
+		actionTitle = " - Novo";
 		initializeEntity();
 		return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
 	}
@@ -157,7 +157,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		try {
 			entity = getService().buscarPorID(idEntity);
 			operation = "edit";
-			moduleTitle = "Usuários - Editar";
+			actionTitle = " - Editar";
 			return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
