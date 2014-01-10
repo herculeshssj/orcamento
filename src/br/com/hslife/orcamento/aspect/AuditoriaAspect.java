@@ -75,6 +75,10 @@ public class AuditoriaAspect {
 		this.sessionFactory = sessionFactory;
 	}
 
+	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
+		this.usuarioComponent = usuarioComponent;
+	}
+	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..save(..)) && args(entity)")
 	public void afterSave(EntityPersistence entity) {
 		System.out.println("Salvamento detectado. Executando auditoria!");
