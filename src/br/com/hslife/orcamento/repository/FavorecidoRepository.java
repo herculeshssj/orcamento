@@ -54,6 +54,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -111,11 +112,16 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 		query.executeUpdate();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Favorecido findDefaultByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("padrao", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return (Favorecido)criteria.uniqueResult();
+		List<Favorecido> resultado = criteria.list();
+		if (resultado != null && resultado.size() >= 1) {
+			return resultado.get(0);
+		}
+		return null;
 	}
 	
 }

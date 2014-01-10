@@ -105,4 +105,16 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 		
 		query.executeUpdate();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Banco findDefaultByUsuario(Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(Banco.class);
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		criteria.add(Restrictions.eq("padrao", true));
+		List<Banco> resultado = criteria.list();
+		if (resultado != null && resultado.size() >= 1) {
+			return resultado.get(0);
+		}
+		return null;
+	}
 }

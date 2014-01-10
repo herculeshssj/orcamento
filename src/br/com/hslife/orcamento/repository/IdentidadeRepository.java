@@ -44,6 +44,8 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -64,5 +66,12 @@ public class IdentidadeRepository extends AbstractCRUDRepository<Identidade> {
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("tipoIdentidade", tipoIdentidade));
 		return criteria.setMaxResults(1).uniqueResult() ==  null ? null : (Identidade)criteria.setMaxResults(1).uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Identidade> findByUsuario(Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(Identidade.class);
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));		
+		return criteria.list();
 	}
 }

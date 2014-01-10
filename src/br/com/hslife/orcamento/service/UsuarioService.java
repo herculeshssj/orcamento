@@ -47,17 +47,28 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.EmailComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
+import br.com.hslife.orcamento.entity.Identidade;
+import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.repository.AuditoriaRepository;
+import br.com.hslife.orcamento.repository.BancoRepository;
+import br.com.hslife.orcamento.repository.CategoriaRepository;
+import br.com.hslife.orcamento.repository.FavorecidoRepository;
+import br.com.hslife.orcamento.repository.IdentidadeRepository;
+import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
+import br.com.hslife.orcamento.repository.MoedaRepository;
+import br.com.hslife.orcamento.repository.OpcaoSistemaRepository;
 import br.com.hslife.orcamento.repository.UsuarioRepository;
 import br.com.hslife.orcamento.util.Util;
 
@@ -75,6 +86,27 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	
 	@Autowired
 	private AuditoriaRepository auditoriaRepository;
+	
+	@Autowired
+	private IdentidadeRepository identidadeRepository;
+	
+	@Autowired
+	private OpcaoSistemaRepository opcaoSistemaRepository;
+	
+	@Autowired
+	private BancoRepository bancoRepository;
+	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private FavorecidoRepository favorecidoRepository;
+	
+	@Autowired
+	private MeioPagamentoRepository meioPagamentoRepository;
+	
+	@Autowired
+	private MoedaRepository moedaRepository;
 
 	public UsuarioRepository getRepository() {
 		return repository;
@@ -100,10 +132,112 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		this.auditoriaRepository = auditoriaRepository;
 	}
 	
+	public void setIdentidadeRepository(IdentidadeRepository identidadeRepository) {
+		this.identidadeRepository = identidadeRepository;
+	}
+
+	public void setOpcaoSistemaRepository(
+			OpcaoSistemaRepository opcaoSistemaRepository) {
+		this.opcaoSistemaRepository = opcaoSistemaRepository;
+	}
+
+	public void setBancoRepository(BancoRepository bancoRepository) {
+		this.bancoRepository = bancoRepository;
+	}
+
+	public void setCategoriaRepository(CategoriaRepository categoriaRepository) {
+		this.categoriaRepository = categoriaRepository;
+	}
+
+	public void setFavorecidoRepository(FavorecidoRepository favorecidoRepository) {
+		this.favorecidoRepository = favorecidoRepository;
+	}
+
+	public void setMeioPagamentoRepository(
+			MeioPagamentoRepository meioPagamentoRepository) {
+		this.meioPagamentoRepository = meioPagamentoRepository;
+	}
+
+	public void setMoedaRepository(MoedaRepository moedaRepository) {
+		this.moedaRepository = moedaRepository;
+	}
+
 	@Override
 	public void excluir(Usuario entity) throws BusinessException {
-		if (auditoriaRepository.countRegistroAuditoriaByUsuario(entity.getLogin()) == 0)
+		// Conta os registros de atividade do usuário.
+		long totalAtividade = 0;
+		Map<String, Long> atividadeUsuarioMap = this.buscarAtividadeUsuario(entity);
+		atividadeUsuarioMap.remove("IDENTIDADE");
+		atividadeUsuarioMap.remove("OPCAO_SISTEMA");
+		for (Long valor : atividadeUsuarioMap.values()) {
+			totalAtividade += valor;
+		}
+		
+		// Verifica se o total é igual a 6. Se for, não é possível excluir, caso contrário exclui os
+		// registros que faltam e logo em seguida exclui o usuário.
+		if (totalAtividade <= 6) {
+			// Exclui os documentos de identidade do usuário
+			for (Identidade identidade : identidadeRepository.findByUsuario(entity)) {
+				identidadeRepository.delete(identidade);
+			}
+		
+			// Exclui as opções do sistema do usuário
+			for (OpcaoSistema opcao : opcaoSistemaRepository.findByUsuario(entity)) {
+				opcaoSistemaRepository.delete(opcao);
+			}
+			
+			// Exclui o banco padrão
+			if (bancoRepository.findDefaultByUsuario(entity) == null)
+				System.out.println("Não existe banco padrão.");
+			else 				
+				bancoRepository.delete(bancoRepository.findDefaultByUsuario(entity));
+			
+			// Exclui o favorecido padrão
+			if (favorecidoRepository.findDefaultByUsuario(entity) == null)
+				System.out.println("Não existe favorecido padrão.");
+			else
+				favorecidoRepository.delete(favorecidoRepository.findDefaultByUsuario(entity));
+				
+			// Exclui o meio de pagamento padrão
+			if (meioPagamentoRepository.findDefaultByUsuario(entity) == null)
+				System.out.println("Não existe meio de pagamento padrão.");
+			else
+				meioPagamentoRepository.delete(meioPagamentoRepository.findDefaultByUsuario(entity));	
+			
+			// Exclui a moeda padrão
+			if (moedaRepository.findDefaultByUsuario(entity) == null)
+				System.out.println("Não existe moeda padrão.");
+			else
+				moedaRepository.delete(moedaRepository.findDefaultByUsuario(entity));
+			
+			// Exclui as categoria
+			if (categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.CREDITO) == null 
+					&& categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.DEBITO) == null)
+				System.out.println("Não existem categorias padrão.");
+			else {
+				categoriaRepository.delete(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.CREDITO));
+				categoriaRepository.delete(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.DEBITO));
+			}								
+			
+			// Exclui o usuário
 			super.excluir(entity);
+			
+			// Envia mensagem de e-mail avisando da exclusão da conta
+			StringBuilder mensagemEmail = new StringBuilder();
+			
+			mensagemEmail.append("Prezado " + entity.getNome() + "\n\n");
+			mensagemEmail.append("Sua conta foi excluída em virtude de inatividade no sistema.\n\n");
+			mensagemEmail.append("Caso queira voltar a utilizar o sistema, por favor efetuar novamente seu registro.\n\n");
+			mensagemEmail.append("Atenciosamente,\n\n");
+			mensagemEmail.append("Administrador do Sistema.\n");
+			mensagemEmail.append("HSlife Serviços de TI");
+			
+			try {
+				emailComponent.enviarEmail(entity.getNome(), entity.getEmail(), "Orçamento Doméstico - Exclusão de conta de usuário", mensagemEmail.toString());
+			} catch (Exception e) {
+				e.printStackTrace();				
+			}
+		}
 		else 
 			throw new BusinessException("Não é possível excluir! Usuário possui atividade no sistema.");
 	}
@@ -232,5 +366,10 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	public void validar(Usuario entity) throws BusinessException {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) throws BusinessException {
+		return getRepository().findUserActivity(usuario);
 	}
 }

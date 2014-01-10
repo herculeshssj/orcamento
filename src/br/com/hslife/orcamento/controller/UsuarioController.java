@@ -45,11 +45,16 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
@@ -68,10 +73,15 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	@Autowired
 	private IUsuario service;
 	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
+	
 	private String loginUsuario;	
 	
 	private String novaSenha;
 	private String confirmaSenha;
+	
+	private Map<String, Long> mapAtividadeUsuario = new HashMap<String, Long>();
 
 	public UsuarioController() {
 		super(new Usuario());
@@ -101,13 +111,13 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	
 	public String list() {
 		operation = "list";
-		moduleTitle = "Usuários";
+		actionTitle = "";  
 		return "/pages/" + entity.getClass().getSimpleName() + "/list" + entity.getClass().getSimpleName(); 
 	}
 	
 	public String create() {
 		operation = "create";
-		moduleTitle = "Usuários - Novo";
+		actionTitle = " - Novo";
 		initializeEntity();
 		return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
 	}
@@ -147,12 +157,57 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		try {
 			entity = getService().buscarPorID(idEntity);
 			operation = "edit";
-			moduleTitle = "Usuários - Editar";
+			actionTitle = " - Editar";
 			return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	@Override
+	public String view() {
+		try {
+			// Obtém o relatório de atividades do usuário
+			mapAtividadeUsuario = getService().buscarAtividadeUsuario(getService().buscarPorID(idEntity));
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return super.view();
+	}
+	
+	public void logarComo() {
+		try {
+			Usuario u = getService().buscarPorID(idEntity);
+			Usuario logadoComo = new Usuario();
+			logadoComo.setAtivo(u.isAtivo());
+			logadoComo.setDataCriacao(u.getDataCriacao());
+			logadoComo.setEmail(u.getEmail());
+			logadoComo.setId(u.getId());
+			logadoComo.setLogin(u.getLogin());
+			logadoComo.setNome(u.getNome() + "(" + getUsuarioLogado().getLogin() + ")");
+			logadoComo.setTipoUsuario(u.getTipoUsuario());
+			logadoComo.setLogado(true);
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", logadoComo);
+			
+			infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
+			
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}
+	}
+	
+	public void deslogarComo() {
+		try {
+			Usuario u = getService().buscarPorID(idEntity);
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioComponent.getUsuarioLogado());
+			
+			infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}
 	}
 
 	public String getLoginUsuario() {
@@ -185,5 +240,17 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 
 	public void setService(IUsuario service) {
 		this.service = service;
+	}
+
+	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
+		this.usuarioComponent = usuarioComponent;
+	}
+
+	public Map<String, Long> getMapAtividadeUsuario() {
+		return mapAtividadeUsuario;
+	}
+
+	public void setMapAtividadeUsuario(Map<String, Long> mapAtividadeUsuario) {
+		this.mapAtividadeUsuario = mapAtividadeUsuario;
 	}
 }

@@ -54,6 +54,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -111,11 +112,16 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 		query.executeUpdate();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public MeioPagamento findDefaultByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
 		criteria.add(Restrictions.eq("padrao", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return (MeioPagamento)criteria.uniqueResult();
+		List<MeioPagamento> resultado = criteria.list();
+		if (resultado != null && resultado.size() >= 1) {
+			return resultado.get(0);
+		}
+		return null;
 	}
 	
 	/*	@Autowired

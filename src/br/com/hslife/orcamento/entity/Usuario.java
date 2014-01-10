@@ -56,6 +56,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 
@@ -90,11 +91,15 @@ public class Usuario extends EntityPersistence {
 	@Column
 	private boolean ativo;
 	
+	@Transient
+	private boolean logado;
+	
 	public Usuario() {
 		dataCriacao = new Date();
 		ativo = true;
 		login = "";
 		tipoUsuario = TipoUsuario.ROLE_USER;
+		logado = false;
 	}
 	
 	@Override
@@ -169,5 +174,13 @@ public class Usuario extends EntityPersistence {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public boolean isLogado() {
+		return logado;
+	}
+
+	public void setLogado(boolean logado) {
+		this.logado = logado;
 	}
 }
