@@ -65,6 +65,10 @@ public class PrevisaoLancamentoContaRepository extends AbstractRepository {
 		getSession().persist(entity);
 	}
 	
+	public void delete(PrevisaoLancamentoConta entity) {
+		getSession().delete(entity);
+	}
+	
 	public void deletePrevisaoLancamentoConta(Conta conta, int ano, TipoAgrupamentoBusca agrupamento) {
 		String sql = "delete from previsaolancamentoconta where idConta = " + conta.getId() + " and ano = " + ano + " and agrupamento = '" +  agrupamento + "'";
 		Query query = getSession().createSQLQuery(sql);
@@ -77,6 +81,14 @@ public class PrevisaoLancamentoContaRepository extends AbstractRepository {
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("ano", ano));
 		criteria.add(Restrictions.eq("agrupamento", agrupamento));
+		criteria.addOrder(Order.asc("indice"));
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PrevisaoLancamentoConta> findByConta(Conta conta) {
+		Criteria criteria = getSession().createCriteria(PrevisaoLancamentoConta.class);
+		criteria.add(Restrictions.eq("conta.id", conta.getId()));		
 		criteria.addOrder(Order.asc("indice"));
 		return criteria.list();
 	}

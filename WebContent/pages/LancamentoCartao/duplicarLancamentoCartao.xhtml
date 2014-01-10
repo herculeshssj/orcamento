@@ -120,6 +120,8 @@
      			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
      				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
      			</h:outputText>
+     			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+		     	<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
      		</p:column>	     		
      		<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">

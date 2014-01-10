@@ -67,29 +67,29 @@
 			<h:inputHidden/>
 			
 			Tipo de Conta:
-			<p:selectOneRadio id="txtTipoConta" value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de conta!">
+			<h:selectOneRadio id="txtTipoConta" value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de conta!">
 				<f:selectItems value="#{managedBean.listaTipoConta}"/>
-			</p:selectOneRadio>
+			</h:selectOneRadio>
 			<p:message for="txtTipoConta"/>
 			
 			Descrição:
-			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe a descrição!"/>
+			<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe a descrição!"/>
 			<p:message for="txtDescricao"/>
 			
 			Agência:
-			<p:inputText id="txtAgencia" value="#{managedBean.entity.agencia}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputText id="txtAgencia" value="#{managedBean.entity.agencia}" disabled="#{!managedBean.entity.ativo}"/>				
 			<h:inputHidden/>
 			
 			Conta corrente:
-			<p:inputText id="txtContaCorrente" value="#{managedBean.entity.contaCorrente}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputText id="txtContaCorrente" value="#{managedBean.entity.contaCorrente}" disabled="#{!managedBean.entity.ativo}"/>				
 			<h:inputHidden/>
 			
 			Conta poupança:
-			<p:inputText id="txtContaPoupanca" value="#{managedBean.entity.contaPoupanca}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputText id="txtContaPoupanca" value="#{managedBean.entity.contaPoupanca}" disabled="#{!managedBean.entity.ativo}"/>				
 			<h:inputHidden/>
 			
 			Variação:
-			<p:inputText id="txtVariacao" value="#{managedBean.entity.variacao}" disabled="#{!managedBean.entity.ativo}"/>				
+			<h:inputText id="txtVariacao" value="#{managedBean.entity.variacao}" disabled="#{!managedBean.entity.ativo}"/>				
 			<h:inputHidden/>	
 			 
 			<h:outputText value="Saldo inicial:" rendered="#{managedBean.operation == 'create'}"/>
@@ -106,9 +106,9 @@
 	    	</p:inputMask> 			
 			<h:outputText value="" rendered="#{managedBean.operation == 'create'}"/>
 			
-			<h:commandLink id="lnkExcluir" value="Excluir conta" action="#{managedBean.delete}" rendered="#{managedBean.operation == 'edit'}" style="color: red; font-weight: bold;"/>				
-			<h:outputText value="" rendered="#{managedBean.operation == 'edit'}"/>
-			<p:tooltip for="lnkExcluir" rendered="#{managedBean.operation == 'edit'}">
+			<h:commandLink id="lnkExcluir" value="Excluir conta" action="#{managedBean.delete}" rendered="#{managedBean.operation == 'edit' and !managedBean.entity.arquivado}" style="color: red; font-weight: bold;"/>				
+			<h:outputText value="" rendered="#{managedBean.operation == 'edit' and !managedBean.entity.arquivado}"/>
+			<p:tooltip for="lnkExcluir" rendered="#{managedBean.operation == 'edit' and !managedBean.entity.arquivado}">
 				<h:outputText value="Esta operação não pode ser desfeita!"/>
 			</p:tooltip>
 			
@@ -141,11 +141,11 @@
 	
 	<ui:define name="acoes">
 		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
+			<h:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
     	<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
-    		<p:graphicImage value="/resources/images/gravar.png" rendered="#{managedBean.entity.ativo}"/>
+    		<h:graphicImage value="/resources/images/gravar.png" rendered="#{managedBean.entity.ativo}"/>
     	</h:commandLink>
 	</ui:define>
 

@@ -132,7 +132,7 @@
 		     				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		     			</h:outputText>
 		     			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
+		     			<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
 		     		</p:column>	     		
 		     		<p:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
@@ -178,7 +178,7 @@
 		     					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		     				</h:outputText>
 		     				<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     				<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     				     			
+		     				<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>     				     			
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
@@ -222,7 +222,7 @@
 		     					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		     				</h:outputText>	
 		     				<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     				<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     				     			
+		     				<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>     				     			
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
@@ -266,7 +266,7 @@
 		     					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		     				</h:outputText>
 		     				<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     				<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>	     				     			
+		     				<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>	     				     			
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
