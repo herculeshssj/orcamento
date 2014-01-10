@@ -55,6 +55,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Auditoria;
 import br.com.hslife.orcamento.entity.AuditoriaDados;
 import br.com.hslife.orcamento.entity.EntityPersistence;
@@ -66,6 +67,9 @@ public class AuditoriaAspect {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -90,7 +94,11 @@ public class AuditoriaAspect {
 		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
 			auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 		} else {
-			auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+			Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+			if (u.isLogado())
+				auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+			else
+				auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
 		}
 		
 		auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
@@ -124,7 +132,11 @@ public class AuditoriaAspect {
 			if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
 				auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 			} else {
-				auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+				Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+				if (u.isLogado())
+					auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+				else
+					auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
 			}
 			
 			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
@@ -159,9 +171,23 @@ public class AuditoriaAspect {
 		Auditoria auditoria = new Auditoria();
 		
 		auditoria.setClasse(entity.getClass().getSimpleName());
-		auditoria.setTransacao("DELETE");
-		auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+		auditoria.setTransacao("DELETE");		
 		auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+		
+		/*
+		 * Mudança realizada em virtude do caso de uso de registro de usuário. Ainda é necessário pensar em uma forma de registrar
+		 * quem está efetuando o registro para gravar na auditoria. Por enquanto será gravado o mesmo IP do computador que efetuou
+		 * o registro
+		 */
+		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
+			auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+		} else {
+			Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+			if (u.isLogado())
+				auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+			else
+				auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+		}
 		
 		for (String s : entity.getFieldValues().keySet()) {
 			auditoria.getDadosAuditoria().add(new AuditoriaDados(entity.getFieldValues().get(s), s, "BEFORE"));
