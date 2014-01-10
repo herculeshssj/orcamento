@@ -294,6 +294,11 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	
 	@Override
 	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) throws BusinessException {
+		// Verifica se o lançamento selecionado já foi vinculado com outra fatura
+		if (lancamentoContaRepository.existsLinkagePagamentoFaturaCartao(lancamentoConta)) {
+			throw new BusinessException("Lançamento selecionado já foi usado para quitar outra fatura!");
+		}
+		
 		FaturaCartao fatura = getRepository().findById(faturaCartao.getId());
 		fatura.setStatusFaturaCartao(StatusFaturaCartao.QUITADA);
 		fatura.setDataPagamento(lancamentoConta.getDataPagamento());
