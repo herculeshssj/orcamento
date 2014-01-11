@@ -42,29 +42,30 @@
   
  ***/
 
-/*** Script de atualização da base de dados ***/
+package br.com.hslife.orcamento.repository;
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAR2014 ***/
+import java.util.List;
 
--- Atualização de versão
-update versao set ativo = false;
-insert into versao (versao, ativo) values ('MAR2014', true);
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
--- Informações pessoais do usuário
-create table pessoal(
-	id bigint not null auto_increment,
-	genero char(1) not null default 'M',
-	etnia varchar(50) null,
-	tipoSanguineo varchar(5) null,
-	dataNascimento date null,
-	nacionalidade varchar(50) null,
-	naturalidade varchar(50) null,
-	escolaridade varchar(50) null,
-	filiacaoPai varchar(100) null,
-	filiacaoMae varchar(100) null,
-	estadoCivil varchar(50) null,
-	idUsuario bigint not null
-	primary key(id)
-) engine=InnoDB; 
+import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Pessoal;
+import br.com.hslife.orcamento.entity.Usuario;
 
-alter table pessoal add constraint fk_pessoal_usuario foreign key(idUsuario) references usuario(id);
+@Repository
+public class PessoalRepository extends AbstractCRUDRepository<Pessoal> {
+	
+	public PessoalRepository() {
+		super(new Pessoal());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Moeda> findByUsuario(Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(Pessoal.class);
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.list();
+	}
+	
+}

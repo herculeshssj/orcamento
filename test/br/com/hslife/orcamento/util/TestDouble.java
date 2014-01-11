@@ -3,11 +3,9 @@ package br.com.hslife.orcamento.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.junit.Test;
-
 public class TestDouble {
 
-	@Test
+	//@Test
 	public void testArredondamento() {
 		System.out.println(29.302);
 		System.out.println();
@@ -22,7 +20,7 @@ public class TestDouble {
 		System.out.println(Util.arredondar(-32.2303939));
 	}
 	
-	@Test
+	//@Test
 	public void testBigDecimal() {
 	      System.out.println();
 	        BigDecimal a = new BigDecimal(0.001).setScale(2,RoundingMode.CEILING);  

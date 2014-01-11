@@ -42,29 +42,14 @@
   
  ***/
 
-/*** Script de atualização da base de dados ***/
+package br.com.hslife.orcamento.facade;
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAR2014 ***/
+import br.com.hslife.orcamento.entity.Pessoal;
+import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.BusinessException;
 
--- Atualização de versão
-update versao set ativo = false;
-insert into versao (versao, ativo) values ('MAR2014', true);
+public interface IInformacaoPessoal {
+	
+	public Pessoal buscarPorUsuario(Usuario usuario) throws BusinessException; 
 
--- Informações pessoais do usuário
-create table pessoal(
-	id bigint not null auto_increment,
-	genero char(1) not null default 'M',
-	etnia varchar(50) null,
-	tipoSanguineo varchar(5) null,
-	dataNascimento date null,
-	nacionalidade varchar(50) null,
-	naturalidade varchar(50) null,
-	escolaridade varchar(50) null,
-	filiacaoPai varchar(100) null,
-	filiacaoMae varchar(100) null,
-	estadoCivil varchar(50) null,
-	idUsuario bigint not null
-	primary key(id)
-) engine=InnoDB; 
-
-alter table pessoal add constraint fk_pessoal_usuario foreign key(idUsuario) references usuario(id);
+}

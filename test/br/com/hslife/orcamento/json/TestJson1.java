@@ -2,7 +2,6 @@ package br.com.hslife.orcamento.json;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Test;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -34,7 +33,7 @@ public class TestJson1 {
 		System.out.println("genero: " + genero);	 
 		}
 	
-	@Test
+	//@Test
 	public void saveJsonValues() {
 		Usuario usuario = new Usuario();
 		usuario.setId(10l);
@@ -56,7 +55,7 @@ public class TestJson1 {
 		System.out.println("JSON gerado ->  " + json.toString());
 	}
 	
-	@Test
+	//@Test
 	public void readJsonValues() {
 		Usuario usuario = new Usuario();
 		usuario.setId(10l);

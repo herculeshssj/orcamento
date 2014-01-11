@@ -3,11 +3,9 @@ package br.com.hslife.orcamento.util;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.Test;
-
 public class TestData {
 	
-	@Test
+	//@Test
 	public void testData() {
 		System.out.println(Util.primeiroDiaMesAnterior());
 		System.out.println(Util.ultimoDiaMesAnterior());
