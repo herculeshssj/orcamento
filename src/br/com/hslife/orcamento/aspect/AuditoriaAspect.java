@@ -95,17 +95,22 @@ public class AuditoriaAspect {
 		 * quem está efetuando o registro para gravar na auditoria. Por enquanto será gravado o mesmo IP do computador que efetuou
 		 * o registro
 		 */
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
-			auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+		if (FacesContext.getCurrentInstance() != null) { // Linha incluída para viabilizar os testes com os repositórios
+			if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
+				auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+			} else {
+				Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+				if (u.isLogado())
+					auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+				else
+					auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+			}
+			
+			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 		} else {
-			Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
-			if (u.isLogado())
-				auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
-			else
-				auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+			auditoria.setUsuario("desenvolvidor");
+			auditoria.setIp("127.0.0.1");
 		}
-		
-		auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 		
 		for (String s : entity.getFieldValues().keySet()) {
 			auditoria.getDadosAuditoria().add(new AuditoriaDados(entity.getFieldValues().get(s), s, "AFTER"));
@@ -133,17 +138,22 @@ public class AuditoriaAspect {
 			 * quem está efetuando o registro para gravar na auditoria. Por enquanto será gravado o mesmo IP do computador que efetuou
 			 * o registro
 			 */
-			if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
-				auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+			if (FacesContext.getCurrentInstance() != null) { // Linha incluída para viabilizar os testes com os repositórios
+				if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
+					auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+				} else {
+					Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+					if (u.isLogado())
+						auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+					else
+						auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+				}
+				
+				auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 			} else {
-				Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
-				if (u.isLogado())
-					auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
-				else
-					auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+				auditoria.setUsuario("desenvolvidor");
+				auditoria.setIp("127.0.0.1");
 			}
-			
-			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 			
 			EntityPersistence entityBefore = (EntityPersistence) sessionFactory.getCurrentSession().get(entity.getClass(), entity.getId());
 			
@@ -176,21 +186,27 @@ public class AuditoriaAspect {
 		
 		auditoria.setClasse(entity.getClass().getSimpleName());
 		auditoria.setTransacao("DELETE");		
-		auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
-		
+				
 		/*
 		 * Mudança realizada em virtude do caso de uso de registro de usuário. Ainda é necessário pensar em uma forma de registrar
 		 * quem está efetuando o registro para gravar na auditoria. Por enquanto será gravado o mesmo IP do computador que efetuou
 		 * o registro
 		 */
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
-			auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+		if (FacesContext.getCurrentInstance() != null) { // Linha incluída para viabilizar os testes com os repositórios
+			if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
+				auditoria.setUsuario(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+			} else {
+				Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+				if (u.isLogado())
+					auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+				else
+					auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+			}
+			
+			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 		} else {
-			Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
-			if (u.isLogado())
-				auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
-			else
-				auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
+			auditoria.setUsuario("desenvolvidor");
+			auditoria.setIp("127.0.0.1");
 		}
 		
 		for (String s : entity.getFieldValues().keySet()) {

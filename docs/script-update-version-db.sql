@@ -63,7 +63,7 @@ create table pessoal(
 	filiacaoPai varchar(100) null,
 	filiacaoMae varchar(100) null,
 	estadoCivil varchar(50) null,
-	idUsuario bigint not null
+	idUsuario bigint not null,
 	primary key(id)
 ) engine=InnoDB; 
 

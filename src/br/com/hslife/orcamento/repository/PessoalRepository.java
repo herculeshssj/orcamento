@@ -44,13 +44,10 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -61,11 +58,10 @@ public class PessoalRepository extends AbstractCRUDRepository<Pessoal> {
 		super(new Pessoal());
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Moeda> findByUsuario(Usuario usuario) {
+	public Pessoal findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Pessoal.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return criteria.list();
+		return (Pessoal)criteria.uniqueResult();
 	}
 	
 }
