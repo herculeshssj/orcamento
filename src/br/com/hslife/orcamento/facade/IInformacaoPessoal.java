@@ -47,8 +47,9 @@ package br.com.hslife.orcamento.facade;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.service.ICRUDService;
 
-public interface IInformacaoPessoal {
+public interface IInformacaoPessoal extends ICRUDService<Pessoal>{
 	
 	public Pessoal buscarPorUsuario(Usuario usuario) throws BusinessException; 
 

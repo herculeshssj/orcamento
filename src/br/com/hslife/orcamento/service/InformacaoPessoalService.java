@@ -44,34 +44,36 @@
 
 package br.com.hslife.orcamento.service;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IInformacaoPessoal;
+import br.com.hslife.orcamento.repository.PessoalRepository;
 
 @Service
-@Transactional
-public class InformacaoPessoalService implements IInformacaoPessoal {
+public class InformacaoPessoalService extends AbstractCRUDService<Pessoal> implements IInformacaoPessoal {
 	
 	@Autowired
-	private SessionFactory sessionFactory;
+	private PessoalRepository repository;
+
+	public PessoalRepository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(PessoalRepository repository) {
+		this.repository = repository;
+	}
 
 	@Override
 	public Pessoal buscarPorUsuario(Usuario usuario) throws BusinessException {		
-		return null;
+		return getRepository().findByUsuario(usuario);
 	}
 
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
+	@Override
+	public void validar(Pessoal entity) throws BusinessException {
+				
+	}	
 }
