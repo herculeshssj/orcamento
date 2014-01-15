@@ -55,21 +55,44 @@
 
 	<ui:param name="managedBean" value="#{pessoalMB}" />
 
-	<ui:define name="campos">
-	
-		<p:tabView activeIndex="1">
-			<ui:include src="dadosPessoais.xhtml"/>
-			<ui:include src="enderecos.xhtml"/>
-			<ui:include src="telefones.xhtml"/> 
-		</p:tabView>
+	<p:tab title="Endereços">
+		<h:panelGroup>
+			<fieldset>
+								
+				<h:panelGrid columns="2">
+				
+					Descrição:
+					<h:inputText />
+					
+					Tipo de logradouro:
+					<h:inputText />
+					
+					Logradouro:
+					<h:inputText />
+					
+					Número:
+					<h:inputText />
+					
+					Complemento:
+					<h:inputText />
+					
+					Bairro:
+					<h:inputText />
+					
+					Cidade:
+					<h:inputText />
+					
+					Estado:
+					<h:inputText />
+					
+					CEP:
+					<h:inputText />
+			
+				</h:panelGrid>
+				
+			</fieldset>	
+		</h:panelGroup>	
+	</p:tab>
 
-	</ui:define>
-
-	<ui:define name="acoes">
-    	<h:commandLink title="Salvar informações" action="#{managedBean.salvarInformacaoPessoal}">
-			<p:graphicImage value="/resources/images/gravar.png" />
-		</h:commandLink>
-	</ui:define>
-	
 </ui:composition>
 </html>

@@ -55,21 +55,52 @@
 
 	<ui:param name="managedBean" value="#{pessoalMB}" />
 
-	<ui:define name="campos">
-	
-		<p:tabView activeIndex="1">
-			<ui:include src="dadosPessoais.xhtml"/>
-			<ui:include src="enderecos.xhtml"/>
-			<ui:include src="telefones.xhtml"/> 
-		</p:tabView>
+	<p:tab title="Dados pessoais">
+		<h:panelGroup>
+			<fieldset>
+							
+				<h:panelGrid columns="2">
+			
+					Gênero:
+					<h:selectOneMenu>
+						<f:selectItem itemLabel="Masculino" itemValue="M"/>
+						<f:selectItem itemLabel="Feminino" itemValue="F"/>
+					</h:selectOneMenu>
+					
+					Etnia:
+					<h:inputText />
+					
+					Tipo sanguíneo:
+					<h:inputText />
+					
+					Data de nascimento:
+					<p:inputMask size="10" mask="99/99/9999">
+			    		<f:converter converterId="dateConverter"/>
+			    	</p:inputMask>
+			    	
+			    	Nacionalidade:
+			    	<h:inputText />
+			    	
+			    	Naturalidade:
+			    	<h:inputText />
+			    	
+			    	Filiação (pai):
+			    	<h:inputText />
+			    	
+			    	Filiação (mãe):
+			    	<h:inputText />
+			    	
+			    	Formação:
+			    	<h:inputText />
+			    	
+			    	Estado civil:
+			    	<h:inputText />
+				
+				</h:panelGrid>
+				
+			</fieldset>	
+		</h:panelGroup>	
+	</p:tab>
 
-	</ui:define>
-
-	<ui:define name="acoes">
-    	<h:commandLink title="Salvar informações" action="#{managedBean.salvarInformacaoPessoal}">
-			<p:graphicImage value="/resources/images/gravar.png" />
-		</h:commandLink>
-	</ui:define>
-	
 </ui:composition>
 </html>
