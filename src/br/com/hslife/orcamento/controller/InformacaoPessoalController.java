@@ -48,6 +48,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Pessoal;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IInformacaoPessoal;
 
 @Component("pessoalMB")
@@ -62,12 +64,23 @@ public class InformacaoPessoalController extends AbstractController {
 	@Autowired
 	private IInformacaoPessoal service; 
 	
+	private Pessoal pessoal;
+	
 	public InformacaoPessoalController() {		
 		moduleTitle = "Informações pessoais";
 	}
 	
 	@Override
 	public String startUp() {
+		try {
+			if (getService().buscarPorUsuario(getUsuarioLogado()) == null) {
+				pessoal = new Pessoal();
+			} else {
+				pessoal = getService().buscarPorUsuario(getUsuarioLogado());
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 		return "/pages/Pessoal/formPessoal";
 	}
 	
@@ -77,7 +90,19 @@ public class InformacaoPessoalController extends AbstractController {
 	}
 
 	public void salvarInformacaoPessoal() {
-		infoMessage("Dados salvos com sucesso!");
+		try {
+			// Cadastra os dados pessoais
+			pessoal.setUsuario(getUsuarioLogado());
+			pessoal.validate();
+			if (pessoal.getId() == null) {
+				getService().cadastrar(pessoal);
+			} else {
+				getService().alterar(pessoal);
+			}
+			infoMessage("Dados salvos com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public IInformacaoPessoal getService() {
@@ -88,7 +113,11 @@ public class InformacaoPessoalController extends AbstractController {
 		this.service = service;
 	}
 
-	
-	
-	
+	public Pessoal getPessoal() {
+		return pessoal;
+	}
+
+	public void setPessoal(Pessoal pessoal) {
+		this.pessoal = pessoal;
+	}
 }

@@ -60,39 +60,39 @@
 		<h:panelGrid columns="2">
 	
 			Gênero:
-			<h:selectOneMenu>
+			<h:selectOneMenu value="#{managedBean.pessoal.genero}">
 				<f:selectItem itemLabel="Masculino" itemValue="M"/>
 				<f:selectItem itemLabel="Feminino" itemValue="F"/>
 			</h:selectOneMenu>
 			
 			Etnia:
-			<h:inputText />
+			<h:inputText value="#{managedBean.pessoal.etnia}"/>
 			
 			Tipo sanguíneo:
-			<h:inputText />
+			<h:inputText value="#{managedBean.pessoal.tipoSanguineo}"/>
 			
 			Data de nascimento:
-			<p:inputMask size="10" mask="99/99/9999">
+			<p:inputMask value="#{managedBean.pessoal.dataNascimento}" size="10" mask="99/99/9999">
 	    		<f:converter converterId="dateConverter"/>
 	    	</p:inputMask>
 	    	
 	    	Nacionalidade:
-	    	<h:inputText size="35"/>
+	    	<h:inputText value="#{managedBean.pessoal.nacionalidade}" size="35"/>
 	    	
 	    	Naturalidade:
-	    	<h:inputText size="35"/>
+	    	<h:inputText value="#{managedBean.pessoal.naturalidade}" size="35"/>
 	    	
 	    	Filiação (pai):
-	    	<h:inputText size="70"/>
+	    	<h:inputText value="#{managedBean.pessoal.filiacaoPai}" size="70"/>
 	    	
 	    	Filiação (mãe):
-	    	<h:inputText size="70"/>
+	    	<h:inputText value="#{managedBean.pessoal.filiacaoMae}" size="70"/>
 	    	
-	    	Formação:
-	    	<h:inputText />
+	    	Escolaridade:
+	    	<h:inputText value="#{managedBean.pessoal.escolaridade}" />
 	    	
 	    	Estado civil:
-	    	<h:inputText />
+	    	<h:inputText value="#{managedBean.pessoal.estadoCivil}" />
 		
 		</h:panelGrid>
 		
