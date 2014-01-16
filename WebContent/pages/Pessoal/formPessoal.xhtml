@@ -57,16 +57,17 @@
 
 	<ui:define name="campos">
 	
-		<p:tabView activeIndex="1">
+		<p:tabView activeIndex="0">
 			<ui:include src="dadosPessoais.xhtml"/>
 			<ui:include src="enderecos.xhtml"/>
 			<ui:include src="telefones.xhtml"/> 
 		</p:tabView>
 
+		<br/>
 	</ui:define>
-
+	
 	<ui:define name="acoes">
-    	<h:commandLink title="Salvar informações" action="#{managedBean.salvarInformacaoPessoal}">
+    	<h:commandLink title="Salvar informações">
 			<p:graphicImage value="/resources/images/gravar.png" />
 		</h:commandLink>
 	</ui:define>

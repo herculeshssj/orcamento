@@ -51,55 +51,51 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition>
 
 	<ui:param name="managedBean" value="#{pessoalMB}" />
 
 	<p:tab title="Dados pessoais">
-		<h:panelGroup>
-			<fieldset>
-							
-				<h:panelGrid columns="2">
+					
+		<h:panelGrid columns="2">
+	
+			Gênero:
+			<h:selectOneMenu>
+				<f:selectItem itemLabel="Masculino" itemValue="M"/>
+				<f:selectItem itemLabel="Feminino" itemValue="F"/>
+			</h:selectOneMenu>
 			
-					Gênero:
-					<h:selectOneMenu>
-						<f:selectItem itemLabel="Masculino" itemValue="M"/>
-						<f:selectItem itemLabel="Feminino" itemValue="F"/>
-					</h:selectOneMenu>
-					
-					Etnia:
-					<h:inputText />
-					
-					Tipo sanguíneo:
-					<h:inputText />
-					
-					Data de nascimento:
-					<p:inputMask size="10" mask="99/99/9999">
-			    		<f:converter converterId="dateConverter"/>
-			    	</p:inputMask>
-			    	
-			    	Nacionalidade:
-			    	<h:inputText />
-			    	
-			    	Naturalidade:
-			    	<h:inputText />
-			    	
-			    	Filiação (pai):
-			    	<h:inputText />
-			    	
-			    	Filiação (mãe):
-			    	<h:inputText />
-			    	
-			    	Formação:
-			    	<h:inputText />
-			    	
-			    	Estado civil:
-			    	<h:inputText />
-				
-				</h:panelGrid>
-				
-			</fieldset>	
-		</h:panelGroup>	
+			Etnia:
+			<h:inputText />
+			
+			Tipo sanguíneo:
+			<h:inputText />
+			
+			Data de nascimento:
+			<p:inputMask size="10" mask="99/99/9999">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>
+	    	
+	    	Nacionalidade:
+	    	<h:inputText size="35"/>
+	    	
+	    	Naturalidade:
+	    	<h:inputText size="35"/>
+	    	
+	    	Filiação (pai):
+	    	<h:inputText size="70"/>
+	    	
+	    	Filiação (mãe):
+	    	<h:inputText size="70"/>
+	    	
+	    	Formação:
+	    	<h:inputText />
+	    	
+	    	Estado civil:
+	    	<h:inputText />
+		
+		</h:panelGrid>
+		
 	</p:tab>
 
 </ui:composition>
