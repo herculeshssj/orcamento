@@ -42,27 +42,29 @@
   
  ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.Endereco;
-import br.com.hslife.orcamento.entity.Pessoal;
-import br.com.hslife.orcamento.entity.Telefone;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
-public interface IInformacaoPessoal {
+import br.com.hslife.orcamento.entity.Endereco;
+import br.com.hslife.orcamento.entity.Usuario;
+
+@Repository
+public class EnderecoRepository extends AbstractCRUDRepository<Endereco> {
 	
-	public void salvarDadosPessoais(Pessoal pessoal) throws BusinessException; 
+	public EnderecoRepository() {
+		super(new Endereco());
+	}
 	
-	public void salvarEnderecos(List<Endereco> enderecos, Usuario usuario) throws BusinessException;
+	@SuppressWarnings("unchecked")
+	public List<Endereco> findByUsuario(Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(Endereco.class);
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.list();
+	}
 	
-	public void salvarTelefones(List<Telefone> telefones) throws BusinessException;
-	
-	public Pessoal buscarDadosPessoais(Usuario usuario) throws BusinessException;
-	
-	public List<Endereco> buscarEnderecos(Usuario usuario) throws BusinessException;
-	
-	public List<Telefone> buscarTelefones(Usuario usuario) throws BusinessException;
 }

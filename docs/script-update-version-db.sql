@@ -68,3 +68,21 @@ create table pessoal(
 ) engine=InnoDB; 
 
 alter table pessoal add constraint fk_pessoal_usuario foreign key(idUsuario) references usuario(id);
+
+-- Endereços do usuário
+create table endereco(
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	tipoLogradouro varchar(30) not null,
+	logradouro varchar(150) not null,
+	numero varchar(10) null,
+	complemento varchar(50) null,
+	bairro varchar(50) not null,
+	cidade varchar(100) not null,
+	estado varchar(2) not null,
+	cep varchar(8) not null,
+	idUsuario bigint not null,
+	primary key(id)
+) engine=InnoDB;
+
+alter table endereco add constraint fk_endereco_usuario foreign key(idUsuario) references usuario(id);

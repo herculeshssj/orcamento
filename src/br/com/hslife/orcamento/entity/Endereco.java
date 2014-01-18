@@ -70,7 +70,7 @@ public class Endereco extends EntityPersistence {
 	@Column(length=30, nullable=false)
 	private String tipoLogradouro;
 	
-	@Column(length=150, nullable=true)
+	@Column(length=150, nullable=false)
 	private String logradouro;
 	
 	@Column(length=10, nullable=true)
@@ -135,6 +135,42 @@ public class Endereco extends EntityPersistence {
 	public void validate() throws BusinessException {
 		if (this.tipoLogradouro.trim().length() > 50) {
 			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
+		}
+		
+		if (this.logradouro.trim().length() > 150) {
+			throw new BusinessException("Campo aceita no máximo 150 caracteres!");
+		}
+		
+		if (this.numero != null && this.numero.trim().length() > 10) {
+			throw new BusinessException("Campo aceita no máximo 10 caracteres!");
+		}
+		
+		if (this.complemento != null && this.complemento.trim().length() > 50) {
+			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
+		}
+		
+		if (this.bairro.trim().length() > 50) {
+			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
+		}
+		
+		if (this.cidade.trim().length() > 100) {
+			throw new BusinessException("Campo aceita no máximo 100 caracteres!");
+		}
+		
+		if (this.estado.trim().length() != 2) {
+			throw new BusinessException("Campo aceita exatamente 2 caracteres!");
+		}
+		
+		if (this.cep != null && this.cep.trim().length() != 8) {
+			throw new BusinessException("Campo aceita exatamente 8 caracteres!");
+		}
+		
+		if (this.descricao.trim().length() > 50) {
+			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
+		}
+		
+		if (this.usuario == null) {
+			throw new BusinessException("Informe o usuário!");
 		}
 	}
 	

@@ -49,28 +49,31 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.hslife.orcamento.entity.Pessoal;
+import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.util.Util;
 
-public class PessoalRepositoryTest extends AbstractTestRepositories {
+public class EnderecoRepositoryTest extends AbstractTestRepositories {
 	
 	private Usuario usuario = new Usuario();
-	private Pessoal pessoal = new Pessoal();
+	private Endereco endereco = new Endereco();
 	
 	@Autowired
 	private PessoalRepository pessoalRepository;
 	
 	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeEntities() {
 		// Cria um novo usuário
@@ -81,85 +84,87 @@ public class PessoalRepositoryTest extends AbstractTestRepositories {
 		usuario.setTipoUsuario(TipoUsuario.ROLE_USER);
 		usuarioRepository.save(usuario);
 		
-		// Cria uma nova informação pessoal
-		pessoal.setUsuario(usuario);
-		pessoal.setDataNascimento(new Date(1980, 5, 15));
-		pessoal.setEscolaridade("Superior completo");
-		pessoal.setEstadoCivil("Solteiro");
-		pessoal.setEtnia("Parda");
-		pessoal.setFiliacaoMae("Mãe de teste");
-		pessoal.setFiliacaoPai("Pai de teste");
-		pessoal.setNacionalidade("Brasileira");
-		pessoal.setNaturalidade("Rio de Janeiro");
+		// Cria uma nova instância de endereço para testar os recursos do CRUD
+		endereco.setTipoLogradouro("Avenida");
+		endereco.setLogradouro("Ministro Lafaeyte de Andrade");
+		endereco.setNumero("1683");
+		endereco.setComplemento("Bl. 3 Apt. 404");
+		endereco.setBairro("Marco II");
+		endereco.setCidade("Nova Iguaçu");
+		endereco.setEstado("RJ");
+		endereco.setCep("26261220");
+		endereco.setDescricao("Residencial");
+		endereco.setUsuario(usuario);
 	}
 
 	@Test
-	public void testFindByUsuario() {		
-		pessoalRepository.save(pessoal);
+	public void testFindByUsuario() {				
+		enderecoRepository.save(endereco);
 		
-		// Testa o método em questão
-		Pessoal pessoalTest = new Pessoal();
-		pessoalTest = pessoalRepository.findByUsuario(usuario);
-		assertEquals(pessoal, pessoalTest);
+		// Testa o método em questão		
+		List<Endereco> listaEndereco = enderecoRepository.findByUsuario(usuario);
+		assertEquals(1, listaEndereco.size());
+		assertEquals(endereco, listaEndereco.get(0));
 	}
 
 	@Test
 	public void testSave() {
-		pessoalRepository.save(pessoal);
+		enderecoRepository.save(endereco);
 		
 		// Testa o método em questão
-		assertNotNull(pessoal.getId());
+		assertNotNull(endereco.getId());
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testUpdate() {
-		pessoalRepository.save(pessoal);
+		enderecoRepository.save(endereco);
 		
-		pessoal.setUsuario(usuario);
-		pessoal.setDataNascimento(new Date(1980, 5, 15));
-		pessoal.setEscolaridade("Ensino médio completo");
-		pessoal.setEstadoCivil("Casado");
-		pessoal.setEtnia("Branco");
-		pessoal.setFiliacaoMae("Mãe");
-		pessoal.setFiliacaoPai("Pai");
-		pessoal.setNacionalidade("Brasileira naturalizado");
-		pessoal.setNaturalidade("São Paulo");
+		endereco.setUsuario(usuario);
+		endereco.setTipoLogradouro("Rua");
+		endereco.setLogradouro("Okir");
+		endereco.setNumero("64");
+		endereco.setComplemento("");
+		endereco.setBairro("Marco II");
+		endereco.setCidade("Nova Iguaçu");
+		endereco.setEstado("RJ");
+		endereco.setCep("26261220");
+		endereco.setDescricao("Comercial");
 		
 		// Testa o método em questão
-		pessoalRepository.update(pessoal);
+		enderecoRepository.update(endereco);
 		
-		Pessoal pessoalTest = pessoalRepository.findById(pessoal.getId());
+		Endereco enderecoTest = enderecoRepository.findById(endereco.getId());
 		
-		assertEquals(pessoal.getUsuario(), pessoalTest.getUsuario());
-		assertEquals(pessoal.getDataNascimento(), pessoalTest.getDataNascimento());
-		assertEquals(pessoal.getEscolaridade(), pessoalTest.getEscolaridade());
-		assertEquals(pessoal.getEstadoCivil(), pessoalTest.getEstadoCivil());
-		assertEquals(pessoal.getEtnia(), pessoalTest.getEtnia());
-		assertEquals(pessoal.getFiliacaoMae(), pessoalTest.getFiliacaoMae());
-		assertEquals(pessoal.getFiliacaoPai(), pessoalTest.getFiliacaoPai());
-		assertEquals(pessoal.getNacionalidade(), pessoalTest.getNacionalidade());
-		assertEquals(pessoal.getNaturalidade(), pessoalTest.getNaturalidade());
+		assertEquals(endereco.getUsuario(),enderecoTest.getUsuario());
+		assertEquals(endereco.getTipoLogradouro(),enderecoTest.getTipoLogradouro());
+		assertEquals(endereco.getLogradouro(),enderecoTest.getLogradouro());
+		assertEquals(endereco.getNumero(),enderecoTest.getNumero());
+		assertEquals(endereco.getComplemento(),enderecoTest.getComplemento());
+		assertEquals(endereco.getBairro(),enderecoTest.getBairro());
+		assertEquals(endereco.getCidade(),enderecoTest.getCidade());
+		assertEquals(endereco.getEstado(),enderecoTest.getEstado());
+		assertEquals(endereco.getCep(),enderecoTest.getCep());
+		assertEquals(endereco.getDescricao(),enderecoTest.getDescricao());
 	}
 
 	@Test
 	public void testDelete() {
-		pessoalRepository.save(pessoal);
-		
+		enderecoRepository.save(endereco);
+				
 		// Testa o método em questão
-		pessoalRepository.delete(pessoal);
+		enderecoRepository.delete(endereco);
 		
-		Pessoal pessoalTest = pessoalRepository.findById(pessoal.getId());
-		assertNull(pessoalTest);
+		Endereco enderecoTest = enderecoRepository.findById(endereco.getId());
+		assertNull(enderecoTest);
 	}
 
 	@Test
 	public void testFindById() {
-		pessoalRepository.save(pessoal);
+		enderecoRepository.save(endereco);
 		
 		// Testa o método em questão
-		Pessoal pessoalTest = pessoalRepository.findById(pessoal.getId());
-		assertEquals(pessoal.getId(), pessoalTest.getId());
+		Endereco enderecoTest = enderecoRepository.findById(endereco.getId());
+		assertEquals(endereco.getId(), enderecoTest.getId());
 	}
 
 }

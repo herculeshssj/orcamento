@@ -73,10 +73,10 @@ public class InformacaoPessoalController extends AbstractController {
 	@Override
 	public String startUp() {
 		try {
-			if (getService().buscarPorUsuario(getUsuarioLogado()) == null) {
+			if (getService().buscarDadosPessoais(getUsuarioLogado()) == null) {
 				pessoal = new Pessoal();
 			} else {
-				pessoal = getService().buscarPorUsuario(getUsuarioLogado());
+				pessoal = getService().buscarDadosPessoais(getUsuarioLogado());
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -93,12 +93,7 @@ public class InformacaoPessoalController extends AbstractController {
 		try {
 			// Cadastra os dados pessoais
 			pessoal.setUsuario(getUsuarioLogado());
-			pessoal.validate();
-			if (pessoal.getId() == null) {
-				getService().cadastrar(pessoal);
-			} else {
-				getService().alterar(pessoal);
-			}
+			getService().salvarDadosPessoais(pessoal);
 			infoMessage("Dados salvos com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
