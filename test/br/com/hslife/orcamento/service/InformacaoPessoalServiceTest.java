@@ -46,7 +46,6 @@ package br.com.hslife.orcamento.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +57,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
+import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -180,21 +180,61 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 		List<Endereco> listaEnderecoTest = informacaoPessoalService.buscarEnderecos(usuario);
 		for (int i = 0; i < 3; i++) {			
 			assertEquals(listaEndereco.get(i).getTipoLogradouro(), listaEnderecoTest.get(i).getTipoLogradouro());
-			assertEquals(listaEndereco.get(i).getLogradouro(),listaEndereco.get(i).getLogradouro());
-			assertEquals(listaEndereco.get(i).getNumero(),listaEndereco.get(i).getNumero());
-			assertEquals(listaEndereco.get(i).getComplemento(),listaEndereco.get(i).getComplemento());
-			assertEquals(listaEndereco.get(i).getBairro(),listaEndereco.get(i).getBairro());
-			assertEquals(listaEndereco.get(i).getCidade(),listaEndereco.get(i).getCidade());
-			assertEquals(listaEndereco.get(i).getEstado(),listaEndereco.get(i).getEstado());
-			assertEquals(listaEndereco.get(i).getCep(),listaEndereco.get(i).getCep());
-			assertEquals(listaEndereco.get(i).getDescricao(),listaEndereco.get(i).getDescricao());
-			assertEquals(listaEndereco.get(i).getUsuario(),listaEndereco.get(i).getUsuario());		
+			assertEquals(listaEndereco.get(i).getLogradouro(), listaEnderecoTest.get(i).getLogradouro());
+			assertEquals(listaEndereco.get(i).getNumero(), listaEnderecoTest.get(i).getNumero());
+			assertEquals(listaEndereco.get(i).getComplemento(), listaEnderecoTest.get(i).getComplemento());
+			assertEquals(listaEndereco.get(i).getBairro(), listaEnderecoTest.get(i).getBairro());
+			assertEquals(listaEndereco.get(i).getCidade(), listaEnderecoTest.get(i).getCidade());
+			assertEquals(listaEndereco.get(i).getEstado(), listaEnderecoTest.get(i).getEstado());
+			assertEquals(listaEndereco.get(i).getCep(), listaEnderecoTest.get(i).getCep());
+			assertEquals(listaEndereco.get(i).getDescricao(), listaEnderecoTest.get(i).getDescricao());
+			assertEquals(listaEndereco.get(i).getUsuario(), listaEnderecoTest.get(i).getUsuario());		
 		}
 	}
 
 	@Test
-	public void testSalvarTelefones() {
-		fail("Not yet implemented");
+	public void testSalvarTelefones() throws BusinessException {
+		List<Telefone> listaTelefone = new ArrayList<Telefone>();
+		Telefone telefone = new Telefone();
+		
+		// Popula a lista de telefones
+		for (int i = 0; i < 3; i++) {
+			telefone.setDescricao("Telefone " + i);
+			telefone.setDdd(Integer.toString(i));
+			telefone.setNumero(Integer.toString(i));
+			telefone.setRamal("");
+			telefone.setUsuario(usuario);
+			listaTelefone.add(telefone);
+			telefone = new Telefone();
+		}
+		
+		// Salva os telefones
+		informacaoPessoalService.salvarTelefones(listaTelefone, usuario);
+		
+		for (Telefone t : listaTelefone) {
+			assertNotNull(t.getId());
+		}
+		
+		// Altera as informações de endereço
+		for (int i = 1; i < 3; i++) {
+			listaTelefone.get(i).setDescricao("Telefone: " + i);
+			listaTelefone.get(i).setDdd("00" + i);
+			listaTelefone.get(i).setNumero("11111111" + i);
+			listaTelefone.get(i).setRamal(Integer.toString(i));
+			listaTelefone.get(i).setUsuario(usuario);						
+		}		
+		
+		// Salva as informações de endereço
+		informacaoPessoalService.salvarTelefones(listaTelefone, usuario);
+		
+		List<Telefone> listaTelefoneTest = informacaoPessoalService.buscarTelefones(usuario);
+		for (int i = 0; i < 3; i++) {
+			assertEquals(listaTelefone.get(i).getDescricao(), listaTelefoneTest.get(i).getDescricao());
+			assertEquals(listaTelefone.get(i).getDdd(), listaTelefoneTest.get(i).getDdd());
+			assertEquals(listaTelefone.get(i).getNumero(), listaTelefoneTest.get(i).getNumero());
+			assertEquals(listaTelefone.get(i).getRamal(), listaTelefoneTest.get(i).getRamal());
+			assertEquals(listaTelefone.get(i).getUsuario(), listaTelefoneTest.get(i).getUsuario());		
+		}
 	}
 
 	@Test
@@ -253,7 +293,28 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 	}
 
 	@Test
-	public void testBuscarTelefones() {
-		fail("Not yet implemented");
+	public void testBuscarTelefones() throws BusinessException {
+		List<Telefone> listaTelefone = new ArrayList<Telefone>();
+		Telefone telefone = new Telefone();
+		
+		// Popula a lista de telefones
+		for (int i = 0; i < 3; i++) {
+			telefone.setDescricao("Telefone " + i);
+			telefone.setDdd(Integer.toString(i));
+			telefone.setNumero(Integer.toString(i));
+			telefone.setRamal("");
+			telefone.setUsuario(usuario);
+			listaTelefone.add(telefone);
+			telefone = new Telefone();
+		}
+		
+		// Salva os telefones
+		informacaoPessoalService.salvarTelefones(listaTelefone, usuario);
+		
+		// Busca os telefones do usuário
+		List<Telefone> listaTelefoneTest = informacaoPessoalService.buscarTelefones(usuario);
+		for (int i = 0; i < 3; i++) {
+			assertEquals(listaTelefone.get(i).getId(), listaTelefoneTest.get(i).getId());
+		}
 	}
 }
