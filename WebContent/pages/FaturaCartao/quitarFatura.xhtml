@@ -85,7 +85,8 @@
 			</p:inputText>
 			
 			Forma de pagamento:
-			<h:selectOneMenu value="#{managedBean.formaPagamentoFatura}">
+			<h:selectOneMenu value="#{managedBean.formaPagamentoFatura}" required="true" requiredMessage="Informe uma forma de pagamento!">
+				<f:selectItem itemLabel="Selecione a forma de pagamento" />
 				<f:selectItem itemLabel="Débito em conta" itemValue="1"/>
 				<f:selectItem itemLabel="Parcelar fatura" itemValue="2"/>
 				<f:selectItem itemLabel="Usar um lançamento existente" itemValue="3"/>

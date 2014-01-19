@@ -197,4 +197,20 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		
 		return result;
 	}
+	
+	public boolean existsLinkagePagamentoFaturaCartao(LancamentoConta lancamento) {
+		boolean result = true;
+		
+		String sqlLancamento = "select count(*) from faturacartao where idLancamento = " + lancamento.getId();
+		
+		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
+		
+		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
+		
+		if (queryResultLancamento.longValue() == 0) {
+			return false;
+		}
+		
+		return result;
+	}
 }

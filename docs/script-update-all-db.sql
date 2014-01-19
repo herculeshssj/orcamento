@@ -1368,3 +1368,9 @@ CREATE TABLE IF NOT EXISTS `panoramalancamentocartao` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 update lancamentoconta lc set lc.dataPagamento = (select fc.dataVencimento from faturacartao fc inner join detalhefatura df on df.idFaturaCartao = fc.id where df.idLancamento = lc.id) where dataPagamento is null;
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO DEZ2013.3 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('DEZ2013.3', true);
