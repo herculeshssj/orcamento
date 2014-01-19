@@ -53,6 +53,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
+import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IInformacaoPessoal;
 
@@ -70,8 +71,10 @@ public class InformacaoPessoalController extends AbstractController {
 	
 	private Pessoal pessoal;
 	private Endereco endereco;
+	private Telefone telefone;
 	
 	private List<Endereco> listaEndereco;
+	private List<Telefone> listaTelefone;
 	
 	public InformacaoPessoalController() {		
 		moduleTitle = "Informações pessoais";
@@ -95,6 +98,15 @@ public class InformacaoPessoalController extends AbstractController {
 				endereco = new Endereco();
 				listaEndereco = getService().buscarEnderecos(getUsuarioLogado());
 			}
+			
+			// Busca os telefones do usuário
+			if (getService().buscarTelefones(getUsuarioLogado()) == null) {
+				telefone = new Telefone();
+				listaTelefone = new ArrayList<Telefone>();
+			} else {
+				telefone = new Telefone();
+				listaTelefone = getService().buscarTelefones(getUsuarioLogado());
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -112,6 +124,7 @@ public class InformacaoPessoalController extends AbstractController {
 			pessoal.setUsuario(getUsuarioLogado());
 			getService().salvarDadosPessoais(pessoal);
 			getService().salvarEnderecos(listaEndereco, getUsuarioLogado());
+			getService().salvarTelefones(listaTelefone, getUsuarioLogado());
 			infoMessage("Dados salvos com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -131,12 +144,35 @@ public class InformacaoPessoalController extends AbstractController {
 		}
 	}
 	
+	public void salvarTelefone() {
+		try {
+			telefone.setUsuario(getUsuarioLogado());
+			telefone.validate();
+			if (!listaTelefone.contains(telefone)) {
+				listaTelefone.add(telefone);
+			}
+			telefone = new Telefone();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
 	public void editarEndereco() {
 		// Método criado unicamente para disparar o action do commandButton
 	}
 	
+	public void editarTelefone() {
+		// Método criado unicamento para disparar o action do commandButton
+	}
+	
 	public void excluirEndereco() {
 		listaEndereco.remove(endereco);
+		endereco = new Endereco();
+	}
+	
+	public void excluirTelefone() {
+		listaTelefone.remove(telefone);
+		telefone = new Telefone();
 	}
 	
 	public IInformacaoPessoal getService() {
@@ -169,5 +205,21 @@ public class InformacaoPessoalController extends AbstractController {
 
 	public void setListaEndereco(List<Endereco> listaEndereco) {
 		this.listaEndereco = listaEndereco;
+	}
+
+	public Telefone getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(Telefone telefone) {
+		this.telefone = telefone;
+	}
+
+	public List<Telefone> getListaTelefone() {
+		return listaTelefone;
+	}
+
+	public void setListaTelefone(List<Telefone> listaTelefone) {
+		this.listaTelefone = listaTelefone;
 	}
 }

@@ -60,39 +60,43 @@
 		<h:panelGrid columns="4">
 		
 			Descrição:
-			<h:inputText />
-			
-			Tipo:
-			<h:inputText />
-			
+			<h:inputText value="#{managedBean.telefone.descricao}"/>
+						
 			DDD:
-			<h:inputText />
+			<h:inputText value="#{managedBean.telefone.ddd}"/>
 			
 			Número:
-			<h:inputText />
+			<h:inputText value="#{managedBean.telefone.numero}"/>
 			
 			Ramal:
-			<h:inputText />
+			<h:inputText value="#{managedBean.telefone.ramal}"/>
 			
 			<h:outputText />
-			<h:commandButton title="Salvar" image="/resources/images/gravar.png" />
+			<h:commandButton title="Salvar telefone" image="/resources/images/gravar.png" action="#{managedBean.salvarTelefone}"/>
+			
+			<h:outputText />
+			<h:outputText />
 									
 		</h:panelGrid>
 	
-		<p:dataTable>
+		<p:dataTable value="#{managedBean.listaTelefone}" var="item">
 			<p:column>
 				<f:facet name="header">
-					<h:outputText value="Endereço"/>
+					<h:outputText value="Telefone"/>
 				</f:facet>
-				<h:outputText />
+				<h:outputText value="#{item.label}"/>
 			</p:column>
 			<p:column>
 				<f:facet name="header">
 					<h:outputText value="Ações"/>
 				</f:facet>
-				<h:commandButton title="Editar" image="/resources/images/alterar.png" />													
+				<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.editarTelefone}">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.telefone}"/>
+				</h:commandButton>													
 	  			<p:spacer width="10"/>
-				<h:commandButton title="Excluir" image="/resources/images/excluir.png" />					
+				<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirTelefone}">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.telefone}"/>
+				</h:commandButton>					
 			</p:column>
 		</p:dataTable>	
 	</p:tab>
