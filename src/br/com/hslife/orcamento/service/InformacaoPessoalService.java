@@ -93,6 +93,7 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 		// Valida cada endereço e depois salva
 		for (Endereco endereco : enderecos) {
 			endereco.validate();
+			endereco.setId(null);
 			enderecoRepository.save(endereco);
 		}
 	}

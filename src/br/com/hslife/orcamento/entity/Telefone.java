@@ -44,6 +44,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -55,13 +56,25 @@ import javax.persistence.Table;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="pessoal")
+@Table(name="telefone")
 @SuppressWarnings("serial")
 public class Telefone extends EntityPersistence {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(length=50, nullable=false)
+	private String descricao;
+	
+	@Column(length=5, nullable=true)
+	private String ddd;
+	
+	@Column(length=15, nullable=false)
+	private String numero;
+	
+	@Column(length=5, nullable=true)
+	private String ramal;
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
@@ -72,12 +85,45 @@ public class Telefone extends EntityPersistence {
 
 	@Override
 	public String getLabel() {		
-		return this.usuario.getNome();
+		StringBuilder textoBuilder = new StringBuilder();
+		
+		textoBuilder.append(this.descricao + ":");
+		
+		if (this.ddd != null && !this.ddd.trim().isEmpty()) {
+			textoBuilder.append(" (" + this.ddd + ")");
+		}
+		
+		textoBuilder.append(" ");
+		textoBuilder.append(this.numero);
+		
+		if (this.ramal != null && !this.ramal.trim().isEmpty()) {
+			textoBuilder.append(", Ramal: " + this.ramal);
+		}
+		
+		return textoBuilder.toString();
 	}
 	
 	@Override
 	public void validate() throws BusinessException {
+		if (this.descricao.trim().length() > 50) {
+			throw new BusinessException("Campo 'Descrição' aceita no máximo 50 caracteres!");
+		}
 		
+		if (this.ddd != null && this.ddd.trim().length() > 5) {
+			throw new BusinessException("Campo 'DDD' aceita no máximo 5 caracteres!");
+		}
+		
+		if (this.numero.trim().length() > 50) {
+			throw new BusinessException("Campo 'Número' aceita no máximo 15 caracteres!");
+		}
+		
+		if (this.ramal != null && this.ramal.trim().length() > 5) {
+			throw new BusinessException("Campo 'Ramal' aceita no máximo 5 caracteres!");
+		}
+		
+		if (this.usuario == null) {
+			throw new BusinessException("Informe o usuário!");
+		}
 	}
 	
 	public Long getId() {
@@ -94,5 +140,37 @@ public class Telefone extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String getDdd() {
+		return ddd;
+	}
+
+	public void setDdd(String ddd) {
+		this.ddd = ddd;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public String getRamal() {
+		return ramal;
+	}
+
+	public void setRamal(String ramal) {
+		this.ramal = ramal;
 	}
 }

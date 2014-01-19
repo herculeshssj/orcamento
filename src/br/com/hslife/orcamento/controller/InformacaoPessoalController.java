@@ -44,10 +44,14 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IInformacaoPessoal;
@@ -65,6 +69,9 @@ public class InformacaoPessoalController extends AbstractController {
 	private IInformacaoPessoal service; 
 	
 	private Pessoal pessoal;
+	private Endereco endereco;
+	
+	private List<Endereco> listaEndereco;
 	
 	public InformacaoPessoalController() {		
 		moduleTitle = "Informações pessoais";
@@ -73,10 +80,20 @@ public class InformacaoPessoalController extends AbstractController {
 	@Override
 	public String startUp() {
 		try {
+			// Busca os dados pessoais do usuário
 			if (getService().buscarDadosPessoais(getUsuarioLogado()) == null) {
 				pessoal = new Pessoal();
 			} else {
 				pessoal = getService().buscarDadosPessoais(getUsuarioLogado());
+			}
+			
+			// Busca os endereços do usuário
+			if (getService().buscarEnderecos(getUsuarioLogado()) == null) {
+				endereco = new Endereco();
+				listaEndereco = new ArrayList<>();
+			} else {
+				endereco = new Endereco();
+				listaEndereco = getService().buscarEnderecos(getUsuarioLogado());
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -94,10 +111,32 @@ public class InformacaoPessoalController extends AbstractController {
 			// Cadastra os dados pessoais
 			pessoal.setUsuario(getUsuarioLogado());
 			getService().salvarDadosPessoais(pessoal);
+			getService().salvarEnderecos(listaEndereco, getUsuarioLogado());
 			infoMessage("Dados salvos com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+	}
+	
+	public void salvarEndereco() {
+		try {
+			endereco.setUsuario(getUsuarioLogado());
+			endereco.validate();
+			if (!listaEndereco.contains(endereco)) {
+				listaEndereco.add(endereco);
+			}
+			endereco = new Endereco();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void editarEndereco() {
+		// Método criado unicamente para disparar o action do commandButton
+	}
+	
+	public void excluirEndereco() {
+		listaEndereco.remove(endereco);
 	}
 	
 	public IInformacaoPessoal getService() {
@@ -114,5 +153,21 @@ public class InformacaoPessoalController extends AbstractController {
 
 	public void setPessoal(Pessoal pessoal) {
 		this.pessoal = pessoal;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public List<Endereco> getListaEndereco() {
+		return listaEndereco;
+	}
+
+	public void setListaEndereco(List<Endereco> listaEndereco) {
+		this.listaEndereco = listaEndereco;
 	}
 }

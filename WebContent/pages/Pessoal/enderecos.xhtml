@@ -60,51 +60,55 @@
 		<h:panelGrid columns="4">
 		
 			Descrição:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.descricao}"/>
 			
 			Tipo de logradouro:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.tipoLogradouro}"/>
 			
 			Logradouro:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.logradouro}"/>
 			
 			Número:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.numero}" size="5"/>
 			
 			Complemento:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.complemento}"/>
 			
 			Bairro:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.bairro}"/>
 			
 			Cidade:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.cidade}"/>
 			
 			Estado:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.estado}" size="2" maxlength="2"/>
 			
 			CEP:
-			<h:inputText />
+			<h:inputText value="#{managedBean.endereco.cep}" size="8" maxlength="8"/>
 			
 			<h:outputText />
-			<h:commandButton title="Editar" image="/resources/images/gravar.png" />
+			<h:commandButton title="Salvar Endereço" image="/resources/images/gravar.png" action="#{managedBean.salvarEndereco}"/>
 				
 		</h:panelGrid>
 		
-		<p:dataTable>
+		<p:dataTable value="#{managedBean.listaEndereco}" var="item">
 			<p:column>
 				<f:facet name="header">
 					<h:outputText value="Endereço"/>
 				</f:facet>
-				<h:outputText />
+				<h:outputText value="#{item.label}"/>
 			</p:column>
 			<p:column>
 				<f:facet name="header">
 					<h:outputText value="Ações"/>
 				</f:facet>
-				<h:commandButton title="Editar" image="/resources/images/alterar.png" />													
+				<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.editarEndereco}">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.endereco}"/>
+				</h:commandButton>													
 	  			<p:spacer width="10"/>
-				<h:commandButton title="Excluir" image="/resources/images/excluir.png" />					
+				<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirEndereco}">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.endereco}"/>
+				</h:commandButton>					
 			</p:column>
 		</p:dataTable>	
 	</p:tab>

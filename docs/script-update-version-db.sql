@@ -86,3 +86,16 @@ create table endereco(
 ) engine=InnoDB;
 
 alter table endereco add constraint fk_endereco_usuario foreign key(idUsuario) references usuario(id);
+
+-- Telefones do usuário
+create table telefone(
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	ddd varchar(5) null,
+	numero varchar(15) not null,
+	ramal varchar(5) null,
+	idUsuario bigint not null,
+	primary key(id)
+) engine=InnoDB;
+
+alter table telefone add constraint fk_telefone_usuario foreign key(idUsuario) references usuario(id);
