@@ -309,7 +309,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		// Busca os lançamentos a partir do critério de busca fornecido
 		// Logo após itera os lançamentos
-		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca)) {
+		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioLancamentoCartao(criterioBusca)) {
 			String oid;
 			if (lancamento.getCategoria() == null) {
 				oid = Util.MD5("Sem categoria");
@@ -454,7 +454,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	private void inserirValorMesPanoramaLancamentoCartao(Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos, LancamentoConta lancamento, String oid) {
-		int mes = lancamento.getDataPagamento().getMonth();
+		int mes = lancamento.getFaturaCartao().getDataVencimento().getMonth();
 		switch(mes) {
 			case Calendar.JANUARY :
 				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
