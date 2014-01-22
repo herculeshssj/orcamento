@@ -109,7 +109,7 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 		listaCategoriaDocumento = new ArrayList<SelectItem>();
 		try {
 			if (operation.equals("edit")) {
-				for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(entity.getUsuario())) {
+				for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(getUsuarioLogado())) {
 					listaCategoriaDocumento.add(new SelectItem(cd, cd.getDescricao()));
 				}
 			} else {
@@ -141,7 +141,6 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 			warnMessage("Anexe um arquivo!");
 			return "";
 		}
-		entity.setUsuario(getUsuarioLogado());			
 		return super.save();
 	}
 	
@@ -150,7 +149,7 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 		try {
 			if (getUsuarioLogado().getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
 				if (operation.equals("edit") || operation.equals("create")) {
-					for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(entity.getUsuario())) {
+					for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(getUsuarioLogado())) {
 						listaCategoriaDocumento.add(new SelectItem(cd, cd.getDescricao()));
 					}
 				} else {

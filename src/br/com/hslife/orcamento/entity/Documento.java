@@ -82,10 +82,6 @@ public class Documento extends EntityPersistence {
 	@JoinColumn(name="idCategoriaDocumento", nullable=false)
 	private CategoriaDocumento categoriaDocumento;
 	
-	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
-	
 	public Documento() {
 		arquivo = new Arquivo();
 	}
@@ -114,14 +110,6 @@ public class Documento extends EntityPersistence {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public String getNome() {

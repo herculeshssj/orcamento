@@ -51,6 +51,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
@@ -74,40 +75,44 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByNomeAndUsuario(String nome, Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Documento.class);
-		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));				
-		return criteria.addOrder(Order.asc("descricao")).list();
+		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
+				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
+		criteria.add(Restrictions.ilike("documento.nome", nome, MatchMode.ANYWHERE));
+		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));				
+		return criteria.addOrder(Order.asc("documento.nome")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByNomeAndCategoriaDocumentoByUsuario(String nome, CategoriaDocumento categoriaDocumento, Usuario usuario) {
-		Criteria criteria = getSession().createCriteria(Documento.class);
-		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		criteria.add(Restrictions.eq("categoriaDocumento.id", categoriaDocumento.getId()));
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return criteria.addOrder(Order.asc("nome")).list();
+		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
+				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
+		criteria.add(Restrictions.ilike("documento.nome", nome, MatchMode.ANYWHERE));
+		criteria.add(Restrictions.eq("documento.categoriaDocumento.id", categoriaDocumento.getId()));
+		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));
+		return criteria.addOrder(Order.asc("documento.nome")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByUsuario(Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Documento.class);
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));				
-		return criteria.addOrder(Order.asc("descricao")).list();
+		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
+				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
+		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));
+		return criteria.addOrder(Order.asc("documento.nome")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByCategoriaDocumento(CategoriaDocumento categoriaDocumento) throws BusinessException {
 		Criteria criteria = getSession().createCriteria(Documento.class);
 		criteria.add(Restrictions.eq("categoriaDocumento.id", categoriaDocumento.getId()));				
-		return criteria.addOrder(Order.asc("descricao")).list();
+		return criteria.addOrder(Order.asc("nome")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByCategoriaDocumentoAndUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Documento.class);
-		criteria.add(Restrictions.eq("categoriaDocumento.id", categoriaDocumento.getId()));
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return criteria.addOrder(Order.asc("descricao")).list();
+		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
+				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
+		criteria.add(Restrictions.eq("documento.categoriaDocumento.id", categoriaDocumento.getId()));
+		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));
+		return criteria.addOrder(Order.asc("documento.nome")).list();
 	}
 }

@@ -99,3 +99,7 @@ create table telefone(
 ) engine=InnoDB;
 
 alter table telefone add constraint fk_telefone_usuario foreign key(idUsuario) references usuario(id);
+
+-- Documentos
+ALTER TABLE `orcamento`.`documento` DROP FOREIGN KEY `FK383D52B47083BD82` ;
+ALTER TABLE `orcamento`.`documento` DROP COLUMN `idUsuario`, DROP INDEX `FK383D52B47083BD82`;
