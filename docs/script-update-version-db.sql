@@ -194,3 +194,5 @@ update arquivo set versionEntity = '2014-01-01 00:00:00';
 
 alter table aberturafechamentoconta add column versionEntity datetime not null default '2014-01-01 00:00:00';
 update aberturafechamentoconta set versionEntity = '2014-01-01 00:00:00';
+
+alter table auditoria change column `versionEntity` `versionAuditedEntity` datetime not null default '2014-01-01 00:00:00';
