@@ -47,9 +47,7 @@ package br.com.hslife.orcamento.aspect;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +55,6 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Auditoria;
-import br.com.hslife.orcamento.entity.AuditoriaDados;
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -108,21 +105,20 @@ public class AuditoriaAspect {
 			
 			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 		} else {
-			auditoria.setUsuario("desenvolvidor");
+			auditoria.setUsuario("desenvolvedor");
 			auditoria.setIp("127.0.0.1");
 		}
-		
-		for (String s : entity.getFieldValues().keySet()) {
-			auditoria.getDadosAuditoria().add(new AuditoriaDados(entity.getFieldValues().get(s), s, "AFTER"));
-		}
+	
+		auditoria.setVersionAuditedEntity(entity.getVersionEntity());
+		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
 		
 		System.out.println("Auditoria realizada!");
 	}
 	
-	@Around("execution(public void br.com.hslife.orcamento.repository..update(..)) && args(entity)")
-	public void afterUpdate(ProceedingJoinPoint executaMetodo, EntityPersistence entity) {
+	@AfterReturning("execution(public void br.com.hslife.orcamento.repository..update(..)) && args(entity)")
+	public void afterUpdate(EntityPersistence entity) {
 		try {
 			System.out.println("Atualização detectada. Auditoria executada!");
 			System.out.println("Classe detectada: " + entity.getClass().getName());
@@ -151,23 +147,12 @@ public class AuditoriaAspect {
 				
 				auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 			} else {
-				auditoria.setUsuario("desenvolvidor");
+				auditoria.setUsuario("desenvolvedor");
 				auditoria.setIp("127.0.0.1");
 			}
 			
-			EntityPersistence entityBefore = (EntityPersistence) sessionFactory.getCurrentSession().get(entity.getClass(), entity.getId());
-			
-			for (String s : entity.getFieldValues().keySet()) {
-				auditoria.getDadosAuditoria().add(new AuditoriaDados(entityBefore.getFieldValues().get(s), s, "BEFORE"));
-			}
-			
-			
-				executaMetodo.proceed();
-			
-			
-			for (String s : entity.getFieldValues().keySet()) {
-				auditoria.getDadosAuditoria().add(new AuditoriaDados(entity.getFieldValues().get(s), s, "AFTER"));
-			}
+			auditoria.setVersionAuditedEntity(entity.getVersionEntity());
+			auditoria.setDadosAuditados(entity.generateJsonValues());
 			
 			sessionFactory.getCurrentSession().persist(auditoria);
 			
@@ -178,7 +163,7 @@ public class AuditoriaAspect {
 	}
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..delete(..)) && args(entity)")
-	public void afterDelete(EntityPersistence entity) {
+	public void beforeDelete(EntityPersistence entity) {
 		System.out.println("Exclusão detectada. Executando auditoria!");
 		System.out.println("Classe detectada: " + entity.getClass().getName());
 		
@@ -205,13 +190,12 @@ public class AuditoriaAspect {
 			
 			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
 		} else {
-			auditoria.setUsuario("desenvolvidor");
+			auditoria.setUsuario("desenvolvedor");
 			auditoria.setIp("127.0.0.1");
 		}
 		
-		for (String s : entity.getFieldValues().keySet()) {
-			auditoria.getDadosAuditoria().add(new AuditoriaDados(entity.getFieldValues().get(s), s, "BEFORE"));
-		}
+		auditoria.setVersionAuditedEntity(entity.getVersionEntity());
+		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
 		

@@ -45,10 +45,11 @@
 package br.com.hslife.orcamento.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,6 +62,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
+import org.json.JSONObject;
 
 @Entity
 @Table(name="auditoria")
@@ -95,23 +98,33 @@ public class Auditoria implements Serializable {
 	@Column(nullable=false)
 	private String transacao; // INSERT, UPDATE, DELETE
 	
-	@Column(nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	@Version
-	private Date versionEntity;
-	
 	@Column(columnDefinition="mediumtext", nullable=true)
 	private String dadosAuditados;
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<AuditoriaDados> dadosAuditoria;
 	
+	@Column(nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Version
+	private Date versionAuditedEntity;
+	
 	public Auditoria() {
 		data = Calendar.getInstance().getTime();
 		dataHora = Calendar.getInstance().getTime();
-		dadosAuditoria = new ArrayList<AuditoriaDados>();
+		//dadosAuditoria = new ArrayList<AuditoriaDados>();
 	}
 
+	public Map<String, String> getReadJsonValues() {
+		JSONObject jsonRead = new JSONObject(this.dadosAuditados);
+		Map<String, String> dados = new HashMap<String, String>();
+		
+		for (Object obj : jsonRead.keySet()) {
+			dados.put((String)obj, (String)jsonRead.get((String)obj));
+		}
+		return dados;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -176,19 +189,19 @@ public class Auditoria implements Serializable {
 		this.dataHora = dataHora;
 	}
 
-	public Date getVersionEntity() {
-		return versionEntity;
-	}
-
-	public void setVersionEntity(Date versionEntity) {
-		this.versionEntity = versionEntity;
-	}
-
 	public String getDadosAuditados() {
 		return dadosAuditados;
 	}
 
 	public void setDadosAuditados(String dadosAuditados) {
 		this.dadosAuditados = dadosAuditados;
+	}
+
+	public Date getVersionAuditedEntity() {
+		return versionAuditedEntity;
+	}
+
+	public void setVersionAuditedEntity(Date versionAuditedEntity) {
+		this.versionAuditedEntity = versionAuditedEntity;
 	}
 }

@@ -46,10 +46,17 @@ package br.com.hslife.orcamento.entity;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
+
+import org.json.JSONObject;
 
 import br.com.hslife.orcamento.exception.BusinessException;
 
@@ -63,7 +70,6 @@ public abstract class EntityPersistence implements Serializable {
 	
 	public abstract void validate() throws BusinessException;
 	
-	/*
 	@Column(nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@Version
@@ -76,7 +82,6 @@ public abstract class EntityPersistence implements Serializable {
 	public void setVersionEntity(Date versionEntity) {
 		this.versionEntity = versionEntity;
 	}
-	 */
 
 	@Override
 	public int hashCode() {
@@ -130,5 +135,15 @@ public abstract class EntityPersistence implements Serializable {
 			e.printStackTrace();
 		}
 		return camposClasse;
+	}
+	
+	public String generateJsonValues() {
+		JSONObject json = new JSONObject();
+		
+		for (String s : this.getFieldValues().keySet()) {
+			json.put(s, this.getFieldValues().get(s));
+		} 
+		
+		return json.toString();
 	}
 }

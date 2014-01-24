@@ -103,3 +103,94 @@ alter table telefone add constraint fk_telefone_usuario foreign key(idUsuario) r
 -- Documentos
 ALTER TABLE `orcamento`.`documento` DROP FOREIGN KEY `FK383D52B47083BD82` ;
 ALTER TABLE `orcamento`.`documento` DROP COLUMN `idUsuario`, DROP INDEX `FK383D52B47083BD82`;
+
+-- Controle de versão das entidades
+alter table versao add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update versao set versionEntity = '2014-01-01 00:00:00';
+
+alter table usuario add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update usuario set versionEntity = '2014-01-01 00:00:00';
+
+alter table unidademedida add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update unidademedida set versionEntity = '2014-01-01 00:00:00';
+
+alter table telefone add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update telefone set versionEntity = '2014-01-01 00:00:00';
+
+alter table previsaolancamentoconta add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update previsaolancamentoconta set versionEntity = '2014-01-01 00:00:00';
+
+alter table pessoal add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update pessoal set versionEntity = '2014-01-01 00:00:00';
+
+alter table panoramalancamentocartao add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update panoramalancamentocartao set versionEntity = '2014-01-01 00:00:00';
+
+alter table opcaosistema add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update opcaosistema set versionEntity = '2014-01-01 00:00:00';
+
+alter table movimentoitemdespensa add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update movimentoitemdespensa set versionEntity = '2014-01-01 00:00:00';
+
+alter table moeda add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update moeda set versionEntity = '2014-01-01 00:00:00';
+
+alter table meiopagamento add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update meiopagamento set versionEntity = '2014-01-01 00:00:00';
+
+alter table lancamentoimportado add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update lancamentoimportado set versionEntity = '2014-01-01 00:00:00';
+
+alter table lancamentoconta add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update lancamentoconta set versionEntity = '2014-01-01 00:00:00';
+
+alter table itemdespensa add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update itemdespensa set versionEntity = '2014-01-01 00:00:00';
+
+alter table identidade add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update identidade set versionEntity = '2014-01-01 00:00:00';
+
+alter table fechamentoperiodo add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update fechamentoperiodo set versionEntity = '2014-01-01 00:00:00';
+
+alter table favorecido add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update favorecido set versionEntity = '2014-01-01 00:00:00';
+
+alter table faturacartao add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update faturacartao set versionEntity = '2014-01-01 00:00:00';
+
+alter table endereco add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update endereco set versionEntity = '2014-01-01 00:00:00';
+
+alter table documento add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update documento set versionEntity = '2014-01-01 00:00:00';
+
+alter table despensa add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update despensa set versionEntity = '2014-01-01 00:00:00';
+
+alter table conversaomoeda add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update conversaomoeda set versionEntity = '2014-01-01 00:00:00';
+
+alter table conta add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update conta set versionEntity = '2014-01-01 00:00:00';
+
+alter table categoriadocumento add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update categoriadocumento set versionEntity = '2014-01-01 00:00:00';
+
+alter table categoria add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update categoria set versionEntity = '2014-01-01 00:00:00';
+
+alter table cartaocredito add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update cartaocredito set versionEntity = '2014-01-01 00:00:00';
+
+alter table buscasalva add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update buscasalva set versionEntity = '2014-01-01 00:00:00';
+
+alter table banco add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update banco set versionEntity = '2014-01-01 00:00:00';
+
+alter table arquivo add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update arquivo set versionEntity = '2014-01-01 00:00:00';
+
+alter table aberturafechamentoconta add column versionEntity datetime not null default '2014-01-01 00:00:00';
+update aberturafechamentoconta set versionEntity = '2014-01-01 00:00:00';
