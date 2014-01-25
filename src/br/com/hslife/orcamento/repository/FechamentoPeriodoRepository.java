@@ -98,4 +98,9 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 		criteria.add(Restrictions.ge("data", fechamento.getData()));
 		return criteria.list();
 	}
+	
+	public FechamentoPeriodo findFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
+		// TODO implementar de acordo com o seguinte SQL: select * from fechamentoperiodo where id < 135 and operacao = 'FECHAMENTO' and idContaBancaria = 2 order by id desc limit 1;
+		return null;
+	}
 }

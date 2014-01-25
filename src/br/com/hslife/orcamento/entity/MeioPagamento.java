@@ -87,9 +87,17 @@ public class MeioPagamento extends EntityPersistence {
 	@Transient
 	private double saldoPago;
 	
+	@Transient
+	private double saldoCredito;
+	
+	@Transient
+	private double saldoDebito;
+	
 	public MeioPagamento() {
 		ativo = true;
 		saldoPago = 0.0;
+		saldoCredito = 0.0;
+		saldoDebito = 0.0;
 	}
 	
 	@Override
@@ -166,5 +174,21 @@ public class MeioPagamento extends EntityPersistence {
 
 	public void setSaldoPago(double saldoPago) {
 		this.saldoPago = saldoPago;
+	}
+
+	public double getSaldoCredito() {
+		return saldoCredito;
+	}
+
+	public void setSaldoCredito(double saldoCredito) {
+		this.saldoCredito = saldoCredito;
+	}
+
+	public double getSaldoDebito() {
+		return saldoDebito;
+	}
+
+	public void setSaldoDebito(double saldoDebito) {
+		this.saldoDebito = saldoDebito;
 	}
 }

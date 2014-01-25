@@ -44,16 +44,22 @@
 
 package br.com.hslife.orcamento.component;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -114,6 +120,230 @@ public class ContaComponent {
 			}
 		}
 		return Util.arredondar(total);
+	}
+	
+	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) throws BusinessException {
+		List<Categoria> categorias = new ArrayList<Categoria>();
+		
+		/* Usa-se o Set para separar as categorias da listagem de lançamentos */
+		Set<Categoria> setCategorias = new HashSet<Categoria>();
+		
+		// Adiciona as categorias no Set
+		for (LancamentoConta l : lancamentos) {
+			if (l.getCategoria() != null)
+				setCategorias.add(l.getCategoria());
+		}
+		
+		// Adiciona as categorias no List
+		categorias.addAll(setCategorias);
+					
+		// Zera a lista de categorias
+		for (Categoria c : categorias) {
+			c.setLancamentos(new ArrayList<LancamentoConta>());
+			c.setSaldoPago(0.0);
+		}
+		
+		List<LancamentoConta> lancamentosSemCategoria = new ArrayList<LancamentoConta>();
+		double saldoLancamentosSemCategoria = 0.0;
+				
+		// Varre a lista de lançamentos para adicionar os lançamentos nas respectivas categorias
+		for (LancamentoConta l : lancamentos) {
+			
+			for (int i = 0; i < categorias.size(); i++) {
+				if (l.getCategoria() != null && categorias.get(i).getId().equals(l.getCategoria().getId())) {
+					categorias.get(i).getLancamentos().add(l);
+					if (l.getTipoLancamento() == TipoLancamento.RECEITA) {
+						categorias.get(i).setSaldoPago(categorias.get(i).getSaldoPago() + l.getValorPago());
+					} else {
+						categorias.get(i).setSaldoPago(categorias.get(i).getSaldoPago() - l.getValorPago());
+					}						
+				} 
+			}
+			if (l.getCategoria() == null) {
+				lancamentosSemCategoria.add(l);
+				if (l.getTipoLancamento() == TipoLancamento.RECEITA) {						
+					saldoLancamentosSemCategoria += l.getValorPago();
+				} else {						
+					saldoLancamentosSemCategoria -= l.getValorPago();
+				}
+			}
+		}
+		
+		// Remove as categorias que não tem lançamentos e ajusta as casas decimais dos saldos
+		int indice = categorias.size() - 1;
+		while (indice >= 0) {
+			if (categorias.get(indice).getLancamentos().size() == 0) {
+				categorias.remove(indice);				
+			} else {
+				categorias.get(indice).setSaldoPago(Util.arredondar(categorias.get(indice).getSaldoPago()));
+			}
+			indice--;
+		}
+		
+		// Cria um favorecido a mais para os lançamentos que não tem favorecido atribuídos
+		Categoria c = new Categoria();
+		c.setDescricao("Sem categoria");
+		c.setLancamentos(lancamentosSemCategoria);
+		c.setSaldoPago(saldoLancamentosSemCategoria);
+		categorias.add(c);
+		
+		return categorias;
+	}
+
+	public List<Favorecido> organizarLancamentosPorFavorecido(List<LancamentoConta> lancamentos) throws BusinessException {
+		List<Favorecido> favorecidos = new ArrayList<Favorecido>();
+		
+		/* Usa-se o Set para separar os favorecidos da listagem de lançamentos */
+		Set<Favorecido> setFavorecidos = new HashSet<Favorecido>();
+		
+		// Adiciona os favorecidos no Set
+		for (LancamentoConta l : lancamentos) {
+			if (l.getFavorecido() != null)
+				setFavorecidos.add(l.getFavorecido());
+		}
+		
+		// Adiciona os favorecidos no List
+		favorecidos.addAll(setFavorecidos);
+		
+		// Zera a lista de favorecidos
+		for (Favorecido f : favorecidos) {
+			f.setLancamentos(new ArrayList<LancamentoConta>());			
+			f.setSaldoPago(0.0);
+		}
+				
+		List<LancamentoConta> lancamentosSemFavorecido = new ArrayList<LancamentoConta>();
+		double saldoLancamentosSemFavorecido = 0.0;
+		double saldoCreditoLancamentosSemFavorecido = 0.0;
+		double saldoDebitoLancamentosSemFavorecido = 0.0;
+		
+		// Varre a lista de lançamentos para adicionar os lançamentos nos respectivos favorecidos
+		for (LancamentoConta l : lancamentos) {
+			
+			for (int i = 0; i < favorecidos.size(); i++) {
+				if (l.getFavorecido() != null && favorecidos.get(i).getId().equals(l.getFavorecido().getId())) {
+					favorecidos.get(i).getLancamentos().add(l);
+					if (l.getTipoLancamento() == TipoLancamento.RECEITA) {						
+						favorecidos.get(i).setSaldoPago(favorecidos.get(i).getSaldoPago() + l.getValorPago());
+						favorecidos.get(i).setSaldoCredito(favorecidos.get(i).getSaldoCredito() + l.getValorPago());
+					} else {						
+						favorecidos.get(i).setSaldoPago(favorecidos.get(i).getSaldoPago() - l.getValorPago());
+						favorecidos.get(i).setSaldoDebito(favorecidos.get(i).getSaldoDebito() + l.getValorPago());
+					}						
+				}
+			}
+			if (l.getFavorecido() == null) {
+				lancamentosSemFavorecido.add(l);
+				if (l.getTipoLancamento() == TipoLancamento.RECEITA) {						
+					saldoLancamentosSemFavorecido += l.getValorPago();
+					saldoCreditoLancamentosSemFavorecido += l.getValorPago();
+				} else {						
+					saldoLancamentosSemFavorecido -= l.getValorPago();
+					saldoDebitoLancamentosSemFavorecido += l.getValorPago();
+				}
+			}
+		}
+		
+		// Remove os favorecidos que não tem lançamentos e ajusta as casas decimais dos saldos
+		int indice = favorecidos.size() - 1;
+		while (indice >= 0) {
+			if (favorecidos.get(indice).getLancamentos().size() == 0) {
+				favorecidos.remove(indice);				
+			} else {
+				favorecidos.get(indice).setSaldoPago(Util.arredondar(favorecidos.get(indice).getSaldoPago()));
+				favorecidos.get(indice).setSaldoCredito(Util.arredondar(favorecidos.get(indice).getSaldoCredito()));
+				favorecidos.get(indice).setSaldoDebito(Util.arredondar(favorecidos.get(indice).getSaldoDebito()));
+			}
+			indice--;
+		}
+		
+		// Cria um favorecido a mais para os lançamentos que não tem favorecido atribuídos
+		Favorecido f = new Favorecido();
+		f.setNome("Sem favorecido/sacado");
+		f.setLancamentos(lancamentosSemFavorecido);
+		f.setSaldoPago(saldoLancamentosSemFavorecido);
+		f.setSaldoCredito(saldoCreditoLancamentosSemFavorecido);
+		f.setSaldoDebito(saldoDebitoLancamentosSemFavorecido);
+		favorecidos.add(f);
+			
+		return favorecidos;
+	}
+
+	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) throws BusinessException {
+		List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
+		
+		/* Usa-se o Set para separar os meios de pagamento da listagem de lançamentos */
+		Set<MeioPagamento> setMeiosPagamento = new HashSet<MeioPagamento>();
+		
+		// Adiciona os meios de pagamento no Set
+		for (LancamentoConta l : lancamentos) {
+			if (l.getMeioPagamento() != null)
+				setMeiosPagamento.add(l.getMeioPagamento());
+		}
+		
+		// Adiciona os meios de pagamento no List
+		meiosPagamento.addAll(setMeiosPagamento);
+		
+		// Zera a lista de meios de pagamento
+		for (MeioPagamento m : meiosPagamento) {
+			m.setLancamentos(new ArrayList<LancamentoConta>());			
+			m.setSaldoPago(0.0);
+		}
+				
+		List<LancamentoConta> lancamentosSemMeioPagamento = new ArrayList<LancamentoConta>();
+		double saldoLancamentosSemMeioPagamento = 0.0;
+		double saldoCreditoLancamentosSemMeioPagamento = 0.0;
+		double saldoDebitoLancamentosSemMeioPagamento = 0.0;
+		
+		// Varre a lista de lançamentos para adicionar os lançamentos nos respectivos meios de pagamento
+		for (LancamentoConta l : lancamentos) {
+			
+			for (int i = 0; i < meiosPagamento.size(); i++) {
+				if (l.getMeioPagamento() != null && meiosPagamento.get(i).getId().equals(l.getMeioPagamento().getId())) {
+					meiosPagamento.get(i).getLancamentos().add(l);
+					if (l.getTipoLancamento() == TipoLancamento.RECEITA) {						
+						meiosPagamento.get(i).setSaldoPago(meiosPagamento.get(i).getSaldoPago() + l.getValorPago());
+						meiosPagamento.get(i).setSaldoCredito(meiosPagamento.get(i).getSaldoCredito() + l.getValorPago());
+					} else {						
+						meiosPagamento.get(i).setSaldoPago(meiosPagamento.get(i).getSaldoPago() - l.getValorPago());
+						meiosPagamento.get(i).setSaldoDebito(meiosPagamento.get(i).getSaldoDebito() + l.getValorPago());
+					}						
+				}
+			}
+			if (l.getMeioPagamento() == null) {
+				lancamentosSemMeioPagamento.add(l);
+				if (l.getTipoLancamento() == TipoLancamento.RECEITA) {						
+					saldoLancamentosSemMeioPagamento += l.getValorPago();
+					saldoCreditoLancamentosSemMeioPagamento += l.getValorPago();
+				} else {						
+					saldoLancamentosSemMeioPagamento -= l.getValorPago();
+					saldoDebitoLancamentosSemMeioPagamento += l.getValorPago();
+				}
+			}
+		}
+		
+		// Remove os meios de pagamento que não tem lançamentos e ajusta as casas decimais dos saldos
+		int indice = meiosPagamento.size() - 1;
+		while (indice >= 0) {
+			if (meiosPagamento.get(indice).getLancamentos().size() == 0) {
+				meiosPagamento.remove(indice);				
+			} else {
+				meiosPagamento.get(indice).setSaldoPago(Util.arredondar(meiosPagamento.get(indice).getSaldoPago()));
+				meiosPagamento.get(indice).setSaldoCredito(Util.arredondar(meiosPagamento.get(indice).getSaldoCredito()));
+				meiosPagamento.get(indice).setSaldoDebito(Util.arredondar(meiosPagamento.get(indice).getSaldoDebito()));
+			}
+			indice--;
+		}
+		
+		// Cria um meio de pagamento a mais para os lançamentos que não tem meios de pagamento atribuídos
+		MeioPagamento m = new MeioPagamento();
+		m.setDescricao("Sem meio de pagamento");
+		m.setLancamentos(lancamentosSemMeioPagamento);
+		m.setSaldoPago(saldoLancamentosSemMeioPagamento);
+		m.setSaldoCredito(saldoCreditoLancamentosSemMeioPagamento);
+		m.setSaldoDebito(saldoDebitoLancamentosSemMeioPagamento);
+		meiosPagamento.add(m);
+			
+		return meiosPagamento;
 	}
 
 	@SuppressWarnings("deprecation")

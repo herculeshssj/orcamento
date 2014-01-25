@@ -68,6 +68,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
+import br.com.hslife.orcamento.model.SaldoMensalContas;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
@@ -369,6 +370,12 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}
 		
 		mapPanoramaLancamentos.clear();		
+	}
+	
+	@Override
+	public SaldoMensalContas gerarRelatorioSaldoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	/*** Implementação dos métodos privados ***/
