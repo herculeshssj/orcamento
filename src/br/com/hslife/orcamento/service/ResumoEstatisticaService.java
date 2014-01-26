@@ -46,6 +46,7 @@ package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,8 +68,8 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.model.SaldoMensalContas;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
@@ -373,9 +374,55 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	}
 	
 	@Override
-	public SaldoMensalContas gerarRelatorioSaldoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
+		ResumoMensalContas resumoMensal = new ResumoMensalContas();
+		CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+		FechamentoPeriodo fechamentoAnterior = null;
+				
+		// Busca o fechamento do período anterior
+		if (fechamentoPeriodo != null) 
+			fechamentoAnterior = fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoPeriodo);
+		else
+			fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
+		
+		// Preenche os parâmetros de busca
+		criterioBusca.setAgendado(false);
+		criterioBusca.setConta(conta);
+		
+		// Determina a data de início do período
+		if (fechamentoAnterior == null) {
+			criterioBusca.setDataInicio(conta.getDataAbertura());
+			criterioBusca.setDataFim(new Date());
+		} else {
+			Calendar temp = Calendar.getInstance();
+			temp.setTime(fechamentoAnterior.getData());
+			temp.add(Calendar.DAY_OF_YEAR, 1);
+			criterioBusca.setDataInicio(temp.getTime());
+		}
+		
+		// Determina a data de fim do período
+		if (fechamentoPeriodo == null) {
+			criterioBusca.setDataFim(new Date());
+		} else {
+			criterioBusca.setDataFim(fechamentoPeriodo.getData());
+		}
+		
+		// Realiza a busca
+		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+		
+		// Processa as categorias
+		if (fechamentoAnterior == null) {
+			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + contaComponent.calcularSaldoLancamentos(lancamentos));			
+		} else {
+			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
+		}
+			
+		// Organiza os lançamentos por categoria, favorecido e meio de pagamento e adiciona no saldo mensal
+		//saldoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos));
+		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		
+		return resumoMensal;
 	}
 	
 	/*** Implementação dos métodos privados ***/

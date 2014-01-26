@@ -56,7 +56,7 @@ import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.model.SaldoMensalContas;
+import br.com.hslife.orcamento.model.ResumoMensalContas;
 
 
 public interface IResumoEstatistica {
@@ -71,5 +71,5 @@ public interface IResumoEstatistica {
 	
 	public List<PanoramaLancamentoCartao> visualizarRelatorioPanoramaLancamentoCartao(Conta conta, int ano, Moeda moeda) throws BusinessException;
 	
-	public SaldoMensalContas gerarRelatorioSaldoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
+	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
 }

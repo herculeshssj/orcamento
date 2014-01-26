@@ -63,15 +63,17 @@
 	
 		<h:form id="frmMenuResumos">
 		
-			<h:panelGrid columns="3" width="100%" style="text-align: center">
+			<h:panelGrid columns="4" width="100%" style="text-align: center">
 			
 				<h:commandButton action="#{previsaoLancamentoContaMB.startUp}" image="/resources/images/planejamento.png" title="Previsão de Lançamentos da Conta"/>
 				<h:commandButton action="#{panoramaLancamentoCartaoMB.startUp}" image="/resources/images/panoramacartao.png" title="Panorama dos Lançamentos do Cartão"/>
-				<h:commandButton action="#{saldoAtualContasMB.startUp}" image="/resources/images/saldoconta.png" title="Saldo Atual das Contas"/>			
+				<h:commandButton action="#{saldoAtualContasMB.startUp}" image="/resources/images/saldoconta.png" title="Saldo Atual das Contas"/>
+				<h:commandButton action="#{resumoMensalContasMB.startUp}" image="/resources/images/resumomensalcontas.png" title="Resumo Mensal das Contas"/>			
 								
 				<h:outputText value="Previsão de Lançamentos da Conta"/>
 				<h:outputText value="Panorama dos Lançamentos do Cartão"/>
-				<h:outputText value="Saldo Atual das Contas"/>												
+				<h:outputText value="Saldo Atual das Contas"/>
+				<h:outputText value="Resumo Mensal das Contas"/>												
 				
 			</h:panelGrid>
 		

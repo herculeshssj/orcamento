@@ -60,6 +60,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="fechamentoperiodo")
@@ -108,7 +109,12 @@ public class FechamentoPeriodo extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return this.toString();
+		switch (this.operacao) {
+			case ABERTURA : return "Perído aberto em " + Util.formataDataHora(this.data, Util.DATA);
+			case FECHAMENTO : return "Período fechado em " + Util.formataDataHora(this.data, Util.DATA);
+			case REABERTURA : return "Período reaberto em " + Util.formataDataHora(this.dataAlteracao, Util.DATA);
+			default : return this.toString();
+		}
 	}
 	
 	@Override

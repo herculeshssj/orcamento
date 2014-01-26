@@ -45,26 +45,51 @@
 
 package br.com.hslife.orcamento.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 
-public class SaldoMensalContas {
+public class ResumoMensalContas {
 
-	private List<Categoria> categorias;
+	private List<Categoria> categorias = new ArrayList<Categoria>();
 	
 	private List<Favorecido> favorecidos;
 	
 	private List<MeioPagamento> meiosPagamento;
-
+	
 	public List<Categoria> getCategorias() {
 		return categorias;
 	}
 
-	public void setCategorias(List<Categoria> categorias) {
-		this.categorias = categorias;
+	public void setCategorias(List<Categoria> categorias, double saldoAnterior, double saldoAtual) {
+		Categoria saldoAnteriorCategorias = new Categoria();
+		Categoria saldoAtualCategorias = new Categoria();
+		
+		saldoAnteriorCategorias.setDescricao("Saldo anterior");
+		saldoAtualCategorias.setDescricao("Saldo atual");
+		
+		saldoAnteriorCategorias.setSaldoPago(saldoAnterior);
+		saldoAtualCategorias.setSaldoPago(saldoAtual);
+		
+		if (saldoAnterior > 0) {
+			saldoAnteriorCategorias.setTipoCategoria(TipoCategoria.CREDITO);
+		} else {
+			saldoAnteriorCategorias.setTipoCategoria(TipoCategoria.DEBITO);
+		}
+		
+		if (saldoAtual > 0) {
+			saldoAtualCategorias.setTipoCategoria(TipoCategoria.CREDITO);
+		} else {
+			saldoAtualCategorias.setTipoCategoria(TipoCategoria.DEBITO);
+		}
+		
+		this.categorias.add(saldoAnteriorCategorias);
+		this.categorias.addAll(categorias);
+		this.categorias.add(saldoAtualCategorias);
 	}
 
 	public List<Favorecido> getFavorecidos() {
