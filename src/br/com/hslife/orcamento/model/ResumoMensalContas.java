@@ -52,17 +52,26 @@ import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.util.Util;
 
 public class ResumoMensalContas {
 
 	private List<Categoria> categorias = new ArrayList<Categoria>();
 	
-	private List<Favorecido> favorecidos;
+	private List<Favorecido> favorecidos = new ArrayList<Favorecido>();
 	
-	private List<MeioPagamento> meiosPagamento;
+	private List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
 	
 	public List<Categoria> getCategorias() {
 		return categorias;
+	}
+	
+	public List<Favorecido> getFavorecidos() {
+		return favorecidos;
+	}
+	
+	public List<MeioPagamento> getMeiosPagamento() {
+		return meiosPagamento;
 	}
 
 	public void setCategorias(List<Categoria> categorias, double saldoAnterior, double saldoAtual) {
@@ -72,8 +81,8 @@ public class ResumoMensalContas {
 		saldoAnteriorCategorias.setDescricao("Saldo anterior");
 		saldoAtualCategorias.setDescricao("Saldo atual");
 		
-		saldoAnteriorCategorias.setSaldoPago(saldoAnterior);
-		saldoAtualCategorias.setSaldoPago(saldoAtual);
+		saldoAnteriorCategorias.setSaldoPago(Util.arredondar(saldoAnterior));
+		saldoAtualCategorias.setSaldoPago(Util.arredondar(saldoAtual));
 		
 		if (saldoAnterior > 0) {
 			saldoAnteriorCategorias.setTipoCategoria(TipoCategoria.CREDITO);
@@ -92,19 +101,33 @@ public class ResumoMensalContas {
 		this.categorias.add(saldoAtualCategorias);
 	}
 
-	public List<Favorecido> getFavorecidos() {
-		return favorecidos;
+	public void setFavorecidos(List<Favorecido> favorecidos, double saldoAnterior, double saldoAtual) {
+		Favorecido saldoAnteriorFavorecidos = new Favorecido();
+		Favorecido saldoAtualFavorecidos = new Favorecido();
+		
+		saldoAnteriorFavorecidos.setNome("Saldo anterior");
+		saldoAtualFavorecidos.setNome("Saldo atual");
+		
+		saldoAnteriorFavorecidos.setSaldoPago(Util.arredondar(saldoAnterior));
+		saldoAtualFavorecidos.setSaldoPago(Util.arredondar(saldoAtual));
+		
+		this.favorecidos.add(saldoAnteriorFavorecidos);
+		this.favorecidos.addAll(favorecidos);
+		this.favorecidos.add(saldoAtualFavorecidos);
 	}
 
-	public void setFavorecidos(List<Favorecido> favorecidos) {
-		this.favorecidos = favorecidos;
-	}
-
-	public List<MeioPagamento> getMeiosPagamento() {
-		return meiosPagamento;
-	}
-
-	public void setMeiosPagamento(List<MeioPagamento> meiosPagamento) {
-		this.meiosPagamento = meiosPagamento;
+	public void setMeiosPagamento(List<MeioPagamento> meiosPagamento, double saldoAnterior, double saldoAtual) {
+		MeioPagamento saldoAnteriorMeiosPagamento = new MeioPagamento();
+		MeioPagamento saldoAtualMeiosPagamento = new MeioPagamento();
+		
+		saldoAnteriorMeiosPagamento.setDescricao("Saldo anterior");
+		saldoAtualMeiosPagamento.setDescricao("Saldo atual");
+		
+		saldoAnteriorMeiosPagamento.setSaldoPago(Util.arredondar(saldoAnterior));
+		saldoAtualMeiosPagamento.setSaldoPago(Util.arredondar(saldoAtual));
+		
+		this.meiosPagamento.add(saldoAnteriorMeiosPagamento);
+		this.meiosPagamento.addAll(meiosPagamento);
+		this.meiosPagamento.add(saldoAtualMeiosPagamento);
 	}
 }
