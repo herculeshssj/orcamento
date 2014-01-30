@@ -180,12 +180,14 @@ public class ContaComponent {
 			indice--;
 		}
 		
-		// Cria um favorecido a mais para os lançamentos que não tem favorecido atribuídos
-		Categoria c = new Categoria();
-		c.setDescricao("Sem categoria");
-		c.setLancamentos(lancamentosSemCategoria);
-		c.setSaldoPago(saldoLancamentosSemCategoria);
-		categorias.add(c);
+		// Cria uma categoria a mais para os lançamentos que não tem categorias atribuídas
+		if (saldoLancamentosSemCategoria != 0) {
+			Categoria c = new Categoria();
+			c.setDescricao("Sem categoria");
+			c.setLancamentos(lancamentosSemCategoria);
+			c.setSaldoPago(saldoLancamentosSemCategoria);
+			categorias.add(c);
+		}
 		
 		return categorias;
 	}
@@ -257,13 +259,15 @@ public class ContaComponent {
 		}
 		
 		// Cria um favorecido a mais para os lançamentos que não tem favorecido atribuídos
-		Favorecido f = new Favorecido();
-		f.setNome("Sem favorecido/sacado");
-		f.setLancamentos(lancamentosSemFavorecido);
-		f.setSaldoPago(saldoLancamentosSemFavorecido);
-		f.setSaldoCredito(saldoCreditoLancamentosSemFavorecido);
-		f.setSaldoDebito(saldoDebitoLancamentosSemFavorecido);
-		favorecidos.add(f);
+		if (saldoLancamentosSemFavorecido != 0) {
+			Favorecido f = new Favorecido();
+			f.setNome("Sem favorecido/sacado");
+			f.setLancamentos(lancamentosSemFavorecido);
+			f.setSaldoPago(saldoLancamentosSemFavorecido);
+			f.setSaldoCredito(saldoCreditoLancamentosSemFavorecido);
+			f.setSaldoDebito(saldoDebitoLancamentosSemFavorecido);
+			favorecidos.add(f);
+		}
 			
 		return favorecidos;
 	}
@@ -335,13 +339,15 @@ public class ContaComponent {
 		}
 		
 		// Cria um meio de pagamento a mais para os lançamentos que não tem meios de pagamento atribuídos
-		MeioPagamento m = new MeioPagamento();
-		m.setDescricao("Sem meio de pagamento");
-		m.setLancamentos(lancamentosSemMeioPagamento);
-		m.setSaldoPago(saldoLancamentosSemMeioPagamento);
-		m.setSaldoCredito(saldoCreditoLancamentosSemMeioPagamento);
-		m.setSaldoDebito(saldoDebitoLancamentosSemMeioPagamento);
-		meiosPagamento.add(m);
+		if (saldoLancamentosSemMeioPagamento != 0) {
+			MeioPagamento m = new MeioPagamento();
+			m.setDescricao("Sem meio de pagamento");
+			m.setLancamentos(lancamentosSemMeioPagamento);
+			m.setSaldoPago(saldoLancamentosSemMeioPagamento);
+			m.setSaldoCredito(saldoCreditoLancamentosSemMeioPagamento);
+			m.setSaldoDebito(saldoDebitoLancamentosSemMeioPagamento);
+			meiosPagamento.add(m);
+		}
 			
 		return meiosPagamento;
 	}

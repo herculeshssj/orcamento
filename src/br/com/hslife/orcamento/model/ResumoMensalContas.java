@@ -111,6 +111,18 @@ public class ResumoMensalContas {
 		saldoAnteriorFavorecidos.setSaldoPago(Util.arredondar(saldoAnterior));
 		saldoAtualFavorecidos.setSaldoPago(Util.arredondar(saldoAtual));
 		
+		if (saldoAnterior > 0) {
+			saldoAnteriorFavorecidos.setSaldoCredito(saldoAnterior);
+		} else {
+			saldoAnteriorFavorecidos.setSaldoDebito(saldoAnterior);
+		}
+		
+		if (saldoAtual > 0) {
+			saldoAtualFavorecidos.setSaldoCredito(saldoAtual);
+		} else {
+			saldoAtualFavorecidos.setSaldoDebito(saldoAtual);
+		}
+		
 		this.favorecidos.add(saldoAnteriorFavorecidos);
 		this.favorecidos.addAll(favorecidos);
 		this.favorecidos.add(saldoAtualFavorecidos);
@@ -125,6 +137,18 @@ public class ResumoMensalContas {
 		
 		saldoAnteriorMeiosPagamento.setSaldoPago(Util.arredondar(saldoAnterior));
 		saldoAtualMeiosPagamento.setSaldoPago(Util.arredondar(saldoAtual));
+		
+		if (saldoAnterior > 0) {
+			saldoAnteriorMeiosPagamento.setSaldoCredito(saldoAnterior);
+		} else {
+			saldoAnteriorMeiosPagamento.setSaldoDebito(saldoAnterior);
+		}
+		
+		if (saldoAtual > 0) {
+			saldoAtualMeiosPagamento.setSaldoCredito(saldoAtual);
+		} else {
+			saldoAtualMeiosPagamento.setSaldoDebito(saldoAtual);
+		}
 		
 		this.meiosPagamento.add(saldoAnteriorMeiosPagamento);
 		this.meiosPagamento.addAll(meiosPagamento);

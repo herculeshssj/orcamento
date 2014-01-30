@@ -117,16 +117,29 @@ public class ResumoMensalContasController extends AbstractController {
 		return "";
 	}
 	
+	@SuppressWarnings("null")
 	public List<Conta> getListaConta() {
 		try {
+			// Variável que armazenará a lista de contas
+			List<Conta> contas;
 			// Obtém o valor da opção do sistema
 			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", getUsuarioLogado());
 			
 			// Determina qual listagem será retornada
-			if (opcao != null && Boolean.valueOf(opcao.getValor()))
-				return contaService.buscarPorUsuario(getUsuarioLogado().getId());
-			else 
-				return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			if (opcao != null && Boolean.valueOf(opcao.getValor())) {
+				contas = contaService.buscarPorUsuario(getUsuarioLogado().getId());
+				if (contas != null || contas.size() != 0) {
+					contaSelecionada = contas.get(0);
+				}
+				return contas;
+			}
+			else {
+				contas = contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+				if (contas != null || contas.size() != 0) {
+					contaSelecionada = contas.get(0);
+				}
+				return contas;
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -135,11 +148,7 @@ public class ResumoMensalContasController extends AbstractController {
 	
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
 		try {
-			if (contaSelecionada == null) {
-				warnMessage("Selecione uma conta!");
-			} else {
 				return fechamentoPeriodoService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
-			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

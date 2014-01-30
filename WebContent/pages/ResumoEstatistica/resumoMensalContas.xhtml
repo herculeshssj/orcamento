@@ -82,13 +82,15 @@
 						<f:facet name="header">
 							<h:outputText value="Descrição"/>
 						</f:facet>
-						<h:outputText value="#{item.descricao}"/>						
+						<h:outputText value="#{item.descricao}" style="#{item.descricao == 'Saldo anterior' || item.descricao == 'Saldo atual' ? 'font-weight: bold; font-style: italic;' : 'font-weight: normal'}"/>						
 					</p:column>
-					<p:column>
+					<p:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Valor"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoPago}"/>						
+						<h:outputText value="#{item.saldoPago}" style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
 					</p:column>					
 				</p:dataTable>
 			</p:tab>
@@ -98,25 +100,31 @@
 						<f:facet name="header">
 							<h:outputText value="Descrição"/>
 						</f:facet>
-						<h:outputText value="#{item.nome}"/>						
+						<h:outputText value="#{item.nome}" style="#{item.nome == 'Saldo anterior' || item.nome == 'Saldo atual' ? 'font-weight: bold; font-style: italic;' : 'font-weight: normal'}"/>						
 					</p:column>
-					<p:column>
+					<p:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Créditos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoCredito}"/>						
+						<h:outputText value="#{item.saldoCredito}">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
 					</p:column>
-					<p:column>
+					<p:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Débitos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoDebito}"/>						
+						<h:outputText value="#{item.saldoDebito}">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
 					</p:column>					
-					<p:column>
+					<p:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Total"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoPago}"/>						
+						<h:outputText value="#{item.saldoPago}" style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
 					</p:column>
 				</p:dataTable>
 			</p:tab>
@@ -126,25 +134,31 @@
 						<f:facet name="header">
 							<h:outputText value="Descrição"/>
 						</f:facet>
-						<h:outputText value="#{item.descricao}"/>						
+						<h:outputText value="#{item.descricao}" style="#{item.descricao == 'Saldo anterior' || item.descricao == 'Saldo atual' ? 'font-weight: bold; font-style: italic;' : 'font-weight: normal'}"/>						
 					</p:column>
-					<p:column>
+					<p:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Créditos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoCredito}"/>						
+						<h:outputText value="#{item.saldoCredito}">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
 					</p:column>
-					<p:column>
+					<p:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Débitos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoDebito}"/>						
+						<h:outputText value="#{item.saldoDebito}">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
 					</p:column>					
-					<p:column>
+					<p:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Total"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoPago}"/>						
+						<h:outputText value="#{item.saldoPago}" style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
 					</p:column>
 				</p:dataTable>
 			</p:tab>
