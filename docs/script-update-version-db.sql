@@ -196,3 +196,9 @@ alter table aberturafechamentoconta add column versionEntity datetime not null d
 update aberturafechamentoconta set versionEntity = '2014-01-01 00:00:00';
 
 alter table auditoria change column `versionEntity` `versionAuditedEntity` datetime not null default '2014-01-01 00:00:00';
+
+-- Previsão dos lançamentos da conta
+
+delete from previsaolancamentoconta where agrupamento = 'FAVORECIDO';
+delete from previsaolancamentoconta where agrupamento = 'MEIOPAGAMENTO';
+alter table previsaolancamentoconta drop column agrupamento;

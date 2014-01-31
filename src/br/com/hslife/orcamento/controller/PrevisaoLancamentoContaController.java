@@ -80,7 +80,6 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 	
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private int ano;
-	private TipoAgrupamentoBusca agruparPor;
 	
 	private PrevisaoLancamentoConta entity;
 	private List<PrevisaoLancamentoConta> listEntity;
@@ -108,11 +107,11 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
 			criterioBusca.setDescricao("");
 			try {
-				listEntity = getService().visualizarRelatorioPrevisaoLancamentoConta(criterioBusca.getConta(), ano, agruparPor);
+				listEntity = getService().visualizarRelatorioPrevisaoLancamentoConta(criterioBusca.getConta(), ano);
 				if (listEntity == null || listEntity.size() == 0) {
 					warnMessage("Nenhum resultado encontrado. Relatório não disponível para visualização.");
 				} else {
-					infoMessage("Relatório disponível para visualização: Ano " + ano + ", " + agruparPor);
+					infoMessage("Relatório " + ano + " disponível para visualização");
 				}
 			}
 			catch (BusinessException be) {
@@ -130,7 +129,7 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
 			criterioBusca.setDescricao("");
 			try {
-				getService().gerarRelatorioPrevisaoLancamentoConta(criterioBusca, ano, agruparPor);
+				getService().gerarRelatorioPrevisaoLancamentoConta(criterioBusca, ano);
 				infoMessage("Relatório gerado com sucesso!");
 			}
 			catch (BusinessException be) {
@@ -191,14 +190,6 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 
 	public void setAno(int ano) {
 		this.ano = ano;
-	}
-
-	public TipoAgrupamentoBusca getAgruparPor() {
-		return agruparPor;
-	}
-
-	public void setAgruparPor(TipoAgrupamentoBusca agruparPor) {
-		this.agruparPor = agruparPor;
 	}
 
 	public PrevisaoLancamentoConta getEntity() {

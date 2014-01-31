@@ -62,7 +62,6 @@ import br.com.hslife.orcamento.entity.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.LancamentoAgendado;
-import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
@@ -190,14 +189,14 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return saldoAtualContas;
 	}
 	
-	public List<PrevisaoLancamentoConta> visualizarRelatorioPrevisaoLancamentoConta(Conta conta, int ano, TipoAgrupamentoBusca agrupamento) throws BusinessException {
-		return previsaoLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano, agrupamento);
+	public List<PrevisaoLancamentoConta> visualizarRelatorioPrevisaoLancamentoConta(Conta conta, int ano) throws BusinessException {
+		return previsaoLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano);
 	}
 	
 	@Override
-	public void gerarRelatorioPrevisaoLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, TipoAgrupamentoBusca agruparPor) throws BusinessException {
+	public void gerarRelatorioPrevisaoLancamentoConta(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException {
 		// Exclui o relatório existente
-		previsaoLancamentoContaRepository.deletePrevisaoLancamentoConta(criterioBusca.getConta(), ano, agruparPor);
+		previsaoLancamentoContaRepository.deletePrevisaoLancamentoConta(criterioBusca.getConta(), ano);
 		
 		// Declara o Map de previsão de lançamentos da conta
 		Map<String, PrevisaoLancamentoConta> mapPrevisaoLancamentos = new HashMap<String, PrevisaoLancamentoConta>();
@@ -206,26 +205,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		// Logo após itera os lançamentos
 		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca)) {
 			String oid;
-			switch (agruparPor) {
-				case FAVORECIDO :   
-					if (lancamento.getFavorecido() == null)
-						oid = Util.MD5("Sem favorecido");
-					else
-						oid = Util.MD5(lancamento.getFavorecido().getNome());
-					break;
-				case MEIOPAGAMENTO :
-					if (lancamento.getMeioPagamento() == null)
-						oid = Util.MD5("Sem meio de pagamento");
-					else
-						oid = Util.MD5(lancamento.getMeioPagamento().getDescricao());
-					break;
-				default :
-					if (lancamento.getCategoria() == null) {
-						oid = Util.MD5("Sem categoria");
-					} else {
-						oid = Util.MD5(lancamento.getCategoria().getDescricao());
-					}
-			}						
+			if (lancamento.getCategoria() == null) {
+				oid = Util.MD5("Sem categoria");
+			} else {
+				oid = Util.MD5(lancamento.getCategoria().getDescricao());
+			}									
 			if (mapPrevisaoLancamentos.containsKey(oid)) {
 				this.inserirValorMesPrevisaoLancamentoConta(mapPrevisaoLancamentos, lancamento, oid);
 			} else {
@@ -233,27 +217,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				previsao.setConta(lancamento.getConta());
 				previsao.setAno(ano);
 				previsao.setOid(oid);
-				previsao.setAgrupamento(agruparPor);
-				switch (agruparPor) {
-				case FAVORECIDO : 
-					if (lancamento.getFavorecido() == null)
-						previsao.setDescricaoPrevisao("Sem favorecido");
-					else
-						previsao.setDescricaoPrevisao(lancamento.getFavorecido().getNome());
-					break;
-				case MEIOPAGAMENTO :
-					if (lancamento.getMeioPagamento() == null)
-						previsao.setDescricaoPrevisao("Sem meio de pagamento");
-					else
-						previsao.setDescricaoPrevisao(lancamento.getMeioPagamento().getDescricao());
-					break;
-				default :
-					if (lancamento.getCategoria() == null) {
-						previsao.setDescricaoPrevisao("Sem categoria");
-					} else {
-						previsao.setDescricaoPrevisao(lancamento.getCategoria().getDescricao());
-					}
-				}
+				if (lancamento.getCategoria() == null) {
+					previsao.setDescricaoPrevisao("Sem categoria");
+				} else {
+					previsao.setDescricaoPrevisao(lancamento.getCategoria().getDescricao());
+				}				
 				previsao.setIndice(mapPrevisaoLancamentos.values().size() + 1);
 				mapPrevisaoLancamentos.put(oid, previsao);
 				this.inserirValorMesPrevisaoLancamentoConta(mapPrevisaoLancamentos, lancamento, oid);
@@ -264,7 +232,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		PrevisaoLancamentoConta saldoTotal = new PrevisaoLancamentoConta();
 		saldoTotal.setConta(criterioBusca.getConta());
 		saldoTotal.setAno(ano);
-		saldoTotal.setAgrupamento(agruparPor);
 		saldoTotal.setOid(Util.MD5("Saldo Total"));
 		saldoTotal.setDescricaoPrevisao("Saldo Total");
 		saldoTotal.setIndice(mapPrevisaoLancamentos.values().size() + 1);

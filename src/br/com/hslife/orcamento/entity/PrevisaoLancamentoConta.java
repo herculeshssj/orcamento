@@ -77,10 +77,6 @@ public class PrevisaoLancamentoConta extends EntityPersistence {
 	@Column(nullable=false)
 	private String descricaoPrevisao;
 	
-	@Column(length=15, nullable=false)
-	@Enumerated(EnumType.STRING)
-	private TipoAgrupamentoBusca agrupamento;
-	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
@@ -281,13 +277,5 @@ public class PrevisaoLancamentoConta extends EntityPersistence {
 
 	public void setIndice(int indice) {
 		this.indice = indice;
-	}
-
-	public TipoAgrupamentoBusca getAgrupamento() {
-		return agrupamento;
-	}
-
-	public void setAgrupamento(TipoAgrupamentoBusca agrupamento) {
-		this.agrupamento = agrupamento;
 	}
 }

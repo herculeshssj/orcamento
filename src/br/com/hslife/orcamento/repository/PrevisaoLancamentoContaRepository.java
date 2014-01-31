@@ -55,7 +55,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 
 @Repository
 @Transactional
@@ -69,18 +68,17 @@ public class PrevisaoLancamentoContaRepository extends AbstractRepository {
 		getSession().delete(entity);
 	}
 	
-	public void deletePrevisaoLancamentoConta(Conta conta, int ano, TipoAgrupamentoBusca agrupamento) {
-		String sql = "delete from previsaolancamentoconta where idConta = " + conta.getId() + " and ano = " + ano + " and agrupamento = '" +  agrupamento + "'";
+	public void deletePrevisaoLancamentoConta(Conta conta, int ano) {
+		String sql = "delete from previsaolancamentoconta where idConta = " + conta.getId() + " and ano = " + ano; 
 		Query query = getSession().createSQLQuery(sql);
 		query.executeUpdate();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PrevisaoLancamentoConta> findByContaAnoAndAgrupamento(Conta conta, int ano, TipoAgrupamentoBusca agrupamento) {
+	public List<PrevisaoLancamentoConta> findByContaAnoAndAgrupamento(Conta conta, int ano) {
 		Criteria criteria = getSession().createCriteria(PrevisaoLancamentoConta.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("ano", ano));
-		criteria.add(Restrictions.eq("agrupamento", agrupamento));
 		criteria.addOrder(Order.asc("indice"));
 		return criteria.list();
 	}

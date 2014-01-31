@@ -51,7 +51,6 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
@@ -59,9 +58,9 @@ import br.com.hslife.orcamento.model.SaldoAtualConta;
 
 public interface IResumoEstatistica {
 	
-	public void gerarRelatorioPrevisaoLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, TipoAgrupamentoBusca agruparPor) throws BusinessException;
+	public void gerarRelatorioPrevisaoLancamentoConta(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException;
 	
-	public List<PrevisaoLancamentoConta> visualizarRelatorioPrevisaoLancamentoConta(Conta conta, int ano, TipoAgrupamentoBusca agrupamento) throws BusinessException;
+	public List<PrevisaoLancamentoConta> visualizarRelatorioPrevisaoLancamentoConta(Conta conta, int ano) throws BusinessException;
 	
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean lancamentoAgendado, Usuario usuario) throws BusinessException;
 	
