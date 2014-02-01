@@ -1374,3 +1374,9 @@ update lancamentoconta lc set lc.dataPagamento = (select fc.dataVencimento from 
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('DEZ2013.3', true);
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO DEZ2013.4 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('DEZ2013.4', true);
