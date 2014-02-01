@@ -179,17 +179,10 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	public void logarComo() {
 		try {
 			Usuario u = getService().buscarPorID(idEntity);
-			Usuario logadoComo = new Usuario();
-			logadoComo.setAtivo(u.isAtivo());
-			logadoComo.setDataCriacao(u.getDataCriacao());
-			logadoComo.setEmail(u.getEmail());
-			logadoComo.setId(u.getId());
-			logadoComo.setLogin(u.getLogin());
-			logadoComo.setNome(u.getNome() + "(" + getUsuarioLogado().getLogin() + ")");
-			logadoComo.setTipoUsuario(u.getTipoUsuario());
-			logadoComo.setLogado(true);
+			u.setNome(u.getNome() + "(admin)");
+			u.setLogado(true);
 			
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", logadoComo);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", u);
 			
 			infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
 			

@@ -68,7 +68,7 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("operacao", operacaoConta));
 		if (operacaoConta.equals(OperacaoConta.FECHAMENTO)) {
-			criteria.addOrder(Order.asc("data"));
+			criteria.addOrder(Order.desc("data"));
 		} else if (operacaoConta.equals(OperacaoConta.REABERTURA)){
 			criteria.addOrder(Order.asc("dataAlteracao"));
 		} else {
@@ -97,5 +97,19 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 		criteria.add(Restrictions.eq("operacao", OperacaoConta.FECHAMENTO));
 		criteria.add(Restrictions.ge("data", fechamento.getData()));
 		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public FechamentoPeriodo findFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
+		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
+		criteria.add(Restrictions.lt("id", fechamentoPeriodo.getId()));
+		criteria.add(Restrictions.eq("operacao", fechamentoPeriodo.getOperacao()));
+		criteria.add(Restrictions.eq("conta.id", fechamentoPeriodo.getConta().getId()));		
+		List<FechamentoPeriodo> resultado = criteria.addOrder(Order.desc("id")).setMaxResults(1).list(); 
+		if (resultado == null || resultado.size() != 1) {
+			return null;
+		} else {
+			return resultado.get(0);
+		}
 	}
 }

@@ -127,6 +127,59 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findByCriterioLancamentoCartao(CriterioLancamentoConta criterio) {
+		Criteria criteria = getSession().createCriteria(LancamentoConta.class, "lancamento")
+				.createAlias("lancamento.faturaCartao", "fatura");
+		
+		if (criterio.getConta() != null && criterio.getConta().getId() != null) {
+			criteria.add(Restrictions.eq("lancamento.conta.id", criterio.getConta().getId()));
+		}
+		
+		if (criterio.getDescricao() != null && !criterio.getDescricao().isEmpty()) {
+			criteria.add(Restrictions.ilike("lancamento.descricao", criterio.getDescricao(), MatchMode.ANYWHERE));
+		}
+		
+		if (criterio.getDataInicio() != null) {
+			criteria.add(Restrictions.ge("fatura.dataVencimento", criterio.getDataInicio()));			
+		}
+		
+		if (criterio.getDataFim() != null) {
+			criteria.add(Restrictions.le("fatura.dataVencimento", criterio.getDataFim()));
+		}
+		
+		if (criterio.getAgendado() == 1 || criterio.getAgendado() == -1) {
+			criteria.add(Restrictions.eq("lancamento.agendado", criterio.getAgendadoBoolean()));
+		}
+		
+		if (criterio.getQuitado() == 1 || criterio.getQuitado() == -1) {
+			criteria.add(Restrictions.eq("lancamento.quitado", criterio.getQuitadoBoolean()));
+		}
+		
+		if (criterio.getLancadoEm() != null) {
+			criteria.add(Restrictions.ge("lancamento.dataLancamento", criterio.getLancadoEm()));
+			criteria.add(Restrictions.le("lancamento.dataLancamento", criterio.getLancadoEm()));
+		}
+		
+		if (criterio.getMoeda() != null) {
+			criteria.add(Restrictions.eq("lancamento.moeda.id", criterio.getMoeda().getId()));
+		}
+		
+		if (criterio.getParcela() != null && !criterio.getParcela().isEmpty()) {
+			criteria.add(Restrictions.ilike("lancamento.parcela", criterio.getParcela(), MatchMode.ANYWHERE));
+		}
+		
+		if (criterio.getTipo() != null) {
+			criteria.add(Restrictions.eq("lancamento.tipoLancamento", criterio.getTipo()));
+		}
+		
+		if (criterio.getValor() != null && criterio.getValor().doubleValue() != 0) {
+			criteria.add(Restrictions.ge("lancamento.valorPago", criterio.getValor()));
+		}
+		
+		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
+	}
+	
 	public LancamentoConta findLastLancamentoContaByConta(Conta conta) {
 		Criteria criteria = getSession().createCriteria(LancamentoConta.class);
 		criteria.add(Restrictions.eq("agendado", false));
