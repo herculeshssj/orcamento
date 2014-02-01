@@ -63,25 +63,26 @@
 			
 			<h:panelGrid columns="4" width="100%" style="text-align: center">
 			
+				<h:commandButton action="#{calendarioAtividadesMB.startUp}" image="/resources/images/agenda.png" title="Calendário de Atividades"/>
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/cadastros.faces"><h:graphicImage value="/resources/images/cadastros.png"/></a></h:panelGroup>
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/contas.faces"><h:graphicImage value="/resources/images/conta.png"/></a></h:panelGroup>
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/cartoes.faces"><h:graphicImage value="/resources/images/cartaocredito.png"/></a></h:panelGroup>
-				<h:panelGroup><a href="#{request.contextPath}/pages/menu/despensa.faces"><h:graphicImage value="/resources/images/despensa.png"/></a></h:panelGroup>
 				
+				<h:outputText value="Agenda"/>
 				<h:outputText value="Cadastros"/>
 				<h:outputText value="Contas"/>
 				<h:outputText value="Cartão de Crédito"/>
-				<h:outputText value="Despensa"/>															
-				
+																			
+				<h:panelGroup><a href="#{request.contextPath}/pages/menu/despensa.faces"><h:graphicImage value="/resources/images/despensa.png"/></a></h:panelGroup>
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/documentos.faces"><h:graphicImage value="/resources/images/documentos.png"/></a></h:panelGroup>															
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/resumos.faces"><h:graphicImage value="/resources/images/resumos.png"/></a></h:panelGroup>									
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/opcoes.faces"><h:graphicImage value="/resources/images/opcoes.png"/></a></h:panelGroup>
-				<h:outputText />
 				
+				<h:outputText value="Despensa"/>
 				<h:outputText value="Documentos"/>
 				<h:outputText value="Resumos"/>								
 				<h:outputText value="Opções"/>
-				<h:outputText />
+				
 								
 			</h:panelGrid>
 		
