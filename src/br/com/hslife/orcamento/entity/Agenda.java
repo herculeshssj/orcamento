@@ -44,24 +44,28 @@
 
 package br.com.hslife.orcamento.entity;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
+import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-//@Table(name="agenda")
+@Table(name="agenda")
 @SuppressWarnings("serial")
 public class Agenda extends EntityPersistence {
 	
@@ -72,20 +76,44 @@ public class Agenda extends EntityPersistence {
 	@Column(length=50, nullable=false)
 	private String descricao;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
+	private Date inicio;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable=false)
+	private Date fim;
+	
+	@Column(length=15)
+	@Enumerated(EnumType.STRING)
+	private TipoAgendamento tipoAgendamento;
+	
+	@Column(length=10)
+	@Enumerated(EnumType.STRING)
+	private PrioridadeTarefa prioridadeTarefa;
+	
+	@Column
+	private boolean diaInteiro;
+	
+	@Column
+	private boolean concluido;
+	
+	@Column
+	private boolean emitirAlerta;
+	
+	@Column(columnDefinition="text", nullable=true)
+	private String notas;
+	
+	@Transient
 	private Date dataInicio;
 	
-	@Temporal(TemporalType.TIME)
-	@Column(nullable=false)
+	@Transient
 	private Date horaInicio;
 	
-	@Temporal(TemporalType.DATE)
-	@Column(nullable=true)
+	@Transient
 	private Date dataFim;
 	
-	@Temporal(TemporalType.TIME)
-	@Column(nullable=true)
+	@Transient
 	private Date horaFim;
 	
 	@Transient
@@ -95,14 +123,16 @@ public class Agenda extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	public Agenda() {
+	public Agenda() {		
 		// Cria uma instância de Calendar com a hora marcada para 0h e seta em horaInicio
+		/*
 		Calendar temp = Calendar.getInstance();
 		temp.set(Calendar.HOUR, 0);
 		temp.set(Calendar.MINUTE, 0);
 		temp.set(Calendar.SECOND, 0);
 		temp.set(Calendar.MILLISECOND, 0);
 		this.horaInicio = temp.getTime();
+		*/
 	}
 
 	public Long getId() {
@@ -116,10 +146,10 @@ public class Agenda extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		if (this.descricao.trim().length() > 150) {
-			throw new BusinessException("Campo aceita no máximo 150 caracteres!");
+		if (this.descricao.trim().length() > 50) {
+			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
 		}
-		
+		/*
 		if (this.dataInicio == null) {
 			throw new BusinessException("Informe a data de início!");
 		}
@@ -127,7 +157,7 @@ public class Agenda extends EntityPersistence {
 		if (this.horaInicio == null) {
 			throw new BusinessException("Informe a hora de início!");
 		}
-		
+		*/
 		if (this.usuario == null) {
 			throw new BusinessException("Informe o usuário!");
 		}
@@ -191,5 +221,69 @@ public class Agenda extends EntityPersistence {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Date getInicio() {
+		return inicio;
+	}
+
+	public void setInicio(Date inicio) {
+		this.inicio = inicio;
+	}
+
+	public Date getFim() {
+		return fim;
+	}
+
+	public void setFim(Date fim) {
+		this.fim = fim;
+	}
+
+	public TipoAgendamento getTipoAgendamento() {
+		return tipoAgendamento;
+	}
+
+	public void setTipoAgendamento(TipoAgendamento tipoAgendamento) {
+		this.tipoAgendamento = tipoAgendamento;
+	}
+
+	public PrioridadeTarefa getPrioridadeTarefa() {
+		return prioridadeTarefa;
+	}
+
+	public void setPrioridadeTarefa(PrioridadeTarefa prioridadeTarefa) {
+		this.prioridadeTarefa = prioridadeTarefa;
+	}
+
+	public boolean isDiaInteiro() {
+		return diaInteiro;
+	}
+
+	public void setDiaInteiro(boolean diaInteiro) {
+		this.diaInteiro = diaInteiro;
+	}
+
+	public boolean isConcluido() {
+		return concluido;
+	}
+
+	public void setConcluido(boolean concluido) {
+		this.concluido = concluido;
+	}
+
+	public boolean isEmitirAlerta() {
+		return emitirAlerta;
+	}
+
+	public void setEmitirAlerta(boolean emitirAlerta) {
+		this.emitirAlerta = emitirAlerta;
+	}
+
+	public String getNotas() {
+		return notas;
+	}
+
+	public void setNotas(String notas) {
+		this.notas = notas;
 	}
 }

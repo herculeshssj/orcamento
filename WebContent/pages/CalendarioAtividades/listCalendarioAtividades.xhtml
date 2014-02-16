@@ -57,10 +57,14 @@
 
 	<ui:define name="conteudo">
 	
-		Aqui entra o schedule do PrimeFaces.
-		<br/><br/>
-		<p:schedule id="schedule">
+		<h:outputScript name="primefaces-schedule-locale.js" library="scripts" />
+			
+		<p:schedule id="schedule" locale="pt" axisFormat="H:mm" timeFormat="H:mm">
 		</p:schedule>
+		
+		<h:form>
+			<h:commandLink value="Ir para o modo clássico >>>>" />
+		</h:form>
 	
 	</ui:define>
 	

@@ -42,18 +42,18 @@
   
  ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.enumeration;
 
-import java.util.Date;
-import java.util.List;
-
-import br.com.hslife.orcamento.entity.Agenda;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
-
-public interface ICalendarioAtividades extends ICRUDService<Agenda> {
+public enum TipoAgendamento {
+	COMPROMISSO("Compromisso"), TAREFA("Tarefa"), PREVISAO("Previsão");
 	
-	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) throws BusinessException;
+	private String descricao;
+	
+	private TipoAgendamento(String descricao) {
+		this.descricao = descricao;
+	}
 
+	public String toString() {
+		return descricao;
+	}
 }

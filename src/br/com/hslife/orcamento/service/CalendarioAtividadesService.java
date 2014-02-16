@@ -57,13 +57,25 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICalendarioAtividades;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 
 @Service("calendarioAtividadesService")
-public class CalendarioAtividadesService implements ICalendarioAtividades {
+public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> implements ICalendarioAtividades {
 
 	@Autowired
+	private AgendaRepository repository;
+	
+	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
+	
+	public AgendaRepository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(AgendaRepository repository) {
+		this.repository = repository;
+	}
 	
 	@Override
 	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) throws BusinessException {
@@ -84,4 +96,12 @@ public class CalendarioAtividadesService implements ICalendarioAtividades {
 		}		
 		return agendamentos;
 	}
+
+	@Override
+	public void validar(Agenda entity) throws BusinessException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

@@ -202,3 +202,22 @@ alter table auditoria change column `versionEntity` `versionAuditedEntity` datet
 delete from previsaolancamentoconta where agrupamento = 'FAVORECIDO';
 delete from previsaolancamentoconta where agrupamento = 'MEIOPAGAMENTO';
 alter table previsaolancamentoconta drop column agrupamento;
+
+-- Agenda
+create table agenda(
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	inicio datetime null,
+	fim datetime null,
+	tipoAgendamento varchar(15) not null,
+	prioridadeTarefa varchar(10) null,
+	diaInteiro boolean,
+	concluido boolean,
+	emitirAlerta boolean,
+	notas text,
+	idUsuario bigint not null,
+	versionEntity datetime not null default '2014-01-01 00:00:00',
+	primary key(id)
+) engine=InnoDB;
+
+alter table agenda add constraint fk_agenda_usuario foreign key(idUsuario) references usuario(id);

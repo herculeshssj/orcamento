@@ -8,6 +8,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 public class AgendaTest {
@@ -22,33 +23,36 @@ public class AgendaTest {
 		
 		entity = new Agenda();
 		entity.setUsuario(usuario);
-		entity.setDescricao("Agendamento de teste");
-		entity.setDataInicio(new Date());
-		entity.setDataFim(new Date());
-		entity.setHoraInicio(new Date());
-		entity.setHoraFim(new Date());
+		entity.setDescricao("Compromisso de teste");
+		entity.setInicio(new Date());
+		entity.setFim(new Date());
+		entity.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
+		//entity.setDataInicio(new Date());
+		//entity.setDataFim(new Date());
+		//entity.setHoraInicio(new Date());
+		//entity.setHoraFim(new Date());
 		
 	}
 
 	@Test
 	public void testGetLabel() {
-		assertEquals("Agendamento de teste", entity.getLabel());
+		assertEquals("Compromisso de teste", entity.getLabel());
 	}
 
 	@Test
 	public void testValidateDescricao() {
 		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo aceita no máximo 150 caracteres!", be.getMessage());
+			assertEquals("Campo aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
 		}
 		fail("Falha no teste!");
 	}
-	
+	/*
 	@Test
 	public void testValidateDataInicio() {
 		try {
@@ -78,6 +82,7 @@ public class AgendaTest {
 		}
 		fail("Falha no teste!");
 	}
+	*/
 	
 	@Test
 	public void testValidateUsuario() {

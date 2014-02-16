@@ -42,18 +42,29 @@
   
  ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.repository;
 
-import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
 import br.com.hslife.orcamento.entity.Agenda;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
+import br.com.hslife.orcamento.entity.Usuario;
 
-public interface ICalendarioAtividades extends ICRUDService<Agenda> {
+@Repository
+public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 	
-	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) throws BusinessException;
-
+	public AgendaRepository() {
+		super(new Agenda());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Agenda> findByUsuario(Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(Agenda.class);
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.addOrder(Order.asc("descricao")).list();
+	}
 }
