@@ -1,0 +1,125 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{agendaMB}" />
+	
+	<ui:define name="campos">
+			
+		<h:panelGrid id="pngAgendamento" columns="2">
+				
+			Tipo de agendamento:
+			<h:selectOneRadio value="#{managedBean.entity.tipoAgendamento}">
+				<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
+			</h:selectOneRadio>
+			
+			Descrição:
+			<h:inputText value="#{managedBean.entity.descricao}" size="50"/>
+			
+			Local:
+			<h:inputText value="#{managedBean.entity.localAgendamento}" size="50"/>
+			
+			Início:
+			<h:panelGroup>
+				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.inicio}">
+	    			<f:converter converterId="dateConverter"/>
+	    		</p:inputMask>
+	    		&nbsp;
+	    		<h:selectOneMenu>
+	    			<f:selectItems value="#{managedBean.listaHoras}"/>
+	    		</h:selectOneMenu>
+	    		&nbsp;
+	    		<h:selectOneMenu>
+	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
+	    		</h:selectOneMenu>
+			</h:panelGroup>
+				
+			Fim:
+			<h:panelGroup>
+				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.fim}">
+	    			<f:converter converterId="dateConverter"/>
+	    		</p:inputMask>
+	    		&nbsp;
+	    		<h:selectOneMenu>
+	    			<f:selectItems value="#{managedBean.listaHoras}"/>
+	    		</h:selectOneMenu>
+	    		&nbsp;
+	    		<h:selectOneMenu>
+	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
+	    		</h:selectOneMenu>
+			</h:panelGroup>
+			
+			Prioridade:
+			<h:selectOneMenu value="#{managedBean.entity.prioridadeTarefa}">
+				<f:selectItems value="#{managedBean.listaPrioridadeTarefa}" />
+			</h:selectOneMenu>
+			
+			Dia inteiro:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.diaInteiro}"/>
+			
+			Concluído:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.concluido}"/>
+			
+			Emitir alerta:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.emitirAlerta}"/>
+			
+			Notas:
+			<h:inputTextarea value="#{managedBean.entity.notas}" size="70" rows="3"></h:inputTextarea>
+		
+		</h:panelGrid>
+		
+	</ui:define>
+
+</ui:composition>
+</html>

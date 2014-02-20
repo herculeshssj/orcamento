@@ -24,6 +24,7 @@ public class AgendaTest {
 		entity = new Agenda();
 		entity.setUsuario(usuario);
 		entity.setDescricao("Compromisso de teste");
+		entity.setLocalAgendamento("Local do compromisso");
 		entity.setInicio(new Date());
 		entity.setFim(new Date());
 		entity.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
@@ -46,6 +47,20 @@ public class AgendaTest {
 			entity.validate();
 		} catch (BusinessException be) {
 			assertEquals("Campo aceita no máximo 50 caracteres!", be.getMessage());
+			return;
+		} catch (Throwable t) {
+			fail(t.getMessage());
+		}
+		fail("Falha no teste!");
+	}
+	
+	@Test
+	public void testValidateLocalAgendamento() {
+		try {
+			entity.setLocalAgendamento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
+			entity.validate();
+		} catch (BusinessException be) {
+			assertEquals("Campo aceita no máximo 200 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

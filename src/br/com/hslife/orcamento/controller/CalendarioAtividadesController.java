@@ -62,7 +62,7 @@ public class CalendarioAtividadesController extends AbstractController {
 	@Autowired
 	private ICalendarioAtividades service;
 	
-	public CalendarioAtividadesController() {		
+	public CalendarioAtividadesController() {
 		moduleTitle = "Calendário de Atividades";
 	}
 	
@@ -75,7 +75,4 @@ public class CalendarioAtividadesController extends AbstractController {
 	public String startUp() {		
 		return "/pages/CalendarioAtividades/listCalendarioAtividades";
 	}
-	
-	/* Métodos Getters e Setters */
-
 }

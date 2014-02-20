@@ -76,6 +76,9 @@ public class Agenda extends EntityPersistence {
 	@Column(length=50, nullable=false)
 	private String descricao;
 	
+	@Column(length=200, nullable=false)
+	private String localAgendamento;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
 	private Date inicio;
@@ -133,6 +136,8 @@ public class Agenda extends EntityPersistence {
 		temp.set(Calendar.MILLISECOND, 0);
 		this.horaInicio = temp.getTime();
 		*/
+		inicio = new Date();
+		fim = new Date();
 	}
 
 	public Long getId() {
@@ -148,6 +153,10 @@ public class Agenda extends EntityPersistence {
 	public void validate() throws BusinessException {
 		if (this.descricao.trim().length() > 50) {
 			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
+		}
+		
+		if (this.localAgendamento.trim().length() > 200) {
+			throw new BusinessException("Campo aceita no máximo 200 caracteres!");
 		}
 		/*
 		if (this.dataInicio == null) {
@@ -285,5 +294,13 @@ public class Agenda extends EntityPersistence {
 
 	public void setNotas(String notas) {
 		this.notas = notas;
+	}
+
+	public String getLocalAgendamento() {
+		return localAgendamento;
+	}
+
+	public void setLocalAgendamento(String localAgendamento) {
+		this.localAgendamento = localAgendamento;
 	}
 }

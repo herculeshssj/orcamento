@@ -207,6 +207,7 @@ alter table previsaolancamentoconta drop column agrupamento;
 create table agenda(
 	id bigint not null auto_increment,
 	descricao varchar(50) not null,
+	localAgendamento varchar(200) null,
 	inicio datetime null,
 	fim datetime null,
 	tipoAgendamento varchar(15) not null,
