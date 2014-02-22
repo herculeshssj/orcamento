@@ -44,6 +44,7 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -95,7 +96,7 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.eq("conta.id", fechamento.getConta().getId()));
 		criteria.add(Restrictions.eq("operacao", OperacaoConta.FECHAMENTO));
-		criteria.add(Restrictions.ge("data", fechamento.getData()));
+		
 		return criteria.list();
 	}
 	
@@ -105,6 +106,20 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 		criteria.add(Restrictions.lt("id", fechamentoPeriodo.getId()));
 		criteria.add(Restrictions.eq("operacao", fechamentoPeriodo.getOperacao()));
 		criteria.add(Restrictions.eq("conta.id", fechamentoPeriodo.getConta().getId()));		
+		List<FechamentoPeriodo> resultado = criteria.addOrder(Order.desc("id")).setMaxResults(1).list(); 
+		if (resultado == null || resultado.size() != 1) {
+			return null;
+		} else {
+			return resultado.get(0);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public FechamentoPeriodo findLastFechamentoPeriodoBeforeDateByContaAndOperacao(Conta conta, Date data, OperacaoConta operacao) {
+		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
+		criteria.add(Restrictions.le("data", data));
+		criteria.add(Restrictions.eq("operacao", operacao));
+		criteria.add(Restrictions.eq("conta.id", conta.getId()));		
 		List<FechamentoPeriodo> resultado = criteria.addOrder(Order.desc("id")).setMaxResults(1).list(); 
 		if (resultado == null || resultado.size() != 1) {
 			return null;

@@ -69,7 +69,7 @@
 				<f:facet name="header">
 					<h:outputText value="Descrição"/>
 				</f:facet>						
-				<h:outputText value="#{item.descricaoPrevisao}" style="#{item.descricaoPrevisao == 'Saldo Total' ? 'font-weight: bold' : 'font-weight: normal'}"/>
+				<h:outputText value="#{item.descricaoPrevisao}" style="#{item.descricaoPrevisao == 'Saldo Total' or item.descricaoPrevisao == 'Saldo Anterior' ? 'font-weight: bold' : 'font-weight: normal'}"/>
 	  		</p:column>
 	  		<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
