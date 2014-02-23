@@ -222,3 +222,7 @@ create table agenda(
 ) engine=InnoDB;
 
 alter table agenda add constraint fk_agenda_usuario foreign key(idUsuario) references usuario(id);
+
+-- Panorama dos lançamentos da conta
+ALTER TABLE previsaolancamentoconta RENAME TO panoramalancamentoconta;
+ALTER TABLE panoramalancamentoconta CHANGE COLUMN `descricaoPrevisao` `descricao` VARCHAR(255) NOT NULL;

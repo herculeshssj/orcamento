@@ -46,8 +46,6 @@ package br.com.hslife.orcamento.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -56,13 +54,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="previsaolancamentoconta")
+@Table(name="panoramalancamentoconta")
 @SuppressWarnings("serial")
-public class PrevisaoLancamentoConta extends EntityPersistence {
+public class PanoramaLancamentoConta extends EntityPersistence {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -75,7 +72,7 @@ public class PrevisaoLancamentoConta extends EntityPersistence {
 	private int ano;
 	
 	@Column(nullable=false)
-	private String descricaoPrevisao;
+	private String descricao;
 	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
@@ -120,13 +117,13 @@ public class PrevisaoLancamentoConta extends EntityPersistence {
 	@Column(nullable=false)
 	private int indice;
 	
-	public PrevisaoLancamentoConta() {
+	public PanoramaLancamentoConta() {
 		
 	}
 
 	@Override
 	public String getLabel() {
-		return descricaoPrevisao;
+		return descricao;
 	}
 
 	@Override
@@ -157,14 +154,6 @@ public class PrevisaoLancamentoConta extends EntityPersistence {
 
 	public void setAno(int ano) {
 		this.ano = ano;
-	}
-
-	public String getDescricaoPrevisao() {
-		return descricaoPrevisao;
-	}
-
-	public void setDescricaoPrevisao(String descricaoPrevisao) {
-		this.descricaoPrevisao = descricaoPrevisao;
 	}
 
 	public Conta getConta() {
@@ -277,5 +266,13 @@ public class PrevisaoLancamentoConta extends EntityPersistence {
 
 	public void setIndice(int indice) {
 		this.indice = indice;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 }

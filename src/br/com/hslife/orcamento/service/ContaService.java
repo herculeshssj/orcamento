@@ -60,7 +60,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
+import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -72,7 +72,7 @@ import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
-import br.com.hslife.orcamento.repository.PrevisaoLancamentoContaRepository;
+import br.com.hslife.orcamento.repository.PanoramaLancamentoContaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("contaService")
@@ -100,7 +100,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
 	
 	@Autowired
-	private PrevisaoLancamentoContaRepository previsaoLancamentoContaRepository;
+	private PanoramaLancamentoContaRepository previsaoLancamentoContaRepository;
 	
 	@Autowired
 	private BuscaSalvaRepository buscaSalvaRepository;
@@ -146,7 +146,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 
 	public void setPrevisaoLancamentoContaRepository(
-			PrevisaoLancamentoContaRepository previsaoLancamentoContaRepository) {
+			PanoramaLancamentoContaRepository previsaoLancamentoContaRepository) {
 		this.previsaoLancamentoContaRepository = previsaoLancamentoContaRepository;
 	}
 
@@ -273,7 +273,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			throw new BusinessException("Não é possível excluir! Existem registros relacionamentos com a conta!");
 		} else {
 			// Exclui as previsões dos lançamentos da conta
-			for (PrevisaoLancamentoConta previsao : previsaoLancamentoContaRepository.findByConta(entity)) {
+			for (PanoramaLancamentoConta previsao : previsaoLancamentoContaRepository.findByConta(entity)) {
 				previsaoLancamentoContaRepository.delete(previsao);
 			}
 			

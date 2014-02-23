@@ -60,7 +60,7 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PanoramaLancamentoCartao;
-import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
+import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.LancamentoAgendado;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
@@ -74,7 +74,7 @@ import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.PanoramaLancamentoCartaoRepository;
-import br.com.hslife.orcamento.repository.PrevisaoLancamentoContaRepository;
+import br.com.hslife.orcamento.repository.PanoramaLancamentoContaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("resumoEstatisticaService")
@@ -83,7 +83,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	/*** Declaração dos repositórios ***/
 	
 	@Autowired
-	private PrevisaoLancamentoContaRepository previsaoLancamentoContaRepository;
+	private PanoramaLancamentoContaRepository panoramaLancamentoContaRepository;
 	
 	@Autowired
 	private PanoramaLancamentoCartaoRepository panoramaLancamentoCartaoRepository;
@@ -103,12 +103,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	private ContaComponent contaComponent;	
 	
 	/*** Declaração dos métodos Setters dos repositórios ***/
-	
-	public void setPrevisaoLancamentoContaRepository(
-			PrevisaoLancamentoContaRepository previsaoLancamentoContaRepository) {
-		this.previsaoLancamentoContaRepository = previsaoLancamentoContaRepository;
-	}
-	
+		
 	public void setLancamentoContaRepository(
 			LancamentoContaRepository lancamentoContaRepository) {
 		this.lancamentoContaRepository = lancamentoContaRepository;
@@ -126,6 +121,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	public void setPanoramaLancamentoCartaoRepository(
 			PanoramaLancamentoCartaoRepository panoramaLancamentoCartaoRepository) {
 		this.panoramaLancamentoCartaoRepository = panoramaLancamentoCartaoRepository;
+	}
+
+	public void setPanoramaLancamentoContaRepository(
+			PanoramaLancamentoContaRepository panoramaLancamentoContaRepository) {
+		this.panoramaLancamentoContaRepository = panoramaLancamentoContaRepository;
 	}
 
 	/*** Declaração dos métodos Setters dos componentes ***/
@@ -192,26 +192,26 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return saldoAtualContas;
 	}
 	
-	public List<PrevisaoLancamentoConta> visualizarRelatorioPrevisaoLancamentoConta(Conta conta, int ano) throws BusinessException {
-		return previsaoLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano);
+	public List<PanoramaLancamentoConta> visualizarRelatorioPanoramaLancamentoConta(Conta conta, int ano) throws BusinessException {
+		return panoramaLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano);
 	}
 	
 	@Override
-	public void gerarRelatorioPrevisaoLancamentoConta(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException {
+	public void gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException {
 		// Exclui o relatório existente
-		previsaoLancamentoContaRepository.deletePrevisaoLancamentoConta(criterioBusca.getConta(), ano);
+		panoramaLancamentoContaRepository.deletePanoramaLancamentoConta(criterioBusca.getConta(), ano);
 		
 		// Declara o Map de previsão de lançamentos da conta
-		Map<String, PrevisaoLancamentoConta> mapPrevisaoLancamentos = new HashMap<String, PrevisaoLancamentoConta>();
+		Map<String, PanoramaLancamentoConta> mapPanoramaLancamentos = new HashMap<String, PanoramaLancamentoConta>();
 		
-		PrevisaoLancamentoConta saldoAnterior = new PrevisaoLancamentoConta();
+		PanoramaLancamentoConta saldoAnterior = new PanoramaLancamentoConta();
 		saldoAnterior.setConta(criterioBusca.getConta());
 		saldoAnterior.setAno(ano);
 		saldoAnterior.setOid(Util.MD5("Saldo Anterior"));
-		saldoAnterior.setDescricaoPrevisao("Saldo Anterior");
-		saldoAnterior.setIndice(mapPrevisaoLancamentos.values().size());
+		saldoAnterior.setDescricao("Saldo Anterior");
+		saldoAnterior.setIndice(mapPanoramaLancamentos.values().size());
 		
-		mapPrevisaoLancamentos.put(saldoAnterior.getOid(), saldoAnterior);
+		mapPanoramaLancamentos.put(saldoAnterior.getOid(), saldoAnterior);
 		
 		// Busca os lançamentos a partir do critério de busca fornecido
 		// Logo após itera os lançamentos
@@ -222,98 +222,98 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			} else {
 				oid = Util.MD5(lancamento.getCategoria().getDescricao());
 			}									
-			if (mapPrevisaoLancamentos.containsKey(oid)) {
-				this.inserirValorMesPrevisaoLancamentoConta(mapPrevisaoLancamentos, lancamento, oid);
+			if (mapPanoramaLancamentos.containsKey(oid)) {
+				this.inserirValorMesPanoramaLancamentoConta(mapPanoramaLancamentos, lancamento, oid);
 			} else {
-				PrevisaoLancamentoConta previsao = new PrevisaoLancamentoConta();
-				previsao.setConta(lancamento.getConta());
-				previsao.setAno(ano);
-				previsao.setOid(oid);
+				PanoramaLancamentoConta panorama = new PanoramaLancamentoConta();
+				panorama.setConta(lancamento.getConta());
+				panorama.setAno(ano);
+				panorama.setOid(oid);
 				if (lancamento.getCategoria() == null) {
-					previsao.setDescricaoPrevisao("Sem categoria");
+					panorama.setDescricao("Sem categoria");
 				} else {
-					previsao.setDescricaoPrevisao(lancamento.getCategoria().getDescricao());
+					panorama.setDescricao(lancamento.getCategoria().getDescricao());
 				}				
-				previsao.setIndice(mapPrevisaoLancamentos.values().size() + 1);
-				mapPrevisaoLancamentos.put(oid, previsao);
-				this.inserirValorMesPrevisaoLancamentoConta(mapPrevisaoLancamentos, lancamento, oid);
+				panorama.setIndice(mapPanoramaLancamentos.values().size() + 1);
+				mapPanoramaLancamentos.put(oid, panorama);
+				this.inserirValorMesPanoramaLancamentoConta(mapPanoramaLancamentos, lancamento, oid);
 			}
 		}
 		
 		// Calcular o saldo total
-		PrevisaoLancamentoConta saldoTotal = new PrevisaoLancamentoConta();
+		PanoramaLancamentoConta saldoTotal = new PanoramaLancamentoConta();
 		saldoTotal.setConta(criterioBusca.getConta());
 		saldoTotal.setAno(ano);
 		saldoTotal.setOid(Util.MD5("Saldo Total"));
-		saldoTotal.setDescricaoPrevisao("Saldo Total");
-		saldoTotal.setIndice(mapPrevisaoLancamentos.values().size() + 1);
+		saldoTotal.setDescricao("Saldo Total");
+		saldoTotal.setIndice(mapPanoramaLancamentos.values().size() + 1);
 		
-		for (PrevisaoLancamentoConta previsao : mapPrevisaoLancamentos.values()) {
-			saldoTotal.setJaneiro(saldoTotal.getJaneiro() + previsao.getJaneiro());
-			saldoTotal.setFevereiro(saldoTotal.getFevereiro() + previsao.getFevereiro());
-			saldoTotal.setMarco(saldoTotal.getMarco() + previsao.getMarco());
-			saldoTotal.setAbril(saldoTotal.getAbril() + previsao.getAbril());
-			saldoTotal.setMaio(saldoTotal.getMaio() + previsao.getMaio());
-			saldoTotal.setJunho(saldoTotal.getJunho() + previsao.getJunho());
-			saldoTotal.setJulho(saldoTotal.getJulho() + previsao.getJulho());
-			saldoTotal.setAgosto(saldoTotal.getAgosto() + previsao.getAgosto());
-			saldoTotal.setSetembro(saldoTotal.getSetembro() + previsao.getSetembro());
-			saldoTotal.setOutubro(saldoTotal.getOutubro() + previsao.getOutubro());
-			saldoTotal.setNovembro(saldoTotal.getNovembro() + previsao.getNovembro());
-			saldoTotal.setDezembro(saldoTotal.getDezembro() + previsao.getDezembro());
+		for (PanoramaLancamentoConta panorama : mapPanoramaLancamentos.values()) {
+			saldoTotal.setJaneiro(saldoTotal.getJaneiro() + panorama.getJaneiro());
+			saldoTotal.setFevereiro(saldoTotal.getFevereiro() + panorama.getFevereiro());
+			saldoTotal.setMarco(saldoTotal.getMarco() + panorama.getMarco());
+			saldoTotal.setAbril(saldoTotal.getAbril() + panorama.getAbril());
+			saldoTotal.setMaio(saldoTotal.getMaio() + panorama.getMaio());
+			saldoTotal.setJunho(saldoTotal.getJunho() + panorama.getJunho());
+			saldoTotal.setJulho(saldoTotal.getJulho() + panorama.getJulho());
+			saldoTotal.setAgosto(saldoTotal.getAgosto() + panorama.getAgosto());
+			saldoTotal.setSetembro(saldoTotal.getSetembro() + panorama.getSetembro());
+			saldoTotal.setOutubro(saldoTotal.getOutubro() + panorama.getOutubro());
+			saldoTotal.setNovembro(saldoTotal.getNovembro() + panorama.getNovembro());
+			saldoTotal.setDezembro(saldoTotal.getDezembro() + panorama.getDezembro());
 		}
 		
-		mapPrevisaoLancamentos.put(saldoTotal.getOid(), saldoTotal);
+		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
 		
 		// Pegar o valor do último fechamento do ano anterior		
 		FechamentoPeriodo fechamento = fechamentoPeriodoRepository.findLastFechamentoPeriodoBeforeDateByContaAndOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
 		if (fechamento == null) {
-			mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
+			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
 		} else {
-			mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setJaneiro(fechamento.getSaldo());
+			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(fechamento.getSaldo());
 		}	
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setJaneiro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getJaneiro() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getJaneiro());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJaneiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJaneiro());
 		
 		// Preenche o saldo anterior		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setFevereiro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getJaneiro());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setFevereiro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getFevereiro() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getFevereiro());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setFevereiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setFevereiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getFevereiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getFevereiro());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setMarco(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getFevereiro());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setMarco(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getMarco() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getMarco());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setMarco(mapPanoramaLancamentos.get(saldoTotal.getOid()).getFevereiro());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setMarco(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMarco() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getMarco());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setAbril(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getMarco());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setAbril(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getAbril() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getAbril());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setAbril(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMarco());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setAbril(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAbril() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getAbril());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setMaio(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getAbril());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setMaio(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getMaio() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getMaio());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setMaio(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAbril());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setMaio(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMaio() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getMaio());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setJunho(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getMaio());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setJunho(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getJunho() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getJunho());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJunho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMaio());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJunho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJunho() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJunho());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setJulho(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getJunho());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setJulho(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getJulho() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getJulho());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJulho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJunho());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJulho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJulho() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJulho());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setAgosto(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getJulho());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setAgosto(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getAgosto() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getAgosto());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setAgosto(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJulho());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setAgosto(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAgosto() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getAgosto());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setSetembro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getAgosto());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setSetembro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getSetembro() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getSetembro());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setSetembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAgosto());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setSetembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getSetembro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getSetembro());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setOutubro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getSetembro());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setOutubro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getOutubro() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getOutubro());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setOutubro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getSetembro());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setOutubro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getOutubro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getOutubro());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setNovembro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getOutubro());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setNovembro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getNovembro() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getNovembro());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setNovembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getOutubro());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setNovembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getNovembro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getNovembro());
 		
-		mapPrevisaoLancamentos.get(saldoAnterior.getOid()).setDezembro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getNovembro());
-		mapPrevisaoLancamentos.get(saldoTotal.getOid()).setDezembro(mapPrevisaoLancamentos.get(saldoTotal.getOid()).getDezembro() + mapPrevisaoLancamentos.get(saldoAnterior.getOid()).getDezembro());
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setDezembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getNovembro());
+		mapPanoramaLancamentos.get(saldoTotal.getOid()).setDezembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getDezembro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getDezembro());
 		
 		// Salva na base
-		for (PrevisaoLancamentoConta previsao : mapPrevisaoLancamentos.values()) {
-			previsaoLancamentoContaRepository.save(previsao);
+		for (PanoramaLancamentoConta panorama : mapPanoramaLancamentos.values()) {
+			panoramaLancamentoContaRepository.save(panorama);
 		}
 		
-		mapPrevisaoLancamentos.clear();
+		mapPanoramaLancamentos.clear();
 	}
 	
 	@Override
@@ -447,7 +447,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	/*** Implementação dos métodos privados ***/
 	
 	@SuppressWarnings("deprecation")
-	private void inserirValorMesPrevisaoLancamentoConta(Map<String, PrevisaoLancamentoConta> mapPrevisaoLancamentos, LancamentoConta lancamento, String oid) {
+	private void inserirValorMesPanoramaLancamentoConta(Map<String, PanoramaLancamentoConta> mapPrevisaoLancamentos, LancamentoConta lancamento, String oid) {
 		int mes = lancamento.getDataPagamento().getMonth();
 		switch(mes) {
 			case Calendar.JANUARY :

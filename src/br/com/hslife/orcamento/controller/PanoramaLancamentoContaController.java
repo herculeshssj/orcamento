@@ -48,24 +48,21 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
+import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
-@Component("previsaoLancamentoContaMB")
+@Component("panoramaLancamentoContaMB")
 @Scope("session")
-public class PrevisaoLancamentoContaController extends AbstractController {
+public class PanoramaLancamentoContaController extends AbstractController {
 
 	/**
 	 * 
@@ -81,22 +78,22 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private int ano;
 	
-	private PrevisaoLancamentoConta entity;
-	private List<PrevisaoLancamentoConta> listEntity;
+	private PanoramaLancamentoConta entity;
+	private List<PanoramaLancamentoConta> listEntity;
 	
-	public PrevisaoLancamentoContaController() {
-		moduleTitle = "Previsão de Lançamentos da Conta";
+	public PanoramaLancamentoContaController() {
+		moduleTitle = "Panorama dos Lançamentos da Conta";
 	}
 	
 	@Override
 	public String startUp() {
-		return "/pages/ResumoEstatistica/previsaoLancamentoConta";
+		return "/pages/ResumoEstatistica/panoramaLancamentoConta";
 	}
 	
 	@Override
 	protected void initializeEntity() {
-		entity = new PrevisaoLancamentoConta();
-		listEntity = new LinkedList<PrevisaoLancamentoConta>();
+		entity = new PanoramaLancamentoConta();
+		listEntity = new LinkedList<PanoramaLancamentoConta>();
 	}
 	
 	public String find() {
@@ -107,7 +104,7 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
 			criterioBusca.setDescricao("");
 			try {
-				listEntity = getService().visualizarRelatorioPrevisaoLancamentoConta(criterioBusca.getConta(), ano);
+				listEntity = getService().visualizarRelatorioPanoramaLancamentoConta(criterioBusca.getConta(), ano);
 				if (listEntity == null || listEntity.size() == 0) {
 					warnMessage("Nenhum resultado encontrado. Relatório não disponível para visualização.");
 				} else {
@@ -129,7 +126,7 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
 			criterioBusca.setDescricao("");
 			try {
-				getService().gerarRelatorioPrevisaoLancamentoConta(criterioBusca, ano);
+				getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano);
 				infoMessage("Relatório gerado com sucesso!");
 			}
 			catch (BusinessException be) {
@@ -143,7 +140,7 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 			warnMessage("Nenhum resultado disponível. Relatório não disponível para visualização.");
 			return "";
 		} else { 
-			return "/pages/ResumoEstatistica/planilhaPrevisaoLancamentoConta";
+			return "/pages/ResumoEstatistica/planilhaPanoramaLancamentoConta";
 		}
 	}
 	
@@ -154,14 +151,6 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
-	}
-	
-	public List<SelectItem> getListaAgruparPor() {
-		List<SelectItem> agrupamentos = new ArrayList<SelectItem>();
-		agrupamentos.add(new SelectItem(TipoAgrupamentoBusca.CATEGORIA, "Categoria"));
-		agrupamentos.add(new SelectItem(TipoAgrupamentoBusca.FAVORECIDO, "Favorecido"));
-		agrupamentos.add(new SelectItem(TipoAgrupamentoBusca.MEIOPAGAMENTO, "Meio de Pagamento"));
-		return agrupamentos;
 	}
 
 	public IResumoEstatistica getService() {
@@ -192,19 +181,19 @@ public class PrevisaoLancamentoContaController extends AbstractController {
 		this.ano = ano;
 	}
 
-	public PrevisaoLancamentoConta getEntity() {
+	public PanoramaLancamentoConta getEntity() {
 		return entity;
 	}
 
-	public void setEntity(PrevisaoLancamentoConta entity) {
+	public void setEntity(PanoramaLancamentoConta entity) {
 		this.entity = entity;
 	}
 
-	public List<PrevisaoLancamentoConta> getListEntity() {
+	public List<PanoramaLancamentoConta> getListEntity() {
 		return listEntity;
 	}
 
-	public void setListEntity(List<PrevisaoLancamentoConta> listEntity) {
+	public void setListEntity(List<PanoramaLancamentoConta> listEntity) {
 		this.listEntity = listEntity;
 	}
 }

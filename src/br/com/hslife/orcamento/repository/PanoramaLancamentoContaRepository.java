@@ -54,29 +54,29 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.PrevisaoLancamentoConta;
+import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 
 @Repository
 @Transactional
-public class PrevisaoLancamentoContaRepository extends AbstractRepository {
+public class PanoramaLancamentoContaRepository extends AbstractRepository {
 	
-	public void save(PrevisaoLancamentoConta entity) {
+	public void save(PanoramaLancamentoConta entity) {
 		getSession().persist(entity);
 	}
 	
-	public void delete(PrevisaoLancamentoConta entity) {
+	public void delete(PanoramaLancamentoConta entity) {
 		getSession().delete(entity);
 	}
 	
-	public void deletePrevisaoLancamentoConta(Conta conta, int ano) {
-		String sql = "delete from previsaolancamentoconta where idConta = " + conta.getId() + " and ano = " + ano; 
+	public void deletePanoramaLancamentoConta(Conta conta, int ano) {
+		String sql = "delete from panoramalancamentoconta where idConta = " + conta.getId() + " and ano = " + ano; 
 		Query query = getSession().createSQLQuery(sql);
 		query.executeUpdate();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PrevisaoLancamentoConta> findByContaAnoAndAgrupamento(Conta conta, int ano) {
-		Criteria criteria = getSession().createCriteria(PrevisaoLancamentoConta.class);
+	public List<PanoramaLancamentoConta> findByContaAnoAndAgrupamento(Conta conta, int ano) {
+		Criteria criteria = getSession().createCriteria(PanoramaLancamentoConta.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("ano", ano));
 		criteria.addOrder(Order.asc("indice"));
@@ -84,8 +84,8 @@ public class PrevisaoLancamentoContaRepository extends AbstractRepository {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PrevisaoLancamentoConta> findByConta(Conta conta) {
-		Criteria criteria = getSession().createCriteria(PrevisaoLancamentoConta.class);
+	public List<PanoramaLancamentoConta> findByConta(Conta conta) {
+		Criteria criteria = getSession().createCriteria(PanoramaLancamentoConta.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));		
 		criteria.addOrder(Order.asc("indice"));
 		return criteria.list();

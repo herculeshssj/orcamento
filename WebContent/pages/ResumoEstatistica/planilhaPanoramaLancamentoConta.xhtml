@@ -59,7 +59,7 @@
 
 <h:body>
 
-	<ui:param name="managedBean" value="#{previsaoLancamentoContaMB}" />
+	<ui:param name="managedBean" value="#{panoramaLancamentoContaMB}" />
 	
 	<h:form>
 	
@@ -69,7 +69,7 @@
 				<f:facet name="header">
 					<h:outputText value="Descrição"/>
 				</f:facet>						
-				<h:outputText value="#{item.descricaoPrevisao}" style="#{item.descricaoPrevisao == 'Saldo Total' or item.descricaoPrevisao == 'Saldo Anterior' ? 'font-weight: bold' : 'font-weight: normal'}"/>
+				<h:outputText value="#{item.descricao}" style="#{item.descricao == 'Saldo Total' or item.descricao == 'Saldo Anterior' ? 'font-weight: bold' : 'font-weight: normal'}"/>
 	  		</p:column>
 	  		<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
@@ -172,7 +172,7 @@
 		<br/>	
 		<h:commandLink title="Exportar para MS-Excel">
 			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
-			<p:dataExporter type="xls" target="sheetTableListEntity" fileName="PrevisaoLancamentoConta" encoding="iso-8859-1"/> 
+			<p:dataExporter type="xls" target="sheetTableListEntity" fileName="PanoramaLancamentoConta" encoding="iso-8859-1"/> 
 		</h:commandLink>
 	
 	</h:form>
