@@ -44,6 +44,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -63,6 +64,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="agenda")
@@ -127,26 +129,8 @@ public class Agenda extends EntityPersistence {
 	private Usuario usuario;
 	
 	public Agenda() {		
-		// Cria uma instância de Calendar com a hora marcada para 0h e seta em horaInicio
-		/*
-		Calendar temp = Calendar.getInstance();
-		temp.set(Calendar.HOUR, 0);
-		temp.set(Calendar.MINUTE, 0);
-		temp.set(Calendar.SECOND, 0);
-		temp.set(Calendar.MILLISECOND, 0);
-		this.horaInicio = temp.getTime();
-		*/
 		inicio = new Date();
 		fim = new Date();
-	}
-
-	public Long getId() {
-		return id;
-	}
-	
-	@Override
-	public String getLabel() {
-		return this.descricao;
 	}
 	
 	@Override
@@ -163,23 +147,124 @@ public class Agenda extends EntityPersistence {
 			throw new BusinessException("Informe o tipo de agendamento!");
 		}
 		
-		if (this.fim.before(this.inicio)) {
+		if (this.fim != null && this.fim.before(this.inicio)) {
 			throw new BusinessException("Data de término não pode ser anterior a data de início!");
 		}
-		/*
-		if (this.dataInicio == null) {
-			throw new BusinessException("Informe a data de início!");
-		}
 		
-		if (this.horaInicio == null) {
-			throw new BusinessException("Informe a hora de início!");
-		}
-		*/
 		if (this.usuario == null) {
 			throw new BusinessException("Informe o usuário!");
 		}
 	}
 
+	@Override
+	public String getLabel() {
+		return this.descricao;
+	}
+	
+	public String getDateLabel() {
+		try {
+			return comporTextoAgendamento();
+		} catch (BusinessException be) {
+			return "";
+		}
+	}
+	
+	public Date extrairData(Date data) {
+		Calendar dataExtraida = Calendar.getInstance();
+		dataExtraida.setTime((Date)data.clone());		
+		dataExtraida.set(Calendar.HOUR, 0);
+		dataExtraida.set(Calendar.MINUTE, 0);
+		dataExtraida.set(Calendar.SECOND, 0);
+		dataExtraida.set(Calendar.MILLISECOND, 0);
+		return dataExtraida.getTime();
+	}
+	
+	public int extrairHora(Date data) {
+		Calendar dataExtraida = Calendar.getInstance();
+		dataExtraida.setTime((Date)data.clone());
+		return dataExtraida.get(Calendar.HOUR_OF_DAY);
+	}
+	
+	public int extrairMinuto(Date data) {
+		Calendar dataExtraida = Calendar.getInstance();
+		dataExtraida.setTime((Date)data.clone());
+		return dataExtraida.get(Calendar.MINUTE);
+	}
+	
+	public int extrairSegundo(Date data) {
+		Calendar dataExtraida = Calendar.getInstance();
+		dataExtraida.setTime((Date)data.clone());
+		return dataExtraida.get(Calendar.SECOND);
+	}
+	
+	public Date comporData(Date data, int hora, int minuto) {
+		return this.comporData(data, hora, minuto, 0);		
+	}
+	
+	public Date comporData(Date data, int hora, int minuto, int segundo) {
+		Calendar dataExtraida = Calendar.getInstance();
+		dataExtraida.setTime((Date)data.clone());		
+		dataExtraida.set(Calendar.HOUR, hora);
+		dataExtraida.set(Calendar.MINUTE, minuto);
+		dataExtraida.set(Calendar.SECOND, segundo);
+		dataExtraida.set(Calendar.MILLISECOND, 0);
+		return dataExtraida.getTime();
+	}
+	
+	public String comporTextoAgendamento() throws BusinessException {
+		return this.comporTextoAgendamento(this.inicio, this.fim, this.diaInteiro, this.tipoAgendamento);
+	}
+	
+	public String comporTextoAgendamento(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+		switch (tipoAgendamento) {
+		case PREVISAO :
+			if (inicio == null) {
+				throw new BusinessException("Informe a data de início!");
+			} else {
+				return Util.formataDataHora(inicio, Util.DATA);
+			}
+		case TAREFA :
+			if (inicio == null) {
+				throw new BusinessException("Informe a data de início!");
+			}
+			if (fim == null) {
+				if (this.extrairHora(inicio) == 0 || this.extrairMinuto(inicio) == 0) {
+					return Util.formataDataHora(inicio, Util.DATA);
+				} else {
+					return Util.formataDataHora(inicio, Util.DATAHORA);
+				}
+			} else {
+				if (this.extrairHora(inicio) == 0 || this.extrairMinuto(inicio) == 0 || this.extrairHora(fim) == 0 || this.extrairMinuto(fim) == 0) {
+					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
+				} else {
+					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATA)).toString();
+				}
+			}				
+		case COMPROMISSO :
+			if (inicio == null) {
+				throw new BusinessException("Informe a data de início!");
+			}
+			if (diaInteiro) {
+				if (fim == null) {
+					return Util.formataDataHora(inicio, Util.DATA);
+				} else {
+					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATA)).toString();
+				}
+			} else {
+				if (fim == null) {
+					return Util.formataDataHora(inicio, Util.DATAHORA);
+				} else {
+					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
+				}
+			}				
+	}
+	return "";
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	
 	public String getDescricao() {
 		return descricao;
 	}

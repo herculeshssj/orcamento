@@ -76,11 +76,11 @@
 	    			<f:converter converterId="dateConverter"/>
 	    		</p:inputMask>
 	    		&nbsp;
-	    		<h:selectOneMenu>
+	    		<h:selectOneMenu value="#{managedBean.horaInicio}">
 	    			<f:selectItems value="#{managedBean.listaHoras}"/>
 	    		</h:selectOneMenu>
 	    		&nbsp;
-	    		<h:selectOneMenu>
+	    		<h:selectOneMenu value="#{managedBean.minutoInicio}">
 	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
 	    		</h:selectOneMenu>
 			</h:panelGroup>
@@ -91,11 +91,11 @@
 	    			<f:converter converterId="dateConverter"/>
 	    		</p:inputMask>
 	    		&nbsp;
-	    		<h:selectOneMenu>
+	    		<h:selectOneMenu value="#{managedBean.horaFim}">
 	    			<f:selectItems value="#{managedBean.listaHoras}"/>
 	    		</h:selectOneMenu>
 	    		&nbsp;
-	    		<h:selectOneMenu>
+	    		<h:selectOneMenu value="#{managedBean.minutoFim}">
 	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
 	    		</h:selectOneMenu>
 			</h:panelGroup>

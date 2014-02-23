@@ -103,16 +103,16 @@ public class Util {
     }
     
     public static String formataDataHora(Date dataHora, String opcao) {
-    	SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+    	SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     	if (dataHora == null) return "";
     	if (opcao.equals(Util.DATAHORA)) {
-    		formata = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+    		formata = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     	}
     	if (opcao.equals(Util.DATA)) {
     		formata = new SimpleDateFormat("dd/MM/yyyy");
     	}
     	if (opcao.equals(Util.HORA)) {
-    		formata = new SimpleDateFormat("hh:mm");
+    		formata = new SimpleDateFormat("HH:mm");
     	}    	
         if (opcao.equals(Util.DATABASE)) {
         	formata = new SimpleDateFormat("yyyy-MM-dd");

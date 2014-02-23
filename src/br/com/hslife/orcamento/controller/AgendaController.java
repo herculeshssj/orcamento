@@ -76,6 +76,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	private Date inicioAgendamento;
 	private Date fimAgendamento;
 	private CriterioAgendamento criterioBusca = new CriterioAgendamento();
+	private Integer horaInicio, horaFim, minutoInicio, minutoFim;
 	
 	@Autowired
 	private ICalendarioAtividades service;
@@ -102,22 +103,51 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	
 	@Override
 	public String save() {
+		if (entity.getInicio() != null) {
+			entity.setInicio(entity.comporData(entity.getInicio(), horaInicio, minutoInicio));
+		}
+		if (entity.getFim() != null) {
+			entity.setFim(entity.comporData(entity.getFim(), horaFim, minutoFim));
+		}		
 		entity.setUsuario(getUsuarioLogado());
 		return super.save();
 	}
 	
-	public List<String> getListaHoras() {
-		List<String> horas = new LinkedList<>();
+	@Override
+	public String edit() {		
+		try {
+			entity = (Agenda) getService().buscarPorID(idEntity);	
+			
+			if (entity.getInicio() != null) {
+				horaInicio = entity.extrairHora(entity.getInicio());
+				minutoInicio = entity.extrairMinuto(entity.getInicio());
+			}
+			if (entity.getFim() != null) {
+				horaFim = entity.extrairHora(entity.getFim());
+				minutoFim = entity.extrairMinuto(entity.getFim());
+			}
+			
+			operation = "edit";
+			actionTitle = " - Editar";
+			return goToFormPage;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public List<Integer> getListaHoras() {
+		List<Integer> horas = new LinkedList<>();
 		for (int i = 0; i < 24; i++) {
-			horas.add(String.format("%02d", i));
+			horas.add(i);
 		}
 		return horas;
 	}
 	
-	public List<String> getListaMinutos() {
-		List<String> horas = new LinkedList<>();
+	public List<Integer> getListaMinutos() {
+		List<Integer> horas = new LinkedList<>();
 		for (int i = 0; i < 60; i++) {
-			horas.add(String.format("%02d", i));
+			horas.add(i);
 		}
 		return horas;
 	}
@@ -186,5 +216,37 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 
 	public void setCriterioBusca(CriterioAgendamento criterioBusca) {
 		this.criterioBusca = criterioBusca;
+	}
+
+	public Integer getHoraInicio() {
+		return horaInicio;
+	}
+
+	public void setHoraInicio(Integer horaInicio) {
+		this.horaInicio = horaInicio;
+	}
+
+	public Integer getHoraFim() {
+		return horaFim;
+	}
+
+	public void setHoraFim(Integer horaFim) {
+		this.horaFim = horaFim;
+	}
+
+	public Integer getMinutoInicio() {
+		return minutoInicio;
+	}
+
+	public void setMinutoInicio(Integer minutoInicio) {
+		this.minutoInicio = minutoInicio;
+	}
+
+	public Integer getMinutoFim() {
+		return minutoFim;
+	}
+
+	public void setMinutoFim(Integer minutoFim) {
+		this.minutoFim = minutoFim;
 	}
 }
