@@ -58,20 +58,21 @@
 	
 	<ui:define name="pesquisa">
 		Descrição:
-	    <h:inputText value="#{managedBean.descricaoAgendamento}" size="15"/>
+	    <h:inputText value="#{managedBean.criterioBusca.descricao}" size="15"/>
 	    &nbsp;
 	    Tipo:
-	    <h:selectOneMenu value="#{managedBean.tipoAgendamento}">
+	    <h:selectOneMenu value="#{managedBean.criterioBusca.tipo}">
+	    	<f:selectItem itemLabel="Todos" />
 			<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
 		</h:selectOneMenu>
 	    &nbsp;
 	    Início:
-	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.inicioAgendamento}">
+	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.inicio}">
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>
 	    &nbsp;
 	    Fim:
-	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.fimAgendamento}">
+	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.fim}">
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>	    
 	</ui:define>
@@ -81,13 +82,13 @@
 			<f:facet name="header">
 				<h:outputText value="Descrição"/>
 			</f:facet>
-			<h:outputText value="" />
+			<h:outputText value="#{item.descricao}" />
   		</p:column>
   		<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Tipo"/>
 			</f:facet>
-			<h:outputText value="" />
+			<h:outputText value="#{item.tipoAgendamento}" />
   		</p:column>  			
   		<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">

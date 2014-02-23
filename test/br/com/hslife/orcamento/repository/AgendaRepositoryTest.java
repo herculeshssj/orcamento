@@ -59,6 +59,7 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
+import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.util.Util;
 
 public class AgendaRepositoryTest extends AbstractTestRepositories {
@@ -150,5 +151,20 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		// Testa o método em questão
 		Agenda agendaTest = agendaRepository.findById(agenda.getId());
 		assertEquals(agenda.getId(), agendaTest.getId());
+	}
+	
+	@Test
+	public void testFindByCriterioAgendamento() {
+		agendaRepository.save(agenda);
+		
+		CriterioAgendamento criterioBusca = new CriterioAgendamento();
+		criterioBusca.setDescricao("Compromisso de teste");
+		criterioBusca.setInicio(new Date());
+		criterioBusca.setFim(new Date());
+		criterioBusca.setTipo(TipoAgendamento.COMPROMISSO);
+		
+		List<Agenda> listaAgenda = agendaRepository.findByCriterioAgendamento(criterioBusca);
+		assertEquals(1, listaAgenda.size());
+		assertEquals(agenda, listaAgenda.get(0));
 	}
 }

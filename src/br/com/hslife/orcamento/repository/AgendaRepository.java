@@ -47,12 +47,14 @@ package br.com.hslife.orcamento.repository;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.model.CriterioAgendamento;
 
 @Repository
 public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
@@ -65,6 +67,29 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 	public List<Agenda> findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Agenda.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.addOrder(Order.asc("descricao")).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Agenda> findByCriterioAgendamento(CriterioAgendamento criterioBusca) {
+		Criteria criteria = getSession().createCriteria(Agenda.class);
+		
+		if (criterioBusca.getDescricao() != null && !criterioBusca.getDescricao().trim().isEmpty()) {
+			criteria.add(Restrictions.ilike("descricao", criterioBusca.getDescricao(), MatchMode.ANYWHERE));
+		}
+		
+		if (criterioBusca.getInicio() != null) {
+			criteria.add(Restrictions.ge("inicio", criterioBusca.getInicio()));
+		}
+		
+		if (criterioBusca.getFim() != null) {
+			criteria.add(Restrictions.le("fim", criterioBusca.getFim()));
+		}
+		
+		if (criterioBusca.getTipo() != null) {
+			criteria.add(Restrictions.eq("tipoAgendamento", criterioBusca.getTipo()));
+		}
+		
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}
 }

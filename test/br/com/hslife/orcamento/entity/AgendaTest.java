@@ -3,6 +3,7 @@ package br.com.hslife.orcamento.entity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Before;
@@ -61,6 +62,36 @@ public class AgendaTest {
 			entity.validate();
 		} catch (BusinessException be) {
 			assertEquals("Campo aceita no máximo 200 caracteres!", be.getMessage());
+			return;
+		} catch (Throwable t) {
+			fail(t.getMessage());
+		}
+		fail("Falha no teste!");
+	}
+	
+	@Test
+	public void testValidateTipoAgendamento() {
+		try {
+			entity.setTipoAgendamento(null);
+			entity.validate();
+		} catch (BusinessException be) {
+			assertEquals("Informe o tipo de agendamento!", be.getMessage());
+			return;
+		} catch (Throwable t) {
+			fail(t.getMessage());
+		}
+		fail("Falha no teste!");
+	}
+	
+	@Test
+	public void testValidateFimBeforeInicio() {
+		try {
+			Calendar temp = Calendar.getInstance();
+			temp.add(Calendar.DAY_OF_MONTH, -5);
+			entity.setFim(temp.getTime());
+			entity.validate();
+		} catch (BusinessException be) {
+			assertEquals("Data de término não pode ser anterior a data de início!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
@@ -66,6 +67,7 @@ import br.com.hslife.orcamento.facade.ICalendarioAtividades;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IUsuario;
+import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
@@ -73,6 +75,7 @@ public class CalendarioAtividadesServiceTest extends AbstractTestServices {
 	
 	private Usuario usuario = new Usuario();
 	private Conta conta = new Conta();
+	private Agenda agenda = new Agenda();
 	private LancamentoConta lancamento = new LancamentoConta();
 	private List<LancamentoConta> lancamentos = new ArrayList<>();
 	
@@ -98,6 +101,15 @@ public class CalendarioAtividadesServiceTest extends AbstractTestServices {
 		usuario.setSenha(Util.SHA1("teste"));
 		usuario.setTipoUsuario(TipoUsuario.ROLE_USER);
 		usuarioService.cadastrar(usuario);
+		
+		// Cria uma nova informação pessoal
+		agenda = new Agenda();
+		agenda.setUsuario(usuario);
+		agenda.setDescricao("Compromisso de teste");
+		agenda.setInicio(new Date());
+		agenda.setFim(new Date());
+		agenda.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
+		calendarioAtividadesService.cadastrar(agenda);
 		
 		// Cria uma nova conta para o usuário
 		conta.setDescricao("Conta de teste - Calendario de atividades");
@@ -135,6 +147,18 @@ public class CalendarioAtividadesServiceTest extends AbstractTestServices {
 			}
 		}
 		assertEquals(3, contador);
+	}
+	
+	public void testBuscarPorCriterioAgendamento() throws BusinessException {
+		CriterioAgendamento criterioBusca = new CriterioAgendamento();
+		criterioBusca.setDescricao("Compromisso de teste");
+		criterioBusca.setInicio(new Date());
+		criterioBusca.setFim(new Date());
+		criterioBusca.setTipo(TipoAgendamento.COMPROMISSO);
+		
+		List<Agenda> listaAgenda = calendarioAtividadesService.buscarPorCriterioAgendamento(criterioBusca);
+		assertEquals(1, listaAgenda.size());
+		assertEquals(agenda, listaAgenda.get(0));
 	}
 	/*
 	@Test

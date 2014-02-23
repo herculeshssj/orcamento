@@ -158,6 +158,14 @@ public class Agenda extends EntityPersistence {
 		if (this.localAgendamento.trim().length() > 200) {
 			throw new BusinessException("Campo aceita no máximo 200 caracteres!");
 		}
+		
+		if (this.tipoAgendamento == null) {
+			throw new BusinessException("Informe o tipo de agendamento!");
+		}
+		
+		if (this.fim.before(this.inicio)) {
+			throw new BusinessException("Data de término não pode ser anterior a data de início!");
+		}
 		/*
 		if (this.dataInicio == null) {
 			throw new BusinessException("Informe a data de início!");

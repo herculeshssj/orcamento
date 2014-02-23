@@ -56,6 +56,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICalendarioAtividades;
+import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
@@ -103,5 +104,8 @@ public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> imp
 		
 	}
 	
-	
+	@Override
+	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) throws BusinessException {
+		return getRepository().findByCriterioAgendamento(criterioBusca);
+	}
 }

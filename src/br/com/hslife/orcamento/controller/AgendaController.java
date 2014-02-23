@@ -58,7 +58,9 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICalendarioAtividades;
+import br.com.hslife.orcamento.model.CriterioAgendamento;
 
 @Component("agendaMB")
 @Scope("session")
@@ -73,6 +75,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	private TipoAgendamento tipoAgendamento;
 	private Date inicioAgendamento;
 	private Date fimAgendamento;
+	private CriterioAgendamento criterioBusca = new CriterioAgendamento();
 	
 	@Autowired
 	private ICalendarioAtividades service;
@@ -84,13 +87,17 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	
 	@Override
 	protected void initializeEntity() {
-		
+		listEntity = new ArrayList<>();
+		entity = new Agenda();
 	}
 
 	@Override
 	public void find() {
-		// TODO Auto-generated method stub
-		
+		try {
+			listEntity = getService().buscarPorCriterioAgendamento(criterioBusca);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}		
 	}
 	
 	@Override
@@ -171,5 +178,13 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 
 	public void setFimAgendamento(Date fimAgendamento) {
 		this.fimAgendamento = fimAgendamento;
+	}
+
+	public CriterioAgendamento getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioAgendamento criterioBusca) {
+		this.criterioBusca = criterioBusca;
 	}
 }
