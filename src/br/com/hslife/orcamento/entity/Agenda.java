@@ -147,6 +147,10 @@ public class Agenda extends EntityPersistence {
 			throw new BusinessException("Informe o tipo de agendamento!");
 		}
 		
+		if (this.inicio == null) {
+			throw new BusinessException("Informe a data de início!");
+		}
+		
 		if (this.fim != null && this.fim.before(this.inicio)) {
 			throw new BusinessException("Data de término não pode ser anterior a data de início!");
 		}
@@ -168,17 +172,17 @@ public class Agenda extends EntityPersistence {
 			return "";
 		}
 	}
-	
+	/*
 	public Date extrairData(Date data) {
 		Calendar dataExtraida = Calendar.getInstance();
 		dataExtraida.setTime((Date)data.clone());		
-		dataExtraida.set(Calendar.HOUR, 0);
+		dataExtraida.set(Calendar.HOUR_OF_DAY, 0);
 		dataExtraida.set(Calendar.MINUTE, 0);
 		dataExtraida.set(Calendar.SECOND, 0);
 		dataExtraida.set(Calendar.MILLISECOND, 0);
 		return dataExtraida.getTime();
 	}
-	
+	*/
 	public int extrairHora(Date data) {
 		Calendar dataExtraida = Calendar.getInstance();
 		dataExtraida.setTime((Date)data.clone());
@@ -190,25 +194,23 @@ public class Agenda extends EntityPersistence {
 		dataExtraida.setTime((Date)data.clone());
 		return dataExtraida.get(Calendar.MINUTE);
 	}
-	
+	/*
 	public int extrairSegundo(Date data) {
 		Calendar dataExtraida = Calendar.getInstance();
 		dataExtraida.setTime((Date)data.clone());
 		return dataExtraida.get(Calendar.SECOND);
 	}
-	
+	*/
 	public Date comporData(Date data, int hora, int minuto) {
 		return this.comporData(data, hora, minuto, 0);		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Date comporData(Date data, int hora, int minuto, int segundo) {
 		Calendar dataExtraida = Calendar.getInstance();
-		dataExtraida.setTime((Date)data.clone());		
-		dataExtraida.set(Calendar.HOUR, hora);
-		dataExtraida.set(Calendar.MINUTE, minuto);
-		dataExtraida.set(Calendar.SECOND, segundo);
-		dataExtraida.set(Calendar.MILLISECOND, 0);
+		dataExtraida.set(data.getYear() + 1900, data.getMonth(), data.getDate(), hora, minuto, segundo);		
 		return dataExtraida.getTime();
+		
 	}
 	
 	public String comporTextoAgendamento() throws BusinessException {
@@ -228,16 +230,16 @@ public class Agenda extends EntityPersistence {
 				throw new BusinessException("Informe a data de início!");
 			}
 			if (fim == null) {
-				if (this.extrairHora(inicio) == 0 || this.extrairMinuto(inicio) == 0) {
+				if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0) {
 					return Util.formataDataHora(inicio, Util.DATA);
 				} else {
 					return Util.formataDataHora(inicio, Util.DATAHORA);
 				}
 			} else {
-				if (this.extrairHora(inicio) == 0 || this.extrairMinuto(inicio) == 0 || this.extrairHora(fim) == 0 || this.extrairMinuto(fim) == 0) {
-					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
-				} else {
+				if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0 && this.extrairHora(fim) == 0 && this.extrairMinuto(fim) == 0) {
 					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATA)).toString();
+				} else {
+					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
 				}
 			}				
 		case COMPROMISSO :
