@@ -172,17 +172,7 @@ public class Agenda extends EntityPersistence {
 			return "";
 		}
 	}
-	/*
-	public Date extrairData(Date data) {
-		Calendar dataExtraida = Calendar.getInstance();
-		dataExtraida.setTime((Date)data.clone());		
-		dataExtraida.set(Calendar.HOUR_OF_DAY, 0);
-		dataExtraida.set(Calendar.MINUTE, 0);
-		dataExtraida.set(Calendar.SECOND, 0);
-		dataExtraida.set(Calendar.MILLISECOND, 0);
-		return dataExtraida.getTime();
-	}
-	*/
+
 	public int extrairHora(Date data) {
 		Calendar dataExtraida = Calendar.getInstance();
 		dataExtraida.setTime((Date)data.clone());
@@ -194,13 +184,7 @@ public class Agenda extends EntityPersistence {
 		dataExtraida.setTime((Date)data.clone());
 		return dataExtraida.get(Calendar.MINUTE);
 	}
-	/*
-	public int extrairSegundo(Date data) {
-		Calendar dataExtraida = Calendar.getInstance();
-		dataExtraida.setTime((Date)data.clone());
-		return dataExtraida.get(Calendar.SECOND);
-	}
-	*/
+	
 	public Date comporData(Date data, int hora, int minuto) {
 		return this.comporData(data, hora, minuto, 0);		
 	}

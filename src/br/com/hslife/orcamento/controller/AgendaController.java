@@ -102,6 +102,12 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	}
 	
 	@Override
+	public String create() {
+		entity.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
+		return super.create();
+	}
+	
+	@Override
 	public String save() {
 		if (entity.getInicio() != null) {
 			entity.setInicio(entity.comporData(entity.getInicio(), horaInicio, minutoInicio));
@@ -154,9 +160,10 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	
 	public List<SelectItem> getListaTipoAgendamento() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		listaSelectItem.add(new SelectItem(TipoAgendamento.COMPROMISSO, "Compromissos"));
-		listaSelectItem.add(new SelectItem(TipoAgendamento.TAREFA, "Tarefas"));
-		listaSelectItem.add(new SelectItem(TipoAgendamento.PREVISAO, "Previsão"));
+		listaSelectItem.add(new SelectItem(TipoAgendamento.COMPROMISSO, "Compromisso"));
+		listaSelectItem.add(new SelectItem(TipoAgendamento.TAREFA, "Tarefa"));
+		if (operation.equals("list"))
+			listaSelectItem.add(new SelectItem(TipoAgendamento.PREVISAO, "Previsão"));
 		return listaSelectItem;
 	}
 	

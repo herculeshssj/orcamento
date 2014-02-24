@@ -51,7 +51,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{agendaMB}" />
 	
@@ -60,64 +60,32 @@
 		<h:panelGrid id="pngAgendamento" columns="2">
 				
 			Tipo de agendamento:
-			<h:selectOneRadio value="#{managedBean.entity.tipoAgendamento}">
-				<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
-				<p:ajax update="pngAgendamento" />
-			</h:selectOneRadio>
-			
+			<h:outputText value="#{managedBean.entity.tipoAgendamento}" />
+						
 			Descrição:
-			<h:inputText value="#{managedBean.entity.descricao}" size="50"/>
-			
+			<h:outputText value="#{managedBean.entity.descricao}" />
+						
 			<h:outputText value="Local:" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
-			<h:inputText value="#{managedBean.entity.localAgendamento}" size="50" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
+			<h:outputText value="#{managedBean.entity.localAgendamento}" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>			
 			
-			Início:
-			<h:panelGroup>
-				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.inicio}">
-	    			<f:converter converterId="dateConverter"/>
-	    		</p:inputMask>
-	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.horaInicio}">
-	    			<f:selectItems value="#{managedBean.listaHoras}"/>
-	    		</h:selectOneMenu>
-	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.minutoInicio}">
-	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
-	    		</h:selectOneMenu>
-			</h:panelGroup>
+			Data:
+			<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
 				
-			Fim:
-			<h:panelGroup>
-				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.fim}">
-	    			<f:converter converterId="dateConverter"/>
-	    		</p:inputMask>
-	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.horaFim}">
-	    			<f:selectItems value="#{managedBean.listaHoras}"/>
-	    		</h:selectOneMenu>
-	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.minutoFim}">
-	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
-	    		</h:selectOneMenu>
-			</h:panelGroup>
-			
 			<h:outputText value="Prioridade:" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>
-			<h:selectOneMenu value="#{managedBean.entity.prioridadeTarefa}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}">
-				<f:selectItems value="#{managedBean.listaPrioridadeTarefa}" />
-			</h:selectOneMenu>
+			<h:outputText value="#{managedBean.entity.prioridadeTarefa}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>	
 			
 			<h:outputText value="Dia inteiro:" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
-			<h:selectBooleanCheckbox value="#{managedBean.entity.diaInteiro}" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
+			<h:selectBooleanCheckbox value="#{managedBean.entity.diaInteiro}" disabled="true" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
 			
 			<h:outputText value="Concluído:" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>
-			<h:selectBooleanCheckbox value="#{managedBean.entity.concluido}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>
+			<h:selectBooleanCheckbox value="#{managedBean.entity.concluido}"  disabled="true" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>
 			
 			Emitir alerta:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.emitirAlerta}"/>
+			<h:selectBooleanCheckbox value="#{managedBean.entity.emitirAlerta}" disabled="true"/>
 			
 			Notas:
-			<h:inputTextarea value="#{managedBean.entity.notas}" size="70" rows="3"></h:inputTextarea>
-		
+			<h:outputText value="#{managedBean.entity.notas}" />
+					
 		</h:panelGrid>
 		
 	</ui:define>
