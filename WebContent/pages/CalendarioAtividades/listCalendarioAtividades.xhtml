@@ -58,12 +58,16 @@
 	<ui:define name="conteudo">
 	
 		<h:outputScript name="primefaces-schedule-locale.js" library="scripts" />
-			
-		<p:schedule id="schedule" locale="pt" axisFormat="H:mm" timeFormat="H:mm">
-		</p:schedule>
 		
-		<h:form>
+		<h:form id="frmListEntity">
+     	
+     		<p:messages />
+			
+			<p:schedule id="schedule" value="#{managedBean.calendario}" locale="pt" axisFormat="H:mm" timeFormat="H:mm">
+			</p:schedule>
+				
 			<h:commandLink value="Ir para o modo clássico >>>>" action="#{agendaMB.startUp}"/>
+			
 		</h:form>
 	
 	</ui:define>

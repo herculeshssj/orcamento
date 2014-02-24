@@ -44,11 +44,19 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.util.Date;
+
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Agenda;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICalendarioAtividades;
+import br.com.hslife.orcamento.model.CriterioAgendamento;
 
 @Component("calendarioAtividadesMB")
 @Scope("session")
@@ -62,6 +70,8 @@ public class CalendarioAtividadesController extends AbstractController {
 	@Autowired
 	private ICalendarioAtividades service;
 	
+	private ScheduleModel calendario;
+	
 	public CalendarioAtividadesController() {
 		moduleTitle = "Calendário de Atividades";
 	}
@@ -73,6 +83,28 @@ public class CalendarioAtividadesController extends AbstractController {
 	
 	@Override
 	public String startUp() {		
+		// Carrega todos os eventos da data e hora atual em diante
+		calendario = new DefaultScheduleModel();
+		CriterioAgendamento criterioBusca = new CriterioAgendamento();
+		criterioBusca.setInicio(new Date());
+		try {
+			for (Agenda agenda : service.buscarPorCriterioAgendamento(criterioBusca)) {
+				if (agenda.getFim() == null)
+					calendario.addEvent(new DefaultScheduleEvent(agenda.getDescricao(), agenda.getInicio(), agenda.getInicio(), agenda.isDiaInteiro()));
+				else
+					calendario.addEvent(new DefaultScheduleEvent(agenda.getDescricao(), agenda.getInicio(), agenda.getFim(), agenda.isDiaInteiro()));
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}		
 		return "/pages/CalendarioAtividades/listCalendarioAtividades";
+	}
+
+	public ScheduleModel getCalendario() {
+		return calendario;
+	}
+
+	public void setCalendario(ScheduleModel calendario) {
+		this.calendario = calendario;
 	}
 }
