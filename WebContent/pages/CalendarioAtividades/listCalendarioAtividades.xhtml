@@ -63,7 +63,7 @@
      	
      		<p:messages />
 			
-			<p:schedule id="schedule" value="#{managedBean.calendario}" locale="pt" axisFormat="H:mm" timeFormat="H:mm">
+			<p:schedule id="schedule" value="#{managedBean.calendario}" locale="pt" timeZone="America/Sao_Paulo" axisFormat="H:mm" timeFormat="H:mm">
 				<p:ajax event="dateSelect" listener="#{calendarioAtividadesMB.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
         		<p:ajax event="eventSelect" listener="#{calendarioAtividadesMB.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
         		<p:ajax event="eventMove" listener="#{calendarioAtividadesMB.onEventMove}" />  
@@ -89,9 +89,7 @@
 		           	<h:selectBooleanCheckbox id="allDay" value="#{managedBean.event.allDay}" />  
 		 
 		           	<p:commandButton type="reset" value="Reset" />  
-		           	<p:commandButton id="addButton" value="Save" actionListener="#{managedBean.addEvent}" oncomplete="eventDialog.hide();">
-		           		<p:ajax update="schedule" />
-		           	</p:commandButton>  
+		           	<p:commandButton id="addButton" value="Save" actionListener="#{managedBean.addEvent}" update="schedule" oncomplete="eventDialog.hide();"/>
         		</h:panelGrid>  
     		</p:dialog>
 				
