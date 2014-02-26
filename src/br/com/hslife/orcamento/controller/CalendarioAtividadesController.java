@@ -46,8 +46,15 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.Date;
 
+import javax.faces.event.ActionEvent;
+
+import org.primefaces.event.DateSelectEvent;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
+import org.primefaces.event.ScheduleEntrySelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -67,10 +74,11 @@ public class CalendarioAtividadesController extends AbstractController {
 	 */
 	private static final long serialVersionUID = 8085348187243579495L;
 
-	@Autowired
+	@Autowired	
 	private ICalendarioAtividades service;
 	
 	private ScheduleModel calendario;
+	private ScheduleEvent event = new DefaultScheduleEvent(); 
 	
 	public CalendarioAtividadesController() {
 		moduleTitle = "Calendário de Atividades";
@@ -99,12 +107,53 @@ public class CalendarioAtividadesController extends AbstractController {
 		}		
 		return "/pages/CalendarioAtividades/listCalendarioAtividades";
 	}
+	
+	public void onDateSelect(DateSelectEvent selectEvent) {  
+        event = new DefaultScheduleEvent("", selectEvent.getDate(), selectEvent.getDate());  
+    }
+	
+	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {  
+        event = selectEvent.getScheduleEvent(); 
+    }
+	
+	public void onEventMove(ScheduleEntryMoveEvent event) {  
+          
+    }  
+      
+    public void onEventResize(ScheduleEntryResizeEvent event) {  
+          
+    } 
 
+    public void addEvent(ActionEvent actionEvent) {  
+        if(event.getId() == null)  
+            calendario.addEvent(event);  
+        else  
+            calendario.updateEvent(event);  
+          
+        event = new DefaultScheduleEvent();  
+    } 
+    
 	public ScheduleModel getCalendario() {
 		return calendario;
 	}
 
 	public void setCalendario(ScheduleModel calendario) {
 		this.calendario = calendario;
+	}
+
+	public ScheduleEvent getEvent() {
+		return event;
+	}
+
+	public void setEvent(ScheduleEvent event) {
+		this.event = event;
+	}
+
+	public ICalendarioAtividades getService() {
+		return service;
+	}
+
+	public void setService(ICalendarioAtividades service) {
+		this.service = service;
 	}
 }

@@ -64,7 +64,36 @@
      		<p:messages />
 			
 			<p:schedule id="schedule" value="#{managedBean.calendario}" locale="pt" axisFormat="H:mm" timeFormat="H:mm">
+				<p:ajax event="dateSelect" listener="#{calendarioAtividadesMB.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
+        		<p:ajax event="eventSelect" listener="#{calendarioAtividadesMB.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
+        		<p:ajax event="eventMove" listener="#{calendarioAtividadesMB.onEventMove}" />  
+        		<p:ajax event="eventResize" listener="#{calendarioAtividadesMB.onEventResize}" />
 			</p:schedule>
+			
+			<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">  
+        		<h:panelGrid id="eventDetails" columns="2">  
+		           	<h:outputLabel for="title" value="Title:" />  
+		           	<p:inputText id="title" value="#{managedBean.event.title}" required="true"/>  
+		 
+		           	<h:outputLabel for="from" value="From:" />  
+		           	<p:inputMask id="from" value="#{managedBean.event.startDate}" mask="99/99/9999">  
+		               	<f:convertDateTime pattern="dd/MM/yyyy" />  
+		           	</p:inputMask>  
+		 
+		           	<h:outputLabel for="to" value="To:" />  
+		           	<p:inputMask id="to" value="#{managedBean.event.endDate}" mask="99/99/9999">  
+		               	<f:convertDateTime pattern="dd/MM/yyyy" />  
+		           	</p:inputMask>  
+		 
+		           	<h:outputLabel for="allDay" value="All Day:" />  
+		           	<h:selectBooleanCheckbox id="allDay" value="#{managedBean.event.allDay}" />  
+		 
+		           	<p:commandButton type="reset" value="Reset" />  
+		           	<p:commandButton id="addButton" value="Save" actionListener="#{managedBean.addEvent}" oncomplete="eventDialog.hide();">
+		           		<p:ajax update="schedule" />
+		           	</p:commandButton>  
+        		</h:panelGrid>  
+    		</p:dialog>
 				
 			<h:commandLink value="Ir para o modo clássico >>>>" action="#{agendaMB.startUp}"/>
 			
