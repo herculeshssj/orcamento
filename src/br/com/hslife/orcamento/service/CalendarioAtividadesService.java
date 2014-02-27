@@ -90,7 +90,7 @@ public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> imp
 		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca)) {
 			agenda.setDataInicio(lancamento.getDataPagamento());
 			agenda.setDescricao(lancamento.getConta().getLabel() + " - " + lancamento.getDescricao());
-			agenda.setLancamentoAgendado(lancamento);
+			//agenda.setLancamentoAgendado(lancamento);
 			agenda.setUsuario(lancamento.getConta().getUsuario());
 			agendamentos.add(agenda);
 			agenda = new Agenda();

@@ -49,6 +49,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 						http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/context
@@ -58,7 +59,9 @@
 						http://www.springframework.org/schema/aop
 						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd						
 						http://www.springframework.org/schema/security 
-						http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+						http://www.springframework.org/schema/security/spring-security-3.1.xsd
+						http://www.springframework.org/schema/task
+						http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 						
 	<!-- General -->
 	<context:component-scan base-package="br.com.hslife.orcamento" />
@@ -100,6 +103,9 @@
     </bean>
     
     <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!-- Task Scheduler -->
+    <task:annotation-driven />
  
  	<!-- Spring Security -->
  	<sec:http auto-config="true" access-denied-page="/acessoNegado.faces">

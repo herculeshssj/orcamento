@@ -216,6 +216,8 @@ create table agenda(
 	concluido boolean,
 	emitirAlerta boolean,
 	notas text,
+	idEntity bigint null,
+	entity varchar(30) null,
 	idUsuario bigint not null,
 	versionEntity datetime not null default '2014-01-01 00:00:00',
 	primary key(id)

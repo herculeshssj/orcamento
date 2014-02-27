@@ -121,12 +121,15 @@ public class Agenda extends EntityPersistence {
 	@Transient
 	private Date horaFim;
 	
-	@Transient
-	private LancamentoConta lancamentoAgendado;
-	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
+	
+	@Column(nullable=true)
+	private Long idEntity;
+	
+	@Column(length=30, nullable=true)
+	private String entity;
 	
 	public Agenda() {		
 		inicio = new Date();
@@ -291,14 +294,6 @@ public class Agenda extends EntityPersistence {
 		this.horaFim = horaFim;
 	}
 
-	public LancamentoConta getLancamentoAgendado() {
-		return lancamentoAgendado;
-	}
-
-	public void setLancamentoAgendado(LancamentoConta lancamentoAgendado) {
-		this.lancamentoAgendado = lancamentoAgendado;
-	}
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -381,5 +376,21 @@ public class Agenda extends EntityPersistence {
 
 	public void setLocalAgendamento(String localAgendamento) {
 		this.localAgendamento = localAgendamento;
+	}
+
+	public Long getIdEntity() {
+		return idEntity;
+	}
+
+	public void setIdEntity(Long idEntity) {
+		this.idEntity = idEntity;
+	}
+
+	public String getEntity() {
+		return entity;
+	}
+
+	public void setEntity(String entity) {
+		this.entity = entity;
 	}
 }
