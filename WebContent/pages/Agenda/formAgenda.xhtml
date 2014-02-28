@@ -59,44 +59,44 @@
 			
 		<h:panelGrid id="pngAgendamento" columns="2">
 				
-			Tipo de agendamento:
-			<h:selectOneRadio value="#{managedBean.entity.tipoAgendamento}">
+			<h:outputText value="Tipo de agendamento:" rendered="#{managedBean.entity.tipoAgendamento != 'PREVISAO'}"/>
+			<h:selectOneRadio value="#{managedBean.entity.tipoAgendamento}" rendered="#{managedBean.entity.tipoAgendamento != 'PREVISAO'}">
 				<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
 				<p:ajax update="pngAgendamento" />
 			</h:selectOneRadio>
 			
 			Descrição:
-			<h:inputText value="#{managedBean.entity.descricao}" size="50"/>
+			<h:inputText value="#{managedBean.entity.descricao}" size="50" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}"/>
 			
 			<h:outputText value="Local:" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
 			<h:inputText value="#{managedBean.entity.localAgendamento}" size="50" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
 			
 			Início:
 			<h:panelGroup>
-				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.inicio}">
+				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.inicio}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}">
 	    			<f:converter converterId="dateConverter"/>
 	    		</p:inputMask>
 	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.horaInicio}">
+	    		<h:selectOneMenu value="#{managedBean.horaInicio}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}">
 	    			<f:selectItems value="#{managedBean.listaHoras}"/>
 	    		</h:selectOneMenu>
 	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.minutoInicio}">
+	    		<h:selectOneMenu value="#{managedBean.minutoInicio}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}">
 	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
 	    		</h:selectOneMenu>
 			</h:panelGroup>
 				
 			Fim:
 			<h:panelGroup>
-				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.fim}">
+				<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.fim}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}">
 	    			<f:converter converterId="dateConverter"/>
 	    		</p:inputMask>
 	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.horaFim}">
+	    		<h:selectOneMenu value="#{managedBean.horaFim}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}">
 	    			<f:selectItems value="#{managedBean.listaHoras}"/>
 	    		</h:selectOneMenu>
 	    		&nbsp;
-	    		<h:selectOneMenu value="#{managedBean.minutoFim}">
+	    		<h:selectOneMenu value="#{managedBean.minutoFim}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}">
 	    			<f:selectItems value="#{managedBean.listaMinutos}"/>
 	    		</h:selectOneMenu>
 			</h:panelGroup>
@@ -113,10 +113,10 @@
 			<h:selectBooleanCheckbox value="#{managedBean.entity.concluido}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>
 			
 			Emitir alerta:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.emitirAlerta}"/>
+			<h:selectBooleanCheckbox value="#{managedBean.entity.emitirAlerta}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}"/>
 			
 			Notas:
-			<h:inputTextarea value="#{managedBean.entity.notas}" size="70" rows="3"></h:inputTextarea>
+			<h:inputTextarea value="#{managedBean.entity.notas}" size="70" rows="3" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}"></h:inputTextarea>
 		
 		</h:panelGrid>
 		

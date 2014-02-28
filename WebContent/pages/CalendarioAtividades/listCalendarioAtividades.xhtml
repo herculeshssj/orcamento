@@ -63,37 +63,49 @@
      	
      		<p:messages />
 			
-			<p:schedule id="schedule" value="#{managedBean.calendario}" locale="pt" timeZone="America/Sao_Paulo" axisFormat="H:mm" timeFormat="H:mm">
-				<p:ajax event="dateSelect" listener="#{calendarioAtividadesMB.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
-        		<p:ajax event="eventSelect" listener="#{calendarioAtividadesMB.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
-        		<p:ajax event="eventMove" listener="#{calendarioAtividadesMB.onEventMove}" />  
-        		<p:ajax event="eventResize" listener="#{calendarioAtividadesMB.onEventResize}" />
+			<p:schedule id="schedule" value="#{managedBean.calendario}" locale="pt" timeZone="America/Sao_Paulo" axisFormat="H:mm" timeFormat="H:mm">				  
+        		<p:ajax event="eventSelect" listener="#{calendarioAtividadesMB.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />        		
 			</p:schedule>
 			
-			<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">  
-        		<h:panelGrid id="eventDetails" columns="2">  
-		           	<h:outputLabel for="title" value="Title:" />  
-		           	<p:inputText id="title" value="#{managedBean.event.title}" required="true"/>  
-		 
-		           	<h:outputLabel for="from" value="From:" />  
-		           	<p:inputMask id="from" value="#{managedBean.event.startDate}" mask="99/99/9999">  
-		               	<f:convertDateTime pattern="dd/MM/yyyy" />  
-		           	</p:inputMask>  
-		 
-		           	<h:outputLabel for="to" value="To:" />  
-		           	<p:inputMask id="to" value="#{managedBean.event.endDate}" mask="99/99/9999">  
-		               	<f:convertDateTime pattern="dd/MM/yyyy" />  
-		           	</p:inputMask>  
-		 
-		           	<h:outputLabel for="allDay" value="All Day:" />  
-		           	<h:selectBooleanCheckbox id="allDay" value="#{managedBean.event.allDay}" />  
-		 
-		           	<p:commandButton type="reset" value="Reset" />  
-		           	<p:commandButton id="addButton" value="Save" actionListener="#{managedBean.addEvent}" update="schedule" oncomplete="eventDialog.hide();"/>
-        		</h:panelGrid>  
-    		</p:dialog>
+			<p:dialog widgetVar="eventDialog" header="Detalhes do agendamento">
+			
+				<h:panelGrid id="eventDetails" columns="2">
 				
-			<h:commandLink value="Ir para o modo clássico >>>>" action="#{agendaMB.startUp}"/>
+					Tipo:
+					<h:outputText value="#{managedBean.event.data.tipoAgendamento}" />
+							
+					Descrição:
+					<h:outputText value="#{managedBean.event.data.descricao}" />
+							
+					<h:outputText value="Local:" rendered="#{managedBean.event.data.tipoAgendamento == 'COMPROMISSO'}"/>
+					<h:outputText value="#{managedBean.event.data.localAgendamento}" rendered="#{managedBean.event.data.tipoAgendamento == 'COMPROMISSO'}"/>			
+				
+					Data:
+					<h:outputText value="#{managedBean.event.data.dateLabel}" style="white-space: pre;"/>
+					
+					<h:outputText value="Prioridade:" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>
+					<h:outputText value="#{managedBean.event.data.prioridadeTarefa}" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>	
+				
+					<h:outputText value="Dia inteiro:" rendered="#{managedBean.event.data.tipoAgendamento == 'COMPROMISSO'}"/>
+					<h:selectBooleanCheckbox value="#{managedBean.event.data.diaInteiro}" disabled="true" rendered="#{managedBean.event.data.tipoAgendamento == 'COMPROMISSO'}"/>
+				
+					<h:outputText value="Concluído:" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>
+					<h:selectBooleanCheckbox value="#{managedBean.event.data.concluido}"  disabled="true" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>
+				
+					Emitir alerta:
+					<h:selectBooleanCheckbox value="#{managedBean.event.data.emitirAlerta}" disabled="true"/>
+				
+					Notas:
+					<h:outputText value="#{managedBean.event.data.notas}" />
+					
+					<p:commandButton id="addButton" value="Fechar" oncomplete="eventDialog.hide();"/>
+					<h:outputText />
+				
+				</h:panelGrid>
+				
+			</p:dialog>
+			
+			<h:commandLink value="Ir para o cadastro >>>>" action="#{agendaMB.startUp}"/>
 			
 		</h:form>
 	

@@ -46,11 +46,6 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.Date;
 
-import javax.faces.event.ActionEvent;
-
-import org.primefaces.event.DateSelectEvent;
-import org.primefaces.event.ScheduleEntryMoveEvent;
-import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.ScheduleEntrySelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -96,11 +91,14 @@ public class CalendarioAtividadesController extends AbstractController {
 		CriterioAgendamento criterioBusca = new CriterioAgendamento();
 		criterioBusca.setInicio(new Date());
 		try {
+			DefaultScheduleEvent evento = new DefaultScheduleEvent();
 			for (Agenda agenda : service.buscarPorCriterioAgendamento(criterioBusca)) {
-				if (agenda.getFim() == null)
-					calendario.addEvent(new DefaultScheduleEvent(agenda.getDescricao(), agenda.getInicio(), agenda.getInicio(), agenda.isDiaInteiro()));
+				if (agenda.getFim() == null) 
+					evento = new DefaultScheduleEvent(agenda.getDescricao(), agenda.getInicio(), agenda.getInicio(), agenda.isDiaInteiro());										
 				else
-					calendario.addEvent(new DefaultScheduleEvent(agenda.getDescricao(), agenda.getInicio(), agenda.getFim(), agenda.isDiaInteiro()));
+					evento = new DefaultScheduleEvent(agenda.getDescricao(), agenda.getInicio(), agenda.getFim(), agenda.isDiaInteiro());				
+				evento.setData(agenda);									
+				calendario.addEvent(evento);				
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -108,31 +106,11 @@ public class CalendarioAtividadesController extends AbstractController {
 		return "/pages/CalendarioAtividades/listCalendarioAtividades";
 	}
 	
-	public void onDateSelect(DateSelectEvent selectEvent) {  
-        event = new DefaultScheduleEvent("", selectEvent.getDate(), selectEvent.getDate());  
-    }
-	
 	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {  
-        event = selectEvent.getScheduleEvent(); 
+        event = selectEvent.getScheduleEvent();
+        System.out.println(event.getId());
     }
-	
-	public void onEventMove(ScheduleEntryMoveEvent event) {  
-          
-    }  
-      
-    public void onEventResize(ScheduleEntryResizeEvent event) {  
-          
-    } 
-
-    public void addEvent(ActionEvent actionEvent) {  
-        if(event.getId() == null)  
-            calendario.addEvent(event);  
-        else  
-            calendario.updateEvent(event);  
-          
-        event = new DefaultScheduleEvent();  
-    } 
-    
+	    
 	public ScheduleModel getCalendario() {
 		return calendario;
 	}

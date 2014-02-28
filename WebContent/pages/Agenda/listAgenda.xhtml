@@ -107,14 +107,14 @@
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
 	  		&nbsp;&nbsp;&nbsp;			
-			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.tipoAgendamento != 'PREVISAO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
   		</p:column>
      </ui:define>
 
 	<ui:define name="outras_opcoes">
-		<h:commandLink value="Ir para o modo normal >>>>" action="#{calendarioAtividadesMB.startUp}"/>
+		<h:commandLink value="Ir para o calendário >>>>" action="#{calendarioAtividadesMB.startUp}"/>
 	</ui:define>
 </ui:composition>
 </html>
