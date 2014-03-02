@@ -49,7 +49,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: mysql06.kinghost.net
--- Tempo de Geração: Dez 22, 2013 as 10:19 PM
+-- Tempo de Geração: Mar 01, 2014 as 09:46 PM
 -- Versão do Servidor: 5.1.70
 -- Versão do PHP: 5.2.9
 
@@ -62,7 +62,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Banco de Dados: `hslife02`
+-- Banco de Dados: `hslife01`
 --
 
 -- --------------------------------------------------------
@@ -603,6 +603,36 @@ CREATE TABLE IF NOT EXISTS `opcaosistema` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `panoramalancamentocartao`
+--
+
+CREATE TABLE IF NOT EXISTS `panoramalancamentocartao` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ano` int(11) DEFAULT NULL,
+  `descricao` varchar(255) NOT NULL,
+  `janeiro` decimal(18,2) NOT NULL,
+  `fevereiro` decimal(18,2) NOT NULL,
+  `marco` decimal(18,2) NOT NULL,
+  `abril` decimal(18,2) NOT NULL,
+  `maio` decimal(18,2) NOT NULL,
+  `junho` decimal(18,2) NOT NULL,
+  `julho` decimal(18,2) NOT NULL,
+  `agosto` decimal(18,2) NOT NULL,
+  `setembro` decimal(18,2) NOT NULL,
+  `outubro` decimal(18,2) NOT NULL,
+  `novembro` decimal(18,2) NOT NULL,
+  `dezembro` decimal(18,2) NOT NULL,
+  `idConta` bigint(20) NOT NULL,
+  `idMoeda` bigint(20) NOT NULL,
+  `indice` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_conta_panoramalancamentocartao` (`idConta`),
+  KEY `fk_moeda_panoramalancamentocartao` (`idMoeda`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `previsaolancamentoconta`
 --
 
@@ -750,8 +780,8 @@ ALTER TABLE `despensa`
 -- Restrições para a tabela `detalhefatura`
 --
 ALTER TABLE `detalhefatura`
-  ADD CONSTRAINT `fk_lancamentoconta_detalhefatura` FOREIGN KEY (`idLancamento`) REFERENCES `lancamentoconta` (`id`),
-  ADD CONSTRAINT `fk_faturacartao_detalhefatura` FOREIGN KEY (`idFaturaCartao`) REFERENCES `faturacartao` (`id`);
+  ADD CONSTRAINT `fk_faturacartao_detalhefatura` FOREIGN KEY (`idFaturaCartao`) REFERENCES `faturacartao` (`id`),
+  ADD CONSTRAINT `fk_lancamentoconta_detalhefatura` FOREIGN KEY (`idLancamento`) REFERENCES `lancamentoconta` (`id`);
 
 --
 -- Restrições para a tabela `documento`
@@ -880,7 +910,7 @@ INSERT INTO `usuario` (`ativo`, `dataCriacao`, `login`, `nome`, `senha`, `tipoUs
 --
 
 INSERT INTO `versao` (`versao`, `ativo`) VALUES
-('DEZ2013', 1);
+('DEZ2013.4', 1);
 
 --
 -- Extraindo dados da tabela `categoria`
