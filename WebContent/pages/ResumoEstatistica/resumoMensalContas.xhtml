@@ -75,6 +75,16 @@
 	
 	<ui:define name="tabela">
 	
+		<script type="text/javascript">
+	    function ext1() {
+	        this.cfg.legend= {
+	             show: true,
+	             location: 's',
+	             placement: 'outsideGrid'
+	           }   
+	    }
+		</script>
+	
 		<p:tabView>
 			<p:tab title="Categoria">
 				<p:dataTable width="100%" value="#{managedBean.resumoMensal.categorias}" var="item">
@@ -161,6 +171,18 @@
 						</h:outputText>						
 					</p:column>
 				</p:dataTable>
+			</p:tab>
+			<p:tab title="Receitas">
+				<p:pieChart id="pieCategoriaCredito" value="#{managedBean.pieCategoriaCredito}" legendPosition="s" title="Receitas do período" showDataLabels="true" diameter="450" style="#{managedBean.styleCorrectionCredito}"
+					extender="ext1" />								
+			</p:tab>
+			<p:tab title="Despesas">
+				<p:pieChart id="pieCategoriaDebito" value="#{managedBean.pieCategoriaDebito}" legendPosition="s" title="Despesas do período" showDataLabels="true" diameter="450" style="#{managedBean.styleCorrectionDebito}"
+					extender="ext1" />
+			</p:tab>
+			<p:tab title="Comparativo">
+				<p:barChart id="barComparativo" value="#{managedBean.barComparativo}" legendPosition="s" title="Comparativo Receitas X Despesas" min="0" max="#{managedBean.maxValueBarComparativo}" style="height:600px" 
+					extender="ext1" showDataTip="false"/> 
 			</p:tab>
 		</p:tabView>
 	

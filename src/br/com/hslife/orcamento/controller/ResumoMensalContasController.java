@@ -44,17 +44,23 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
@@ -89,32 +95,101 @@ public class ResumoMensalContasController extends AbstractController {
 	private FechamentoPeriodo fechamentoSelecionado;
 	private ResumoMensalContas resumoMensal;
 	
+	private PieChartModel pieCategoriaCredito;
+	private PieChartModel pieCategoriaDebito;
+	
+	private CartesianChartModel barComparativo = new CartesianChartModel();  
+	
+	private Integer maxValueBarComparativo = 100;
+	
+	private String styleCorrectionCredito = "width:820px;height:600px";
+	private String styleCorrectionDebito = "width:820px;height:600px";
+	
 	public ResumoMensalContasController() {
+		// Inicializa os gráficos com um valor default
+		pieCategoriaCredito = new PieChartModel();
+		pieCategoriaCredito.set("Sem dados", 1);
+		
+		pieCategoriaDebito = new PieChartModel();
+		pieCategoriaDebito.set("Sem dados", 1);
+		
 		moduleTitle = "Resumo Mensal das Contas";
 	}
 
 	@Override
-	protected void initializeEntity() {
-		// TODO Auto-generated method stub
-		//contasAtivas = new ArrayList<>();
-		///contasInativas = new ArrayList<>();
-		///saldoTotalContas = 0;
-	}
+	protected void initializeEntity() {}
 	
 	@Override
-	public String startUp() {
-		//initializeEntity();
-		//this.getListaSaldoAtualConta(new Object());
+	public String startUp() {		
 		return "/pages/ResumoEstatistica/resumoMensalContas";
 	}
 	
 	public String find() {
 		try {
 			resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
+			this.gerarGraficoCreditoDebito();
+			this.gerarGraficoComparativo();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	private void gerarGraficoCreditoDebito() {
+		pieCategoriaCredito = new PieChartModel();
+		pieCategoriaDebito = new PieChartModel();
+		int pieSizeC = 1; // POG para realizar a correção no style do Pie Chart >:(
+		int pieSizeD = 1; // POG para realizar a correção no style do Pie Chart >:(
+		
+		for (Categoria categoria : resumoMensal.getCategorias()) {
+			if (!categoria.getDescricao().equals("Saldo atual")) {
+				if (categoria.getTipoCategoria().equals(TipoCategoria.CREDITO)) {
+					pieCategoriaCredito.set(categoria.getDescricao(), categoria.getSaldoPago());
+					pieSizeC++;
+				} else {
+					pieCategoriaDebito.set(categoria.getDescricao(), categoria.getSaldoPago());
+					pieSizeD++;
+				}
+			}			
+		}
+		
+		// POG para realizar a correção no style do Pie Chart >:(
+		styleCorrectionCredito = "width:820px;height:" + (600 + (30 * pieSizeC)) + "px";
+		styleCorrectionDebito = "width:820px;height:" + (600 + (30 * pieSizeD)) + "px";
+	}
+	
+	private void gerarGraficoComparativo() {
+		barComparativo = new CartesianChartModel();  
+		double receitas = 0;
+		double despesas = 0;
+		
+		for (Categoria categoria : resumoMensal.getCategorias()) {
+			if (!categoria.getDescricao().equals("Saldo atual")) {
+				if (categoria.getTipoCategoria().equals(TipoCategoria.CREDITO)) {
+					receitas += categoria.getSaldoPago();
+				} else {
+					despesas += categoria.getSaldoPago();
+				}
+			}			
+		}
+		
+		ChartSeries receitaSeries = new ChartSeries();
+		receitaSeries.setLabel("Receitas");		
+		receitaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(receitas));
+		
+		
+		ChartSeries despesaSeries = new ChartSeries();
+		despesaSeries.setLabel("Despesas");
+		despesaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(despesas));
+		
+        barComparativo.addSeries(receitaSeries);  
+        barComparativo.addSeries(despesaSeries);
+        
+        if (Math.abs(receitas) >= Math.abs(despesas)) {
+        	maxValueBarComparativo = new BigDecimal(Math.abs(receitas)).intValue();
+        } else {
+        	maxValueBarComparativo = new BigDecimal(Math.abs(despesas)).intValue();
+        }
 	}
 	
 	@SuppressWarnings("null")
@@ -157,23 +232,6 @@ public class ResumoMensalContasController extends AbstractController {
 	
 	public void atualizaListaFechamentoPeriodo() {
 		this.getListaFechamentoPeriodo();
-	}
-	
-	public void getListaSaldoAtualConta(Object document) {
-	/*	try {
-			List<SaldoAtualConta> saldos = new ArrayList<>();
-			saldos = getService().gerarSaldoAtualContas(lancamentoAgendado, getUsuarioLogado());
-			for (SaldoAtualConta saldo : saldos) {
-				if (saldo.isAtivo()) {
-					contasAtivas.add(saldo);
-					saldoTotalContas += saldo.getSaldoAtual();
-				} else {
-					contasInativas.add(saldo);
-				}
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}*/		
 	}
 
 	public boolean isLancamentoAgendado() {
@@ -243,5 +301,53 @@ public class ResumoMensalContasController extends AbstractController {
 
 	public void setFechamentoSelecionado(FechamentoPeriodo fechamentoSelecionado) {
 		this.fechamentoSelecionado = fechamentoSelecionado;
+	}
+
+	public PieChartModel getPieCategoriaCredito() {
+		return pieCategoriaCredito;
+	}
+
+	public void setPieCategoriaCredito(PieChartModel pieCategoriaCredito) {
+		this.pieCategoriaCredito = pieCategoriaCredito;
+	}
+
+	public PieChartModel getPieCategoriaDebito() {
+		return pieCategoriaDebito;
+	}
+
+	public void setPieCategoriaDebito(PieChartModel pieCategoriaDebito) {
+		this.pieCategoriaDebito = pieCategoriaDebito;
+	}
+
+	public String getStyleCorrectionCredito() {
+		return styleCorrectionCredito;
+	}
+
+	public void setStyleCorrectionCredito(String styleCorrectionCredito) {
+		this.styleCorrectionCredito = styleCorrectionCredito;
+	}
+
+	public String getStyleCorrectionDebito() {
+		return styleCorrectionDebito;
+	}
+
+	public void setStyleCorrectionDebito(String styleCorrectionDebito) {
+		this.styleCorrectionDebito = styleCorrectionDebito;
+	}
+
+	public CartesianChartModel getBarComparativo() {
+		return barComparativo;
+	}
+
+	public void setBarComparativo(CartesianChartModel barComparativo) {
+		this.barComparativo = barComparativo;
+	}
+
+	public Integer getMaxValueBarComparativo() {
+		return maxValueBarComparativo;
+	}
+
+	public void setMaxValueBarComparativo(Integer maxValueBarComparativo) {
+		this.maxValueBarComparativo = maxValueBarComparativo;
 	}
 }
