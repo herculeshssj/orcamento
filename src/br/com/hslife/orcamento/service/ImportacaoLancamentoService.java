@@ -70,6 +70,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
+import br.com.hslife.orcamento.model.InfoOFX;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -272,6 +273,37 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		}
 	}
 	
+	@Override
+	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo) throws BusinessException {
+		InfoOFX info = new InfoOFX();
+		try {
+			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
+			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));				
+			SignonResponse sr = re.getSignonResponse();			
+			MessageSetType type = MessageSetType.banking;
+			ResponseMessageSet message = re.getMessageSet(type);			
+			if (message != null) {
+				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
+			    for (BankStatementResponseTransaction b : bank) {
+			    	info.setBancoID(b.getMessage().getAccount().getBankId());
+			    	info.setConta(b.getMessage().getAccount().getAccountNumber());
+			    	info.setAgencia(b.getMessage().getAccount().getBranchId());
+			    	info.setTipoConta(b.getMessage().getAccount().getAccountType().name());
+			        info.setBalancoFinal(b.getMessage().getLedgerBalance().getAmount());
+			        info.setDataArquivo(b.getMessage().getLedgerBalance().getAsOfDate());
+			        info.setMoedaPadrao(b.getMessage().getCurrencyCode());
+			        info.setQuantidadeTransacao(b.getMessage().getTransactionList().getTransactions().size());
+			        info.setInicioTransacoes(b.getMessage().getTransactionList().getStart());
+			        info.setFimTransacoes(b.getMessage().getTransactionList().getEnd());			        
+			   }
+			} 
+		}catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		return info;
+	}
+	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) throws BusinessException {
 		try {
@@ -290,7 +322,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 			if (message != null) {
 				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
-			    for (BankStatementResponseTransaction b : bank) {
+			    for (BankStatementResponseTransaction b : bank) {			    	
 			    	System.out.println("bank ID: " + b.getMessage().getAccount().getBankId());
 			    	System.out.println("cc: " + b.getMessage().getAccount().getAccountNumber());
 			        System.out.println("ag: " + b.getMessage().getAccount().getBranchId());
