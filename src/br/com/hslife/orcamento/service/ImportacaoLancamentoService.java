@@ -107,85 +107,13 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		return lancamentoImportadoRepository.findByID(id);
 	}
 	
-	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	@Override
 	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
-		try {
-			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
-			
-			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
-			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
-				
-			//objeto contendo informações como instituição financeira, idioma, data da conta.
-			SignonResponse sr = re.getSignonResponse();
-	
-			//como não existe esse get "BankStatementResponse bsr = re.getBankStatementResponse();"
-			//fiz esse codigo para capturar a lista de transações
-			MessageSetType type = MessageSetType.banking;
-			ResponseMessageSet message = re.getMessageSet(type);
-	
-			if (message != null) {
-				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
-			    for (BankStatementResponseTransaction b : bank) {
-			    	System.out.println("bank ID: " + b.getMessage().getAccount().getBankId());
-			    	System.out.println("cc: " + b.getMessage().getAccount().getAccountNumber());
-			        System.out.println("ag: " + b.getMessage().getAccount().getBranchId());
-			        System.out.println("tipo da conta: " + b.getMessage().getAccount().getAccountType());
-			        System.out.println("balanço final: " + b.getMessage().getLedgerBalance().getAmount());
-			        System.out.println("dataDoArquivo: " + b.getMessage().getLedgerBalance().getAsOfDate());
-			        
-			        /* Aqui começa meu código de validação de conta */
-			        
-			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
-			        	throw new BusinessException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
-			        }
-			        if (!conta.getAgencia().equals(b.getMessage().getAccount().getBranchId())) {		        	
-			        	throw new BusinessException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
-			        }		        
-			        if (!conta.getContaCorrente().equals(b.getMessage().getAccount().getAccountNumber())) {
-			        	throw new BusinessException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
-			        }
-			        if (!conta.getTipoConta().equals(TipoConta.CORRENTE)) {
-			        	throw new BusinessException("Somente contas correntes são aceitas!");
-			        }
-			        
-			        /* Término do código do meu código de validação de conta */
-			        
-			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();
-			        System.out.println("TRANSAÇÕES\n");
-			        for (Transaction transaction : list) {
-			        	System.out.println("tipo: " + transaction.getTransactionType().name());
-			            System.out.println("id: " + transaction.getId());
-			            System.out.println("data: " + transaction.getDatePosted());
-			            System.out.println("num. doc.: " + transaction.getReferenceNumber());
-			            System.out.println("check number: " + transaction.getCheckNumber());
-			            System.out.println("valor: " + transaction.getAmount());
-			            System.out.println("descricao: " + transaction.getMemo());
-			            System.out.println("");
-			            
-			            /* Aqui começa meu código */
-			            
-			            if (this.lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId())) == null) {
-			            
-			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
-			            	if (transaction.getDatePosted().after(conta.getDataAbertura())) {
-			            		LancamentoImportado li = new LancamentoImportado();
-			            		li.setConta(conta);
-			            		li.setData(transaction.getDatePosted());
-			            		li.setDocumento(transaction.getReferenceNumber());
-			            		li.setHash(Util.MD5(transaction.getId()));
-			            		li.setHistorico(transaction.getMemo());
-			            		li.setValor(transaction.getAmount());
-				            
-			            		lancamentoImportadoRepository.save(li);
-			            	}
-			            }
-			            
-			            /* Fim do meu código */
-			       }
-			   }
-			} 
-		}catch (Exception e) {
-			throw new BusinessException(e);
+		switch (conta.getTipoConta()) {
+			case CORRENTE : this.processarArquivoImportadoContaCorrente(arquivo, conta); break;
+			case POUPANCA : this.processarArquivoImportadoContaPoupanca(arquivo, conta); break;
+			case CARTAO : this.processarArquivoImportadoCartaoCredito(arquivo, conta); break;
+			default : throw new BusinessException("Opção inválida para conta!");
 		}
 	}
 
@@ -342,5 +270,174 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			// Exclui o lançamento importado
 			lancamentoImportadoRepository.delete(entity);
 		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) throws BusinessException {
+		try {
+			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
+			
+			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
+			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
+				
+			//objeto contendo informações como instituição financeira, idioma, data da conta.
+			SignonResponse sr = re.getSignonResponse();
+	
+			//como não existe esse get "BankStatementResponse bsr = re.getBankStatementResponse();"
+			//fiz esse codigo para capturar a lista de transações
+			MessageSetType type = MessageSetType.banking;
+			ResponseMessageSet message = re.getMessageSet(type);
+	
+			if (message != null) {
+				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
+			    for (BankStatementResponseTransaction b : bank) {
+			    	System.out.println("bank ID: " + b.getMessage().getAccount().getBankId());
+			    	System.out.println("cc: " + b.getMessage().getAccount().getAccountNumber());
+			        System.out.println("ag: " + b.getMessage().getAccount().getBranchId());
+			        System.out.println("tipo da conta: " + b.getMessage().getAccount().getAccountType());
+			        System.out.println("balanço final: " + b.getMessage().getLedgerBalance().getAmount());
+			        System.out.println("dataDoArquivo: " + b.getMessage().getLedgerBalance().getAsOfDate());
+			        
+			        /* Aqui começa meu código de validação de conta */
+			        
+			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
+			        	throw new BusinessException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
+			        }
+			        if (!conta.getAgencia().equals(b.getMessage().getAccount().getBranchId())) {		        	
+			        	throw new BusinessException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
+			        }		        
+			        if (!conta.getContaCorrente().equals(b.getMessage().getAccount().getAccountNumber())) {
+			        	throw new BusinessException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
+			        }
+			        if (!conta.getTipoConta().equals(TipoConta.CORRENTE)) {
+			        	throw new BusinessException("Somente contas correntes são aceitas!");
+			        }
+			        
+			        /* Término do código do meu código de validação de conta */
+			        
+			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();
+			        System.out.println("TRANSAÇÕES\n");
+			        for (Transaction transaction : list) {
+			        	System.out.println("tipo: " + transaction.getTransactionType().name());
+			            System.out.println("id: " + transaction.getId());
+			            System.out.println("data: " + transaction.getDatePosted());
+			            System.out.println("num. doc.: " + transaction.getReferenceNumber());
+			            System.out.println("check number: " + transaction.getCheckNumber());
+			            System.out.println("valor: " + transaction.getAmount());
+			            System.out.println("descricao: " + transaction.getMemo());
+			            System.out.println("");
+			            
+			            /* Aqui começa meu código */
+			            
+			            if (this.lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId())) == null) {
+			            
+			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
+			            	if (transaction.getDatePosted().after(conta.getDataAbertura())) {
+			            		LancamentoImportado li = new LancamentoImportado();
+			            		li.setConta(conta);
+			            		li.setData(transaction.getDatePosted());
+			            		li.setDocumento(transaction.getReferenceNumber());
+			            		li.setHash(Util.MD5(transaction.getId()));
+			            		li.setHistorico(transaction.getMemo());
+			            		li.setValor(transaction.getAmount());
+				            
+			            		lancamentoImportadoRepository.save(li);
+			            	}
+			            }
+			            
+			            /* Fim do meu código */
+			       }
+			   }
+			} 
+		}catch (Exception e) {
+			throw new BusinessException(e);
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) throws BusinessException {
+		try {
+			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
+			
+			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
+			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
+				
+			//objeto contendo informações como instituição financeira, idioma, data da conta.
+			SignonResponse sr = re.getSignonResponse();
+	
+			//como não existe esse get "BankStatementResponse bsr = re.getBankStatementResponse();"
+			//fiz esse codigo para capturar a lista de transações
+			MessageSetType type = MessageSetType.banking;
+			ResponseMessageSet message = re.getMessageSet(type);
+	
+			if (message != null) {
+				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
+			    for (BankStatementResponseTransaction b : bank) {
+			    	System.out.println("bank ID: " + b.getMessage().getAccount().getBankId());
+			    	System.out.println("cc: " + b.getMessage().getAccount().getAccountNumber());
+			        System.out.println("ag: " + b.getMessage().getAccount().getBranchId());
+			        System.out.println("tipo da conta: " + b.getMessage().getAccount().getAccountType());
+			        System.out.println("balanço final: " + b.getMessage().getLedgerBalance().getAmount());
+			        System.out.println("dataDoArquivo: " + b.getMessage().getLedgerBalance().getAsOfDate());
+			        
+			        /* Aqui começa meu código de validação de conta */
+			        
+			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
+			        	throw new BusinessException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
+			        }
+			        if (!conta.getAgencia().equals(b.getMessage().getAccount().getBranchId())) {		        	
+			        	throw new BusinessException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
+			        }		        
+			        if (!conta.getContaCorrente().equals(b.getMessage().getAccount().getAccountNumber())) {
+			        	throw new BusinessException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
+			        }
+			        if (!conta.getTipoConta().equals(TipoConta.POUPANCA)) {
+			        	throw new BusinessException("Somente contas correntes são aceitas!");
+			        }
+			        
+			        /* Término do código do meu código de validação de conta */
+			        
+			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();
+			        System.out.println("TRANSAÇÕES\n");
+			        for (Transaction transaction : list) {
+			        	System.out.println("tipo: " + transaction.getTransactionType().name());
+			            System.out.println("id: " + transaction.getId());
+			            System.out.println("data: " + transaction.getDatePosted());
+			            System.out.println("num. doc.: " + transaction.getReferenceNumber());
+			            System.out.println("check number: " + transaction.getCheckNumber());
+			            System.out.println("valor: " + transaction.getAmount());
+			            System.out.println("descricao: " + transaction.getMemo());
+			            System.out.println("");
+			            
+			            /* Aqui começa meu código */
+			            
+			            if (this.lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId())) == null) {
+			            
+			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
+			            	if (transaction.getDatePosted().after(conta.getDataAbertura())) {
+			            		LancamentoImportado li = new LancamentoImportado();
+			            		li.setConta(conta);
+			            		li.setData(transaction.getDatePosted());
+			            		li.setDocumento(transaction.getReferenceNumber());
+			            		li.setHash(Util.MD5(transaction.getId()));
+			            		li.setHistorico(transaction.getMemo());
+			            		li.setValor(transaction.getAmount());
+				            
+			            		lancamentoImportadoRepository.save(li);
+			            	}
+			            }
+			            
+			            /* Fim do meu código */
+			       }
+			   }
+			} 
+		}catch (Exception e) {
+			throw new BusinessException(e);
+		}
+	}
+
+	//@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) throws BusinessException {
+		
 	}
 }
