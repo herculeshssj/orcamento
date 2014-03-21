@@ -62,6 +62,7 @@ public class IdentidadeRepository extends AbstractCRUDRepository<Identidade> {
 	}
 	
 	public Identidade findByUsuarioAndTipoIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Identidade.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("tipoIdentidade", tipoIdentidade));
@@ -70,6 +71,7 @@ public class IdentidadeRepository extends AbstractCRUDRepository<Identidade> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Identidade> findByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Identidade.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));		
 		return criteria.list();

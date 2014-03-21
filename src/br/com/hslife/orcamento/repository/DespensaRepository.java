@@ -64,6 +64,7 @@ public class DespensaRepository extends AbstractCRUDRepository<Despensa>{
 
 	@SuppressWarnings("unchecked")
 	public List<Despensa> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Despensa.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -72,6 +73,7 @@ public class DespensaRepository extends AbstractCRUDRepository<Despensa>{
 	
 	@SuppressWarnings("unchecked")
 	public List<Despensa> findAllByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Despensa.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();

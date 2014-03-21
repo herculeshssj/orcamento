@@ -67,6 +67,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Favorecido> findByNomeAndUsuario(String nome, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -75,6 +76,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Favorecido> findByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("nome")).list();
@@ -82,6 +84,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Favorecido> findEnabledByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -114,6 +117,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public Favorecido findDefaultByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("padrao", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -122,64 +126,5 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 			return resultado.get(0);
 		}
 		return null;
-	}
-	
+	}	
 }
-	/*
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
-	
-	public void save(Favorecido entity) {
-		getSession().persist(entity);
-	}
-	
-	public void update(Favorecido entity) {
-		getSession().merge(entity);
-	}
-	
-	public void delete(Favorecido entity) {
-		getSession().delete(entity);
-	}
-	
-	public Favorecido findById(Long id) {
-		return (Favorecido)getSession().get(Favorecido.class, id);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findAll() {
-		return getSession().createCriteria(Favorecido.class).addOrder(Order.asc("nome")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findByUsuario(Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Favorecido.class);
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return criteria.addOrder(Order.asc("nome")).list();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findByNomeAndUsuario(String nome, Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Favorecido.class);
-		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		if (!usuario.getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
-			criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		}		
-		return criteria.addOrder(Order.asc("nome")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findByNome(String nome) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Favorecido.class);
-		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		return criteria.addOrder(Order.asc("nome")).list();
-	}
-	*?
-}*/

@@ -63,6 +63,7 @@ public class MoedaRepository extends AbstractCRUDRepository<Moeda> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Moeda> findByNomeAndUsuario(String nome, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Moeda.class);
 		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));		
@@ -71,12 +72,14 @@ public class MoedaRepository extends AbstractCRUDRepository<Moeda> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Moeda> findByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Moeda.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.list();
 	}
 	
 	public Moeda findDefaultByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Moeda.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("padrao", true));

@@ -56,6 +56,7 @@ import br.com.hslife.orcamento.entity.Versao;
 public class VersaoRepository extends AbstractRepository {
 	
 	public Versao findActived() {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Versao.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		return (Versao)criteria.setMaxResults(1).uniqueResult();

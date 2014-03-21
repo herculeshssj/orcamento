@@ -68,6 +68,7 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 	
 	@SuppressWarnings("unchecked")
 	public List<CartaoCredito> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CartaoCredito.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -76,6 +77,7 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 	
 	@SuppressWarnings("unchecked")
 	public List<CartaoCredito> findByDataValidade(Date data) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CartaoCredito.class);		
 		criteria.add(Restrictions.le("validade", data));
 		return criteria.list();
@@ -83,6 +85,7 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 	
 	@SuppressWarnings("unchecked")
 	public List<CartaoCredito> findByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CartaoCredito.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -90,6 +93,7 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 	
 	@SuppressWarnings("unchecked")
 	public List<CartaoCredito> findOnlyCartaoTipoCreditoByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CartaoCredito.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("tipoCartao", TipoCartao.CREDITO));
@@ -117,6 +121,7 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 	}
 	
 	public boolean isSubstituto(CartaoCredito cartaoCredito) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CartaoCredito.class);
 		criteria.add(Restrictions.eq("cartaoSubstituto.id", cartaoCredito.getId()));
 		if (criteria.list() != null && criteria.list().size() != 0) {

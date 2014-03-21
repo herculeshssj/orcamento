@@ -66,6 +66,7 @@ public class ItemDespensaRepository extends AbstractCRUDRepository<ItemDespensa>
 	
 	@Override
 	public ItemDespensa findById(Long id) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(ItemDespensa.class).setFetchMode("movimentacao", FetchMode.JOIN);
 		criteria.add(Restrictions.eq("id", id));
 		return (ItemDespensa)criteria.uniqueResult();
@@ -92,6 +93,7 @@ public class ItemDespensaRepository extends AbstractCRUDRepository<ItemDespensa>
 	
 	@SuppressWarnings("unchecked")
 	public List<ItemDespensa> findByDespensa(Despensa despensa) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(ItemDespensa.class);
 		criteria.add(Restrictions.eq("despensa.id", despensa.getId()));
 		return criteria.list();
@@ -99,107 +101,9 @@ public class ItemDespensaRepository extends AbstractCRUDRepository<ItemDespensa>
 	
 	@SuppressWarnings("unchecked")
 	public List<ItemDespensa> findByUnidadeMedida(UnidadeMedida unidadeMedida) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(ItemDespensa.class);
 		criteria.add(Restrictions.eq("unidadeMedida.id", unidadeMedida.getId()));
 		return criteria.list();
 	}
-	
-	/*
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
-	
-	public void save(ItemDespensa entity) {
-		getSession().persist(entity);
-	}
-	
-	public void update(ItemDespensa entity) {
-		getSession().merge(entity);
-	}
-	
-	public void delete(ItemDespensa entity) {
-		getSession().delete(entity);
-	}
-	
-	public ItemDespensa findById(Long id) {
-		return (ItemDespensa)getSession().get(ItemDespensa.class, id);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<ItemDespensa> findAll() {
-		return getSession().createCriteria(ItemDespensa.class).addOrder(Order.asc("descricao")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<ItemDespensa> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
-		Criteria criteria = getSession().createCriteria(Despensa.class);
-		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
-		if (!usuario.getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
-			criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		}
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<ItemDespensa> findByUnidadeMedida(UnidadeMedida unidadeMedida) {
-		Criteria criteria = getSession().createCriteria(ItemDespensa.class);
-		criteria.add(Restrictions.eq("unidadeMedida.id", unidadeMedida.getId()));		
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<ItemDespensa> findAllEnabledByUsuario(Usuario usuario) {
-		Criteria criteria = getSession().createCriteria(ItemDespensa.class);
-		criteria.add(Restrictions.eq("arquivado", false));
-		if (!usuario.getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
-			criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		}
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<CompraConsumoOperacaoDespensa> findCompraConsumoOperacaoDespensaByDataInicioFim(OperacaoDespensa operacao, Date dataInicio, Date dataFim) {
-		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("select d.descricao as item, sum(h.quantidade) as quantidade from despensa d ");
-		sqlQuery.append("inner join despensa_historicodespensa dh on dh.despensa_id = d.id ");
-		sqlQuery.append("inner join historicodespensa h on h.id = dh.historico_id where d.arquivado = false ");
-		sqlQuery.append("and h.operacaoDespensa = '" + operacao.toString() +  "' ");
-		if (dataInicio != null) {
-			sqlQuery.append("and h.dataOperacao >= '" + Util.formataDataHora(dataInicio, Util.DATABASE) + "' ");
-		}
-		if (dataFim != null) {
-			sqlQuery.append("and h.dataOperacao <= '" + Util.formataDataHora(dataFim, Util.DATABASE) + "' ");
-		}
-		sqlQuery.append("group by d.descricao");
-		
-		Query query = getSession().createSQLQuery(sqlQuery.toString()).addEntity(CompraConsumoOperacaoDespensa.class);
-		return query.list();		
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<CompraConsumoItemDespensa> findCompraConsumoItemDespensaByDataInicioFim(ItemDespensa item, Date dataInicio, Date dataFim) {
-		StringBuilder sqlQuery = new StringBuilder();
-		sqlQuery.append("select h.id, h.dataOperacao as data, h.quantidade as quantidade, h.operacaoDespensa as operacao, d.descricao as item from despensa d ");
-		sqlQuery.append("inner join despensa_historicodespensa dh on dh.despensa_id = d.id ");
-		sqlQuery.append("inner join historicodespensa h on h.id = dh.historico_id where d.arquivado = false ");
-		sqlQuery.append("and d.id = :idItemDespensa ");
-		if (dataInicio != null) {
-			sqlQuery.append("and h.dataOperacao >= '" + Util.formataDataHora(dataInicio, Util.DATABASE) + "' ");
-		}
-		if (dataFim != null) {
-			sqlQuery.append("and h.dataOperacao <= '" + Util.formataDataHora(dataFim, Util.DATABASE) + "' ");
-		}
-		Query query = getSession().createSQLQuery(sqlQuery.toString()).addEntity(CompraConsumoItemDespensa.class);
-		query.setLong("idItemDespensa", item.getId());		
-		return query.list();
-		
-	}
-	*/
 }

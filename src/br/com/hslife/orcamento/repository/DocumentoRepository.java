@@ -68,6 +68,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	
 	@Override
 	public Documento findById(Long id) {
+		// TODO migrar para HQL
 		 Criteria criteria = getSession().createCriteria(Documento.class).setFetchMode("arquivo", FetchMode.JOIN);
 		 criteria.add(Restrictions.eq("id", id));
 		 return (Documento)criteria.uniqueResult();
@@ -75,6 +76,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByNomeAndUsuario(String nome, Usuario usuario) throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.ilike("documento.nome", nome, MatchMode.ANYWHERE));
@@ -84,6 +86,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByNomeAndCategoriaDocumentoByUsuario(String nome, CategoriaDocumento categoriaDocumento, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.ilike("documento.nome", nome, MatchMode.ANYWHERE));
@@ -94,6 +97,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByUsuario(Usuario usuario) throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));
@@ -102,6 +106,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByCategoriaDocumento(CategoriaDocumento categoriaDocumento) throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Documento.class);
 		criteria.add(Restrictions.eq("categoriaDocumento.id", categoriaDocumento.getId()));				
 		return criteria.addOrder(Order.asc("nome")).list();
@@ -109,6 +114,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByCategoriaDocumentoAndUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.eq("documento.categoriaDocumento.id", categoriaDocumento.getId()));

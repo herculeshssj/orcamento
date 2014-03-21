@@ -62,6 +62,7 @@ public class EnderecoRepository extends AbstractCRUDRepository<Endereco> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Endereco> findByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Endereco.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.list();

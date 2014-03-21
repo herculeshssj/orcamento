@@ -65,6 +65,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findByConta(Conta conta) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(BuscaSalva.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -72,6 +73,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findAllByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and not c.tipoConta = 'CARTAO' order by b.descricao asc";
 		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
 		return query.list();
@@ -79,6 +81,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findAllEnabledContaByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and c.ativo = true and not c.tipoConta = 'CARTAO' order by b.descricao asc";
 		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
 		return query.list();
@@ -86,6 +89,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findAllByContaAndUsuario(Conta conta, Usuario usuario) {
+		// TODO migrar para HQL
 		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta and c.id = :idConta where c.idUsuario = :idUsuario order by b.descricao asc";
 		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId()).setLong("idConta", conta.getId());
 		return query.list();
@@ -93,6 +97,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findAllEnabledContaByContaAndUsuario(Conta conta, Usuario usuario) {
+		// TODO migrar para HQL
 		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta and c.id = :idConta where c.idUsuario = :idUsuario and c.ativo = true order by b.descricao asc";
 		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId()).setLong("idConta", conta.getId());
 		return query.list();
@@ -100,6 +105,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findAllContaCartaoByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and c.tipoConta = 'CARTAO' order by b.descricao asc";
 		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
 		return query.list();
@@ -107,6 +113,7 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findAllEnabledContaCartaoByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and c.tipoConta = 'CARTAO' and c.ativo = true order by b.descricao asc";
 		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
 		return query.list();

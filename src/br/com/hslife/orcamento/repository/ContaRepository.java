@@ -69,6 +69,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAll() throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -76,6 +77,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findByBanco(Long idBanco) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("banco.id", idBanco));
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
@@ -84,6 +86,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findByDescricao(String descricao) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
@@ -92,6 +95,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findByUsuario(Long idUsuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("usuario.id", idUsuario));
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
@@ -100,6 +104,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAllAtivos() throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
@@ -108,6 +113,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAllAtivosByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		if (!usuario.getLogin().equals("admin")) {
@@ -119,6 +125,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		if (!usuario.getLogin().equals("admin")) {
@@ -130,6 +137,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findByBancoAndUsuario(Banco banco, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("banco.id", banco.getId()));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -139,6 +147,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findByTipoContaAndUsuario(TipoConta tipoConta, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("tipoConta", tipoConta));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -148,6 +157,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findEnabledByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -157,6 +167,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findOnlyTipoCartaoEnabledByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -166,6 +177,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findOnlyTipoCartaoByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("tipoConta", TipoConta.CARTAO));
@@ -173,6 +185,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	}
 	
 	public Conta findByCartaoCredito(CartaoCredito cartaoCredito) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("cartaoCredito.id", cartaoCredito.getId()));
 		return (Conta)criteria.uniqueResult();
@@ -197,6 +210,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	}
 	
 	public boolean existsLinkagesCartao(Conta conta) {
+		// TODO implementar!!!!!!
 		boolean result = false;
 		/*
 		BigInteger resultFechamentoPeriodo = (BigInteger)getSession().createSQLQuery("select count(id) from fechamentoperiodo where operacao = 'FECHAMENTO' and idContaBancaria = " + conta.getId()).uniqueResult();

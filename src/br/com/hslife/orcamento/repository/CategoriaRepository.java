@@ -67,6 +67,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -75,6 +76,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -82,6 +84,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findEnabledByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -89,6 +92,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	}
 	
 	public Categoria findDefaultByTipoCategoriaAndUsuario(Usuario usuario, TipoCategoria tipoCategoria) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("padrao", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -98,6 +102,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findByTipoCategoriaAndUsuario(TipoCategoria tipoCategoria, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("tipoCategoria", tipoCategoria));
@@ -127,108 +132,4 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 		
 		query.executeUpdate();
 	}
-	/*
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
-	
-	public void save(final Categoria entity) {
-		getSession().persist(entity);
-	}
-	
-	public void update(final Categoria entity) {
-		getSession().merge(entity);
-	}
-	
-	public void delete(final Categoria entity) {
-		getSession().delete(entity);
-	}
-	
-	public Categoria findById(final Long id) {
-		return (Categoria)getSession().get(Categoria.class, id);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Categoria> findAll() {
-		return getSession().createCriteria(Categoria.class).addOrder(Order.asc("descricao")).list();
-	}
-		
-	@SuppressWarnings("unchecked")
-	public List<Categoria> findByDescricao(String descricao) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Categoria.class);
-		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE)).addOrder(Order.asc("descricao"));		
-		return criteria.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Categoria findDefault() throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Categoria.class);
-		criteria.add(Restrictions.eq("padrao", true));		
-		List<Categoria> result = criteria.list(); 
-		if (result == null || result.size() == 0) {
-			return null;
-		} else {
-			return result.get(0);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Categoria> findByUsuario(Long idUsuario)	throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Categoria.class);
-		criteria.add(Restrictions.eq("usuario.id", idUsuario)).addOrder(Order.asc("descricao"));
-		return criteria.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Categoria findDefaultByUsuario(Long idUsuario)	throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Categoria.class);
-		criteria.add(Restrictions.eq("padrao", true));
-		criteria.add(Restrictions.eq("usuario.id", idUsuario));
-		List<Categoria> result = criteria.list();	 
-		if (result == null || result.size() == 0) {
-			throw new BusinessException("Usuário não possui categoria padrão!");
-		} else {
-			return result.get(0);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Categoria findDefaultByUsuarioAndTipoCategoria(TipoCategoria tipoCategoria, Long idUsuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Categoria.class);
-		criteria.add(Restrictions.eq("padrao", true));
-		criteria.add(Restrictions.eq("usuario.id", idUsuario));
-		criteria.add(Restrictions.eq("tipoCategoria", tipoCategoria));
-		List<Categoria> result = criteria.list();	 
-		if (result == null || result.size() == 0) {
-			return null;
-		} else {
-			return result.get(0);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Categoria> findByDescricaoAndUsuario(String descricao,	Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Categoria.class);
-		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
-		if (!usuario.getLogin().equals("admin")) {
-			criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		}		
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Categoria> findByUsuarioAndTipo(Usuario usuario, TipoCategoria tipoCategoria) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Categoria.class);
-		criteria.add(Restrictions.eq("tipoCategoria", tipoCategoria));
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));	
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	*/
 }

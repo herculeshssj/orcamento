@@ -67,6 +67,7 @@ public class CategoriaDocumentoRepository extends AbstractCRUDRepository<Categor
 		
 	@SuppressWarnings("unchecked")
 	public List<CategoriaDocumento> findByDescricaoAndUsuario(String descricao, Usuario usuario) throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CategoriaDocumento.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		if (!usuario.getLogin().equals("admin")) {
@@ -77,6 +78,7 @@ public class CategoriaDocumentoRepository extends AbstractCRUDRepository<Categor
 	
 	@SuppressWarnings("unchecked")
 	public List<CategoriaDocumento> findByDescricao(String descricao) throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CategoriaDocumento.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));				
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -84,6 +86,7 @@ public class CategoriaDocumentoRepository extends AbstractCRUDRepository<Categor
 	
 	@SuppressWarnings("unchecked")
 	public List<CategoriaDocumento> findByUsuario(Usuario usuario) throws BusinessException {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(CategoriaDocumento.class);		
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));		
 		return criteria.addOrder(Order.asc("descricao")).list();

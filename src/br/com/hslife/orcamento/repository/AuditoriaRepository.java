@@ -67,6 +67,7 @@ public class AuditoriaRepository extends AbstractRepository {
 	}
 	
 	public Auditoria findById(Long id) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Auditoria.class).setFetchMode("dadosAuditoria", FetchMode.JOIN);
 		criteria.add(Restrictions.eq("id", id));
 		return (Auditoria)criteria.uniqueResult();
@@ -74,6 +75,7 @@ public class AuditoriaRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")
 	public List<Auditoria> findByCriteriosAuditoria(CriterioAuditoria criterio) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Auditoria.class);
 		
 		if (criterio.getUsuario() != null && !criterio.getUsuario().isEmpty()) {
@@ -101,10 +103,12 @@ public class AuditoriaRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")
 	public List<String> findClasses() {
+		// TODO migrar para HQL
 		return getSession().createSQLQuery("select distinct classe from auditoria order by classe asc").list();
 	}
 	
-	public long countRegistroAuditoriaByUsuario(String usuario) {		
+	public long countRegistroAuditoriaByUsuario(String usuario) {
+		// TODO migrar para HQL
 		String sql = "select count(*) from auditoria where usuario = '" + usuario + "'";		
 		Query query = getSession().createSQLQuery(sql);		
 		BigInteger queryResult = (BigInteger)query.uniqueResult();

@@ -71,6 +71,8 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	
 	@SuppressWarnings("unchecked")
 	public E findById(Long id) {
-		return (E)getSession().get(entity.getClass(), id);
+		hql = "FROM " + entity.getClass().getSimpleName() + " as entity WHERE entity.id = :idEntity";
+		hqlQuery = getSession().createQuery(hql).setLong("idEntity", id);
+		return (E)hqlQuery.uniqueResult();
 	}
 }

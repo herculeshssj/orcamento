@@ -76,6 +76,7 @@ public class PanoramaLancamentoContaRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")
 	public List<PanoramaLancamentoConta> findByContaAnoAndAgrupamento(Conta conta, int ano) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(PanoramaLancamentoConta.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("ano", ano));
@@ -85,6 +86,7 @@ public class PanoramaLancamentoContaRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")
 	public List<PanoramaLancamentoConta> findByConta(Conta conta) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(PanoramaLancamentoConta.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));		
 		criteria.addOrder(Order.asc("indice"));

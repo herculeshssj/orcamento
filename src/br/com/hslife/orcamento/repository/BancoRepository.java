@@ -66,6 +66,7 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Banco> findByNomeAndUsuario(String nome, Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Banco.class);
 		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -74,6 +75,7 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Banco> findByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Banco.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("nome")).list();
@@ -108,6 +110,7 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 	
 	@SuppressWarnings("unchecked")
 	public Banco findDefaultByUsuario(Usuario usuario) {
+		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Banco.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("padrao", true));
