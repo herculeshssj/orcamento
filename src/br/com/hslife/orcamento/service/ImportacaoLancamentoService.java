@@ -62,15 +62,19 @@ import net.sf.ofx4j.io.AggregateUnmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.model.InfoOFX;
+import br.com.hslife.orcamento.repository.CategoriaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -83,6 +87,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
+	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 
 	public void setLancamentoImportadoRepository(
 			LancamentoImportadoRepository lancamentoImportadoRepository) {
@@ -94,6 +104,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		this.lancamentoContaRepository = lancamentoContaRepository;
 	}
 	
+	public void setCategoriaRepository(CategoriaRepository categoriaRepository) {
+		this.categoriaRepository = categoriaRepository;
+	}
+
+	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
+		this.usuarioComponent = usuarioComponent;
+	}
+
 	@Override
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException {
 		return lancamentoImportadoRepository.findByConta(conta);
@@ -134,6 +152,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
 		
 		LancamentoConta lc;
+		Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.CREDITO);
+		Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.DEBITO);
 		
 		for (LancamentoImportado li : lancamentosImportados) {
 			if (lancamentoContaRepository.findByHash(li.getHash()) == null) {
@@ -148,8 +168,10 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				
 				if (li.getValor() > 0) {
 					lc.setTipoLancamento(TipoLancamento.RECEITA);
+					lc.setCategoria(categoriaPadraoCredito);
 				} else {
 					lc.setTipoLancamento(TipoLancamento.DESPESA);
+					lc.setCategoria(categoriaPadraoDebito);
 				}
 				
 				lc.setConta(li.getConta());
