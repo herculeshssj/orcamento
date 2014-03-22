@@ -51,6 +51,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -111,7 +112,7 @@ public class ItemDespensa extends EntityPersistence {
 	@JoinColumn(name="idDespensa")
 	private Despensa despensa;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)	
 	private List<MovimentoItemDespensa> movimentacao;
 	
 	/*** Aplicando o padrão Builder para eliminar o construtor com n parâmetros ***/

@@ -120,6 +120,10 @@
 			<p:graphicImage value="/resources/images/pdf.png" width="32" height="32"/>
 			<p:dataExporter type="pdf" target="tableListEntity" fileName="inventario" encoding="iso-8859-1"/> 
 		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+		<h:commandLink title="Desfazer último registro compra/consumo" action="#{managedBean.desfazerRegistroCompraConsumoView}">
+			<p:graphicImage value="/resources/images/voltar.png" width="32" height="32"/>			 
+		</h:commandLink>
 	</ui:define>
 
 </ui:composition>

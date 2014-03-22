@@ -67,32 +67,6 @@ public interface IItemDespensa extends ICRUDService<ItemDespensa> {
 	
 	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws BusinessException;
 	
-	/*
-
-public void cadastrar(ItemDespensa entity) throws BusinessException;
+	public void desfazerRegistroCompraConsumo(ItemDespensa entity) throws BusinessException;
 	
-	public void alterar(ItemDespensa entity) throws BusinessException;
-	
-	public void excluir(ItemDespensa entity) throws BusinessException;
-	
-	public ItemDespensa buscar(Long id) throws BusinessException;
-	
-	public List<ItemDespensa> buscarTodos() throws BusinessException;
-	
-	public List<ItemDespensa> buscarTodosAtivosPorUsuario(Usuario usuario) throws BusinessException;
-	
-	public List<ItemDespensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
-	
-	public void arquivar(ItemDespensa entity) throws BusinessException;
-	
-	public void desarquivar(ItemDespensa entity) throws BusinessException;
-	
-	public void registrarCompraConsumo(ItemDespensa entity, HistoricoDespensa historicoDespensa) throws BusinessException;
-	
-	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws BusinessException;
-	
-	public List<CompraConsumoOperacaoDespensa> buscarCompraConsumoOperacaoDespensaPorDataInicioFim (OperacaoDespensa operacao, Date dataInicio, Date dataFim) throws BusinessException;
-	
-	public List<CompraConsumoItemDespensa> buscarCompraConsumoItemDespensaPorDataInicioFim(ItemDespensa item, Date dataInicio, Date dataFim) throws BusinessException;
-*/	
 }
