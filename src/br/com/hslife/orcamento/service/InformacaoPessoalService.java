@@ -88,44 +88,6 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 	
 	@Override
-	public void salvarEnderecos(List<Endereco> enderecos, Usuario usuario) throws BusinessException {
-		List<Endereco> enderecosUsuario = enderecoRepository.findByUsuario(usuario);
-		enderecosUsuario.removeAll(enderecos);
-		// Itera a listagem de endereços encontrados e que foram removidos pelo usuário
-		for (Endereco e : enderecosUsuario) {
-			enderecoRepository.delete(e);
-		}
-				
-		// Valida cada endereço e depois salva
-		for (Endereco endereco : enderecos) {
-			endereco.validate();
-			if (endereco.getId() == null)
-				enderecoRepository.save(endereco);
-			else
-				enderecoRepository.update(endereco);
-		}
-	}
-
-	@Override
-	public void salvarTelefones(List<Telefone> telefones, Usuario usuario) throws BusinessException {
-		List<Telefone> telefonesUsuario = telefoneRepository.findByUsuario(usuario);
-		telefonesUsuario.removeAll(telefones);
-		// Itera a listagem de telefones encontrados e que foram removidos pelo usuário
-		for (Telefone t : telefonesUsuario) {
-			telefoneRepository.delete(t);
-		}
-		
-		// Valida cada telefone e depois salva
-		for (Telefone telefone : telefones) {
-			telefone.validate();
-			if (telefone.getId() == null)
-				telefoneRepository.save(telefone);
-			else
-				telefoneRepository.update(telefone);
-		}
-	}
-
-	@Override
 	public Pessoal buscarDadosPessoais(Usuario usuario) throws BusinessException {
 		return pessoalRepository.findByUsuario(usuario);
 	}
@@ -138,5 +100,35 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	@Override
 	public List<Telefone> buscarTelefones(Usuario usuario) throws BusinessException {
 		return telefoneRepository.findByUsuario(usuario);
+	}
+
+	@Override
+	public void salvarEndereco(Endereco entity) throws BusinessException {
+		entity.validate();
+		if (entity.getId() == null) {
+			enderecoRepository.save(entity);
+		} else {
+			enderecoRepository.update(entity);
+		}
+	}
+
+	@Override
+	public void excluirEndereco(Endereco entity) throws BusinessException {
+		enderecoRepository.delete(entity);		
+	}
+
+	@Override
+	public void salvarTelefone(Telefone entity) throws BusinessException {
+		entity.validate();
+		if (entity.getId() == null) {
+			telefoneRepository.save(entity);
+		} else {
+			telefoneRepository.update(entity);
+		}
+	}
+
+	@Override
+	public void excluirTelefone(Telefone entity) throws BusinessException {
+		telefoneRepository.delete(entity);		
 	}	
 }

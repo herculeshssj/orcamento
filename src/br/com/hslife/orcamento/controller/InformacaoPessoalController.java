@@ -123,8 +123,8 @@ public class InformacaoPessoalController extends AbstractController {
 			// Cadastra os dados pessoais
 			pessoal.setUsuario(getUsuarioLogado());
 			getService().salvarDadosPessoais(pessoal);
-			getService().salvarEnderecos(listaEndereco, getUsuarioLogado());
-			getService().salvarTelefones(listaTelefone, getUsuarioLogado());
+			//getService().salvarEnderecos(listaEndereco, getUsuarioLogado());
+			//getService().salvarTelefones(listaTelefone, getUsuarioLogado());
 			infoMessage("Dados salvos com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -134,11 +134,10 @@ public class InformacaoPessoalController extends AbstractController {
 	public void salvarEndereco() {
 		try {
 			endereco.setUsuario(getUsuarioLogado());
-			endereco.validate();
-			if (!listaEndereco.contains(endereco)) {
-				listaEndereco.add(endereco);
-			}
+			getService().salvarEndereco(endereco);
+			listaEndereco = getService().buscarEnderecos(getUsuarioLogado());
 			endereco = new Endereco();
+			infoMessage("Endereço salvo com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -147,11 +146,10 @@ public class InformacaoPessoalController extends AbstractController {
 	public void salvarTelefone() {
 		try {
 			telefone.setUsuario(getUsuarioLogado());
-			telefone.validate();
-			if (!listaTelefone.contains(telefone)) {
-				listaTelefone.add(telefone);
-			}
+			getService().salvarTelefone(telefone);
+			listaTelefone = getService().buscarTelefones(getUsuarioLogado());
 			telefone = new Telefone();
+			infoMessage("Telefone salvo com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -166,13 +164,25 @@ public class InformacaoPessoalController extends AbstractController {
 	}
 	
 	public void excluirEndereco() {
-		listaEndereco.remove(endereco);
-		endereco = new Endereco();
+		try {			
+			getService().excluirEndereco(endereco);
+			listaEndereco = getService().buscarEnderecos(getUsuarioLogado());
+			endereco = new Endereco();
+			infoMessage("Endereço excluído com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void excluirTelefone() {
-		listaTelefone.remove(telefone);
-		telefone = new Telefone();
+		try {
+			getService().excluirTelefone(telefone);
+			listaTelefone = getService().buscarTelefones(getUsuarioLogado());
+			telefone = new Telefone();
+			infoMessage("Telefone excluído com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public IInformacaoPessoal getService() {
