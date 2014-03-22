@@ -74,10 +74,10 @@
 			<h:outputText/>
 			
 			Unidade de Medida:
-			<h:selectOneMenu id="txtUnidadeMedida" value="#{managedBean.entity.unidadeMedida}" converter="entityConverter" rendered="#{managedBean.operation == 'create'}">
+			<h:selectOneMenu id="txtUnidadeMedida" value="#{managedBean.entity.unidadeMedida}" converter="entityConverter" rendered="#{empty managedBean.entity.movimentacao}">
 	    		<f:selectItems value="#{managedBean.listaUnidadeMedida}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 	    	</h:selectOneMenu>
-	    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+	    	<h:panelGroup rendered="#{not empty managedBean.entity.movimentacao}">
 	    		<h:outputText value="#{managedBean.entity.unidadeMedida.descricao}" />&nbsp;(<h:outputText value="#{managedBean.entity.unidadeMedida.sigla}" />)
 	    	</h:panelGroup>
 	    	<p:message for="txtUnidadeMedida"/>
