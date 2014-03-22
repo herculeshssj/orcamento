@@ -44,8 +44,8 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAR2014.1 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAR2014.2 ***/
 
 -- Atualização de versão
 update versao set ativo = false;
-insert into versao (versao, ativo) values ('MAR2014.1', true);
+insert into versao (versao, ativo) values ('MAR2014.2', true);
