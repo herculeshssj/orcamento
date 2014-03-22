@@ -59,6 +59,9 @@
 	<ui:define name="pesquisa">
 		Nome:
 	    <p:inputText value="#{managedBean.nomeMoeda}" />
+	    &nbsp;
+	    <h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    Somente ativos
 	</ui:define>
 
 	<ui:define name="colunas">
@@ -73,7 +76,14 @@
 				<h:outputText value="País" />
 			</f:facet>
 			<h:outputText value="#{item.pais} - #{item.siglaPais}" />
-		</p:column>		
+		</p:column>
+			
+   		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ativo"/>
+			</f:facet>
+			<h:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
+   		</p:column>		
 	</ui:define>
 
 	<ui:define name="acoes">
