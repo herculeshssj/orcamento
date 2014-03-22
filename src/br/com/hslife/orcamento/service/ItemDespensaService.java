@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -85,6 +86,29 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 			throw new BusinessException("Quantidade informada ultrapassa estoque disponível!");
 		}
 		entity.getMovimentacao().add(movimentoItemDespensa);
+		entity.setQuantidadeAtual(0);
+		for (MovimentoItemDespensa mid : entity.getMovimentacao()) {
+			if (mid.getOperacaoDespensa().equals(OperacaoDespensa.COMPRA)) {
+				entity.setQuantidadeAtual(entity.getQuantidadeAtual() + mid.getQuantidade());
+			} else {
+				entity.setQuantidadeAtual(entity.getQuantidadeAtual() - mid.getQuantidade());
+			}
+		}
+		getRepository().update(entity);
+	}
+	
+	@Override
+	public void desfazerRegistroCompraConsumo(ItemDespensa entity) throws BusinessException {
+		if (entity.getMovimentacao() != null && entity.getMovimentacao().size() > 0) {
+			Collections.reverse(entity.getMovimentacao());
+		} else {
+			throw new BusinessException("Impossível desfazer! Item de despensa sem movimentação!");
+		}
+		MovimentoItemDespensa movimentoItemDespensa = entity.getMovimentacao().get(0);
+		if (movimentoItemDespensa.getOperacaoDespensa().equals(OperacaoDespensa.COMPRA) && (entity.getQuantidadeAtual() - movimentoItemDespensa.getQuantidade()) < 0) {
+			throw new BusinessException("Impossível desfazer! Quantidade informada ultrapassa estoque disponível!");
+		}
+		entity.getMovimentacao().remove(movimentoItemDespensa);
 		entity.setQuantidadeAtual(0);
 		for (MovimentoItemDespensa mid : entity.getMovimentacao()) {
 			if (mid.getOperacaoDespensa().equals(OperacaoDespensa.COMPRA)) {
@@ -169,111 +193,4 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado) throws BusinessException {
 		return getRepository().findByUsuarioAndArquivado(usuario, arquivado);
 	}
-	
-/*
-	@Autowired
-	private ItemDespensaRepository repository;
-	
-	@Override
-	public void cadastrar(ItemDespensa entity) throws BusinessException {
-		getRepository().save(entity);		
-	}
-
-	@Override
-	public void alterar(ItemDespensa entity) throws BusinessException {
-		getRepository().update(entity);
-		
-	}
-
-	@Override
-	public void excluir(ItemDespensa entity) throws BusinessException {
-		getRepository().delete(entity);
-		
-	}
-
-	@Override
-	public ItemDespensa buscar(Long id) throws BusinessException {
-		return (ItemDespensa) getRepository().findById(id);
-	}
-
-	@Override
-	public List<ItemDespensa> buscarTodos() throws BusinessException {
-		return getRepository().findAll();
-	}
-	
-	@Override
-	public List<ItemDespensa> buscarTodosAtivosPorUsuario(Usuario usuario) throws BusinessException {
-		return getRepository().findAllEnabledByUsuario(usuario);
-	}
-
-	@Override
-	public List<ItemDespensa> buscarPorDescricaoEUsuario(String descricao,	Usuario usuario) throws BusinessException {
-		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
-	}
-	
-	@Override
-	public void arquivar(ItemDespensa entity) throws BusinessException {
-		if (!entity.isArquivado()) {
-			entity.setArquivado(true);
-			getRepository().update(entity);
-		}		
-	}
-	
-	@Override
-	public void desarquivar(ItemDespensa entity) throws BusinessException {
-		if (entity.isArquivado()) {
-			entity.setArquivado(false);
-			getRepository().update(entity);
-		}
-	}
-	
-	@Override
-	public void registrarCompraConsumo(ItemDespensa entity, HistoricoDespensa historicoDespensa) throws BusinessException {
-		if (historicoDespensa.getOperacaoDespensa().equals(OperacaoDespensa.CONSUMO) && (entity.getQuantidadeAtual() - historicoDespensa.getQuantidade()) < 0) {
-			throw new BusinessException("Quantidade informada ultrapassa estoque disponível!");
-		}
-		entity.getHistorico().add(historicoDespensa);
-		entity.setQuantidadeAtual(0);
-		for (HistoricoDespensa hd : entity.getHistorico()) {
-			if (hd.getOperacaoDespensa().equals(OperacaoDespensa.COMPRA)) {
-				entity.setQuantidadeAtual(entity.getQuantidadeAtual() + hd.getQuantidade());
-			} else {
-				entity.setQuantidadeAtual(entity.getQuantidadeAtual() - hd.getQuantidade());
-			}
-		}
-		getRepository().update(entity);
-	}
-	
-	@Override
-	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws BusinessException {
-		List<ItemDespensa> listaDespensas = new ArrayList<ItemDespensa>();
-		for (ItemDespensa despensa : this.buscarPorDescricaoEUsuario("", usuario)) {
-			if (despensa.getQuantidadeAtual() <= despensa.getQuantidadeVermelho() && !despensa.isArquivado()) {
-				listaDespensas.add(new ItemDespensa(despensa.getDescricao(), 
-						despensa.getCaracteristicas(), 
-						despensa.getUnidadeMedida(), 
-						despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual()));
-			}
-		}
-		return listaDespensas;
-	}
-	
-	@Override
-	public List<CompraConsumoOperacaoDespensa> buscarCompraConsumoOperacaoDespensaPorDataInicioFim(OperacaoDespensa operacao, Date dataInicio, Date dataFim) throws BusinessException {
-		return getRepository().findCompraConsumoOperacaoDespensaByDataInicioFim(operacao, dataInicio, dataFim);
-	}
-	
-	@Override
-	public List<CompraConsumoItemDespensa> buscarCompraConsumoItemDespensaPorDataInicioFim(ItemDespensa item, Date dataInicio, Date dataFim) throws BusinessException {
-		return getRepository().findCompraConsumoItemDespensaByDataInicioFim(item, dataInicio, dataFim);
-	}
-
-	public ItemDespensaRepository getRepository() {
-		return repository;
-	}
-
-	public void setRepository(ItemDespensaRepository repository) {
-		this.repository = repository;
-	}
-	*/
 }

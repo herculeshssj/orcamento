@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Moeda;
@@ -94,6 +95,17 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 		}
 		super.alterar(entity);
 	}
+	
+	@Override
+	public void excluir(Moeda entity) throws BusinessException {
+		try {
+			super.excluir(entity);
+		} catch (DataIntegrityViolationException dive) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
+		} catch (Exception e) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
+		}
+	}
 
 	@Override
 	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException {
@@ -108,5 +120,10 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	@Override
 	public Moeda buscarPadraoPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findDefaultByUsuario(usuario);
+	}
+	
+	@Override
+	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario,	boolean ativo) throws BusinessException {
+		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
 }

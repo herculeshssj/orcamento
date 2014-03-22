@@ -68,10 +68,55 @@
 			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>
 			
 			<h:outputText value=""/>
-			<p:commandButton value="Processar Arquivo" action="#{managedBean.processarArquivo}" ajax="false"/>						
+			<h:panelGroup>
+				<p:commandButton value="Processar Arquivo" action="#{managedBean.processarArquivo}" ajax="false"/>
+				&nbsp;
+				<p:commandButton value="Informações Arquivo" action="#{managedBean.obterInformacaoArquivo}" ajax="false"/>
+			</h:panelGroup>						
 			
 		</h:panelGrid>
 	
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo}">
+			N° do banco: 
+			<h:outputText value="#{managedBean.infoArquivo.bancoID}"/>
+			
+			Agência:
+			<h:outputText value="#{managedBean.infoArquivo.agencia}"/>
+			
+			Conta:
+			<h:outputText value="#{managedBean.infoArquivo.conta}"/>
+			
+			Tipo de conta:
+			<h:outputText value="#{managedBean.infoArquivo.tipoConta}"/>
+			
+			Data do arquivo:
+			<h:outputText value="#{managedBean.infoArquivo.dataArquivo}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Balanço final:
+			<h:outputText value="#{managedBean.infoArquivo.balancoFinal}">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+			
+			Moeda padrão:
+			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
+			
+			Quantidade de transações:
+			<h:outputText value="#{managedBean.infoArquivo.quantidadeTransacao}"/>
+			
+			Período:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.infoArquivo.inicioTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+				à
+				<h:outputText value="#{managedBean.infoArquivo.fimTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+			</h:panelGroup>			
+		</h:panelGrid>
+		
 	</ui:define>
 	
 	<ui:define name="acoes">

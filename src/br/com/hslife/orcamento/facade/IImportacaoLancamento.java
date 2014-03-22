@@ -51,6 +51,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.model.InfoOFX;
 
 
 public interface IImportacaoLancamento {
@@ -70,4 +71,6 @@ public interface IImportacaoLancamento {
 	public void processarLancamentosImportados(Conta conta, boolean gerarNovosLancamentos) throws BusinessException;
 	
 	public void importarLancamento(LancamentoImportado entity) throws BusinessException;
+	
+	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo) throws BusinessException;
 }

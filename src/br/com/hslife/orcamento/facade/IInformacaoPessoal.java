@@ -56,9 +56,13 @@ public interface IInformacaoPessoal {
 	
 	public void salvarDadosPessoais(Pessoal pessoal) throws BusinessException; 
 	
-	public void salvarEnderecos(List<Endereco> enderecos, Usuario usuario) throws BusinessException;
+	public void salvarEndereco(Endereco entity) throws BusinessException;
 	
-	public void salvarTelefones(List<Telefone> telefones, Usuario usuario) throws BusinessException;
+	public void excluirEndereco(Endereco entity) throws BusinessException;
+	
+	public void salvarTelefone(Telefone entity) throws BusinessException;
+	
+	public void excluirTelefone(Telefone entity) throws BusinessException;
 	
 	public Pessoal buscarDadosPessoais(Usuario usuario) throws BusinessException;
 	

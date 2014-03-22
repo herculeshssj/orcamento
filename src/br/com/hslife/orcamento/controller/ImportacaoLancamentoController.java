@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
+import br.com.hslife.orcamento.model.InfoOFX;
 
 @Component("importacaoLancamentoMB")
 @Scope("session")
@@ -79,6 +80,8 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private Conta contaSelecionada;
 	private Arquivo arquivoAnexado;
 	private boolean gerarNovosLancamentos;
+	private boolean exibirInfoArquivo;
+	private InfoOFX infoArquivo;
 	
 	private List<LancamentoImportado> lancamentosImportadosValidos;
 	private List<LancamentoConta> lancamentoContaAInserir;
@@ -180,6 +183,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		} else {
 			infoMessage("Nenhum arquivo anexado!");
 		}
+		exibirInfoArquivo = false;
 	}
 	
 	public void processarArquivo() {
@@ -228,6 +232,19 @@ public class ImportacaoLancamentoController extends AbstractController {
 		return goToListPage();
 	}
 
+	public void obterInformacaoArquivo() {
+		if (arquivoAnexado == null || arquivoAnexado.getDados() == null || arquivoAnexado.getDados().length == 0) {
+			warnMessage("Carregue um arquivo OFX antes de obter informações!");			
+		} else {
+			try {
+				infoArquivo = getService().obterInformacaoArquivoImportado(arquivoAnexado);
+				exibirInfoArquivo = true;
+			} catch (Exception e) {
+				errorMessage(e.getMessage());
+			}
+		}		
+	}
+	
 	public List<Conta> getListaConta() {
 		try {
 			// Obtém o valor da opção do sistema
@@ -338,5 +355,21 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setIdEntity(Long idEntity) {
 		this.idEntity = idEntity;
+	}
+
+	public boolean isExibirInfoArquivo() {
+		return exibirInfoArquivo;
+	}
+
+	public void setExibirInfoArquivo(boolean exibirInfoArquivo) {
+		this.exibirInfoArquivo = exibirInfoArquivo;
+	}
+
+	public InfoOFX getInfoArquivo() {
+		return infoArquivo;
+	}
+
+	public void setInfoArquivo(InfoOFX infoArquivo) {
+		this.infoArquivo = infoArquivo;
 	}
 }

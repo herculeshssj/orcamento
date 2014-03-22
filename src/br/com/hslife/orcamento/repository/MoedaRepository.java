@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.repository;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -84,5 +85,14 @@ public class MoedaRepository extends AbstractCRUDRepository<Moeda> {
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("padrao", true));
 		return (Moeda)criteria.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Moeda> findByNomeUsuarioAndAtivo(String nome, Usuario usuario, boolean ativo) {
+		String hql = "FROM Moeda moeda WHERE moeda.nome like '%" + nome + "%' AND moeda.usuario.id = :idUsuario AND moeda.ativo = :ativo ORDER BY moeda.nome ASC";
+		Query query = getSession().createQuery(hql)
+				.setLong("idUsuario", usuario.getId())
+				.setBoolean("ativo", ativo);
+		return query.list();
 	}
 }

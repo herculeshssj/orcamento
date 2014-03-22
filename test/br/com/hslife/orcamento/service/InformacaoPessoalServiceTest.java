@@ -149,13 +149,11 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 			endereco.setCep("2626122" + i);
 			endereco.setDescricao("Residencial");
 			endereco.setUsuario(usuario);
+			informacaoPessoalService.salvarEndereco(endereco);
 			listaEndereco.add(endereco);
 			endereco = new Endereco();
 		}
-		
-		// Salva os endereços
-		informacaoPessoalService.salvarEnderecos(listaEndereco, usuario);
-		
+				
 		for (Endereco e : listaEndereco) {
 			assertNotNull(e.getId());
 		}
@@ -171,11 +169,9 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 			listaEndereco.get(i).setEstado("RJ");
 			listaEndereco.get(i).setCep("2006292" + i);
 			listaEndereco.get(i).setDescricao("Comercial");
-			listaEndereco.get(i).setUsuario(usuario);			
+			listaEndereco.get(i).setUsuario(usuario);
+			informacaoPessoalService.salvarEndereco(listaEndereco.get(i));
 		}		
-		
-		// Salva as informações de endereço
-		informacaoPessoalService.salvarEnderecos(listaEndereco, usuario);
 		
 		List<Endereco> listaEnderecoTest = informacaoPessoalService.buscarEnderecos(usuario);
 		for (int i = 0; i < 3; i++) {			
@@ -204,12 +200,10 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 			telefone.setNumero(Integer.toString(i));
 			telefone.setRamal("");
 			telefone.setUsuario(usuario);
+			informacaoPessoalService.salvarTelefone(telefone);
 			listaTelefone.add(telefone);
 			telefone = new Telefone();
 		}
-		
-		// Salva os telefones
-		informacaoPessoalService.salvarTelefones(listaTelefone, usuario);
 		
 		for (Telefone t : listaTelefone) {
 			assertNotNull(t.getId());
@@ -221,11 +215,9 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 			listaTelefone.get(i).setDdd("00" + i);
 			listaTelefone.get(i).setNumero("11111111" + i);
 			listaTelefone.get(i).setRamal(Integer.toString(i));
-			listaTelefone.get(i).setUsuario(usuario);						
+			listaTelefone.get(i).setUsuario(usuario);
+			informacaoPessoalService.salvarTelefone(listaTelefone.get(i));
 		}		
-		
-		// Salva as informações de endereço
-		informacaoPessoalService.salvarTelefones(listaTelefone, usuario);
 		
 		List<Telefone> listaTelefoneTest = informacaoPessoalService.buscarTelefones(usuario);
 		for (int i = 0; i < 3; i++) {
@@ -278,12 +270,10 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 			endereco.setCep("2626122" + i);
 			endereco.setDescricao("Residencial");
 			endereco.setUsuario(usuario);
+			informacaoPessoalService.salvarEndereco(endereco);
 			listaEndereco.add(endereco);
 			endereco = new Endereco();
 		}
-		
-		// Salva os endereços
-		informacaoPessoalService.salvarEnderecos(listaEndereco, usuario);
 		
 		// Busca os endereços do usuário
 		List<Endereco> listaEnderecoTest = informacaoPessoalService.buscarEnderecos(usuario);
@@ -304,12 +294,10 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 			telefone.setNumero(Integer.toString(i));
 			telefone.setRamal("");
 			telefone.setUsuario(usuario);
+			informacaoPessoalService.salvarTelefone(telefone);
 			listaTelefone.add(telefone);
 			telefone = new Telefone();
 		}
-		
-		// Salva os telefones
-		informacaoPessoalService.salvarTelefones(listaTelefone, usuario);
 		
 		// Busca os telefones do usuário
 		List<Telefone> listaTelefoneTest = informacaoPessoalService.buscarTelefones(usuario);

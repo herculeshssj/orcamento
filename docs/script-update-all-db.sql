@@ -1565,3 +1565,10 @@ alter table agenda add constraint fk_agenda_usuario foreign key(idUsuario) refer
 -- Panorama dos lançamentos da conta
 ALTER TABLE previsaolancamentoconta RENAME TO panoramalancamentoconta;
 ALTER TABLE panoramalancamentoconta CHANGE COLUMN `descricaoPrevisao` `descricao` VARCHAR(255) NOT NULL;
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAR2014.1 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('MAR2014.1', true);
+

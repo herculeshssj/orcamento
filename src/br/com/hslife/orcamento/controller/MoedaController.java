@@ -67,6 +67,7 @@ public class MoedaController extends AbstractCRUDController<Moeda> {
 	private IMoeda service; 
 	
 	private String nomeMoeda;
+	private boolean somenteAtivos = true;
 	
 	public MoedaController() {
 		super(new Moeda());
@@ -82,7 +83,7 @@ public class MoedaController extends AbstractCRUDController<Moeda> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorNomeEUsuario(nomeMoeda, getUsuarioLogado());
+			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeMoeda, getUsuarioLogado(), somenteAtivos);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -108,5 +109,13 @@ public class MoedaController extends AbstractCRUDController<Moeda> {
 
 	public void setNomeMoeda(String nomeMoeda) {
 		this.nomeMoeda = nomeMoeda;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }
