@@ -58,7 +58,6 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -66,7 +65,6 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
 
 @Component("resumoMensalContasMB")
 @Scope("session")
@@ -79,8 +77,6 @@ public class ResumoMensalContasController extends AbstractController {
 
 	private boolean lancamentoAgendado;
 	private double saldoTotalContas;
-	private List<SaldoAtualConta> contasAtivas = new ArrayList<>();
-	private List<SaldoAtualConta> contasInativas = new ArrayList<>();
 	
 	@Autowired
 	private IResumoEstatistica service;
@@ -192,33 +188,19 @@ public class ResumoMensalContasController extends AbstractController {
         }
 	}
 	
-	@SuppressWarnings("null")
 	public List<Conta> getListaConta() {
 		try {
 			// Variável que armazenará a lista de contas
 			List<Conta> contas;
-			// Obtém o valor da opção do sistema
-			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", getUsuarioLogado());
-			
-			// Determina qual listagem será retornada
-			if (opcao != null && Boolean.valueOf(opcao.getValor())) {
-				contas = contaService.buscarPorUsuario(getUsuarioLogado().getId());
-				if (contas != null || contas.size() != 0) {
-					contaSelecionada = contas.get(0);
-				}
-				return contas;
+			contas = contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			if (contas != null && contas.size() != 0) {
+				contaSelecionada = contas.get(0);
 			}
-			else {
-				contas = contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-				if (contas != null || contas.size() != 0) {
-					contaSelecionada = contas.get(0);
-				}
-				return contas;
-			}
+			return contas;			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<Conta>();
+		return new ArrayList<>();
 	}
 	
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
@@ -250,14 +232,6 @@ public class ResumoMensalContasController extends AbstractController {
 		this.service = service;
 	}
 
-	public List<SaldoAtualConta> getContasAtivas() {
-		return contasAtivas;
-	}
-
-	public void setContasAtivas(List<SaldoAtualConta> contasAtivas) {
-		this.contasAtivas = contasAtivas;
-	}
-
 	public double getSaldoTotalContas() {
 		return saldoTotalContas;
 	}
@@ -266,13 +240,6 @@ public class ResumoMensalContasController extends AbstractController {
 		this.saldoTotalContas = saldoTotalContas;
 	}
 
-	public List<SaldoAtualConta> getContasInativas() {
-		return contasInativas;
-	}
-
-	public void setContasInativas(List<SaldoAtualConta> contasInativas) {
-		this.contasInativas = contasInativas;
-	}
 	public Conta getContaSelecionada() {
 		return contaSelecionada;
 	}
