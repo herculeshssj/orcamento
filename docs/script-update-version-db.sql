@@ -50,4 +50,8 @@
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('MAR2014.2', true);
 
+-- Cadastro de favorecidos
 alter table favorecido add column cpfCnpj varchar(14) null;
+
+-- Cadastro de moedas
+alter table moeda add column valorConversao decimal(18,2) not null default 0.0;

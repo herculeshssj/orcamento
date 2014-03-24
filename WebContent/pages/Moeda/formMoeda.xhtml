@@ -60,22 +60,27 @@
 		<h:panelGrid columns="2">
 				
 			Nome da moeda:
-			<p:inputText id="txtNomeMoeda" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo}"/>			
+			<h:inputText id="txtNomeMoeda" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo}"/>			
 			
 			País:
-			<p:inputText id="txtNomePais" value="#{managedBean.entity.pais}" size="50" maxlength="50" disabled="#{!managedBean.entity.ativo}"/>			
+			<h:inputText id="txtNomePais" value="#{managedBean.entity.pais}" size="50" maxlength="50" disabled="#{!managedBean.entity.ativo}"/>			
 			
 			Sigla do país:
-			<p:inputText id="txtSiglaPais" value="#{managedBean.entity.siglaPais}" size="3" maxlength="2" disabled="#{!managedBean.entity.ativo}"/>			
+			<h:inputText id="txtSiglaPais" value="#{managedBean.entity.siglaPais}" size="3" maxlength="2" disabled="#{!managedBean.entity.ativo}"/>			
 			
 			Símbolo monetário:
-			<p:inputText id="txtSimboloMonetario" value="#{managedBean.entity.simboloMonetario}" size="3" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>			
+			<h:inputText id="txtSimboloMonetario" value="#{managedBean.entity.simboloMonetario}" size="3" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>
+			
+			Valor de conversão moeda local:
+			<h:inputText value="#{managedBean.entity.valorConversao}" size="5">
+				<f:convertNumber maxFractionDigits="4"/>
+			</h:inputText>		
 			
 			<h:outputText value="Padrão:" rendered="#{!managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>			
-			<p:selectBooleanCheckbox value="#{managedBean.entity.padrao}" rendered="#{!managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
+			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" rendered="#{!managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
 			
 			<h:outputText value="Ativo:" rendered="#{!managedBean.entity.padrao}"/>			
-			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" rendered="#{!managedBean.entity.padrao}"/>			
+			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" rendered="#{!managedBean.entity.padrao}"/>			
 				
 		</h:panelGrid>
 		
