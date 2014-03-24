@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Favorecido;
@@ -92,11 +93,12 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	
 	@Override
 	public void excluir(Favorecido entity) throws BusinessException {
-		if (getRepository().existsLinkages(entity) ) {
-			entity.setAtivo(false);
-			super.alterar(entity);
-		} else {
+		try {
 			super.excluir(entity);
+		} catch (DataIntegrityViolationException dive) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
+		} catch (Exception e) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
 		}
 	}
 	
@@ -118,5 +120,10 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	
 	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findEnabledByUsuario(usuario);
+	}
+
+	@Override
+	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException {
+		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
 }

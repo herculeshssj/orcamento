@@ -44,7 +44,6 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -54,7 +53,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -88,20 +86,11 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 	
-	public boolean existsLinkages(Favorecido favorecido) {
-		boolean result = true;
-		
-		String sqlLancamento = "select count(id) from lancamentoconta where idFavorecido = " + favorecido.getId();
-		
-		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
-		
-		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
-		
-		if (queryResultLancamento.longValue() == 0) {
-			return false;
-		}
-		
-		return result;
+	@SuppressWarnings("unchecked")
+	public List<Favorecido> findByNomeUsuarioAndAtivo(String nome, Usuario usuario, boolean ativo) {
+		String hql = "FROM Favorecido favorecido WHERE favorecido.nome like '%" + nome + "%' AND favorecido.usuario.id = :idUsuario AND favorecido.ativo = :ativo ORDER BY favorecido.nome ASC";
+		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
+		return query.list();
 	}
 	
 	public void updateAllToNotDefault(Usuario usuario) {
@@ -123,63 +112,4 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 		}
 		return null;
 	}
-	
 }
-	/*
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
-	
-	public void save(Favorecido entity) {
-		getSession().persist(entity);
-	}
-	
-	public void update(Favorecido entity) {
-		getSession().merge(entity);
-	}
-	
-	public void delete(Favorecido entity) {
-		getSession().delete(entity);
-	}
-	
-	public Favorecido findById(Long id) {
-		return (Favorecido)getSession().get(Favorecido.class, id);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findAll() {
-		return getSession().createCriteria(Favorecido.class).addOrder(Order.asc("nome")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findByUsuario(Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Favorecido.class);
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return criteria.addOrder(Order.asc("nome")).list();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findByNomeAndUsuario(String nome, Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Favorecido.class);
-		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		if (!usuario.getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
-			criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		}		
-		return criteria.addOrder(Order.asc("nome")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Favorecido> findByNome(String nome) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(Favorecido.class);
-		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		return criteria.addOrder(Order.asc("nome")).list();
-	}
-	*?
-}*/

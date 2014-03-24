@@ -78,8 +78,7 @@ public class AuditoriaAspect {
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..save(..)) && args(entity)")
 	public void afterSave(EntityPersistence entity) {
-		System.out.println("Salvamento detectado. Executando auditoria!");
-		System.out.println("Classe detectada: " + entity.getClass().getName());
+		System.out.println("Salvamento detectado. Executando auditoria da classe " + entity.getClass().getName());
 		
 		Auditoria auditoria = new Auditoria();
 		
@@ -120,8 +119,7 @@ public class AuditoriaAspect {
 	@AfterReturning("execution(public void br.com.hslife.orcamento.repository..update(..)) && args(entity)")
 	public void afterUpdate(EntityPersistence entity) {
 		try {
-			System.out.println("Atualização detectada. Auditoria executada!");
-			System.out.println("Classe detectada: " + entity.getClass().getName());
+			System.out.println("Atualização detectada. Executando auditoria da classe " + entity.getClass().getName());
 			
 			Auditoria auditoria  = new Auditoria();
 			
@@ -164,9 +162,8 @@ public class AuditoriaAspect {
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..delete(..)) && args(entity)")
 	public void beforeDelete(EntityPersistence entity) {
-		System.out.println("Exclusão detectada. Executando auditoria!");
-		System.out.println("Classe detectada: " + entity.getClass().getName());
-		
+		System.out.println("Exclusão detectada. Executando auditoria da classe " + entity.getClass().getName());
+				
 		Auditoria auditoria = new Auditoria();
 		
 		auditoria.setClasse(entity.getClass().getSimpleName());

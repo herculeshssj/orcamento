@@ -58,4 +58,6 @@ public interface IFavorecido extends ICRUDService<Favorecido> {
 	public List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException;
 	
 	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	
+	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException;
 }
