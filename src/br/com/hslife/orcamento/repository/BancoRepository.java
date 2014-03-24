@@ -44,7 +44,6 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -79,25 +78,6 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 	
-	public boolean existsLinkages(Banco banco) {
-		boolean result = true;
-		
-		String sqlConta = "select count(id) from conta where idBanco = " + banco.getId();
-		String sqlCartao = "select count(id) from cartaocredito where idBanco = " + banco.getId();
-		
-		Query queryConta = getSession().createSQLQuery(sqlConta);
-		Query queryCartao = getSession().createSQLQuery(sqlCartao);
-		
-		BigInteger queryResultConta = (BigInteger)queryConta.uniqueResult();
-		BigInteger queryResultCartao = (BigInteger)queryCartao.uniqueResult();
-		
-		if (queryResultConta.longValue() == 0 && queryResultCartao.longValue() == 0) {
-			return false;
-		}
-		
-		return result;
-	}
-	
 	public void updateAllToNotDefault(Usuario usuario) {
 		String sql = "update banco set padrao = false where idUsuario = " + usuario.getId();
 		
@@ -116,5 +96,12 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 			return resultado.get(0);
 		}
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Banco> findByNomeUsuarioAndAtivo(String nome, Usuario usuario, boolean ativo) {
+		String hql = "FROM Banco banco WHERE banco.nome LIKE '%" + nome + "%' AND banco.usuario.id = :idUsuario AND banco.ativo = :ativo ORDER BY banco.nome ASC";
+		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
+		return query.list();
 	}
 }

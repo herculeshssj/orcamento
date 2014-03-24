@@ -56,5 +56,7 @@ public interface IBanco extends ICRUDService<Banco>{
 	public List<Banco> buscarPorUsuario(Usuario usuario) throws BusinessException;
 	
 	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException; 
+	
+	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException;
 
 }

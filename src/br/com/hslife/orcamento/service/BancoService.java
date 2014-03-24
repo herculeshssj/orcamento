@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Banco;
@@ -87,11 +88,12 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	
 	@Override
 	public void excluir(Banco entity) throws BusinessException {
-		if (getRepository().existsLinkages(entity)) {
-			entity.setAtivo(false);
-			super.alterar(entity);
-		} else {
+		try {
 			super.excluir(entity);
+		} catch (DataIntegrityViolationException dive) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
+		} catch (Exception e) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
 		}
 	}
 
@@ -110,77 +112,8 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 		
 	}
 	
-	/*
-	public void setContaComponent(ContaComponent contaComponent) {
-		this.contaComponent = contaComponent;
-	}
-
 	@Override
-	public void cadastrar(Banco entity) throws BusinessException {
-		if (entity.isPadrao()) {
-			Banco b = buscarPadraoPorUsuario(entity.getUsuario().getId());
-			if (b != null) {
-				b.setPadrao(false);
-				alterar(b);
-			}
-		}
-		getRepository().save(entity);
+	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException {
+		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
-	
-	@Override
-	public void alterar(Banco entity) throws BusinessException {
-		if (entity.isPadrao()) {
-			Banco b = buscarPadraoPorUsuario(entity.getUsuario().getId());
-			if (b != null) {
-				b.setPadrao(false);
-				alterar(b);
-			}
-		}
-		getRepository().update(entity);
-	}
-
-	@Override
-	public void excluir(Banco entity) throws BusinessException {		
-		if (contaComponent.buscarContasPorBanco(entity).size() == 0) {
-			getRepository().delete(entity);
-		} else {
-			entity.setAtivo(false);
-			getRepository().update(entity);
-		}
-	}
-	
-	@Override
-	public List<Banco> buscarPorNome(String nome) throws BusinessException {
-		return getRepository().findByNome(nome);
-	}
-	
-	@Override
-	public Banco buscarPadrao() throws BusinessException {
-		return getRepository().findDefault();
-	}
-	
-	@Override
-	public Banco buscarPadraoPorUsuario(Long idUsuario) throws BusinessException {
-		return getRepository().findDefaultByUsuario(idUsuario);
-	}
-
-	@Override
-	public List<Banco> buscarPorUsuario(Long idUsuario)	throws BusinessException {
-		return getRepository().findByUsuario(idUsuario);
-	}
-
-	@Override
-	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException {
-		return getRepository().findByNomeAndUsuario(nome, usuario);
-	}
-
-	@Override
-	public Banco buscar(Long id) throws BusinessException {
-		return getRepository().findById(id);
-	}
-
-	@Override
-	public List<Banco> buscarTodos() throws BusinessException {
-		return getRepository().findAll();
-	}*/
 }
