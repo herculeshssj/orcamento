@@ -49,3 +49,5 @@
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('MAR2014.2', true);
+
+alter table favorecido add column cpfCnpj varchar(14) null;

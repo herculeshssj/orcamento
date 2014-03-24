@@ -78,9 +78,9 @@ public class AgendamentoTask {
 		this.agendaRepository = agendaRepository;
 	}
 	
-	//@Scheduled(fixedDelay=3600000)
+	@Scheduled(fixedDelay=3600000)
 	@SuppressWarnings("deprecation")
-	@Scheduled(fixedDelay=120000)
+	//@Scheduled(fixedDelay=120000)
 	public void executarTarefa() {
 		CriterioAgendamento criterioAgendamento = new CriterioAgendamento();
 		criterioAgendamento.setTipo(TipoAgendamento.PREVISAO);

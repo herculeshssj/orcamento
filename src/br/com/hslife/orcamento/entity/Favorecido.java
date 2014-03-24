@@ -87,6 +87,9 @@ public class Favorecido extends EntityPersistence {
 	@Column
 	private boolean padrao;
 	
+	@Column(length=14, nullable=true)
+	private String cpfCnpj;
+	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
@@ -123,7 +126,20 @@ public class Favorecido extends EntityPersistence {
 		
 		if (this.usuario == null) {
 			throw new BusinessException("Informe o usuário!");
-		}		
+		}
+		
+		if (this.cpfCnpj != null && !this.cpfCnpj.trim().isEmpty()) {
+			switch (this.tipoPessoa) {
+				case FISICA : 
+					if (!Util.validaCPF(this.cpfCnpj))
+						throw new BusinessException("CPF informado é inválido!");
+					break;
+				case JURIDICA : 
+					if (!Util.validaCNPJ(this.cpfCnpj))
+						throw new BusinessException("CNPJ informado é inválido!");
+					break;
+			}
+		}
 	}
 	
 	public String getSaldoPagoFormatado() {
@@ -216,5 +232,13 @@ public class Favorecido extends EntityPersistence {
 
 	public void setSaldoDebito(double saldoDebito) {
 		this.saldoDebito = saldoDebito;
+	}
+
+	public String getCpfCnpj() {
+		return cpfCnpj;
+	}
+
+	public void setCpfCnpj(String cpfCnpj) {
+		this.cpfCnpj = cpfCnpj;
 	}
 }
