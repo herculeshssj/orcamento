@@ -67,6 +67,7 @@ public class MeioPagamentoController extends AbstractCRUDController<MeioPagament
 	private IMeioPagamento service; 
 	
 	private String descricaoMeioPagamento;
+	private boolean somenteAtivos = true;
 	
 	public MeioPagamentoController() {
 		super(new MeioPagamento());
@@ -82,7 +83,7 @@ public class MeioPagamentoController extends AbstractCRUDController<MeioPagament
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorDescricaoEUsuario(descricaoMeioPagamento, getUsuarioLogado());
+			listEntity = getService().buscarPorDescricaoUsuarioEAtivo(descricaoMeioPagamento, getUsuarioLogado(), somenteAtivos);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -108,5 +109,13 @@ public class MeioPagamentoController extends AbstractCRUDController<MeioPagament
 
 	public void setDescricaoMeioPagamento(String descricaoMeioPagamento) {
 		this.descricaoMeioPagamento = descricaoMeioPagamento;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }

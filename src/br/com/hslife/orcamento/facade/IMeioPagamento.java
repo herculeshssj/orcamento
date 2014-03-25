@@ -58,4 +58,6 @@ public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
 	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
 
 	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	
+	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
 }

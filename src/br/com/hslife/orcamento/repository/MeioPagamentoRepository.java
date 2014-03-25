@@ -44,7 +44,6 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -54,7 +53,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -88,22 +86,6 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}
 	
-	public boolean existsLinkages(MeioPagamento meioPagamento) {
-		boolean result = true;
-		
-		String sqlLancamento = "select count(id) from lancamentoconta where idMeioPagamento = " + meioPagamento.getId();
-		
-		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
-		
-		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
-		
-		if (queryResultLancamento.longValue() == 0) {
-			return false;
-		}
-		
-		return result;
-	}
-	
 	public void updateAllToNotDefault(Usuario usuario) {
 		String sql = "update meiopagamento set padrao = false where idUsuario = " + usuario.getId();
 		
@@ -124,75 +106,10 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 		return null;
 	}
 	
-	/*	@Autowired
-	private SessionFactory sessionFactory;
-	
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
-	
-	public void save(MeioPagamento entity) {
-		getSession().persist(entity);
-	}
-	
-	public void update(MeioPagamento entity) {
-		getSession().merge(entity);
-	}
-	
-	public void delete(MeioPagamento entity) {
-		getSession().delete(entity);
-	}
-	
-	public MeioPagamento findById(Long id) {
-		return (MeioPagamento)getSession().get(MeioPagamento.class, id);
-	}
-	
 	@SuppressWarnings("unchecked")
-	public List<MeioPagamento> findAll() {
-		return getSession().createCriteria(MeioPagamento.class).addOrder(Order.asc("descricao")).list();
+	public List<MeioPagamento> findByDescricaoUsuarioAndAtivo(String descricao, Usuario usuario, boolean ativo) {
+		String hql = "FROM MeioPagamento meioPagamento WHERE meioPagamento.descricao LIKE '%" + descricao + "%' AND meioPagamento.usuario.id = :idUsuario AND meioPagamento.ativo = :ativo ORDER BY meioPagamento.descricao ASC";
+		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
+		return query.list();
 	}
-	
-	@SuppressWarnings("unchecked")
-	public List<MeioPagamento> findByDescricao(String descricao) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
-		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));		
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-
-	public MeioPagamento findDefault() throws BusinessException {
-		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
-		criteria.add(Restrictions.eq("padrao", true));
-		criteria.setMaxResults(1);
-		return (MeioPagamento)criteria.uniqueResult();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<MeioPagamento> findByUsuario(Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-
-	public MeioPagamento findDefaultByUsuario(Long idUsuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
-		criteria.add(Restrictions.eq("padrao", true));
-		criteria.add(Restrictions.eq("usuario.id", idUsuario));
-		criteria.setMaxResults(1);
-		return (MeioPagamento)criteria.uniqueResult();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<MeioPagamento> findByDescricaoAndUsuario(String descricao, Usuario usuario) throws BusinessException {
-		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
-		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
-		if (!usuario.getLogin().equals("admin")) {
-			criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		}		
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	*/
 }
