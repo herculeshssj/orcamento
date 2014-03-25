@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Categoria;
@@ -93,11 +94,12 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	
 	@Override
 	public void excluir(Categoria entity) throws BusinessException {
-		if (getRepository().existsLinkages(entity)) {
-			entity.setAtivo(false);
-			super.alterar(entity);
-		} else {
+		try {
 			super.excluir(entity);
+		} catch (DataIntegrityViolationException dive) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
+		} catch (Exception e) {
+			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
 		}
 	}
 
@@ -124,5 +126,10 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	@Override
 	public void validar(Categoria entity) throws BusinessException {
 		
+	}
+
+	@Override
+	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException {
+		return getRepository().findByDescricaoUsuarioAndAtivo(descricao, usuario, ativo);
 	}
 }

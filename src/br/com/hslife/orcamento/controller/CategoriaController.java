@@ -71,6 +71,7 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 	private ICategoria service; 
 	
 	private String descricaoCategoria;
+	private boolean somenteAtivos = true;
 	
 	public CategoriaController() {
 		super(new Categoria());
@@ -86,7 +87,7 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorDescricaoEUsuario(descricaoCategoria, getUsuarioLogado());
+			listEntity = getService().buscarPorDescricaoUsuarioEAtivo(descricaoCategoria, getUsuarioLogado(), somenteAtivos);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -119,5 +120,13 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 
 	public void setDescricaoCategoria(String descricaoCategoria) {
 		this.descricaoCategoria = descricaoCategoria;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }

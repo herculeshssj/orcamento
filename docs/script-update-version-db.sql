@@ -54,4 +54,4 @@ insert into versao (versao, ativo) values ('MAR2014.2', true);
 alter table favorecido add column cpfCnpj varchar(14) null;
 
 -- Cadastro de moedas
-alter table moeda add column valorConversao decimal(18,2) not null default 0.0;
+alter table moeda add column valorConversao decimal(18,4) not null default 0.0;

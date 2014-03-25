@@ -58,7 +58,10 @@
 	
 	<ui:define name="pesquisa">
 		Descrição:
-	    <p:inputText value="#{managedBean.descricaoCategoria}" />
+	    <h:inputText value="#{managedBean.descricaoCategoria}" />
+	    &nbsp;
+	    <h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    Somente ativos
 	</ui:define>
 
 	<ui:define name="colunas">
@@ -68,19 +71,12 @@
 			</f:facet>
 			<h:outputText value="#{item.descricao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF' : 'color: #FF0000' }"/>
 		 </p:column>
-		 			 			
-		 <p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Padrão"/>
-			</f:facet>
-			<p:selectBooleanCheckbox value="#{item.padrao}" disabled="true"/>
-		 </p:column>
 		 			
 		 <p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Ativo"/>
 			</f:facet>
-			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
+			<h:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
 		 </p:column>
 	</ui:define>
 	
