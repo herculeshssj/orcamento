@@ -190,13 +190,16 @@ public class ResumoMensalContasController extends AbstractController {
 	
 	public List<Conta> getListaConta() {
 		try {
-			// Variável que armazenará a lista de contas
-			List<Conta> contas;
-			contas = contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-			if (contas != null && contas.size() != 0) {
-				contaSelecionada = contas.get(0);
+			if (contaSelecionada == null) {
+				List<Conta> contas;
+				contas = contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+				if (contas != null && contas.size() != 0) {
+					contaSelecionada = contas.get(0);
+				}
+				return contas;
+			} else {
+				return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
 			}
-			return contas;			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -205,7 +208,7 @@ public class ResumoMensalContasController extends AbstractController {
 	
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
 		try {
-				return fechamentoPeriodoService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
+			return fechamentoPeriodoService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
