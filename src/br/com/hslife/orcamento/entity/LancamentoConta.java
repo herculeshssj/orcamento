@@ -197,6 +197,7 @@ public class LancamentoConta extends EntityPersistence {
 	private FaturaCartao faturaCartao;
 	
 	@OneToOne(orphanRemoval=false)
+	@JoinColumn(name="lancamentoPai")
 	private LancamentoConta lancamentoPai;
 	
 	@Transient

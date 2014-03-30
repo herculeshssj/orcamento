@@ -57,7 +57,7 @@ alter table lancamentoconta add column diaVencimento integer null;
 alter table lancamentoconta add column totalParcela integer null;
 
 alter table lancamentoconta add column dataAquisicao date null;
-alter table lancamentoconta add column valorParcela decimal(18,2) null;
+alter table lancamentoconta add column valorParcela decimal(18,2) default 0.0;
 
 alter table lancamentoconta add column naturezaLancamento varchar(15) not null;
 alter table lancamentoconta add column periodoLancamento varchar(15) null;
@@ -70,3 +70,5 @@ alter table lancamentoconta add constraint fk_lancamentopai_lancamentoconta fore
 update lancamentoconta set statusLancamento = 'REGISTRADO';
 update lancamentoconta set statusLancamento = 'AGENDADO' where agendado = true;
 update lancamentoconta set statusLancamento = 'QUITADO' where quitado = true;
+
+update lancamentoconta set naturezaLancamento = 'FIXO';
