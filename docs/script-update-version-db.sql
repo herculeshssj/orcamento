@@ -48,4 +48,25 @@
 
 -- Atualização de versão
 update versao set ativo = false;
-insert into versao (versao, ativo) values ('MAR2014.2', true);
+insert into versao (versao, ativo) values ('MAI2014', true);
+
+-- Alterações na tabela lancamentoconta;
+alter table lancamentoconta add column mes integer null;
+alter table lancamentoconta add column ano integer null;
+alter table lancamentoconta add column diaVencimento integer null;
+alter table lancamentoconta add column totalParcela integer null;
+
+alter table lancamentoconta add column dataAquisicao date null;
+alter table lancamentoconta add column valorParcela decimal(18,2) null;
+
+alter table lancamentoconta add column naturezaLancamento varchar(15) not null;
+alter table lancamentoconta add column periodoLancamento varchar(15) null;
+alter table lancamentoconta add column statusLancamento varchar(15) not null;
+
+alter table lancamentoconta add column lancamentoPai bigint null;
+
+alter table lancamentoconta add constraint fk_lancamentopai_lancamentoconta foreign key(lancamentoPai) references lancamentoconta(id);
+
+update lancamentoconta set statusLancamento = 'REGISTRADO';
+update lancamentoconta set statusLancamento = 'AGENDADO' where agendado = true;
+update lancamentoconta set statusLancamento = 'QUITADO' where quitado = true;
