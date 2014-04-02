@@ -42,34 +42,18 @@
   
  ***/
 
-package br.com.hslife.orcamento.service;
+package br.com.hslife.orcamento.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
-import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 
-@Service("lancamentoPeriodicoService")
-public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPeriodico> implements ILancamentoPeriodico {
-
-	@Autowired
-	private LancamentoPeriodicoRepository repository;
-
-	public LancamentoPeriodicoRepository getRepository() {
-		return repository;
+@Repository
+public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<LancamentoPeriodico> {
+	
+	public LancamentoPeriodicoRepository() {
+		super(new LancamentoPeriodico());
 	}
-
-	public void setRepository(LancamentoPeriodicoRepository repository) {
-		this.repository = repository;
-	}
-
-	@Override
-	public void validar(LancamentoPeriodico entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
+	
 }

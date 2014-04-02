@@ -44,12 +44,12 @@
 
 package br.com.hslife.orcamento.enumeration;
 
-public enum NaturezaLancamento {
+public enum TipoLancamentoPeriodico {
 	FIXO("FIXO"), PERIODICO("PERIODICO"), PARCELADO("PARCELADO");
 	
 	private String descricao;
 	
-	private NaturezaLancamento(String descricao) {
+	private TipoLancamentoPeriodico(String descricao) {
 		this.descricao = descricao;
 	}
 

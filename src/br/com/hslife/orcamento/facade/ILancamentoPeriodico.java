@@ -44,51 +44,10 @@
 
 package br.com.hslife.orcamento.facade;
 
-import java.util.List;
-import java.util.Map;
-
-import br.com.hslife.orcamento.entity.Categoria;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.AgrupamentoLancamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.service.ICRUDService;
 
-public interface ILancamentoPeriodico extends ICRUDService<LancamentoConta> {
+public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> {
 	
-	public List<LancamentoConta> buscarPorCriterioLancamentoConta(CriterioLancamentoConta criterio) throws BusinessException;
 	
-	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos);
-	
-	public double saldoUltimoFechamento(Conta conta) throws BusinessException;
-
-	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<Favorecido> organizarLancamentosPorFavorecido(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<AgrupamentoLancamento> organizarLancamentosPorDebitoCredito(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public void moverLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void excluirLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void copiarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros) throws BusinessException;
-	
-	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
-	
-	public void vincularAFaturaAtual(LancamentoConta lancamento) throws BusinessException;
-	
-	public void vincularAProximaFatura(LancamentoConta lancamento) throws BusinessException;
-	
-	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException;
 }

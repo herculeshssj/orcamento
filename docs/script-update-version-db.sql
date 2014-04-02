@@ -50,25 +50,40 @@
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('MAI2014', true);
 
--- Alterações na tabela lancamentoconta;
-alter table lancamentoconta add column mes integer null;
-alter table lancamentoconta add column ano integer null;
-alter table lancamentoconta add column diaVencimento integer null;
-alter table lancamentoconta add column totalParcela integer null;
+-- Lançamentos periódicos
+create table lancamentoperiodico(
+	id bigint not null auto_increment,
+	dataAquisicao date not null,
+	descricao varchar(50) not null,
+	observacao text null,
+	valorParcela decimal(18,2) default 0.0,
+	valorCompra decimal(18,2) default 0.0,
+	tipoLancamento varchar(10) not null,
+	statusLancamento varchar(15) not null,
+	idConta bigint not null,
+	idCategoria bigint null,
+	idFavorecido bigint null,
+	idMeioPagamento bigint null,
+	idArquivo bigint null,
+	idMoeda bigint not null,
+	idUsuario bigint not null,
+	totalParcela integer null,
+	diaVencimento integer not null,
+	tipoLancamentoPeriodico varchar(10) not null,
+	periodoLancamento varchar(20) null,
+	parcelasPagas int null,
+	versionEntity datetime not null default '2014-05-01 00:00:00', 
+	primary key(id)
+);
 
-alter table lancamentoconta add column dataAquisicao date null;
-alter table lancamentoconta add column valorParcela decimal(18,2) default 0.0;
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_conta foreign key (idConta) references conta(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_categoria foreign key (idCategoria) references categoria(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_favorecido foreign key (idFavorecido) references favorecido(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_meiopagamento foreign key (idMeioPagamento) references meiopagamento(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_arquivo foreign key (idArquivo) references arquivo(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_moeda foreign key (idMoeda) references moeda(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_usuario foreign key (idUsuario) references usuario(id);
 
-alter table lancamentoconta add column naturezaLancamento varchar(15) not null;
-alter table lancamentoconta add column periodoLancamento varchar(15) null;
-alter table lancamentoconta add column statusLancamento varchar(15) not null;
-
-alter table lancamentoconta add column lancamentoPai bigint null;
-
-alter table lancamentoconta add constraint fk_lancamentopai_lancamentoconta foreign key(lancamentoPai) references lancamentoconta(id);
-
-update lancamentoconta set statusLancamento = 'REGISTRADO';
-update lancamentoconta set statusLancamento = 'AGENDADO' where agendado = true;
-update lancamentoconta set statusLancamento = 'QUITADO' where quitado = true;
-
-update lancamentoconta set naturezaLancamento = 'FIXO';
+-- alterções em lancamentoconta
+alter table lancamentoconta add column idLancamentoPeriodico bigint null;
+alter table lancamentoconta add constraint fk_lancamentoconta_lancamentoperiodico foreign key(idLancamentoPeriodico) references lancamentoperiodico(id);

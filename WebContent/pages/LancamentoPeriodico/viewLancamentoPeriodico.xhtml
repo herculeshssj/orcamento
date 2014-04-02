@@ -54,63 +54,7 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{lancamentoContaMB}" />
+	<ui:param name="managedBean" value="#{lancamentoPeriodicoMB}" />
 	
-	<ui:define name="campos">
-			
-		<h:panelGrid columns="2">
-			
-			Conta:
-			<h:outputText value="#{managedBean.entity.conta.descricao}"/>			
-									
-			Tipo de Lançamento:
-			<h:outputText value="#{managedBean.entity.tipoLancamento}"/>	
-			
-			Descrição:
-			<h:outputText value="#{managedBean.entity.descricao}"/>
-			
-			Histórico:
-			<h:outputText value="#{managedBean.entity.historico}"/>
-						
-			Número do documento:
-			<h:outputText value="#{managedBean.entity.numeroDocumento}"/>
-			
-			Data de pagamento:
-			<h:outputText value="#{managedBean.entity.dataPagamento}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-						
-			Valor pago:
-			<h:outputText value="#{managedBean.entity.valorPago}" >
-				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-			</h:outputText>			
-						
-			Observação:
-			<h:outputText value="#{managedBean.entity.observacao}" />
-						
-			Lançamento agendado:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.agendado}"  disabled="true"/>
-						
-			Categoria:
-			<h:outputText value="#{managedBean.entity.categoria.descricao}"/>
-			
-			Favorecido/Sacado:
-			<h:outputText value="#{managedBean.entity.favorecido.nome}"/>
-			
-			Meio de pagamento:
-			<h:outputText value="#{managedBean.entity.meioPagamento.descricao}"/>
-			
-			Anexo:
-			<h:outputText value="#{managedBean.entity.arquivo.nomeArquivo}" rendered="#{managedBean.entity.arquivo != null}"/>
-			<h:outputText value="Sem anexo" rendered="#{managedBean.entity.arquivo == null}"/>
-			
-			Importado:
-			<h:outputText value="Sim" rendered="#{not empty managedBean.entity.hashImportacao}" />
-			<h:outputText value="Não" rendered="#{empty managedBean.entity.hashImportacao}" />
-				
-		</h:panelGrid>
-		
-	</ui:define>
-
 </ui:composition>
 </html>
