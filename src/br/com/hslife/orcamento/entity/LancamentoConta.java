@@ -66,9 +66,6 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import br.com.hslife.orcamento.enumeration.NaturezaLancamento;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
-import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 
@@ -93,10 +90,6 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(nullable=true)
 	private Date dataPagamento;
 	
-	@Temporal(TemporalType.DATE)
-	@Column(nullable=true)
-	private Date dataAquisicao;
-	
 	@Column(length=100, nullable=false)
 	private String descricao;
 	
@@ -112,24 +105,9 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)
 	private double valorPago;
 	
-	@Column(nullable=false, precision=18, scale=2)
-	private double valorParcela;
-	
-	@Column(length=10, nullable=false)
+	@Column(length=10)
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipoLancamento;
-	
-	@Column(length=15, nullable=false)
-	@Enumerated(EnumType.STRING)
-	private NaturezaLancamento naturezaLancamento;
-	
-	@Column(length=15, nullable=false)
-	@Enumerated(EnumType.STRING)
-	private StatusLancamento statusLancamento;
-	
-	@Column(length=10, nullable = true)
-	@Enumerated(EnumType.STRING)
-	private PeriodoLancamento periodoLancamento;
 	
 	@Column(nullable=false)
 	private boolean agendado;
@@ -172,20 +150,12 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=true)
 	private Moeda moeda;
 	
+	@ManyToOne
+	@JoinColumn(name="idLancamentoPeriodico", nullable=true)
+	private LancamentoPeriodico lancamentoPeriodico;
+	
 	@Column(length=20, nullable=true)
 	private String parcela;
-	
-	@Column(nullable=true)
-	private Integer totalParcela;
-	
-	@Column(nullable=true)
-	private Integer mes;
-	
-	@Column(nullable=true)
-	private Integer ano;
-	
-	@Column(nullable=true)
-	private Integer diaVencimento;
 		
 	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=true)
@@ -195,10 +165,6 @@ public class LancamentoConta extends EntityPersistence {
 	@ManyToOne(optional=true)
 	@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")})
 	private FaturaCartao faturaCartao;
-	
-	@OneToOne(orphanRemoval=false)
-	@JoinColumn(name="lancamentoPai")
-	private LancamentoConta lancamentoPai;
 	
 	@Transient
 	private LancamentoImportado lancamentoImportado;
@@ -253,24 +219,6 @@ public class LancamentoConta extends EntityPersistence {
 	
 	public void setValorPago(double valorPago) {
 		this.valorPago = Math.abs(valorPago);
-	}
-	
-	public void setAgendado(boolean agendado) {
-		if (agendado) {
-			this.statusLancamento = StatusLancamento.AGENDADO;
-		} else {
-			this.statusLancamento = StatusLancamento.REGISTRADO;
-		}
-		this.agendado = agendado;
-	}
-	
-	public void setQuitado(boolean quitado) {
-		if (quitado) {
-			this.statusLancamento = StatusLancamento.QUITADO;
-		} else {
-			this.statusLancamento = StatusLancamento.REGISTRADO;
-		}
-		this.quitado = quitado;
 	}
 
 	public void setId(Long id) {
@@ -336,9 +284,17 @@ public class LancamentoConta extends EntityPersistence {
 	public boolean isAgendado() {
 		return agendado;
 	}
-	
+
+	public void setAgendado(boolean agendado) {
+		this.agendado = agendado;
+	}
+
 	public boolean isQuitado() {
 		return quitado;
+	}
+
+	public void setQuitado(boolean quitado) {
+		this.quitado = quitado;
 	}
 
 	public String getHashImportacao() {
@@ -457,83 +413,11 @@ public class LancamentoConta extends EntityPersistence {
 		this.faturaCartao = faturaCartao;
 	}
 
-	public Date getDataAquisicao() {
-		return dataAquisicao;
+	public LancamentoPeriodico getLancamentoPeriodico() {
+		return lancamentoPeriodico;
 	}
 
-	public void setDataAquisicao(Date dataAquisicao) {
-		this.dataAquisicao = dataAquisicao;
-	}
-
-	public double getValorParcela() {
-		return valorParcela;
-	}
-
-	public void setValorParcela(double valorParcela) {
-		this.valorParcela = valorParcela;
-	}
-
-	public NaturezaLancamento getNaturezaLancamento() {
-		return naturezaLancamento;
-	}
-
-	public void setNaturezaLancamento(NaturezaLancamento naturezaLancamento) {
-		this.naturezaLancamento = naturezaLancamento;
-	}
-
-	public StatusLancamento getStatusLancamento() {
-		return statusLancamento;
-	}
-
-	public void setStatusLancamento(StatusLancamento statusLancamento) {
-		this.statusLancamento = statusLancamento;
-	}
-
-	public PeriodoLancamento getPeriodoLancamento() {
-		return periodoLancamento;
-	}
-
-	public void setPeriodoLancamento(PeriodoLancamento periodoLancamento) {
-		this.periodoLancamento = periodoLancamento;
-	}
-
-	public Integer getTotalParcela() {
-		return totalParcela;
-	}
-
-	public void setTotalParcela(Integer totalParcela) {
-		this.totalParcela = totalParcela;
-	}
-
-	public Integer getMes() {
-		return mes;
-	}
-
-	public void setMes(Integer mes) {
-		this.mes = mes;
-	}
-
-	public Integer getAno() {
-		return ano;
-	}
-
-	public void setAno(Integer ano) {
-		this.ano = ano;
-	}
-
-	public Integer getDiaVencimento() {
-		return diaVencimento;
-	}
-
-	public void setDiaVencimento(Integer diaVencimento) {
-		this.diaVencimento = diaVencimento;
-	}
-
-	public LancamentoConta getLancamentoPai() {
-		return lancamentoPai;
-	}
-
-	public void setLancamentoPai(LancamentoConta lancamentoPai) {
-		this.lancamentoPai = lancamentoPai;
+	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
+		this.lancamentoPeriodico = lancamentoPeriodico;
 	}
 }
