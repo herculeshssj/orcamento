@@ -47,22 +47,34 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
+import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("lancamentoPeriodicoMB")
@@ -83,8 +95,19 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	@Autowired
 	private IMoeda moedaService;
 	
+	@Autowired
+	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
+	
 	private Conta contaSelecionada;
 	private StatusLancamento statusLancamento;
+	private TipoCategoria tipoCategoriaSelecionada;	
+	private boolean parcelamento;
 	
 	public LancamentoPeriodicoController() {
 		super(new LancamentoPeriodico());
@@ -114,6 +137,71 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return super.save();
 	}
 	
+	@Override
+	public String edit() {
+		String goToPage = super.edit();
+		if (goToPage.equals(goToFormPage)) {
+			atualizaComboCategorias();
+			atualizaPainelCadastro();
+		}
+		return goToPage;
+	}
+	
+	public void carregarArquivo(FileUploadEvent event) {
+		if (event.getFile() != null) {
+			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
+			entity.getArquivo().setDados(event.getFile().getContents());
+			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			entity.getArquivo().setContentType(event.getFile().getContentType());
+			entity.getArquivo().setTamanho(event.getFile().getSize());			
+		} 
+	}
+	
+	public void baixarArquivo() {
+		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
+			warnMessage("Nenhum arquivo adicionado!");
+		} else {
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			try {			
+				response.setContentType(entity.getArquivo().getContentType());
+				response.setHeader("Content-Disposition","attachment; filename=" + entity.getArquivo().getNomeArquivo());
+				response.setContentLength(entity.getArquivo().getDados().length);
+				ServletOutputStream output = response.getOutputStream();
+				output.write(entity.getArquivo().getDados(), 0, entity.getArquivo().getDados().length);
+				FacesContext.getCurrentInstance().responseComplete();
+			} catch (Exception e) {
+				errorMessage(e.getMessage());
+			}
+		}
+	}
+	
+	public void excluirArquivo() {
+		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
+			warnMessage("Nenhum arquivo adicionado!");
+		} else {
+			entity.setArquivo(null);
+			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
+		}
+	}
+	
+	public void atualizaPainelCadastro() {
+		if (entity.getTipoLancamentoPeriodico() != null && entity.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+			parcelamento = false;
+		} else {
+			parcelamento = true;
+		}
+	}
+	
+	public void atualizaComboCategorias() {
+		if (entity.getTipoLancamento() != null) {
+			if (entity.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+				tipoCategoriaSelecionada = TipoCategoria.CREDITO;
+			} else {
+				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
+			}
+		}
+	}
+	
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());						
@@ -121,6 +209,34 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
+	}
+	
+	public List<Categoria> getListaCategoria() {
+		try {
+			if (tipoCategoriaSelecionada != null)
+				return categoriaService.buscarPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		} 
+		return new ArrayList<Categoria>();
+	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			return favorecidoService.buscarPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<Favorecido>();
+	}
+	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			return meioPagamentoService.buscarPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<MeioPagamento>();
 	}
 	
 	public List<Moeda> getListaMoeda() {
@@ -191,5 +307,33 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setMoedaService(IMoeda moedaService) {
 		this.moedaService = moedaService;
+	}
+
+	public boolean isParcelamento() {
+		return parcelamento;
+	}
+
+	public void setParcelamento(boolean parcelamento) {
+		this.parcelamento = parcelamento;
+	}
+
+	public TipoCategoria getTipoCategoriaSelecionada() {
+		return tipoCategoriaSelecionada;
+	}
+
+	public void setTipoCategoriaSelecionada(TipoCategoria tipoCategoriaSelecionada) {
+		this.tipoCategoriaSelecionada = tipoCategoriaSelecionada;
+	}
+
+	public void setCategoriaService(ICategoria categoriaService) {
+		this.categoriaService = categoriaService;
+	}
+
+	public void setFavorecidoService(IFavorecido favorecidoService) {
+		this.favorecidoService = favorecidoService;
+	}
+
+	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {
+		this.meioPagamentoService = meioPagamentoService;
 	}
 }

@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoLancamentoPeriodico {
-	FIXO("FIXO"), PERIODICO("PERIODICO"), PARCELADO("PARCELADO");
+	FIXO("FIXO"), PARCELADO("PARCELADO");
 	
 	private String descricao;
 	
