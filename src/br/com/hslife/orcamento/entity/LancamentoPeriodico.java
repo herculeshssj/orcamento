@@ -96,14 +96,14 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)
 	private double valorParcela;
 	
-	@Column(nullable=false, precision=18, scale=2)
-	private double valorCompra;
+	@Column(nullable=true, precision=18, scale=2)
+	private Double valorCompra;
 	
-	@Column(length=10)
+	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipoLancamento;
 	
-	@Column(length=15)
+	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private StatusLancamento statusLancamento;
 	
@@ -113,11 +113,11 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@Column
 	private int diaVencimento;
 	
-	@Column(length=10)
+	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoLancamentoPeriodico tipoLancamentoPeriodico;
 	
-	@Column(length=10)
+	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private PeriodoLancamento periodoLancamento;
 	
@@ -150,7 +150,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	private Arquivo arquivo;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario")
+	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
 	public LancamentoPeriodico() {
@@ -164,7 +164,6 @@ public class LancamentoPeriodico extends EntityPersistence {
 
 	@Override
 	public void validate() throws BusinessException {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -208,11 +207,11 @@ public class LancamentoPeriodico extends EntityPersistence {
 		this.valorParcela = valorParcela;
 	}
 
-	public double getValorCompra() {
+	public Double getValorCompra() {
 		return valorCompra;
 	}
 
-	public void setValorCompra(double valorCompra) {
+	public void setValorCompra(Double valorCompra) {
 		this.valorCompra = valorCompra;
 	}
 

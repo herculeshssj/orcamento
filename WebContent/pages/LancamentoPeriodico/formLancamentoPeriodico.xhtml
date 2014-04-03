@@ -55,5 +55,62 @@
 
 	<ui:param name="managedBean" value="#{lancamentoPeriodicoMB}" />
 	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+		
+			Tipo de Lançamento:
+			<h:selectOneRadio value="#{managedBean.entity.tipoLancamentoPeriodico}" layout="lineDirection">
+				<f:selectItems value="#{managedBean.listaTipoLancamentoPeriodico}"/>								
+			</h:selectOneRadio>
+		
+			Descrição:
+			<h:inputText value="#{managedBean.entity.descricao}" size="50"/>
+			
+			<h:outputText />
+			<h:selectOneRadio value="#{managedBean.entity.tipoLancamento}" layout="lineDirection">
+				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>								
+			</h:selectOneRadio>
+			
+			Conta de pagamento:
+			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+			
+			Moeda:
+			<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>
+			
+			Data de aquisição:
+			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataAquisicao}">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>
+	    	
+	    	Valor da compra:
+	    	<h:inputText value="#{managedBean.entity.valorCompra}" size="10">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:inputText>
+			
+			Quantidade de parcelas:
+			<h:inputText value="#{managedBean.entity.totalParcela}" size="5"/>
+	    	
+	    	Valor da parcela:
+	    	<h:inputText value="#{managedBean.entity.valorParcela}" size="10">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:inputText>
+			
+			Dia de vencimento:
+			<h:inputText value="#{managedBean.entity.diaVencimento}" size="5"/>
+			
+			Periodicidade:
+			<h:selectOneMenu value="#{managedBean.entity.periodoLancamento}">			
+				<f:selectItems value="#{managedBean.listaPeriodoLancamento}" />
+			</h:selectOneMenu>
+			
+		</h:panelGrid>
+	
+	</ui:define>
+	
 </ui:composition>
 </html>

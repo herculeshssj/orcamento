@@ -44,10 +44,16 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.util.List;
+
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> {
 	
+	public List<LancamentoPeriodico> buscarPorContaEStatusLancamento(Conta conta, StatusLancamento statusLancamento) throws BusinessException;
 	
 }

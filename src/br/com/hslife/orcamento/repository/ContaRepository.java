@@ -113,14 +113,9 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAllAtivosByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
-		Criteria criteria = getSession().createCriteria(Conta.class);
-		criteria.add(Restrictions.eq("ativo", true));
-		if (!usuario.getLogin().equals("admin")) {
-			criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		}
-		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
-		return criteria.addOrder(Order.asc("descricao")).list();
+		hql = "FROM Conta conta WHERE conta.ativo = :ativo AND conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC";
+		hqlQuery = getSession().createQuery(hql).setBoolean("ativo", true).setLong("idUsuario", usuario.getId());
+		return hqlQuery.list(); 
 	}
 	
 	@SuppressWarnings("unchecked")

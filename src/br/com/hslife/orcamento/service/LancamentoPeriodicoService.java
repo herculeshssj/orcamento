@@ -44,10 +44,14 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
@@ -72,4 +76,8 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		
 	}
 
+	@Override
+	public List<LancamentoPeriodico> buscarPorContaEStatusLancamento(Conta conta, StatusLancamento statusLancamento) throws BusinessException {
+		return getRepository().findByContaAndStatusLancamento(conta, statusLancamento);
+	}
 }

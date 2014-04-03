@@ -44,9 +44,13 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
 
 @Repository
 public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<LancamentoPeriodico> {
@@ -55,5 +59,10 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 		super(new LancamentoPeriodico());
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoPeriodico> findByContaAndStatusLancamento(Conta conta, StatusLancamento statusLancamento) {
+		hql = "FROM LancamentoPeriodico periodico WHERE periodico.conta.id = :idConta AND periodico.statusLancamento = :status ORDER BY periodico.descricao ASC";
+		hqlQuery = getSession().createQuery(hql).setLong("idConta", conta.getId()).setParameter("status", statusLancamento);
+		return hqlQuery.list();
+	}
 }

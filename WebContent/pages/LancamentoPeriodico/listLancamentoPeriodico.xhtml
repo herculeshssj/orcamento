@@ -56,5 +56,44 @@
 
 	<ui:param name="managedBean" value="#{lancamentoPeriodicoMB}" />
 	
+	<ui:define name="pesquisa">
+		Conta:
+		<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
+			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		</h:selectOneMenu>
+		&nbsp;
+		Situação:
+		<h:selectOneMenu value="#{managedBean.statusLancamento}">
+			<f:selectItems value="#{managedBean.listaStatusLancamento}" />
+		</h:selectOneMenu>
+	</ui:define>
+	
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição"/>
+			</f:facet>
+			<h:outputText value="#{item.descricao}"/>						
+	  	</p:column>
+	  	<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Vencimento"/>
+			</f:facet>
+			<h:outputText value="#{item.diaVencimento}"/>						
+	  	</p:column>
+	  	<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Valor"/>
+			</f:facet>
+			<h:outputText value="#{item.valorParcela}"/>						
+	  	</p:column>
+	  	<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Situação"/>
+			</f:facet>
+			<h:outputText value="#{item.statusLancamento}"/>						
+	  	</p:column>
+	</ui:define>
+	
 </ui:composition>
 </html>

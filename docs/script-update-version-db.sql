@@ -57,7 +57,7 @@ create table lancamentoperiodico(
 	descricao varchar(50) not null,
 	observacao text null,
 	valorParcela decimal(18,2) default 0.0,
-	valorCompra decimal(18,2) default 0.0,
+	valorCompra decimal(18,2) null,
 	tipoLancamento varchar(10) not null,
 	statusLancamento varchar(15) not null,
 	idConta bigint not null,
