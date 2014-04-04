@@ -60,10 +60,10 @@
 		<h:panelGrid columns="2">
 			
 			Selecione o tipo de despesa:
-			<h:selectOneRadio value="#{managedBean.entity.tipoLancamentoPeriodico}" layout="lineDirection">
+			<p:selectOneRadio value="#{managedBean.entity.tipoLancamentoPeriodico}" layout="lineDirection">
 				<f:selectItems value="#{managedBean.listaTipoLancamentoPeriodico}"/>
 				<p:ajax event="change" update="pnlLancamentoPeriodico" listener="#{managedBean.atualizaPainelCadastro}" />							
-			</h:selectOneRadio>
+			</p:selectOneRadio>
 			
 		</h:panelGrid>
 		
@@ -72,16 +72,16 @@
 		<h:panelGrid columns="2">
 		
 			Descrição:
-			<h:inputText value="#{managedBean.entity.descricao}" size="50"/>
+			<p:inputText value="#{managedBean.entity.descricao}" size="50"/>
 			
 			Observação:
-			<h:inputTextarea cols="30" rows="3" />
+			<p:inputTextarea cols="30" rows="3" value="#{managedBean.entity.observacao}"/>
 			
 			Tipo de lançamento a gerar:
-			<h:selectOneRadio value="#{managedBean.entity.tipoLancamento}" layout="lineDirection">
+			<p:selectOneRadio value="#{managedBean.entity.tipoLancamento}" layout="lineDirection">
 				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
 				<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>								
-			</h:selectOneRadio>
+			</p:selectOneRadio>
 			
 			Moeda:
 			<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
@@ -89,7 +89,7 @@
 			</h:selectOneMenu>
 			
 			Dia de vencimento:
-			<h:inputText value="#{managedBean.entity.diaVencimento}" size="5"/>
+			<p:inputText value="#{managedBean.entity.diaVencimento}" size="5"/>
 		
 		</h:panelGrid>
 	
@@ -105,9 +105,9 @@
 	    		</p:inputMask>
 	    		
 	    		Valor por período:
-	    		<h:inputText value="#{managedBean.entity.valorParcela}" size="10">
+	    		<p:inputText value="#{managedBean.entity.valorParcela}" size="10">
 					<f:convertNumber type="currency" pattern="###.##"/>
-				</h:inputText>
+				</p:inputText>
 				
 				Periodicidade:
 				<h:selectOneMenu value="#{managedBean.entity.periodoLancamento}">			
@@ -124,20 +124,20 @@
 	    		</p:inputMask>
 	    		
 	    		Valor da compra:
-	    		<h:inputText value="#{managedBean.entity.valorCompra}" size="10">
+	    		<p:inputText value="#{managedBean.entity.valorCompra}" size="10">
 					<f:convertNumber type="currency" pattern="###.##"/>
-				</h:inputText>
+				</p:inputText>
 	    		
 	    		Valor da parcela:
-	    		<h:inputText value="#{managedBean.entity.valorParcela}" size="10">
+	    		<p:inputText value="#{managedBean.entity.valorParcela}" size="10">
 					<f:convertNumber type="currency" pattern="###.##"/>
-				</h:inputText>
+				</p:inputText>
 				
 				Quantidade de parcelas:
-				<h:inputText value="#{managedBean.entity.totalParcela}" size="5"/>
+				<p:inputText value="#{managedBean.entity.totalParcela}" size="5"/>
 				
 				Quantidade de parcelas já pagas:
-				<h:inputText value="#{managedBean.entity.parcelasPagas}" size="5"/>
+				<p:inputText value="#{managedBean.entity.parcelasPagas}" size="5"/>
 				
 			</h:panelGrid>
 		
