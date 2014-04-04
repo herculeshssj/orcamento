@@ -138,7 +138,7 @@
 					</p:column>
 				</p:dataTable>
 			</p:tab>
-			<p:tab title="Meio de Pagamento">
+			<p:tab title="Meio de Pagamento" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 				<p:dataTable width="100%" value="#{managedBean.resumoMensal.meiosPagamento}" var="item">
 					<p:column>
 						<f:facet name="header">

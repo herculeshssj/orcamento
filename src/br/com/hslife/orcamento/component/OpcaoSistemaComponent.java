@@ -68,6 +68,9 @@ public class OpcaoSistemaComponent implements Serializable{
 	
 	@Autowired
 	private OpcaoSistemaRepository opcaoSistemaRepository;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 
 	public void setOpcaoSistemaRepository(OpcaoSistemaRepository opcaoSistemaRepository) {
 		this.opcaoSistemaRepository = opcaoSistemaRepository;
@@ -194,4 +197,18 @@ public class OpcaoSistemaComponent implements Serializable{
 			}
 		}
 	}
+	
+	/*** Métodos Getters das opções do sistema existentes ***/
+	
+	public Boolean getExibirMeioPagamento() {
+		try {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("EXIBIR_MEIO_PAGAMENTO", usuarioComponent.getUsuarioLogado());
+			return Boolean.valueOf(opcao.getValor());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/*** Métodos Setters das opções do sistema existentes ***/
 }

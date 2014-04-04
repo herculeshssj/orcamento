@@ -83,7 +83,7 @@
     </ui:define>
 	
 	<ui:define name="pesquisa">
-    	<h:inputText value="#{managedBean.criterioBusca.descricao}" size="20"/>
+    	<p:inputText value="#{managedBean.criterioBusca.descricao}" size="20"/>
     	&nbsp;
 	    De:
 	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.dataInicio}">
@@ -101,23 +101,31 @@
 		<p:overlayPanel for="linkBuscaAvancada">
 			<h:panelGrid columns="2">
 				<h:panelGroup>
-		  			Agrupar por:     			
-		  			<h:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}">
+		  			Agrupar por:
+		  			<!-- selectOneRadio exibido quando a exibição de meio de pagamento está ativada -->     			
+		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 		  				<f:selectItem itemLabel="Nenhum"/>
 		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
 						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-						<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
+						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
 						<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
-					</h:selectOneRadio>
+					</p:selectOneRadio>
+					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->     			
+		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
+		  				<f:selectItem itemLabel="Nenhum"/>
+		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
+						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
+						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
+					</p:selectOneRadio>
 				</h:panelGroup>				
 				<h:panelGroup>   				
 					Exibir:
-					<h:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.agendado}">
+					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.agendado}">
 		  				<f:selectItem itemLabel="Sem lançamentos agendados" itemValue="-1"/>
 						<f:selectItem itemLabel="Com lançamentos agendados" itemValue="0"/>
 						<f:selectItem itemLabel="Somente lançamentos agendados" itemValue="1"/>   					
-					</h:selectOneRadio>
-					<h:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
+					</p:selectOneRadio>
+					<p:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
 					Exibir saldo anterior
 				</h:panelGroup>
 				
@@ -130,11 +138,11 @@
 		     	<p:dataTable id="tableListEntity" width="100%" value="#{managedBean.listEntity}" var="item" style="font-size: 16px;">
 		     		<p:column style="text-align: center; vertical-align: middle;">
 		     			<f:facet name="header">
-		     				<h:selectBooleanCheckbox value="#{managedBean.selecionarTodosLancamentos}">
+		     				<p:selectBooleanCheckbox value="#{managedBean.selecionarTodosLancamentos}">
 		     					<p:ajax update="tableListEntity" listener="#{managedBean.selecionarTodos}" />
-		     				</h:selectBooleanCheckbox>
+		     				</p:selectBooleanCheckbox>
 		     			</f:facet>
-		     			<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+		     			<p:selectBooleanCheckbox value="#{item.selecionado}"/>
 		     		</p:column>
 		     		<p:column style="vertical-align: middle;">
 		     			<f:facet name="header">
@@ -184,7 +192,7 @@
 		     				<h:outputText value="#{cat.descricao}"/>
 		     			</f:facet>
 		     			<p:column style="text-align: center; vertical-align: middle;">		     			
-		     				<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+		     				<p:selectBooleanCheckbox value="#{item.selecionado}"/>
 		     			</p:column>
 		     			<p:column style="vertical-align: middle;">
 			     			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
@@ -236,7 +244,7 @@
 		     				<h:outputText value="#{fav.nome}"/>
 		     			</f:facet>
 		     			<p:column style="text-align: center; vertical-align: middle;">		     			
-		     				<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+		     				<p:selectBooleanCheckbox value="#{item.selecionado}"/>
 		     			</p:column>
 		     			<p:column style="vertical-align: middle;">
 			     			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
@@ -288,7 +296,7 @@
 		     				<h:outputText value="#{pag.descricao}"/>
 		     			</f:facet>
 		     			<p:column style="text-align: center; vertical-align: middle;">		     			
-		     				<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+		     				<p:selectBooleanCheckbox value="#{item.selecionado}"/>
 		     			</p:column>
 		     			<p:column style="vertical-align: middle;">
 			     			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
@@ -340,7 +348,7 @@
 		     				<h:outputText value="#{cd.descricao}"/>
 		     			</f:facet>
 		     			<p:column style="text-align: center; vertical-align: middle;">		     			
-		     				<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+		     				<p:selectBooleanCheckbox value="#{item.selecionado}"/>
 		     			</p:column>
 		     			<p:column style="vertical-align: middle;">
 			     			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
