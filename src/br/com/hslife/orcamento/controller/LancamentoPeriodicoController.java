@@ -61,6 +61,7 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
@@ -73,9 +74,11 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 
 @Component("lancamentoPeriodicoMB")
 @Scope("session")
@@ -104,10 +107,18 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
 	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
+	
 	private Conta contaSelecionada;
 	private StatusLancamento statusLancamento;
 	private TipoCategoria tipoCategoriaSelecionada;	
 	private boolean parcelamento;
+	private boolean selecionarTodosLancamentos;
+	private List<LancamentoConta> lancamentosEncontrados;
+	private List<LancamentoConta> lancamentosVinculados = new ArrayList<>();
+	private List<LancamentoConta> lancamentosVinculadosAgendados = new ArrayList<>();
+	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	
 	public LancamentoPeriodicoController() {
 		super(new LancamentoPeriodico());
@@ -147,6 +158,55 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return goToPage;
 	}
 	
+	public String verMensalidades() {
+		try {
+			lancamentosVinculados.clear();
+			lancamentosVinculadosAgendados.clear();
+			entity = getService().buscarPorID(idEntity);
+			
+			for (LancamentoConta lancamento : entity.getLancamentos()) {
+				if (lancamento.isQuitado()) {
+					lancamentosVinculados.add(lancamento);
+				} else {
+					lancamentosVinculadosAgendados.add(lancamento);
+				}
+			}
+			
+			actionTitle = " - Mensalidades";
+			return "/pages/LancamentoPeriodico/mensalidades";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public void vincularLancamentos() {
+		try {
+			List<LancamentoConta> lancamentos = new ArrayList<>();
+			for (LancamentoConta l : lancamentosEncontrados) {
+				if (l.isSelecionado()) {
+					lancamentos.add(l);
+				}
+			}
+			getService().vincularLancamentos(entity, lancamentos);
+			infoMessage("Lançamentos vinculados com sucesso!");
+			lancamentosEncontrados = new ArrayList<>();
+			
+			lancamentosVinculados.clear();
+			lancamentosVinculadosAgendados.clear();
+			entity = getService().buscarPorID(idEntity);
+			for (LancamentoConta lancamento : entity.getLancamentos()) {
+				if (lancamento.isQuitado()) {
+					lancamentosVinculados.add(lancamento);
+				} else {
+					lancamentosVinculadosAgendados.add(lancamento);
+				}
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
 	public void carregarArquivo(FileUploadEvent event) {
 		if (event.getFile() != null) {
 			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
@@ -181,6 +241,41 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		} else {
 			entity.setArquivo(null);
 			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
+		}
+	}
+	
+	public void selecionarTodos() {
+		/*
+		if (listEntity != null && listEntity.size() > 0)
+			for (LancamentoConta l : listEntity) {
+				if (selecionarTodosLancamentos) {
+					l.setSelecionado(true);
+				} else {
+					l.setSelecionado(false);
+				}
+			}
+			*/
+	}
+	
+	public void pesquisarLancamentos() {
+		try {
+			lancamentosEncontrados = new ArrayList<>();
+			criterioBusca.setConta(entity.getConta());
+			List<LancamentoConta> lancamentos = lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca);
+			if (lancamentos != null && lancamentos.size() > 0) {
+				lancamentosEncontrados.addAll(lancamentos);
+				lancamentosEncontrados.removeAll(lancamentosVinculados);
+				lancamentosEncontrados.removeAll(lancamentosVinculadosAgendados);
+			} else {
+				warnMessage("Nenhum lançamento foi encontrado!");
+				return;
+			}
+			if (lancamentosEncontrados.size() == 0) {
+				warnMessage("Nenhum lançamento foi encontrado!");
+				return;
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
 	}
 	
@@ -335,5 +430,51 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {
 		this.meioPagamentoService = meioPagamentoService;
+	}
+
+	public boolean isSelecionarTodosLancamentos() {
+		return selecionarTodosLancamentos;
+	}
+
+	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
+		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
+	}
+
+	public List<LancamentoConta> getLancamentosEncontrados() {
+		return lancamentosEncontrados;
+	}
+
+	public void setLancamentosEncontrados(
+			List<LancamentoConta> lancamentosEncontrados) {
+		this.lancamentosEncontrados = lancamentosEncontrados;
+	}
+
+	public List<LancamentoConta> getLancamentosVinculados() {
+		return lancamentosVinculados;
+	}
+
+	public void setLancamentosVinculados(List<LancamentoConta> lancamentosVinculados) {
+		this.lancamentosVinculados = lancamentosVinculados;
+	}
+
+	public List<LancamentoConta> getLancamentosVinculadosAgendados() {
+		return lancamentosVinculadosAgendados;
+	}
+
+	public void setLancamentosVinculadosAgendados(
+			List<LancamentoConta> lancamentosVinculadosAgendados) {
+		this.lancamentosVinculadosAgendados = lancamentosVinculadosAgendados;
+	}
+
+	public CriterioLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
+	}
+
+	public void setLancamentoContaService(ILancamentoConta lancamentoContaService) {
+		this.lancamentoContaService = lancamentoContaService;
 	}
 }

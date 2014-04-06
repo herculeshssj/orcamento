@@ -79,6 +79,7 @@
 			<f:facet name="header">
 				<h:outputText value="Vencimento"/>
 			</f:facet>
+			<h:outputText value="Dia " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
 			<h:outputText value="#{item.diaVencimento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>						
 	  	</p:column>
 	  	<p:column style="text-align: center; vertical-align: middle;">
@@ -102,7 +103,7 @@
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>		
-			<h:commandButton title="Mensalidades" image="/resources/images/calendario.png" action="#{managedBean.edit}" rendered="#{item.tipoLancamentoPeriodico == 'FIXO'}">
+			<h:commandButton title="Mensalidades" image="/resources/images/calendario.png" action="#{managedBean.verMensalidades}" rendered="#{item.tipoLancamentoPeriodico == 'FIXO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
 	  		<h:commandButton title="Parcelas" image="/resources/images/porcentagem.png" action="#{managedBean.edit}"  rendered="#{item.tipoLancamentoPeriodico == 'PARCELADO'}">
