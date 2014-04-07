@@ -58,34 +58,30 @@
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="2">
 		
 			Conta:
 			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Informe a conta!">
 				<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>			
-			<p:message for="txtConta"/>	
 			
 			Categoria:
 			<h:selectOneMenu id="txtCategoria" value="#{managedBean.categoriaSelecionada}"  converter="entityConverter">
 				<f:selectItem itemLabel="Não alterar"/>
 				<f:selectItems value="#{managedBean.listaCategoriaAtivo}"/>
 			</h:selectOneMenu>
-			<h:inputHidden/>
 			
 			Favorecido/Sacado:
 			<h:selectOneMenu id="txtFavorecido" value="#{managedBean.favorecidoSelecionado}" converter="entityConverter">
 				<f:selectItem itemLabel="Não alterar"/>
 				<f:selectItems value="#{managedBean.listaFavorecidoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
-			<h:inputHidden/>
 			
-			Meio de pagamento:
-			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.meioPagamentoSelecionado}" converter="entityConverter">
+			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
+			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.meioPagamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 				<f:selectItem itemLabel="Não alterar"/>
 				<f:selectItems value="#{managedBean.listaMeioPagamentoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-			</h:selectOneMenu>
-			<h:inputHidden/>		
+			</h:selectOneMenu>	
 			
 		</h:panelGrid>
 		

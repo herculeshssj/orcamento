@@ -62,4 +62,6 @@ public interface ICategoria extends ICRUDService<Categoria> {
 	
 	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
 	
+	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
+	
 }

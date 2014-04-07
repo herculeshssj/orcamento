@@ -66,8 +66,10 @@ import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -75,8 +77,10 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.model.InfoOFX;
 import br.com.hslife.orcamento.repository.CategoriaRepository;
+import br.com.hslife.orcamento.repository.FavorecidoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
+import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("importacaoLancamentoService")
@@ -90,6 +94,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private FavorecidoRepository favorecidoRepository;
+	
+	@Autowired
+	private MeioPagamentoRepository meioPagamentoRepository;
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
@@ -110,6 +120,15 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
 		this.usuarioComponent = usuarioComponent;
+	}
+
+	public void setFavorecidoRepository(FavorecidoRepository favorecidoRepository) {
+		this.favorecidoRepository = favorecidoRepository;
+	}
+
+	public void setMeioPagamentoRepository(
+			MeioPagamentoRepository meioPagamentoRepository) {
+		this.meioPagamentoRepository = meioPagamentoRepository;
 	}
 
 	@Override
@@ -155,6 +174,10 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.CREDITO);
 		Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.DEBITO);
 		
+		Favorecido favorecidoPadrao = favorecidoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+		
+		MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+		
 		for (LancamentoImportado li : lancamentosImportados) {
 			if (lancamentoContaRepository.findByHash(li.getHash()) == null) {
 			
@@ -173,6 +196,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					lc.setTipoLancamento(TipoLancamento.DESPESA);
 					lc.setCategoria(categoriaPadraoDebito);
 				}
+				lc.setFavorecido(favorecidoPadrao);
+				lc.setMeioPagamento(meioPagamentoPadrao);
 				
 				lc.setConta(li.getConta());
 				lc.setDataPagamento(li.getData());
@@ -242,6 +267,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		if (l == null) {
 			// Cria um novo lançamento
 			l = new LancamentoConta();
+			Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.CREDITO);
+			Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.DEBITO);
+			
+			Favorecido favorecidoPadrao = favorecidoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+			
+			MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 			
 			if (entity.getData().after(new Date())) {
 				l.setAgendado(true);
@@ -251,9 +282,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			
 			if (entity.getValor() > 0) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
+				l.setCategoria(categoriaPadraoCredito);
 			} else {
 				l.setTipoLancamento(TipoLancamento.DESPESA);
+				l.setCategoria(categoriaPadraoDebito);
 			}
+			
+			l.setFavorecido(favorecidoPadrao);
+			l.setMeioPagamento(meioPagamentoPadrao);
 			
 			l.setConta(entity.getConta());
 			l.setDataPagamento(entity.getData());

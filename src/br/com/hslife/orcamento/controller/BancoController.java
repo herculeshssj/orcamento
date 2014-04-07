@@ -67,6 +67,7 @@ public class BancoController extends AbstractCRUDController<Banco> {
 	private IBanco service; 
 	
 	private String nomeBanco;
+	private boolean somenteAtivos = true;
 	
 	public BancoController() {
 		super(new Banco());
@@ -82,7 +83,7 @@ public class BancoController extends AbstractCRUDController<Banco> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorNomeEUsuario(nomeBanco, getUsuarioLogado());
+			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeBanco, getUsuarioLogado(), somenteAtivos);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -108,5 +109,13 @@ public class BancoController extends AbstractCRUDController<Banco> {
 
 	public void setNomeBanco(String nomeBanco) {
 		this.nomeBanco = nomeBanco;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }

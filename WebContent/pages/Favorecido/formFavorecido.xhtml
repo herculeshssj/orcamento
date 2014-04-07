@@ -57,29 +57,27 @@
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="2">
 				
 			Nome:
 			<p:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
-			<p:message for="txtNome"/>
 			
 			Tipo de Pessoa:
 			<p:selectOneRadio id="txtTipoPessoa" value="#{managedBean.entity.tipoPessoa}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de pessoa!">
 				<f:selectItems value="#{managedBean.listaTipoPessoa}"/>
 			</p:selectOneRadio>
-			<p:message for="txtTipoPessoa"/>
+			
+			CPF/CNPJ:
+			<p:inputText value="#{managedBean.entity.cpfCnpj}" size="20"/>
 			
 			Contato:
-			<p:inputTextarea id="txtContato" value="#{managedBean.entity.contato}" disabled="#{!managedBean.entity.ativo}"/>				
-			<h:inputHidden/>		
+			<p:inputTextarea id="txtContato" value="#{managedBean.entity.contato}" disabled="#{!managedBean.entity.ativo}"/>						
 			
 			Padrão:
 			<p:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-			<h:inputHidden/>
 			
 			Ativo:
 			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" />
-			<h:inputHidden/>
 				
 			</h:panelGrid>
 		

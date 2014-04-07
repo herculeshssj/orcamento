@@ -44,7 +44,6 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -54,7 +53,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -67,7 +65,6 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 	
 	@SuppressWarnings("unchecked")
 	public List<MeioPagamento> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -76,7 +73,6 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 	
 	@SuppressWarnings("unchecked")
 	public List<MeioPagamento> findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -84,27 +80,10 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 	
 	@SuppressWarnings("unchecked")
 	public List<MeioPagamento> findEnabledByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	
-	public boolean existsLinkages(MeioPagamento meioPagamento) {
-		boolean result = true;
-		
-		String sqlLancamento = "select count(id) from lancamentoconta where idMeioPagamento = " + meioPagamento.getId();
-		
-		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
-		
-		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
-		
-		if (queryResultLancamento.longValue() == 0) {
-			return false;
-		}
-		
-		return result;
 	}
 	
 	public void updateAllToNotDefault(Usuario usuario) {
@@ -117,7 +96,6 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 	
 	@SuppressWarnings("unchecked")
 	public MeioPagamento findDefaultByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(MeioPagamento.class);
 		criteria.add(Restrictions.eq("padrao", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -126,5 +104,12 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 			return resultado.get(0);
 		}
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MeioPagamento> findByDescricaoUsuarioAndAtivo(String descricao, Usuario usuario, boolean ativo) {
+		String hql = "FROM MeioPagamento meioPagamento WHERE meioPagamento.descricao LIKE '%" + descricao + "%' AND meioPagamento.usuario.id = :idUsuario AND meioPagamento.ativo = :ativo ORDER BY meioPagamento.descricao ASC";
+		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
+		return query.list();
 	}
 }

@@ -58,71 +58,59 @@
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="2">
 			
 			Conta de origem:
 			<h:selectOneMenu id="txtContaOrigem" value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Informe a conta de origem!">
 				<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-			</h:selectOneMenu>			
-			<p:message for="txtContaOrigem"/>	
+			</h:selectOneMenu>				
 			
 			Conta de destino:
 			<h:selectOneMenu id="txtContaDestino" value="#{managedBean.contaDestino}" converter="entityConverter" required="true" requiredMessage="Informe a conta de destino!">
 				<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>			
-			<p:message for="txtContaDestino"/>
 			
 			Descrição:
-			<h:inputText id="txtDescricao" value="#{managedBean.lancamentoATransferir.descricao}" size="50" />
-			<h:outputText/>			
+			<p:inputText id="txtDescricao" value="#{managedBean.lancamentoATransferir.descricao}" size="50" />	
 			
 			Número do documento:
-			<h:inputText id="txtNumeroDocumento" value="#{managedBean.lancamentoATransferir.numeroDocumento}" />
-			<h:outputText/>
+			<p:inputText id="txtNumeroDocumento" value="#{managedBean.lancamentoATransferir.numeroDocumento}" />
 			
 			Data de pagamento:
 			<p:inputMask id="txtDataPagamento" size="10" mask="99/99/9999" value="#{managedBean.lancamentoATransferir.dataPagamento}">
 	    		<f:converter converterId="dateConverter"/>
 	    	</p:inputMask>
-	    	<h:outputText/>
 	    					
 			Valor Pago:
-	    	<h:inputText id="txtValorPago" value="#{managedBean.lancamentoATransferir.valorPago}" size="10">
+	    	<p:inputText id="txtValorPago" value="#{managedBean.lancamentoATransferir.valorPago}" size="10">
 				<f:convertNumber type="currency" pattern="###.##"/>
-			</h:inputText>
-			<h:outputText/>
+			</p:inputText>
 			
 			Observação:
-			<h:inputTextarea value="#{managedBean.lancamentoATransferir.observacao}" size="70" rows="3"/>
-			<h:outputText/>
+			<p:inputTextarea value="#{managedBean.lancamentoATransferir.observacao}" size="70" rows="3"/>
 			
 			Lançamento agendado:
-			<h:selectBooleanCheckbox value="#{managedBean.lancamentoATransferir.agendado}"/>
-			<h:outputText/>
+			<p:selectBooleanCheckbox value="#{managedBean.lancamentoATransferir.agendado}"/>
 			
 			Categoria de origem:
 			<h:selectOneMenu id="txtCategoriaOrigem" value="#{managedBean.categoriaSelecionada}"  converter="entityConverter">
 				<f:selectItems value="#{managedBean.listaCategoriaDebitoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
-			<h:outputText/>
 			
 			Categoria de destino:
 			<h:selectOneMenu id="txtCategoriaDestino" value="#{managedBean.categoriaDestino}"  converter="entityConverter">
 				<f:selectItems value="#{managedBean.listaCategoriaCreditoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
-			<h:outputText/>
 			
 			Favorecido/Sacado:
 			<h:selectOneMenu id="txtFavorecido" value="#{managedBean.favorecidoSelecionado}" converter="entityConverter">				
 				<f:selectItems value="#{managedBean.listaFavorecidoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
-			<h:outputText/>
 			
-			Meio de pagamento:
-			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.meioPagamentoSelecionado}" converter="entityConverter">				
+			<h:outputText value="Meio de pagamento:"  rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
+			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.meioPagamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">				
 				<f:selectItems value="#{managedBean.listaMeioPagamentoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
-			<h:inputHidden/>	
 			
 		</h:panelGrid>
 		

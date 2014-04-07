@@ -78,9 +78,9 @@ public class AgendamentoTask {
 		this.agendaRepository = agendaRepository;
 	}
 	
-	//@Scheduled(fixedDelay=3600000)
+	@Scheduled(fixedDelay=3600000)
 	@SuppressWarnings("deprecation")
-	@Scheduled(fixedDelay=120000)
+	//@Scheduled(fixedDelay=120000)
 	public void executarTarefa() {
 		CriterioAgendamento criterioAgendamento = new CriterioAgendamento();
 		criterioAgendamento.setTipo(TipoAgendamento.PREVISAO);
@@ -88,18 +88,21 @@ public class AgendamentoTask {
 		List<Agenda> agendamentos = agendaRepository.findByCriterioAgendamento(criterioAgendamento);
 		List<LancamentoConta> lancamentosAtualizados = new ArrayList<>();
 		LancamentoConta lancamento;
+		Date dataLancamento;
 		
 		for (Agenda agenda : agendamentos) {
+			Date dataAgenda = new Date(agenda.getInicio().getYear()+1900, agenda.getInicio().getMonth(), agenda.getInicio().getDate(), 0, 0, 0);
 			switch (agenda.getEntity()) {
 			case "LancamentoConta":
 				lancamento = lancamentoContaRepository.findById(agenda.getIdEntity());
-				Date dataLancamento = new Date(lancamento.getDataPagamento().getYear()+1900, lancamento.getDataPagamento().getMonth(), lancamento.getDataPagamento().getDate(), 0, 0, 0);
-				Date dataAgenda = new Date(agenda.getInicio().getYear()+1900, agenda.getInicio().getMonth(), agenda.getInicio().getDate(), 0, 0, 0);
-				if (lancamento != null && lancamento.isAgendado() && dataLancamento.equals(dataAgenda)) {
-					lancamentosAtualizados.add(lancamento);
-				} else {
-					agendaRepository.delete(agenda);
-				}
+				if (lancamento != null) {
+					dataLancamento = new Date(lancamento.getDataPagamento().getYear()+1900, lancamento.getDataPagamento().getMonth(), lancamento.getDataPagamento().getDate(), 0, 0, 0);
+					if (lancamento.isAgendado() && dataLancamento.equals(dataAgenda)) {
+						lancamentosAtualizados.add(lancamento);
+					} else {
+						agendaRepository.delete(agenda);
+					}					
+				}				
 				break;
 			default:
 				break;

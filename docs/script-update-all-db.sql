@@ -1572,3 +1572,14 @@ ALTER TABLE panoramalancamentoconta CHANGE COLUMN `descricaoPrevisao` `descricao
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('MAR2014.1', true);
 
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAR2014.2 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('MAR2014.2', true);
+
+-- Cadastro de favorecidos
+alter table favorecido add column cpfCnpj varchar(14) null;
+
+-- Cadastro de moedas
+alter table moeda add column valorConversao decimal(18,4) not null default 0.0;

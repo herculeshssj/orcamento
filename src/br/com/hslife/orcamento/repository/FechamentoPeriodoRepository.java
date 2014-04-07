@@ -99,7 +99,7 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.eq("conta.id", fechamento.getConta().getId()));
 		criteria.add(Restrictions.eq("operacao", OperacaoConta.FECHAMENTO));
-		
+		criteria.add(Restrictions.ge("data", fechamento.getData()));
 		return criteria.list();
 	}
 	

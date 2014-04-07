@@ -71,6 +71,7 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	private IFavorecido service; 
 	
 	private String nomeFavorecido;
+	private boolean somenteAtivos = true;
 	
 	public FavorecidoController() {
 		super(new Favorecido());
@@ -86,7 +87,7 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorNomeEUsuario(nomeFavorecido, getUsuarioLogado());
+			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeFavorecido, getUsuarioLogado(), somenteAtivos);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -119,5 +120,13 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 
 	public void setNomeFavorecido(String nomeFavorecido) {
 		this.nomeFavorecido = nomeFavorecido;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }

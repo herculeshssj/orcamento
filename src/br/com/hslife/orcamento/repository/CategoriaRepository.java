@@ -44,7 +44,6 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -67,7 +66,6 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -76,7 +74,6 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -84,7 +81,6 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findEnabledByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -92,7 +88,6 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	}
 	
 	public Categoria findDefaultByTipoCategoriaAndUsuario(Usuario usuario, TipoCategoria tipoCategoria) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("padrao", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -102,27 +97,10 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findByTipoCategoriaAndUsuario(TipoCategoria tipoCategoria, Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Categoria.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("tipoCategoria", tipoCategoria));
 		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	
-	public boolean existsLinkages(Categoria categoria) {
-		boolean result = true;
-		
-		String sqlLancamento = "select count(id) from lancamentoconta where idCategoria = " + categoria.getId();
-		
-		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
-		
-		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
-		
-		if (queryResultLancamento.longValue() == 0) {
-			return false;
-		}
-		
-		return result;
 	}
 	
 	public void updateAllToNotDefault(TipoCategoria tipoCategoria, Usuario usuario) {
@@ -131,5 +109,12 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 		Query query = getSession().createSQLQuery(sql);
 		
 		query.executeUpdate();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Categoria> findByDescricaoUsuarioAndAtivo(String descricao, Usuario usuario, boolean ativo) {
+		String hql = "FROM Categoria categoria WHERE categoria.descricao LIKE '%" + descricao + "%' AND categoria.usuario.id = :idUsuario AND categoria.ativo = :ativo ORDER BY categoria.descricao ASC";
+		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
+		return query.list();
 	}
 }

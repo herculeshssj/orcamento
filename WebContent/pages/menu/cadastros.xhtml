@@ -63,7 +63,8 @@
 	
 		<h:form id="frmMenuCadastros">
 		
-			<h:panelGrid columns="3" width="100%" style="text-align: center">
+			<!-- panelGrid exibido quando a exibição de meio de pagamento está ativada -->
+			<h:panelGrid columns="3" width="100%" style="text-align: center" rendered="#{meioPagamentoMB.opcoesSistema.exibirMeioPagamento}">
 			
 								
 				<h:commandButton action="#{categoriaMB.startUp}" image="/resources/images/categorias.png" title="Categorias"/>
@@ -82,6 +83,21 @@
 				<h:outputText value="Bancos"/>
 				<h:outputText value="Moedas"/>
 				<h:outputText value=""/>
+				
+			</h:panelGrid>
+			
+			<!-- panelGrid exibido quando a exibição de meio de pagamento está desativado -->
+			<h:panelGrid columns="4" width="100%" style="text-align: center" rendered="#{!meioPagamentoMB.opcoesSistema.exibirMeioPagamento}">
+			
+				<h:commandButton action="#{bancoMB.startUp}" image="/resources/images/bancos.png" title="Bancos"/>				
+				<h:commandButton action="#{categoriaMB.startUp}" image="/resources/images/categorias.png" title="Categorias"/>
+				<h:commandButton action="#{favorecidoMB.startUp}" image="/resources/images/favorecido.png" title="Favorecidos"/>
+				<h:commandButton action="#{moedaMB.startUp}" image="/resources/images/moeda.png" title="Moedas"/>
+				
+				<h:outputText value="Bancos"/>				
+				<h:outputText value="Categorias"/>
+				<h:outputText value="Favorecido/Sacado"/>
+				<h:outputText value="Moedas"/>
 				
 			</h:panelGrid>
 		

@@ -44,7 +44,6 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -54,7 +53,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -67,7 +65,6 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Favorecido> findByNomeAndUsuario(String nome, Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -76,7 +73,6 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Favorecido> findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("nome")).list();
@@ -84,27 +80,17 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Favorecido> findEnabledByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 	
-	public boolean existsLinkages(Favorecido favorecido) {
-		boolean result = true;
-		
-		String sqlLancamento = "select count(id) from lancamentoconta where idFavorecido = " + favorecido.getId();
-		
-		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
-		
-		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
-		
-		if (queryResultLancamento.longValue() == 0) {
-			return false;
-		}
-		
-		return result;
+	@SuppressWarnings("unchecked")
+	public List<Favorecido> findByNomeUsuarioAndAtivo(String nome, Usuario usuario, boolean ativo) {
+		String hql = "FROM Favorecido favorecido WHERE favorecido.nome like '%" + nome + "%' AND favorecido.usuario.id = :idUsuario AND favorecido.ativo = :ativo ORDER BY favorecido.nome ASC";
+		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
+		return query.list();
 	}
 	
 	public void updateAllToNotDefault(Usuario usuario) {
@@ -117,7 +103,6 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	
 	@SuppressWarnings("unchecked")
 	public Favorecido findDefaultByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("padrao", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -126,5 +111,5 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 			return resultado.get(0);
 		}
 		return null;
-	}	
+	}
 }
