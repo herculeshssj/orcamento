@@ -61,13 +61,16 @@
  
             <form action="j_spring_security_check" method="post">
             
-                <h:panelGrid columns="6" cellpadding="5" style="text-align: left">
+                <h:panelGrid columns="4" cellpadding="5" style="text-align: left">
                     <h:outputLabel value="Login:" />
                     <input id="j_username" name="j_username" type="text" />
                     
                     <h:outputLabel value="Senha:" />
                     <input id="j_password" name="j_password" type="password"/>
                     
+                    <h:outputText />
+                    <input id="j_remember" name="_spring_security_remember_me" type="checkbox"/> Lembre-se de mim
+                                        
                     <h:outputText />
                     <input type="image" src="#{request.contextPath}/resources/images/entrar.png" title="Entrar no sistema" />
                     
@@ -81,9 +84,6 @@
                     
                     <h:inputHidden />
                     <h:commandLink value="Recuperar senha" action="recuperarSenha"/>
-                    
-                    <h:inputHidden />
-                    <h:inputHidden />
                     
                 </h:panelGrid>            
             </h:form>

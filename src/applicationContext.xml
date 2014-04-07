@@ -111,6 +111,8 @@
  	<sec:http auto-config="true" access-denied-page="/acessoNegado.faces">
 	    <sec:form-login login-page="/login.faces" default-target-url="/pages/menu/inicio.faces" authentication-failure-url="/erroLogin.faces" />
 	    <sec:intercept-url pattern="/pages/**" access="ROLE_USER,ROLE_ADMIN" />
+	    <sec:logout delete-cookies="JSESSIONID" />
+	    <sec:remember-me key="uniqueAndSecret" token-validity-seconds="86400"/>	    
 	</sec:http>
 	
 	<sec:authentication-manager>
