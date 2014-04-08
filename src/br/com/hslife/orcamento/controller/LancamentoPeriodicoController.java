@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -53,6 +54,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -180,6 +182,28 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return "";
 	}
 	
+	public String verParcelas() {
+		try {
+			lancamentosVinculados.clear();
+			lancamentosVinculadosAgendados.clear();
+			entity = getService().buscarPorID(idEntity);
+			
+			for (LancamentoConta lancamento : entity.getLancamentos()) {
+				if (lancamento.isQuitado()) {
+					lancamentosVinculados.add(lancamento);
+				} else {
+					lancamentosVinculadosAgendados.add(lancamento);
+				}
+			}
+			
+			actionTitle = " - Parcelas";
+			return "/pages/LancamentoPeriodico/parcelas";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public void vincularLancamentos() {
 		try {
 			List<LancamentoConta> lancamentos = new ArrayList<>();
@@ -205,6 +229,34 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+	}
+	
+	private void desvincularLancamentos(List<LancamentoConta> lancamentos) {
+		try {			
+			getService().desvincularLancamentos(entity, lancamentos);
+			infoMessage("Lançamentos desvinculados com sucesso!");
+			
+			lancamentosVinculados.clear();
+			lancamentosVinculadosAgendados.clear();
+			entity = getService().buscarPorID(idEntity);
+			for (LancamentoConta lancamento : entity.getLancamentos()) {
+				if (lancamento.isQuitado()) {
+					lancamentosVinculados.add(lancamento);
+				} else {
+					lancamentosVinculadosAgendados.add(lancamento);
+				}
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void desvincularLancamentosVinculados() {
+		this.desvincularLancamentos(lancamentosVinculados);
+	}
+	
+	public void desvincularLancamentosVinculadosAgendados() {
+		this.desvincularLancamentos(lancamentosVinculadosAgendados);
 	}
 	
 	public void carregarArquivo(FileUploadEvent event) {
@@ -244,17 +296,28 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		}
 	}
 	
-	public void selecionarTodos() {
-		/*
-		if (listEntity != null && listEntity.size() > 0)
-			for (LancamentoConta l : listEntity) {
+	private void selecionarTodos(List<LancamentoConta> lancamentos) {
+		if (lancamentos != null && lancamentos.size() > 0) {
+			for (LancamentoConta l : lancamentos) {
 				if (selecionarTodosLancamentos) {
 					l.setSelecionado(true);
 				} else {
 					l.setSelecionado(false);
 				}
 			}
-			*/
+		}
+	}
+	
+	public void selecionarTodosEncontrados() {
+		this.selecionarTodos(lancamentosEncontrados);
+	}
+	
+	public void selecionarTodosVinculados() {
+		this.selecionarTodos(lancamentosVinculados);
+	}
+	
+	public void selecionarTodosVinculadosAgendados() {
+		this.selecionarTodos(lancamentosVinculadosAgendados);
 	}
 	
 	public void pesquisarLancamentos() {
@@ -266,6 +329,35 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				lancamentosEncontrados.addAll(lancamentos);
 				lancamentosEncontrados.removeAll(lancamentosVinculados);
 				lancamentosEncontrados.removeAll(lancamentosVinculadosAgendados);
+			} else {
+				warnMessage("Nenhum lançamento foi encontrado!");
+				return;
+			}
+			if (lancamentosEncontrados.size() == 0) {
+				warnMessage("Nenhum lançamento foi encontrado!");
+				return;
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void pesquisarLancamentosParcelados() {
+		try {
+			lancamentosEncontrados = new ArrayList<>();
+			criterioBusca.setConta(entity.getConta());
+			List<LancamentoConta> lancamentos = lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca);
+			if (lancamentos != null && lancamentos.size() > 0) {
+				lancamentosEncontrados.addAll(lancamentos);
+				lancamentosEncontrados.removeAll(lancamentosVinculados);
+				lancamentosEncontrados.removeAll(lancamentosVinculadosAgendados);
+				
+				// Remove todos os lançamentos que não parcelamentos
+				for (Iterator<LancamentoConta> i = lancamentosEncontrados.iterator(); i.hasNext();) {
+					if (i.next().getParcela() == null || i.next().getParcela().length() == 0) {
+						i.remove();
+					}
+				}				 
 			} else {
 				warnMessage("Nenhum lançamento foi encontrado!");
 				return;
@@ -293,6 +385,25 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				tipoCategoriaSelecionada = TipoCategoria.CREDITO;
 			} else {
 				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
+			}
+		}
+	}
+	
+	public void alterarAbas(TabChangeEvent event) {
+		selecionarTodosLancamentos = false;
+		if (lancamentosEncontrados != null && lancamentosEncontrados.size() > 0) {
+			for (LancamentoConta l : lancamentosEncontrados) {
+				l.setSelecionado(false);				
+			}
+		}
+		if (lancamentosVinculados != null && lancamentosVinculados.size() > 0) {
+			for (LancamentoConta l : lancamentosVinculados) {
+				l.setSelecionado(false);				
+			}
+		}
+		if (lancamentosVinculadosAgendados != null && lancamentosVinculadosAgendados.size() > 0) {
+			for (LancamentoConta l : lancamentosVinculadosAgendados) {
+				l.setSelecionado(false);				
 			}
 		}
 	}

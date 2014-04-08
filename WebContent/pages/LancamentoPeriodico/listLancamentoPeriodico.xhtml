@@ -106,7 +106,7 @@
 			<h:commandButton title="Mensalidades" image="/resources/images/calendario.png" action="#{managedBean.verMensalidades}" rendered="#{item.tipoLancamentoPeriodico == 'FIXO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		<h:commandButton title="Parcelas" image="/resources/images/porcentagem.png" action="#{managedBean.edit}"  rendered="#{item.tipoLancamentoPeriodico == 'PARCELADO'}">
+	  		<h:commandButton title="Parcelas" image="/resources/images/porcentagem.png" action="#{managedBean.verParcelas}"  rendered="#{item.tipoLancamentoPeriodico == 'PARCELADO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
 	  		&nbsp;&nbsp;&nbsp;
