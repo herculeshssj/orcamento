@@ -71,7 +71,6 @@ create table lancamentoperiodico(
 	diaVencimento integer not null,
 	tipoLancamentoPeriodico varchar(10) not null,
 	periodoLancamento varchar(20) null,
-	parcelasPagas int null,
 	versionEntity datetime not null default '2014-05-01 00:00:00', 
 	primary key(id)
 );
@@ -84,6 +83,19 @@ alter table lancamentoperiodico add constraint fk_lancamentoperiodico_arquivo fo
 alter table lancamentoperiodico add constraint fk_lancamentoperiodico_moeda foreign key (idMoeda) references moeda(id);
 alter table lancamentoperiodico add constraint fk_lancamentoperiodico_usuario foreign key (idUsuario) references usuario(id);
 
--- alterções em lancamentoconta
-alter table lancamentoconta add column idLancamentoPeriodico bigint null;
-alter table lancamentoconta add constraint fk_lancamentoconta_lancamentoperiodico foreign key(idLancamentoPeriodico) references lancamentoperiodico(id);
+create table pagamentoperiodo(
+	id bigint not null auto_increment,
+	idLancamentoConta bigint null,
+	idLancamentoPeriodico bigint not null,
+	periodo integer,
+	ano integer,
+	parcela integer,
+	dataPagamento date not null,
+	valorPago decimal(18,2) default 0.0,
+	pago boolean,
+	versionEntity datetime not null default '2014-05-01 00:00:00', 
+	primary key(id)
+);
+
+alter table pagamentoperiodo add constraint fk_pagamentoperiodo_lancamentoconta foreign key(idLancamentoConta) references lancamentoconta(id);
+alter table pagamentoperiodo add constraint fk_pagamentoperiodo_lancamentoperiodico foreign key(idLancamentoPeriodico) references lancamentoperiodico(id);

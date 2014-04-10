@@ -150,9 +150,8 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=true)
 	private Moeda moeda;
 	
-	@ManyToOne
-	@JoinColumn(name="idLancamentoPeriodico", nullable=true)
-	private LancamentoPeriodico lancamentoPeriodico;
+	@OneToOne(mappedBy="lancamentoConta")
+	private PagamentoPeriodo pagamentoPeriodo;
 	
 	@Column(length=20, nullable=true)
 	private String parcela;
@@ -411,13 +410,5 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setFaturaCartao(FaturaCartao faturaCartao) {
 		this.faturaCartao = faturaCartao;
-	}
-
-	public LancamentoPeriodico getLancamentoPeriodico() {
-		return lancamentoPeriodico;
-	}
-
-	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
-		this.lancamentoPeriodico = lancamentoPeriodico;
 	}
 }

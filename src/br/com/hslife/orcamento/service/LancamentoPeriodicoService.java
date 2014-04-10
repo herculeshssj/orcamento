@@ -93,19 +93,23 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	
 	@Override
 	public void vincularLancamentos(LancamentoPeriodico entity,	List<LancamentoConta> lancamentos) throws BusinessException {
+		/*
 		for (LancamentoConta l : lancamentos) {
 			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
 			lancamento.setLancamentoPeriodico(entity);
 			lancamentoContaRepository.update(lancamento);
-		}		
+		}
+		*/		
 	}
 	
 	@Override
 	public void desvincularLancamentos(LancamentoPeriodico entity, List<LancamentoConta> lancamentos) throws BusinessException {
+		/*
 		for (LancamentoConta l : lancamentos) {
 			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
 			lancamento.setLancamentoPeriodico(null);
 			lancamentoContaRepository.update(lancamento);
 		}
+		*/
 	}
 }

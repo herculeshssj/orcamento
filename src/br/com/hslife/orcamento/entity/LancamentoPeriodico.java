@@ -123,9 +123,6 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@Enumerated(EnumType.STRING)
 	private PeriodoLancamento periodoLancamento;
 	
-	@Column(nullable=true)
-	private Integer parcelasPagas;
-	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
@@ -154,9 +151,6 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
-	
-	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.EAGER)
-	private List<LancamentoConta> lancamentos;
 	
 	public LancamentoPeriodico() {
 		
@@ -269,14 +263,6 @@ public class LancamentoPeriodico extends EntityPersistence {
 		this.periodoLancamento = periodoLancamento;
 	}
 
-	public Integer getParcelasPagas() {
-		return parcelasPagas;
-	}
-
-	public void setParcelasPagas(Integer parcelasPagas) {
-		this.parcelasPagas = parcelasPagas;
-	}
-
 	public Conta getConta() {
 		return conta;
 	}
@@ -331,13 +317,5 @@ public class LancamentoPeriodico extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-
-	public List<LancamentoConta> getLancamentos() {
-		return lancamentos;
-	}
-
-	public void setLancamentos(List<LancamentoConta> lancamentos) {
-		this.lancamentos = lancamentos;
 	}
 }

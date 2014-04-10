@@ -166,13 +166,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			lancamentosVinculadosAgendados.clear();
 			entity = getService().buscarPorID(idEntity);
 			
-			for (LancamentoConta lancamento : entity.getLancamentos()) {
-				if (lancamento.isQuitado()) {
-					lancamentosVinculados.add(lancamento);
-				} else {
-					lancamentosVinculadosAgendados.add(lancamento);
-				}
-			}
+//			for (LancamentoConta lancamento : entity.getLancamentos()) {
+//				if (lancamento.isQuitado()) {
+//					lancamentosVinculados.add(lancamento);
+//				} else {
+//					lancamentosVinculadosAgendados.add(lancamento);
+//				}
+//			}
 			
 			actionTitle = " - Mensalidades";
 			return "/pages/LancamentoPeriodico/mensalidades";
@@ -188,13 +188,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			lancamentosVinculadosAgendados.clear();
 			entity = getService().buscarPorID(idEntity);
 			
-			for (LancamentoConta lancamento : entity.getLancamentos()) {
-				if (lancamento.isQuitado()) {
-					lancamentosVinculados.add(lancamento);
-				} else {
-					lancamentosVinculadosAgendados.add(lancamento);
-				}
-			}
+//			for (LancamentoConta lancamento : entity.getLancamentos()) {
+//				if (lancamento.isQuitado()) {
+//					lancamentosVinculados.add(lancamento);
+//				} else {
+//					lancamentosVinculadosAgendados.add(lancamento);
+//				}
+//			}
 			
 			actionTitle = " - Parcelas";
 			return "/pages/LancamentoPeriodico/parcelas";
@@ -219,13 +219,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			lancamentosVinculados.clear();
 			lancamentosVinculadosAgendados.clear();
 			entity = getService().buscarPorID(idEntity);
-			for (LancamentoConta lancamento : entity.getLancamentos()) {
-				if (lancamento.isQuitado()) {
-					lancamentosVinculados.add(lancamento);
-				} else {
-					lancamentosVinculadosAgendados.add(lancamento);
-				}
-			}
+//			for (LancamentoConta lancamento : entity.getLancamentos()) {
+//				if (lancamento.isQuitado()) {
+//					lancamentosVinculados.add(lancamento);
+//				} else {
+//					lancamentosVinculadosAgendados.add(lancamento);
+//				}
+//			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -239,13 +239,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			lancamentosVinculados.clear();
 			lancamentosVinculadosAgendados.clear();
 			entity = getService().buscarPorID(idEntity);
-			for (LancamentoConta lancamento : entity.getLancamentos()) {
-				if (lancamento.isQuitado()) {
-					lancamentosVinculados.add(lancamento);
-				} else {
-					lancamentosVinculadosAgendados.add(lancamento);
-				}
-			}
+//			for (LancamentoConta lancamento : entity.getLancamentos()) {
+//				if (lancamento.isQuitado()) {
+//					lancamentosVinculados.add(lancamento);
+//				} else {
+//					lancamentosVinculadosAgendados.add(lancamento);
+//				}
+//			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
