@@ -49,7 +49,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: mysql06.kinghost.net
--- Tempo de Geração: Mar 01, 2014 as 09:46 PM
+-- Tempo de Geração: Abr 12, 2014 as 10:09 PM
 -- Versão do Servidor: 5.1.70
 -- Versão do PHP: 5.2.9
 
@@ -79,8 +79,35 @@ CREATE TABLE IF NOT EXISTS `aberturafechamentoconta` (
   `saldo` decimal(18,2) NOT NULL,
   `usuario` varchar(255) NOT NULL,
   `idConta` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FKB806F0BD7DD97C50` (`idConta`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `agenda`
+--
+
+CREATE TABLE IF NOT EXISTS `agenda` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(50) NOT NULL,
+  `localAgendamento` varchar(200) DEFAULT NULL,
+  `inicio` datetime DEFAULT NULL,
+  `fim` datetime DEFAULT NULL,
+  `tipoAgendamento` varchar(15) NOT NULL,
+  `prioridadeTarefa` varchar(10) DEFAULT NULL,
+  `diaInteiro` tinyint(1) DEFAULT NULL,
+  `concluido` tinyint(1) DEFAULT NULL,
+  `emitirAlerta` tinyint(1) DEFAULT NULL,
+  `notas` text,
+  `idEntity` bigint(20) DEFAULT NULL,
+  `entity` varchar(30) DEFAULT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `fk_agenda_usuario` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -95,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `arquivo` (
   `contentType` varchar(255) DEFAULT NULL,
   `tamanho` bigint(20) DEFAULT NULL,
   `dados` mediumblob,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -112,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
   `ip` varchar(255) NOT NULL,
   `transacao` varchar(255) NOT NULL,
   `usuario` varchar(255) NOT NULL,
-  `versionEntity` datetime NOT NULL,
+  `versionAuditedEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   `dadosAuditados` mediumtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -158,6 +186,7 @@ CREATE TABLE IF NOT EXISTS `banco` (
   `padrao` tinyint(1) DEFAULT NULL,
   `ativo` tinyint(1) NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK592C0BB7083BD82` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -180,6 +209,7 @@ CREATE TABLE IF NOT EXISTS `buscasalva` (
   `tipoAgrupamentoBusca` varchar(15) NOT NULL,
   `textoParcela` varchar(20) DEFAULT NULL,
   `lancadoEm` date DEFAULT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK129C7AEB7DD97C50` (`idConta`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -210,6 +240,7 @@ CREATE TABLE IF NOT EXISTS `cartaocredito` (
   `idUsuario` bigint(20) NOT NULL,
   `descricao` varchar(50) NOT NULL,
   `idCartaoSubstituto` bigint(20) DEFAULT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK9BFA41887083BD82` (`idUsuario`),
   KEY `FK9BFA4188A36EA1C` (`idBanco`),
@@ -229,6 +260,7 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   `padrao` tinyint(1) DEFAULT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `tipoCategoria` varchar(10) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK5D54E1337083BD82` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -243,6 +275,7 @@ CREATE TABLE IF NOT EXISTS `categoriadocumento` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `descricao` varchar(50) NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FKD0771AE17083BD82` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -270,6 +303,7 @@ CREATE TABLE IF NOT EXISTS `conta` (
   `saldoInicial` decimal(18,2) NOT NULL,
   `saldoFinal` decimal(18,2) NOT NULL,
   `arquivado` tinyint(1) DEFAULT '0',
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK5A7376F7083BD82` (`idUsuario`),
   KEY `FK5A7376FA36EA1C` (`idBanco`),
@@ -288,6 +322,7 @@ CREATE TABLE IF NOT EXISTS `conversaomoeda` (
   `taxaConversao` decimal(18,4) NOT NULL,
   `idMoeda` bigint(20) NOT NULL,
   `idFaturaCartao` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_faturacartao_conversaomoeda` (`idFaturaCartao`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -303,6 +338,7 @@ CREATE TABLE IF NOT EXISTS `despensa` (
   `descricao` varchar(50) NOT NULL,
   `localArmazenamento` varchar(255) DEFAULT NULL,
   `idUsuario` bigint(20) DEFAULT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_despensa` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -332,11 +368,33 @@ CREATE TABLE IF NOT EXISTS `documento` (
   `nome` varchar(50) NOT NULL,
   `idArquivo` bigint(20) NOT NULL,
   `idCategoriaDocumento` bigint(20) NOT NULL,
-  `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `FK383D52B47083BD82` (`idUsuario`),
   KEY `FK383D52B46CA8AABC` (`idCategoriaDocumento`),
   KEY `FK383D52B428C1FC80` (`idArquivo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `endereco`
+--
+
+CREATE TABLE IF NOT EXISTS `endereco` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(50) NOT NULL,
+  `tipoLogradouro` varchar(30) NOT NULL,
+  `logradouro` varchar(150) NOT NULL,
+  `numero` varchar(10) DEFAULT NULL,
+  `complemento` varchar(50) DEFAULT NULL,
+  `bairro` varchar(50) NOT NULL,
+  `cidade` varchar(100) NOT NULL,
+  `estado` varchar(2) NOT NULL,
+  `cep` varchar(8) NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `fk_endereco_usuario` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -360,6 +418,7 @@ CREATE TABLE IF NOT EXISTS `faturacartao` (
   `valorPago` decimal(18,2) NOT NULL,
   `parcelado` tinyint(1) DEFAULT NULL,
   `saldoDevedor` decimal(18,2) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_conta_faturacartao` (`idConta`),
   KEY `fk_moeda_faturacartao` (`idMoeda`),
@@ -381,6 +440,7 @@ CREATE TABLE IF NOT EXISTS `favorecido` (
   `tipoPessoa` varchar(10) NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `padrao` tinyint(1) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK1D15D5D87083BD82` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -401,6 +461,7 @@ CREATE TABLE IF NOT EXISTS `fechamentoperiodo` (
   `dataAlteracao` datetime NOT NULL,
   `mes` int(11) NOT NULL,
   `ano` int(11) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FKEC523EC8BA3900C1` (`idContaBancaria`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -429,6 +490,7 @@ CREATE TABLE IF NOT EXISTS `identidade` (
   `categoria` varchar(5) DEFAULT NULL,
   `pais` varchar(30) DEFAULT NULL,
   `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_identidade` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -454,6 +516,7 @@ CREATE TABLE IF NOT EXISTS `itemdespensa` (
   `validade` datetime DEFAULT NULL,
   `valor` decimal(18,2) NOT NULL,
   `perecivel` tinyint(1) DEFAULT '0',
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK3D6214555F6482A2` (`idUnidadeMedida`),
   KEY `FK3D621455EC275F4E` (`idUsuario`)
@@ -502,6 +565,7 @@ CREATE TABLE IF NOT EXISTS `lancamentoconta` (
   `descricaoMeioPagamento` varchar(255) DEFAULT NULL,
   `parcela` varchar(20) DEFAULT NULL,
   `idMoeda` bigint(20) DEFAULT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_conta_lancamentoconta` (`idConta`),
   KEY `fk_categoria_lancamentoconta` (`idCategoria`),
@@ -525,6 +589,7 @@ CREATE TABLE IF NOT EXISTS `lancamentoimportado` (
   `valor` decimal(18,2) NOT NULL,
   `hash` varchar(32) NOT NULL,
   `idConta` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_conta_lancamentoimportado` (`idConta`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -541,6 +606,7 @@ CREATE TABLE IF NOT EXISTS `meiopagamento` (
   `descricao` varchar(50) NOT NULL,
   `padrao` tinyint(1) DEFAULT NULL,
   `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FKC31F74287083BD82` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -560,6 +626,7 @@ CREATE TABLE IF NOT EXISTS `moeda` (
   `padrao` tinyint(1) DEFAULT NULL,
   `ativo` tinyint(1) DEFAULT NULL,
   `idUsuario` bigint(20) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_usuario_moeda` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -576,6 +643,7 @@ CREATE TABLE IF NOT EXISTS `movimentoitemdespensa` (
   `operacaoDespensa` varchar(10) DEFAULT NULL,
   `quantidade` int(11) NOT NULL,
   `valor` decimal(18,2) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -596,6 +664,7 @@ CREATE TABLE IF NOT EXISTS `opcaosistema` (
   `tipoValor` varchar(20) NOT NULL,
   `casoDeUso` varchar(100) NOT NULL,
   `idUsuario` bigint(20) DEFAULT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_opcaosistema` (`idUsuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -625,6 +694,7 @@ CREATE TABLE IF NOT EXISTS `panoramalancamentocartao` (
   `idConta` bigint(20) NOT NULL,
   `idMoeda` bigint(20) NOT NULL,
   `indice` int(11) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   KEY `fk_conta_panoramalancamentocartao` (`idConta`),
   KEY `fk_moeda_panoramalancamentocartao` (`idMoeda`)
@@ -689,6 +759,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `senha` varchar(40) NOT NULL,
   `tipoUsuario` varchar(10) DEFAULT NULL,
   `email` varchar(40) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -703,6 +774,7 @@ CREATE TABLE IF NOT EXISTS `versao` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `versao` varchar(30) NOT NULL,
   `ativo` tinyint(1) NOT NULL,
+  `versionEntity` datetime NOT NULL DEFAULT '2014-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -715,6 +787,12 @@ CREATE TABLE IF NOT EXISTS `versao` (
 --
 ALTER TABLE `aberturafechamentoconta`
   ADD CONSTRAINT `FKB806F0BD7DD97C50` FOREIGN KEY (`idConta`) REFERENCES `conta` (`id`);
+
+--
+-- Restrições para a tabela `agenda`
+--
+ALTER TABLE `agenda`
+  ADD CONSTRAINT `fk_agenda_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `auditoria_auditoriadados`
@@ -788,8 +866,13 @@ ALTER TABLE `detalhefatura`
 --
 ALTER TABLE `documento`
   ADD CONSTRAINT `FK383D52B428C1FC80` FOREIGN KEY (`idArquivo`) REFERENCES `arquivo` (`id`),
-  ADD CONSTRAINT `FK383D52B46CA8AABC` FOREIGN KEY (`idCategoriaDocumento`) REFERENCES `categoriadocumento` (`id`),
-  ADD CONSTRAINT `FK383D52B47083BD82` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+  ADD CONSTRAINT `FK383D52B46CA8AABC` FOREIGN KEY (`idCategoriaDocumento`) REFERENCES `categoriadocumento` (`id`);
+
+--
+-- Restrições para a tabela `endereco`
+--
+ALTER TABLE `endereco`
+  ADD CONSTRAINT `fk_endereco_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
 
 --
 -- Restrições para a tabela `faturacartao`
@@ -878,6 +961,7 @@ ALTER TABLE `previsaolancamentoconta`
 --
 ALTER TABLE `unidademedida`
   ADD CONSTRAINT `FK2F2C0D88EC275F4E` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`);
+
 
   
 --
