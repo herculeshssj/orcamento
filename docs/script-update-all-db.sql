@@ -914,7 +914,7 @@ alter table auditoria_auditoriadados
         references auditoria (id);
 
 alter table usuario add column email varchar(40) null;
-update usuario set email = (select concat(login,'@hslife.com.br')) where tipoUsuario = 'ROLE_USER';
+update usuario set email = (select concat(login,'@hslife.com.br')); -- where tipoUsuario = 'ROLE_USER'; // trecho removido. Tarefa #976
 alter table usuario change `email` `email` varchar(40) not null;
 
 alter table usuario drop column perguntaSecreta;

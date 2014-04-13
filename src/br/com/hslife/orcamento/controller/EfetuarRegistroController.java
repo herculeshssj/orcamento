@@ -74,6 +74,7 @@ public class EfetuarRegistroController {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Senha de acesso foi enviada para o e-mail informado."));
 			entity = new Usuario();
 		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha ao efetuar o registro. Entre em contato com o Administrador do Sistema.", null));
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(),null));
 		}
 		return "";
