@@ -170,6 +170,22 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	private void gerarParcelas(LancamentoPeriodico entity) throws BusinessException {
-		
+		Calendar dataVencimento = Calendar.getInstance();
+		dataVencimento.setTime(entity.getDataAquisicao());
+		for (int i = 1; i <= entity.getTotalParcela(); i++) {
+			PagamentoPeriodo parcela = new PagamentoPeriodo();
+			
+			if (dataVencimento.get(Calendar.DAY_OF_MONTH) >= entity.getDiaVencimento()) {
+				dataVencimento.add(Calendar.MONTH, 1);
+			}
+			
+			parcela.setAno(dataVencimento.get(Calendar.YEAR));
+			parcela.setLancamentoPeriodico(entity);
+			parcela.setPeriodo(dataVencimento.get(Calendar.MONTH));
+			parcela.setDataVencimento(dataVencimento.getTime());
+			
+			pagamentoPeriodoRepository.save(parcela);
+			dataVencimento.add(Calendar.MONTH, 1);
+		}
 	}
 }
