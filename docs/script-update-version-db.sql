@@ -44,7 +44,7 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAR2014.2 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAI2014 ***/
 
 -- Atualização de versão
 update versao set ativo = false;
@@ -90,7 +90,8 @@ create table pagamentoperiodo(
 	periodo integer,
 	ano integer,
 	parcela integer,
-	dataPagamento date not null,
+	dataPagamento date,
+	dataVencimento date not null,
 	valorPago decimal(18,2) default 0.0,
 	pago boolean,
 	versionEntity datetime not null default '2014-05-01 00:00:00', 

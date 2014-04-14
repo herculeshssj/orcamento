@@ -152,6 +152,9 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
+	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.EAGER)
+	private List<PagamentoPeriodo> pagamentos;
+	
 	public LancamentoPeriodico() {
 		
 	}
@@ -317,5 +320,13 @@ public class LancamentoPeriodico extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public List<PagamentoPeriodo> getPagamentos() {
+		return pagamentos;
+	}
+
+	public void setPagamentos(List<PagamentoPeriodo> pagamentos) {
+		this.pagamentos = pagamentos;
 	}
 }

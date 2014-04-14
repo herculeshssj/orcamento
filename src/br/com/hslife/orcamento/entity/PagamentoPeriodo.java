@@ -52,8 +52,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.exception.BusinessException;
 
@@ -76,6 +79,11 @@ public class PagamentoPeriodo extends EntityPersistence {
 	private int ano;
 	
 	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date dataVencimento;
+	
+	@Column(nullable=true)
+	@Temporal(TemporalType.DATE)
 	private Date dataPagamento;
 	
 	@Column(nullable=false, precision=18, scale=2)
@@ -88,7 +96,7 @@ public class PagamentoPeriodo extends EntityPersistence {
 	@JoinColumn(name="idLancamentoConta", nullable=true)
 	private LancamentoConta lancamentoConta;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="idLancamentoPeriodico")
 	private LancamentoPeriodico lancamentoPeriodico;
 	
@@ -176,5 +184,13 @@ public class PagamentoPeriodo extends EntityPersistence {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Date getDataVencimento() {
+		return dataVencimento;
+	}
+
+	public void setDataVencimento(Date dataVencimento) {
+		this.dataVencimento = dataVencimento;
 	}
 }
