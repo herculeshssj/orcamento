@@ -190,15 +190,15 @@
     		<p:graphicImage value="/resources/images/gravar.png" />
     	</h:commandLink>
     	<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento == 'ATIVO' and managedBean.operation == 'edit'}"/>
-    	<h:commandLink title="Suspender" action="#{managedBean.save}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO' and managedBean.operation == 'edit'}">
+    	<h:commandLink title="Suspender" action="#{managedBean.suspenderLancamento}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO' and managedBean.operation == 'edit'}">
     		<p:graphicImage value="/resources/images/pausa.png" />
     	</h:commandLink>
     	<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento == 'SUSPENSO'}"/>
-    	<h:commandLink title="Ativar" action="#{managedBean.save}" rendered="#{managedBean.entity.statusLancamento == 'SUSPENSO'}">
+    	<h:commandLink title="Ativar" action="#{managedBean.ativarLancamento}" rendered="#{managedBean.entity.statusLancamento == 'SUSPENSO'}">
     		<p:graphicImage value="/resources/images/ativar.png" />
     	</h:commandLink>
     	<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento != 'ENCERRADO' and managedBean.operation == 'edit'}"/>
-    	<h:commandLink title="Encerrar" action="#{managedBean.save}" rendered="#{managedBean.entity.statusLancamento != 'ENCERRADO' and managedBean.operation == 'edit'}">
+    	<h:commandLink title="Encerrar" action="#{managedBean.encerrarLancamento}" rendered="#{managedBean.entity.statusLancamento != 'ENCERRADO' and managedBean.operation == 'edit'}">
     		<p:graphicImage value="/resources/images/fechar.png" />
     	</h:commandLink>
 	</ui:define>

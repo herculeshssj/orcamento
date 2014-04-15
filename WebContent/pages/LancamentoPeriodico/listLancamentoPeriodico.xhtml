@@ -113,8 +113,8 @@
 			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;
-			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+	  		<p:spacer width="20" rendered="#{item.statusLancamento != 'ENCERRADO'}"/>
+			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.statusLancamento != 'ENCERRADO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
 	  	</p:column>

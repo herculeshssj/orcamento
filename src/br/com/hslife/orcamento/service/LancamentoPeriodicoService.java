@@ -135,6 +135,12 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		*/
 	}
 	
+	@Override
+	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws BusinessException {
+		entity.setStatusLancamento(novoStatus);
+		getRepository().update(entity);
+	}
+	
 	private void gerarMensalidade(LancamentoPeriodico entity) throws BusinessException {
 		PagamentoPeriodo proximaMensalidade = new PagamentoPeriodo();
 		proximaMensalidade.setLancamentoPeriodico(entity);

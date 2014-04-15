@@ -60,4 +60,6 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	public void vincularLancamentos(LancamentoPeriodico entity, List<LancamentoConta> lancamentos) throws BusinessException;
 	
 	public void desvincularLancamentos(LancamentoPeriodico entity, List<LancamentoConta> lancamentos) throws BusinessException;
+	
+	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws BusinessException;
 }
