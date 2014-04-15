@@ -156,7 +156,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	private List<PagamentoPeriodo> pagamentos;
 	
 	public LancamentoPeriodico() {
-		
+		statusLancamento = StatusLancamento.ATIVO;
 	}
 	
 	@Override

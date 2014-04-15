@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum StatusLancamento {
-	ATIVO("ATIVO"), SUSPENSO("SUSPENSO"), ENCERRADO("ENCERRADO"), AGENDADO("AGENDADO"), QUITADO("QUITADO"), REGISTRADO("REGISTRADO");
+	ATIVO("Ativo"), SUSPENSO("Suspenso"), ENCERRADO("Encerrado"), AGENDADO("Agendado"), QUITADO("Quitado"), REGISTRADO("Registrado");
 	
 	private String descricao;
 	

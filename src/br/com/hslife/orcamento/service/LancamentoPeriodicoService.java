@@ -107,12 +107,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			gerarParcelas(entity);
 		}
 	}
-	
-	@Override
-	public void alterar(LancamentoPeriodico entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		super.alterar(entity);
-	}
 
 	@Override
 	public List<LancamentoPeriodico> buscarPorContaEStatusLancamento(Conta conta, StatusLancamento statusLancamento) throws BusinessException {

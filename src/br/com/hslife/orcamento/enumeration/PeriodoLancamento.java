@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum PeriodoLancamento {
-	MENSAL("Mensal"), BIMESTRAL("Bimestral"), TRIMESTRAL("Trimestral"), QUADRIMESTRAL("Quadrimestral"), SEMESTRAL("Semestral"), ANUAL("ANUAL");
+	MENSAL("Mensal"), BIMESTRAL("Bimestral"), TRIMESTRAL("Trimestral"), QUADRIMESTRAL("Quadrimestral"), SEMESTRAL("Semestral"), ANUAL("Anual");
 	
 	private String descricao;
 	
