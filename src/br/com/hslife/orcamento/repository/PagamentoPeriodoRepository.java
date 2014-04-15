@@ -44,8 +44,11 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 
 @Repository
@@ -55,4 +58,17 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 		super(new PagamentoPeriodo());
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
+		return getQuery("FROM PagamentoPeriodo pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.pago = true ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamento.getId())
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findByLancamentoPeriodico(LancamentoPeriodico lancamento) {
+		return getQuery("FROM PagamentoPeriodo pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamento.getId())
+				.list();
+	}
 }

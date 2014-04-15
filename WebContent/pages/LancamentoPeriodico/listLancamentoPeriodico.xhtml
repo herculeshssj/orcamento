@@ -103,13 +103,10 @@
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>		
-			<h:commandButton title="Mensalidades" image="/resources/images/calendario.png" action="#{managedBean.verMensalidades}" rendered="#{item.tipoLancamentoPeriodico == 'FIXO'}">
+			<h:commandButton title="Registrar pagamento" image="/resources/images/baixa.png" action="#{managedBean.registrarPagamentoView}" rendered="#{item.statusLancamento == 'ATIVO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		<h:commandButton title="Parcelas" image="/resources/images/porcentagem.png" action="#{managedBean.verParcelas}"  rendered="#{item.tipoLancamentoPeriodico == 'PARCELADO'}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;
+	  		<p:spacer width="20"/>
 			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								

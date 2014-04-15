@@ -54,6 +54,7 @@ public abstract class AbstractRepository {
 	@Autowired
 	protected SessionFactory sessionFactory;
 	
+	//TODO remover estas declarações
 	protected String hql = "SELECT 1";
 	protected Query hqlQuery;
 	
@@ -63,5 +64,9 @@ public abstract class AbstractRepository {
 	
 	protected Session getSession() {
 		return this.sessionFactory.getCurrentSession();
+	}
+	
+	protected Query getQuery(String hql) {
+		return getSession().createQuery(hql);
 	}
 }

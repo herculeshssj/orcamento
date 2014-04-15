@@ -107,6 +107,21 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			gerarParcelas(entity);
 		}
 	}
+	
+	@Override
+	public void excluir(LancamentoPeriodico entity) throws BusinessException {
+		List<PagamentoPeriodo> pagamentos = pagamentoPeriodoRepository.findPagosByLancamentoPeriodico(entity);
+		if (pagamentos != null) {
+			if (pagamentos.size() != 0) {
+				throw new BusinessException("Não é possível excluir! Existem pagamentos registrados!");
+			}
+		}
+		// Exclui os pagamentos e depois exclui o lançamento
+		for (PagamentoPeriodo pagamento : pagamentoPeriodoRepository.findByLancamentoPeriodico(entity)) {
+			pagamentoPeriodoRepository.delete(pagamento);
+		}
+		super.excluir(entity);
+	}
 
 	@Override
 	public List<LancamentoPeriodico> buscarPorContaEStatusLancamento(Conta conta, StatusLancamento statusLancamento) throws BusinessException {

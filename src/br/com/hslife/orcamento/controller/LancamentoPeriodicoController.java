@@ -203,6 +203,21 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return this.alterarStatus(StatusLancamento.ENCERRADO);
 	}
 	
+	public String registrarPagamentoView() {
+		try {
+			entity = getService().buscarPorID(idEntity);
+			actionTitle = " - Registrar pagamento";
+			return "/pages/LancamentoPeriodico/registrarPagamento";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public String registrarPagamento() {
+		return "";
+	}
+	
 	public String verMensalidades() {
 		try {
 			lancamentosVinculados.clear();
