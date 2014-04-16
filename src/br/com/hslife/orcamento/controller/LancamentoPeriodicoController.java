@@ -45,7 +45,6 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -54,7 +53,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -63,11 +61,11 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -77,11 +75,9 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
-import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 
 @Component("lancamentoPeriodicoMB")
 @Scope("session")
@@ -110,18 +106,12 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
 	
-	@Autowired
-	private ILancamentoConta lancamentoContaService;
-	
 	private Conta contaSelecionada;
+	private PagamentoPeriodo pagamentoPeriodo;
 	private StatusLancamento statusLancamento;
-	private TipoCategoria tipoCategoriaSelecionada;	
+	private TipoCategoria tipoCategoriaSelecionada;
 	private boolean parcelamento;
 	private boolean selecionarTodosLancamentos;
-	private List<LancamentoConta> lancamentosEncontrados;
-	private List<LancamentoConta> lancamentosVinculados = new ArrayList<>();
-	private List<LancamentoConta> lancamentosVinculadosAgendados = new ArrayList<>();
-	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	
 	public LancamentoPeriodicoController() {
 		super(new LancamentoPeriodico());
@@ -147,7 +137,6 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	@Override
 	public String save() {
 		entity.setUsuario(getUsuarioLogado());
-		entity.setStatusLancamento(StatusLancamento.ATIVO);
 		return super.save();
 	}
 	
@@ -215,106 +204,14 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	}
 	
 	public String registrarPagamento() {
-		return "";
-	}
-	
-	public String verMensalidades() {
 		try {
-			lancamentosVinculados.clear();
-			lancamentosVinculadosAgendados.clear();
-			entity = getService().buscarPorID(idEntity);
-			
-//			for (LancamentoConta lancamento : entity.getLancamentos()) {
-//				if (lancamento.isQuitado()) {
-//					lancamentosVinculados.add(lancamento);
-//				} else {
-//					lancamentosVinculadosAgendados.add(lancamento);
-//				}
-//			}
-			
-			actionTitle = " - Mensalidades";
-			return "/pages/LancamentoPeriodico/mensalidades";
+			getService().registrarPagamento(pagamentoPeriodo);
+			infoMessage("Pagamento registrado com sucesso!");
+			pagamentoPeriodo = new PagamentoPeriodo();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
-	}
-	
-	public String verParcelas() {
-		try {
-			lancamentosVinculados.clear();
-			lancamentosVinculadosAgendados.clear();
-			entity = getService().buscarPorID(idEntity);
-			
-//			for (LancamentoConta lancamento : entity.getLancamentos()) {
-//				if (lancamento.isQuitado()) {
-//					lancamentosVinculados.add(lancamento);
-//				} else {
-//					lancamentosVinculadosAgendados.add(lancamento);
-//				}
-//			}
-			
-			actionTitle = " - Parcelas";
-			return "/pages/LancamentoPeriodico/parcelas";
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	public void vincularLancamentos() {
-		try {
-			List<LancamentoConta> lancamentos = new ArrayList<>();
-			for (LancamentoConta l : lancamentosEncontrados) {
-				if (l.isSelecionado()) {
-					lancamentos.add(l);
-				}
-			}
-			getService().vincularLancamentos(entity, lancamentos);
-			infoMessage("Lançamentos vinculados com sucesso!");
-			lancamentosEncontrados = new ArrayList<>();
-			
-			lancamentosVinculados.clear();
-			lancamentosVinculadosAgendados.clear();
-			entity = getService().buscarPorID(idEntity);
-//			for (LancamentoConta lancamento : entity.getLancamentos()) {
-//				if (lancamento.isQuitado()) {
-//					lancamentosVinculados.add(lancamento);
-//				} else {
-//					lancamentosVinculadosAgendados.add(lancamento);
-//				}
-//			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	private void desvincularLancamentos(List<LancamentoConta> lancamentos) {
-		try {			
-			getService().desvincularLancamentos(entity, lancamentos);
-			infoMessage("Lançamentos desvinculados com sucesso!");
-			
-			lancamentosVinculados.clear();
-			lancamentosVinculadosAgendados.clear();
-			entity = getService().buscarPorID(idEntity);
-//			for (LancamentoConta lancamento : entity.getLancamentos()) {
-//				if (lancamento.isQuitado()) {
-//					lancamentosVinculados.add(lancamento);
-//				} else {
-//					lancamentosVinculadosAgendados.add(lancamento);
-//				}
-//			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	public void desvincularLancamentosVinculados() {
-		this.desvincularLancamentos(lancamentosVinculados);
-	}
-	
-	public void desvincularLancamentosVinculadosAgendados() {
-		this.desvincularLancamentos(lancamentosVinculadosAgendados);
 	}
 	
 	public void carregarArquivo(FileUploadEvent event) {
@@ -354,81 +251,6 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		}
 	}
 	
-	private void selecionarTodos(List<LancamentoConta> lancamentos) {
-		if (lancamentos != null && lancamentos.size() > 0) {
-			for (LancamentoConta l : lancamentos) {
-				if (selecionarTodosLancamentos) {
-					l.setSelecionado(true);
-				} else {
-					l.setSelecionado(false);
-				}
-			}
-		}
-	}
-	
-	public void selecionarTodosEncontrados() {
-		this.selecionarTodos(lancamentosEncontrados);
-	}
-	
-	public void selecionarTodosVinculados() {
-		this.selecionarTodos(lancamentosVinculados);
-	}
-	
-	public void selecionarTodosVinculadosAgendados() {
-		this.selecionarTodos(lancamentosVinculadosAgendados);
-	}
-	
-	public void pesquisarLancamentos() {
-		try {
-			lancamentosEncontrados = new ArrayList<>();
-			criterioBusca.setConta(entity.getConta());
-			List<LancamentoConta> lancamentos = lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca);
-			if (lancamentos != null && lancamentos.size() > 0) {
-				lancamentosEncontrados.addAll(lancamentos);
-				lancamentosEncontrados.removeAll(lancamentosVinculados);
-				lancamentosEncontrados.removeAll(lancamentosVinculadosAgendados);
-			} else {
-				warnMessage("Nenhum lançamento foi encontrado!");
-				return;
-			}
-			if (lancamentosEncontrados.size() == 0) {
-				warnMessage("Nenhum lançamento foi encontrado!");
-				return;
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	public void pesquisarLancamentosParcelados() {
-		try {
-			lancamentosEncontrados = new ArrayList<>();
-			criterioBusca.setConta(entity.getConta());
-			List<LancamentoConta> lancamentos = lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca);
-			if (lancamentos != null && lancamentos.size() > 0) {
-				lancamentosEncontrados.addAll(lancamentos);
-				lancamentosEncontrados.removeAll(lancamentosVinculados);
-				lancamentosEncontrados.removeAll(lancamentosVinculadosAgendados);
-				
-				// Remove todos os lançamentos que não parcelamentos
-				for (Iterator<LancamentoConta> i = lancamentosEncontrados.iterator(); i.hasNext();) {
-					if (i.next().getParcela() == null || i.next().getParcela().length() == 0) {
-						i.remove();
-					}
-				}				 
-			} else {
-				warnMessage("Nenhum lançamento foi encontrado!");
-				return;
-			}
-			if (lancamentosEncontrados.size() == 0) {
-				warnMessage("Nenhum lançamento foi encontrado!");
-				return;
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
 	public void atualizaPainelCadastro() {
 		if (entity.getTipoLancamentoPeriodico() != null && entity.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
 			parcelamento = false;
@@ -447,23 +269,17 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		}
 	}
 	
-	public void alterarAbas(TabChangeEvent event) {
-		selecionarTodosLancamentos = false;
-		if (lancamentosEncontrados != null && lancamentosEncontrados.size() > 0) {
-			for (LancamentoConta l : lancamentosEncontrados) {
-				l.setSelecionado(false);				
-			}
+	public void carregarPagamentoPeriodo() {
+		// método criado para carregar os dados do pagamento do período
+	}
+	
+	public List<PagamentoPeriodo> getListaPagamentoPeriodo() {
+		try {
+			return getService().buscarPagamentosNaoPagosPorLancamentoPeriodico(entity);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
-		if (lancamentosVinculados != null && lancamentosVinculados.size() > 0) {
-			for (LancamentoConta l : lancamentosVinculados) {
-				l.setSelecionado(false);				
-			}
-		}
-		if (lancamentosVinculadosAgendados != null && lancamentosVinculadosAgendados.size() > 0) {
-			for (LancamentoConta l : lancamentosVinculadosAgendados) {
-				l.setSelecionado(false);				
-			}
-		}
+		return new ArrayList<>();
 	}
 	
 	public List<Conta> getListaConta() {
@@ -610,41 +426,11 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 
-	public List<LancamentoConta> getLancamentosEncontrados() {
-		return lancamentosEncontrados;
+	public PagamentoPeriodo getPagamentoPeriodo() {
+		return pagamentoPeriodo;
 	}
 
-	public void setLancamentosEncontrados(
-			List<LancamentoConta> lancamentosEncontrados) {
-		this.lancamentosEncontrados = lancamentosEncontrados;
-	}
-
-	public List<LancamentoConta> getLancamentosVinculados() {
-		return lancamentosVinculados;
-	}
-
-	public void setLancamentosVinculados(List<LancamentoConta> lancamentosVinculados) {
-		this.lancamentosVinculados = lancamentosVinculados;
-	}
-
-	public List<LancamentoConta> getLancamentosVinculadosAgendados() {
-		return lancamentosVinculadosAgendados;
-	}
-
-	public void setLancamentosVinculadosAgendados(
-			List<LancamentoConta> lancamentosVinculadosAgendados) {
-		this.lancamentosVinculadosAgendados = lancamentosVinculadosAgendados;
-	}
-
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
-	}
-
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
-	}
-
-	public void setLancamentoContaService(ILancamentoConta lancamentoContaService) {
-		this.lancamentoContaService = lancamentoContaService;
+	public void setPagamentoPeriodo(PagamentoPeriodo pagamentoPeriodo) {
+		this.pagamentoPeriodo = pagamentoPeriodo;
 	}
 }

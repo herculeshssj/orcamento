@@ -106,7 +106,7 @@
 			<h:commandButton title="Registrar pagamento" image="/resources/images/baixa.png" action="#{managedBean.registrarPagamentoView}" rendered="#{item.statusLancamento == 'ATIVO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		<p:spacer width="20"/>
+	  		<p:spacer width="20" rendered="#{item.statusLancamento == 'ATIVO'}"/>
 			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								

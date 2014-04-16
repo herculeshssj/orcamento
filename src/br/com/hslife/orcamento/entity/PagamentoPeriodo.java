@@ -58,7 +58,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="pagamentoperiodo")
@@ -97,7 +99,7 @@ public class PagamentoPeriodo extends EntityPersistence {
 	private LancamentoConta lancamentoConta;
 	
 	@ManyToOne
-	@JoinColumn(name="idLancamentoPeriodico")
+	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
 	private LancamentoPeriodico lancamentoPeriodico;
 	
 	public PagamentoPeriodo() {
@@ -110,7 +112,11 @@ public class PagamentoPeriodo extends EntityPersistence {
 
 	@Override
 	public String getLabel() {
-		return "";
+		if (this.lancamentoPeriodico.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+			return "Período " + this.periodo + " / " + this.ano + ", vencimento para " + Util.formataDataHora(this.dataVencimento, Util.DATA);
+		} else {
+			return "Parcela " + this.parcela + " / " + this.lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(this.dataVencimento, Util.DATA);
+		}
 	}
 	
 	@Override

@@ -51,14 +51,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
-import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.repository.PagamentoPeriodoRepository;
 
@@ -69,9 +67,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	private LancamentoPeriodicoRepository repository;
 	
 	@Autowired
-	private LancamentoContaRepository lancamentoContaRepository;
-	
-	@Autowired
 	private PagamentoPeriodoRepository pagamentoPeriodoRepository;
 
 	public LancamentoPeriodicoRepository getRepository() {
@@ -80,11 +75,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 
 	public void setRepository(LancamentoPeriodicoRepository repository) {
 		this.repository = repository;
-	}
-
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
 	}
 
 	public void setPagamentoPeriodoRepository(
@@ -129,31 +119,20 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
-	public void vincularLancamentos(LancamentoPeriodico entity,	List<LancamentoConta> lancamentos) throws BusinessException {
-		/*
-		for (LancamentoConta l : lancamentos) {
-			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
-			lancamento.setLancamentoPeriodico(entity);
-			lancamentoContaRepository.update(lancamento);
-		}
-		*/		
-	}
-	
-	@Override
-	public void desvincularLancamentos(LancamentoPeriodico entity, List<LancamentoConta> lancamentos) throws BusinessException {
-		/*
-		for (LancamentoConta l : lancamentos) {
-			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
-			lancamento.setLancamentoPeriodico(null);
-			lancamentoContaRepository.update(lancamento);
-		}
-		*/
+	public List<PagamentoPeriodo> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException {
+		return pagamentoPeriodoRepository.findNotPagosByLancamentoPeriodico(entity);
 	}
 	
 	@Override
 	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws BusinessException {
 		entity.setStatusLancamento(novoStatus);
 		getRepository().update(entity);
+	}
+	
+	@Override
+	public void registrarPagamento(PagamentoPeriodo pagamentoPeriodo) throws BusinessException {
+		pagamentoPeriodo.setPago(true);
+		pagamentoPeriodoRepository.update(pagamentoPeriodo);
 	}
 	
 	private void gerarMensalidade(LancamentoPeriodico entity) throws BusinessException {

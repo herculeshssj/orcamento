@@ -71,4 +71,11 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findNotPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
+		return getQuery("FROM PagamentoPeriodo pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.pago = false ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamento.getId())
+				.list();
+	}
 }
