@@ -116,6 +116,40 @@
 			</h:commandButton>
 	  	</p:column>
     </ui:define>
+    
+    <ui:define name="outras_opcoes">
+    
+    	<h:panelGrid columns="6" rendered="#{managedBean.statusLancamento == 'ATIVO'}">
+    	
+    		<strong>Receitas</strong>
+    		<h:outputText />
+    		
+    		<i>Fixos:</i>
+    		<h:outputText value="#{managedBean.receitaFixa}">
+    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+    		</h:outputText>
+    		
+    		<i>Parcelados:</i>
+    		<h:outputText value="#{managedBean.receitaParcelada}">
+    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+    		</h:outputText>
+    		
+    		<strong>Despesas</strong>
+    		<h:outputText />
+    		
+    		<i>Fixos:</i>
+    		<h:outputText value="#{managedBean.despesaFixa}">
+    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+    		</h:outputText>
+    		
+    		<i>Parcelados:</i>
+    		<h:outputText value="#{managedBean.despesaParcelada}">
+    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+    		</h:outputText>
+    	
+    	</h:panelGrid>
+    	
+    </ui:define>
 	
 </ui:composition>
 </html>

@@ -232,6 +232,23 @@
 					</p:column>
 				</p:dataTable>
 				
+				<h:panelGrid columns="6" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
+    	
+		    		<strong>Totais</strong>
+		    		<h:outputText />
+		    		
+		    		<i>À pagar:</i>
+		    		<h:outputText value="#{managedBean.totalAPagar}">
+		    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+		    		</h:outputText>
+		    		
+		    		<i>Pagos:</i>
+		    		<h:outputText value="#{managedBean.totalPago}">
+		    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+		    		</h:outputText>
+		    		
+		    	</h:panelGrid>
+				
 			</p:tab>
 	
 		</p:tabView>

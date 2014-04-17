@@ -282,6 +282,82 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return new ArrayList<>();
 	}
 	
+	public double getReceitaFixa() {
+		double valor = 0.0;
+		if (listEntity != null && listEntity.size() > 0) {
+			for (LancamentoPeriodico lancamento : listEntity) {
+				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA) 
+						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+					valor += lancamento.getValorParcela();
+				}
+			}
+		}
+		return valor;
+	}
+	
+	public double getReceitaParcelada() {
+		double valor = 0.0;
+		if (listEntity != null && listEntity.size() > 0) {
+			for (LancamentoPeriodico lancamento : listEntity) {
+				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA) 
+						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+					valor += lancamento.getValorParcela();
+				}
+			}
+		}
+		return valor;
+	}
+	
+	public double getDespesaFixa() {
+		double valor = 0.0;
+		if (listEntity != null && listEntity.size() > 0) {
+			for (LancamentoPeriodico lancamento : listEntity) {
+				if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA) 
+						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+					valor += lancamento.getValorParcela();
+				}
+			}
+		}
+		return valor;
+	}
+	
+	public double getDespesaParcelada() {
+		double valor = 0.0;
+		if (listEntity != null && listEntity.size() > 0) {
+			for (LancamentoPeriodico lancamento : listEntity) {
+				if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA) 
+						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+					valor += lancamento.getValorParcela();
+				}
+			}
+		}
+		return valor;
+	}
+	
+	public double getTotalAPagar() {
+		double valor = 0.0;
+		if (entity.getPagamentos() != null && entity.getPagamentos().size() > 0) {
+			for (PagamentoPeriodo pagamento : entity.getPagamentos()) {
+				if (!pagamento.isPago()) {
+					valor += entity.getValorParcela();
+				}
+			}
+		}
+		return valor;
+	}
+	
+	public double getTotalPago() {
+		double valor = 0.0;
+		if (entity.getPagamentos() != null && entity.getPagamentos().size() > 0) {
+			for (PagamentoPeriodo pagamento : entity.getPagamentos()) {
+				if (pagamento.isPago()) {
+					valor += pagamento.getValorPago();
+				}
+			}
+		}
+		return valor;
+	}
+	
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());						
