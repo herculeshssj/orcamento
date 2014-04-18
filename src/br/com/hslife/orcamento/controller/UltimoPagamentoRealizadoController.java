@@ -44,7 +44,6 @@
 
 package br.com.hslife.orcamento.controller;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,25 +60,36 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
+import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("ultimoPagamentoRealizadoMB")
 @Scope("session")
 public class UltimoPagamentoRealizadoController extends AbstractController {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -330108799008412944L;
+
 	@Autowired
 	private ILancamentoPeriodico lancamentoPeriodicoService;
 	
+	@Autowired
+	private IMoeda moedaService;
+	
 	private LancamentoPeriodico lancamentoSelecionado;
+	private Moeda moedaPadrao;
 	private String dataAConsiderar;
 	private boolean agrupar;
 	private Integer periodo;
 	private boolean exibirGrafico;
-	private Integer maxValueBarPagamentos = 1;
+	private Double maxValueBarPagamentos = 1.0;
 	
 	private CartesianChartModel ultimosPagamentosModel;
 	
@@ -94,6 +104,7 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 	@Override
 	public String startUp() {
 		exibirGrafico = false;
+		this.carregarMoedaPadrao();
 		return "/pages/ResumoEstatistica/ultimoPagamentoRealizado";
 	}
 
@@ -104,8 +115,22 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 				return;
 			}
 			// Traz os pagamentos quitados do lançamento fixo selecionado
-			List<PagamentoPeriodo> pagamento = lancamentoPeriodicoService.buscarPagamentosPagosPorLancamentoPeriodico(lancamentoSelecionado);
-			gerarGrafico(pagamento);
+			List<PagamentoPeriodo> pagamentos = lancamentoPeriodicoService.buscarPagamentosPagosPorLancamentoPeriodico(lancamentoSelecionado);
+			if (pagamentos == null || pagamentos.size() == 0) {
+				warnMessage("O lançamento selecionado não contém pagamentos registrados!");
+				return;
+			}
+			gerarGrafico(pagamentos);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	private void carregarMoedaPadrao() {
+		try {
+			if (moedaPadrao == null) {
+				moedaPadrao = moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -115,6 +140,14 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 		// Instancia o Map que irá gravar os dados que irão gerar o gráfico
 		Map<String, Double> dadosPagamento = new HashMap<String, Double>();
 		String dataKey = "";
+		int quantIteracoes = 0;
+		
+		// Converte o valor do pagamento para a moeda padrão
+		for (PagamentoPeriodo pagamento : pagamentos) {
+			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
+			}
+		}
 						
 		if (agrupar) {
 			// Gera as entradas de acordo com a quantidade de períodos
@@ -134,12 +167,15 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
 				}	
 				// Busca a entrada no Map e soma o valor do pagamento do período
-				if (dadosPagamento.get(dataKey) != null)
+				if (dadosPagamento.get(dataKey) != null) {
 					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
+					
+					// Determina o valor máximo do eixo Y
+					maxValueBarPagamentos = dadosPagamento.get(dataKey) + 100;
+				}	
 				
-				// Determina o valor máximo do eixo Y
-				if (pagamento.getValorPago() > maxValueBarPagamentos)
-					maxValueBarPagamentos = new BigDecimal(Math.abs(pagamento.getValorPago()) + 100).intValue();
+				quantIteracoes++;
+				if (quantIteracoes == periodo) break;
 			}
 		} else {
 			for (PagamentoPeriodo pagamento : pagamentos) {
@@ -149,12 +185,15 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 					dataKey = new SimpleDateFormat("dd/MM/yyyy").format(pagamento.getDataPagamento());
 				}	
 				
+				// Busca a entrada no Map e soma o valor do pagamento do período
+				dadosPagamento.put(dataKey, pagamento.getValorPago());
+				
 				// Determina o valor máximo do eixo Y
 				if (pagamento.getValorPago() > maxValueBarPagamentos)
-					maxValueBarPagamentos = new BigDecimal(Math.abs(pagamento.getValorPago()) + 100).intValue(); 
+					maxValueBarPagamentos = dadosPagamento.get(dataKey) + 100;
 				
-				// Busca a entrada no Map e soma o valor do pagamento do período
-				dadosPagamento.put(dataKey, pagamento.getValorPago()); 
+				quantIteracoes++;
+				if (quantIteracoes == periodo) break;
 			}
 		}
 		
@@ -183,7 +222,7 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 	
 	public List<SelectItem> getPeriodos() {
 		List<SelectItem> periodos = new ArrayList<>();
-		for (int i = 1; i <= 36; i++) {
+		for (int i = 1; i <= 12; i++) {
 			periodos.add(new SelectItem(Integer.valueOf(i), Integer.toString(i)));
 		}
 		return periodos;
@@ -237,13 +276,19 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 		this.ultimosPagamentosModel = ultimosPagamentosModel;
 	}
 
-	public Integer getMaxValueBarPagamentos() {
+	public Double getMaxValueBarPagamentos() {
 		return maxValueBarPagamentos;
 	}
 
-	public void setMaxValueBarPagamentos(Integer maxValueBarPagamentos) {
+	public void setMaxValueBarPagamentos(Double maxValueBarPagamentos) {
 		this.maxValueBarPagamentos = maxValueBarPagamentos;
 	}
-	
-	
+
+	public Moeda getMoedaPadrao() {
+		return moedaPadrao;
+	}
+
+	public void setMoedaPadrao(Moeda moedaPadrao) {
+		this.moedaPadrao = moedaPadrao;
+	}
 }

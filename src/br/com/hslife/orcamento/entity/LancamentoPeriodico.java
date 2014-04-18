@@ -65,6 +65,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OrderBy;
 
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
@@ -153,6 +154,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	private Usuario usuario;
 	
 	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.EAGER)
+	@OrderBy(clause="dataVencimento")
 	private List<PagamentoPeriodo> pagamentos;
 	
 	public LancamentoPeriodico() {

@@ -165,7 +165,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			dataVencimento.set(Calendar.DAY_OF_MONTH, pagamentoPeriodo.getLancamentoPeriodico().getDiaVencimento());
 			
 			proximaMensalidade.setAno(dataVencimento.get(Calendar.YEAR));
-			proximaMensalidade.setPeriodo(dataVencimento.get(Calendar.MONTH));
+			proximaMensalidade.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
 			proximaMensalidade.setDataVencimento(dataVencimento.getTime());
 			
 			pagamentoPeriodoRepository.save(proximaMensalidade);
