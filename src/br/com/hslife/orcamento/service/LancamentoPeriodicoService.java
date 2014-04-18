@@ -124,6 +124,11 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
+	public List<PagamentoPeriodo> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException {
+		return pagamentoPeriodoRepository.findPagosByLancamentoPeriodico(entity);
+	}
+	
+	@Override
 	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws BusinessException {
 		entity.setStatusLancamento(novoStatus);
 		getRepository().update(entity);

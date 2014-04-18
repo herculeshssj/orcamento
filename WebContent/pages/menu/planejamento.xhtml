@@ -56,18 +56,20 @@
 <ui:composition template="/templates/principal.xhtml">
 
 	<ui:define name="titulo">
-		<h3>Orçamento</h3>
+		<h3>Planejamento do Orçamento</h3>
 	</ui:define>
 
 	<ui:define name="conteudo">
 	
 		<h:form id="frmMenuCadastros">
 		
-			<h:panelGrid columns="1" width="100%" style="text-align: center">
+			<h:panelGrid columns="2" width="100%" style="text-align: center">
 			
 				<h:commandButton action="#{lancamentoPeriodicoMB.startUp}" image="/resources/images/parcelamento.png" title="Despesas fixas e parceladas"/>
+				<h:commandButton action="#{ultimoPagamentoRealizadoMB.startUp}" image="/resources/images/pagamentos.png" title="Últimos Pagamentos Realizados"/>
 				
 				<h:outputText value="Despesas fixas e parceladas"/>
+				<h:outputText value="Últimos Pagamentos Realizados"/>
 										
 			</h:panelGrid>
 		

@@ -62,5 +62,7 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	
 	public List<PagamentoPeriodo> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
 	
+	public List<PagamentoPeriodo> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
+	
 	public void registrarPagamento(PagamentoPeriodo pagamentoPeriodo) throws BusinessException;
 }
