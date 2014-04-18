@@ -226,8 +226,9 @@
 						<f:facet name="header">
 							<h:outputText value="Valor"/>
 						</f:facet>
+						<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} "/>
 						<h:outputText value="#{item.valorPago}">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
 					</p:column>
 				</p:dataTable>
@@ -238,14 +239,20 @@
 		    		<h:outputText />
 		    		
 		    		<i>À pagar:</i>
-		    		<h:outputText value="#{managedBean.totalAPagar}">
-		    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-		    		</h:outputText>
+		    		<h:panelGroup>
+			    		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} "/>
+			    		<h:outputText value="#{managedBean.totalAPagar}">
+			    			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			    		</h:outputText>
+		    		</h:panelGroup>
 		    		
 		    		<i>Pagos:</i>
-		    		<h:outputText value="#{managedBean.totalPago}">
-		    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-		    		</h:outputText>
+		    		<h:panelGroup>
+			    		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} "/>
+			    		<h:outputText value="#{managedBean.totalPago}">
+			    			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			    		</h:outputText>
+		    		</h:panelGroup>
 		    		
 		    	</h:panelGrid>
 				

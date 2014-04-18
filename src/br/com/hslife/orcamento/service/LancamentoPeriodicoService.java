@@ -114,8 +114,8 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 
 	@Override
-	public List<LancamentoPeriodico> buscarPorContaEStatusLancamento(Conta conta, StatusLancamento statusLancamento) throws BusinessException {
-		return getRepository().findByContaAndStatusLancamento(conta, statusLancamento);
+	public List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento) throws BusinessException {
+		return getRepository().findByTipoLancamentoContaAndStatusLancamento(tipo, conta, statusLancamento);
 	}
 	
 	@Override
@@ -133,6 +133,39 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	public void registrarPagamento(PagamentoPeriodo pagamentoPeriodo) throws BusinessException {
 		pagamentoPeriodo.setPago(true);
 		pagamentoPeriodoRepository.update(pagamentoPeriodo);
+		
+		// Gera o próximo pagamento para os lançamentos fixos
+		if (pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+			
+			// Busca o pagamento mais recente
+			PagamentoPeriodo ultimaMensalidade = pagamentoPeriodoRepository.findLastGeneratedPagamentoPeriodo(pagamentoPeriodo.getLancamentoPeriodico());
+			
+			Calendar dataVencimento = Calendar.getInstance();
+			dataVencimento.setTime(ultimaMensalidade.getDataVencimento());
+			
+			if (dataVencimento.get(Calendar.DAY_OF_MONTH) >= pagamentoPeriodo.getLancamentoPeriodico().getDiaVencimento()) {
+				switch (pagamentoPeriodo.getLancamentoPeriodico().getPeriodoLancamento()) {
+					case MENSAL : dataVencimento.add(Calendar.MONTH, 1); break;
+					case BIMESTRAL : dataVencimento.add(Calendar.MONTH, 2); break;
+					case TRIMESTRAL : dataVencimento.add(Calendar.MONTH, 3); break;
+					case QUADRIMESTRAL : dataVencimento.add(Calendar.MONTH, 4); break;
+					case SEMESTRAL : dataVencimento.add(Calendar.MONTH, 6); break;
+					case ANUAL : dataVencimento.add(Calendar.YEAR, 1); break;
+					default : throw new BusinessException("Período informado é inválido!");
+				}
+			}
+			
+			PagamentoPeriodo proximaMensalidade = new PagamentoPeriodo();
+			proximaMensalidade.setLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico());
+			dataVencimento.set(Calendar.DAY_OF_MONTH, pagamentoPeriodo.getLancamentoPeriodico().getDiaVencimento());
+			
+			proximaMensalidade.setAno(dataVencimento.get(Calendar.YEAR));
+			proximaMensalidade.setPeriodo(dataVencimento.get(Calendar.MONTH));
+			proximaMensalidade.setDataVencimento(dataVencimento.getTime());
+			
+			pagamentoPeriodoRepository.save(proximaMensalidade);
+			
+		}
 	}
 	
 	private void gerarMensalidade(LancamentoPeriodico entity) throws BusinessException {

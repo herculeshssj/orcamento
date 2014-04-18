@@ -78,4 +78,11 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
+	
+	public PagamentoPeriodo findLastGeneratedPagamentoPeriodo(LancamentoPeriodico lancamentoPeriodico) {
+		return (PagamentoPeriodo)getQuery("FROM PagamentoPeriodo pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamentoPeriodico.getId())
+				.setMaxResults(1)
+				.uniqueResult();
+	}
 }

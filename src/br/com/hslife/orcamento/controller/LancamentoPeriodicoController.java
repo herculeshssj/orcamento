@@ -108,8 +108,10 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	private Conta contaSelecionada;
 	private PagamentoPeriodo pagamentoPeriodo;
+	private Moeda moedaPadrao;
 	private StatusLancamento statusLancamento;
 	private TipoCategoria tipoCategoriaSelecionada;
+	private TipoLancamentoPeriodico tipoLancamentoPeriodico;
 	private boolean parcelamento;
 	private boolean selecionarTodosLancamentos;
 	
@@ -128,7 +130,8 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorContaEStatusLancamento(contaSelecionada, statusLancamento);
+			listEntity = getService().buscarPorTipoLancamentoContaEStatusLancamento(tipoLancamentoPeriodico, contaSelecionada, statusLancamento);
+			this.carregarMoedaPadrao();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -214,6 +217,16 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return "";
 	}
 	
+	private void carregarMoedaPadrao() {
+		try {
+			if (moedaPadrao == null) {
+				moedaPadrao = moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
 	public void carregarArquivo(FileUploadEvent event) {
 		if (event.getFile() != null) {
 			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
@@ -280,58 +293,6 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
-	}
-	
-	public double getReceitaFixa() {
-		double valor = 0.0;
-		if (listEntity != null && listEntity.size() > 0) {
-			for (LancamentoPeriodico lancamento : listEntity) {
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA) 
-						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
-					valor += lancamento.getValorParcela();
-				}
-			}
-		}
-		return valor;
-	}
-	
-	public double getReceitaParcelada() {
-		double valor = 0.0;
-		if (listEntity != null && listEntity.size() > 0) {
-			for (LancamentoPeriodico lancamento : listEntity) {
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA) 
-						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
-					valor += lancamento.getValorParcela();
-				}
-			}
-		}
-		return valor;
-	}
-	
-	public double getDespesaFixa() {
-		double valor = 0.0;
-		if (listEntity != null && listEntity.size() > 0) {
-			for (LancamentoPeriodico lancamento : listEntity) {
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA) 
-						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
-					valor += lancamento.getValorParcela();
-				}
-			}
-		}
-		return valor;
-	}
-	
-	public double getDespesaParcelada() {
-		double valor = 0.0;
-		if (listEntity != null && listEntity.size() > 0) {
-			for (LancamentoPeriodico lancamento : listEntity) {
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA) 
-						&& lancamento.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
-					valor += lancamento.getValorParcela();
-				}
-			}
-		}
-		return valor;
 	}
 	
 	public double getTotalAPagar() {
@@ -508,5 +469,22 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setPagamentoPeriodo(PagamentoPeriodo pagamentoPeriodo) {
 		this.pagamentoPeriodo = pagamentoPeriodo;
+	}
+
+	public TipoLancamentoPeriodico getTipoLancamentoPeriodico() {
+		return tipoLancamentoPeriodico;
+	}
+
+	public void setTipoLancamentoPeriodico(
+			TipoLancamentoPeriodico tipoLancamentoPeriodico) {
+		this.tipoLancamentoPeriodico = tipoLancamentoPeriodico;
+	}
+
+	public Moeda getMoedaPadrao() {
+		return moedaPadrao;
+	}
+
+	public void setMoedaPadrao(Moeda moedaPadrao) {
+		this.moedaPadrao = moedaPadrao;
 	}
 }

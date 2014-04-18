@@ -46,11 +46,13 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 
 @Repository
 public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<LancamentoPeriodico> {
@@ -60,9 +62,26 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<LancamentoPeriodico> findByContaAndStatusLancamento(Conta conta, StatusLancamento statusLancamento) {
-		hql = "FROM LancamentoPeriodico periodico WHERE periodico.conta.id = :idConta AND periodico.statusLancamento = :status ORDER BY periodico.descricao ASC";
-		hqlQuery = getSession().createQuery(hql).setLong("idConta", conta.getId()).setParameter("status", statusLancamento);
+	public List<LancamentoPeriodico> findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM LancamentoPeriodico periodico WHERE ");
+		if (tipo != null) {
+			hql.append("periodico.tipoLancamentoPeriodico = :tipo AND ");
+		}
+		if (conta != null) {
+			hql.append("periodico.conta.id = :idConta AND ");
+		}
+		hql.append("periodico.statusLancamento = :status ORDER BY periodico.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
+		if (conta != null) {
+			hqlQuery.setLong("idConta", conta.getId());
+		}
+		hqlQuery.setParameter("status", statusLancamento);
+		
 		return hqlQuery.list();
 	}
 }

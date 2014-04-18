@@ -57,8 +57,15 @@
 	<ui:param name="managedBean" value="#{lancamentoPeriodicoMB}" />
 	
 	<ui:define name="pesquisa">
+		Tipo:
+		<h:selectOneMenu value="#{managedBean.tipoLancamentoPeriodico}">
+			<f:selectItem itemLabel="Todos" />
+			<f:selectItems value="#{managedBean.listaTipoLancamentoPeriodico}" />
+		</h:selectOneMenu>
+		&nbsp;
 		Conta:
 		<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
+			<f:selectItem itemLabel="Todos" />
 			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>
 		&nbsp;
@@ -86,8 +93,9 @@
 			<f:facet name="header">
 				<h:outputText value="Valor"/>
 			</f:facet>
+			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
 			<h:outputText value="#{item.valorParcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>						
 	  	</p:column>
 	  	<p:column style="text-align: center; vertical-align: middle;">
@@ -106,49 +114,15 @@
 			<h:commandButton title="Registrar pagamento" image="/resources/images/baixa.png" action="#{managedBean.registrarPagamentoView}" rendered="#{item.statusLancamento == 'ATIVO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		<p:spacer width="20" rendered="#{item.statusLancamento == 'ATIVO'}"/>
+	  		<p:spacer width="15" rendered="#{item.statusLancamento == 'ATIVO'}"/>
 			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		<p:spacer width="20" rendered="#{item.statusLancamento != 'ENCERRADO'}"/>
+	  		<p:spacer width="15" rendered="#{item.statusLancamento != 'ENCERRADO'}"/>
 			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.statusLancamento != 'ENCERRADO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
 	  	</p:column>
-    </ui:define>
-    
-    <ui:define name="outras_opcoes">
-    
-    	<h:panelGrid columns="6" rendered="#{managedBean.statusLancamento == 'ATIVO'}">
-    	
-    		<strong>Receitas</strong>
-    		<h:outputText />
-    		
-    		<i>Fixos:</i>
-    		<h:outputText value="#{managedBean.receitaFixa}">
-    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-    		</h:outputText>
-    		
-    		<i>Parcelados:</i>
-    		<h:outputText value="#{managedBean.receitaParcelada}">
-    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-    		</h:outputText>
-    		
-    		<strong>Despesas</strong>
-    		<h:outputText />
-    		
-    		<i>Fixos:</i>
-    		<h:outputText value="#{managedBean.despesaFixa}">
-    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-    		</h:outputText>
-    		
-    		<i>Parcelados:</i>
-    		<h:outputText value="#{managedBean.despesaParcelada}">
-    			<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-    		</h:outputText>
-    	
-    	</h:panelGrid>
-    	
     </ui:define>
 	
 </ui:composition>
