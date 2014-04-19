@@ -78,7 +78,8 @@
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/despensa.faces"><h:graphicImage value="/resources/images/despensa.png"/></a></h:panelGroup>
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/documentos.faces"><h:graphicImage value="/resources/images/documentos.png"/></a></h:panelGroup>															
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/resumos.faces"><h:graphicImage value="/resources/images/resumos.png"/></a></h:panelGroup>									
-				<h:panelGroup><a href="#{request.contextPath}/pages/menu/opcoes.faces"><h:graphicImage value="/resources/images/opcoes.png"/></a></h:panelGroup>
+				<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}"><a href="#{request.contextPath}/pages/menu/opcoes.faces"><h:graphicImage value="/resources/images/opcoes.png"/></a></h:panelGroup>
+				<h:commandButton rendered="#{usuarioMB.usuarioLogado.login != 'admin'}" action="#{opcaoSistemaMB.startUp}" image="/resources/images/opcoes.png" />
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/ajuda.faces"><h:graphicImage value="/resources/images/ajuda.png"/></a></h:panelGroup>
 				
 				<h:outputText value="Despensa"/>

@@ -118,8 +118,9 @@
 									<a href="#{request.contextPath}/pages/menu/resumos.faces">Resumos</a>
 								</li>
 								
-								<li class="page_item page-item-8"><a
-									href="#{request.contextPath}/pages/menu/opcoes.faces">Opções</a>
+								<li class="page_item page-item-8">
+									<h:outputLink value="#{request.contextPath}/pages/menu/opcoes.faces" rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">Opções</h:outputLink>
+									<h:commandLink value="Opções" action="#{opcaoSistemaMB.startUp}" rendered="#{usuarioMB.usuarioLogado.login != 'admin'}" />																	
 								</li>
 								
 								<li class="page_item page-item-8"><a
