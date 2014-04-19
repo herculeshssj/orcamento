@@ -102,5 +102,18 @@
 		</h:panelGrid>
 
 	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true" rendered="#{managedBean.entity.login == 'admin'>
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+   		<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.login == 'admin'}">
+   			<p:graphicImage value="/resources/images/gravar.png" />
+   		</h:commandLink>
+   		<h:commandLink title="Salvar registro" action="#{managedBean.saveUser}" rendered="#{managedBean.entity.login != 'admin'}">
+   			<p:graphicImage value="/resources/images/gravar.png" />
+   		</h:commandLink>
+	</ui:define>
 </ui:composition>
 </html>

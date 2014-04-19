@@ -153,6 +153,27 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		return "";
 	}
 	
+	public void saveUser() {
+		try {
+			getService().alterar(entity, novaSenha, confirmaSenha);
+			infoMessage("Dados do usuário alterados com sucesso!");					
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public String startUpUser() {
+		try {
+			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
+			operation = "edit";
+			actionTitle = " - Editar";
+			return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public String edit() {
 		try {
 			entity = getService().buscarPorID(idEntity);

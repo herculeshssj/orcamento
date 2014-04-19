@@ -66,7 +66,10 @@
 					</div>
 					<div id="site-description">
 						Seja bem-vindo
-						<h:outputText value="#{usuarioMB.usuarioLogado.nome}" />
+						<h:form>
+							<h:outputText value="#{usuarioMB.usuarioLogado.nome}" rendered="#{usuarioMB.usuarioLogado.login == 'admin'}"/>
+							<h:commandLink value="#{usuarioMB.usuarioLogado.nome}" action="#{usuarioMB.startUpUser}" rendered="#{usuarioMB.usuarioLogado.login != 'admin'}" />
+						</h:form>						
 					</div>
 
 					<h:graphicImage name="header.jpg" library="images" width="940"
