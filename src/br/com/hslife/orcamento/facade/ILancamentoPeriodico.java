@@ -71,4 +71,8 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	
 	public List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario) throws BusinessException;
 	
+	public List<PagamentoPeriodo> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, Boolean pago) throws BusinessException;
+	
+	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) throws BusinessException;
+	
 }

@@ -46,6 +46,7 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
@@ -96,5 +97,51 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 				.setParameter("tipo", tipo)
 				.setLong("idUsuario", usuario.getId())
 				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findPagamentosByLancamentoPeriodicoAndPago(LancamentoPeriodico lancamento, Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM PagamentoPeriodo pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.pago = :pago AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		
+		hqlQuery.setParameter("idLancamento", lancamento.getId());
+		
+		return hqlQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findPagamentosByTipoLancamentoAndUsuarioAndPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM PagamentoPeriodo pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.pago = :pago AND ");
+		}
+		if (tipo != null) {
+			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.usuario.id = :idUsuario ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
+		
+		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
 	}
 }
