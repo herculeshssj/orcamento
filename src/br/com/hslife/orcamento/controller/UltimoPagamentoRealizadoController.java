@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
@@ -88,10 +89,14 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 	private String dataAConsiderar;
 	private boolean agrupar;
 	private Integer periodo;
-	private boolean exibirGrafico;
-	private Double maxValueBarPagamentos = 1.0;
+	private boolean exibirGraficoReceita;
+	private boolean exibirGraficoDespesa;
 	
-	private CartesianChartModel ultimosPagamentosModel;
+	private Double maxValueBarPagamentosDespesa = 1.0;
+	private Double maxValueBarPagamentosReceita = 1.0;
+	
+	private CartesianChartModel ultimosPagamentosDespesaModel;
+	private CartesianChartModel ultimosPagamentosReceitaModel;
 	
 	public UltimoPagamentoRealizadoController() {
 		moduleTitle = "Últimos Pagamentos Realizados";
@@ -103,24 +108,45 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 
 	@Override
 	public String startUp() {
-		exibirGrafico = false;
+		exibirGraficoDespesa = false;
+		exibirGraficoReceita = false;
 		this.carregarMoedaPadrao();
 		return "/pages/ResumoEstatistica/ultimoPagamentoRealizado";
 	}
 
 	public void find() {
-		try {
+		try {			
+			// Traz os pagamentos quitados do lançamento fixo selecionado, ou todos se nenhum for selecionado
+			List<PagamentoPeriodo> pagamentos = new ArrayList<>();
+			List<PagamentoPeriodo> pagamentosReceita = new ArrayList<>();
+			List<PagamentoPeriodo> pagamentosDespesa = new ArrayList<>();
 			if (lancamentoSelecionado == null) {
-				warnMessage("Selecione um lançamento!");
-				return;
+				if (!agrupar) {
+					warnMessage("Opção de visualização não disponível. Marque a opção 'Agrupar' para visualizar.");
+					return;
+				}					
+				pagamentos = lancamentoPeriodicoService.buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico.FIXO, getUsuarioLogado());
+			} else {
+				pagamentos = lancamentoPeriodicoService.buscarPagamentosPagosPorLancamentoPeriodico(lancamentoSelecionado);
 			}
-			// Traz os pagamentos quitados do lançamento fixo selecionado
-			List<PagamentoPeriodo> pagamentos = lancamentoPeriodicoService.buscarPagamentosPagosPorLancamentoPeriodico(lancamentoSelecionado);
 			if (pagamentos == null || pagamentos.size() == 0) {
 				warnMessage("O lançamento selecionado não contém pagamentos registrados!");
 				return;
 			}
-			gerarGrafico(pagamentos);
+			
+			// Separa os pagamento de lançamentos fixos de receita dos de despesa
+			for (PagamentoPeriodo pagamento : pagamentos) {
+				if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+					pagamentosDespesa.add(pagamento);
+				} else {
+					pagamentosReceita.add(pagamento);
+				}
+			}
+			
+			// Envia a lista de pagamento para os respectivos métodos para gerar o gráfico
+			gerarGraficoDespesa(pagamentosDespesa);
+			gerarGraficoReceita(pagamentosReceita);
+			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -136,11 +162,18 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 		}
 	}
 	
-	private void gerarGrafico(List<PagamentoPeriodo> pagamentos) {
+	private void gerarGraficoDespesa(List<PagamentoPeriodo> pagamentos) {
+		// Verifica se deve continuar com a geração do gráfico a partir da quantidade de lançamentos
+		if (pagamentos == null || pagamentos.size() == 0) {
+			exibirGraficoDespesa = false;
+			return;
+		}
+		
 		// Instancia o Map que irá gravar os dados que irão gerar o gráfico
 		Map<String, Double> dadosPagamento = new HashMap<String, Double>();
 		String dataKey = "";
 		int quantIteracoes = 0;
+		maxValueBarPagamentosDespesa = 1.0;
 		
 		// Converte o valor do pagamento para a moeda padrão
 		for (PagamentoPeriodo pagamento : pagamentos) {
@@ -171,11 +204,9 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
 					
 					// Determina o valor máximo do eixo Y
-					maxValueBarPagamentos = dadosPagamento.get(dataKey) + 100;
+					if (dadosPagamento.get(dataKey) > maxValueBarPagamentosDespesa)
+						maxValueBarPagamentosDespesa = dadosPagamento.get(dataKey) + 100;
 				}	
-				
-				quantIteracoes++;
-				if (quantIteracoes == periodo) break;
 			}
 		} else {
 			for (PagamentoPeriodo pagamento : pagamentos) {
@@ -189,8 +220,8 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 				dadosPagamento.put(dataKey, pagamento.getValorPago());
 				
 				// Determina o valor máximo do eixo Y
-				if (pagamento.getValorPago() > maxValueBarPagamentos)
-					maxValueBarPagamentos = dadosPagamento.get(dataKey) + 100;
+				if (pagamento.getValorPago() > maxValueBarPagamentosDespesa)
+					maxValueBarPagamentosDespesa = dadosPagamento.get(dataKey) + 100;
 				
 				quantIteracoes++;
 				if (quantIteracoes == periodo) break;
@@ -198,7 +229,7 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
-		ultimosPagamentosModel = new CartesianChartModel();
+		ultimosPagamentosDespesaModel = new CartesianChartModel();
 		
 		ChartSeries pagamentosSerie = new ChartSeries();
 		pagamentosSerie.setLabel("Pagamento efetuado");
@@ -206,14 +237,94 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 			pagamentosSerie.set(key, dadosPagamento.get(key));
 		}
 		
-		ultimosPagamentosModel.addSeries(pagamentosSerie);
+		ultimosPagamentosDespesaModel.addSeries(pagamentosSerie);
 		
-		exibirGrafico = true;
+		exibirGraficoDespesa = true;
+	}
+	
+	private void gerarGraficoReceita(List<PagamentoPeriodo> pagamentos) {
+		// Verifica se deve continuar com a geração do gráfico a partir da quantidade de lançamentos
+		if (pagamentos == null || pagamentos.size() == 0) {
+			exibirGraficoReceita = false;
+			return;
+		}
+		
+		// Instancia o Map que irá gravar os dados que irão gerar o gráfico
+		Map<String, Double> dadosPagamento = new HashMap<String, Double>();
+		String dataKey = "";
+		int quantIteracoes = 0;
+		maxValueBarPagamentosReceita = 1.0;
+		
+		// Converte o valor do pagamento para a moeda padrão
+		for (PagamentoPeriodo pagamento : pagamentos) {
+			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
+			}
+		}
+						
+		if (agrupar) {
+			// Gera as entradas de acordo com a quantidade de períodos
+			Calendar dataAtual = Calendar.getInstance();
+			for (Integer i = 1; i <= periodo; i++) {
+				dataKey = new SimpleDateFormat("MM/yyyy").format(dataAtual.getTime());
+				dadosPagamento.put(dataKey, 0.0);
+				dataAtual.add(Calendar.MONTH, -1);
+			}
+			
+			// Itera a lista de pagamentos para somar no mês/ano correspondente
+			for (PagamentoPeriodo pagamento : pagamentos) {
+				// Determina qual data será usada
+				if (dataAConsiderar.equals("VENCIMENTO")) {
+					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
+				} else {
+					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
+				}	
+				// Busca a entrada no Map e soma o valor do pagamento do período
+				if (dadosPagamento.get(dataKey) != null) {
+					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
+					
+					// Determina o valor máximo do eixo Y
+					if (dadosPagamento.get(dataKey) > maxValueBarPagamentosReceita)
+						maxValueBarPagamentosReceita = dadosPagamento.get(dataKey) + 100;
+				}	
+			}
+		} else {
+			for (PagamentoPeriodo pagamento : pagamentos) {
+				if (dataAConsiderar.equals("VENCIMENTO")) {
+					dataKey = new SimpleDateFormat("dd/MM/yyyy").format(pagamento.getDataVencimento());
+				} else {
+					dataKey = new SimpleDateFormat("dd/MM/yyyy").format(pagamento.getDataPagamento());
+				}	
+				
+				// Busca a entrada no Map e soma o valor do pagamento do período
+				dadosPagamento.put(dataKey, pagamento.getValorPago());
+				
+				// Determina o valor máximo do eixo Y
+				if (pagamento.getValorPago() > maxValueBarPagamentosReceita)
+					maxValueBarPagamentosReceita = dadosPagamento.get(dataKey) + 100;
+				
+				quantIteracoes++;
+				if (quantIteracoes == periodo) break;
+			}
+		}
+		
+		// Popula o gráfico com os dados obtido e habilita a exibição
+		ultimosPagamentosReceitaModel = new CartesianChartModel();
+		
+		ChartSeries pagamentosSerie = new ChartSeries();
+		pagamentosSerie.setLabel("Pagamento efetuado");
+		for (String key : dadosPagamento.keySet()) {
+			pagamentosSerie.set(key, dadosPagamento.get(key));
+		}
+		
+		ultimosPagamentosReceitaModel.addSeries(pagamentosSerie);
+		
+		exibirGraficoReceita = true;
 	}
 	
 	public List<LancamentoPeriodico> getListaLancamentoPeriodico() {
 		try {
-			return lancamentoPeriodicoService.buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, null, StatusLancamento.ATIVO);
+			return lancamentoPeriodicoService.buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico.FIXO, StatusLancamento.ATIVO, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -260,35 +371,61 @@ public class UltimoPagamentoRealizadoController extends AbstractController {
 		this.periodo = periodo;
 	}
 
-	public boolean isExibirGrafico() {
-		return exibirGrafico;
-	}
-
-	public void setExibirGrafico(boolean exibirGrafico) {
-		this.exibirGrafico = exibirGrafico;
-	}
-
-	public CartesianChartModel getUltimosPagamentosModel() {
-		return ultimosPagamentosModel;
-	}
-
-	public void setUltimosPagamentosModel(CartesianChartModel ultimosPagamentosModel) {
-		this.ultimosPagamentosModel = ultimosPagamentosModel;
-	}
-
-	public Double getMaxValueBarPagamentos() {
-		return maxValueBarPagamentos;
-	}
-
-	public void setMaxValueBarPagamentos(Double maxValueBarPagamentos) {
-		this.maxValueBarPagamentos = maxValueBarPagamentos;
-	}
-
 	public Moeda getMoedaPadrao() {
 		return moedaPadrao;
 	}
 
 	public void setMoedaPadrao(Moeda moedaPadrao) {
 		this.moedaPadrao = moedaPadrao;
+	}
+
+	public boolean isExibirGraficoReceita() {
+		return exibirGraficoReceita;
+	}
+
+	public void setExibirGraficoReceita(boolean exibirGraficoReceita) {
+		this.exibirGraficoReceita = exibirGraficoReceita;
+	}
+
+	public boolean isExibirGraficoDespesa() {
+		return exibirGraficoDespesa;
+	}
+
+	public void setExibirGraficoDespesa(boolean exibirGraficoDespesa) {
+		this.exibirGraficoDespesa = exibirGraficoDespesa;
+	}
+
+	public CartesianChartModel getUltimosPagamentosDespesaModel() {
+		return ultimosPagamentosDespesaModel;
+	}
+
+	public void setUltimosPagamentosDespesaModel(
+			CartesianChartModel ultimosPagamentosDespesaModel) {
+		this.ultimosPagamentosDespesaModel = ultimosPagamentosDespesaModel;
+	}
+
+	public CartesianChartModel getUltimosPagamentosReceitaModel() {
+		return ultimosPagamentosReceitaModel;
+	}
+
+	public void setUltimosPagamentosReceitaModel(
+			CartesianChartModel ultimosPagamentosReceitaModel) {
+		this.ultimosPagamentosReceitaModel = ultimosPagamentosReceitaModel;
+	}
+
+	public Double getMaxValueBarPagamentosDespesa() {
+		return maxValueBarPagamentosDespesa;
+	}
+
+	public void setMaxValueBarPagamentosDespesa(Double maxValueBarPagamentosDespesa) {
+		this.maxValueBarPagamentosDespesa = maxValueBarPagamentosDespesa;
+	}
+
+	public Double getMaxValueBarPagamentosReceita() {
+		return maxValueBarPagamentosReceita;
+	}
+
+	public void setMaxValueBarPagamentosReceita(Double maxValueBarPagamentosReceita) {
+		this.maxValueBarPagamentosReceita = maxValueBarPagamentosReceita;
 	}
 }

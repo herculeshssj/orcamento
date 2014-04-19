@@ -64,6 +64,7 @@
 	
 		Receita/Despesa:
 		<h:selectOneMenu value="#{managedBean.lancamentoSelecionado}" converter="entityConverter">
+			<f:selectItem itemLabel="Todos os lançamentos" />
 			<f:selectItems value="#{managedBean.listaLancamentoPeriodico}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>
 		&nbsp;
@@ -94,8 +95,19 @@
 	    }
 		</script>
 	
-		<p:barChart id="barPagamentos" value="#{managedBean.ultimosPagamentosModel}" legendPosition="s" title="Últimos Pagamentos Realizados" min="0" max="#{managedBean.maxValueBarPagamentos}" style="height:600px" 
-					extender="ext1" showDataTip="false" rendered="#{managedBean.exibirGrafico}"/>
+		<p:tabView>
+		
+			<p:tab title="Despesa">
+				<p:barChart id="barPagamentosDespesa" value="#{managedBean.ultimosPagamentosDespesaModel}" legendPosition="s" title="Últimos Pagamentos Realizados" min="0" max="#{managedBean.maxValueBarPagamentosDespesa}" 
+					style="height:600px" extender="ext1" showDataTip="false" rendered="#{managedBean.exibirGraficoDespesa}"/>		
+			</p:tab>
+			
+			<p:tab title="Receita">
+				<p:barChart id="barPagamentosReceita" value="#{managedBean.ultimosPagamentosReceitaModel}" legendPosition="s" title="Últimos Pagamentos Realizados" min="0" max="#{managedBean.maxValueBarPagamentosReceita}" 
+					style="height:600px" extender="ext1" showDataTip="false" rendered="#{managedBean.exibirGraficoReceita}"/>		
+			</p:tab>		
+					
+		</p:tabView>
 	
 	</ui:define>
 	

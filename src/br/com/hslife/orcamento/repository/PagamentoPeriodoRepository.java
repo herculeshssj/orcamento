@@ -50,6 +50,9 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
+import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 
 @Repository
 public class PagamentoPeriodoRepository extends AbstractCRUDRepository<PagamentoPeriodo> {
@@ -84,5 +87,14 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 				.setLong("idLancamento", lancamentoPeriodico.getId())
 				.setMaxResults(1)
 				.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findAllPagamentosPagosActivedLancamentosByTipoLancamentoAndUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) {
+		return getQuery("FROM PagamentoPeriodo pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.pago = true ORDER BY pagamento.dataVencimento DESC")
+				.setParameter("status", StatusLancamento.ATIVO)
+				.setParameter("tipo", tipo)
+				.setLong("idUsuario", usuario.getId())
+				.list();
 	}
 }

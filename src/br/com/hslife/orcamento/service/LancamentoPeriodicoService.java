@@ -53,6 +53,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -119,6 +120,11 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
+	public List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario) throws BusinessException {
+		return getRepository().findByTipoLancamentoAndStatusLancamentoByUsuario(tipo, status, usuario);
+	}
+	
+	@Override
 	public List<PagamentoPeriodo> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException {
 		return pagamentoPeriodoRepository.findNotPagosByLancamentoPeriodico(entity);
 	}
@@ -126,6 +132,11 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	@Override
 	public List<PagamentoPeriodo> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException {
 		return pagamentoPeriodoRepository.findPagosByLancamentoPeriodico(entity);
+	}
+	
+	@Override
+	public List<PagamentoPeriodo> buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) throws BusinessException {
+		return pagamentoPeriodoRepository.findAllPagamentosPagosActivedLancamentosByTipoLancamentoAndUsuario(tipo, usuario);
 	}
 	
 	@Override
