@@ -51,8 +51,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.ContaComponent;
-import br.com.hslife.orcamento.component.UsuarioComponent;
-import br.com.hslife.orcamento.entity.AberturaFechamentoConta;
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.CartaoCredito;
@@ -66,7 +64,6 @@ import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.repository.AberturaFechamentoContaRepository;
 import br.com.hslife.orcamento.repository.BuscaSalvaRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
@@ -85,13 +82,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	private ContaComponent component;
 	
 	@Autowired
-	private AberturaFechamentoContaRepository aberturaFechamentoContaRepository;
-	
-	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
-	
-	@Autowired
-	private UsuarioComponent usuarioComponent;
 	
 	@Autowired
 	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
@@ -120,19 +111,10 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	public void setRepository(ContaRepository repository) {
 		this.repository = repository;
 	}
-
-	public void setAberturaFechamentoContaRepository(
-			AberturaFechamentoContaRepository aberturaFechamentoContaRepository) {
-		this.aberturaFechamentoContaRepository = aberturaFechamentoContaRepository;
-	}
 	
 	public void setLancamentoContaRepository(
 			LancamentoContaRepository lancamentoContaRepository) {
 		this.lancamentoContaRepository = lancamentoContaRepository;
-	}
-	
-	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
-		this.usuarioComponent = usuarioComponent;
 	}
 
 	public void setLancamentoImportadoRepository(
@@ -181,21 +163,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 		conta.setDataFechamento(null);
 		conta.setSaldoFinal(0);
 		
-		// Salva o histórico de abertura da conta
-		AberturaFechamentoConta afc = new AberturaFechamentoConta();
-		afc.setConta(conta);
-		afc.setData(conta.getDataAbertura());
-		afc.setOperacao(OperacaoConta.ABERTURA);
-		afc.setSaldo(conta.getSaldoInicial());
-		//afc.setUsuario(usuarioComponent.getUsuarioLogado().getLogin()); --Trecho original
-		// Modificação abaixo foi feita para poder realizar a execução dos testes unitários
-		if (usuarioComponent.getUsuarioLogado() == null) {
-			afc.setUsuario("desenvolvedor");
-		} else {
-			afc.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
-		}
-		aberturaFechamentoContaRepository.save(afc);
-		
 		// Salva a conta
 		getRepository().update(conta);
 	}
@@ -241,15 +208,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 		// Seta a conta como inativa
 		conta.setAtivo(false);
 		
-		// Salva o histórico de fechamento da conta
-		AberturaFechamentoConta afc = new AberturaFechamentoConta();
-		afc.setConta(conta);
-		afc.setData(conta.getDataFechamento());
-		afc.setOperacao(OperacaoConta.FECHAMENTO);
-		afc.setSaldo(conta.getSaldoFinal());
-		afc.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
-		aberturaFechamentoContaRepository.save(afc);
-		
 		// Salva a conta
 		getRepository().update(conta);
 		
@@ -290,11 +248,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			// Exclui os fechamentos de períodos com status REABERTURA
 			for (FechamentoPeriodo fechamento : fechamentoPeriodoRepository.findByContaAndOperacaoConta(entity, OperacaoConta.REABERTURA)) {
 				fechamentoPeriodoRepository.delete(fechamento);
-			}
-			
-			// Exclui o histórico de abertura e fechamento existente
-			for (AberturaFechamentoConta afc : aberturaFechamentoContaRepository.findByConta(entity)) {
-				aberturaFechamentoContaRepository.delete(afc);
 			}
 			
 			// Exclui a conta
@@ -348,16 +301,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	@Override
 	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) throws BusinessException {
 		return getRepository().findByTipoContaAndUsuario(tipoConta, usuario);
-	}
-	
-	@Override
-	public List<AberturaFechamentoConta> buscarHistoricoAberturaFechamentoPorConta(Conta conta) throws BusinessException {
-		return aberturaFechamentoContaRepository.findByConta(conta);
-	}
-	
-	@Override
-	public void excluirHistorico(AberturaFechamentoConta entity) throws BusinessException {
-		aberturaFechamentoContaRepository.delete(entity);		
 	}
 	
 	@Override

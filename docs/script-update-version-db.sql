@@ -100,3 +100,7 @@ create table pagamentoperiodo(
 
 alter table pagamentoperiodo add constraint fk_pagamentoperiodo_lancamentoconta foreign key(idLancamentoConta) references lancamentoconta(id);
 alter table pagamentoperiodo add constraint fk_pagamentoperiodo_lancamentoperiodico foreign key(idLancamentoPeriodico) references lancamentoperiodico(id);
+
+-- Remoção da tabela de histórico de abertura e fechamento de contas
+-- Tarefa #977
+drop table aberturafechamentoconta;

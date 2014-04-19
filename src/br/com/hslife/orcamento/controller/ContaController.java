@@ -54,7 +54,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.entity.AberturaFechamentoConta;
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
@@ -79,13 +78,11 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	private IConta service;
 	
 	private Banco findBanco;
-	private AberturaFechamentoConta aberturaFechamentoConta;
 	private String opcaoLancamentos;
 	private Conta contaSelecionada;
 	
 	private List<SelectItem> listaBanco;
 	private List<SelectItem> listaConta;
-	private List<AberturaFechamentoConta> historicoAberturaFechamentoConta;
 	
 	public ContaController() {
 		super(new Conta());
@@ -96,9 +93,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	@Override
 	protected void initializeEntity() {
 		entity = new Conta();
-		listEntity = new ArrayList<Conta>();
-		aberturaFechamentoConta = null;
-		historicoAberturaFechamentoConta = new ArrayList<AberturaFechamentoConta>();		
+		listEntity = new ArrayList<Conta>();	
 	}
 	
 	@Override
@@ -252,36 +247,6 @@ public class ContaController extends AbstractCRUDController<Conta> {
 		}
 	}
 	
-	public String historicoAberturaFechamentoConta() {
-		//operation = "";
-		actionTitle = " - Histórico de aberturas e fechamentos";
-		//findUsuario = getUsuarioLogado();
-		this.atualizaListaContas();
-		return "/pages/Conta/historicoAberturaFechamentoConta";
-	}
-	
-	public void exibirHistoricoConta() {
-		try {
-			if (contaSelecionada == null)
-				warnMessage("Selecione uma conta!");				
-			else
-				historicoAberturaFechamentoConta = getService().buscarHistoricoAberturaFechamentoPorConta(contaSelecionada);
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	public String excluirHistorico() throws BusinessException {
-		try {
-			getService().excluirHistorico(aberturaFechamentoConta);
-			infoMessage("Histórico excluído com sucesso!");
-			initializeEntity();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
 	public IConta getService() {
 		return service;
 	}
@@ -290,30 +255,12 @@ public class ContaController extends AbstractCRUDController<Conta> {
 		this.service = service;
 	}
 
-	public AberturaFechamentoConta getAberturaFechamentoConta() {
-		return aberturaFechamentoConta;
-	}
-
-	public void setAberturaFechamentoConta(
-			AberturaFechamentoConta aberturaFechamentoConta) {
-		this.aberturaFechamentoConta = aberturaFechamentoConta;
-	}
-
 	public List<SelectItem> getListaBanco() {
 		return listaBanco;
 	}
 
 	public void setListaBanco(List<SelectItem> listaBanco) {
 		this.listaBanco = listaBanco;
-	}
-
-	public List<AberturaFechamentoConta> getHistoricoAberturaFechamentoConta() {
-		return historicoAberturaFechamentoConta;
-	}
-
-	public void setHistoricoAberturaFechamentoConta(
-			List<AberturaFechamentoConta> historicoAberturaFechamentoConta) {
-		this.historicoAberturaFechamentoConta = historicoAberturaFechamentoConta;
 	}
 
 	public void setBancoService(IBanco bancoService) {

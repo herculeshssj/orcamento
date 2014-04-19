@@ -46,7 +46,6 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.AberturaFechamentoConta;
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
@@ -80,10 +79,6 @@ public interface IConta extends ICRUDService<Conta> {
 	public List<Conta> buscarPorBancoEUsuario(Banco banco, Usuario usuario) throws BusinessException;
 	
 	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) throws BusinessException;
-	
-	public List<AberturaFechamentoConta> buscarHistoricoAberturaFechamentoPorConta(Conta conta) throws BusinessException;
-	
-	public void excluirHistorico(AberturaFechamentoConta entity) throws BusinessException;
 	
 	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario) throws BusinessException;
 	
