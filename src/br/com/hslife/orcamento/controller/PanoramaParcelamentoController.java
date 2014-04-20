@@ -47,9 +47,12 @@ package br.com.hslife.orcamento.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.faces.model.SelectItem;
 
@@ -164,33 +167,42 @@ public class PanoramaParcelamentoController extends AbstractController {
 			return;
 		}
 		
-		// Instancia o Map que irá gravar os dados que irão gerar o gráfico
-		Map<String, Double> dadosPagamento = new HashMap<String, Double>();
-		Map<String, Double> dadosAPagar = new HashMap<String, Double>();
+		// Instancia o Map que irá gravar os dados para gerar o gráfico
+		// É necessário manter o LinkedHashMap para poder preservar a ordenação dos meses e anos
+		// no gráfico. Caso contrário, será necessário implementar um Comparator para realizar
+		// a ordenação das chaves (em formato String) de acordo com a sequência de meses e anos
+		Map<String, Double> dadosPagamento = new LinkedHashMap<String, Double>();
+		Map<String, Double> dadosAPagar = new LinkedHashMap<String, Double>();
 		String dataKey = "";
 		maxValueBarPagamentosDespesa = 1.0;
 		
-		// Converte o valor do pagamento para a moeda padrão
-		for (PagamentoPeriodo pagamento : pagamentos) {
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-		}
-						
-		// Gera as entradas de acordo com a quantidade de períodos
+		// Gera as chaves e popula os Maps
+		SortedSet<Date> chaves = new TreeSet<>();
 		Calendar dataAtual = Calendar.getInstance();
 		for (Integer i = 1; i <= periodo; i++) {
-			dataKey = new SimpleDateFormat("MM/yyyy").format(dataAtual.getTime());
-			dadosPagamento.put(dataKey, 0.0);
-			dadosAPagar.put(dataKey, 0.0);
+			chaves.add(dataAtual.getTime());
 			if (periodoAConsiderar.equals("ANTERIOR"))
 				dataAtual.add(Calendar.MONTH, -1);
 			else
 				dataAtual.add(Calendar.MONTH, 1);
 		}
 		
+		// Popula os Maps com as chaves geradas
+		for (Date data : chaves) {
+			dataKey = new SimpleDateFormat("MM/yyyy").format(data);
+			dadosPagamento.put(dataKey, 0.0);
+			dadosAPagar.put(dataKey, 0.0);
+			System.out.println(dataKey);
+		}
+		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (PagamentoPeriodo pagamento : pagamentos) {
+			
+			// Converte o valor do pagamento para a moeda padrão
+			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
+			}
+			
 			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
 			if (pagamento.isPago()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
@@ -246,33 +258,42 @@ public class PanoramaParcelamentoController extends AbstractController {
 			return;
 		}
 		
-		// Instancia o Map que irá gravar os dados que irão gerar o gráfico
-		Map<String, Double> dadosPagamento = new HashMap<String, Double>();
-		Map<String, Double> dadosAPagar = new HashMap<String, Double>();
+		// Instancia o Map que irá gravar os dados para gerar o gráfico
+		// É necessário manter o LinkedHashMap para poder preservar a ordenação dos meses e anos
+		// no gráfico. Caso contrário, será necessário implementar um Comparator para realizar
+		// a ordenação das chaves (em formato String) de acordo com a sequência de meses e anos
+		Map<String, Double> dadosPagamento = new LinkedHashMap<String, Double>();
+		Map<String, Double> dadosAPagar = new LinkedHashMap<String, Double>();
 		String dataKey = "";
 		maxValueBarPagamentosReceita = 1.0;
 		
-		// Converte o valor do pagamento para a moeda padrão
-		for (PagamentoPeriodo pagamento : pagamentos) {
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-		}
-						
-		// Gera as entradas de acordo com a quantidade de períodos
+		// Gera as chaves e popula os Maps
+		SortedSet<Date> chaves = new TreeSet<>();
 		Calendar dataAtual = Calendar.getInstance();
 		for (Integer i = 1; i <= periodo; i++) {
-			dataKey = new SimpleDateFormat("MM/yyyy").format(dataAtual.getTime());
-			dadosPagamento.put(dataKey, 0.0);
-			dadosAPagar.put(dataKey, 0.0);
+			chaves.add(dataAtual.getTime());
 			if (periodoAConsiderar.equals("ANTERIOR"))
 				dataAtual.add(Calendar.MONTH, -1);
 			else
 				dataAtual.add(Calendar.MONTH, 1);
 		}
 		
+		// Popula os Maps com as chaves geradas
+		for (Date data : chaves) {
+			dataKey = new SimpleDateFormat("MM/yyyy").format(data);
+			dadosPagamento.put(dataKey, 0.0);
+			dadosAPagar.put(dataKey, 0.0);
+			System.out.println(dataKey);
+		}
+		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (PagamentoPeriodo pagamento : pagamentos) {
+			
+			// Converte o valor do pagamento para a moeda padrão
+			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
+			}
+			
 			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
 			if (pagamento.isPago()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
