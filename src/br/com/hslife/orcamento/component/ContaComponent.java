@@ -47,9 +47,9 @@ package br.com.hslife.orcamento.component;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -126,7 +126,7 @@ public class ContaComponent {
 		List<Categoria> categorias = new ArrayList<Categoria>();
 		
 		/* Usa-se o Set para separar as categorias da listagem de lançamentos */
-		Set<Categoria> setCategorias = new HashSet<Categoria>();
+		SortedSet<Categoria> setCategorias = new TreeSet<Categoria>();
 		
 		// Adiciona as categorias no Set
 		for (LancamentoConta l : lancamentos) {
@@ -196,7 +196,7 @@ public class ContaComponent {
 		List<Favorecido> favorecidos = new ArrayList<Favorecido>();
 		
 		/* Usa-se o Set para separar os favorecidos da listagem de lançamentos */
-		Set<Favorecido> setFavorecidos = new HashSet<Favorecido>();
+		SortedSet<Favorecido> setFavorecidos = new TreeSet<Favorecido>();
 		
 		// Adiciona os favorecidos no Set
 		for (LancamentoConta l : lancamentos) {
@@ -276,7 +276,7 @@ public class ContaComponent {
 		List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
 		
 		/* Usa-se o Set para separar os meios de pagamento da listagem de lançamentos */
-		Set<MeioPagamento> setMeiosPagamento = new HashSet<MeioPagamento>();
+		SortedSet<MeioPagamento> setMeiosPagamento = new TreeSet<MeioPagamento>();
 		
 		// Adiciona os meios de pagamento no Set
 		for (LancamentoConta l : lancamentos) {

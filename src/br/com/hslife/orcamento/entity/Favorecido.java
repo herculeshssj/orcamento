@@ -114,6 +114,11 @@ public class Favorecido extends EntityPersistence {
 	}
 	
 	@Override
+	public int compareTo(EntityPersistence o) {
+		return super.compareToLabels(o);
+	}
+	
+	@Override
 	public String getLabel() {
 		return nome;
 	}
