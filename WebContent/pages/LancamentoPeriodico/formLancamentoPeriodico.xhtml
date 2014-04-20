@@ -131,6 +131,11 @@
 			    		<p:inputText value="#{managedBean.entity.valorCompra}" size="10" disabled="#{managedBean.operation == 'edit'}">
 							<f:convertNumber type="currency" pattern="###.##"/>
 						</p:inputText>
+						
+						<h:outputText value="Data de vencimento 1ª parcela:" rendered="#{managedBean.operation == 'create'}"/>
+						<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataPrimeiraParcela}" rendered="#{managedBean.operation == 'create'}">
+			    			<f:converter converterId="dateConverter"/>
+			    		</p:inputMask>
 			    		
 			    		Valor da parcela:
 			    		<p:inputText value="#{managedBean.entity.valorParcela}" size="10" disabled="#{managedBean.operation == 'edit'}">

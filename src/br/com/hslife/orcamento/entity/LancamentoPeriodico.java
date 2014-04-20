@@ -62,6 +62,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -156,6 +157,9 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.EAGER)
 	@OrderBy(clause="dataVencimento")
 	private List<PagamentoPeriodo> pagamentos;
+	
+	@Transient
+	private Date dataPrimeiraParcela;
 	
 	public LancamentoPeriodico() {
 		statusLancamento = StatusLancamento.ATIVO;
@@ -330,5 +334,13 @@ public class LancamentoPeriodico extends EntityPersistence {
 
 	public void setPagamentos(List<PagamentoPeriodo> pagamentos) {
 		this.pagamentos = pagamentos;
+	}
+
+	public Date getDataPrimeiraParcela() {
+		return dataPrimeiraParcela;
+	}
+
+	public void setDataPrimeiraParcela(Date dataPrimeiraParcela) {
+		this.dataPrimeiraParcela = dataPrimeiraParcela;
 	}
 }
