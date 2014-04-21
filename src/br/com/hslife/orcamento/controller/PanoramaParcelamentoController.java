@@ -91,6 +91,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 	private Moeda moedaPadrao;
 	private String periodoAConsiderar;
 	private Integer periodo;
+	
 	private boolean exibirGraficoReceita;
 	private boolean exibirGraficoDespesa;
 	
@@ -99,6 +100,9 @@ public class PanoramaParcelamentoController extends AbstractController {
 	
 	private CartesianChartModel ultimosPagamentosDespesaModel;
 	private CartesianChartModel ultimosPagamentosReceitaModel;
+	
+	private double saldoCredor;
+	private double saldoDevedor;
 	
 	public PanoramaParcelamentoController() {
 		moduleTitle = "Panorama dos Parcelamento";
@@ -112,6 +116,8 @@ public class PanoramaParcelamentoController extends AbstractController {
 	public String startUp() {
 		exibirGraficoDespesa = false;
 		exibirGraficoReceita = false;
+		saldoCredor = 0.0;
+		saldoDevedor = 0.0;
 		this.carregarMoedaPadrao();
 		return "/pages/ResumoEstatistica/panoramaParcelamento";
 	}
@@ -175,6 +181,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		Map<String, Double> dadosAPagar = new LinkedHashMap<String, Double>();
 		String dataKey = "";
 		maxValueBarPagamentosDespesa = 1.0;
+		saldoDevedor = 0.0;
 		
 		// Gera as chaves e popula os Maps
 		SortedSet<Date> chaves = new TreeSet<>();
@@ -192,7 +199,6 @@ public class PanoramaParcelamentoController extends AbstractController {
 			dataKey = new SimpleDateFormat("MM/yyyy").format(data);
 			dadosPagamento.put(dataKey, 0.0);
 			dadosAPagar.put(dataKey, 0.0);
-			System.out.println(dataKey);
 		}
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
@@ -214,7 +220,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 					// Determina o valor máximo do eixo Y
 					if (dadosPagamento.get(dataKey) > maxValueBarPagamentosDespesa)
 						maxValueBarPagamentosDespesa = dadosPagamento.get(dataKey) + 100;
-				}
+				} 
 			} else {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
 				
@@ -225,6 +231,10 @@ public class PanoramaParcelamentoController extends AbstractController {
 					// Determina o valor máximo do eixo Y
 					if (dadosAPagar.get(dataKey) > maxValueBarPagamentosDespesa)
 						maxValueBarPagamentosDespesa = dadosAPagar.get(dataKey) + 100;
+				} else {
+					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
+						saldoDevedor += pagamento.getLancamentoPeriodico().getValorParcela();
+					}
 				}
 			}	
 		}
@@ -266,6 +276,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		Map<String, Double> dadosAPagar = new LinkedHashMap<String, Double>();
 		String dataKey = "";
 		maxValueBarPagamentosReceita = 1.0;
+		saldoCredor = 0.0;
 		
 		// Gera as chaves e popula os Maps
 		SortedSet<Date> chaves = new TreeSet<>();
@@ -283,7 +294,6 @@ public class PanoramaParcelamentoController extends AbstractController {
 			dataKey = new SimpleDateFormat("MM/yyyy").format(data);
 			dadosPagamento.put(dataKey, 0.0);
 			dadosAPagar.put(dataKey, 0.0);
-			System.out.println(dataKey);
 		}
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
@@ -316,6 +326,10 @@ public class PanoramaParcelamentoController extends AbstractController {
 					// Determina o valor máximo do eixo Y
 					if (dadosAPagar.get(dataKey) > maxValueBarPagamentosReceita)
 						maxValueBarPagamentosReceita = dadosAPagar.get(dataKey) + 100;
+				} else {
+					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
+						saldoCredor += pagamento.getLancamentoPeriodico().getValorParcela();
+					}
 				}
 			}	
 		}
@@ -439,5 +453,21 @@ public class PanoramaParcelamentoController extends AbstractController {
 
 	public void setPeriodoAConsiderar(String periodoAConsiderar) {
 		this.periodoAConsiderar = periodoAConsiderar;
+	}
+
+	public double getSaldoCredor() {
+		return saldoCredor;
+	}
+
+	public void setSaldoCredor(double saldoCredor) {
+		this.saldoCredor = saldoCredor;
+	}
+
+	public double getSaldoDevedor() {
+		return saldoDevedor;
+	}
+
+	public void setSaldoDevedor(double saldoDevedor) {
+		this.saldoDevedor = saldoDevedor;
 	}
 }
