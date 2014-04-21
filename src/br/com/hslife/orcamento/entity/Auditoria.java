@@ -88,6 +88,9 @@ public class Auditoria implements Serializable {
 	private String ip;
 	
 	@Column(nullable=false)
+	private String browser;
+	
+	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)
 	private Date data;
 	
@@ -203,5 +206,13 @@ public class Auditoria implements Serializable {
 
 	public void setVersionAuditedEntity(Date versionAuditedEntity) {
 		this.versionAuditedEntity = versionAuditedEntity;
+	}
+
+	public String getBrowser() {
+		return browser;
+	}
+
+	public void setBrowser(String browser) {
+		this.browser = browser;
 	}
 }

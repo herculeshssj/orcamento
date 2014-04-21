@@ -104,3 +104,6 @@ alter table pagamentoperiodo add constraint fk_pagamentoperiodo_lancamentoperiod
 -- Remoção da tabela de histórico de abertura e fechamento de contas
 -- Tarefa #977
 drop table aberturafechamentoconta;
+
+-- Inclusão do browser do usuário no registro de auditoria
+-- Tarefa #940

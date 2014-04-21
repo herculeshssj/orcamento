@@ -103,6 +103,7 @@ public class AuditoriaAspect {
 			}
 			
 			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+			auditoria.setBrowser(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getHeader("User-Agent"));
 		} else {
 			auditoria.setUsuario("desenvolvedor");
 			auditoria.setIp("127.0.0.1");
@@ -144,6 +145,7 @@ public class AuditoriaAspect {
 				}
 				
 				auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+				auditoria.setBrowser(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getHeader("User-Agent"));
 			} else {
 				auditoria.setUsuario("desenvolvedor");
 				auditoria.setIp("127.0.0.1");
@@ -186,6 +188,7 @@ public class AuditoriaAspect {
 			}
 			
 			auditoria.setIp(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr());
+			auditoria.setBrowser(((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getHeader("User-Agent"));
 		} else {
 			auditoria.setUsuario("desenvolvedor");
 			auditoria.setIp("127.0.0.1");
