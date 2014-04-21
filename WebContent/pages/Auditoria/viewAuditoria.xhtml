@@ -86,7 +86,7 @@
 			
 		</h:panelGrid>
 		
-		<p:dataTable id="tableAuditoriaDadosJson" value="#{managedBean.entity.readJsonValues.keySet().toArray()}" var="map" rendered="#{not empty managedBean.entity.dadosAuditados}">
+		<p:dataTable id="tableAuditoriaDadosJson" value="#{managedBean.entity.readJsonValues.keySet().toArray()}" var="map">
 		    <p:column>
 		        <f:facet name="header">
 		            <h:outputText value="Atributo"/>
@@ -101,40 +101,14 @@
 		    </p:column>
 		</p:dataTable>
 		
-		<p:dataTable id="tableAuditoriaDados" value="#{managedBean.entity.dadosAuditoria}" var="item" rendered="#{empty managedBean.entity.dadosAuditados}">
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Atributo"/>
-				</f:facet>
-				<h:outputText value="#{item.nomeAtributo}"/>
-			</p:column>
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Valor"/>
-				</f:facet>
-				<h:outputText value="#{item.valorAtributo}"/>
-			</p:column>
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Situação"/>
-				</f:facet>
-				<h:outputText value="#{item.situacaoOperacao}"/>
-			</p:column>
-		</p:dataTable>
-		
 	</ui:define>
 	
 	<ui:define name="acoes">
 		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
 			<p:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
-		<p:spacer width="10" rendered="#{empty managedBean.entity.dadosAuditados}"/>
-		<h:commandLink title="Exportar para MS-Excel" rendered="#{empty managedBean.entity.dadosAuditados}">
-			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
-			<p:dataExporter type="xls" target="tableAuditoriaDados" fileName="auditoriadados" /> 
-		</h:commandLink>
-		<p:spacer width="10" rendered="#{not empty managedBean.entity.dadosAuditados}"/>
-		<h:commandLink title="Exportar para MS-Excel" rendered="#{not empty managedBean.entity.dadosAuditados}">
+		<p:spacer width="10"/>
+		<h:commandLink title="Exportar para MS-Excel">
 			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
 			<p:dataExporter type="xls" target="tableAuditoriaDadosJson" fileName="auditoriadados" /> 
 		</h:commandLink>

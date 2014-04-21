@@ -107,3 +107,9 @@ drop table aberturafechamentoconta;
 
 -- Inclusão do browser do usuário no registro de auditoria
 -- Tarefa #940
+alter table auditoria add column browser varchar(255) not null;
+
+-- Remoção das tabelas de registro de auditoria no modo antigo
+-- Tarefa #983
+drop table auditoria_auditoriadados;
+drop table auditoriadados;
