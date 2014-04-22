@@ -192,26 +192,26 @@
 			
 			<p:tab title="Histórico de pagamento" rendered="#{managedBean.operation == 'edit'}">
 				
-				<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">				
-					<p:column style="text-align: center;">
+				<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">									
+					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
 						<f:facet name="header">
 							<h:outputText value="Período"/>
 						</f:facet>
 						<h:outputText value="#{item.periodo}"/>
 					</p:column>
-					<p:column style="text-align: center;">
+					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
 						<f:facet name="header">
 							<h:outputText value="Ano"/>
 						</f:facet>
 						<h:outputText value="#{item.ano}"/>
 					</p:column>
-					<p:column style="text-align: center;">
+					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
 						<f:facet name="header">
 							<h:outputText value="Parcela"/>
 						</f:facet>
 						<h:outputText value="#{item.parcela}"/>
 					</p:column>
-					<p:column style="text-align: center;">
+					<p:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Vencimento"/>
 						</f:facet>
@@ -219,7 +219,7 @@
 							<f:converter converterId="dateConverter"/>
 						</h:outputText>
 					</p:column>
-					<p:column style="text-align: center;">
+					<p:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Pagamento"/>
 						</f:facet>
@@ -227,7 +227,7 @@
 							<f:converter converterId="dateConverter"/>
 						</h:outputText>						
 					</p:column>
-					<p:column>
+					<p:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Valor"/>
 						</f:facet>
@@ -235,6 +235,17 @@
 						<h:outputText value="#{item.valorPago}">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
+					</p:column>
+					<p:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Ações"/>
+						</f:facet>
+						<h:commandButton title="Editar lançamento da conta vinculado" image="/resources/images/alterar.png" action="#{lancamentoContaMB.edit}" rendered="#{item.lancamentoConta  != null and item.lancamentoPeriodico.conta.tipoConta != 'CARTAO'}">
+							<f:setPropertyActionListener value="#{item.lancamentoConta.id}" target="#{lancamentoContaMB.idEntity}"/>
+						</h:commandButton>
+						<h:commandButton title="Editar lançamento do cartão vinculado" image="/resources/images/alterar.png" action="#{lancamentoCartaoMB.edit}" rendered="#{item.lancamentoConta != null and item.lancamentoPeriodico.conta.tipoConta == 'CARTAO'}">
+							<f:setPropertyActionListener value="#{item.lancamentoConta.id}" target="#{lancamentoCartaoMB.idEntity}"/>
+						</h:commandButton>
 					</p:column>
 				</p:dataTable>
 				

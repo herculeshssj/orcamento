@@ -57,6 +57,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -101,6 +102,9 @@ public class PagamentoPeriodo extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
 	private LancamentoPeriodico lancamentoPeriodico;
+	
+	@Transient
+	private boolean gerarLancamento;
 	
 	public PagamentoPeriodo() {
 	
@@ -198,5 +202,13 @@ public class PagamentoPeriodo extends EntityPersistence {
 
 	public void setDataVencimento(Date dataVencimento) {
 		this.dataVencimento = dataVencimento;
+	}
+
+	public boolean isGerarLancamento() {
+		return gerarLancamento;
+	}
+
+	public void setGerarLancamento(boolean gerarLancamento) {
+		this.gerarLancamento = gerarLancamento;
 	}
 }

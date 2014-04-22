@@ -114,6 +114,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	private TipoLancamentoPeriodico tipoLancamentoPeriodico;
 	private boolean parcelamento;
 	private boolean selecionarTodosLancamentos;
+	private boolean gerarLancamento;
 	
 	public LancamentoPeriodicoController() {
 		super(new LancamentoPeriodico());
@@ -199,6 +200,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		try {
 			entity = getService().buscarPorID(idEntity);
 			actionTitle = " - Registrar pagamento";
+			gerarLancamento = false;
 			return "/pages/LancamentoPeriodico/registrarPagamento";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -208,6 +210,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public String registrarPagamento() {
 		try {
+			pagamentoPeriodo.setGerarLancamento(gerarLancamento);
 			getService().registrarPagamento(pagamentoPeriodo);
 			infoMessage("Pagamento registrado com sucesso!");
 			pagamentoPeriodo = new PagamentoPeriodo();
@@ -486,5 +489,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setMoedaPadrao(Moeda moedaPadrao) {
 		this.moedaPadrao = moedaPadrao;
+	}
+
+	public boolean isGerarLancamento() {
+		return gerarLancamento;
+	}
+
+	public void setGerarLancamento(boolean gerarLancamento) {
+		this.gerarLancamento = gerarLancamento;
 	}
 }

@@ -125,6 +125,9 @@
 			<f:selectItems value="#{managedBean.listaPagamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			<p:ajax event="change" update="pnlPagamentoPeriodo" listener="#{lancamentoPeriodicoMB.carregarPagamentoPeriodo}"/>
 		</h:selectOneMenu>
+		&nbsp;&nbsp;&nbsp;
+		<h:selectBooleanCheckbox value="#{managedBean.gerarLancamento}"/>
+		Gerar lançamento de conta/cartão correspondente		
 	
 		<br/><br/>
 	

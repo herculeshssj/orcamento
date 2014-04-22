@@ -51,6 +51,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -58,6 +59,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
+import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.repository.PagamentoPeriodoRepository;
 
@@ -69,6 +71,9 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	
 	@Autowired
 	private PagamentoPeriodoRepository pagamentoPeriodoRepository;
+	
+	@Autowired
+	private LancamentoContaRepository lancamentoContaRepository;
 
 	public LancamentoPeriodicoRepository getRepository() {
 		return repository;
@@ -156,8 +161,29 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
-	public void registrarPagamento(PagamentoPeriodo pagamentoPeriodo) throws BusinessException {
+	public void registrarPagamento(PagamentoPeriodo pagamentoPeriodo) throws BusinessException {		
 		pagamentoPeriodo.setPago(true);
+		
+		// Verifica se é para gerar o lançamento correspondente ao pagamento. Se for, gera o lançamento
+		if (pagamentoPeriodo.isGerarLancamento()) {
+			LancamentoConta lancamento = new LancamentoConta();
+			lancamento.setAgendado(false);
+			lancamento.setCategoria(pagamentoPeriodo.getLancamentoPeriodico().getCategoria());
+			lancamento.setConta(pagamentoPeriodo.getLancamentoPeriodico().getConta());
+			lancamento.setDataLancamento(pagamentoPeriodo.getDataPagamento());
+			lancamento.setDataPagamento(pagamentoPeriodo.getDataPagamento());
+			lancamento.setDescricao(pagamentoPeriodo.getLancamentoPeriodico().getDescricao() + " - " +  pagamentoPeriodo.getLabel());
+			lancamento.setFavorecido(pagamentoPeriodo.getLancamentoPeriodico().getFavorecido());
+			lancamento.setMeioPagamento(pagamentoPeriodo.getLancamentoPeriodico().getMeioPagamento());
+			lancamento.setMoeda(pagamentoPeriodo.getLancamentoPeriodico().getMoeda());
+			lancamento.setTipoLancamento(pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamento());
+			lancamento.setValorPago(pagamentoPeriodo.getValorPago());
+			
+			lancamentoContaRepository.save(lancamento);
+			pagamentoPeriodo.setLancamentoConta(lancamento);
+		}
+		
+		// Atualiza o pagamento
 		pagamentoPeriodoRepository.update(pagamentoPeriodo);
 		
 		// Gera o próximo pagamento para os lançamentos fixos
