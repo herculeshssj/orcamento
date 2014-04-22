@@ -62,10 +62,17 @@
 	
 	<ui:define name="pesquisa">
 	
-		Receita/Despesa:
-		<h:selectOneMenu value="#{managedBean.lancamentoSelecionado}" converter="entityConverter">
+		<h:selectOneMenu value="#{managedBean.lancamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'INDIVIDUAL'}">
 			<f:selectItem itemLabel="Todos os lançamentos" />
 			<f:selectItems value="#{managedBean.listaLancamentoPeriodico}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'CONTA'}">
+			<f:selectItem itemLabel="Todos os lançamentos" />
+			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		</h:selectOneMenu>
+		<h:selectOneMenu value="#{managedBean.tipoContaSelecionada}" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'TIPO_CONTA'}">
+			<f:selectItem itemLabel="Todos os lançamentos" />
+			<f:selectItems value="#{managedBean.listaTipoConta}" />
 		</h:selectOneMenu>
 		&nbsp;
 		Períodos:

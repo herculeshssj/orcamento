@@ -49,10 +49,12 @@ import java.util.List;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 
 @Repository
@@ -141,6 +143,46 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 		}
 		
 		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findPagamentosByContaAndPago(Conta conta,	Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM PagamentoPeriodo pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.pago = :pago AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.conta.id = :idConta ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		
+		hqlQuery.setParameter("idConta", conta.getId());
+		
+		return hqlQuery.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<PagamentoPeriodo> findPagamentosByTipoContaAndPago(TipoConta tipo, Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM PagamentoPeriodo pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.pago = :pago AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.conta.tipoConta = :tipo ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		
+		hqlQuery.setParameter("tipo", tipo);
 		
 		return hqlQuery.list();
 	}

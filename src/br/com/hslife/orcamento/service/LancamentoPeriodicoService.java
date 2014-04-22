@@ -56,6 +56,7 @@ import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
@@ -152,6 +153,16 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	@Override
 	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) throws BusinessException {
 		return pagamentoPeriodoRepository.findPagamentosByTipoLancamentoAndUsuarioAndPago(tipo, usuario, pago);
+	}
+	
+	@Override
+	public List<PagamentoPeriodo> buscarPagamentosPorContaEPago(Conta conta,Boolean pago) throws BusinessException {
+		return pagamentoPeriodoRepository.findPagamentosByContaAndPago(conta, pago);
+	}
+	
+	@Override
+	public List<PagamentoPeriodo> buscarPagamentosPorTipoContaEPago(TipoConta tipo, Boolean pago) throws BusinessException {
+		return pagamentoPeriodoRepository.findPagamentosByTipoContaAndPago(tipo, pago);
 	}
 	
 	@Override

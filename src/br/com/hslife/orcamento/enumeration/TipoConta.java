@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoConta {
-	CORRENTE("Conta Corrente"), POUPANCA("Conta Poupança"), CARTAO("");
+	CORRENTE("Conta Corrente"), POUPANCA("Conta Poupança"), CARTAO("Cartão de Crédito"), OUTROS("Outros");
 	
 	private String descricao;
 	

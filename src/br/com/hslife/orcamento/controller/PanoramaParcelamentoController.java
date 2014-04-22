@@ -62,13 +62,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMoeda;
 
@@ -87,7 +90,12 @@ public class PanoramaParcelamentoController extends AbstractController {
 	@Autowired
 	private IMoeda moedaService;
 	
+	@Autowired
+	private IConta contaService;
+	
 	private LancamentoPeriodico lancamentoSelecionado;
+	private Conta contaSelecionada;
+	private TipoConta tipoContaSelecionada;
 	private Moeda moedaPadrao;
 	private String periodoAConsiderar;
 	private Integer periodo;
@@ -128,14 +136,24 @@ public class PanoramaParcelamentoController extends AbstractController {
 			List<PagamentoPeriodo> pagamentos = new ArrayList<>();
 			List<PagamentoPeriodo> pagamentosReceita = new ArrayList<>();
 			List<PagamentoPeriodo> pagamentosDespesa = new ArrayList<>();
-			if (lancamentoSelecionado == null) {
-				pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.PARCELADO, getUsuarioLogado(), null);
-			} else {
-				pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
-			}
-			if (pagamentos == null || pagamentos.size() == 0) {
-				warnMessage("O lançamento selecionado não contém pagamentos registrados!");
-				return;
+			
+			switch (getOpcoesSistema().getFormaAgrupamentoPagamento()) {
+				case "INDIVIDUAL" : 
+					if (lancamentoSelecionado != null) {
+						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
+						break;
+					}						
+				case "CONTA": 
+					if (contaSelecionada != null) {
+						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorContaEPago(contaSelecionada, null);
+						break;
+					}
+				case "TIPO_CONTA": 
+					if (tipoContaSelecionada != null) {
+						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoContaEPago(tipoContaSelecionada, null);
+						break;
+					}
+				default: pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.PARCELADO, getUsuarioLogado(), null);
 			}
 			
 			// Separa os pagamento de lançamentos fixos de receita dos de despesa
@@ -365,12 +383,29 @@ public class PanoramaParcelamentoController extends AbstractController {
 		return new ArrayList<>();
 	}
 	
+	public List<Conta> getListaConta() {
+		try {
+			return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());						
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
 	public List<SelectItem> getPeriodos() {
 		List<SelectItem> periodos = new ArrayList<>();
 		for (int i = 1; i <= 12; i++) {
 			periodos.add(new SelectItem(Integer.valueOf(i), Integer.toString(i)));
 		}
 		return periodos;
+	}
+	
+	public List<SelectItem> getListaTipoConta() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (TipoConta tipo : TipoConta.values()) {
+			listaSelectItem.add(new SelectItem(tipo, tipo.toString()));
+		}
+		return listaSelectItem;
 	}
 
 	public LancamentoPeriodico getLancamentoSelecionado() {
@@ -469,5 +504,21 @@ public class PanoramaParcelamentoController extends AbstractController {
 
 	public void setSaldoDevedor(double saldoDevedor) {
 		this.saldoDevedor = saldoDevedor;
+	}
+
+	public Conta getContaSelecionada() {
+		return contaSelecionada;
+	}
+
+	public void setContaSelecionada(Conta contaSelecionada) {
+		this.contaSelecionada = contaSelecionada;
+	}
+
+	public TipoConta getTipoContaSelecionada() {
+		return tipoContaSelecionada;
+	}
+
+	public void setTipoContaSelecionada(TipoConta tipoContaSelecionada) {
+		this.tipoContaSelecionada = tipoContaSelecionada;
 	}
 }

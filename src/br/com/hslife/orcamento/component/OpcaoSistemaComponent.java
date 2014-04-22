@@ -205,12 +205,21 @@ public class OpcaoSistemaComponent implements Serializable{
 			OpcaoSistema opcao = buscarPorChaveEUsuario("EXIBIR_MEIO_PAGAMENTO", usuarioComponent.getUsuarioLogado());
 			if (opcao != null)
 				return Boolean.valueOf(opcao.getValor());
-			else
-				return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public String getFormaAgrupamentoPagamento() {
+		try {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", usuarioComponent.getUsuarioLogado());
+			if (opcao != null)
+				return (String)opcao.getValor();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	/*** Métodos Setters das opções do sistema existentes ***/

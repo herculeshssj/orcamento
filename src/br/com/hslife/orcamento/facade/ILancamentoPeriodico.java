@@ -51,6 +51,7 @@ import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
@@ -74,5 +75,9 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	public List<PagamentoPeriodo> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, Boolean pago) throws BusinessException;
 	
 	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) throws BusinessException;
+	
+	public List<PagamentoPeriodo> buscarPagamentosPorContaEPago(Conta conta, Boolean pago) throws BusinessException;
+
+	public List<PagamentoPeriodo> buscarPagamentosPorTipoContaEPago(TipoConta tipo, Boolean pago) throws BusinessException;
 	
 }
