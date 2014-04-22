@@ -145,12 +145,12 @@ public class PanoramaParcelamentoController extends AbstractController {
 					}						
 				case "CONTA": 
 					if (contaSelecionada != null) {
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorContaEPago(contaSelecionada, null);
+						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.PARCELADO, contaSelecionada, null);
 						break;
 					}
 				case "TIPO_CONTA": 
 					if (tipoContaSelecionada != null) {
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoContaEPago(tipoContaSelecionada, null);
+						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.PARCELADO, tipoContaSelecionada, null);
 						break;
 					}
 				default: pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.PARCELADO, getUsuarioLogado(), null);

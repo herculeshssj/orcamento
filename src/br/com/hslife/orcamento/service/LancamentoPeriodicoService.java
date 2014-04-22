@@ -156,13 +156,13 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
-	public List<PagamentoPeriodo> buscarPagamentosPorContaEPago(Conta conta,Boolean pago) throws BusinessException {
-		return pagamentoPeriodoRepository.findPagamentosByContaAndPago(conta, pago);
+	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico tipo, Conta conta,Boolean pago) throws BusinessException {
+		return pagamentoPeriodoRepository.findPagamentosByTipoLancamentoAndContaAndPago(tipo, conta, pago);
 	}
 	
 	@Override
-	public List<PagamentoPeriodo> buscarPagamentosPorTipoContaEPago(TipoConta tipo, Boolean pago) throws BusinessException {
-		return pagamentoPeriodoRepository.findPagamentosByTipoContaAndPago(tipo, pago);
+	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, Boolean pago) throws BusinessException {
+		return pagamentoPeriodoRepository.findPagamentosByTipoLancamentoAndTipoContaAndPago(tipo, tipoConta, pago);
 	}
 	
 	@Override

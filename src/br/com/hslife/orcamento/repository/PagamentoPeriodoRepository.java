@@ -148,11 +148,14 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PagamentoPeriodo> findPagamentosByContaAndPago(Conta conta,	Boolean pago) {
+	public List<PagamentoPeriodo> findPagamentosByTipoLancamentoAndContaAndPago(TipoLancamentoPeriodico tipo, Conta conta, Boolean pago) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM PagamentoPeriodo pagamento WHERE ");
 		if (pago != null) {
 			hql.append("pagamento.pago = :pago AND ");
+		}
+		if (tipo != null) {
+			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
 		}
 		
 		hql.append("pagamento.lancamentoPeriodico.conta.id = :idConta ORDER BY pagamento.dataVencimento DESC");
@@ -161,6 +164,9 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 		if (pago != null) {
 			hqlQuery.setParameter("pago", pago);
 		}
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
 		
 		hqlQuery.setParameter("idConta", conta.getId());
 		
@@ -168,21 +174,27 @@ public class PagamentoPeriodoRepository extends AbstractCRUDRepository<Pagamento
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PagamentoPeriodo> findPagamentosByTipoContaAndPago(TipoConta tipo, Boolean pago) {
+	public List<PagamentoPeriodo> findPagamentosByTipoLancamentoAndTipoContaAndPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, Boolean pago) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM PagamentoPeriodo pagamento WHERE ");
 		if (pago != null) {
 			hql.append("pagamento.pago = :pago AND ");
 		}
+		if (tipo != null) {
+			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
+		}
 		
-		hql.append("pagamento.lancamentoPeriodico.conta.tipoConta = :tipo ORDER BY pagamento.dataVencimento DESC");
+		hql.append("pagamento.lancamentoPeriodico.conta.tipoConta = :tipoConta ORDER BY pagamento.dataVencimento DESC");
 		
 		Query hqlQuery = getQuery(hql.toString());
 		if (pago != null) {
 			hqlQuery.setParameter("pago", pago);
 		}
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
 		
-		hqlQuery.setParameter("tipo", tipo);
+		hqlQuery.setParameter("tipoConta", tipoConta);
 		
 		return hqlQuery.list();
 	}
