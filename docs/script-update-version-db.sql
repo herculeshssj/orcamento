@@ -113,3 +113,7 @@ alter table auditoria add column browser varchar(255) not null;
 -- Tarefa #983
 drop table auditoria_auditoriadados;
 drop table auditoriadados;
+
+-- Correção de nomenclatura de opção do sistema
+-- Tarefa #988
+update opcaosistema set chave = 'CONTA_EXIBIR_MEIO_PAGAMENTO' where chave = 'EXIBIR_MEIO_PAGAMENTO';

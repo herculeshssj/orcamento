@@ -202,7 +202,7 @@ public class OpcaoSistemaComponent implements Serializable{
 	
 	public Boolean getExibirMeioPagamento() {
 		try {
-			OpcaoSistema opcao = buscarPorChaveEUsuario("EXIBIR_MEIO_PAGAMENTO", usuarioComponent.getUsuarioLogado());
+			OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_MEIO_PAGAMENTO", usuarioComponent.getUsuarioLogado());
 			if (opcao != null)
 				return Boolean.valueOf(opcao.getValor());
 		} catch (Exception e) {
