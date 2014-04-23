@@ -1583,3 +1583,77 @@ alter table favorecido add column cpfCnpj varchar(14) null;
 
 -- Cadastro de moedas
 alter table moeda add column valorConversao decimal(18,4) not null default 0.0;
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAI2014 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('MAI2014', true);
+
+-- Lançamentos periódicos
+create table lancamentoperiodico(
+	id bigint not null auto_increment,
+	dataAquisicao date not null,
+	descricao varchar(50) not null,
+	observacao text null,
+	valorParcela decimal(18,2) default 0.0,
+	valorCompra decimal(18,2) null,
+	tipoLancamento varchar(10) not null,
+	statusLancamento varchar(15) not null,
+	idConta bigint not null,
+	idCategoria bigint null,
+	idFavorecido bigint null,
+	idMeioPagamento bigint null,
+	idArquivo bigint null,
+	idMoeda bigint not null,
+	idUsuario bigint not null,
+	totalParcela integer null,
+	diaVencimento integer not null,
+	tipoLancamentoPeriodico varchar(10) not null,
+	periodoLancamento varchar(20) null,
+	versionEntity datetime not null default '2014-05-01 00:00:00', 
+	primary key(id)
+);
+
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_conta foreign key (idConta) references conta(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_categoria foreign key (idCategoria) references categoria(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_favorecido foreign key (idFavorecido) references favorecido(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_meiopagamento foreign key (idMeioPagamento) references meiopagamento(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_arquivo foreign key (idArquivo) references arquivo(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_moeda foreign key (idMoeda) references moeda(id);
+alter table lancamentoperiodico add constraint fk_lancamentoperiodico_usuario foreign key (idUsuario) references usuario(id);
+
+create table pagamentoperiodo(
+	id bigint not null auto_increment,
+	idLancamentoConta bigint null,
+	idLancamentoPeriodico bigint not null,
+	periodo integer,
+	ano integer,
+	parcela integer,
+	dataPagamento date,
+	dataVencimento date not null,
+	valorPago decimal(18,2) default 0.0,
+	pago boolean,
+	versionEntity datetime not null default '2014-05-01 00:00:00', 
+	primary key(id)
+);
+
+alter table pagamentoperiodo add constraint fk_pagamentoperiodo_lancamentoconta foreign key(idLancamentoConta) references lancamentoconta(id);
+alter table pagamentoperiodo add constraint fk_pagamentoperiodo_lancamentoperiodico foreign key(idLancamentoPeriodico) references lancamentoperiodico(id);
+
+-- Remoção da tabela de histórico de abertura e fechamento de contas
+-- Tarefa #977
+drop table aberturafechamentoconta;
+
+-- Inclusão do browser do usuário no registro de auditoria
+-- Tarefa #940
+alter table auditoria add column browser varchar(255) not null;
+
+-- Remoção das tabelas de registro de auditoria no modo antigo
+-- Tarefa #983
+drop table auditoria_auditoriadados;
+drop table auditoriadados;
+
+-- Correção de nomenclatura de opção do sistema
+-- Tarefa #988
+update opcaosistema set chave = 'CONTA_EXIBIR_MEIO_PAGAMENTO' where chave = 'EXIBIR_MEIO_PAGAMENTO';
