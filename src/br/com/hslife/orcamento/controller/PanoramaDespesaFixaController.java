@@ -233,7 +233,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		Map<String, Double> dadosPagamento = new LinkedHashMap<String, Double>();
 		Map<String, Double> dadosAPagar = new LinkedHashMap<String, Double>();
 		String dataKey = "";
-		maxValueBarPagamentosDespesa = 10000.0;
+		maxValueBarPagamentosDespesa = 1.0;
 		saldoDevedor = 0.0;
 		
 		// Gera as chaves e popula os Maps
@@ -287,28 +287,22 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		// Popula o gráfico com os dados obtido e habilita a exibição
 		ultimosPagamentosDespesaModel = new CartesianChartModel();
 		
-		ChartSeries pagamentosSerie = new ChartSeries();
+		ChartSeries pagamentosSerie = new ChartSeries();		
+		ChartSeries aPagarSerie = new ChartSeries();
+		
 		pagamentosSerie.setLabel("Despesas Pagas");
+		aPagarSerie.setLabel("Despesas À Pagar");
+		
 		for (String key : dadosPagamento.keySet()) {
 			pagamentosSerie.set(key, dadosPagamento.get(key));
+			aPagarSerie.set(key, dadosAPagar.get(key));
 			
-			// Determina o valor máximo do eixo Y
-			//if (dadosPagamento.get(key) > maxValueBarPagamentosDespesa)
-				//maxValueBarPagamentosDespesa = maxValueBarPagamentosDespesa + (dadosPagamento.get(key) - maxValueBarPagamentosDespesa) + 100;
+			if ( (dadosPagamento.get(key) + dadosAPagar.get(key) + 100) > maxValueBarPagamentosDespesa) {
+				maxValueBarPagamentosDespesa = dadosPagamento.get(key) + dadosAPagar.get(key) + 100;
+			}
 		}
 		
 		ultimosPagamentosDespesaModel.addSeries(pagamentosSerie);
-		
-		ChartSeries aPagarSerie = new ChartSeries();
-		aPagarSerie.setLabel("Despesas À Pagar");
-		for (String key : dadosAPagar.keySet()) {
-			aPagarSerie.set(key, dadosAPagar.get(key));
-			
-			// Determina o valor máximo do eixo Y
-			//if (dadosPagamento.get(key) > maxValueBarPagamentosDespesa)
-				//maxValueBarPagamentosDespesa = maxValueBarPagamentosDespesa + (dadosPagamento.get(key) - maxValueBarPagamentosDespesa) + 100;
-		}
-		
 		ultimosPagamentosDespesaModel.addSeries(aPagarSerie);
 		
 		exibirGraficoDespesa = true;
@@ -328,7 +322,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		Map<String, Double> dadosPagamento = new LinkedHashMap<String, Double>();
 		Map<String, Double> dadosAPagar = new LinkedHashMap<String, Double>();
 		String dataKey = "";
-		maxValueBarPagamentosReceita = 10000.0;
+		maxValueBarPagamentosReceita = 1.0;
 		saldoCredor = 0.0;
 		
 		// Gera as chaves e popula os Maps
@@ -382,28 +376,22 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		// Popula o gráfico com os dados obtido e habilita a exibição
 		ultimosPagamentosReceitaModel = new CartesianChartModel();
 		
-		ChartSeries pagamentosSerie = new ChartSeries();
+		ChartSeries pagamentosSerie = new ChartSeries();		
+		ChartSeries aPagarSerie = new ChartSeries();
+		
 		pagamentosSerie.setLabel("Receitas Pagas");
+		aPagarSerie.setLabel("Receitas À Pagar");
+		
 		for (String key : dadosPagamento.keySet()) {
 			pagamentosSerie.set(key, dadosPagamento.get(key));
+			aPagarSerie.set(key, dadosAPagar.get(key));
 			
-			// Determina o valor máximo do eixo Y
-			//if (dadosPagamento.get(key) > maxValueBarPagamentosReceita)
-				//maxValueBarPagamentosReceita = dadosPagamento.get(key) + 100;
+			if ( (dadosPagamento.get(key) + dadosAPagar.get(key) + 100) > maxValueBarPagamentosReceita) {
+				maxValueBarPagamentosReceita = dadosPagamento.get(key) + dadosAPagar.get(key) + 100;
+			}
 		}
 		
 		ultimosPagamentosReceitaModel.addSeries(pagamentosSerie);
-		
-		ChartSeries aPagarSerie = new ChartSeries();
-		aPagarSerie.setLabel("Receitas À Pagar");
-		for (String key : dadosAPagar.keySet()) {
-			aPagarSerie.set(key, dadosAPagar.get(key));
-			
-			// Determina o valor máximo do eixo Y
-			//if ((maxValueBarPagamentosReceita + dadosAPagar.get(key) + 100) > maxValueBarPagamentosReceita)
-				//maxValueBarPagamentosReceita = maxValueBarPagamentosReceita + dadosAPagar.get(key) + 100;
-		}
-		
 		ultimosPagamentosReceitaModel.addSeries(aPagarSerie);
 		
 		exibirGraficoReceita = true;
