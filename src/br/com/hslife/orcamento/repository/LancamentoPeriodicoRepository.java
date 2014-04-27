@@ -53,6 +53,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 
 @Repository
@@ -93,5 +94,29 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 				.setParameter("status", status)
 				.setLong("idUsuario", usuario.getId())
 				.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<LancamentoPeriodico> findByTipoLancamentoAndTipoContaAndStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta,	StatusLancamento statusLancamento) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM LancamentoPeriodico periodico WHERE ");
+		if (tipo != null) {
+			hql.append("periodico.tipoLancamentoPeriodico = :tipo AND ");
+		}
+		if (tipoConta != null) {
+			hql.append("periodico.conta.tipoConta = :tipoConta AND ");
+		}
+		hql.append("periodico.statusLancamento = :status ORDER BY periodico.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
+		if (tipoConta != null) {
+			hqlQuery.setParameter("tipoConta", tipoConta);
+		}
+		hqlQuery.setParameter("status", statusLancamento);
+		
+		return hqlQuery.list();
 	}
 }

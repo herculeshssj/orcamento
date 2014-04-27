@@ -44,6 +44,7 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -166,6 +167,11 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
+	public List<LancamentoPeriodico> buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamento statusLancamento) throws BusinessException {
+		return getRepository().findByTipoLancamentoAndTipoContaAndStatusLancamento(tipo, tipoConta, statusLancamento);
+	}
+	
+	@Override
 	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws BusinessException {
 		entity.setStatusLancamento(novoStatus);
 		getRepository().update(entity);
@@ -229,6 +235,50 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			pagamentoPeriodoRepository.save(proximaMensalidade);
 			
 		}
+	}
+	
+	@Override
+	public List<PagamentoPeriodo> gerarPrevisaoProximosPagamentos(LancamentoPeriodico lancamentoPeriodico, int quantidadePeriodos) throws BusinessException {
+		List<PagamentoPeriodo> pagamentosGerados = new ArrayList<>();
+		// Gera o próximo pagamento para os lançamentos fixos
+		if (lancamentoPeriodico.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+			
+			// Busca o pagamento mais recente
+			PagamentoPeriodo ultimaMensalidade = pagamentoPeriodoRepository.findLastGeneratedPagamentoPeriodo(lancamentoPeriodico);
+			
+			Calendar dataVencimento = Calendar.getInstance();
+			dataVencimento.setTime(ultimaMensalidade.getDataVencimento());
+			
+			for (int i = 1; i <= quantidadePeriodos; i++) {
+			
+				// Determina a data do próximo pagamento
+				if (dataVencimento.get(Calendar.DAY_OF_MONTH) >= lancamentoPeriodico.getDiaVencimento()) {
+					switch (lancamentoPeriodico.getPeriodoLancamento()) {
+						case MENSAL : dataVencimento.add(Calendar.MONTH, 1); break;
+						case BIMESTRAL : dataVencimento.add(Calendar.MONTH, 2); break;
+						case TRIMESTRAL : dataVencimento.add(Calendar.MONTH, 3); break;
+						case QUADRIMESTRAL : dataVencimento.add(Calendar.MONTH, 4); break;
+						case SEMESTRAL : dataVencimento.add(Calendar.MONTH, 6); break;
+						case ANUAL : dataVencimento.add(Calendar.YEAR, 1); break;
+						default : throw new BusinessException("Período informado é inválido!");
+					}
+				}
+				
+				PagamentoPeriodo proximaMensalidade = new PagamentoPeriodo();
+				proximaMensalidade.setLancamentoPeriodico(lancamentoPeriodico);
+				dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
+				
+				proximaMensalidade.setAno(dataVencimento.get(Calendar.YEAR));
+				proximaMensalidade.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
+				proximaMensalidade.setDataVencimento(dataVencimento.getTime());
+				
+				pagamentosGerados.add(proximaMensalidade);
+			}
+			
+		} else {
+			throw new BusinessException("Só é possível gerar previsão de pagamento de lançamentos fixos!");
+		}
+		return pagamentosGerados;
 	}
 	
 	private void gerarMensalidade(LancamentoPeriodico entity) throws BusinessException {
