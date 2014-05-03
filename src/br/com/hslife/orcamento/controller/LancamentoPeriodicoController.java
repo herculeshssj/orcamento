@@ -126,6 +126,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	protected void initializeEntity() {
 		entity = new LancamentoPeriodico();
 		listEntity = new ArrayList<LancamentoPeriodico>();
+		pagamentoPeriodo = new PagamentoPeriodo();
 	}
 	
 	@Override

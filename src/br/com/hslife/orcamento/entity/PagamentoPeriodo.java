@@ -48,6 +48,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -95,11 +96,11 @@ public class PagamentoPeriodo extends EntityPersistence {
 	@Column
 	private int parcela;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idLancamentoConta", nullable=true)
 	private LancamentoConta lancamentoConta;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
 	private LancamentoPeriodico lancamentoPeriodico;
 	
@@ -126,6 +127,14 @@ public class PagamentoPeriodo extends EntityPersistence {
 	@Override
 	public void validate() throws BusinessException {
 		
+	}
+	
+	@Override
+	public int compareTo(EntityPersistence o) {
+		if (this.getId() != null) {
+			return super.compareToNaturalOrder(o);  
+		}
+		return 0;
 	}
 
 	public boolean isPago() {
