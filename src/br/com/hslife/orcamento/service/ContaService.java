@@ -147,11 +147,8 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	
 	@Override
 	public void cadastrar(Conta entity) throws BusinessException {
-		// Cadastra a conta		
+		// Cadastra a conta e já realiza a abertura da mesma
 		getRepository().save(entity);
-		
-		// Registra a abertura da conta
-		this.ativarConta(entity);
 	}
 	
 	@Override

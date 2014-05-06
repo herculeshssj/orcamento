@@ -128,6 +128,8 @@ public class Conta extends EntityPersistence {
 	public Conta() {
 		ativo = true;
 		arquivado = false;
+		dataFechamento = null;
+		saldoFinal = 0;
 	}
 	
 	@Override

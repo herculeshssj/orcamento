@@ -210,6 +210,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		listaSelectItem.add(new SelectItem(TipoConta.CORRENTE, "Conta Corrente"));
 		listaSelectItem.add(new SelectItem(TipoConta.POUPANCA, "Conta Poupança"));
+		listaSelectItem.add(new SelectItem(TipoConta.OUTROS, "Outros"));
 		return listaSelectItem;
 	}
 	

@@ -56,82 +56,53 @@
 
 	<ui:param name="managedBean" value="#{contaMB}" />
 
-	<ui:define name="conteudo">
-		<h:form id="frmListEntity">
+	<ui:define name="pesquisa">
+		Banco:
+		<h:selectOneMenu id="txtBancos" value="#{managedBean.findBanco}" converter="entityConverter">
+			<f:selectItem itemLabel="Todos" />
+			<f:selectItems value="#{managedBean.listaBanco}" />
+		</h:selectOneMenu>
+	</ui:define>
+	
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição" />
+			</f:facet>
+			<h:outputText value="#{item.descricao}" />
+		</p:column>
 
-			<p:messages />
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Banco" />
+			</f:facet>
+			<h:outputText value="#{item.banco.nome}" />
+		</p:column>
 
-			<h:commandLink action="#{managedBean.create}" title="Novo registro">
-				<h:graphicImage value="/resources/images/novo.png" />
-			</h:commandLink>     		
-     		&nbsp;
-     				
-    	Banco:
-		<h:selectOneMenu id="txtBancos" value="#{managedBean.findBanco}"
-				converter="entityConverter">
-				<f:selectItem itemLabel="Todos" />
-				<f:selectItems value="#{managedBean.listaBanco}" />
-			</h:selectOneMenu>     		
-     		&nbsp;
-     		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
-				<h:graphicImage value="/resources/images/pesquisar.png" />
-			</h:commandLink>
-
-			<br />
-			<br />
-
-			<p:dataTable id="tableListEntity" width="100%" rows="15"
-				value="#{managedBean.listEntity}" var="item" paginator="true">
-
-				<p:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Descrição" />
-					</f:facet>
-					<h:outputText value="#{item.descricao}" />
-				</p:column>
-
-				<p:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Banco" />
-					</f:facet>
-					<h:outputText value="#{item.banco.nome}" />
-				</p:column>
-
-				<p:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Ativo" />
-					</f:facet>
-					<h:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
-				</p:column>
-
-				<p:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Ações"/>
-					</f:facet>
-					<h:commandButton title="Editar"
-						image="/resources/images/alterar.png" action="#{managedBean.edit}">
-						<f:setPropertyActionListener value="#{item.id}"
-							target="#{managedBean.idEntity}" />
-					</h:commandButton>
-					&nbsp;&nbsp;&nbsp;
-					<h:commandButton title="Ativar conta"
-						image="/resources/images/habilitar.png"
-						action="#{managedBean.ativarConta}" rendered="#{!item.ativo and !item.arquivado}">
-						<f:setPropertyActionListener value="#{item.id}"
-							target="#{managedBean.idEntity}" />
-					</h:commandButton>					
-					<h:commandButton title="Desativar conta"
-						image="/resources/images/fechar.png"
-						action="#{managedBean.desativarContaView}"
-						rendered="#{item.ativo}">
-						<f:setPropertyActionListener value="#{item.id}"
-							target="#{managedBean.idEntity}" />
-					</h:commandButton>
-				</p:column>
-
-			</p:dataTable>
-
-		</h:form>
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ativo" />
+			</f:facet>
+			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
+		</p:column>
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações"/>
+			</f:facet>
+			<h:commandButton title="Editar"	image="/resources/images/alterar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>
+			&nbsp;&nbsp;&nbsp;
+			<h:commandButton title="Ativar conta" image="/resources/images/habilitar.png" action="#{managedBean.ativarConta}" rendered="#{!item.ativo and !item.arquivado}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>					
+			<h:commandButton title="Desativar conta" image="/resources/images/fechar.png" action="#{managedBean.desativarContaView}" rendered="#{item.ativo}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>
+		</p:column>
 	</ui:define>
 
 </ui:composition>
