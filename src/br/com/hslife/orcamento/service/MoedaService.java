@@ -69,12 +69,6 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	public void setRepository(MoedaRepository repository) {
 		this.repository = repository;
 	}
-
-	@Override
-	public void validar(Moeda entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public void cadastrar(Moeda entity) throws BusinessException {

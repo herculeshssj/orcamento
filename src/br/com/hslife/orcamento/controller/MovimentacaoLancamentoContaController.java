@@ -102,7 +102,6 @@ public class MovimentacaoLancamentoContaController extends AbstractController {
 
 	@Override
 	public String startUp() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

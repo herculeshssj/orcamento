@@ -67,4 +67,8 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	public E buscarPorID(Long id) throws BusinessException {
 		return getRepository().findById(id);
 	}
+	
+	public void validar(E entity) throws BusinessException {
+		entity.validate();
+	}
 }

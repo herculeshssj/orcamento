@@ -106,11 +106,6 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException {
 		return getRepository().findByNomeAndUsuario(nome, usuario);
 	}
-
-	@Override
-	public void validar(Banco entity) throws BusinessException {
-		
-	}
 	
 	@Override
 	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException {

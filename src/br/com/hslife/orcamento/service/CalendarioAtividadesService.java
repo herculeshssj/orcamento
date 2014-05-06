@@ -97,12 +97,6 @@ public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> imp
 		}		
 		return agendamentos;
 	}
-
-	@Override
-	public void validar(Agenda entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) throws BusinessException {

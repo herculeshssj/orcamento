@@ -78,11 +78,6 @@ public class DespensaService extends AbstractCRUDService<Despensa> implements ID
 			ItemDespensaRepository itemDespensaRepository) {
 		this.itemDespensaRepository = itemDespensaRepository;
 	}
-
-	@Override
-	public void validar(Despensa entity) throws BusinessException {
-		
-	}
 	
 	@Override
 	public void excluir(Despensa entity) throws BusinessException {

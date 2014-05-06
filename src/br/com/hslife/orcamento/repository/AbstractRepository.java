@@ -54,10 +54,6 @@ public abstract class AbstractRepository {
 	@Autowired
 	protected SessionFactory sessionFactory;
 	
-	//TODO remover estas declarações
-	protected String hql = "SELECT 1";
-	protected Query hqlQuery;
-	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

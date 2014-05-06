@@ -92,10 +92,4 @@ public class CategoriaDocumentoService extends AbstractCRUDService<CategoriaDocu
 	public List<CategoriaDocumento> buscarPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findByUsuario(usuario);
 	}
-
-	@Override
-	public void validar(CategoriaDocumento entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 }

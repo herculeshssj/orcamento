@@ -166,10 +166,4 @@ public class FechamentoPeriodoService extends AbstractCRUDService<FechamentoPeri
 			lancamentoContaRepository.update(lancamento);
 		}
 	}
-
-	@Override
-	public void validar(FechamentoPeriodo entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 }

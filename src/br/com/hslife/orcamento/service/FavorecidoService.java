@@ -112,12 +112,6 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 		return getRepository().findByNomeAndUsuario(nome, usuario);
 	}
 	
-	
-	@Override
-	public void validar(Favorecido entity) throws BusinessException {
-		
-	}
-	
 	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findEnabledByUsuario(usuario);
 	}

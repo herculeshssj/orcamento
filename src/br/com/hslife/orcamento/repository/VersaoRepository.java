@@ -44,8 +44,6 @@
 
 package br.com.hslife.orcamento.repository;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,10 +54,9 @@ import br.com.hslife.orcamento.entity.Versao;
 public class VersaoRepository extends AbstractRepository {
 	
 	public Versao findActived() {
-		// TODO migrar para HQL
-		Criteria criteria = getSession().createCriteria(Versao.class);
-		criteria.add(Restrictions.eq("ativo", true));
-		return (Versao)criteria.setMaxResults(1).uniqueResult();
+		return (Versao) getQuery("FROM Versao versao WHERE versao.ativo = true")
+				.setMaxResults(1)
+				.uniqueResult();
 	}
 
 }

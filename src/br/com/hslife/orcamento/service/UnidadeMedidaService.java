@@ -88,11 +88,6 @@ public class UnidadeMedidaService extends AbstractCRUDService<UnidadeMedida> imp
 	}
 	
 	@Override
-	public void validar(UnidadeMedida entity) throws BusinessException {
-		
-	}
-	
-	@Override
 	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}

@@ -113,12 +113,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 			LancamentoContaRepository lancamentoContaRepository) {
 		this.lancamentoContaRepository = lancamentoContaRepository;
 	}
-
-	@Override
-	public void validar(CartaoCredito entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public void cadastrar(CartaoCredito entity) throws BusinessException {

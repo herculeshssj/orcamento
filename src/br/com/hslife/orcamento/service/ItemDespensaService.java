@@ -74,11 +74,6 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	public void setRepository(ItemDespensaRepository repository) {
 		this.repository = repository;
 	}
-
-	@Override
-	public void validar(ItemDespensa entity) throws BusinessException {
-		
-	}
 	
 	@Override
 	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa) throws BusinessException {

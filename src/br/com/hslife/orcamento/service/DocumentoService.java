@@ -89,12 +89,6 @@ public class DocumentoService extends AbstractCRUDService<Documento> implements 
 	public List<Documento> buscarPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findByUsuario(usuario);
 	}
-
-	@Override
-	public void validar(Documento entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public List<Documento> buscarPorNomeECategoriaDocumentoPorUsuario(String nome, CategoriaDocumento categoria, Usuario usuario) throws BusinessException {
 		return getRepository().findByNomeAndCategoriaDocumentoByUsuario(nome, categoria, usuario);
