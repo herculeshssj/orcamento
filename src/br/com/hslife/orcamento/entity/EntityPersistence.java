@@ -104,45 +104,10 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	
 	
 	@Override
-	/**
-	 * Ordena usando a ordem natural dos registros (ID de tabela na base) caso possua, 
-	 * senão usa o resultado do método getLabel(). 
-	 * 
-	 */
 	public int compareTo(EntityPersistence o) {
-		return compareToNatureOrderOrLabels(o);	
-	}
-	
-	public int compareToNaturalOrder(EntityPersistence o) {
-		if (o != null && o.getId() != null) {
-			return this.getId().compareTo(o.getId()); // ordem natural das entidades persistentes 
-		} 
-		return 0;	
-	}
-	
-	public int compareToLabels(EntityPersistence o) {
-		if (o != null && o.getLabel() != null) {
-			return this.getLabel().compareToIgnoreCase(o.getLabel()); // ordem natural gerada a partir do resultado do método getLabel()
-		}
-		return 0;	
-	}
-	
-	/**
-	 * Compara as entidades na ordem natural, caso a entidade possua IDs válidos. Caso
-	 * contrário será invocado a comparação dos labels de cada entidade, retornando o 
-	 * valor 0 caso o método retorne nulo ou os valores sejam iguais.
-	 * 
-	 * @param o objeto a ser comparado
-	 * @return o resultado da comparação
-	 */
-	public int compareToNatureOrderOrLabels(EntityPersistence o) {
-		if (this.getId() != null) {
-			return this.compareToNaturalOrder(o);  
-		} else if (this.getLabel() != null ) {
-			return this.compareToLabels(o);
-		} else {
-			return 0;
-		}
+		if (this.getId() != null && o != null && o.getId() != null)
+			return this.getId().compareTo(o.getId());
+		return 0;
 	}
 	
 	@Override

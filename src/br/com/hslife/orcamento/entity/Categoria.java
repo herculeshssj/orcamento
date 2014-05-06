@@ -123,11 +123,6 @@ public class Categoria extends EntityPersistence {
 			throw new BusinessException("Informe o usuário!");
 		}
 	}
-	
-	@Override
-	public int compareTo(EntityPersistence o) {
-		return super.compareToLabels(o);
-	}
 
 	public void setId(Long id) {
 		this.id = id;

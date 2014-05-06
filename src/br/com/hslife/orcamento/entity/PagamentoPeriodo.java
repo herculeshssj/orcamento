@@ -128,14 +128,6 @@ public class PagamentoPeriodo extends EntityPersistence {
 	public void validate() throws BusinessException {
 		
 	}
-	
-	@Override
-	public int compareTo(EntityPersistence o) {
-		if (this.getId() != null) {
-			return super.compareToNaturalOrder(o);  
-		}
-		return 0;
-	}
 
 	public boolean isPago() {
 		return pago;

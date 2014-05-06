@@ -159,14 +159,6 @@ public class Conta extends EntityPersistence {
 			throw new BusinessException("Informe o usuário!");
 		}	
 	}
-	
-	@Override
-	public int compareTo(EntityPersistence o) {
-		if (this.getId() != null) {
-			return super.compareToNaturalOrder(o);  
-		}
-		return 0;
-	}
 
 	public Banco getBanco() {
 		return banco;
