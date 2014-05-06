@@ -142,6 +142,15 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 		return "";
 	}
 	
+	public Long getAgendamentosDeHoje() {
+		try {
+			return getService().contarAgendamentosDeHojeComAlerta();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return 0l;
+	}
+	
 	public List<Integer> getListaHoras() {
 		List<Integer> horas = new LinkedList<>();
 		for (int i = 0; i < 24; i++) {

@@ -90,6 +90,7 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		agenda.setInicio(new Date());
 		agenda.setFim(new Date());
 		agenda.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
+		agenda.setEmitirAlerta(true);
 	}
 
 	@Test
@@ -166,5 +167,13 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		List<Agenda> listaAgenda = agendaRepository.findByCriterioAgendamento(criterioBusca);
 		assertEquals(1, listaAgenda.size());
 		assertEquals(agenda, listaAgenda.get(0));
+	}
+	
+	public void testCountAgendamentoByDateAndAlerta() {
+		agendaRepository.save(agenda);
+		
+		Long esperado = 1l;
+		Long resultado = agendaRepository.countAgendamentoByDataInicioAndDataFimAndAlerta(new Date(), new Date(), true);
+		assertEquals(esperado, resultado);
 	}
 }
