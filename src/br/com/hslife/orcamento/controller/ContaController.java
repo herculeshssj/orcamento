@@ -77,6 +77,9 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	@Autowired
 	private IConta service;
 	
+	private String descricaoConta;
+	private boolean somenteAtivos = true;
+	
 	private Banco findBanco;
 	private String opcaoLancamentos;
 	private Conta contaSelecionada;
@@ -105,7 +108,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorBancoEUsuario(findBanco, getUsuarioLogado());			
+			listEntity = getService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(descricaoConta, null, getUsuarioLogado(), somenteAtivos);			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -298,5 +301,21 @@ public class ContaController extends AbstractCRUDController<Conta> {
 
 	public void setOpcaoLancamentos(String opcaoLancamentos) {
 		this.opcaoLancamentos = opcaoLancamentos;
+	}
+
+	public String getDescricaoConta() {
+		return descricaoConta;
+	}
+
+	public void setDescricaoConta(String descricaoConta) {
+		this.descricaoConta = descricaoConta;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }

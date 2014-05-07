@@ -319,4 +319,9 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	public Conta buscarPorCartaoCredito(CartaoCredito cartao) throws BusinessException {
 		return getRepository().findByCartaoCredito(cartao);
 	}
+	
+	@Override
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) throws BusinessException {
+		return getRepository().findDescricaoOrTipoContaOrAtivoByUsuario(descricao, tipoConta, usuario, ativo);
+	}
 }

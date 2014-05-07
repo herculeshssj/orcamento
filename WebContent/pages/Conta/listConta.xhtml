@@ -57,11 +57,11 @@
 	<ui:param name="managedBean" value="#{contaMB}" />
 
 	<ui:define name="pesquisa">
-		Banco:
-		<h:selectOneMenu id="txtBancos" value="#{managedBean.findBanco}" converter="entityConverter">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{managedBean.listaBanco}" />
-		</h:selectOneMenu>
+		Descrição:
+	    <h:inputText value="#{managedBean.descricaoConta}" />
+	    &nbsp;
+	    <h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    Somente ativos
 	</ui:define>
 	
 	<ui:define name="colunas">
@@ -92,16 +92,21 @@
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>
-			<h:commandButton title="Editar"	image="/resources/images/alterar.png" action="#{managedBean.edit}">
+			<h:commandButton title="Editar"	image="/resources/images/alterar.png" action="#{managedBean.edit}" rendered="#{item.tipoConta != 'CARTAO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>
+			<h:commandButton title="Editar cartão de crédito" image="/resources/images/alterar.png" action="#{cartaoCreditoMB.edit}" rendered="#{item.tipoConta == 'CARTAO'}">
+				<f:setPropertyActionListener value="#{item.cartaoCredito.id}" target="#{cartaoCreditoMB.idEntity}" />
 			</h:commandButton>
 			&nbsp;&nbsp;&nbsp;
-			<h:commandButton title="Ativar conta" image="/resources/images/habilitar.png" action="#{managedBean.ativarConta}" rendered="#{!item.ativo and !item.arquivado}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
-			</h:commandButton>					
-			<h:commandButton title="Desativar conta" image="/resources/images/fechar.png" action="#{managedBean.desativarContaView}" rendered="#{item.ativo}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
-			</h:commandButton>
+			<h:panelGroup rendered="#{item.tipoConta != 'CARTAO'}">
+				<h:commandButton title="Ativar conta" image="/resources/images/habilitar.png" action="#{managedBean.ativarConta}" rendered="#{!item.ativo and !item.arquivado}">
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+				</h:commandButton>					
+				<h:commandButton title="Desativar conta" image="/resources/images/fechar.png" action="#{managedBean.desativarContaView}" rendered="#{item.ativo}">
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+				</h:commandButton>
+			</h:panelGroup>
 		</p:column>
 	</ui:define>
 
