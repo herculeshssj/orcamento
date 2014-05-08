@@ -97,18 +97,9 @@ public class CartaoCredito extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)
 	private double limiteSaque;
 	
-	@Column(length=30)
-	private String numeroCartao;
-	
-	@Column(length=3)
-	private String codigoSeguranca;
-	
 	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)
 	private Date validade;
-	
-	@Column(length=50)
-	private String nomeCliente;
 	
 	@Column(length=10)
 	@Enumerated(EnumType.STRING)
@@ -210,36 +201,12 @@ public class CartaoCredito extends EntityPersistence {
 		return limiteSaque;
 	}
 
-	public String getNumeroCartao() {
-		return numeroCartao;
-	}
-
-	public void setNumeroCartao(String numeroCartao) {
-		this.numeroCartao = numeroCartao;
-	}
-
-	public String getCodigoSeguranca() {
-		return codigoSeguranca;
-	}
-
-	public void setCodigoSeguranca(String codigoSeguranca) {
-		this.codigoSeguranca = codigoSeguranca;
-	}
-
 	public Date getValidade() {
 		return validade;
 	}
 
 	public void setValidade(Date validade) {
 		this.validade = validade;
-	}
-
-	public String getNomeCliente() {
-		return nomeCliente;
-	}
-
-	public void setNomeCliente(String nomeCliente) {
-		this.nomeCliente = nomeCliente;
 	}
 
 	public TipoCartao getTipoCartao() {

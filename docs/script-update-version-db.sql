@@ -68,3 +68,9 @@ alter table lancamentoconta drop column descricaoCategoria;
 alter table conta add column idMoeda bigint not null;
 update conta c set idMoeda = (select id from moeda where idUsuario = c.idUsuario and padrao = true);
 alter table conta add constraint fk_conta_moeda foreign key (idMoeda) references moeda(id);
+
+-- Remoção dos campos sensíveis do cadastro de cartão de crédito
+-- Tarefa #1003
+alter table cartaocredito drop column codigoSeguranca;
+alter table cartaocredito drop column nomeCliente;
+alter table cartaocredito drop column numeroCartao;

@@ -109,15 +109,6 @@
 			Dia de fechamento da fatura:
 			<p:inputText id="txtDiaFechamentoFatura" value="#{managedBean.entity.diaFechamentoFatura}" size="5" required="true" requiredMessage="Informe o dia de fechamento da fatura!" disabled="#{!managedBean.entity.ativo}"/>			
 			
-			Nome do cliente (escrito no cartão):
-			<p:inputText value="#{managedBean.entity.nomeCliente}" size="30" disabled="#{!managedBean.entity.ativo}"/>
-			
-			Número do cartão:
-			<p:inputText value="#{managedBean.entity.numeroCartao}" size="20" disabled="#{!managedBean.entity.ativo}"/>
-			
-			Código de segurança:
-			<p:inputText value="#{managedBean.entity.codigoSeguranca}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>
-			
 			Validade:
 			<p:inputMask id="txtValidade" value="#{managedBean.entity.validade}" size="10" required="true" requiredMessage="Informe a data de validade do cartão!" disabled="#{!managedBean.entity.ativo}" mask="99/99/9999">
 				<f:converter converterId="dateConverter"/>
