@@ -44,8 +44,13 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2014 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAI2014.1 ***/
 
 -- Atualização de versão
 update versao set ativo = false;
-insert into versao (versao, ativo) values ('JUL2014', true);
+insert into versao (versao, ativo) values ('MAI2014.1', true);
+
+-- Exclusão dos dados sensíveis do cartão de crédito
+-- Tarefa #1003
+update cartaocredito set codigoSeguranca = null, nomeCliente = null, numeroCartao = null;
+delete from auditoria where classe = 'CartaoCredito';
