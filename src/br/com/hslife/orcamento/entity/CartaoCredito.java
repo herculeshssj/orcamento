@@ -60,6 +60,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
@@ -129,6 +130,12 @@ public class CartaoCredito extends EntityPersistence {
 	
 	@Column
 	private boolean ativo;
+	
+	@Transient
+	private int mesValidade;
+	
+	@Transient
+	private int anoValidade;
 	
 	public CartaoCredito() {
 		ativo = true;
@@ -281,5 +288,21 @@ public class CartaoCredito extends EntityPersistence {
 
 	public void setConta(Conta conta) {
 		this.conta = conta;
+	}
+
+	public int getMesValidade() {
+		return mesValidade;
+	}
+
+	public void setMesValidade(int mesValidade) {
+		this.mesValidade = mesValidade;
+	}
+
+	public int getAnoValidade() {
+		return anoValidade;
+	}
+
+	public void setAnoValidade(int anoValidade) {
+		this.anoValidade = anoValidade;
 	}
 }

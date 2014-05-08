@@ -45,19 +45,13 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
-import br.com.hslife.orcamento.enumeration.Abrangencia;
-import br.com.hslife.orcamento.enumeration.Bandeira;
-import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
@@ -78,6 +72,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	private IBanco bancoService;
 	
 	private String descricaoCartao;
+	private boolean somenteAtivos = true;
 	private CartaoCredito novoCartao;
 	
 	public CartaoCreditoController() {
@@ -93,26 +88,73 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	}
 	
 	public void find() {
-		try {
-			listEntity = getService().buscarPorDescricaoEUsuario(descricaoCartao, getUsuarioLogado());
+		try {			
+			listEntity = getService().buscarDescricaoOuAtivoPorUsuario(descricaoCartao, getUsuarioLogado(), somenteAtivos);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public String save() {
+		Date validade = new Date(entity.getAnoValidade() - 1900, entity.getMesValidade() - 1, entity.getDiaVencimentoFatura());
 		entity.setUsuario(getUsuarioLogado());
+		entity.setValidade(validade);
 		return super.save();
 	}
 	
-	public List<Banco> getListaBanco() {
+	@SuppressWarnings("deprecation")
+	@Override
+	public String edit() {
+		String retorno = super.edit();
+		entity.setMesValidade(entity.getValidade().getMonth() + 1);
+		entity.setAnoValidade(entity.getValidade().getYear() + 1900);
+		return retorno;
+	}
+	
+	public String ativarCartaoView() {
 		try {
-			return bancoService.buscarPorUsuario(getUsuarioLogado());
+			entity = getService().buscarPorID(idEntity);
+			actionTitle = " - Ativar";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}		
+		return "/pages/CartaoCredito/ativarDesativarCartao";
+	}
+
+	public String ativarCartao() {
+		try {		
+			getService().ativarCartao(entity);
+			infoMessage("Cartão ativado com sucesso!");
+			initializeEntity();
+			return list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<>();
+		return "";
+	}
+	
+	public String desativarCartaoView() {
+		try {
+			entity = getService().buscarPorID(idEntity);
+			actionTitle = " - Desativar";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}		
+		return "/pages/CartaoCredito/ativarDesativarCartao";
+	}
+	
+	public String desativarCartao() {
+		try {		
+			getService().desativarCartao(entity);
+			infoMessage("Cartão desativado com sucesso!");
+			initializeEntity();
+			return list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String substituirCartaoView() {
@@ -126,8 +168,11 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		return "/pages/CartaoCredito/substituirCartao";
 	}
 	
+	@SuppressWarnings("deprecation")
 	public String substituirCartao() {
 		try {
+			Date validade = new Date(novoCartao.getAnoValidade() - 1900, novoCartao.getMesValidade() - 1, novoCartao.getDiaVencimentoFatura());
+			novoCartao.setValidade(validade);
 			novoCartao.setUsuario(getUsuarioLogado());
 			entity.setCartaoSubstituto(novoCartao);			
 			getService().substituirCartao(entity);
@@ -138,35 +183,6 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			errorMessage(be.getMessage());
 		}
 		return "";
-	}
-	
-	public List<SelectItem> getListaTipoCartao() {
-		List<SelectItem> lista = new ArrayList<>();
-		lista.add(new SelectItem(TipoCartao.CREDITO));
-		lista.add(new SelectItem(TipoCartao.DEBITO));
-		return lista;
-	}
-	
-	public List<SelectItem> getListaAbrangencia() {
-		List<SelectItem> lista = new ArrayList<>();
-		lista.add(new SelectItem(Abrangencia.NACIONAL));
-		lista.add(new SelectItem(Abrangencia.INTERNACIONAL));
-		return lista;
-	}
-	
-	public List<SelectItem> getListaBandeira() {
-		List<SelectItem> lista = new ArrayList<>();
-		lista.add(new SelectItem(Bandeira.NENHUMA));
-		lista.add(new SelectItem(Bandeira.AMERICAN_EXPRESS));
-		lista.add(new SelectItem(Bandeira.AURA));
-		lista.add(new SelectItem(Bandeira.BNDES));
-		lista.add(new SelectItem(Bandeira.DINERS_CLUB));
-		lista.add(new SelectItem(Bandeira.ELO));
-		lista.add(new SelectItem(Bandeira.HIPERCARD));
-		lista.add(new SelectItem(Bandeira.MASTERCARD));
-		lista.add(new SelectItem(Bandeira.SOROCRED));
-		lista.add(new SelectItem(Bandeira.VISA));
-		return lista;
 	}
 	
 	public ICartaoCredito getService() {
@@ -195,5 +211,13 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 
 	public void setNovoCartao(CartaoCredito novoCartao) {
 		this.novoCartao = novoCartao;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }

@@ -130,4 +130,30 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 			return false;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<CartaoCredito> findDescricaoOrAtivoByUsuario(String descricao, Usuario usuario, Boolean ativo) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM CartaoCredito cartao WHERE ");
+		if (descricao != null) {
+			hql.append("cartao.descricao LIKE '%");
+			hql.append(descricao);
+			hql.append("%' AND ");
+		}
+		if (ativo != null) {
+			hql.append("cartao.ativo = :ativo AND ");
+		}
+		
+		hql.append("cartao.usuario.id = :idUsuario ORDER BY cartao.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		
+		if (ativo != null) {
+			hqlQuery.setBoolean("ativo", ativo);
+		}
+		
+		hqlQuery.setLong("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
 }

@@ -161,6 +161,11 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
+	public List<CartaoCredito> buscarDescricaoOuAtivoPorUsuario(String descricao, Usuario usuario, Boolean ativo) throws BusinessException {
+		return getRepository().findDescricaoOrAtivoByUsuario(descricao, usuario, ativo);
+	}
+	
+	@Override
 	public void desativarCartoes() throws BusinessException {
 		// Retorna os cartões que a data de expiração é igual ou menor que a data atual
 		List<CartaoCredito> cartoes = getRepository().findByDataValidade(new Date());
@@ -189,5 +194,17 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		Conta conta = contaRepository.findByCartaoCredito(entity);
 		conta.setCartaoCredito(entity.getCartaoSubstituto());		
 		contaRepository.update(conta);
+	}
+	
+	@Override
+	public void ativarCartao(CartaoCredito entity) throws BusinessException {
+		entity.setAtivo(true);
+		getRepository().update(entity);
+	}
+	
+	@Override
+	public void desativarCartao(CartaoCredito entity) throws BusinessException {
+		entity.setAtivo(false);
+		getRepository().update(entity);
 	}
 }

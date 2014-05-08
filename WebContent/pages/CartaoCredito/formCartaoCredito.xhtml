@@ -62,7 +62,7 @@
 			Banco:	     		
 			<h:selectOneMenu value="#{managedBean.entity.banco}" converter="entityConverter" disabled="#{!managedBean.entity.ativo}">
 				<f:selectItem itemLabel="Nenhum banco"/>
-				<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+				<f:selectItems value="#{entityCombo.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>									
 			</h:selectOneMenu>
 					
 			Descrição:				
@@ -70,17 +70,17 @@
 			
 			Tipo de cartão:
 			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.entity.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!" disabled="#{!managedBean.entity.ativo}">
-				<f:selectItems value="#{managedBean.listaTipoCartao}"/>
+				<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
 			</p:selectOneRadio>			
 			
 			Bandeira:
 			<h:selectOneMenu id="txtBandeira" value="#{managedBean.entity.bandeira}" required="true" requiredMessage="Informe o bandeira do cartão!" disabled="#{!managedBean.entity.ativo}">
-				<f:selectItems value="#{managedBean.listaBandeira}"/>
+				<f:selectItems value="#{enumCombo.listaBandeira}"/>
 			</h:selectOneMenu>			
 			
 			Abrangência:
 			<p:selectOneRadio id="txtAbrangencia" value="#{managedBean.entity.abrangencia}" required="true" requiredMessage="Informe o abrangência do cartão!" disabled="#{!managedBean.entity.ativo}">
-				<f:selectItems value="#{managedBean.listaAbrangencia}"/>
+				<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
 			</p:selectOneRadio>			
 			
 			Limite do cartão:
@@ -110,9 +110,11 @@
 			<p:inputText id="txtDiaFechamentoFatura" value="#{managedBean.entity.diaFechamentoFatura}" size="5" required="true" requiredMessage="Informe o dia de fechamento da fatura!" disabled="#{!managedBean.entity.ativo}"/>			
 			
 			Validade:
-			<p:inputMask id="txtValidade" value="#{managedBean.entity.validade}" size="10" required="true" requiredMessage="Informe a data de validade do cartão!" disabled="#{!managedBean.entity.ativo}" mask="99/99/9999">
-				<f:converter converterId="dateConverter"/>
-			</p:inputMask>
+			<h:panelGroup>
+				<p:inputText value="#{managedBean.entity.mesValidade}" size="2" required="true" requiredMessage="Informe o mês de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
+				<h:outputText value=" / " />
+				<p:inputText value="#{managedBean.entity.anoValidade}" size="4" required="true" requiredMessage="Informe o ano de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
+			</h:panelGroup>
 			
 			<h:outputText value="Cartão substituto:" rendered="#{managedBean.operation == 'edit'}"/>			
 			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}" rendered="#{managedBean.operation == 'edit'}"/>

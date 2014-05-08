@@ -52,6 +52,9 @@ import javax.faces.model.SelectItem;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.enumeration.Abrangencia;
+import br.com.hslife.orcamento.enumeration.Bandeira;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 
 @Component("enumCombo")
@@ -70,6 +73,30 @@ public class EnumComboUtil {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (TipoConta enumeration : TipoConta.values()) {
 			if (enumeration.equals(TipoConta.CARTAO)) continue;
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaTipoCartao() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (TipoCartao enumeration : TipoCartao.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaBandeira() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (Bandeira enumeration : Bandeira.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaAbrangencia() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (Abrangencia enumeration : Abrangencia.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

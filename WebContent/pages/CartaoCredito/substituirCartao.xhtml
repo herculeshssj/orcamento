@@ -70,18 +70,18 @@
 			
 			Tipo de cartão:
 			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.novoCartao.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!">
-				<f:selectItems value="#{managedBean.listaTipoCartao}"/>
+				<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
 			</p:selectOneRadio>			
 			
 			Bandeira:
 			<h:selectOneMenu id="txtBandeira" value="#{managedBean.novoCartao.bandeira}" required="true" requiredMessage="Informe o bandeira do cartão!">
-				<f:selectItems value="#{managedBean.listaBandeira}"/>
+				<f:selectItems value="#{enumCombo.listaBandeira}"/>
 			</h:selectOneMenu>			
 			
 			Abrangência:
 			<p:selectOneRadio id="txtAbrangencia" value="#{managedBean.novoCartao.abrangencia}" required="true" requiredMessage="Informe o abrangência do cartão!">
-				<f:selectItems value="#{managedBean.listaAbrangencia}"/>
-			</p:selectOneRadio>			
+				<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
+			</p:selectOneRadio>		
 			
 			Dia de vencimento da fatura:
 			<p:inputText id="txtDiaVencimentoFatura" value="#{managedBean.novoCartao.diaVencimentoFatura}" size="5" required="true" requiredMessage="Informe o dia de vencimento da fatura!"/>			
@@ -90,9 +90,11 @@
 			<p:inputText id="txtDiaFechamentoFatura" value="#{managedBean.novoCartao.diaFechamentoFatura}" size="5" required="true" requiredMessage="Informe o dia de fechamento da fatura!"/>			
 			
 			Validade:
-			<p:inputMask id="txtValidade" value="#{managedBean.novoCartao.validade}" size="10" required="true" requiredMessage="Informe a data de validade do cartão!" mask="99/99/9999">
-				<f:converter converterId="dateConverter"/>
-			</p:inputMask>			
+			<h:panelGroup>
+				<p:inputText value="#{managedBean.novoCartao.mesValidade}" size="2" required="true" requiredMessage="Informe o mês de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
+				<h:outputText value=" / " />
+				<p:inputText value="#{managedBean.novoCartao.anoValidade}" size="4" required="true" requiredMessage="Informe o ano de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
+			</h:panelGroup>			
 						
 		</h:panelGrid>
 	

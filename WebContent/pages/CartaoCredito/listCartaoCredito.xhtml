@@ -59,6 +59,9 @@
 	<ui:define name="pesquisa">
 		Descrição:
 		<h:inputText value="#{managedBean.descricaoCartao}"/> 
+		&nbsp;
+	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    Somente ativos
 	</ui:define>
 
 	<ui:define name="colunas">
@@ -121,6 +124,15 @@
 			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.cartaoSubstituto == null}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
+			&nbsp;
+			<h:panelGroup>
+				<h:commandButton title="Ativar cartão" image="/resources/images/habilitar.png" action="#{managedBean.ativarCartaoView}" rendered="#{!item.ativo and item.cartaoSubstituto == null}">
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+				</h:commandButton>					
+				<h:commandButton title="Desativar cartão" image="/resources/images/fechar.png" action="#{managedBean.desativarCartaoView}" rendered="#{item.ativo}">
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+				</h:commandButton>
+			</h:panelGroup>
 			&nbsp;
 			<h:commandButton title="Substituir cartão" image="/resources/images/substituir.png" action="#{managedBean.substituirCartaoView}" rendered="#{item.cartaoSubstituto == null}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
