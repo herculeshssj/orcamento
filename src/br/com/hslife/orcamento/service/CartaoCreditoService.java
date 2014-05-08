@@ -44,9 +44,7 @@
 
 package br.com.hslife.orcamento.service;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,21 +52,14 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.ConversaoMoeda;
-import br.com.hslife.orcamento.entity.FaturaCartao;
-import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.repository.CartaoCreditoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
-import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
-import br.com.hslife.orcamento.util.Util;
 
 @Service("cartaoCreditoService")
 public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> implements ICartaoCredito {
@@ -79,8 +70,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	@Autowired
 	private ContaRepository contaRepository;
 	
-	@Autowired
-	private FaturaCartaoRepository faturaCartaoRepository;
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
@@ -98,11 +87,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 
 	public void setContaRepository(ContaRepository contaRepository) {
 		this.contaRepository = contaRepository;
-	}
-
-	public void setFaturaCartaoRepository(
-			FaturaCartaoRepository faturaCartaoRepository) {
-		this.faturaCartaoRepository = faturaCartaoRepository;
 	}
 
 	public void setMoedaRepository(MoedaRepository moedaRepository) {
@@ -205,99 +189,5 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		Conta conta = contaRepository.findByCartaoCredito(entity);
 		conta.setCartaoCredito(entity.getCartaoSubstituto());		
 		contaRepository.update(conta);
-	}
-	
-	@Override
-	public void validarExistenciaFaturaCartao(CartaoCredito entity) throws BusinessException {
-		// Verifica se já existe faturas cadastradas para o cartão de crédito selecionado
-		if (faturaCartaoRepository.existsFaturaCartao(entity.getConta())) {
-			throw new BusinessException("Já existem faturas registradas para o cartão selecionado!");
-		}
-	}
-	
-	@Override
-	public void registrarFatura(CartaoCredito entity) throws BusinessException {		
-		// Busca a conta do cartão de crédito
-		Conta conta = contaRepository.findByCartaoCredito(entity);
-		
-		// Cria uma nova fatura para o cartão de crédito
-		FaturaCartao fatura = new FaturaCartao();
-		
-		// Data de fechamento da fatura
-		
-		Calendar fechamento = Calendar.getInstance();
-		fechamento.setTime(entity.getDataUltimaFatura());		
-		
-		// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês anterior
-		if (entity.getDiaFechamentoFatura() < entity.getDiaVencimentoFatura()) {
-			fechamento.set(Calendar.DAY_OF_MONTH, entity.getDiaFechamentoFatura());
-		} else {
-			fechamento.set(Calendar.DAY_OF_MONTH, entity.getDiaFechamentoFatura());
-			fechamento.add(Calendar.MONTH, -1);
-		}		
-		fatura.setDataFechamento(fechamento.getTime());
-		
-		// Data de vencimento da fatura
-		Calendar vencimento = Calendar.getInstance();
-		vencimento.setTime(fechamento.getTime());		
-
-		// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
-		if (entity.getDiaFechamentoFatura() < entity.getDiaVencimentoFatura()) {
-			vencimento.set(Calendar.DAY_OF_MONTH, entity.getDiaVencimentoFatura());
-		} else {
-			vencimento.set(Calendar.DAY_OF_MONTH, entity.getDiaVencimentoFatura());
-			vencimento.add(Calendar.MONTH, 1);
-		}
-		fatura.setDataVencimento(vencimento.getTime());
-		
-		// Registra a conversão
-		ConversaoMoeda conversao = new ConversaoMoeda();
-		conversao.setFaturaCartao(fatura);
-		conversao.setMoeda(moedaRepository.findDefaultByUsuario(entity.getUsuario()));
-		conversao.setTaxaConversao(0);
-		conversao.setValor(entity.getValorUltimaFatura());
-		fatura.getConversoesMoeda().add(conversao);
-		
-		// Situação da fatura
-		if (entity.isFaturaQuitada()) {
-			fatura.setStatusFaturaCartao(StatusFaturaCartao.QUITADA);
-			fatura.setDataPagamento(entity.getDataUltimaFatura());
-			fatura.setValorPago(entity.getValorUltimaFatura());			
-		} else {
-			fatura.setStatusFaturaCartao(StatusFaturaCartao.VENCIDA);
-		}
-		
-		// Vincula o lançamento à fatura
-		LancamentoConta lancamento = new LancamentoConta();
-		lancamento.setConta(conta);
-		lancamento.setDataPagamento(fechamento.getTime());
-		lancamento.setDescricao("Lançamento inicial - " + fatura.getLabel());
-		lancamento.setMoeda(moedaRepository.findDefaultByUsuario(entity.getUsuario()));
-		lancamento.setTipoLancamento(TipoLancamento.DESPESA);
-		lancamento.setValorPago(Math.abs(entity.getValorUltimaFatura()));
-		lancamento.setQuitado(true);
-		fatura.setDetalheFatura(new HashSet<LancamentoConta>());
-		fatura.getDetalheFatura().add(lancamento);
-		
-		// Demais campos da fatura
-		fatura.setConta(conta);		
-		fatura.setMoeda(moedaRepository.findDefaultByUsuario(entity.getUsuario()));
-		fatura.setParcelado(false);
-		fatura.setValorFatura(Math.abs(entity.getValorUltimaFatura()));
-		fatura.setValorMinimo(Util.arredondar((Math.abs(entity.getValorUltimaFatura()) * 15) / 100)); // 15% do valor da fatura
-		
-		// Salva a fatura
-		faturaCartaoRepository.save(fatura);
-		
-		// Cria a próxima fatura ABERTA
-		FaturaCartao novaFatura = new FaturaCartao();
-		novaFatura.setConta(conta);
-		novaFatura.setMoeda(moedaRepository.findDefaultByUsuario(entity.getUsuario()));
-		novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
-		vencimento.add(Calendar.MONTH, 1);
-		novaFatura.setDataVencimento(vencimento.getTime());
-		
-		// Salva a nova fatura
-		faturaCartaoRepository.save(novaFatura);
 	}
 }

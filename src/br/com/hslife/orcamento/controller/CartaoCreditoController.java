@@ -140,30 +140,6 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		return "";
 	}
 	
-	public String registrarUltimaFaturaView() {
-		try {
-			entity = getService().buscarPorID(idEntity);
-			getService().validarExistenciaFaturaCartao(entity);
-			actionTitle = " - Registrar última fatura paga";
-			return "/pages/CartaoCredito/registrarUltimaFatura";
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}		
-		return "";
-	}
-	
-	public String registrarUltimaFatura() {
-		try {
-			getService().registrarFatura(entity);
-			infoMessage("Fatura registrada com sucesso!");
-			initializeEntity();
-			return list();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
 	public List<SelectItem> getListaTipoCartao() {
 		List<SelectItem> lista = new ArrayList<>();
 		lista.add(new SelectItem(TipoCartao.CREDITO));

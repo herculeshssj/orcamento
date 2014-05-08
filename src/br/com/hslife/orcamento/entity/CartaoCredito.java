@@ -60,7 +60,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
@@ -131,15 +130,6 @@ public class CartaoCredito extends EntityPersistence {
 	@Column
 	private boolean ativo;
 	
-	@Transient
-	private double valorUltimaFatura;
-	
-	@Transient
-	private Date dataUltimaFatura;
-	
-	@Transient
-	private boolean faturaQuitada;
-	
 	public CartaoCredito() {
 		ativo = true;
 	}
@@ -167,10 +157,6 @@ public class CartaoCredito extends EntityPersistence {
 	
 	public void setLimiteCartao(double limiteCartao) {
 		this.limiteCartao = Math.abs(limiteCartao);
-	}
-	
-	public void setValorUltimaFatura(double valorUltimaFatura) {
-		this.valorUltimaFatura = Math.abs(valorUltimaFatura);
 	}
 
 	public void setId(Long id) {
@@ -287,26 +273,6 @@ public class CartaoCredito extends EntityPersistence {
 
 	public void setCartaoSubstituto(CartaoCredito cartaoSubstituto) {
 		this.cartaoSubstituto = cartaoSubstituto;
-	}
-
-	public double getValorUltimaFatura() {
-		return valorUltimaFatura;
-	}
-
-	public Date getDataUltimaFatura() {
-		return dataUltimaFatura;
-	}
-
-	public void setDataUltimaFatura(Date dataUltimaFatura) {
-		this.dataUltimaFatura = dataUltimaFatura;
-	}
-
-	public boolean isFaturaQuitada() {
-		return faturaQuitada;
-	}
-
-	public void setFaturaQuitada(boolean faturaQuitada) {
-		this.faturaQuitada = faturaQuitada;
 	}
 
 	public Conta getConta() {

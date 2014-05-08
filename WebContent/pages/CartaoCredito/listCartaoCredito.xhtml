@@ -125,10 +125,6 @@
 			<h:commandButton title="Substituir cartão" image="/resources/images/substituir.png" action="#{managedBean.substituirCartaoView}" rendered="#{item.cartaoSubstituto == null}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
-			&nbsp;
-			<h:commandButton title="Registrar última fatura" image="/resources/images/registrar.png" action="#{managedBean.registrarUltimaFaturaView}" rendered="#{item.cartaoSubstituto == null and item.tipoCartao == 'CREDITO'}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>
 	  	</p:column>
      </ui:define>
 
