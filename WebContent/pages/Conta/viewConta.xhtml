@@ -60,9 +60,6 @@
 			
 		<h:panelGrid columns="4">
 			
-			Usuário:
-			<h:outputText value="#{managedBean.entity.usuario.nome}" />
-			
 			Banco:
 			<h:outputText value="#{managedBean.entity.banco.nome}" />
 			
@@ -83,17 +80,36 @@
 						
 			Variação:
 			<h:outputText id="txtVariacao" value="#{managedBean.entity.variacao}" />
-						
-	    	<h:outputText value="Saldo inicial:" rendered="#{!managedBean.entity.ativo}"/>
-			<p:inputText value="#{managedBean.entity.saldoInicial}" rendered="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o saldo inicial!">
-				<f:convertNumber type="currency" pattern="###.##"/>
-			</p:inputText>			
 			
-			<h:outputText value="Data de abertura:" rendered="#{!managedBean.entity.ativo}"/>
-			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataAbertura}" rendered="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe a data de abertura!">
-	    		<f:converter converterId="dateConverter"/>
-	    	</p:inputMask>				
-	    	
+			Moeda:
+			<h:outputText value="#{managedBean.entity.moeda.label}" />
+			
+			Data de abertura:
+			<h:outputText value="#{managedBean.entity.dataAbertura}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Saldo de abertura:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+				<h:outputText value="#{managedBean.entity.saldoInicial}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>
+						
+			<h:outputText value="Data de fechamento:" rendered="#{!managedBean.entity.ativo}"/>
+			<h:outputText value="#{managedBean.entity.dataFechamento}" rendered="#{!managedBean.entity.ativo}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			<h:outputText value="Saldo de fechamento:" rendered="#{!managedBean.entity.ativo}"/>
+			<h:panelGroup rendered="#{!managedBean.entity.ativo}">
+				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+				<h:outputText value="#{managedBean.entity.saldoFinal}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>			
+			
 			<h:outputText value="Data de fechamento:" rendered="#{managedBean.entity.ativo}"/>
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataFechamento}" rendered="#{managedBean.entity.ativo}" required="true" requiredMessage="Informe a data de fechamento!">
 	    		<f:converter converterId="dateConverter"/>

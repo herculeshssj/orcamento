@@ -51,7 +51,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.ContaComponent;
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
@@ -244,11 +243,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public List<Conta> buscarPorBanco(Long idBanco) throws BusinessException {
-		return getRepository().findByBanco(idBanco);
-	}
-	
-	@Override
 	public List<Conta> buscarPorDescricao(String descricao) throws BusinessException {
 		return getRepository().findByDescricao(descricao);
 	}
@@ -271,14 +265,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	@Override
 	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
-	}
-	
-	@Override
-	public List<Conta> buscarPorBancoEUsuario(Banco banco, Usuario usuario) throws BusinessException {
-		if (banco == null)
-			return getRepository().findByUsuario(usuario.getId());
-		else
-			return getRepository().findByBancoAndUsuario(banco, usuario);
 	}
 	
 	@Override

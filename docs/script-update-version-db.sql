@@ -63,3 +63,8 @@ update lancamentoconta l set idCategoria = (select id from categoria where descr
 alter table lancamentoconta drop column descricaoMeioPagamento;
 alter table lancamentoconta drop column descricaoFavorecido;
 alter table lancamentoconta drop column descricaoCategoria;
+
+-- Inclusão do campo moeda
+alter table conta add column idMoeda bigint not null;
+update conta c set idMoeda = (select id from moeda where idUsuario = c.idUsuario and padrao = true);
+alter table conta add constraint fk_conta_moeda foreign key (idMoeda) references moeda(id);

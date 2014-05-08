@@ -115,6 +115,10 @@ public class Conta extends EntityPersistence {
 	private Usuario usuario;
 	
 	@ManyToOne
+	@JoinColumn(name="idMoeda", nullable=false)
+	private Moeda moeda;
+	
+	@ManyToOne
 	@JoinColumn(name="idBanco", nullable=true)
 	private Banco banco;
 	
@@ -152,7 +156,11 @@ public class Conta extends EntityPersistence {
 		
 		if (this.usuario == null) {
 			throw new BusinessException("Informe o usuário!");
-		}	
+		}
+		
+		if (this.moeda == null) {
+			throw new BusinessException("Informe a moeda!");
+		}
 	}
 
 	public Banco getBanco() {
@@ -273,5 +281,13 @@ public class Conta extends EntityPersistence {
 
 	public void setCartaoCredito(CartaoCredito cartaoCredito) {
 		this.cartaoCredito = cartaoCredito;
+	}
+
+	public Moeda getMoeda() {
+		return moeda;
+	}
+
+	public void setMoeda(Moeda moeda) {
+		this.moeda = moeda;
 	}
 }

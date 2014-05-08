@@ -46,7 +46,6 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -57,8 +56,6 @@ import br.com.hslife.orcamento.service.ICRUDService;
 public interface IConta extends ICRUDService<Conta> {
 	
 	public List<Conta> buscarTodos() throws BusinessException;
-	
-	public List<Conta> buscarPorBanco(Long idBanco) throws BusinessException;
 	
 	public List<Conta> buscarPorDescricao(String descricao) throws BusinessException;
 	
@@ -75,8 +72,6 @@ public interface IConta extends ICRUDService<Conta> {
 	public void desativarConta(Conta conta, String situacaoLancamentos) throws BusinessException;
 	
 	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
-	
-	public List<Conta> buscarPorBancoEUsuario(Banco banco, Usuario usuario) throws BusinessException;
 	
 	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) throws BusinessException;
 	

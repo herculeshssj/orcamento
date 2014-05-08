@@ -56,8 +56,10 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Banco;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
+import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("entityCombo")
 @Scope("session")
@@ -65,6 +67,9 @@ public class EntityComboUtil {
 
 	@Autowired
 	private IBanco bancoService;
+	
+	@Autowired
+	private IMoeda moedaService;
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
@@ -76,5 +81,14 @@ public class EntityComboUtil {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<Banco>();
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			return moedaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<Moeda>();
 	}
 }

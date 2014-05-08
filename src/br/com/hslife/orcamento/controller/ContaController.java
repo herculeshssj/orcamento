@@ -100,6 +100,18 @@ public class ContaController extends AbstractCRUDController<Conta> {
 		return super.save();
 	}
 
+	public String ativarContaView() {
+		try {
+			actionTitle = " - Ativar";
+			//operation = "";
+			entity = getService().buscarPorID(idEntity);
+			return goToViewPage;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public String ativarConta() {
 		try {
 			entity = getService().buscarPorID(idEntity);
