@@ -60,37 +60,37 @@
 		<h:panelGrid columns="3">
 							
 			Banco:
-			<h:selectOneMenu id="txtBanco" value="#{managedBean.entity.banco}" disabled="#{!managedBean.entity.ativo}" converter="entityConverter">
+			<h:selectOneMenu value="#{managedBean.entity.banco}" disabled="#{!managedBean.entity.ativo}" converter="entityConverter">
 				<f:selectItem itemLabel="Nenhum"/>
-				<f:selectItems value="#{managedBean.listaBanco}"/>
+				<f:selectItems value="#{entityCombo.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
-			<h:inputHidden/>
+			<h:outputText/>	
 			
 			Tipo de Conta:
-			<h:selectOneRadio id="txtTipoConta" value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de conta!">
-				<f:selectItems value="#{managedBean.listaTipoConta}"/>
+			<h:selectOneRadio value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de conta!">
+				<f:selectItems value="#{enumCombo.listaTipoContaSemCartao}"/>
 			</h:selectOneRadio>
-			<p:message for="txtTipoConta"/>
+			<h:outputText/>	
 			
 			Descrição:
 			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe a descrição!"/>
-			<p:message for="txtDescricao"/>
+			<h:outputText/>	
 			
 			Agência:
 			<p:inputText id="txtAgencia" value="#{managedBean.entity.agencia}" disabled="#{!managedBean.entity.ativo}"/>				
-			<h:inputHidden/>
+			<h:outputText/>	
 			
 			Conta corrente:
 			<p:inputText id="txtContaCorrente" value="#{managedBean.entity.contaCorrente}" disabled="#{!managedBean.entity.ativo}"/>				
-			<h:inputHidden/>
+			<h:outputText/>	
 			
 			Conta poupança:
 			<p:inputText id="txtContaPoupanca" value="#{managedBean.entity.contaPoupanca}" disabled="#{!managedBean.entity.ativo}"/>				
-			<h:inputHidden/>
+			<h:outputText/>	
 			
 			Variação:
 			<p:inputText id="txtVariacao" value="#{managedBean.entity.variacao}" disabled="#{!managedBean.entity.ativo}"/>				
-			<h:inputHidden/>	
+			<h:outputText/>	
 			 
 			<h:outputText value="Saldo inicial:" rendered="#{managedBean.operation == 'create'}"/>
 			<p:inputText id="txtSaldoInicial" value="#{managedBean.entity.saldoInicial}" rendered="#{managedBean.operation == 'create'}" required="true" requiredMessage="Informe o saldo inicial!">
@@ -106,9 +106,9 @@
 	    	</p:inputMask> 			
 			<h:outputText value="" rendered="#{managedBean.operation == 'create'}"/>
 			
-			<h:commandLink id="lnkExcluir" value="Excluir conta" action="#{managedBean.delete}" rendered="#{managedBean.operation == 'edit' and !managedBean.entity.arquivado}" style="color: red; font-weight: bold;"/>				
-			<h:outputText value="" rendered="#{managedBean.operation == 'edit' and !managedBean.entity.arquivado}"/>
-			<p:tooltip for="lnkExcluir" rendered="#{managedBean.operation == 'edit' and !managedBean.entity.arquivado}">
+			<h:commandLink id="lnkExcluir" value="Excluir conta" action="#{managedBean.delete}" rendered="#{managedBean.operation == 'edit'}" style="color: red; font-weight: bold;"/>				
+			<h:outputText value="" rendered="#{managedBean.operation == 'edit'}"/>
+			<p:tooltip for="lnkExcluir" rendered="#{managedBean.operation == 'edit'}">
 				<h:outputText value="Esta operação não pode ser desfeita!"/>
 			</p:tooltip>
 			

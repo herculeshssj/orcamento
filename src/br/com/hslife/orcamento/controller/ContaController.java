@@ -46,20 +46,14 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.IConta;
 
 @Component("contaMB")
@@ -70,9 +64,6 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	 * 
 	 */
 	private static final long serialVersionUID = 5542222141716552390L;
-
-	@Autowired
-	private IBanco bancoService;
 	
 	@Autowired
 	private IConta service;
@@ -80,12 +71,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	private String descricaoConta;
 	private boolean somenteAtivos = true;
 	
-	private Banco findBanco;
 	private String opcaoLancamentos;
-	private Conta contaSelecionada;
-	
-	private List<SelectItem> listaBanco;
-	private List<SelectItem> listaConta;
 	
 	public ContaController() {
 		super(new Conta());
@@ -97,12 +83,6 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	protected void initializeEntity() {
 		entity = new Conta();
 		listEntity = new ArrayList<Conta>();	
-	}
-	
-	@Override
-	public String startUp() {
-		loadCombos();
-		return super.startUp();
 	}
 	
 	@Override
@@ -118,25 +98,6 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	public String save() {
 		entity.setUsuario(getUsuarioLogado());
 		return super.save();
-	}
-	
-	private void loadCombos() {
-		listaBanco = new ArrayList<SelectItem>();
-		try {		
-			if (operation.equals("edit")) {
-				// Carrega os bancos
-				for (Banco b : bancoService.buscarPorUsuario(entity.getUsuario())) {
-					listaBanco.add(new SelectItem(b, b.getNome(), "", !b.isAtivo()));
-				}
-			} else {
-				// Carrega os bancos
-				for (Banco b : bancoService.buscarPorUsuario(getUsuarioLogado())) {
-					listaBanco.add(new SelectItem(b, b.getNome(), "", !b.isAtivo()));
-				}
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
 	}
 
 	public String ativarConta() {
@@ -160,7 +121,6 @@ public class ContaController extends AbstractCRUDController<Conta> {
 			} else {
 				initializeEntity();
 			}
-			loadCombos();
 			return super.list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -201,54 +161,11 @@ public class ContaController extends AbstractCRUDController<Conta> {
 			} else {
 				initializeEntity();
 			}
-			loadCombos();
 			return super.list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
-	}
-	
-	public List<SelectItem> getListaTipoConta() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		listaSelectItem.add(new SelectItem(TipoConta.CORRENTE, "Conta Corrente"));
-		listaSelectItem.add(new SelectItem(TipoConta.POUPANCA, "Conta Poupança"));
-		listaSelectItem.add(new SelectItem(TipoConta.OUTROS, "Outros"));
-		return listaSelectItem;
-	}
-	
-	public void atualizaListaBancos() {
-		listaBanco = new ArrayList<SelectItem>();
-		try {
-			for (Banco b : bancoService.buscarPorUsuario(getUsuarioLogado())) {
-				listaBanco.add(new SelectItem(b, b.getNome(), "", !b.isAtivo()));
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	public void atualizaListaContas() {
-		listaConta = new ArrayList<SelectItem>();
-		try {
-			for (Conta c : getService().buscarPorUsuario(getUsuarioLogado().getId())) {
-				listaConta.add(new SelectItem(c, c.getLabel()));
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	public void atualizaListaBancosCartoes() {
-		listaBanco = new ArrayList<SelectItem>();
-		try {
-			// Carrega os bancos
-			for (Banco b : bancoService.buscarPorUsuario(entity.getUsuario())) {
-				listaBanco.add(new SelectItem(b, b.getNome(), "", !b.isAtivo()));
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
 	}
 	
 	public IConta getService() {
@@ -257,42 +174,6 @@ public class ContaController extends AbstractCRUDController<Conta> {
 
 	public void setService(IConta service) {
 		this.service = service;
-	}
-
-	public List<SelectItem> getListaBanco() {
-		return listaBanco;
-	}
-
-	public void setListaBanco(List<SelectItem> listaBanco) {
-		this.listaBanco = listaBanco;
-	}
-
-	public void setBancoService(IBanco bancoService) {
-		this.bancoService = bancoService;
-	}
-
-	public Banco getFindBanco() {
-		return findBanco;
-	}
-
-	public void setFindBanco(Banco findBanco) {
-		this.findBanco = findBanco;
-	}
-
-	public Conta getContaSelecionada() {
-		return contaSelecionada;
-	}
-
-	public void setContaSelecionada(Conta contaSelecionada) {
-		this.contaSelecionada = contaSelecionada;
-	}
-
-	public List<SelectItem> getListaConta() {
-		return listaConta;
-	}
-
-	public void setListaConta(List<SelectItem> listaConta) {
-		this.listaConta = listaConta;
 	}
 
 	public String getOpcaoLancamentos() {

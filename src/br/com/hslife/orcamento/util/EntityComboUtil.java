@@ -42,24 +42,39 @@
   
  ***/
 
-/*** Script de atualização da base de dados ***/
+package br.com.hslife.orcamento.util;
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2014 ***/
+import java.util.ArrayList;
+import java.util.List;
 
--- Atualização de versão
-update versao set ativo = false;
-insert into versao (versao, ativo) values ('JUL2014', true);
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
-alter table conta drop column arquivado;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
--- Recuperando as categorias, favorecidos e meios de pagamento dos lançamentos arquivados
-update lancamentoconta l set idMeioPagamento = (select id from meiopagamento where descricao = l.descricaoMeioPagamento) 
-	where l.descricaoMeioPagamento is not null and l.idMeioPagamento is null;
-update lancamentoconta l set idFavorecido = (select id from favorecido where nome = l.descricaoFavorecido) 
-	where l.descricaoFavorecido is not null and l.idFavorecido is null;
-update lancamentoconta l set idCategoria = (select id from categoria where descricao = l.descricaoCategoria) 
-	where l.descricaoCategoria is not null and l.idCategoria is null;
+import br.com.hslife.orcamento.component.UsuarioComponent;
+import br.com.hslife.orcamento.entity.Banco;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IBanco;
+
+@Component("entityCombo")
+@Scope("session")
+public class EntityComboUtil {
+
+	@Autowired
+	private IBanco bancoService;
 	
-alter table lancamentoconta drop column descricaoMeioPagamento;
-alter table lancamentoconta drop column descricaoFavorecido;
-alter table lancamentoconta drop column descricaoCategoria;
+	@Autowired
+	private UsuarioComponent usuarioComponent;
+	
+	public List<Banco> getListaBanco() {
+		try {
+			return bancoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<Banco>();
+	}
+}

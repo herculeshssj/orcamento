@@ -94,9 +94,6 @@ public class Conta extends EntityPersistence {
 	@Column
 	private boolean ativo;
 	
-	@Column
-	private boolean arquivado;
-	
 	@Column(nullable=false, precision=18, scale=2)
 	private double saldoInicial;
 	
@@ -127,7 +124,6 @@ public class Conta extends EntityPersistence {
 
 	public Conta() {
 		ativo = true;
-		arquivado = false;
 		dataFechamento = null;
 		saldoFinal = 0;
 	}
@@ -140,10 +136,7 @@ public class Conta extends EntityPersistence {
 			if (this.ativo) 
 				return this.descricao;
 			else
-				if (this.arquivado)
-					return this.descricao + " [ARQUIVADO]";
-				else
-					return this.descricao + " [INATIVO]";
+				return this.descricao + " [INATIVO]";
 		}
 	}
 	
@@ -272,14 +265,6 @@ public class Conta extends EntityPersistence {
 
 	public void setDataFechamento(Date dataFechamento) {
 		this.dataFechamento = dataFechamento;
-	}
-
-	public boolean isArquivado() {
-		return arquivado;
-	}
-
-	public void setArquivado(boolean arquivado) {
-		this.arquivado = arquivado;
 	}
 
 	public CartaoCredito getCartaoCredito() {

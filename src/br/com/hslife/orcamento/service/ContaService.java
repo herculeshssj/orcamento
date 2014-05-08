@@ -198,8 +198,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			lancamentoContaRepository.deleteAllLancamentoContaAfterDateByConta(conta.getDataFechamento(), conta);
 						
 			// Define o saldo final da conta com base no último fechamento realizado
-			conta.setSaldoFinal(getComponent().buscarUltimoFechamentoPeriodoPorConta(conta).getSaldo());
-						
+			conta.setSaldoFinal(getComponent().buscarUltimoFechamentoPeriodoPorConta(conta).getSaldo());			
 		}
 		
 		// Seta a conta como inativa
@@ -207,19 +206,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 		
 		// Salva a conta
 		getRepository().update(conta);
-		
-		// Desvincula as categorias, favorecidos e meios de pagamentos dos lançamentos da conta inativada
-		lancamentoContaRepository.setAllDescricaoCategoriaOnLancamentoContaByConta(conta);
-		lancamentoContaRepository.setAllDescricaoFavorecidoOnLancamentoContaByConta(conta);
-		lancamentoContaRepository.setAllDescricaoMeioPagamentoOnLancamentoContaByConta(conta);
-		
-		// Caso a conta esteja marcada para arquivamento desvincula as categorias, favorecidos e meios de pagamento
-		// dos lançamentos da conta inativada
-		if (conta.isArquivado()) {
-			lancamentoContaRepository.setNullCategoriaOnLancamentoContaByConta(conta);
-			lancamentoContaRepository.setNullFavorecidoOnLancamentoContaByConta(conta);
-			lancamentoContaRepository.setNullMeioPagamentoOnLancamentoContaByConta(conta);
-		}
 	}
 	
 	@Override

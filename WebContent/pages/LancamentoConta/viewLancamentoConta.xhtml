@@ -92,13 +92,13 @@
 			<p:selectBooleanCheckbox value="#{managedBean.entity.agendado}"  disabled="true"/>
 						
 			Categoria:
-			<h:outputText value="#{managedBean.entity.categoria.descricao}"/>
+			<h:outputText value="#{managedBean.entity.categoria.label}"/>
 			
 			Favorecido/Sacado:
-			<h:outputText value="#{managedBean.entity.favorecido.nome}"/>
+			<h:outputText value="#{managedBean.entity.favorecido.label}"/>
 			
 			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
-			<h:outputText value="#{managedBean.entity.meioPagamento.descricao}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			
 			Anexo:
 			<h:outputText value="#{managedBean.entity.arquivo.nomeArquivo}" rendered="#{managedBean.entity.arquivo != null}"/>

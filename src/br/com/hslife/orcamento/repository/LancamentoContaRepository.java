@@ -199,43 +199,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		Query query = getSession().createSQLQuery(sql);
 		query.executeUpdate();
 	}
-	
-	public void setAllDescricaoCategoriaOnLancamentoContaByConta(Conta conta) {
-		String sqlQuerySetDescricao = "update lancamentoconta l set l.descricaoCategoria = (select descricao from categoria where id = l.idCategoria) where l.idConta = " + conta.getId() + " and l.dataPagamento >= '" + Util.formataDataHora(conta.getDataAbertura(),Util.DATABASE) + "' and l.dataPagamento <= '" + Util.formataDataHora(conta.getDataFechamento(),Util.DATABASE) + "'";				
-		Query querySetDescricao = getSession().createSQLQuery(sqlQuerySetDescricao);		
-		querySetDescricao.executeUpdate();		
-	}
-	
-	public void setAllDescricaoFavorecidoOnLancamentoContaByConta(Conta conta) {
-		String sqlQuerySetDescricao = "update lancamentoconta l set l.descricaoFavorecido = (select nome from favorecido where id = l.idFavorecido) where l.idConta = " + conta.getId() + " and l.dataPagamento >= '" + Util.formataDataHora(conta.getDataAbertura(),Util.DATABASE) + "' and l.dataPagamento <= '" + Util.formataDataHora(conta.getDataFechamento(),Util.DATABASE) + "'";				
-		Query querySetDescricao = getSession().createSQLQuery(sqlQuerySetDescricao);		
-		querySetDescricao.executeUpdate();		
-	}
-
-	public void setAllDescricaoMeioPagamentoOnLancamentoContaByConta(Conta conta) {
-		String sqlQuerySetDescricao = "update lancamentoconta l set l.descricaoMeioPagamento = (select descricao from meiopagamento where id = l.idMeioPagamento) where l.idConta = " + conta.getId() + " and l.dataPagamento >= '" + Util.formataDataHora(conta.getDataAbertura(),Util.DATABASE) + "' and l.dataPagamento <= '" + Util.formataDataHora(conta.getDataFechamento(),Util.DATABASE) + "'";				
-		Query querySetDescricao = getSession().createSQLQuery(sqlQuerySetDescricao);		
-		querySetDescricao.executeUpdate();		
-	}
-	
-	public void setNullCategoriaOnLancamentoContaByConta(Conta conta) {
-		String sqlQuerySetNull = "update lancamentoconta set idCategoria = null where idConta = " + conta.getId() + " and dataPagamento >= '" + Util.formataDataHora(conta.getDataAbertura(),Util.DATABASE) + "' and dataPagamento <= '" + Util.formataDataHora(conta.getDataFechamento(),Util.DATABASE) + "'";	
-		Query querySetNull = getSession().createSQLQuery(sqlQuerySetNull);
-		querySetNull.executeUpdate();
-	}
-	
-	public void setNullFavorecidoOnLancamentoContaByConta(Conta conta) {		
-		String sqlQuerySetNull = "update lancamentoconta set idFavorecido = null where idConta = " + conta.getId() + " and dataPagamento >= '" + Util.formataDataHora(conta.getDataAbertura(),Util.DATABASE) + "' and dataPagamento <= '" + Util.formataDataHora(conta.getDataFechamento(),Util.DATABASE) + "'";			
-		Query querySetNull = getSession().createSQLQuery(sqlQuerySetNull);
-		querySetNull.executeUpdate();
-	}
-
-	public void setNullMeioPagamentoOnLancamentoContaByConta(Conta conta) {		
-		String sqlQuerySetNull = "update lancamentoconta set idMeioPagamento = null where idConta = " + conta.getId() + " and dataPagamento >= '" + Util.formataDataHora(conta.getDataAbertura(),Util.DATABASE) + "' and dataPagamento <= '" + Util.formataDataHora(conta.getDataFechamento(),Util.DATABASE) + "'";		
-		Query querySetNull = getSession().createSQLQuery(sqlQuerySetNull);
-		querySetNull.executeUpdate();
-	}
-	
+		
 	public boolean existsLinkageFaturaCartao(LancamentoConta lancamento) {
 		// TODO migrar para HQL
 		boolean result = true;

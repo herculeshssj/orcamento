@@ -121,15 +121,9 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(length=32, nullable=true)
 	private String hashImportacao;
 	
-	@Column(nullable=true)
-	private String descricaoFavorecido;
-	
 	@ManyToOne
 	@JoinColumn(name="idFavorecido", nullable=true)
 	private Favorecido favorecido;
-	
-	@Column(nullable=true)
-	private String descricaoMeioPagamento;
 	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
@@ -138,9 +132,6 @@ public class LancamentoConta extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idCategoria", nullable=true)
 	private Categoria categoria;
-	
-	@Column(nullable=true)
-	private String descricaoCategoria;
 	
 	@ManyToOne
 	@JoinColumn(name="idMeioPagamento", nullable=true)
@@ -350,30 +341,6 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setSelecionado(boolean selecionado) {
 		this.selecionado = selecionado;
-	}
-
-	public String getDescricaoFavorecido() {
-		return descricaoFavorecido;
-	}
-
-	public void setDescricaoFavorecido(String descricaoFavorecido) {
-		this.descricaoFavorecido = descricaoFavorecido;
-	}
-
-	public String getDescricaoMeioPagamento() {
-		return descricaoMeioPagamento;
-	}
-
-	public void setDescricaoMeioPagamento(String descricaoMeioPagamento) {
-		this.descricaoMeioPagamento = descricaoMeioPagamento;
-	}
-
-	public String getDescricaoCategoria() {
-		return descricaoCategoria;
-	}
-
-	public void setDescricaoCategoria(String descricaoCategoria) {
-		this.descricaoCategoria = descricaoCategoria;
 	}
 
 	public LancamentoImportado getLancamentoImportado() {

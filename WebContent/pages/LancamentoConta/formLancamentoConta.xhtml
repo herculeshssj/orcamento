@@ -123,7 +123,7 @@
 				<f:selectItem itemLabel="Nenhuma categoria"/>
 				<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
-			<h:outputText value="#{managedBean.entity.descricaoCategoria}" rendered="#{!managedBean.entity.conta.ativo}"/>
+			<h:outputText value="#{managedBean.entity.categoria.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
 			
 			Favorecido/Sacado:
@@ -131,7 +131,7 @@
 				<f:selectItem itemLabel="Nenhum favorecido"/>
 				<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
-			<h:outputText value="#{managedBean.entity.descricaoFavorecido}" rendered="#{!managedBean.entity.conta.ativo}"/>
+			<h:outputText value="#{managedBean.entity.favorecido.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
 			
 			
@@ -140,7 +140,7 @@
 				<f:selectItem itemLabel="Nenhum meio de pagamento"/>
 				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
-			<h:outputText value="#{managedBean.entity.descricaoMeioPagamento}" rendered="#{!managedBean.entity.conta.ativo and managedBean.opcoesSistema.exibirMeioPagamento}"/>
+			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{!managedBean.entity.conta.ativo and managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			<h:outputText value="" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			
 			<h:outputText value="Vincular lançamento importado:" rendered="#{managedBean.entity.conta.ativo and managedBean.operation == 'edit'}"/>
