@@ -44,6 +44,7 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -93,5 +94,13 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 		}
 		
 		return criteria.addOrder(Order.asc("descricao")).list();
+	}
+	
+	public long countAgendamentoByDataInicioAndDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta) {
+		return (Long)getQuery("SELECT COUNT(*) FROM Agenda agenda WHERE agenda.inicio >= :inicio AND agenda.fim <= :fim AND agenda.emitirAlerta = :alerta")
+				.setTimestamp("inicio", inicio)
+				.setTimestamp("fim", fim)
+				.setBoolean("alerta", emiteAlerta)
+				.uniqueResult();
 	}
 }

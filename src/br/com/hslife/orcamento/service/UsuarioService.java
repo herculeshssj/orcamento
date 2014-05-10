@@ -361,12 +361,6 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	public List<Usuario> buscarTodosPorLogin(String login) throws BusinessException {
 		return getRepository().findAllByLogin(login);
 	}
-
-	@Override
-	public void validar(Usuario entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) throws BusinessException {

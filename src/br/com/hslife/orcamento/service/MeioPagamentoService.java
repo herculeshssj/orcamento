@@ -112,11 +112,6 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
-	@Override
-	public void validar(MeioPagamento entity) throws BusinessException {
-		
-	}
-	
 	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findEnabledByUsuario(usuario);
 	}

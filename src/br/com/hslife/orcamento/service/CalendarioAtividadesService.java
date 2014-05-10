@@ -97,15 +97,24 @@ public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> imp
 		}		
 		return agendamentos;
 	}
-
-	@Override
-	public void validar(Agenda entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) throws BusinessException {
 		return getRepository().findByCriterioAgendamento(criterioBusca);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public Long contarAgendamentosDeHojeComAlerta() {
+		Date inicio = new Date();
+		inicio.setHours(0);
+		inicio.setMinutes(0);
+		inicio.setSeconds(0);
+
+		Date fim = new Date(inicio.getTime());
+		fim.setHours(23);
+		fim.setMinutes(59);
+		fim.setSeconds(59);
+		return getRepository().countAgendamentoByDataInicioAndDataFimAndAlerta(inicio, fim, true);
 	}
 }

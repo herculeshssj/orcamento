@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.util.EntityLabelComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Component
@@ -126,7 +127,7 @@ public class ContaComponent {
 		List<Categoria> categorias = new ArrayList<Categoria>();
 		
 		/* Usa-se o Set para separar as categorias da listagem de lançamentos */
-		SortedSet<Categoria> setCategorias = new TreeSet<Categoria>();
+		SortedSet<Categoria> setCategorias = new TreeSet<Categoria>(new EntityLabelComparator());
 		
 		// Adiciona as categorias no Set
 		for (LancamentoConta l : lancamentos) {
@@ -196,7 +197,7 @@ public class ContaComponent {
 		List<Favorecido> favorecidos = new ArrayList<Favorecido>();
 		
 		/* Usa-se o Set para separar os favorecidos da listagem de lançamentos */
-		SortedSet<Favorecido> setFavorecidos = new TreeSet<Favorecido>();
+		SortedSet<Favorecido> setFavorecidos = new TreeSet<Favorecido>(new EntityLabelComparator());
 		
 		// Adiciona os favorecidos no Set
 		for (LancamentoConta l : lancamentos) {
@@ -276,7 +277,7 @@ public class ContaComponent {
 		List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
 		
 		/* Usa-se o Set para separar os meios de pagamento da listagem de lançamentos */
-		SortedSet<MeioPagamento> setMeiosPagamento = new TreeSet<MeioPagamento>();
+		SortedSet<MeioPagamento> setMeiosPagamento = new TreeSet<MeioPagamento>(new EntityLabelComparator());
 		
 		// Adiciona os meios de pagamento no Set
 		for (LancamentoConta l : lancamentos) {

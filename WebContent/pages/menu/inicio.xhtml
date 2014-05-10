@@ -69,7 +69,12 @@
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/cartoes.faces"><h:graphicImage value="/resources/images/cartaocredito.png"/></a></h:panelGroup>
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/planejamento.faces"><h:graphicImage value="/resources/images/planejamento.png"/></a></h:panelGroup>
 				
-				<h:outputText value="Agenda"/>
+				<h:panelGroup>
+					<h:outputText value="Agenda "/>
+					<h:outputText value="(" style="color: #FF0000"/>
+					<h:outputText value="#{agendaMB.agendamentosDeHoje}" style="color: #FF0000"/>
+					<h:outputText value=")" style="color: #FF0000"/>
+				</h:panelGroup>
 				<h:outputText value="Cadastros"/>
 				<h:outputText value="Contas"/>
 				<h:outputText value="Cartão de Crédito"/>

@@ -100,10 +100,4 @@ public class BuscaSalvaService extends AbstractCRUDService<BuscaSalva> implement
 	public List<BuscaSalva> buscarTodosContaCartaoAtivaPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findAllEnabledContaCartaoByUsuario(usuario);
 	}
-
-	@Override
-	public void validar(BuscaSalva entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 }

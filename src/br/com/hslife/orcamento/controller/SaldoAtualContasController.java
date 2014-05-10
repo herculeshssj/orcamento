@@ -78,7 +78,6 @@ public class SaldoAtualContasController extends AbstractController {
 
 	@Override
 	protected void initializeEntity() {
-		// TODO Auto-generated method stub
 		contasAtivas = new ArrayList<>();
 		contasInativas = new ArrayList<>();
 		saldoTotalContas = 0;

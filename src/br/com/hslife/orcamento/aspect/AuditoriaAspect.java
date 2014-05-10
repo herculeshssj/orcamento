@@ -107,6 +107,7 @@ public class AuditoriaAspect {
 		} else {
 			auditoria.setUsuario("desenvolvedor");
 			auditoria.setIp("127.0.0.1");
+			auditoria.setBrowser("Internal Browser");
 		}
 	
 		auditoria.setVersionAuditedEntity(entity.getVersionEntity());
@@ -149,6 +150,7 @@ public class AuditoriaAspect {
 			} else {
 				auditoria.setUsuario("desenvolvedor");
 				auditoria.setIp("127.0.0.1");
+				auditoria.setBrowser("Internal Browser");
 			}
 			
 			auditoria.setVersionAuditedEntity(entity.getVersionEntity());
@@ -192,6 +194,7 @@ public class AuditoriaAspect {
 		} else {
 			auditoria.setUsuario("desenvolvedor");
 			auditoria.setIp("127.0.0.1");
+			auditoria.setBrowser("Internal Browser");
 		}
 		
 		auditoria.setVersionAuditedEntity(entity.getVersionEntity());

@@ -101,11 +101,6 @@ public class MeioPagamento extends EntityPersistence {
 	}
 	
 	@Override
-	public int compareTo(EntityPersistence o) {
-		return super.compareToLabels(o);
-	}
-	
-	@Override
 	public String getLabel() {
 		return descricao;
 	}

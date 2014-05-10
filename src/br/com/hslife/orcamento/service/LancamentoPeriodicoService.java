@@ -89,12 +89,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			PagamentoPeriodoRepository pagamentoPeriodoRepository) {
 		this.pagamentoPeriodoRepository = pagamentoPeriodoRepository;
 	}
-
-	@Override
-	public void validar(LancamentoPeriodico entity) throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public void cadastrar(LancamentoPeriodico entity) throws BusinessException {

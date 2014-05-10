@@ -67,13 +67,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		super(new LancamentoConta());
 	}
 	
-	@Override
-	public LancamentoConta findById(Long id) {
-		hql = "FROM LancamentoConta lancamento WHERE lancamento.id = :id";
-		hqlQuery = getSession().createQuery(hql).setLong("id", id);
-		return (LancamentoConta)hqlQuery.uniqueResult();
-	}
-	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findByCriterioLancamentoConta(CriterioLancamentoConta criterio) {
 		Criteria criteria = getSession().createCriteria(LancamentoConta.class);

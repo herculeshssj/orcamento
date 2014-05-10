@@ -42,22 +42,26 @@
   
  ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.util;
 
-import java.util.Date;
-import java.util.List;
+import java.util.Comparator;
 
-import br.com.hslife.orcamento.entity.Agenda;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.CriterioAgendamento;
-import br.com.hslife.orcamento.service.ICRUDService;
+import br.com.hslife.orcamento.entity.EntityPersistence;
 
-public interface ICalendarioAtividades extends ICRUDService<Agenda> {
-	
-	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) throws BusinessException;
-	
-	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) throws BusinessException;
-	
-	public Long contarAgendamentosDeHojeComAlerta() throws BusinessException;
+public class EntityLabelComparator implements Comparator<EntityPersistence>{
+
+	@Override
+	public int compare(EntityPersistence oneEntity, EntityPersistence otherEntity) {
+		try {
+			
+			if (oneEntity != null && otherEntity != null) {
+				if (oneEntity.getLabel() != null && otherEntity.getLabel() != null) {
+					return oneEntity.getLabel().compareToIgnoreCase(otherEntity.getLabel());
+				}
+			}			
+		} catch (NullPointerException npe) {
+			System.out.println(npe.getMessage());
+		}
+		return 0;
+	}
 }

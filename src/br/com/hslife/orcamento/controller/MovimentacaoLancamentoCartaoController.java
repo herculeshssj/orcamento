@@ -108,7 +108,6 @@ public class MovimentacaoLancamentoCartaoController extends AbstractController {
 
 	@Override
 	public String startUp() {
-		// TODO Auto-generated method stub
 		return null;
 	}	
 	

@@ -114,9 +114,10 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAllAtivosByUsuario(Usuario usuario) {
-		hql = "FROM Conta conta WHERE conta.ativo = :ativo AND conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC";
-		hqlQuery = getSession().createQuery(hql).setBoolean("ativo", true).setLong("idUsuario", usuario.getId());
-		return hqlQuery.list(); 
+		return getQuery("FROM Conta conta WHERE conta.ativo = :ativo AND conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC")
+				.setBoolean("ativo", true)
+				.setLong("idUsuario", usuario.getId())
+				.list(); 
 	}
 	
 	@SuppressWarnings("unchecked")

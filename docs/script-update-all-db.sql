@@ -1657,3 +1657,14 @@ drop table auditoriadados;
 -- Correção de nomenclatura de opção do sistema
 -- Tarefa #988
 update opcaosistema set chave = 'CONTA_EXIBIR_MEIO_PAGAMENTO' where chave = 'EXIBIR_MEIO_PAGAMENTO';
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO MAI2014.1 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('MAI2014.1', true);
+
+-- Exclusão dos dados sensíveis do cartão de crédito
+-- Tarefa #1003
+update cartaocredito set codigoSeguranca = null, nomeCliente = null, numeroCartao = null;
+delete from auditoria where classe = 'CartaoCredito';

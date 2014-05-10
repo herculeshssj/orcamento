@@ -123,6 +123,7 @@ public class AgendamentoTask {
 			agenda.setInicio(l.getDataPagamento());
 			agenda.setFim(l.getDataPagamento());
 			agenda.setDiaInteiro(true);
+			agenda.setEmitirAlerta(true);
 			agenda.setTipoAgendamento(TipoAgendamento.PREVISAO);
 			agenda.setNotas(l.getObservacao());
 			agenda.setUsuario(l.getConta().getUsuario());
