@@ -42,7 +42,6 @@
   
   -->
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -99,45 +98,26 @@
 		<p:commandLink id="linkBuscaAvancada" value="Mais opções >>>"/>
 		
 		<p:overlayPanel for="linkBuscaAvancada">
-			<h:panelGrid columns="2">
-				<h:panelGroup>
-					Agrupar por:     	
-					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está ativada -->		
-		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
-		  				<f:selectItem itemLabel="Nenhum"/>
-		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
-						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-						<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
-						<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
-						<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
-						<f:selectItem itemLabel="Fatura do Cartão" itemValue="FAT"/>
-						<f:selectItem itemLabel="Despesa Fixa/Parcelamento" itemValue="PER"/>
-					</p:selectOneRadio>
-					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->
-					<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
-		  				<f:selectItem itemLabel="Nenhum"/>
-		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
-						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-						<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
-						<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
-						<f:selectItem itemLabel="Fatura do Cartão" itemValue="FAT"/>
-						<f:selectItem itemLabel="Despesa Fixa/Parcelamento" itemValue="PER"/>
-					</p:selectOneRadio>
-				</h:panelGroup>
-				<h:panelGroup>
-					Agendados:
-					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.agendado}">
-		  				<f:selectItem itemLabel="Sem agendados" itemValue="-1"/>
-						<f:selectItem itemLabel="Com agendados" itemValue="0"/>
-						<f:selectItem itemLabel="Somente agendados" itemValue="1"/>   					
-					</p:selectOneRadio>
-					Considerar:
-					<p:selectOneRadio layout="pageDirection">
-						<f:selectItem itemLabel="Data de lançamento" />
-						<f:selectItem itemLabel="Data de pagamento" />
-					</p:selectOneRadio>
-				</h:panelGroup>
-			</h:panelGrid>			   				   				
+			<h:panelGroup>
+				Agrupar por:     	
+				<!-- selectOneRadio exibido quando a exibição de meio de pagamento está ativada -->		
+	  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+	  				<f:selectItem itemLabel="Nenhum"/>
+	  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
+					<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
+					<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
+					<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
+					<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
+				</p:selectOneRadio>
+				<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->
+				<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
+	  				<f:selectItem itemLabel="Nenhum"/>
+	  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
+					<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
+					<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
+					<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
+				</p:selectOneRadio>
+			</h:panelGroup>			   				   				
   		</p:overlayPanel>
 	</ui:define>
 	
@@ -146,136 +126,19 @@
 			<ui:include src="semAgrupamento.xhtml"/>     	
 	    </h:panelGroup>
 	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'CAT'}">
-		     	<p:dataTable id="tableListEntityCategorias" width="100%" value="#{managedBean.agrupamentoLancamentoPorCategoria}" var="cat" style="font-size: 16px;">		     		
-		     		<p:columnGroup type="header">
-		     			<p:row>
-		  					<p:column headerText="Selecionar"/>
-		  					<p:column headerText="Histórico"/>
-		  					<p:column headerText="Ações"/>
-		  				</p:row>
-		     		</p:columnGroup>		     		
-		     		<p:subTable var="item" value="#{cat.lancamentos}">
-		     			<f:facet name="header">
-		     				<h:outputText value="#{cat.descricao}"/>
-		     			</f:facet>
-		     			<p:column style="text-align: center; vertical-align: middle;">		     			
-		     				<p:selectBooleanCheckbox value="#{item.selecionado}"/>
-		     			</p:column>
-		     			<p:column style="vertical-align: middle;">
-			     			<h:outputText value="#{item.dataLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-			     				<f:converter converterId="dateConverter"/>
-			     			</h:outputText>
-			     			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value=" - #{item.parcela}" rendered="#{not empty item.parcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
-			     			<br/>
-			     			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
-		     				<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-		     					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		     				</h:outputText>
-		     				<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     				<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>     				     			
-		     			</p:column>	     		
-		     			<p:column style="text-align: center; vertical-align: middle;">
-							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-							</h:commandButton>
-							&nbsp;
-							<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.quitado}">
-								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-							</h:commandButton>							
-		  				</p:column>		  						  				
-		     		</p:subTable>		     		
-		     	</p:dataTable>
+		     	<ui:include src="categoriaAgrupamento.xhtml"/>
 	     	</h:panelGroup>
 	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'FAV'}">
-		     	<p:dataTable id="tableListEntityFavorecidos" width="100%" value="#{managedBean.agrupamentoLancamentoPorFavorecido}" var="fav" style="font-size: 16px;">		     		
-		     		<p:columnGroup type="header">
-		     			<p:row>
-		  					<p:column headerText="Selecionar"/>
-		  					<p:column headerText="Histórico"/>
-		  					<p:column headerText="Ações"/>
-		  				</p:row>
-		     		</p:columnGroup>		     		
-		     		<p:subTable var="item" value="#{fav.lancamentos}">
-		     			<f:facet name="header">
-		     				<h:outputText value="#{fav.nome}"/>
-		     			</f:facet>
-		     			<p:column style="text-align: center; vertical-align: middle;">		     			
-		     				<p:selectBooleanCheckbox value="#{item.selecionado}"/>
-		     			</p:column>
-		     			<p:column style="vertical-align: middle;">
-			     			<h:outputText value="#{item.dataLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-			     				<f:converter converterId="dateConverter"/>
-			     			</h:outputText>
-			     			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value=" - #{item.parcela}" rendered="#{not empty item.parcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
-			     			<br/>
-			     			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
-		     				<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-		     					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		     				</h:outputText>	
-		     				<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     				<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>     				     			
-		     			</p:column>	     		
-		     			<p:column style="text-align: center; vertical-align: middle;">
-							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-							</h:commandButton>
-							&nbsp;
-							<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.quitado}">
-								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-							</h:commandButton>							
-		  				</p:column>		  						  				
-		     		</p:subTable>		     		
-		     	</p:dataTable>
+		     	<ui:include src="favorecidoAgrupamento.xhtml"/>
 	     	</h:panelGroup>
 	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'CD'}">
-		     	<p:dataTable id="tableListEntityCreditoDebito" width="100%" value="#{managedBean.agrupamentoLancamentoPorDebitoCredito}" var="cd" style="font-size: 16px;">		     		
-		     		<p:columnGroup type="header">
-		     			<p:row>
-		  					<p:column headerText="Selecionar"/>
-		  					<p:column headerText="Histórico"/>
-		  					<p:column headerText="Ações"/>
-		  				</p:row>
-		     		</p:columnGroup>		     		
-		     		<p:subTable var="item" value="#{cd.lancamentos}">
-		     			<f:facet name="header">
-		     				<h:outputText value="#{cd.descricao}"/>
-		     			</f:facet>
-		     			<p:column style="text-align: center; vertical-align: middle;">		     			
-		     				<p:selectBooleanCheckbox value="#{item.selecionado}"/>
-		     			</p:column>
-		     			<p:column style="vertical-align: middle;">
-			     			<h:outputText value="#{item.dataLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-			     				<f:converter converterId="dateConverter"/>
-			     			</h:outputText>
-			     			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value=" - #{item.parcela}" rendered="#{not empty item.parcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
-			     			<br/>
-			     			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
-		     				<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-		     					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		     				</h:outputText>
-		     				<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     				<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>	     				     			
-		     			</p:column>	     		
-		     			<p:column style="text-align: center; vertical-align: middle;">
-							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-							</h:commandButton>
-							&nbsp;
-							<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.quitado}">
-								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-							</h:commandButton>							
-		  				</p:column>		  						  				
-		     		</p:subTable>
-		     	</p:dataTable>
+		     	<ui:include src="creditoDebitoAgrupamento.xhtml"/>
+	     	</h:panelGroup>
+	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'PAG'}">
+		     	<ui:include src="meioPagamentoAgrupamento.xhtml"/>
+	     	</h:panelGroup>
+	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'MOE'}">
+		     	<ui:include src="moedaAgrupamento.xhtml"/>
 	     	</h:panelGroup>
 	</ui:define>
 	
