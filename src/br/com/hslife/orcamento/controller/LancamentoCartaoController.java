@@ -125,6 +125,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
 	private List<MeioPagamento> agrupamentoLancamentoPorMeioPagamento = new ArrayList<MeioPagamento>();
+	private List<Moeda> agrupamentoLancamentoPorMoeda = new ArrayList<>();
 	private List<AgrupamentoLancamento> agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
 	
 	private BuscaSalva buscaSalva = new BuscaSalva();
@@ -150,6 +151,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 		agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
 		agrupamentoLancamentoPorMeioPagamento = new ArrayList<MeioPagamento>();
+		agrupamentoLancamentoPorMoeda = new ArrayList<>();
 		agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
 		
 		buscasSalvas.clear();
@@ -177,6 +179,8 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 					agrupamentoLancamentoPorFavorecido = getService().organizarLancamentosPorFavorecido(listEntity);
 				if (agrupamentoSelecionado.equals("PAG"))
 					agrupamentoLancamentoPorMeioPagamento = getService().organizarLancamentosPorMeioPagamento(listEntity);
+				if (agrupamentoSelecionado.equals("MOE"))
+					agrupamentoLancamentoPorMoeda = getService().organizarLancamentosPorMoeda(listEntity);
 				if (agrupamentoSelecionado.equals("CD"))
 					agrupamentoLancamentoPorDebitoCredito = getService().organizarLancamentosPorDebitoCredito(listEntity);
 			}
@@ -713,5 +717,14 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 
 	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
+	}
+
+	public List<Moeda> getAgrupamentoLancamentoPorMoeda() {
+		return agrupamentoLancamentoPorMoeda;
+	}
+
+	public void setAgrupamentoLancamentoPorMoeda(
+			List<Moeda> agrupamentoLancamentoPorMoeda) {
+		this.agrupamentoLancamentoPorMoeda = agrupamentoLancamentoPorMoeda;
 	}
 }

@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -408,5 +409,85 @@ public class ContaComponent {
 		
 		// Salva o fechamento
 		fechamentoPeriodoRepository.save(novoFechamento);
+	}
+
+	public List<Moeda> organizarLancamentosPorMoeda(List<LancamentoConta> lancamentos) {
+		List<Moeda> moedas = new ArrayList<Moeda>();
+		
+		/* Usa-se o Set para separar os moedas da listagem de lançamentos */
+		SortedSet<Moeda> setMoedas = new TreeSet<Moeda>(new EntityLabelComparator());
+		
+		// Adiciona os moedas no Set
+		for (LancamentoConta l : lancamentos) {
+			if (l.getMoeda() != null)
+				setMoedas.add(l.getMoeda());
+		}
+		
+		// Adiciona os moedas no List
+		moedas.addAll(setMoedas);
+		
+		// Zera a lista de moedas
+		for (Moeda m : moedas) {
+			m.setLancamentos(new ArrayList<LancamentoConta>());			
+			m.setSaldoPago(0.0);
+		}
+				
+		List<LancamentoConta> lancamentosSemMoeda = new ArrayList<LancamentoConta>();
+		double saldoLancamentosSemMoeda = 0.0;
+		double saldoCreditoLancamentosSemMoeda = 0.0;
+		double saldoDebitoLancamentosSemMoeda = 0.0;
+		
+		// Varre a lista de lançamentos para adicionar os lançamentos nos respectivos moedas
+		for (LancamentoConta l : lancamentos) {
+			
+			for (int i = 0; i < moedas.size(); i++) {
+				if (l.getMoeda() != null && moedas.get(i).getId().equals(l.getMoeda().getId())) {
+					moedas.get(i).getLancamentos().add(l);
+					if (l.getTipoLancamento() == TipoLancamento.RECEITA) {						
+						moedas.get(i).setSaldoPago(moedas.get(i).getSaldoPago() + l.getValorPago());
+						moedas.get(i).setSaldoCredito(moedas.get(i).getSaldoCredito() + l.getValorPago());
+					} else {						
+						moedas.get(i).setSaldoPago(moedas.get(i).getSaldoPago() - l.getValorPago());
+						moedas.get(i).setSaldoDebito(moedas.get(i).getSaldoDebito() + l.getValorPago());
+					}						
+				}
+			}
+			if (l.getMoeda() == null) {
+				lancamentosSemMoeda.add(l);
+				if (l.getTipoLancamento() == TipoLancamento.RECEITA) {						
+					saldoLancamentosSemMoeda += l.getValorPago();
+					saldoCreditoLancamentosSemMoeda += l.getValorPago();
+				} else {						
+					saldoLancamentosSemMoeda -= l.getValorPago();
+					saldoDebitoLancamentosSemMoeda += l.getValorPago();
+				}
+			}
+		}
+		
+		// Remove os moedas que não tem lançamentos e ajusta as casas decimais dos saldos
+		int indice = moedas.size() - 1;
+		while (indice >= 0) {
+			if (moedas.get(indice).getLancamentos().size() == 0) {
+				moedas.remove(indice);				
+			} else {
+				moedas.get(indice).setSaldoPago(Util.arredondar(moedas.get(indice).getSaldoPago()));
+				moedas.get(indice).setSaldoCredito(Util.arredondar(moedas.get(indice).getSaldoCredito()));
+				moedas.get(indice).setSaldoDebito(Util.arredondar(moedas.get(indice).getSaldoDebito()));
+			}
+			indice--;
+		}
+		
+		// Cria um favorecido a mais para os lançamentos que não tem favorecido atribuídos
+		if (saldoLancamentosSemMoeda != 0) {
+			Moeda m = new Moeda();
+			m.setNome("Sem moeda definida");
+			m.setLancamentos(lancamentosSemMoeda);
+			m.setSaldoPago(saldoLancamentosSemMoeda);
+			m.setSaldoCredito(saldoCreditoLancamentosSemMoeda);
+			m.setSaldoDebito(saldoDebitoLancamentosSemMoeda);
+			moedas.add(m);
+		}
+			
+		return moedas;
 	}		
 }

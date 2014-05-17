@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -212,6 +213,11 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) throws BusinessException {
 		return getComponent().organizarLancamentosPorMeioPagamento(lancamentos);
+	}
+	
+	@Override
+	public List<Moeda> organizarLancamentosPorMoeda(List<LancamentoConta> lancamentos) throws BusinessException {
+		return getComponent().organizarLancamentosPorMoeda(lancamentos);
 	}
 
 	@Override

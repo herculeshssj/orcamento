@@ -110,8 +110,20 @@ public class Moeda extends EntityPersistence {
 	@Transient
 	private double totalConvertido;
 	
+	@Transient
+	private double saldoPago;
+	
+	@Transient
+	private double saldoCredito;
+	
+	@Transient
+	private double saldoDebito;
+	
 	public Moeda() {
 		ativo = true;
+		saldoPago = 0.0;
+		saldoCredito = 0.0;
+		saldoDebito = 0.0;
 	}
 
 	public Long getId() {
@@ -260,5 +272,29 @@ public class Moeda extends EntityPersistence {
 
 	public void setValorConversao(double valorConversao) {
 		this.valorConversao = valorConversao;
+	}
+
+	public double getSaldoPago() {
+		return saldoPago;
+	}
+
+	public void setSaldoPago(double saldoPago) {
+		this.saldoPago = saldoPago;
+	}
+
+	public double getSaldoCredito() {
+		return saldoCredito;
+	}
+
+	public void setSaldoCredito(double saldoCredito) {
+		this.saldoCredito = saldoCredito;
+	}
+
+	public double getSaldoDebito() {
+		return saldoDebito;
+	}
+
+	public void setSaldoDebito(double saldoDebito) {
+		this.saldoDebito = saldoDebito;
 	}
 }
