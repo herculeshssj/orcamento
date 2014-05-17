@@ -81,6 +81,7 @@ import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("lancamentoCartaoMB")
 @Scope("session")
@@ -196,12 +197,14 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 				infoMessage("Registro cadastrado com sucesso!");
 				
 				// Vínculo com a fatura atual ou futura
+				/*
 				if (vincularFatura.equalsIgnoreCase("ATUAL")) {
 					getService().vincularAFaturaAtual(entity);
 				} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
 					getService().vincularAProximaFatura(entity);
-				}
+				}*/
 				vincularFatura = "";
+				
 			} else {
 				validate(operation);
 				getService().alterar(entity);
@@ -529,13 +532,24 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		return new ArrayList<MeioPagamento>();
 	}
 	
-	public List<LancamentoImportado> getListaLancamentoImportado() {
+	public List<SelectItem> getListaLancamentoImportado() {
+		List<SelectItem> listagem = new ArrayList<SelectItem>();
 		try {
-			return getService().buscarLancamentoImportadoPorConta(entity.getConta());
+			// Traz a opção do sistema para suprimir texto
+			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_SUPRIMIR_TEXTO_MEIO", getUsuarioLogado());
+			
+			// Carrega os lançamentos importados
+			for (LancamentoImportado importado : getService().buscarLancamentoImportadoPorConta(entity.getConta())) {
+				if (opcao != null && Boolean.valueOf(opcao.getValor())) {
+					listagem.add(new SelectItem(importado, Util.suprimirTextoMeio(Util.formataDataHora(importado.getData(), Util.DATA) + " - R$ " + importado.getValor() + " - " + importado.getHistorico(), 55)));
+				} else {
+					listagem.add(new SelectItem(importado, Util.suprimirTextoFim(Util.formataDataHora(importado.getData(), Util.DATA) + " - R$ " + importado.getValor() + " - " + importado.getHistorico(), 55)));
+				}
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<LancamentoImportado>();
+		return listagem;
 	}
 	
 	public List<Moeda> getListaMoeda() {
