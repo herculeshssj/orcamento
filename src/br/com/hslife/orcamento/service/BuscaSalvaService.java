@@ -52,6 +52,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
 import br.com.hslife.orcamento.repository.BuscaSalvaRepository;
@@ -70,34 +71,7 @@ public class BuscaSalvaService extends AbstractCRUDService<BuscaSalva> implement
 		this.repository = repository;
 	}
 
-	public List<BuscaSalva> buscarPorConta(Conta conta) throws BusinessException {
-		return getRepository().findByConta(conta);
-	}
-	
-	public List<BuscaSalva> buscarTodosPorUsuario(Usuario usuario) throws BusinessException {
-		return getRepository().findAllByUsuario(usuario);
-	}
-	
-	public List<BuscaSalva> buscarTodosContaAtivaPorUsuario(Usuario usuario) throws BusinessException {
-		return getRepository().findAllEnabledContaByUsuario(usuario);
-	}
-	
-	@Override
-	public List<BuscaSalva> buscarTodosPorContaEUsuario(Conta conta, Usuario usuario) throws BusinessException {	
-		return getRepository().findAllByContaAndUsuario(conta, usuario);
-	}
-	
-	public List<BuscaSalva> buscarTodosContaAtivaPorContaEUsuario(Conta conta, Usuario usuario) throws BusinessException {
-		return getRepository().findAllEnabledContaByContaAndUsuario(conta, usuario);
-	}
-	
-	@Override
-	public List<BuscaSalva> buscarTodosContaCartaoPorUsuario(Usuario usuario) throws BusinessException {
-		return getRepository().findAllContaCartaoByUsuario(usuario);
-	}
-	
-	@Override
-	public List<BuscaSalva> buscarTodosContaCartaoAtivaPorUsuario(Usuario usuario) throws BusinessException {
-		return getRepository().findAllEnabledContaCartaoByUsuario(usuario);
+	public List<BuscaSalva> buscarContaETipoContaEContaAtivaPorUsuario(Conta conta, TipoConta[] tipoConta, Boolean contaAtiva, Usuario usuario) throws BusinessException {
+		return getRepository().findContaAndTipoContaAndContaAtivaByUsuario(conta, tipoConta, contaAtiva, usuario);
 	}
 }

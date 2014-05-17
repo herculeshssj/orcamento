@@ -87,10 +87,6 @@ public class BuscaSalva extends EntityPersistence {
 	@Temporal(TemporalType.DATE)
 	private Date dataFim;
 	
-	@Column(nullable=true)
-	@Temporal(TemporalType.DATE)
-	private Date lancadoEm;
-	
 	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoAgrupamentoBusca tipoAgrupamentoBusca;
@@ -197,13 +193,5 @@ public class BuscaSalva extends EntityPersistence {
 
 	public void setTextoParcela(String textoParcela) {
 		this.textoParcela = textoParcela;
-	}
-
-	public Date getLancadoEm() {
-		return lancadoEm;
-	}
-
-	public void setLancadoEm(Date lancadoEm) {
-		this.lancadoEm = lancadoEm;
 	}
 }

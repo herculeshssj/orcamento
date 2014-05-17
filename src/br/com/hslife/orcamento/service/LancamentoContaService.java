@@ -168,13 +168,8 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 
 	@Override
 	public void validar(LancamentoConta entity) throws BusinessException {
-		if (entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
-			if (entity.getDataLancamento() == null)
-				throw new BusinessException("Informe a data de lançamento!");
-		} else {
-			if (entity.getDataPagamento() == null)
-				throw new BusinessException("Informe a data de pagamento!");
-		}
+		if (entity.getDataPagamento() == null)
+			throw new BusinessException("Informe a data de pagamento!");
 		
 		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
 			if (entity.getDataPagamento().before(entity.getConta().getDataAbertura())) {
@@ -414,10 +409,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 
 				// Prepara os contadores
 				Calendar temp = Calendar.getInstance();				
-				if (lancamentoDuplicado.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
-					temp.setTime(lancamentoDuplicado.getDataLancamento());					
-				} else
-					temp.setTime(lancamentoDuplicado.getDataPagamento());
+				temp.setTime(lancamentoDuplicado.getDataPagamento());
 				
 				if (incrementarData != null && !incrementarData.isEmpty()) {
 					
@@ -432,10 +424,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 						temp.add(Calendar.YEAR, i);
 						tempFatura.add(Calendar.YEAR, 1);
 					}
-					if (lancamentoDuplicado.getConta().getTipoConta().equals(TipoConta.CARTAO))
-						lancamentoDuplicado.setDataLancamento(temp.getTime());
-					else
-						lancamentoDuplicado.setDataPagamento(temp.getTime());
+					lancamentoDuplicado.setDataPagamento(temp.getTime());
 				} else {
 					tempFatura.add(Calendar.MONTH, 1);
 				}

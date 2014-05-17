@@ -69,6 +69,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
@@ -80,7 +81,6 @@ import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
-import br.com.hslife.orcamento.util.Util;
 
 @Component("lancamentoCartaoMB")
 @Scope("session")
@@ -118,7 +118,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	
 	private String agrupamentoSelecionado;
-	private boolean exibirSaldoUltimoFechamento;
 	private TipoCategoria tipoCategoriaSelecionada;
 	private boolean selecionarTodosLancamentos;
 	
@@ -169,7 +168,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	public void find() {
 		try {
 			if (criterioBusca.getConta() == null) {
-				warnMessage("Informe a conta!");
+				warnMessage("Informe o cartão!");
 			} else {
 				listEntity = getService().buscarPorCriterioLancamentoConta(criterioBusca);
 				
@@ -273,7 +272,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
 			warnMessage("Nenhum arquivo adicionado!");
 		} else {
-			entity.setArquivo(new Arquivo());
+			entity.setArquivo(null);
 			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
 		}
 	}
@@ -304,7 +303,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	
 	public void atualizaComboBuscasSalvas() {
 		try {
-			buscasSalvas = buscaSalvaService.buscarPorConta(criterioBusca.getConta());
+			buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, null, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -408,12 +407,15 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		if (buscaSalva != null) {
 			criterioBusca.setConta(buscaSalva.getConta());
 			criterioBusca.setDescricao(buscaSalva.getTextoBusca());
-			criterioBusca.setLancadoEm(buscaSalva.getLancadoEm());
+			criterioBusca.setDataInicio(buscaSalva.getDataInicio());
+			criterioBusca.setDataFim(buscaSalva.getDataFim());
 			criterioBusca.setParcela(buscaSalva.getTextoParcela());			
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
 				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
 				case FAVORECIDO : agrupamentoSelecionado = "FAV"; break;
+				case MEIOPAGAMENTO : agrupamentoSelecionado = "PAG"; break;
+				case MOEDA : agrupamentoSelecionado = "MOE"; break;
 				default : agrupamentoSelecionado = "";
 			}
 			this.find();
@@ -428,11 +430,14 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		buscaSalva.setConta(criterioBusca.getConta());
 		buscaSalva.setTextoBusca(criterioBusca.getDescricao());
 		buscaSalva.setTextoParcela(criterioBusca.getParcela());
-		buscaSalva.setLancadoEm(criterioBusca.getLancadoEm());
+		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
+		buscaSalva.setDataFim(criterioBusca.getDataFim());
 		
 		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);
 		if (agrupamentoSelecionado.equals("CAT")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.CATEGORIA);
 		if (agrupamentoSelecionado.equals("FAV")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.FAVORECIDO);
+		if (agrupamentoSelecionado.equals("PAG")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.MEIOPAGAMENTO);
+		if (agrupamentoSelecionado.equals("MOE")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.MOEDA);
 		
 		actionTitle = " - Salvar busca";
 		return "/pages/LancamentoCartao/salvarBusca";
@@ -545,42 +550,15 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	public List<BuscaSalva> getBuscasSalvas() {
 		try {
 			if (buscasSalvas.isEmpty()) {
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", getUsuarioLogado());
-				
-				// Determina qual listagem será retornada
-				if (opcao != null && Boolean.valueOf(opcao.getValor()))
-					if (criterioBusca.getConta() == null)
-						buscasSalvas = buscaSalvaService.buscarTodosContaCartaoPorUsuario(getUsuarioLogado());
-					else
-						buscasSalvas = buscaSalvaService.buscarTodosPorContaEUsuario(criterioBusca.getConta(), getUsuarioLogado());
-				else 
-					if (criterioBusca.getConta() == null)
-						buscasSalvas = buscaSalvaService.buscarTodosContaCartaoAtivaPorUsuario(getUsuarioLogado());
-					else
-						buscasSalvas = buscaSalvaService.buscarTodosContaAtivaPorContaEUsuario(criterioBusca.getConta(), getUsuarioLogado());
+				if (getOpcoesSistema().getExibirContasInativas())
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), new TipoConta[]{TipoConta.CARTAO}, null, getUsuarioLogado());
+				else
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), new TipoConta[]{TipoConta.CARTAO}, true, getUsuarioLogado());
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return buscasSalvas;
-	}
-	
-	public String getSaldoTotalFormatado() {
-		if (listEntity == null || listEntity.isEmpty()) {
-			return Util.moedaBrasil(0.0);
-		} else {
-			if(exibirSaldoUltimoFechamento)
-				try {
-					return Util.moedaBrasil(getService().saldoUltimoFechamento(criterioBusca.getConta()) + getService().calcularSaldoLancamentos(listEntity));
-				}
-				catch (BusinessException be) {
-					errorMessage(be.getMessage());
-				}
-			else
-				return Util.moedaBrasil(getService().calcularSaldoLancamentos(listEntity));
-		}
-		return Util.moedaBrasil(0.0);
 	}
 	
 	public List<SelectItem> getListaTipoLancamento() {
@@ -628,14 +606,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 
 	public void setAgrupamentoSelecionado(String agrupamentoSelecionado) {
 		this.agrupamentoSelecionado = agrupamentoSelecionado;
-	}
-
-	public boolean isExibirSaldoUltimoFechamento() {
-		return exibirSaldoUltimoFechamento;
-	}
-
-	public void setExibirSaldoUltimoFechamento(boolean exibirSaldoUltimoFechamento) {
-		this.exibirSaldoUltimoFechamento = exibirSaldoUltimoFechamento;
 	}
 
 	public TipoCategoria getTipoCategoriaSelecionada() {

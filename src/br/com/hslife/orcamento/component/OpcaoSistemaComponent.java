@@ -222,5 +222,16 @@ public class OpcaoSistemaComponent implements Serializable{
 		return "";
 	}
 	
+	public Boolean getExibirContasInativas() {
+		try {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", usuarioComponent.getUsuarioLogado());
+			if (opcao != null)
+				return Boolean.valueOf(opcao.getValor());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	/*** Métodos Setters das opções do sistema existentes ***/
 }

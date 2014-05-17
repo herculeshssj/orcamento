@@ -74,3 +74,11 @@ alter table conta add constraint fk_conta_moeda foreign key (idMoeda) references
 alter table cartaocredito drop column codigoSeguranca;
 alter table cartaocredito drop column nomeCliente;
 alter table cartaocredito drop column numeroCartao;
+
+-- Remoção da coluna dataLancamento na tabela lancamentoconta
+update lancamentoconta set dataPagamento = dataLancamento where idConta in (select id from conta where tipoConta = 'CARTAO');
+alter table lancamentoconta drop column dataLancamento;
+
+-- Remoção da coluna lancadoEm na tabela buscasalva
+update buscasalva set dataInicio = lancadoEm, dataFim = lancadoEm where idConta in (select id from conta where tipoConta = 'CARTAO');
+alter table buscasalva drop column lancadoEm;

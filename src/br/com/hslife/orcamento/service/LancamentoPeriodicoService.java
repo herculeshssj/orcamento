@@ -181,7 +181,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			lancamento.setAgendado(false);
 			lancamento.setCategoria(pagamentoPeriodo.getLancamentoPeriodico().getCategoria());
 			lancamento.setConta(pagamentoPeriodo.getLancamentoPeriodico().getConta());
-			lancamento.setDataLancamento(pagamentoPeriodo.getDataPagamento());
 			lancamento.setDataPagamento(pagamentoPeriodo.getDataPagamento());
 			lancamento.setDescricao(pagamentoPeriodo.getLancamentoPeriodico().getDescricao() + " - " +  pagamentoPeriodo.getLabel());
 			lancamento.setFavorecido(pagamentoPeriodo.getLancamentoPeriodico().getFavorecido());

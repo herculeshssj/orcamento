@@ -61,8 +61,6 @@ public class CriterioLancamentoConta {
 	
 	private Date dataFim;
 	
-	private Date lancadoEm;
-	
 	private String parcela;
 	
 	private Moeda moeda;
@@ -188,14 +186,6 @@ public class CriterioLancamentoConta {
 
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
-	}
-
-	public Date getLancadoEm() {
-		return lancadoEm;
-	}
-
-	public void setLancadoEm(Date lancadoEm) {
-		this.lancadoEm = lancadoEm;
 	}
 
 	public String getParcela() {

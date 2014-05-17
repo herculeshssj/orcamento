@@ -218,7 +218,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			}
 			
 			// Exclui as buscas salvas
-			for (BuscaSalva busca : buscaSalvaRepository.findByConta(entity)) {
+			for (BuscaSalva busca : buscaSalvaRepository.findContaAndTipoContaAndContaAtivaByUsuario(entity, null, null, entity.getUsuario())) {
 				buscaSalvaRepository.delete(busca);
 			}
 			

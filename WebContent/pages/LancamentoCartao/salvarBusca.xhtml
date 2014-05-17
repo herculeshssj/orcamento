@@ -72,8 +72,13 @@
 			Parcela:
 			<h:outputText value="#{managedBean.buscaSalva.textoParcela}" />
 			
-			Lançado em:	
-			<h:outputText value="#{managedBean.buscaSalva.lancadoEm}">
+			Data inicial:	
+			<h:outputText value="#{managedBean.buscaSalva.dataInicio}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Data final:	
+			<h:outputText value="#{managedBean.buscaSalva.dataFim}">
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			

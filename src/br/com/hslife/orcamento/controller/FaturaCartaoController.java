@@ -345,13 +345,13 @@ public class FaturaCartaoController extends AbstractController {
 	}
 	
 	public void incluirLancamento() {
-		if (criterioBusca.getLancadoEm() == null || criterioBusca.getDescricao() == null || criterioBusca.getDescricao().trim().isEmpty()) {
+		if (criterioBusca.getDataInicio() == null || criterioBusca.getDescricao() == null || criterioBusca.getDescricao().trim().isEmpty()) {
 			warnMessage("Preencha a data de lançamento e informe uma descrição!");
 		} else {			
 			try {
 				lancamento = new LancamentoConta();
 				lancamento.setConta(contaService.buscarPorID(entity.getConta().getId()));
-				lancamento.setDataLancamento(criterioBusca.getLancadoEm());
+				lancamento.setDataPagamento(criterioBusca.getDataInicio());
 				lancamento.setDescricao(criterioBusca.getDescricao());
 				lancamento.setMoeda(criterioBusca.getMoeda());
 				lancamento.setParcela(criterioBusca.getParcela());

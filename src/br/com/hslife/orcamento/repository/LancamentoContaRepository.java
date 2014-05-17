@@ -95,11 +95,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(Restrictions.eq("quitado", criterio.getQuitadoBoolean()));
 		}
 		
-		if (criterio.getLancadoEm() != null) {
-			criteria.add(Restrictions.ge("dataLancamento", criterio.getLancadoEm()));
-			criteria.add(Restrictions.le("dataLancamento", criterio.getLancadoEm()));
-		}
-		
 		if (criterio.getMoeda() != null) {
 			criteria.add(Restrictions.eq("moeda.id", criterio.getMoeda().getId()));
 		}
@@ -146,11 +141,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		
 		if (criterio.getQuitado() == 1 || criterio.getQuitado() == -1) {
 			criteria.add(Restrictions.eq("lancamento.quitado", criterio.getQuitadoBoolean()));
-		}
-		
-		if (criterio.getLancadoEm() != null) {
-			criteria.add(Restrictions.ge("lancamento.dataLancamento", criterio.getLancadoEm()));
-			criteria.add(Restrictions.le("lancamento.dataLancamento", criterio.getLancadoEm()));
 		}
 		
 		if (criterio.getMoeda() != null) {

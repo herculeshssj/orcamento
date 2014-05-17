@@ -49,22 +49,12 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IBuscaSalva extends ICRUDService<BuscaSalva>{
 	
-	public List<BuscaSalva> buscarPorConta(Conta conta) throws BusinessException;
+	public List<BuscaSalva> buscarContaETipoContaEContaAtivaPorUsuario(Conta conta, TipoConta[] tipoConta, Boolean contaAtiva, Usuario usuario) throws BusinessException;
 	
-	public List<BuscaSalva> buscarTodosPorUsuario(Usuario usuario) throws BusinessException;
-	
-	public List<BuscaSalva> buscarTodosContaAtivaPorUsuario(Usuario usuario) throws BusinessException;
-	
-	public List<BuscaSalva> buscarTodosPorContaEUsuario(Conta conta, Usuario usuario) throws BusinessException;
-	
-	public List<BuscaSalva> buscarTodosContaAtivaPorContaEUsuario(Conta conta, Usuario usuario) throws BusinessException;
-	
-	public List<BuscaSalva> buscarTodosContaCartaoPorUsuario(Usuario usuario) throws BusinessException;
-	
-	public List<BuscaSalva> buscarTodosContaCartaoAtivaPorUsuario(Usuario usuario) throws BusinessException;
 }

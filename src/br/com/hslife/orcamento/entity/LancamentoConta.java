@@ -84,10 +84,6 @@ public class LancamentoConta extends EntityPersistence {
 	
 	@Temporal(TemporalType.DATE)
 	@Column(nullable=true)
-	private Date dataLancamento;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(nullable=true)
 	private Date dataPagamento;
 	
 	@Column(length=100, nullable=false)
@@ -165,7 +161,6 @@ public class LancamentoConta extends EntityPersistence {
 	
 	public LancamentoConta(LancamentoConta lancamento) {
 		descricao = lancamento.getDescricao();
-		dataLancamento = lancamento.getDataLancamento();
 		valorPago = lancamento.getValorPago();
 		dataPagamento = lancamento.getDataPagamento();
 		observacao = lancamento.getObservacao();
@@ -213,10 +208,6 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getDataLancamento() {
-		return dataLancamento;
 	}
 
 	public Date getDataPagamento() {
@@ -365,10 +356,6 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setParcela(String parcela) {
 		this.parcela = parcela;
-	}
-
-	public void setDataLancamento(Date dataLancamento) {
-		this.dataLancamento = dataLancamento;
 	}
 
 	public FaturaCartao getFaturaCartao() {

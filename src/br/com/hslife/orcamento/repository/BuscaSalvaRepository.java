@@ -46,15 +46,13 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 
 @Repository
 public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
@@ -64,58 +62,35 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<BuscaSalva> findByConta(Conta conta) {
-		// TODO migrar para HQL
-		Criteria criteria = getSession().createCriteria(BuscaSalva.class);
-		criteria.add(Restrictions.eq("conta.id", conta.getId()));
-		return criteria.addOrder(Order.asc("descricao")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<BuscaSalva> findAllByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
-		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and not c.tipoConta = 'CARTAO' order by b.descricao asc";
-		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
-		return query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<BuscaSalva> findAllEnabledContaByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
-		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and c.ativo = true and not c.tipoConta = 'CARTAO' order by b.descricao asc";
-		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
-		return query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<BuscaSalva> findAllByContaAndUsuario(Conta conta, Usuario usuario) {
-		// TODO migrar para HQL
-		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta and c.id = :idConta where c.idUsuario = :idUsuario order by b.descricao asc";
-		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId()).setLong("idConta", conta.getId());
-		return query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<BuscaSalva> findAllEnabledContaByContaAndUsuario(Conta conta, Usuario usuario) {
-		// TODO migrar para HQL
-		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta and c.id = :idConta where c.idUsuario = :idUsuario and c.ativo = true order by b.descricao asc";
-		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId()).setLong("idConta", conta.getId());
-		return query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<BuscaSalva> findAllContaCartaoByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
-		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and c.tipoConta = 'CARTAO' order by b.descricao asc";
-		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
-		return query.list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<BuscaSalva> findAllEnabledContaCartaoByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
-		String sql = "select b.* from buscasalva b inner join conta c on c.id = b.idConta where c.idUsuario = :idUsuario and c.tipoConta = 'CARTAO' and c.ativo = true order by b.descricao asc";
-		Query query = getSession().createSQLQuery(sql).addEntity(BuscaSalva.class).setLong("idUsuario", usuario.getId());
-		return query.list();
+	public List<BuscaSalva> findContaAndTipoContaAndContaAtivaByUsuario(Conta conta, TipoConta[] tipoConta, Boolean contaAtiva, Usuario usuario) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM BuscaSalva busca WHERE ");
+		if (conta != null) {
+			hql.append("busca.conta.id = :idConta AND ");
+		}
+		if (tipoConta != null && tipoConta.length != 0) {
+			hql.append("busca.conta.tipoConta IN (:tipoConta) AND ");
+		}
+		if (contaAtiva != null) {
+			hql.append("busca.conta.ativo = :contaAtiva AND ");
+		}
+		
+		hql.append("busca.conta.usuario.id = :idUsuario ORDER BY busca.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		
+		if (conta != null) {
+			hqlQuery.setLong("idConta", conta.getId());
+		}
+		if (tipoConta != null && tipoConta.length != 0) {
+			hqlQuery.setParameterList("tipoConta", tipoConta);
+		}
+		if (contaAtiva != null) {
+			hqlQuery.setBoolean("contaAtiva", contaAtiva);
+		}
+		
+		hqlQuery.setLong("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
 	}
 }

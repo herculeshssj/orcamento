@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoAgrupamentoBusca {
-	DEBITO_CREDITO("Débito/Crédito"), CATEGORIA("Categoria"), FAVORECIDO("Favorecido"), MEIOPAGAMENTO("Meio de Pagamento"), NENHUM("Nenhum");
+	DEBITO_CREDITO("Débito/Crédito"), CATEGORIA("Categoria"), FAVORECIDO("Favorecido"), MEIOPAGAMENTO("Meio de Pagamento"), MOEDA("Moeda"), NENHUM("Nenhum");
 	
 	private String descricao;
 	

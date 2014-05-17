@@ -68,6 +68,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
@@ -236,7 +237,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public void atualizaComboBuscasSalvas() {
 		try {
-			buscasSalvas = buscaSalvaService.buscarPorConta(criterioBusca.getConta());
+			buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, null, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -492,33 +493,14 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		}
 		return listagem;
 	}
-	/*
-	public List<LancamentoImportado> getListaLancamentoImportado() {
-		try {
-			return getService().buscarLancamentoImportadoPorConta(entity.getConta());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<LancamentoImportado>();
-	}
-	*/
+	
 	public List<BuscaSalva> getBuscasSalvas() {
 		try {
 			if (buscasSalvas.isEmpty()) {
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", getUsuarioLogado());
-				
-				// Determina qual listagem será retornada
-				if (opcao != null && Boolean.valueOf(opcao.getValor()))
-					if (criterioBusca.getConta() == null)
-						buscasSalvas = buscaSalvaService.buscarTodosPorUsuario(getUsuarioLogado());
-					else
-						buscasSalvas = buscaSalvaService.buscarTodosPorContaEUsuario(criterioBusca.getConta(), getUsuarioLogado());
-				else 
-					if (criterioBusca.getConta() == null)
-						buscasSalvas = buscaSalvaService.buscarTodosContaAtivaPorUsuario(getUsuarioLogado());
-					else
-						buscasSalvas = buscaSalvaService.buscarTodosContaAtivaPorContaEUsuario(criterioBusca.getConta(), getUsuarioLogado());
+				if (getOpcoesSistema().getExibirContasInativas())
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, null, getUsuarioLogado());
+				else
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, true, getUsuarioLogado());
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
