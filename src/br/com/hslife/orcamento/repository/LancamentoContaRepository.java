@@ -99,10 +99,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(Restrictions.eq("moeda.id", criterio.getMoeda().getId()));
 		}
 		
-		if (criterio.getParcela() != null && !criterio.getParcela().isEmpty()) {
-			criteria.add(Restrictions.ilike("parcela", criterio.getParcela(), MatchMode.ANYWHERE));
-		}
-		
 		if (criterio.getTipo() != null) {
 			criteria.add(Restrictions.eq("tipoLancamento", criterio.getTipo()));
 		}

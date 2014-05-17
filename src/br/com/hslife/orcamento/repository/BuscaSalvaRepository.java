@@ -64,17 +64,13 @@ public class BuscaSalvaRepository extends AbstractCRUDRepository<BuscaSalva> {
 	@SuppressWarnings("unchecked")
 	public List<BuscaSalva> findContaAndTipoContaAndContaAtivaByUsuario(Conta conta, TipoConta[] tipoConta, Boolean contaAtiva, Usuario usuario) {
 		StringBuilder hql = new StringBuilder();
-		hql.append("FROM BuscaSalva busca WHERE ");
-		if (conta != null) {
-			hql.append("busca.conta.id = :idConta AND ");
-		}
-		if (tipoConta != null && tipoConta.length != 0) {
-			hql.append("busca.conta.tipoConta IN (:tipoConta) AND ");
-		}
-		if (contaAtiva != null) {
-			hql.append("busca.conta.ativo = :contaAtiva AND ");
-		}
 		
+		hql.append("FROM BuscaSalva busca WHERE ");
+		
+		repositoryUtil.validAndAddToHQL(hql, "busca.conta.id = :idConta AND ", conta);
+		repositoryUtil.validAndAddToHQL(hql, "busca.conta.ativo = :contaAtiva AND ", contaAtiva);
+		repositoryUtil.validAndAddToHQL(hql, "busca.conta.tipoConta IN (:tipoConta) AND ", tipoConta);
+				
 		hql.append("busca.conta.usuario.id = :idUsuario ORDER BY busca.descricao ASC");
 		
 		Query hqlQuery = getQuery(hql.toString());

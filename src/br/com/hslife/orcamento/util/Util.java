@@ -407,9 +407,9 @@ public class Util {
 
         /* Primeira parte */
         for (int i = 0; i < 4; i++) {
-            if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9) {
+            //if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9) {
                 soma += (chr_cnpj[i] - 48) * (6 - (i + 1));
-            }
+            //}
         }
         for (int i = 0; i < 8; i++) {
             if (chr_cnpj[i + 4] - 48 >= 0 && chr_cnpj[i + 4] - 48 <= 9) {
@@ -424,9 +424,9 @@ public class Util {
         /* Segunda parte */
         soma = 0;
         for (int i = 0; i < 5; i++) {
-            if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9) {
+            //if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9) {
                 soma += (chr_cnpj[i] - 48) * (7 - (i + 1));
-            }
+            //}
         }
         for (int i = 0; i < 8; i++) {
             if (chr_cnpj[i + 5] - 48 >= 0 && chr_cnpj[i + 5] - 48 <= 9) {

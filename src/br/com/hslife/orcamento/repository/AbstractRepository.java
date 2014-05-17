@@ -49,10 +49,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.util.RepositoryUtil;
+
 public abstract class AbstractRepository {
 	
 	@Autowired
 	protected SessionFactory sessionFactory;
+	
+	@Autowired
+	protected RepositoryUtil repositoryUtil;
 	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -64,5 +69,9 @@ public abstract class AbstractRepository {
 	
 	protected Query getQuery(String hql) {
 		return getSession().createQuery(hql);
+	}
+
+	public void setRepositoryUtil(RepositoryUtil repositoryUtil) {
+		this.repositoryUtil = repositoryUtil;
 	}
 }
