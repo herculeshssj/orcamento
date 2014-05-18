@@ -72,7 +72,7 @@
 			
 			Tipo de Lançamento:
 			<p:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" rendered="#{!managedBean.entity.quitado}" required="true" requiredMessage="Informe o tipo de lançamento!">
-				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
+				<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>
 				<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>				
 			</p:selectOneRadio>
 			<h:outputText value="#{managedBean.entity.tipoLancamento}" rendered="#{managedBean.entity.quitado}"/>
@@ -85,7 +85,7 @@
 			
 			Moeda:
 			<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.quitado}">
-				<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+				<f:selectItems value="#{entityCombo.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>			
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
@@ -137,7 +137,7 @@
 			Favorecido/Sacado:
 			<h:selectOneMenu id="txtFavorecido" value="#{managedBean.entity.favorecido}" converter="entityConverter" rendered="#{managedBean.entity.conta.ativo}">
 				<f:selectItem itemLabel="Nenhum favorecido"/>
-				<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{entityCombo.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.descricaoFavorecido}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
@@ -145,7 +145,7 @@
 			<h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.entity.meioPagamento}" converter="entityConverter" rendered="#{managedBean.entity.conta.ativo and managedBean.opcoesSistema.exibirMeioPagamento}">
 				<f:selectItem itemLabel="Nenhum meio de pagamento"/>
-				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{entityCombo.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{!managedBean.entity.conta.ativo and managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			<h:outputText value="" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>

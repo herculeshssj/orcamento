@@ -108,7 +108,7 @@
      			<f:facet name="header">
      				<h:outputText value="Histórico"/>
      			</f:facet>
-     			<h:outputText value="#{item.dataLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+     			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
      				<f:converter converterId="dateConverter"/>
      			</h:outputText>
      			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>

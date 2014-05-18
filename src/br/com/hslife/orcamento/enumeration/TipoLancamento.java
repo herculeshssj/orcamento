@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoLancamento {	
-	RECEITA("RECEITA"), DESPESA("DESPESA");
+	RECEITA("Receita"), DESPESA("Despesa");
 	
 	private String descricao;
 	

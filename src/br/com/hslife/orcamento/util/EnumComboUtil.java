@@ -56,6 +56,7 @@ import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 
 @Component("enumCombo")
 @Scope("application")
@@ -97,6 +98,14 @@ public class EnumComboUtil {
 	public List<SelectItem> getListaAbrangencia() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (Abrangencia enumeration : Abrangencia.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaTipoLancamento() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (TipoLancamento enumeration : TipoLancamento.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

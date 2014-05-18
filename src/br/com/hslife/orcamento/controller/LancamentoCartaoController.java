@@ -514,24 +514,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		return new ArrayList<Categoria>();
 	}
 	
-	public List<Favorecido> getListaFavorecido() {
-		try {
-			return favorecidoService.buscarPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<Favorecido>();
-	}
-	
-	public List<MeioPagamento> getListaMeioPagamento() {
-		try {
-			return meioPagamentoService.buscarPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<MeioPagamento>();
-	}
-	
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
 		try {
@@ -552,15 +534,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		return listagem;
 	}
 	
-	public List<Moeda> getListaMoeda() {
-		try {
-			return moedaService.buscarPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
-	}
-	
 	public List<BuscaSalva> getBuscasSalvas() {
 		try {
 			if (buscasSalvas.isEmpty()) {
@@ -573,13 +546,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 			errorMessage(be.getMessage());
 		}
 		return buscasSalvas;
-	}
-	
-	public List<SelectItem> getListaTipoLancamento() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		listaSelectItem.add(new SelectItem(TipoLancamento.RECEITA, "Receita"));
-		listaSelectItem.add(new SelectItem(TipoLancamento.DESPESA, "Despesa"));
-		return listaSelectItem;
 	}
 
 	public ILancamentoConta getService() {
