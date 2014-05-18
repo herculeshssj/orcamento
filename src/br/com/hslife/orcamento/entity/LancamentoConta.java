@@ -206,27 +206,11 @@ public class LancamentoConta extends EntityPersistence {
 		return id;
 	}
 	
-	public List<LancamentoConta> clonarLancamentos(int quantidade) {
-		return this.clonarLancamentos(this, quantidade);
-	}
-	
 	public List<LancamentoConta> clonarLancamentos(int quantidade, IncrementoClonagemLancamento incremento) {
-		return this.clonarLancamentos(this, quantidade, incremento);
-	}
-	
-	public List<LancamentoConta> clonarLancamentos(LancamentoConta lancamentoOrigem, int quantidade) {
-		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
-		for (int i = 1; i <= quantidade; i++) {
-			lancamentos.add(new LancamentoConta(lancamentoOrigem));
-		}
-		return lancamentos;
-	}
-	
-	public List<LancamentoConta> clonarLancamentos(LancamentoConta lancamentoOrigem, int quantidade, IncrementoClonagemLancamento incremento) {
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
 		LancamentoConta lancamentoDestino;
 		for (int i = 1; i <= quantidade; i++) {
-			lancamentoDestino = new LancamentoConta(lancamentoOrigem);
+			lancamentoDestino = new LancamentoConta(this);
 			Calendar temp = Calendar.getInstance();				
 			temp.setTime(lancamentoDestino.getDataPagamento());
 			switch (incremento) {
@@ -403,5 +387,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setFaturaCartao(FaturaCartao faturaCartao) {
 		this.faturaCartao = faturaCartao;
+	}
+
+	public PagamentoPeriodo getPagamentoPeriodo() {
+		return pagamentoPeriodo;
+	}
+
+	public void setPagamentoPeriodo(PagamentoPeriodo pagamentoPeriodo) {
+		this.pagamentoPeriodo = pagamentoPeriodo;
 	}
 }

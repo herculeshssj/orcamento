@@ -95,10 +95,10 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Conta> findByUsuario(Long idUsuario) {
+	public List<Conta> findByUsuario(Usuario usuario) {
 		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Conta.class);
-		criteria.add(Restrictions.eq("usuario.id", idUsuario));
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}

@@ -98,7 +98,7 @@ public class FechamentoPeriodoController extends AbstractCRUDController<Fechamen
 			
 			// Determina qual listagem será retornada
 			if (opcao != null && Boolean.valueOf(opcao.getValor()))
-				return contaService.buscarPorUsuario(getUsuarioLogado().getId());
+				return contaService.buscarPorUsuario(getUsuarioLogado());
 			else 
 				return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
 		} catch (BusinessException be) {

@@ -248,8 +248,8 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public List<Conta> buscarPorUsuario(Long idUsuario)	throws BusinessException {
-		return getRepository().findByUsuario(idUsuario);
+	public List<Conta> buscarPorUsuario(Usuario usuario)	throws BusinessException {
+		return getRepository().findByUsuario(usuario);
 	}
 	
 	@Override

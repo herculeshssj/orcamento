@@ -63,7 +63,7 @@ public interface IConta extends ICRUDService<Conta> {
 	
 	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario) throws BusinessException;
 	
-	public List<Conta> buscarPorUsuario(Long idUsuario) throws BusinessException;
+	public List<Conta> buscarPorUsuario(Usuario usuario) throws BusinessException;
 	
 	public List<Conta> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
 	

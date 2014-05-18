@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -272,7 +273,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public void copiarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
 		for (LancamentoConta lancamentoOrigem : lancamentos) {
-			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(1)) {
+			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(1, IncrementoClonagemLancamento.NENHUM)) {
 				if (parametros.get("CONTA_DESTINO") != null)
 					lancamentoCopiado.setConta((Conta)parametros.get("CONTA_DESTINO"));
 				if (parametros.get("CATEGORIA_DESTINO") != null) { 

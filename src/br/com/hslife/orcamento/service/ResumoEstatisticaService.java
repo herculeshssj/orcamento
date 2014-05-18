@@ -142,7 +142,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
 		
 		// Itera todas as contas do usuário
-		for (Conta conta : contaRepository.findByUsuario(usuario.getId())) {
+		for (Conta conta : contaRepository.findByUsuario(usuario)) {
 			
 			// Define a descrição da conta
 			saldoAtual.setDescricaoConta(conta.getDescricao());

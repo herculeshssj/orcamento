@@ -111,6 +111,9 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	private MovimentacaoLancamentoCartaoController movimentacaoLancamentoCartaoMB;
 	
 	@Autowired
+	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
+	
+	@Autowired
 	private IBuscaSalva buscaSalvaService;
 	
 	@Autowired
@@ -163,6 +166,11 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		movimentacaoLancamentoCartaoMB.setFavorecidoService(favorecidoService);
 		movimentacaoLancamentoCartaoMB.setMeioPagamentoService(meioPagamentoService);
 		movimentacaoLancamentoCartaoMB.setContaService(contaService);
+		
+		movimentacaoLancamentoMB.setCategoriaService(categoriaService);
+		movimentacaoLancamentoMB.setFavorecidoService(favorecidoService);
+		movimentacaoLancamentoMB.setMeioPagamentoService(meioPagamentoService);
+		movimentacaoLancamentoMB.setContaService(contaService);
 	}
 	
 	@Override
@@ -313,24 +321,10 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	}
 	
 	public String mover() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoCartaoMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado() && !l.isQuitado() && l.getFaturaCartao() == null) {
-					movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoCartaoMB.moverView();
-			} else {
-				warnMessage("Nenhum lançamento a mover!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
-		}
-		return "";
+		movimentacaoLancamentoMB.setLancamentosSelecionados(listEntity);
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoCartaoMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.moverView();
 	}
 	
 	public String copiar() {

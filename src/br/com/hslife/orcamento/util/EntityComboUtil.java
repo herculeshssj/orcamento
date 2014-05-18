@@ -57,12 +57,15 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Categoria;
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -76,6 +79,9 @@ public class EntityComboUtil {
 	
 	@Autowired
 	private ICategoria categoriaService;
+	
+	@Autowired
+	private IConta contaService;
 	
 	@Autowired
 	private IFavorecido favorecidoService;
@@ -101,6 +107,24 @@ public class EntityComboUtil {
 	public List<Categoria> getListaCategoria() {
 		try {
 			return categoriaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Conta> getListaConta() {
+		try {
+			return contaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Conta> getListaContaCartao() {
+		try {
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), null);
 		} catch (BusinessException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}

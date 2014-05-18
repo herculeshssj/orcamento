@@ -59,11 +59,11 @@
 	   	<p:dataTable id="tableListEntity" width="100%" value="#{managedBean.listEntity}" var="item" style="font-size: 16px;">
 	   		<p:column style="text-align: center; vertical-align: middle;">
 	   			<f:facet name="header">
-	   				<h:selectBooleanCheckbox value="#{managedBean.selecionarTodosLancamentos}">
+	   				<p:selectBooleanCheckbox value="#{managedBean.selecionarTodosLancamentos}">
 	   					<p:ajax update="tableListEntity" listener="#{managedBean.selecionarTodos}" />
-	   				</h:selectBooleanCheckbox>
+	   				</p:selectBooleanCheckbox>
 	   			</f:facet>
-	   			<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+	   			<p:selectBooleanCheckbox value="#{item.selecionado}"/>
 	   		</p:column>
 	   		<p:column style="vertical-align: middle;">
 	   			<f:facet name="header">
