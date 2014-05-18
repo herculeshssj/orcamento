@@ -44,7 +44,10 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -66,6 +69,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 
@@ -157,6 +161,7 @@ public class LancamentoConta extends EntityPersistence {
 	
 	public LancamentoConta() {
 		conta = new Conta();
+		tipoLancamento = TipoLancamento.DESPESA;
 	}
 	
 	public LancamentoConta(LancamentoConta lancamento) {
@@ -171,7 +176,6 @@ public class LancamentoConta extends EntityPersistence {
 		tipoLancamento = lancamento.getTipoLancamento();
 		agendado = lancamento.isAgendado();
 		moeda = lancamento.getMoeda();
-		parcela = lancamento.getParcela();
 	}
 
 	@Override
@@ -200,6 +204,41 @@ public class LancamentoConta extends EntityPersistence {
 
 	public Long getId() {
 		return id;
+	}
+	
+	public List<LancamentoConta> clonarLancamentos(int quantidade) {
+		return this.clonarLancamentos(this, quantidade);
+	}
+	
+	public List<LancamentoConta> clonarLancamentos(int quantidade, IncrementoClonagemLancamento incremento) {
+		return this.clonarLancamentos(this, quantidade, incremento);
+	}
+	
+	public List<LancamentoConta> clonarLancamentos(LancamentoConta lancamentoOrigem, int quantidade) {
+		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
+		for (int i = 1; i <= quantidade; i++) {
+			lancamentos.add(new LancamentoConta(lancamentoOrigem));
+		}
+		return lancamentos;
+	}
+	
+	public List<LancamentoConta> clonarLancamentos(LancamentoConta lancamentoOrigem, int quantidade, IncrementoClonagemLancamento incremento) {
+		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
+		LancamentoConta lancamentoDestino;
+		for (int i = 1; i <= quantidade; i++) {
+			lancamentoDestino = new LancamentoConta(lancamentoOrigem);
+			Calendar temp = Calendar.getInstance();				
+			temp.setTime(lancamentoDestino.getDataPagamento());
+			switch (incremento) {
+				case DIA : temp.add(Calendar.DAY_OF_YEAR, i); break;
+				case MES : temp.add(Calendar.MONTH, i); break;
+				case ANO : temp.add(Calendar.YEAR, i); break;
+				default : // faz nada com a data de pagamento
+			}
+			lancamentoDestino.setDataPagamento(temp.getTime());
+			lancamentos.add(lancamentoDestino);
+		}
+		return lancamentos;
 	}
 	
 	public void setValorPago(double valorPago) {

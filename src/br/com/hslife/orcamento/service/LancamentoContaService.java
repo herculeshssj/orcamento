@@ -47,7 +47,6 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -272,6 +271,27 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Override
 	public void copiarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
+		for (LancamentoConta lancamentoOrigem : lancamentos) {
+			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(1)) {
+				if (parametros.get("CONTA_DESTINO") != null)
+					lancamentoCopiado.setConta((Conta)parametros.get("CONTA_DESTINO"));
+				if (parametros.get("CATEGORIA_DESTINO") != null) { 
+					if ( ((Categoria)parametros.get("CATEGORIA_DESTINO")).getTipoCategoria().equals(TipoCategoria.CREDITO) ) {
+						lancamentoCopiado.setTipoLancamento(TipoLancamento.RECEITA);
+					} else {
+						lancamentoCopiado.setTipoLancamento(TipoLancamento.DESPESA);
+					}
+					lancamentoCopiado.setCategoria((Categoria)parametros.get("CATEGORIA_DESTINO"));
+				}
+				if (parametros.get("FAVORECIDO_DESTINO") != null) 
+					lancamentoCopiado.setFavorecido((Favorecido)parametros.get("FAVORECIDO_DESTINO"));
+				if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
+					lancamentoCopiado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
+				getRepository().save(lancamentoCopiado);
+			}
+		}
+		
+		/*
 		// Instanciação das variáveis
 		LancamentoConta lancamentoCopiado;
 		List<LancamentoConta> lancamentosCopiados = new ArrayList<LancamentoConta>(); 
@@ -345,10 +365,12 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 				faturaCartaoRepository.update(faturaFutura);
 			}
 		}
+		*/
 	}
 	
 	@Override
 	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
+		/*
 		LancamentoConta lancamentoDuplicado;
 		Integer quantADuplicar = (Integer)parametros.get("QUANT_DUPLICAR");		
 		String incrementarData = parametros.get("INCREMENTAR_DATA") == null ? null : (String)parametros.get("INCREMENTAR_DATA");
@@ -453,6 +475,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 					}
 				}
 			}
+			
 		}
 		
 		// Salva as faturas
@@ -468,6 +491,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			}
 			
 		}
+		*/
 	}
 	
 	@Override
