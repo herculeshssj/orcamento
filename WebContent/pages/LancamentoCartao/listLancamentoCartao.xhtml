@@ -68,7 +68,7 @@
   			<p:graphicImage value="/resources/images/copiar.png" />
   		</h:commandLink>
   		&nbsp;
-  		<h:commandLink title="Altera propriedades dos lançamentos">
+  		<h:commandLink action="#{managedBean.alterarPropriedades}" title="Altera propriedades dos lançamentos">
   			<p:graphicImage value="/resources/images/propriedades.png" />
   		</h:commandLink>
   		&nbsp;
@@ -142,7 +142,7 @@
 		<strong>Cartão:</strong>
 		&nbsp;
 		<h:selectOneMenu id="txtConta" value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			<f:selectItems value="#{entityCombo.listaContaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			<p:ajax update="txtBuscaSalva" listener="#{managedBean.atualizaComboBuscasSalvas}"/>			
 		</h:selectOneMenu>
 		&nbsp;

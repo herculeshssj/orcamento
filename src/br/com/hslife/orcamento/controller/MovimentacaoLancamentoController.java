@@ -50,8 +50,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.model.SelectItem;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -61,12 +59,10 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
-import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.facade.IFavorecido;
-import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMovimentacaoLancamento;
 
 @Component("movimentacaoLancamentoMB")
@@ -82,15 +78,14 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	private IMovimentacaoLancamento service;
 	
 	@Autowired
-	private IConta contaService;
 	private ICategoria categoriaService;
-	private IFavorecido favorecidoService;
-	private IMeioPagamento meioPagamentoService;
 	
-	private String opcaoMovimentar;
 	private int quantADuplicar = 1;
-	private String incrementarData;
 	private LancamentoConta lancamentoATransferir;
+	private IncrementoClonagemLancamento incremento;
+	private String descricao;
+	private String observacao;
+	private TipoCategoria tipoCategoriaSelecionada;
 	
 	private List<LancamentoConta> lancamentosSelecionados;
 	
@@ -144,25 +139,6 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			return goToListCartaoPage;
 	}
 	
-	public String movimentarLancamentos() {		
-		if (opcaoMovimentar.equals("MOVE")) {
-			return moverLancamentos();
-		}
-		if (opcaoMovimentar.equals("COPY")) {
-			return copiarLancamentos();
-		}
-		if (opcaoMovimentar.equals("DOUBLE")) {
-			return duplicarLancamentos();
-		}
-		if (opcaoMovimentar.equals("DELETE")) {
-			return excluirLancamentos();
-		}
-		if (opcaoMovimentar.equals("TRANSFER")) {
-			return transferirLancamentos();
-		}
-		return "";
-	}
-	
 	public String moverView() {
 		try {
 			if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {
@@ -199,45 +175,16 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		return "";
 	}
 	
-	public String copiarView() {
-		try {
-			actionTitle = " - Copiar";
-			opcaoMovimentar = "COPY";
-			return "/pages/LancamentoCartao/copiarLancamentoCartao";
-		} catch (Exception e) {
-			errorMessage(e.getMessage());
-		}
-		return "";
-	}
-	
-	public String copiarLancamentos() {
-		try {
-			Map<String, Object> parametros = new HashMap<String, Object>();
-			parametros.put("VINCULAR_FATURA", vincularFatura);
-			if (contaSelecionada != null)
-				parametros.put("CONTA_DESTINO", contaSelecionada);
-			if (categoriaSelecionada != null) 
-				parametros.put("CATEGORIA_DESTINO", categoriaSelecionada);
-			if (favorecidoSelecionado != null) 
-				parametros.put("FAVORECIDO_DESTINO", favorecidoSelecionado);
-			if (meioPagamentoSelecionado != null) 
-				parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
-			getService().copiarLancamentos(lancamentosSelecionados, parametros);			
-			infoMessage("Lançamentos copiados com sucesso!");
-			vincularFatura = "";
-			return cancel();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return ""; 
-	}
-	
 	public String duplicarView() {
 		try {
-			actionTitle = " - Duplicar";
-			opcaoMovimentar = "DOUBLE";	
-			return "/pages/LancamentoCartao/duplicarLancamentoCartao";
+			if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {				
+				actionTitle = " - Duplicar";
+				return "/pages/MovimentacaoLancamento/duplicarLancamentos";				
+			} else {
+				warnMessage("Nenhum lançamento selecionado!");
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			errorMessage(e.getMessage());
 		}
 		return "";
@@ -245,21 +192,8 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	
 	public String duplicarLancamentos() {
 		try {
-			Map<String, Object> parametros = new HashMap<String, Object>();
-			parametros.put("QUANT_DUPLICAR", quantADuplicar);
-			parametros.put("INCREMENTAR_DATA", incrementarData);
-			parametros.put("VINCULAR_FATURA", vincularFatura);
-			if (contaSelecionada != null)
-				parametros.put("CONTA_DESTINO", contaSelecionada);						
-			if (categoriaSelecionada != null) 
-				parametros.put("CATEGORIA_DESTINO", categoriaSelecionada);
-			if (favorecidoSelecionado != null) 
-				parametros.put("FAVORECIDO_DESTINO", favorecidoSelecionado);
-			if (meioPagamentoSelecionado != null) 
-				parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
-			getService().duplicarLancamentos(lancamentosSelecionados, parametros);
+			getService().duplicarLancamentos(lancamentosSelecionados, contaSelecionada, quantADuplicar, incremento);			
 			infoMessage("Lançamentos duplicados com sucesso!");
-			vincularFatura = "";
 			return cancel();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -268,15 +202,33 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	}
 	
 	public String excluirView() {
-		actionTitle = " - Excluir";
-		opcaoMovimentar = "DELETE";
-		return "/pages/LancamentoCartao/excluirLancamentoCartao";
+		try {
+			if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {
+				for (Iterator<LancamentoConta> i = lancamentosSelecionados.iterator(); i.hasNext(); ) {
+					LancamentoConta l = i.next();
+					if (l.getFaturaCartao() != null || l.getPagamentoPeriodo() != null) {
+						i.remove();
+					}
+				}
+				if (lancamentosSelecionados.isEmpty()) {
+					warnMessage("Nenhum lançamento a excluir!");
+				} else {
+					actionTitle = " - Excluir";
+					return "/pages/MovimentacaoLancamento/excluirLancamentos";
+				}
+			} else {
+				warnMessage("Nenhum lançamento selecionado!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			errorMessage(e.getMessage());
+		}
+		return "";
 	}
 	
 	public String excluirLancamentos() {
 		try {
-			Map<String, Object> parametros = new HashMap<String, Object>();
-			getService().excluirLancamentos(lancamentosSelecionados, parametros);
+			getService().excluirLancamentos(lancamentosSelecionados);
 			infoMessage("Lançamentos excluídos com sucesso!");
 			return cancel();
 		} catch (BusinessException be) {
@@ -288,9 +240,8 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	public String transferirView() {
 		try {
 			actionTitle = " - Transferir";
-			opcaoMovimentar = "TRANSFER";
 			lancamentoATransferir = new LancamentoConta();
-			return "/pages/LancamentoCartao/transferirLancamentoCartao";
+			return "/pages/MovimentacaoLancamento/transferirLancamento";
 		} catch (Exception e) {
 			errorMessage(e.getMessage());
 		}
@@ -315,6 +266,33 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		return ""; 
 	}
 	
+	public String alterarPropriedadesView() {
+		try {
+			actionTitle = " - Alterar propriedades";
+			return "/pages/MovimentacaoLancamento/propriedadesLancamento";
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}
+		return "";
+	}
+	
+	public String alterarPropriedades() {
+		try {
+			Map<String, Object> parametros = new HashMap<String, Object>();
+			parametros.put("DESCRICAO_DESTINO", descricao);
+			parametros.put("OBSERVACAO_DESTINO", observacao);
+			parametros.put("CATEGORIA_DESTINO", categoriaSelecionada);
+			parametros.put("FAVORECIDO_DESTINO", favorecidoSelecionado);
+			parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
+			getService().alterarPropriedades(lancamentosSelecionados, parametros);
+			infoMessage("Propriedades alteradas com sucesso!");
+			return cancel();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return ""; 
+	}
+	
 	public void excluirLancamentoListaSelecionados() {
 		if (lancamentosSelecionados.size() > 1)
 			lancamentosSelecionados.remove(lancamentoSelecionado);
@@ -322,63 +300,19 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			warnMessage("É necessário ter um lançamento selecionado!");
 		}
 	}
-
-	public List<Conta> getListaContaAtiva() {
-		try {
-			return contaService.buscarSomenteTipoCartaoAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<Conta>();
+	
+	public void atualizaComboCategorias() {
+		this.getListaCategoria();
 	}
 	
-	public List<SelectItem> getListaCategoriaAtivo() {
-		List<SelectItem> listaCategoria = new ArrayList<SelectItem>();
+	public List<Categoria> getListaCategoria() {
 		try {
-			for (Categoria c : categoriaService.buscarAtivosPorUsuario(getUsuarioLogado())) {
-				listaCategoria.add(new SelectItem(c, c.getTipoCategoria() + " - " + c.getDescricao()));
-			}
-			return listaCategoria;
+			if (tipoCategoriaSelecionada != null)
+				return categoriaService.buscarPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		} 
-		return new ArrayList<SelectItem>();
-	}
-	
-	public List<Categoria> getListaCategoriaDebitoAtivo() {		
-		try {
-			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
 		return new ArrayList<Categoria>();
-	}
-	
-	public List<Categoria> getListaCategoriaCreditoAtivo() {
-		try {
-			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<Categoria>();
-	}
-	
-	public List<Favorecido> getListaFavorecidoAtivo() {
-		try {
-			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<Favorecido>();
-	}
-	
-	public List<MeioPagamento> getListaMeioPagamentoAtivo() {
-		try {
-			return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<MeioPagamento>();
 	}
 	
 	public IMovimentacaoLancamento getService() {
@@ -389,44 +323,12 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		this.service = service;
 	}
 
-	public IConta getContaService() {
-		return contaService;
-	}
-
-	public void setContaService(IConta contaService) {
-		this.contaService = contaService;
-	}
-
 	public ICategoria getCategoriaService() {
 		return categoriaService;
 	}
 
 	public void setCategoriaService(ICategoria categoriaService) {
 		this.categoriaService = categoriaService;
-	}
-
-	public IFavorecido getFavorecidoService() {
-		return favorecidoService;
-	}
-
-	public void setFavorecidoService(IFavorecido favorecidoService) {
-		this.favorecidoService = favorecidoService;
-	}
-
-	public IMeioPagamento getMeioPagamentoService() {
-		return meioPagamentoService;
-	}
-
-	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {
-		this.meioPagamentoService = meioPagamentoService;
-	}
-
-	public String getOpcaoMovimentar() {
-		return opcaoMovimentar;
-	}
-
-	public void setOpcaoMovimentar(String opcaoMovimentar) {
-		this.opcaoMovimentar = opcaoMovimentar;
 	}
 
 	public int getQuantADuplicar() {
@@ -510,14 +412,6 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		this.favorecidoDestino = favorecidoDestino;
 	}
 
-	public String getIncrementarData() {
-		return incrementarData;
-	}
-
-	public void setIncrementarData(String incrementarData) {
-		this.incrementarData = incrementarData;
-	}
-
 	public LancamentoConta getLancamentoATransferir() {
 		return lancamentoATransferir;
 	}
@@ -540,5 +434,37 @@ public class MovimentacaoLancamentoController extends AbstractController {
 
 	public void setManagedBeanOrigem(String managedBeanOrigem) {
 		this.managedBeanOrigem = managedBeanOrigem;
+	}
+
+	public IncrementoClonagemLancamento getIncremento() {
+		return incremento;
+	}
+
+	public void setIncremento(IncrementoClonagemLancamento incremento) {
+		this.incremento = incremento;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	public TipoCategoria getTipoCategoriaSelecionada() {
+		return tipoCategoriaSelecionada;
+	}
+
+	public void setTipoCategoriaSelecionada(TipoCategoria tipoCategoriaSelecionada) {
+		this.tipoCategoriaSelecionada = tipoCategoriaSelecionada;
 	}
 }

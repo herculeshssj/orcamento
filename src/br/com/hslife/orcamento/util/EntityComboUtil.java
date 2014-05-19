@@ -54,6 +54,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Categoria;
@@ -61,6 +62,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
@@ -95,6 +97,9 @@ public class EntityComboUtil {
 	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
+	@Autowired
+	private OpcaoSistemaComponent opcaoSistemaComponent;
+	
 	public List<Banco> getListaBanco() {
 		try {
 			return bancoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
@@ -113,9 +118,30 @@ public class EntityComboUtil {
 		return new ArrayList<>();
 	}
 	
+	public List<Categoria> getListaCategoriaCredito() {
+		try {
+			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, usuarioComponent.getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Categoria> getListaCategoriaDebito() {
+		try {
+			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, usuarioComponent.getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
 	public List<Conta> getListaConta() {
 		try {
-			return contaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+			if (opcaoSistemaComponent.getExibirContasInativas())
+				return contaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+			else
+				return contaService.buscarAtivosPorUsuario(usuarioComponent.getUsuarioLogado());
 		} catch (BusinessException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
@@ -124,7 +150,10 @@ public class EntityComboUtil {
 	
 	public List<Conta> getListaContaCartao() {
 		try {
-			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), null);
+			if (opcaoSistemaComponent.getExibirContasInativas())
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), null);
+			else
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), true);
 		} catch (BusinessException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}

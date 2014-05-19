@@ -54,44 +54,26 @@
 
 <ui:composition template="/templates/formulario.xhtml">
 
-	<ui:param name="managedBean" value="#{movimentacaoLancamentoContaMB}" />
+	<ui:param name="managedBean" value="#{movimentacaoLancamentoMB}" />
 	
 	<ui:define name="campos">
 			
 		<h:panelGrid columns="2">
 			
 			Conta:
-			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Informe a conta!">
-				<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-			</h:selectOneMenu>			
-			
-			Categoria:
-			<h:selectOneMenu id="txtCategoria" value="#{managedBean.categoriaSelecionada}"  converter="entityConverter">
-				<f:selectItem itemLabel="Não alterar"/>
-				<f:selectItems value="#{managedBean.listaCategoriaAtivo}"/>
+			<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Informe a conta!" rendered="#{managedBean.managedBeanOrigem == 'lancamentoContaMB'}">
+				<f:selectItems value="#{entityCombo.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
-			
-			Favorecido/Sacado:
-			<h:selectOneMenu id="txtFavorecido" value="#{managedBean.favorecidoSelecionado}" converter="entityConverter">
-				<f:selectItem itemLabel="Não alterar"/>
-				<f:selectItems value="#{managedBean.listaFavorecidoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Informe o cartão!" rendered="#{managedBean.managedBeanOrigem == 'lancamentoCartaoMB'}">
+				<f:selectItems value="#{entityCombo.listaContaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
-			
-			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
-			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.meioPagamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
-				<f:selectItem itemLabel="Não alterar"/>
-				<f:selectItems value="#{managedBean.listaMeioPagamentoAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-			</h:selectOneMenu>			
 							
 			Instâncias a criar:
 			<h:inputText value="#{managedBean.quantADuplicar}"/>
 			
 			Incrementar data de pagamento:
-			<h:selectOneMenu value="#{managedBean.incrementarData}">
-				<f:selectItem itemLabel="Não incrementar" />
-				<f:selectItem itemLabel="Por dia" itemValue="DIA"/>
-				<f:selectItem itemLabel="Por mês" itemValue="MES"/>
-				<f:selectItem itemLabel="Por ano" itemValue="ANO"/>
+			<h:selectOneMenu value="#{managedBean.incremento}">
+				<f:selectItems value="#{enumCombo.listaIncrementoClonagemLancamento}"/>				
 			</h:selectOneMenu>			
 			
 		</h:panelGrid>
@@ -108,11 +90,14 @@
      			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
      			<h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
      			<br/>
+     			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{item.conta.tipoConta == 'CARTAO'}"/>
+     			<h:outputText value="#{item.conta.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{item.conta.tipoConta != 'CARTAO'}"/>
      			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+     				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
      			</h:outputText>
      			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     			
+		     	<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
+		     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
      		</p:column>	     		
      		<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
@@ -131,7 +116,7 @@
 			<p:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;    	
-    	<h:commandLink title="Confirmar" action="#{managedBean.movimentarLancamentos}">
+    	<h:commandLink title="Confirmar" action="#{managedBean.duplicarLancamentos}">
     		<p:graphicImage value="/resources/images/ativar.png" />
     	</h:commandLink>    	
 	</ui:define>

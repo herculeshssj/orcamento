@@ -77,235 +77,46 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	}
 	
 	@Override
-	public void excluirLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
+	public void excluirLancamentos(List<LancamentoConta> lancamentos) throws BusinessException {
 		for (LancamentoConta l : lancamentos) {			
 			lancamentoContaRepository.delete(l);
 		}		
 	}
 	
-	@Override
-	public void copiarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
+	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento) throws BusinessException {
 		for (LancamentoConta lancamentoOrigem : lancamentos) {
-			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(1, IncrementoClonagemLancamento.NENHUM)) {
-				if (parametros.get("CONTA_DESTINO") != null)
-					lancamentoCopiado.setConta((Conta)parametros.get("CONTA_DESTINO"));
-				if (parametros.get("CATEGORIA_DESTINO") != null) { 
-					if ( ((Categoria)parametros.get("CATEGORIA_DESTINO")).getTipoCategoria().equals(TipoCategoria.CREDITO) ) {
-						lancamentoCopiado.setTipoLancamento(TipoLancamento.RECEITA);
-					} else {
-						lancamentoCopiado.setTipoLancamento(TipoLancamento.DESPESA);
-					}
-					lancamentoCopiado.setCategoria((Categoria)parametros.get("CATEGORIA_DESTINO"));
-				}
-				if (parametros.get("FAVORECIDO_DESTINO") != null) 
-					lancamentoCopiado.setFavorecido((Favorecido)parametros.get("FAVORECIDO_DESTINO"));
-				if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
-					lancamentoCopiado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
+			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(quantidade, incremento)) {
+				lancamentoCopiado.setConta(conta);
 				lancamentoContaRepository.save(lancamentoCopiado);
 			}
 		}
-		
-		/*
-		// Instanciação das variáveis
-		LancamentoConta lancamentoCopiado;
-		List<LancamentoConta> lancamentosCopiados = new ArrayList<LancamentoConta>(); 
-		FaturaCartao faturaAtual = new FaturaCartao();
-		FaturaCartao faturaFutura = new FaturaCartao();
-		
-		// Pega o tipo de vinculação da fatura
-		String vincularFatura = (String)parametros.get("VINCULAR_FATURA") == null ? "ATUAL" : (String)parametros.get("VINCULAR_FATURA");
-		
-		// Pega a conta que será setada na fatura
-		Conta conta = parametros.get("CONTA_DESTINO") ==  null ? lancamentos.get(0).getConta() : (Conta)parametros.get("CONTA_DESTINO");
-		
-		// Verifica qual tipo de vinculação será usado e carrega a fatura correspondente
-		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
-			faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
-		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {			
-			faturaFutura = faturaCartaoRepository.findNextFaturaCartaoFutura(conta);
-			
-			// Se não existir fatura futura uma nova é criada
-			if (faturaFutura == null) {
-				// Traz a fatura atual para determinar a data de vencimento da fatura futura
-				faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
-				
-				// Instancia uma nova fatura futura
-				faturaFutura = new FaturaCartao();
-				
-				// Preenche os atributos da fatura futura
-				faturaFutura.setConta(conta);
-				faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
-				faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
-				
-				// Data de vencimento da próxima fatura
-				Calendar vencimento = Calendar.getInstance();
-				vencimento.setTime(faturaAtual.getDataVencimento());		
-				vencimento.add(Calendar.MONTH, 1);		
-				faturaFutura.setDataVencimento(vencimento.getTime());
-						
-				// Salva a nova fatura
-				faturaCartaoRepository.save(faturaFutura);
-			}
-		}
-		
-		// Realiza a cópia dos lançamentos		
-		for (LancamentoConta l : lancamentos) {
-			lancamentoCopiado = new LancamentoConta(l);
-			if (parametros.get("CONTA_DESTINO") != null)
-				lancamentoCopiado.setConta((Conta)parametros.get("CONTA_DESTINO"));
-			if (parametros.get("CATEGORIA_DESTINO") != null) { 
-				if ( ((Categoria)parametros.get("CATEGORIA_DESTINO")).getTipoCategoria().equals(TipoCategoria.CREDITO) ) {
-					lancamentoCopiado.setTipoLancamento(TipoLancamento.RECEITA);
-				} else {
-					lancamentoCopiado.setTipoLancamento(TipoLancamento.DESPESA);
-				}
-				lancamentoCopiado.setCategoria((Categoria)parametros.get("CATEGORIA_DESTINO"));
-			}
-			if (parametros.get("FAVORECIDO_DESTINO") != null) 
-				lancamentoCopiado.setFavorecido((Favorecido)parametros.get("FAVORECIDO_DESTINO"));
-			if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
-				lancamentoCopiado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
-			getRepository().save(lancamentoCopiado);
-			lancamentosCopiados.add(lancamentoCopiado);
-		}
-		
-		// Determina o tipo de vinculação com a fatura, adiciona os lançamentos copiados e salva
-		if (parametros.get("CONTA_DESTINO") != null && ((Conta)parametros.get("CONTA_DESTINO")).getTipoConta().equals(TipoConta.CARTAO)) {
-			if (vincularFatura.equalsIgnoreCase("ATUAL")) {
-				faturaAtual.getDetalheFatura().addAll(lancamentosCopiados);
-				faturaCartaoRepository.update(faturaAtual);
-			} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
-				faturaFutura.getDetalheFatura().addAll(lancamentosCopiados);
-				faturaCartaoRepository.update(faturaFutura);
-			}
-		}
-		*/
 	}
 	
 	@Override
-	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
-		/*
-		LancamentoConta lancamentoDuplicado;
-		Integer quantADuplicar = (Integer)parametros.get("QUANT_DUPLICAR");		
-		String incrementarData = parametros.get("INCREMENTAR_DATA") == null ? null : (String)parametros.get("INCREMENTAR_DATA");
-		
-		// Map que armazenará as faturas futuras. A chave é uma representação String da data de vencimento da fatura
-		Map<String, FaturaCartao> faturasFuturas = new HashMap<String, FaturaCartao>();
-		
-		FaturaCartao faturaAtual = new FaturaCartao();
-		FaturaCartao faturaFutura = new FaturaCartao();
-		Date dataVencimentoFaturaAtual = new Date();
-		
-		// Pega o tipo de vinculação da fatura
-		String vincularFatura = (String)parametros.get("VINCULAR_FATURA") == null ? "ATUAL" : (String)parametros.get("VINCULAR_FATURA");
-		
-		// Pega a conta que será setada na fatura
-		Conta conta = parametros.get("CONTA_DESTINO") ==  null ? lancamentos.get(0).getConta() : (Conta)parametros.get("CONTA_DESTINO");
-		
-		// Verifica qual tipo de vinculação será usado e carrega a fatura correspondente
-		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
-			faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
-		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {			
-			// Popula o Map com as fatura futuras encontradas
-			for (FaturaCartao fc : faturaCartaoRepository.findAllByStatusFatura(conta, StatusFaturaCartao.FUTURA)) {
-				faturasFuturas.put(Util.formataDataHora(fc.getDataVencimento(), Util.DATA), fc);
+	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
+		for (LancamentoConta lancamento : lancamentos) {
+			if (parametros.get("DESCRICAO_DESTINO") != null && !((String)parametros.get("DESCRICAO_DESTINO")).trim().isEmpty()) {
+				lancamento.setDescricao((String)parametros.get("DESCRICAO_DESTINO"));
 			}
-			
-			// Armazena a data de vencimento da fatura atual para uso futuro no método
-			faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(conta);
-			dataVencimentoFaturaAtual = faturaAtual.getDataVencimento();			
-		}
-	
-		// Realiza a duplicação dos lançamentos
-		for (LancamentoConta l : lancamentos) {
-			
-			// Prepara a data de vencimento da fatura
-			Calendar tempFatura = Calendar.getInstance();
-			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {			
-				tempFatura.setTime(dataVencimentoFaturaAtual);				
+			if (parametros.get("OBSERVACAO_DESTINO") != null && !((String)parametros.get("OBSERVACAO_DESTINO")).trim().isEmpty()) {
+				lancamento.setObservacao((String)parametros.get("OBSERVACAO_DESTINO"));
 			}
-			
-			// Duplica os lançamentos incrementando por dia, mês ou ano
-			for (int i = 1; i <= quantADuplicar; i++) {
-				lancamentoDuplicado = new LancamentoConta(l);
-				if (parametros.get("CONTA_DESTINO") != null)
-					lancamentoDuplicado.setConta((Conta)parametros.get("CONTA_DESTINO"));
-				if (parametros.get("CATEGORIA_DESTINO") != null) { 
-					if ( ((Categoria)parametros.get("CATEGORIA_DESTINO")).getTipoCategoria().equals(TipoCategoria.CREDITO) ) {
-						lancamentoDuplicado.setTipoLancamento(TipoLancamento.RECEITA);
-					} else {
-						lancamentoDuplicado.setTipoLancamento(TipoLancamento.DESPESA);
-					}
-					lancamentoDuplicado.setCategoria((Categoria)parametros.get("CATEGORIA_DESTINO"));
-				}
-				if (parametros.get("FAVORECIDO_DESTINO") != null) 
-					lancamentoDuplicado.setFavorecido((Favorecido)parametros.get("FAVORECIDO_DESTINO"));
-				if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
-					lancamentoDuplicado.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
-
-				// Prepara os contadores
-				Calendar temp = Calendar.getInstance();				
-				temp.setTime(lancamentoDuplicado.getDataPagamento());
-				
-				if (incrementarData != null && !incrementarData.isEmpty()) {
-					
-					if (incrementarData.equals("DIA")) {						
-						temp.add(Calendar.DAY_OF_YEAR, i);
-					}
-					if (incrementarData.equals("MES")) {						
-						temp.add(Calendar.MONTH, i);
-						tempFatura.add(Calendar.MONTH, 1);
-					}
-					if (incrementarData.equals("ANO")) {						
-						temp.add(Calendar.YEAR, i);
-						tempFatura.add(Calendar.YEAR, 1);
-					}
-					lancamentoDuplicado.setDataPagamento(temp.getTime());
+			if (parametros.get("CATEGORIA_DESTINO") != null) { 
+				if ( ((Categoria)parametros.get("CATEGORIA_DESTINO")).getTipoCategoria().equals(TipoCategoria.CREDITO) ) {
+					lancamento.setTipoLancamento(TipoLancamento.RECEITA);
 				} else {
-					tempFatura.add(Calendar.MONTH, 1);
+					lancamento.setTipoLancamento(TipoLancamento.DESPESA);
 				}
-				getRepository().save(lancamentoDuplicado);
-				
-				if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
-					// Adiciona o lançamento duplicado do Map, criando novas faturas caso não haja
-					if (vincularFatura.equalsIgnoreCase("FUTURA")) {
-						if (faturasFuturas.containsKey(Util.formataDataHora(tempFatura.getTime(), Util.DATA))) {
-							faturasFuturas.get(Util.formataDataHora(tempFatura.getTime(), Util.DATA)).getDetalheFatura().add(lancamentoDuplicado);
-						} else {
-							// Instancia uma nova fatura futura
-							faturaFutura = new FaturaCartao();
-							
-							// Preenche os atributos da fatura futura
-							faturaFutura.setConta(conta);
-							faturaFutura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
-							faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
-							faturaFutura.setDataVencimento(tempFatura.getTime());
-							faturaFutura.getDetalheFatura().add(lancamentoDuplicado);
-							
-							faturasFuturas.put(Util.formataDataHora(tempFatura.getTime(), Util.DATA), faturaFutura);
-						}
-					} else if (vincularFatura.equalsIgnoreCase("ATUAL")) {
-						faturaAtual.getDetalheFatura().add(lancamentoDuplicado);
-					}
-				}
+				lancamento.setCategoria((Categoria)parametros.get("CATEGORIA_DESTINO"));
 			}
+			if (parametros.get("FAVORECIDO_DESTINO") != null) 
+				lancamento.setFavorecido((Favorecido)parametros.get("FAVORECIDO_DESTINO"));
+			if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
+				lancamento.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 			
+			lancamentoContaRepository.update(lancamento);
 		}
 		
-		// Salva as faturas
-		if (vincularFatura.equalsIgnoreCase("ATUAL")) {
-			faturaCartaoRepository.update(faturaAtual);
-		} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
-			for (FaturaCartao fc : faturasFuturas.values()) {
-				if (fc.getId() == null) {
-					faturaCartaoRepository.save(fc);
-				} else {
-					faturaCartaoRepository.update(fc);
-				}
-			}
-			
-		}
-		*/
 	}
 	
 	@Override
@@ -336,6 +147,5 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		
 		lancamentoContaRepository.save(lancamentoOrigem);
 		lancamentoContaRepository.save(lancamentoDestino);
-	}
-	
+	}	
 }

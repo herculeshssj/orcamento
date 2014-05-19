@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -75,9 +76,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
-import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
@@ -100,15 +99,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	
 	@Autowired
 	private ICategoria categoriaService;
-	
-	@Autowired
-	private IFavorecido favorecidoService;
-	
-	@Autowired
-	private IMeioPagamento meioPagamentoService;
-	
-	@Autowired
-	private MovimentacaoLancamentoCartaoController movimentacaoLancamentoCartaoMB;
 	
 	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
@@ -158,19 +148,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
 		
 		buscasSalvas.clear();
-	}
-	
-	private void initializeMovimentaLancamentoMB() {
-		movimentacaoLancamentoCartaoMB.setService(getService());
-		movimentacaoLancamentoCartaoMB.setCategoriaService(categoriaService);
-		movimentacaoLancamentoCartaoMB.setFavorecidoService(favorecidoService);
-		movimentacaoLancamentoCartaoMB.setMeioPagamentoService(meioPagamentoService);
-		movimentacaoLancamentoCartaoMB.setContaService(contaService);
-		
-		movimentacaoLancamentoMB.setCategoriaService(categoriaService);
-		movimentacaoLancamentoMB.setFavorecidoService(favorecidoService);
-		movimentacaoLancamentoMB.setMeioPagamentoService(meioPagamentoService);
-		movimentacaoLancamentoMB.setContaService(contaService);
 	}
 	
 	@Override
@@ -296,7 +273,8 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
 			}
 		}
-	}	
+	}
+	
 	public void selecionarTodos() {
 		if (listEntity != null && listEntity.size() > 0)
 		for (LancamentoConta l : listEntity) {
@@ -320,79 +298,40 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		}
 	}
 	
+	private List<LancamentoConta> removerNaoSelecionados(List<LancamentoConta> lancamentos) {
+		for (Iterator<LancamentoConta> i = lancamentos.iterator(); i.hasNext(); ) {
+			if (!i.next().isSelecionado())
+				i.remove();
+		}
+		return lancamentos;
+	}
+	
 	public String mover() {
-		movimentacaoLancamentoMB.setLancamentosSelecionados(listEntity);
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
 		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoCartaoMB");
 		initializeEntity();
 		return movimentacaoLancamentoMB.moverView();
 	}
 	
-	public String copiar() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoCartaoMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado()) {
-					movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoCartaoMB.copiarView();
-			} else {
-				warnMessage("Nenhum lançamento a copiar!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
-		}
-		return "";
-	}
-	
 	public String duplicar() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoCartaoMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado()) {
-					movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoCartaoMB.duplicarView();
-			} else {
-				warnMessage("Nenhum lançamento a duplicar!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
-		}
-		return "";
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoCartaoMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.duplicarView();
 	}
 	
 	public String excluir() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoCartaoMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado() && !l.isQuitado()) {
-					movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoCartaoMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoCartaoMB.excluirView();
-			} else {
-				warnMessage("Nenhum lançamento a excluir!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
-		}
-		return "";
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoCartaoMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.excluirView();
 	}
 	
-	public String transferir() {
-		initializeMovimentaLancamentoMB();
-		return movimentacaoLancamentoCartaoMB.transferirView();
+	public String alterarPropriedades() {
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoCartaoMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.alterarPropriedadesView();
 	}
 	
 	public void quebrarVinculo() {		
@@ -558,14 +497,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		this.categoriaService = categoriaService;
 	}
 
-	public void setFavorecidoService(IFavorecido favorecidoService) {
-		this.favorecidoService = favorecidoService;
-	}
-
-	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {
-		this.meioPagamentoService = meioPagamentoService;
-	}
-
 	public CriterioLancamentoConta getCriterioBusca() {
 		return criterioBusca;
 	}
@@ -636,11 +567,6 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 
 	public void setBuscaSalvaService(IBuscaSalva buscaSalvaService) {
 		this.buscaSalvaService = buscaSalvaService;
-	}
-
-	public void setMovimentacaoLancamentoCartaoMB(
-			MovimentacaoLancamentoCartaoController movimentacaoLancamentoCartaoMB) {
-		this.movimentacaoLancamentoCartaoMB = movimentacaoLancamentoCartaoMB;
 	}
 
 	public void setMoedaService(IMoeda moedaService) {

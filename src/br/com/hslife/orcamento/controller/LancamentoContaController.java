@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -106,7 +107,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private IMeioPagamento meioPagamentoService;
 	
 	@Autowired
-	private MovimentacaoLancamentoContaController movimentacaoLancamentoContaMB;
+	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
 	
 	@Autowired
 	private IBuscaSalva buscaSalvaService;
@@ -143,14 +144,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
 		
 		buscasSalvas.clear();
-	}
-	
-	private void initializeMovimentaLancamentoMB() {
-		movimentacaoLancamentoContaMB.setService(getService());
-		movimentacaoLancamentoContaMB.setCategoriaService(categoriaService);
-		movimentacaoLancamentoContaMB.setFavorecidoService(favorecidoService);
-		movimentacaoLancamentoContaMB.setMeioPagamentoService(meioPagamentoService);
-		movimentacaoLancamentoContaMB.setContaService(contaService);
 	}
 	
 	@Override
@@ -254,93 +247,45 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		}
 	}
 	
-	public String mover() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoContaMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado() && !l.isQuitado()) {
-					movimentacaoLancamentoContaMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoContaMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoContaMB.moverView();
-			} else {
-				warnMessage("Nenhum lançamento a mover!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
+	private List<LancamentoConta> removerNaoSelecionados(List<LancamentoConta> lancamentos) {
+		for (Iterator<LancamentoConta> i = lancamentos.iterator(); i.hasNext(); ) {
+			if (!i.next().isSelecionado())
+				i.remove();
 		}
-		return "";
+		return lancamentos;
 	}
 	
-	public String copiar() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoContaMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado()) {
-					movimentacaoLancamentoContaMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoContaMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoContaMB.copiarView();
-			} else {
-				warnMessage("Nenhum lançamento a copiar!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
-		}
-		return "";
+	public String mover() {
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.moverView();
 	}
 	
 	public String duplicar() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoContaMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado()) {
-					movimentacaoLancamentoContaMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoContaMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoContaMB.duplicarView();
-			} else {
-				warnMessage("Nenhum lançamento a duplicar!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
-		}
-		return "";
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.duplicarView();
 	}
 	
 	public String excluir() {
-		initializeMovimentaLancamentoMB();
-		movimentacaoLancamentoContaMB.setLancamentosSelecionados(new ArrayList<LancamentoConta>());
-		if (listEntity != null && !listEntity.isEmpty()) {
-			for (LancamentoConta l : listEntity) {
-				if (l.isSelecionado() && !l.isQuitado()) {
-					movimentacaoLancamentoContaMB.getLancamentosSelecionados().add(l);
-				}
-			}
-			if (!movimentacaoLancamentoContaMB.getLancamentosSelecionados().isEmpty()) {
-				initializeEntity();
-				return movimentacaoLancamentoContaMB.excluirView();
-			} else {
-				warnMessage("Nenhum lançamento a excluir!");
-			}
-		} else {
-			warnMessage("Nenhum lançamento selecionado!");
-		}
-		return "";
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.excluirView();
 	}
 	
 	public String transferir() {
-		initializeMovimentaLancamentoMB();
-		return movimentacaoLancamentoContaMB.transferirView();
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");		
+		return movimentacaoLancamentoMB.transferirView();
+	}
+	
+	public String alterarPropriedades() {
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
+		initializeEntity();
+		return movimentacaoLancamentoMB.alterarPropriedadesView();
 	}
 	
 	public void quebrarVinculo() {		
@@ -622,11 +567,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public void setAgrupamentoLancamentoPorDebitoCredito(
 			List<AgrupamentoLancamento> agrupamentoLancamentoPorDebitoCredito) {
 		this.agrupamentoLancamentoPorDebitoCredito = agrupamentoLancamentoPorDebitoCredito;
-	}
-
-	public void setMovimentacaoLancamentoContaMB(
-			MovimentacaoLancamentoContaController movimentacaoLancamentoContaMB) {
-		this.movimentacaoLancamentoContaMB = movimentacaoLancamentoContaMB;
 	}
 	
 	public BuscaSalva getBuscaSalva() {

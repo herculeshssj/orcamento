@@ -45,7 +45,6 @@
 package br.com.hslife.orcamento.facade;
 
 import java.util.List;
-import java.util.Map;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
@@ -76,16 +75,6 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	public List<Moeda> organizarLancamentosPorMoeda(List<LancamentoConta> lancamentos) throws BusinessException;
 	
 	public List<AgrupamentoLancamento> organizarLancamentosPorDebitoCredito(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public void moverLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void excluirLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void copiarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
-	
-	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros) throws BusinessException;
 	
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
 	

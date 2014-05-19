@@ -46,7 +46,7 @@ package br.com.hslife.orcamento.enumeration;
 
 public enum TipoCategoria {
 	
-	CREDITO("CREDITO"), DEBITO("DEBITO");
+	CREDITO("Crédito"), DEBITO("Débito");
 	
 	private String descricao;
 	
