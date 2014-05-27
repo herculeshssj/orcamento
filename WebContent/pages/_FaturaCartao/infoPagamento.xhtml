@@ -42,7 +42,6 @@
   
   -->
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -50,55 +49,20 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:rich="http://richfaces.org/rich">
 
-<ui:composition template="/templates/listagem.xhtml">
+<ui:composition>
 
 	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
 	
-	<ui:define name="pesquisa">
-		
-		<strong>Cartão:</strong>
-		&nbsp;
-		<h:selectOneMenu value="#{managedBean.cartaoSelecionado}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaCartaoSoCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-		</h:selectOneMenu>
-		&nbsp;
-		<strong>Status da Fatura:</strong>
-		&nbsp;
-		<h:selectOneMenu value="#{managedBean.statusFaturaCartao}">
-			<f:selectItems value="#{enumCombo.listaStatusFaturaCartao}" />
-		</h:selectOneMenu>
-	</ui:define>
-		
-	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Fatura"/>
-			</f:facet>
-			<h:outputText value="#{item.label}"/>		
-	  	</p:column>
-	  	<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Valor"/>
-			</f:facet>
-			<h:outputText value="#{item.moeda.simboloMonetario} "/>
-			<h:outputText value="#{item.valorFatura}">
-				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-			</h:outputText>				
-	  	</p:column>
-	</ui:define>	
+	<h:outputText value="Esta é a caixa de diálogo para informações de pagamento da fatura." />
 	
-	<ui:define name="acoes">
-		<p:column style="text-align: center; vertical-align: middle;" exportable="false">
-			<f:facet name="header">
-				<h:outputText value="Ações"/>
-			</f:facet>		
-			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-		</p:column>
-	</ui:define>
-		
+	<br/><br/>
+	
+	<h:commandLink title="Voltar">
+		<p:graphicImage value="/resources/images/voltar.png" />
+	</h:commandLink>
+	
 </ui:composition>
 </html>
