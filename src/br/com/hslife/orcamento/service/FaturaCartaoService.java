@@ -332,4 +332,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findAllByUsuario(usuario);
 	}
+	
+	@Override
+	public List<FaturaCartao> buscarPorContaEStatusFatura(Conta conta, StatusFaturaCartao statusFatura) throws BusinessException {
+		return getRepository().findByContaAndStatusFatura(conta, statusFatura);
+	}
 }

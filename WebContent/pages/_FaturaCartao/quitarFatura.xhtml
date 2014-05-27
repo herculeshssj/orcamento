@@ -1,0 +1,187 @@
+<!--
+  
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:rich="http://richfaces.org/rich">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+		
+			Cartão:
+			<h:outputText value="#{managedBean.faturaSelecionada.conta.cartaoCredito.label}"/>
+			
+			Data de vencimento:
+			<h:outputText value="#{managedBean.faturaSelecionada.dataVencimento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Moeda da fatura:
+			<h:outputText value="#{managedBean.faturaSelecionada.moeda.label}"/>
+			
+			Valor total da fatura:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
+				<h:outputText value="#{managedBean.faturaSelecionada.valorFatura + managedBean.faturaSelecionada.saldoDevedor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>				
+			</h:panelGroup>
+			
+			Pagamento mínimo:
+			<p:inputText value="#{managedBean.faturaSelecionada.valorMinimo}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</p:inputText>
+			
+			Forma de pagamento:
+			<h:selectOneMenu value="#{managedBean.formaPagamentoFatura}" required="true" requiredMessage="Informe uma forma de pagamento!">
+				<f:selectItem itemLabel="Selecione a forma de pagamento" />
+				<f:selectItem itemLabel="Débito em conta" itemValue="1"/>
+				<f:selectItem itemLabel="Parcelar fatura" itemValue="2"/>
+				<f:selectItem itemLabel="Usar um lançamento existente" itemValue="3"/>
+				<p:ajax event="change" update="pnlFormaPagamentoFatura" />
+			</h:selectOneMenu>
+			
+		</h:panelGrid>
+		
+		<p:outputPanel id="pnlFormaPagamentoFatura">
+		
+			<h:panelGrid columns="2" rendered="#{managedBean.formaPagamentoFatura == 1}">
+			
+				<f:facet name="header">
+					<h:outputText value="Débito em conta corrente/poupança"/>
+				</f:facet>
+				
+				Escolha a conta corrente/poupança:
+				<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Escolha uma conta!">
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+				</h:selectOneMenu>
+				
+				Informe o valor a ser pago:
+				<p:inputText value="#{managedBean.valorAQuitar}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</p:inputText>
+				
+				Informe a data de pagamento:
+				<p:inputMask value="#{managedBean.dataPagamento}" size="10" required="true" requiredMessage="Informe a data de pagamento da fatura!" mask="99/99/9999">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>
+			
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" rendered="#{managedBean.formaPagamentoFatura == 2}">
+				<f:facet name="header">
+					<h:outputText value="Parcelar valor da fatura"/>
+				</f:facet>		
+				
+				Informe a quantidade de parcelas:
+				<p:inputText />
+			</h:panelGrid>
+			
+			<p:outputPanel rendered="#{managedBean.formaPagamentoFatura == 3}">
+				<h:panelGrid columns="3">
+				
+					Escolha a conta corrente/poupança:
+					<h:selectOneMenu value="#{managedBean.criterioBusca.conta}" converter="entityConverter" required="true" requiredMessage="Escolha uma conta!">
+						<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+					</h:selectOneMenu>
+					<h:outputText />
+					
+					Informe a data de pagamento:
+					<p:inputMask value="#{managedBean.criterioBusca.dataInicio}" size="10" required="true" requiredMessage="Informe a data de pagamento da fatura!" mask="99/99/9999">
+						<f:converter converterId="dateConverter"/>
+					</p:inputMask>
+					<h:commandButton action="#{managedBean.pesquisarLancamentoQuitacao}" title="Pesquisar" image="/resources/images/pesquisar.png"/>
+					
+				</h:panelGrid>
+				
+				<i>Lançamentos encontrados:</i>
+		
+				<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
+					<p:column style="vertical-align: middle;">
+						<f:facet name="header">
+					    	<h:outputText value="Histórico"/>
+					    </f:facet>
+					    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+					    	<f:converter converterId="dateConverter"/>
+					    </h:outputText>
+					    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+					    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+					    <h:outputText value=" - #{item.parcela}" rendered="#{not empty item.parcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+					    <h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
+					    <br/>
+					    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+					    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					    </h:outputText>
+					</p:column>					
+				</p:dataTable>
+			</p:outputPanel>
+		
+		</p:outputPanel>
+	
+	</ui:define>
+
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+    	<h:commandLink title="Quitar fatura" action="#{managedBean.quitarFatura}">
+    		<p:graphicImage value="/resources/images/ativar.png" />
+    	</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>
