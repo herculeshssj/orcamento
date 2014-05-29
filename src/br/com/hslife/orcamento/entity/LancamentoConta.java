@@ -71,7 +71,9 @@ import org.hibernate.annotations.CascadeType;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="lancamentoconta")
@@ -115,6 +117,16 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(nullable=false)
 	private boolean quitado;
 	
+	@Column
+	private int periodo;
+	
+	@Column
+	private int ano;
+	
+	@Column(nullable=true)
+	@Temporal(TemporalType.DATE)
+	private Date dataVencimento;
+	
 	@Transient
 	private boolean selecionado;
 	
@@ -141,11 +153,8 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=true)
 	private Moeda moeda;
 	
-	@OneToOne(mappedBy="lancamentoConta")
-	private PagamentoPeriodo pagamentoPeriodo;
-	
-	@Column(length=20, nullable=true)
-	private String parcela;
+	@Column
+	private int parcela;
 		
 	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=true)
@@ -155,6 +164,10 @@ public class LancamentoConta extends EntityPersistence {
 	@ManyToOne(optional=true)
 	@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")})
 	private FaturaCartao faturaCartao;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
+	private LancamentoPeriodico lancamentoPeriodico;
 	
 	@Transient
 	private LancamentoImportado lancamentoImportado;
@@ -180,6 +193,14 @@ public class LancamentoConta extends EntityPersistence {
 
 	@Override
 	public String getLabel() {
+		/* Inclusão de rotina para quando o lançamento compor um lançamento periódico */
+		
+		if (this.lancamentoPeriodico.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+			this.descricao = "Período " + this.periodo + " / " + this.ano + ", vencimento para " + Util.formataDataHora(this.dataVencimento, Util.DATA);
+		} else {
+			this.descricao = "Parcela " + this.parcela + " / " + this.lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(this.dataVencimento, Util.DATA);
+		}
+		
 		return this.descricao;
 	}
 
@@ -373,14 +394,6 @@ public class LancamentoConta extends EntityPersistence {
 		this.moeda = moeda;
 	}
 
-	public String getParcela() {
-		return parcela;
-	}
-
-	public void setParcela(String parcela) {
-		this.parcela = parcela;
-	}
-
 	public FaturaCartao getFaturaCartao() {
 		return faturaCartao;
 	}
@@ -389,11 +402,43 @@ public class LancamentoConta extends EntityPersistence {
 		this.faturaCartao = faturaCartao;
 	}
 
-	public PagamentoPeriodo getPagamentoPeriodo() {
-		return pagamentoPeriodo;
+	public int getPeriodo() {
+		return periodo;
 	}
 
-	public void setPagamentoPeriodo(PagamentoPeriodo pagamentoPeriodo) {
-		this.pagamentoPeriodo = pagamentoPeriodo;
+	public void setPeriodo(int periodo) {
+		this.periodo = periodo;
+	}
+
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
+	}
+
+	public Date getDataVencimento() {
+		return dataVencimento;
+	}
+
+	public void setDataVencimento(Date dataVencimento) {
+		this.dataVencimento = dataVencimento;
+	}
+
+	public int getParcela() {
+		return parcela;
+	}
+
+	public void setParcela(int parcela) {
+		this.parcela = parcela;
+	}
+
+	public LancamentoPeriodico getLancamentoPeriodico() {
+		return lancamentoPeriodico;
+	}
+
+	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
+		this.lancamentoPeriodico = lancamentoPeriodico;
 	}
 }

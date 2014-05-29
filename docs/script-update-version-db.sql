@@ -82,3 +82,43 @@ alter table lancamentoconta drop column dataLancamento;
 -- Remoção da coluna lancadoEm na tabela buscasalva
 update buscasalva set dataInicio = lancadoEm, dataFim = lancadoEm where idConta in (select id from conta where tipoConta = 'CARTAO');
 alter table buscasalva drop column lancadoEm;
+
+-- Adição dos campos que habilitam os lançamentos de conta serem parcelas de lançamentos periódicos
+alter table lancamentoconta add column ano integer default 0;
+alter table lancamentoconta add column periodo integer default 0;
+alter table lancamentoconta add column dataVencimento date null;
+alter table lancamentoconta add column idLancamentoPeriodico bigint null;
+
+alter table lancamentoconta add constraint fk_lancamentoperiodico_lancamentoconta foreign key(idLancamentoPeriodico) references lancamentoperiodico(id);
+
+-- Conversão do campo 'parcela' de String para Integer
+update lancamentoconta set parcela = 0 where parcela = '';
+update lancamentoconta set parcela = (cast(parcela as unsigned)) where parcela is not null;
+
+alter table lancamentoconta change column `parcela` `parcela` integer default 0;
+
+-- Migração das informações de PagamentoPeriodo para LancamentoConta
+insert into lancamentoconta (dataPagamento, descricao, valorPago, tipoLancamento, agendado, quitado, idConta, idCategoria, idFavorecido, idMeioPagamento, parcela, idMoeda, versionEntity, ano, periodo, dataVencimento, idLancamentoPeriodico)
+	select
+	pg.dataVencimento,
+	lp.descricao,
+	pg.valorPago,
+	lp.tipoLancamento,
+	false,
+	pg.pago,
+	lp.idConta,
+	lp.idCategoria,
+	lp.idFavorecido,
+	lp.idMeioPagamento,
+	pg.parcela,
+	lp.idMoeda,
+	'2014-06-01 00:00:00.000',
+	pg.ano,
+	pg.periodo,
+	pg.dataVencimento,
+	pg.idLancamentoPeriodico
+	from pagamentoperiodo pg
+	inner join lancamentoperiodico lp on lp.id = pg.idLancamentoPeriodico;
+	
+-- Exclusão da tabela PagamentoPeriodo
+drop table pagamentoperiodo;

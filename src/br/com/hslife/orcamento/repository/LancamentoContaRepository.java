@@ -57,6 +57,11 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
@@ -143,9 +148,9 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(Restrictions.eq("lancamento.moeda.id", criterio.getMoeda().getId()));
 		}
 		
-		if (criterio.getParcela() != null && !criterio.getParcela().isEmpty()) {
-			criteria.add(Restrictions.ilike("lancamento.parcela", criterio.getParcela(), MatchMode.ANYWHERE));
-		}
+		//if (criterio.getParcela() != null && !criterio.getParcela().isEmpty()) {
+		//	criteria.add(Restrictions.ilike("lancamento.parcela", criterio.getParcela(), MatchMode.ANYWHERE));
+		//}
 		
 		if (criterio.getTipo() != null) {
 			criteria.add(Restrictions.eq("lancamento.tipoLancamento", criterio.getTipo()));
@@ -211,5 +216,140 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		}
 		
 		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.pago = true ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamento.getId())
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findByLancamentoPeriodico(LancamentoPeriodico lancamento) {
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamento.getId())
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findNotPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.pago = false ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamento.getId())
+				.list();
+	}
+	
+	public LancamentoConta findLastGeneratedPagamentoPeriodo(LancamentoPeriodico lancamentoPeriodico) {
+		return (LancamentoConta)getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
+				.setLong("idLancamento", lancamentoPeriodico.getId())
+				.setMaxResults(1)
+				.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findAllPagamentosPagosActivedLancamentosByTipoLancamentoAndUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) {
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.pago = true ORDER BY pagamento.dataVencimento DESC")
+				.setParameter("status", StatusLancamento.ATIVO)
+				.setParameter("tipo", tipo)
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findPagamentosByLancamentoPeriodicoAndPago(LancamentoPeriodico lancamento, Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM LancamentoConta pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.quitado = :pago AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		
+		hqlQuery.setParameter("idLancamento", lancamento.getId());
+		
+		return hqlQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findPagamentosByTipoLancamentoAndUsuarioAndPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM LancamentoConta pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.pago = :pago AND ");
+		}
+		if (tipo != null) {
+			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.usuario.id = :idUsuario ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
+		
+		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findPagamentosByTipoLancamentoAndContaAndPago(TipoLancamentoPeriodico tipo, Conta conta, Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM LancamentoConta pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.quitado = :pago AND ");
+		}
+		if (tipo != null) {
+			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.conta.id = :idConta ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
+		
+		hqlQuery.setParameter("idConta", conta.getId());
+		
+		return hqlQuery.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findPagamentosByTipoLancamentoAndTipoContaAndPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, Boolean pago) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM LancamentoConta pagamento WHERE ");
+		if (pago != null) {
+			hql.append("pagamento.quitado = :pago AND ");
+		}
+		if (tipo != null) {
+			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
+		}
+		
+		hql.append("pagamento.lancamentoPeriodico.conta.tipoConta = :tipoConta ORDER BY pagamento.dataVencimento DESC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (pago != null) {
+			hqlQuery.setParameter("pago", pago);
+		}
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
+		
+		hqlQuery.setParameter("tipoConta", tipoConta);
+		
+		return hqlQuery.list();
 	}
 }

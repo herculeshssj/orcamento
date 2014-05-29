@@ -182,7 +182,7 @@ public class FaturaCartaoController extends AbstractController {
 					moeda.getLancamentos().add(lancamento);
 					
 					// Verifica e calcula a compra a vista
-					if (lancamento.getParcela() == null || lancamento.getParcela().trim().isEmpty()) {
+					if (lancamento.getParcela() == 0) {
 						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
 							moeda.setCompraSaque(moeda.getCompraSaque() + lancamento.getValorPago());
 						else
@@ -190,7 +190,7 @@ public class FaturaCartaoController extends AbstractController {
 					}
 					
 					// Verifica e calcula a compra parcelada
-					if (lancamento.getParcela() != null && !lancamento.getParcela().trim().isEmpty()) {
+					if (lancamento.getParcela() != 0) {
 						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
 							moeda.setParcelado(moeda.getParcelado() + lancamento.getValorPago());
 						else

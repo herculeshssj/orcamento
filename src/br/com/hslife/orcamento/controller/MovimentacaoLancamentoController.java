@@ -144,7 +144,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {
 				for (Iterator<LancamentoConta> i = lancamentosSelecionados.iterator(); i.hasNext(); ) {
 					LancamentoConta l = i.next();
-					if (l.getFaturaCartao() != null || l.getPagamentoPeriodo() != null || l.getHashImportacao() != null) {
+					if (l.getFaturaCartao() != null || l.getLancamentoPeriodico() != null || l.getHashImportacao() != null) {
 						i.remove();
 					}
 				}
@@ -206,7 +206,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {
 				for (Iterator<LancamentoConta> i = lancamentosSelecionados.iterator(); i.hasNext(); ) {
 					LancamentoConta l = i.next();
-					if (l.getFaturaCartao() != null || l.getPagamentoPeriodo() != null) {
+					if (l.getFaturaCartao() != null || l.getLancamentoPeriodico() != null) {
 						i.remove();
 					}
 				}

@@ -47,8 +47,8 @@ package br.com.hslife.orcamento.facade;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
-import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -64,23 +64,23 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	
 	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws BusinessException;
 	
-	public List<PagamentoPeriodo> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
 	
-	public List<PagamentoPeriodo> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
 	
-	public void registrarPagamento(PagamentoPeriodo pagamentoPeriodo) throws BusinessException;
+	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException;
 	
-	public List<PagamentoPeriodo> buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) throws BusinessException;
+	public List<LancamentoConta> buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) throws BusinessException;
 	
 	public List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario) throws BusinessException;
 	
-	public List<PagamentoPeriodo> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, Boolean pago) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, Boolean pago) throws BusinessException;
 	
-	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) throws BusinessException;
 	
-	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico tipo, Conta conta, Boolean pago) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico tipo, Conta conta, Boolean pago) throws BusinessException;
 
-	public List<PagamentoPeriodo> buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, Boolean pago) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, Boolean pago) throws BusinessException;
 	
-	public List<PagamentoPeriodo> gerarPrevisaoProximosPagamentos(LancamentoPeriodico lancamentoPeriodico, int quantidadePeriodos) throws BusinessException;
+	public List<LancamentoConta> gerarPrevisaoProximosPagamentos(LancamentoPeriodico lancamentoPeriodico, int quantidadePeriodos) throws BusinessException;
 }

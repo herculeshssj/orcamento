@@ -345,7 +345,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 			criterioBusca.setDescricao(buscaSalva.getTextoBusca());
 			criterioBusca.setDataInicio(buscaSalva.getDataInicio());
 			criterioBusca.setDataFim(buscaSalva.getDataFim());
-			criterioBusca.setParcela(buscaSalva.getTextoParcela());			
+			//criterioBusca.setParcela(buscaSalva.getTextoParcela());			
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
 				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
@@ -365,7 +365,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 		
 		buscaSalva.setConta(criterioBusca.getConta());
 		buscaSalva.setTextoBusca(criterioBusca.getDescricao());
-		buscaSalva.setTextoParcela(criterioBusca.getParcela());
+		//buscaSalva.setTextoParcela(criterioBusca.getParcela());
 		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
 		buscaSalva.setDataFim(criterioBusca.getDataFim());
 		
