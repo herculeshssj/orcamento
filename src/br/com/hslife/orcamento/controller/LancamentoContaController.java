@@ -401,24 +401,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return new ArrayList<Categoria>();
 	}
 	
-	public List<Favorecido> getListaFavorecido() {
-		try {
-			return favorecidoService.buscarPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<Favorecido>();
-	}
-	
-	public List<MeioPagamento> getListaMeioPagamento() {
-		try {
-			return meioPagamentoService.buscarPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<MeioPagamento>();
-	}
-	
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
 		try {
