@@ -160,11 +160,13 @@ public class Identidade extends EntityPersistence {
 
 	private void validTituloEleitor() throws BusinessException {
 		// Verifica se todos os campos foram preenchidos no Título de Eleitor
-		if ( (Util.eVazio(this.getNumero()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf()) && Util.eVazio(this.getZona()) && Util.eVazio(this.getSecao()) && this.getDataExpedicao() == null) 
-				|| (!Util.eVazio(this.getNumero()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf()) && !Util.eVazio(this.getZona()) && !Util.eVazio(this.getSecao()) && this.getDataExpedicao() != null) ) {
-			// Nada a fazer. Pode gravar sem problemas.
-		} else {
-			throw new BusinessException("Todos os campos do título de eleitor são obrigatórios!");
+		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf()) && Util.eVazio(this.getZona()) && Util.eVazio(this.getSecao()) && this.getDataExpedicao() == null;
+		
+		if (!resultado) {
+			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf()) && !Util.eVazio(this.getZona()) && !Util.eVazio(this.getSecao()) && this.getDataExpedicao() != null;
+			if (!resultado){
+				throw new BusinessException("Todos os campos do título de eleitor são obrigatórios!");
+			}
 		}
 	}
 
@@ -179,22 +181,26 @@ public class Identidade extends EntityPersistence {
 	}
 
 	private void validPassaporte() throws BusinessException {
-		// Verifica se todos os campos foram preenchidos no passaporte		
-		if ( (Util.eVazio(this.getNumero()) && Util.eVazio(this.getPais()) && Util.eVazio(this.getOrgaoExpedidor()) && this.getDataExpedicao() == null && this.getDataValidade() == null)
-				|| (!Util.eVazio(this.getNumero()) && !Util.eVazio(this.getPais()) && !Util.eVazio(this.getOrgaoExpedidor()) && this.getDataExpedicao() != null && this.getDataValidade() != null)) {
-			// Nada a fazer. Pode gravar sem problemas
-		} else {
-			throw new BusinessException("Todos os campos do passaporte são obrigatórios!");
+		// Verifica se todos os campos foram preenchidos no passaporte
+		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getPais()) && Util.eVazio(this.getOrgaoExpedidor()) && this.getDataExpedicao() == null && this.getDataValidade() == null;
+		
+		if (!resultado) {
+			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getPais()) && !Util.eVazio(this.getOrgaoExpedidor()) && this.getDataExpedicao() != null && this.getDataValidade() != null;
+			if (!resultado) {
+				throw new BusinessException("Todos os campos do passaporte são obrigatórios!");
+			}
 		}
 	}
 
 	private void validDocMilitar() throws BusinessException {
-		// Verifica se todos os campos foram preenchidos no certificado de reservista		
-		if ( (Util.eVazio(this.getNumero()) && Util.eVazio(this.getSerie()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf()))
-				|| (!Util.eVazio(this.getNumero()) && !Util.eVazio(this.getSerie()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf())) ) {
-			// Nada a fazer. Pode gravar sem problemas
-		} else {
-			throw new BusinessException("Todos os campos do certificado de reservista são obrigatórios!");
+		// Verifica se todos os campos foram preenchidos no certificado de reservista
+		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getSerie()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf());
+		
+		if (!resultado) {
+			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getSerie()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf());
+			if (!resultado) {
+				throw new BusinessException("Todos os campos do certificado de reservista são obrigatórios!");
+			}
 		}
 	}
 
@@ -207,32 +213,37 @@ public class Identidade extends EntityPersistence {
 	}
 
 	private void validCnh() throws BusinessException {
-		// Verifica se todos os campos foram preenchidos na carteira de motorista		
-		if ( (Util.eVazio(this.getNumero()) && Util.eVazio(this.getCategoria()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf()) && this.getDataExpedicao() == null && this.getDataPrimeiraHabilitacao() == null && this.getDataValidade() == null)
-				|| (!Util.eVazio(this.getNumero()) && !Util.eVazio(this.getCategoria()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf()) && this.getDataExpedicao() != null && this.getDataPrimeiraHabilitacao() != null && this.getDataValidade() != null)) {
-			// nada a fazer. Pode gravar sem problemas
-		} else {
-			throw new BusinessException("Todos os campos da carteira de motorista são obrigatórios!");
+		// Verifica se todos os campos foram preenchidos na carteira de motorista
+		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getCategoria()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf()) && this.getDataExpedicao() == null && this.getDataPrimeiraHabilitacao() ==  null && this.getDataValidade() == null;
+		
+		if (!resultado) {
+			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getCategoria()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf()) && this.getDataExpedicao() != null && this.getDataPrimeiraHabilitacao() !=  null && this.getDataValidade() != null;
+			if (!resultado)
+				throw new BusinessException("Todos os campos da carteira de motorista são obrigatórios!");
 		}
 	}
 
 	private void validCertidaoNascimento() throws BusinessException {
-		// Verifica se todos os campos foram preenchidos na certidão de nascimento		
-		if ( (Util.eVazio(this.getNumero()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getLivro()) && Util.eVazio(this.getFolha()) && this.getDataExpedicao() == null)
-				|| (!Util.eVazio(this.getNumero()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getLivro()) && !Util.eVazio(this.getFolha()) && this.getDataExpedicao() != null) ) {
-			// Nada a fazer. Pode gravar sem problemas
-		} else {
-			throw new BusinessException("Todos os campos da certidão de nascimento são obrigatórios!");
+		// Verifica se todos os campos foram preenchidos na certidão de nascimento
+		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getLivro()) && Util.eVazio(this.getFolha()) && this.getDataExpedicao() == null;
+		
+		if (!resultado) {
+			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getLivro()) && !Util.eVazio(this.getFolha()) && this.getDataExpedicao() != null;
+			if (!resultado) {
+				throw new BusinessException("Todos os campos da certidão de nascimento são obrigatórios!");
+			}
 		}
 	}
 
 	private void validCarteiraTrabalho() throws BusinessException {
-		// Verifica se todos os campos foram preenchidos na carteira de trabalho		
-		if ( (Util.eVazio(this.getNumero()) && Util.eVazio(this.getSerie()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getUf()) && this.getDataExpedicao() == null)
-				|| (!Util.eVazio(this.getNumero()) && !Util.eVazio(this.getSerie()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getUf()) && this.getDataExpedicao() != null)) {
-			// Nada a fazer. Pode gravar sem problemas
-		} else {
-			throw new BusinessException("Todos os campos da carteira de trabalho são obrigatórios!");
+		// Verifica se todos os campos foram preenchidos na carteira de trabalho
+		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getSerie()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getUf()) && this.getDataExpedicao() == null;
+		
+		if (!resultado) {
+			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getSerie()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getUf()) && this.getDataExpedicao() != null;
+			if (!resultado) {
+				throw new BusinessException("Todos os campos da carteira de trabalho são obrigatórios!");
+			}
 		}
 	}
 
