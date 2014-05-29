@@ -96,6 +96,7 @@ update lancamentoconta set parcela = 0 where parcela = '';
 update lancamentoconta set parcela = (cast(parcela as unsigned)) where parcela is not null;
 
 alter table lancamentoconta change column `parcela` `parcela` integer default 0;
+update lancamentoconta set parcela = 0 where parcela is null;
 
 -- Migração das informações de PagamentoPeriodo para LancamentoConta
 insert into lancamentoconta (dataPagamento, descricao, valorPago, tipoLancamento, agendado, quitado, idConta, idCategoria, idFavorecido, idMeioPagamento, parcela, idMoeda, versionEntity, ano, periodo, dataVencimento, idLancamentoPeriodico)

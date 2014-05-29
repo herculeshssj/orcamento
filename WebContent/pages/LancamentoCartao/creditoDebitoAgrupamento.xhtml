@@ -77,7 +77,6 @@
      			</h:outputText>
      			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
      			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-     			<h:outputText value=" - #{item.parcela}" rendered="#{not empty item.parcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
      			<h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
      			<br/>
      			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>

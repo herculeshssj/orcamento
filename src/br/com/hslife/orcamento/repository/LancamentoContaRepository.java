@@ -220,7 +220,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.pago = true ORDER BY pagamento.dataVencimento DESC")
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.quitado = true ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
@@ -234,7 +234,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findNotPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.pago = false ORDER BY pagamento.dataVencimento DESC")
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.quitado = false ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
@@ -248,7 +248,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findAllPagamentosPagosActivedLancamentosByTipoLancamentoAndUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.pago = true ORDER BY pagamento.dataVencimento DESC")
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.quitado = true ORDER BY pagamento.dataVencimento DESC")
 				.setParameter("status", StatusLancamento.ATIVO)
 				.setParameter("tipo", tipo)
 				.setLong("idUsuario", usuario.getId())
@@ -280,7 +280,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM LancamentoConta pagamento WHERE ");
 		if (pago != null) {
-			hql.append("pagamento.pago = :pago AND ");
+			hql.append("pagamento.quitado = :pago AND ");
 		}
 		if (tipo != null) {
 			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
