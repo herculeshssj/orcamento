@@ -60,23 +60,23 @@
 		<h:panelGrid columns="3">
 			
 				* Nome:
-				<h:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50"
+				<p:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50"
 				maxLength="100" required="true"
 				requiredMessage="Informe o nome do usuário!"
 				disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}" />
 			<p:message for="txtNome" />
 				
 				* Login:
-				<h:inputText id="txtLogin" value="#{managedBean.entity.login}"
+				<p:inputText id="txtLogin" value="#{managedBean.entity.login}"
 				size="50" maxLength="50" required="true"
 				requiredMessage="Informe o login do usuário!"
 				disabled="#{!managedBean.entity.ativo  || managedBean.entity.login == 'admin' || managedBean.operation == 'edit'}" />
 			<p:message for="txtLogin" />
 				
 				* E-Mail:
-				<h:inputText id="txtEmail" value="#{managedBean.entity.email}" required="true" requiredMessage="Informe um e-mail válido!" size="30" maxLength="40" disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}">
+				<p:inputText id="txtEmail" value="#{managedBean.entity.email}" required="true" requiredMessage="Informe um e-mail válido!" size="30" maxLength="40" disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}">
 					<f:validator validatorId="emailValidator"/>
-				</h:inputText>
+				</p:inputText>
 				<p:message for="txtEmail" />
 					
 				Senha:
@@ -96,7 +96,7 @@
 				<h:outputText value="" rendered="#{managedBean.operation == 'edit'}"/>
 				
 				<h:outputText value="Ativo:" rendered="#{managedBean.operation == 'edit' and managedBean.usuarioLogado.login == 'admin'}"/>				
-				<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="#{managedBean.entity.login == 'admin'}" rendered="#{managedBean.operation == 'edit' and managedBean.usuarioLogado.login == 'admin'}"/>
+				<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="#{managedBean.entity.login == 'admin'}" rendered="#{managedBean.operation == 'edit' and managedBean.usuarioLogado.login == 'admin'}"/>
 				<h:outputText value="" rendered="#{managedBean.operation == 'edit' and managedBean.usuarioLogado.login == 'admin'}"/>
 
 		</h:panelGrid>
@@ -104,7 +104,7 @@
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true" rendered="#{managedBean.entity.login == 'admin'}">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
 			<p:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;

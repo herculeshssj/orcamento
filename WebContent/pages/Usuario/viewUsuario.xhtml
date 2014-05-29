@@ -74,7 +74,7 @@
 			</h:outputText>
 			
 			Ativo:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
 						
 		</h:panelGrid>
 		
@@ -101,6 +101,9 @@
 			
 			Favorecidos cadastrados:
 			<h:outputText value="#{managedBean.mapAtividadeUsuario['FAVORECIDO']}"/>
+			
+			Lançamentos periódicos cadastrados:
+			<h:outputText value="#{managedBean.mapAtividadeUsuario['LANCAMENTO_PERIODICO']}"/>
 			
 			Meios de pagamentos cadastrados:
 			<h:outputText value="#{managedBean.mapAtividadeUsuario['MEIO_PAGAMENTO']}"/>

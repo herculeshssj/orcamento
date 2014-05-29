@@ -113,6 +113,10 @@ public class UsuarioRepository extends AbstractCRUDRepository<Usuario> {
 		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from favorecido where idUsuario = " + usuario.getId()).uniqueResult(); 
 		usuarioAtividade.put("FAVORECIDO", resultado.longValue());
 		
+		// Traz a quantidade de lançamentos periódicos do usuário
+		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from lancamentoperiodico where idUsuario = " + usuario.getId()).uniqueResult(); 
+		usuarioAtividade.put("LANCAMENTO_PERIODICO", resultado.longValue());
+		
 		// Traz a quantidade de meios de pagemento do usuário
 		resultado = (BigInteger)getSession().createSQLQuery("select count(*) from meiopagamento where idUsuario = " + usuario.getId()).uniqueResult(); 
 		usuarioAtividade.put("MEIO_PAGAMENTO", resultado.longValue());
