@@ -55,7 +55,6 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -125,14 +124,6 @@ public class EnumComboUtil {
 	public List<SelectItem> getListaTipoCategoria() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (TipoCategoria enumeration : TipoCategoria.values()) {
-			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
-		}
-		return listaSelectItem;
-	}
-	
-	public List<SelectItem> getListaStatusFaturaCartao() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (StatusFaturaCartao enumeration : StatusFaturaCartao.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

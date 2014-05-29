@@ -81,7 +81,7 @@ import br.com.hslife.orcamento.util.Util;
 
 @Component("faturaCartaoMB")
 @Scope("session")
-public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao> {
+public class FaturaCartaoController extends AbstractController {
 	
 	/**
 	 * 
@@ -117,15 +117,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private LancamentoConta lancamento;
 	private Conta contaSelecionada;
-	private StatusFaturaCartao statusFaturaCartao;
 	
+	private List<LancamentoConta> listEntity = new ArrayList<>();
 	private List<Moeda> moedas = new ArrayList<Moeda>();
 	private List<LancamentoConta> lancamentosEncontrados = new ArrayList<LancamentoConta>();
 	private List<LancamentoConta> lancamentosAdicionados = new ArrayList<LancamentoConta>();
 	
-	public FaturaCartaoController() {
-		super(new FaturaCartao());
-		
+	public FaturaCartaoController() {		
 		moduleTitle = "Fatura do Cartão";
 	}
 	
@@ -136,13 +134,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	@Override
 	protected void initializeEntity() {
-		listEntity = new ArrayList<FaturaCartao>();
+		listEntity = new ArrayList<LancamentoConta>();
 		entity = new FaturaCartao();
 		lancamentosEncontrados.clear();
 		moedas = new ArrayList<Moeda>();
 		criterioBusca = new CriterioLancamentoConta();
 	}
-/*
+
 	@Override
 	public String startUp() {
 		// Pega a moeda padrão do usuário
@@ -155,19 +153,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		actionTitle = "";
 		return "/pages/FaturaCartao/listFaturaCartao";
 	}
-	*/
-	@Override
-	public void find() {
-		try {
-			listEntity = getService().buscarPorContaEStatusFatura(cartaoSelecionado.getConta(), statusFaturaCartao);
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
 	
-	 /*
-	public void find() {
-		
+	public String find() {
 		try {
 			if (faturaSelecionada == null) {
 				warnMessage("Selecione uma fatura!");
@@ -179,13 +166,12 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		} catch(BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		//return "";
-		 * *
-	}*/
-	/*
+		return "";
+	}
+	
 	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws BusinessException {
 
-		/* Pegando os totais para mostrar na fatura *
+		/* Pegando os totais para mostrar na fatura */
 		moedas = moedaService.buscarPorUsuario(getUsuarioLogado());
 		
 		for (Moeda moeda : moedas) {
@@ -229,7 +215,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			}
 		}
 	}
-	*/
+	
 	public String editarLancamentos() {
 		try {
 			if (faturaSelecionada == null) {
@@ -389,6 +375,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public void pesquisarLancamento() {
 		try {
+			criterioBusca.setDataFim(criterioBusca.getDataInicio());
 			criterioBusca.setConta(contaService.buscarPorID(entity.getConta().getId()));
 			criterioBusca.setQuitado(false);
 			lancamentosEncontrados.clear();
@@ -526,8 +513,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			} else {
 				entity = getService().buscarPorID(faturaSelecionada.getId());
 				listEntity.clear(); 
-				//listEntity.addAll(entity.getDetalheFatura());
-				//this.calcularSaldoCompraSaqueParceladoPorMoeda();
+				listEntity.addAll(entity.getDetalheFatura());
+				this.calcularSaldoCompraSaqueParceladoPorMoeda();
 				for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
 					moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
 				}
@@ -661,6 +648,14 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public void setMoedaPadrao(Moeda moedaPadrao) {
 		this.moedaPadrao = moedaPadrao;
+	}
+
+	public List<LancamentoConta> getListEntity() {
+		return listEntity;
+	}
+
+	public void setListEntity(List<LancamentoConta> listEntity) {
+		this.listEntity = listEntity;
 	}
 
 	public void setMoedaService(IMoeda moedaService) {
@@ -804,14 +799,4 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
-
-	public StatusFaturaCartao getStatusFaturaCartao() {
-		return statusFaturaCartao;
-	}
-
-	public void setStatusFaturaCartao(StatusFaturaCartao statusFaturaCartao) {
-		this.statusFaturaCartao = statusFaturaCartao;
-	}
-	
-	
 }

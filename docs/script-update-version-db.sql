@@ -44,11 +44,11 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2014 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUN2014 ***/
 
 -- Atualização de versão
 update versao set ativo = false;
-insert into versao (versao, ativo) values ('JUL2014', true);
+insert into versao (versao, ativo) values ('JUN2014', true);
 
 alter table conta drop column arquivado;
 

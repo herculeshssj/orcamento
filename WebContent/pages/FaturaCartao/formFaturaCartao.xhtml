@@ -90,15 +90,17 @@
 		
 		<h:panelGrid columns="5" style="font-size: 16px;">
 		
-			Lançado em:
-			<p:inputMask value="#{managedBean.criterioBusca.lancadoEm}" size="10" mask="99/99/9999">
+			Data:
+			<p:inputMask value="#{managedBean.criterioBusca.dataInicio}" size="10" mask="99/99/9999">
 				<f:converter converterId="dateConverter"/>
 			</p:inputMask>
 			
 			Descrição:
 			<p:inputText value="#{managedBean.criterioBusca.descricao}" size="30"/>
 			
-			<h:commandButton action="#{managedBean.pesquisarLancamento}" title="Pesquisar" image="/resources/images/pesquisar.png"/>
+			<p:commandLink actionListener="#{managedBean.pesquisarLancamento}" title="Pesquisar" update="tableLancamentosEncontrados">
+				<h:graphicImage value="/resources/images/pesquisar.png" />
+			</p:commandLink>
 			
 			Valor:
 			<p:inputText value="#{managedBean.criterioBusca.valor}" size="10">
@@ -108,7 +110,9 @@
 			Parcela:
 			<p:inputText value="#{managedBean.criterioBusca.parcela}" size="7"/>
 			
-			<h:commandButton action="#{managedBean.incluirLancamento}" title="Adicionar" image="/resources/images/adicionar.png"/>
+			<p:commandLink actionListener="#{managedBean.incluirLancamento}" title="Adicionar" update="tableLancamentosEncontrados, tableLancamentosAdicionados">
+				<h:graphicImage value="/resources/images/adicionar.png" />
+			</p:commandLink>
 			
 			Tipo:
 			<h:selectOneMenu value="#{managedBean.criterioBusca.tipo}">
@@ -126,12 +130,12 @@
 		
 		<i>Lançamentos encontrados:</i>
 		
-		<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}">
+		<p:dataTable id="tableLancamentosEncontrados" var="item" value="#{managedBean.lancamentosEncontrados}">
 			<p:column style="vertical-align: middle;">
 				<f:facet name="header">
 			    	<h:outputText value="Histórico"/>
 			    </f:facet>
-			    <h:outputText value="#{item.dataLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+			    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
 			    	<f:converter converterId="dateConverter"/>
 			    </h:outputText>
 			    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
@@ -158,12 +162,12 @@
 		
 		<i>Lançamentos adicionados à fatura:</i>
 		
-		<p:dataTable var="item" value="#{managedBean.lancamentosAdicionados}">
+		<p:dataTable id="tableLancamentosAdicionados" var="item" value="#{managedBean.lancamentosAdicionados}">
 			<p:column style="vertical-align: middle;">
 				<f:facet name="header">
 			    	<h:outputText value="Histórico"/>
 			    </f:facet>
-			    <h:outputText value="#{item.dataLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+			    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
 			    	<f:converter converterId="dateConverter"/>
 			    </h:outputText>
 			    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
