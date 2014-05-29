@@ -77,7 +77,6 @@ public class OpcaoSistemaRepository extends AbstractRepository implements IRepos
 
 	@SuppressWarnings("unchecked")
 	public List<OpcaoSistema> findOpcoesGlobalAdminByCDU(String cdu) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
 		criteria.add(Restrictions.eq("tipoOpcaoSistema", TipoOpcaoSistema.GLOBAL_ADMIN));
 		criteria.add(Restrictions.eq("casoDeUso", cdu));
@@ -86,14 +85,12 @@ public class OpcaoSistemaRepository extends AbstractRepository implements IRepos
 	
 	@SuppressWarnings("unchecked")
 	public List<OpcaoSistema> findOpcoesGlobalAdmin() {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
 		criteria.add(Restrictions.eq("tipoOpcaoSistema", TipoOpcaoSistema.GLOBAL_ADMIN));
 		return criteria.list();
 	}
 	
 	public OpcaoSistema findOpcaoGlobalAdminByChave(String chave) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
 		criteria.add(Restrictions.eq("tipoOpcaoSistema", TipoOpcaoSistema.GLOBAL_ADMIN));
 		criteria.add(Restrictions.eq("chave", chave));
@@ -101,7 +98,6 @@ public class OpcaoSistemaRepository extends AbstractRepository implements IRepos
 	}
 	
 	public OpcaoSistema findOpcaoUserByChave(String chave, Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
 		criteria.add(Restrictions.eq("tipoOpcaoSistema", TipoOpcaoSistema.USER));
 		criteria.add(Restrictions.eq("chave", chave));
@@ -111,7 +107,6 @@ public class OpcaoSistemaRepository extends AbstractRepository implements IRepos
 	
 	@SuppressWarnings("unchecked")
 	public List<OpcaoSistema> findOpcoesUser(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
 		criteria.add(Restrictions.eq("tipoOpcaoSistema", TipoOpcaoSistema.USER));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -120,7 +115,6 @@ public class OpcaoSistemaRepository extends AbstractRepository implements IRepos
 	
 	@SuppressWarnings("unchecked")
 	public List<OpcaoSistema> findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.list();

@@ -73,7 +73,6 @@ public class PanoramaLancamentoCartaoRepository extends AbstractRepository {
 		
 	@SuppressWarnings("unchecked")
 	public List<PanoramaLancamentoCartao> findByContaAnoAndMoeda(Conta conta, int ano, Moeda moeda) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(PanoramaLancamentoCartao.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("ano", ano));

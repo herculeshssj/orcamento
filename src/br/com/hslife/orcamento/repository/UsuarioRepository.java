@@ -66,12 +66,10 @@ public class UsuarioRepository extends AbstractCRUDRepository<Usuario> {
 
 	@SuppressWarnings("unchecked")
 	public List<Usuario> findAll() {
-		// TODO migrar para HQL
 		return getSession().createCriteria(Usuario.class).addOrder(Order.asc("nome")).list();
 	}
 	
 	public Usuario findByLogin(String login) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Usuario.class);
 		criteria.add(Restrictions.eq("login", login));
 		return (Usuario)criteria.uniqueResult();
@@ -79,7 +77,6 @@ public class UsuarioRepository extends AbstractCRUDRepository<Usuario> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Usuario> findAllByLogin(String login) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Usuario.class);
 		criteria.add(Restrictions.ilike("login", login, MatchMode.ANYWHERE));
 		return criteria.addOrder(Order.asc("nome")).list();

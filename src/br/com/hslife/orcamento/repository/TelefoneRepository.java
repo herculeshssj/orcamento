@@ -62,7 +62,6 @@ public class TelefoneRepository extends AbstractCRUDRepository<Telefone> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Telefone> findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Telefone.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.list();
