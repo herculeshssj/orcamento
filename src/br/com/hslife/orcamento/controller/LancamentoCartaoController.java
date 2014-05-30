@@ -157,6 +157,11 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 				warnMessage("Informe o cartão!");
 			} else {
 				listEntity = getService().buscarPorCriterioLancamentoConta(criterioBusca);
+				if (listEntity != null & listEntity.size() > getOpcoesSistema().getLimiteQuantidadeRegistros()) {
+					listEntity.clear();
+					warnMessage("Resultado ultrapassa os " + getOpcoesSistema().getLimiteQuantidadeRegistros() + " registros configurados. Refine sua busca!");
+					return;
+				}
 				
 				if (agrupamentoSelecionado.equals("CAT"))
 					agrupamentoLancamentoPorCategoria = getService().organizarLancamentosPorCategoria(listEntity);

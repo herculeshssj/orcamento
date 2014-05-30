@@ -123,3 +123,20 @@ insert into lancamentoconta (dataPagamento, descricao, valorPago, tipoLancamento
 	
 -- Exclusão da tabela PagamentoPeriodo
 drop table pagamentoperiodo;
+
+-- Limite de lançamentos de conta/cartão exibidos na busca
+-- Tarefa #947
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso, idUsuario, versionEntity)
+	select
+	'LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS',
+	'100',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	'',
+	id,
+	'2014-06-01 00:00:00.000'
+	from
+	usuario;

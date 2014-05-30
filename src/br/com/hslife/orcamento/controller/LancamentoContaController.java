@@ -153,6 +153,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				warnMessage("Informe a conta!");
 			} else {
 				listEntity = getService().buscarPorCriterioLancamentoConta(criterioBusca);
+				if (listEntity != null & listEntity.size() > getOpcoesSistema().getLimiteQuantidadeRegistros()) {
+					listEntity.clear();
+					warnMessage("Resultado ultrapassa os " + getOpcoesSistema().getLimiteQuantidadeRegistros() + " registros configurados. Refine sua busca!");
+					return;
+				}
 				
 				if (agrupamentoSelecionado.equals("CAT"))
 					agrupamentoLancamentoPorCategoria = getService().organizarLancamentosPorCategoria(listEntity);

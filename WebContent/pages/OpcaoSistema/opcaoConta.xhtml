@@ -72,6 +72,22 @@
 			
 		</fieldset>	
 		</h:panelGroup>	
+		
+		<hr/>
+		
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações de lançamentos de conta/cartão</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Quantidade máxima de registros exibidos na busca:
+				<p:inputText value="#{managedBean.opcoesUser['LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS']}"/>
+				
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
 	</p:tab>
 		
 </ui:composition>
