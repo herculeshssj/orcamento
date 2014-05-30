@@ -61,11 +61,11 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
-import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -107,7 +107,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	private IMeioPagamento meioPagamentoService;
 	
 	private Conta contaSelecionada;
-	private PagamentoPeriodo pagamentoPeriodo;
+	private LancamentoConta pagamentoPeriodo;
 	private Moeda moedaPadrao;
 	private StatusLancamento statusLancamento;
 	private TipoCategoria tipoCategoriaSelecionada;
@@ -126,7 +126,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	protected void initializeEntity() {
 		entity = new LancamentoPeriodico();
 		listEntity = new ArrayList<LancamentoPeriodico>();
-		pagamentoPeriodo = new PagamentoPeriodo();
+		pagamentoPeriodo = new LancamentoConta();
 	}
 	
 	@Override
@@ -211,10 +211,10 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public String registrarPagamento() {
 		try {
-			pagamentoPeriodo.setGerarLancamento(gerarLancamento);
+			//pagamentoPeriodo.setGerarLancamento(gerarLancamento);
 			getService().registrarPagamento(pagamentoPeriodo);
 			infoMessage("Pagamento registrado com sucesso!");
-			pagamentoPeriodo = new PagamentoPeriodo();
+			pagamentoPeriodo = new LancamentoConta();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -290,7 +290,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		// método criado para carregar os dados do pagamento do período
 	}
 	
-	public List<PagamentoPeriodo> getListaPagamentoPeriodo() {
+	public List<LancamentoConta> getListaPagamentoPeriodo() {
 		try {
 			return getService().buscarPagamentosNaoPagosPorLancamentoPeriodico(entity);
 		} catch (BusinessException be) {
@@ -302,8 +302,8 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	public double getTotalAPagar() {
 		double valor = 0.0;
 		if (entity.getPagamentos() != null && entity.getPagamentos().size() > 0) {
-			for (PagamentoPeriodo pagamento : entity.getPagamentos()) {
-				if (!pagamento.isPago()) {
+			for (LancamentoConta pagamento : entity.getPagamentos()) {
+				if (!pagamento.isQuitado()) {
 					valor += entity.getValorParcela();
 				}
 			}
@@ -314,8 +314,8 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	public double getTotalPago() {
 		double valor = 0.0;
 		if (entity.getPagamentos() != null && entity.getPagamentos().size() > 0) {
-			for (PagamentoPeriodo pagamento : entity.getPagamentos()) {
-				if (pagamento.isPago()) {
+			for (LancamentoConta pagamento : entity.getPagamentos()) {
+				if (pagamento.isQuitado()) {
 					valor += pagamento.getValorPago();
 				}
 			}
@@ -467,14 +467,6 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 
-	public PagamentoPeriodo getPagamentoPeriodo() {
-		return pagamentoPeriodo;
-	}
-
-	public void setPagamentoPeriodo(PagamentoPeriodo pagamentoPeriodo) {
-		this.pagamentoPeriodo = pagamentoPeriodo;
-	}
-
 	public TipoLancamentoPeriodico getTipoLancamentoPeriodico() {
 		return tipoLancamentoPeriodico;
 	}
@@ -498,5 +490,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setGerarLancamento(boolean gerarLancamento) {
 		this.gerarLancamento = gerarLancamento;
+	}
+
+	public LancamentoConta getPagamentoPeriodo() {
+		return pagamentoPeriodo;
+	}
+
+	public void setPagamentoPeriodo(LancamentoConta pagamentoPeriodo) {
+		this.pagamentoPeriodo = pagamentoPeriodo;
 	}
 }

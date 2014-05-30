@@ -61,7 +61,7 @@ public class CriterioLancamentoConta {
 	
 	private Date dataFim;
 	
-	private String parcela;
+	private int parcela;
 	
 	private Moeda moeda;
 	
@@ -188,14 +188,6 @@ public class CriterioLancamentoConta {
 		this.dataFim = dataFim;
 	}
 
-	public String getParcela() {
-		return parcela;
-	}
-
-	public void setParcela(String parcela) {
-		this.parcela = parcela;
-	}
-
 	public Moeda getMoeda() {
 		return moeda;
 	}
@@ -218,5 +210,13 @@ public class CriterioLancamentoConta {
 
 	public void setValor(Double valor) {
 		this.valor = valor;
+	}
+
+	public int getParcela() {
+		return parcela;
+	}
+
+	public void setParcela(int parcela) {
+		this.parcela = parcela;
 	}
 }

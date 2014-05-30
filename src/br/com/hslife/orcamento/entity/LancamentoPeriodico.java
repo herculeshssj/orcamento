@@ -156,7 +156,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	
 	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.EAGER)
 	@OrderBy(clause="dataVencimento")
-	private List<PagamentoPeriodo> pagamentos;
+	private List<LancamentoConta> pagamentos;
 	
 	@Transient
 	private Date dataPrimeiraParcela;
@@ -328,19 +328,19 @@ public class LancamentoPeriodico extends EntityPersistence {
 		this.usuario = usuario;
 	}
 
-	public List<PagamentoPeriodo> getPagamentos() {
-		return pagamentos;
-	}
-
-	public void setPagamentos(List<PagamentoPeriodo> pagamentos) {
-		this.pagamentos = pagamentos;
-	}
-
 	public Date getDataPrimeiraParcela() {
 		return dataPrimeiraParcela;
 	}
 
 	public void setDataPrimeiraParcela(Date dataPrimeiraParcela) {
 		this.dataPrimeiraParcela = dataPrimeiraParcela;
+	}
+
+	public List<LancamentoConta> getPagamentos() {
+		return pagamentos;
+	}
+
+	public void setPagamentos(List<LancamentoConta> pagamentos) {
+		this.pagamentos = pagamentos;
 	}
 }

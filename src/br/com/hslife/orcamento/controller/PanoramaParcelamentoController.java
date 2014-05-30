@@ -63,9 +63,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.entity.PagamentoPeriodo;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -133,9 +133,9 @@ public class PanoramaParcelamentoController extends AbstractController {
 	public void find() {
 		try {			
 			// Traz os pagamentos quitados do lançamento fixo selecionado, ou todos se nenhum for selecionado
-			List<PagamentoPeriodo> pagamentos = new ArrayList<>();
-			List<PagamentoPeriodo> pagamentosReceita = new ArrayList<>();
-			List<PagamentoPeriodo> pagamentosDespesa = new ArrayList<>();
+			List<LancamentoConta> pagamentos = new ArrayList<>();
+			List<LancamentoConta> pagamentosReceita = new ArrayList<>();
+			List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
 			
 			switch (getOpcoesSistema().getFormaAgrupamentoPagamento()) {
 				case "INDIVIDUAL" : 
@@ -157,7 +157,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 			}
 			
 			// Separa os pagamento de lançamentos fixos de receita dos de despesa
-			for (PagamentoPeriodo pagamento : pagamentos) {
+			for (LancamentoConta pagamento : pagamentos) {
 				if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
 					pagamentosDespesa.add(pagamento);
 				} else {
@@ -184,7 +184,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		}
 	}
 	
-	private void gerarGraficoDespesa(List<PagamentoPeriodo> pagamentos) {
+	private void gerarGraficoDespesa(List<LancamentoConta> pagamentos) {
 		// Verifica se deve continuar com a geração do gráfico a partir da quantidade de lançamentos
 		if (pagamentos == null || pagamentos.size() == 0) {
 			exibirGraficoDespesa = false;
@@ -220,7 +220,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		}
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
-		for (PagamentoPeriodo pagamento : pagamentos) {
+		for (LancamentoConta pagamento : pagamentos) {
 			
 			// Converte o valor do pagamento para a moeda padrão
 			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
@@ -228,7 +228,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 			}
 			
 			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
-			if (pagamento.isPago()) {
+			if (pagamento.isQuitado()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
 				
 				// Busca a entrada no Map e soma o valor do pagamento do período
@@ -279,7 +279,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		exibirGraficoDespesa = true;
 	}
 	
-	private void gerarGraficoReceita(List<PagamentoPeriodo> pagamentos) {
+	private void gerarGraficoReceita(List<LancamentoConta> pagamentos) {
 		// Verifica se deve continuar com a geração do gráfico a partir da quantidade de lançamentos
 		if (pagamentos == null || pagamentos.size() == 0) {
 			exibirGraficoReceita = false;
@@ -315,7 +315,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		}
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
-		for (PagamentoPeriodo pagamento : pagamentos) {
+		for (LancamentoConta pagamento : pagamentos) {
 			
 			// Converte o valor do pagamento para a moeda padrão
 			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
@@ -323,7 +323,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 			}
 			
 			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
-			if (pagamento.isPago()) {
+			if (pagamento.isQuitado()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
 				
 				// Busca a entrada no Map e soma o valor do pagamento do período
