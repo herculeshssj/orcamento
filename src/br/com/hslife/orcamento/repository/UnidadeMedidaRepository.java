@@ -64,7 +64,6 @@ public class UnidadeMedidaRepository extends AbstractCRUDRepository<UnidadeMedid
 	
 	@SuppressWarnings("unchecked")
 	public List<UnidadeMedida> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(UnidadeMedida.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
@@ -73,7 +72,6 @@ public class UnidadeMedidaRepository extends AbstractCRUDRepository<UnidadeMedid
 	
 	@SuppressWarnings("unchecked")
 	public List<UnidadeMedida> findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(UnidadeMedida.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();

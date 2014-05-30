@@ -65,7 +65,6 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	
 	@SuppressWarnings("unchecked")
 	public List<FechamentoPeriodo> findByContaAndOperacaoConta(Conta conta, OperacaoConta operacaoConta) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("operacao", operacaoConta));
@@ -81,7 +80,6 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	
 	@SuppressWarnings("unchecked")
 	public FechamentoPeriodo findUltimoFechamentoByConta(Conta conta) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		criteria.add(Restrictions.eq("operacao", OperacaoConta.FECHAMENTO));
@@ -95,7 +93,6 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	
 	@SuppressWarnings("unchecked")
 	public List<FechamentoPeriodo> findFechamentosPosteriores(FechamentoPeriodo fechamento) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.eq("conta.id", fechamento.getConta().getId()));
 		criteria.add(Restrictions.eq("operacao", OperacaoConta.FECHAMENTO));
@@ -105,7 +102,6 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	
 	@SuppressWarnings("unchecked")
 	public FechamentoPeriodo findFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.lt("id", fechamentoPeriodo.getId()));
 		criteria.add(Restrictions.eq("operacao", fechamentoPeriodo.getOperacao()));
@@ -120,7 +116,6 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	
 	@SuppressWarnings("unchecked")
 	public FechamentoPeriodo findLastFechamentoPeriodoBeforeDateByContaAndOperacao(Conta conta, Date data, OperacaoConta operacao) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.le("data", data));
 		criteria.add(Restrictions.eq("operacao", operacao));

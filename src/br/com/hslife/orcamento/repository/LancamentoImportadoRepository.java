@@ -72,14 +72,12 @@ public class LancamentoImportadoRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoImportado> findByConta(Conta conta) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(LancamentoImportado.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		return criteria.list();
 	}
 	
 	public LancamentoImportado findByHash(String hash) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(LancamentoImportado.class);
 		criteria.add(Restrictions.eq("hash", hash));
 		return (LancamentoImportado)criteria.setMaxResults(1).uniqueResult();

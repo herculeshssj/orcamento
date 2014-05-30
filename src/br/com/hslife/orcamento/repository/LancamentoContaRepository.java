@@ -164,7 +164,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	public LancamentoConta findLastLancamentoContaByConta(Conta conta) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(LancamentoConta.class);
 		criteria.add(Restrictions.eq("agendado", false));
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
@@ -172,7 +171,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	public LancamentoConta findByHash(String hash) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(LancamentoConta.class);
 		criteria.add(Restrictions.eq("hashImportacao", hash));
 		return (LancamentoConta)criteria.setMaxResults(1).uniqueResult();
@@ -185,7 +183,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 		
 	public boolean existsLinkageFaturaCartao(LancamentoConta lancamento) {
-		// TODO migrar para HQL
 		boolean result = true;
 		
 		String sqlLancamento = "select count(*) from detalhefatura where idLancamento = " + lancamento.getId();
@@ -202,7 +199,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	public boolean existsLinkagePagamentoFaturaCartao(LancamentoConta lancamento) {
-		// TODO migrar para HQL
 		boolean result = true;
 		
 		String sqlLancamento = "select count(*) from faturacartao where idLancamento = " + lancamento.getId();

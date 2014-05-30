@@ -66,7 +66,6 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Agenda> findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Agenda.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -74,7 +73,6 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Agenda> findByCriterioAgendamento(CriterioAgendamento criterioBusca) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Agenda.class);
 		
 		if (criterioBusca.getDescricao() != null && !criterioBusca.getDescricao().trim().isEmpty()) {

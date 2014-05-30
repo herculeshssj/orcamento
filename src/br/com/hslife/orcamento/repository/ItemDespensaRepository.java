@@ -66,7 +66,6 @@ public class ItemDespensaRepository extends AbstractCRUDRepository<ItemDespensa>
 	
 	@Override
 	public ItemDespensa findById(Long id) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(ItemDespensa.class).setFetchMode("movimentacao", FetchMode.JOIN);
 		criteria.add(Restrictions.eq("id", id));
 		return (ItemDespensa)criteria.uniqueResult();
@@ -93,7 +92,6 @@ public class ItemDespensaRepository extends AbstractCRUDRepository<ItemDespensa>
 	
 	@SuppressWarnings("unchecked")
 	public List<ItemDespensa> findByDespensa(Despensa despensa) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(ItemDespensa.class);
 		criteria.add(Restrictions.eq("despensa.id", despensa.getId()));
 		return criteria.list();
@@ -101,7 +99,6 @@ public class ItemDespensaRepository extends AbstractCRUDRepository<ItemDespensa>
 	
 	@SuppressWarnings("unchecked")
 	public List<ItemDespensa> findByUnidadeMedida(UnidadeMedida unidadeMedida) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(ItemDespensa.class);
 		criteria.add(Restrictions.eq("unidadeMedida.id", unidadeMedida.getId()));
 		return criteria.list();

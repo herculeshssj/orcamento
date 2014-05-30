@@ -59,7 +59,6 @@ public class PessoalRepository extends AbstractCRUDRepository<Pessoal> {
 	}
 	
 	public Pessoal findByUsuario(Usuario usuario) {
-		// TODO migrar para HQL
 		Criteria criteria = getSession().createCriteria(Pessoal.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return (Pessoal)criteria.uniqueResult();
