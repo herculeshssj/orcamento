@@ -50,6 +50,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -76,6 +77,9 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 
 	public CartaoCreditoRepository getRepository() {
 		return repository;
@@ -109,6 +113,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		conta.setSaldoInicial(0);
 		conta.setTipoConta(TipoConta.CARTAO);
 		conta.setUsuario(entity.getUsuario());
+		conta.setMoeda(moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado()));
 	
 		// Salva o cartão, e logo em seguida a conta
 		super.cadastrar(entity);
@@ -186,7 +191,8 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		
 		// Vincula o novo cartão à conta do cartão antigo
 		Conta conta = contaRepository.findByCartaoCredito(entity);
-		conta.setCartaoCredito(entity.getCartaoSubstituto());		
+		conta.setCartaoCredito(entity.getCartaoSubstituto());
+		conta.setDescricao(entity.getDescricao());
 		contaRepository.update(conta);
 	}
 	

@@ -166,7 +166,7 @@ public class LancamentoConta extends EntityPersistence {
 	private FaturaCartao faturaCartao;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
+	@JoinColumn(name="idLancamentoPeriodico", nullable=true)
 	private LancamentoPeriodico lancamentoPeriodico;
 	
 	@Transient
