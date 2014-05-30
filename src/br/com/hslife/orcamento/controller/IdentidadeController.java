@@ -150,7 +150,7 @@ public class IdentidadeController extends AbstractController {
 			
 			// Valida os documentos de identidade
 			for (Identidade identidade : documentos) {
-				getService().validar(identidade);
+				identidade.validate();
 			}
 			
 			// Salva os documentos
