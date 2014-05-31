@@ -67,9 +67,9 @@
 			<h:outputText/>	
 			
 			Tipo de Conta:
-			<h:selectOneRadio value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de conta!">
+			<p:selectOneRadio value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de conta!">
 				<f:selectItems value="#{enumCombo.listaTipoContaSemCartao}"/>
-			</h:selectOneRadio>
+			</p:selectOneRadio>
 			<h:outputText/>	
 			
 			Descrição:

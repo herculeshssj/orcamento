@@ -147,13 +147,15 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 					.build()
 				);	*/			
 				
-				listaDespensas.add(new ItemDespensa(despensa.getDescricao(), 
-						despensa.getCaracteristicas(),
-						despensa.getDespensa(),
-						despensa.getUnidadeMedida(), 
-						despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual(),
-						despensa.getValor() * (despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual())
-				));
+				ItemDespensa item = new ItemDespensa();
+				item.setDescricao(despensa.getDescricao());
+				item.setCaracteristicas(despensa.getCaracteristicas());
+				item.setDespensa(despensa.getDespensa());
+				item.setUnidadeMedida(despensa.getUnidadeMedida());
+				item.setQuantidadeAtual(despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual());
+				item.setValor(despensa.getValor() * (despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual()));
+				
+				listaDespensas.add(item);
 				
 			} else if (despensa.getValidade() != null && despensa.getValidade().before(new Date())) { /*
 				listaDespensas.add(new ItemDespensa.Builder()
@@ -166,13 +168,15 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 					.build()
 				);*/
 				
-				listaDespensas.add(new ItemDespensa(despensa.getDescricao(), 
-						despensa.getCaracteristicas(),
-						despensa.getDespensa(),
-						despensa.getUnidadeMedida(), 
-						despensa.getQuantidadeVerde(),
-						despensa.getValor() * despensa.getQuantidadeVerde()
-				));
+				ItemDespensa item = new ItemDespensa();
+				item.setDescricao(despensa.getDescricao());
+				item.setCaracteristicas(despensa.getCaracteristicas());
+				item.setDespensa(despensa.getDespensa());
+				item.setUnidadeMedida(despensa.getUnidadeMedida());
+				item.setQuantidadeAtual(despensa.getQuantidadeVerde());
+				item.setValor(despensa.getValor() * despensa.getQuantidadeVerde());
+				
+				listaDespensas.add(item);
 				
 			}
 		}

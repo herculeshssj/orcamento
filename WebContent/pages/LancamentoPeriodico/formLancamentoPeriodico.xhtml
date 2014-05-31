@@ -193,7 +193,7 @@
 			<p:tab title="Histórico de pagamento" rendered="#{managedBean.operation == 'edit'}">
 				
 				<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">
-					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
+					<p:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value=""/>
 						</f:facet>

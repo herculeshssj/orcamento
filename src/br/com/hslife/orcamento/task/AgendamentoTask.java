@@ -102,7 +102,9 @@ public class AgendamentoTask {
 					} else {
 						agendaRepository.delete(agenda);
 					}					
-				}				
+				} else {
+					agendaRepository.delete(agenda);
+				}
 				break;
 			default:
 				break;

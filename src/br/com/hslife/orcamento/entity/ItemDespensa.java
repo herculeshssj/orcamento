@@ -154,17 +154,7 @@ public class ItemDespensa extends EntityPersistence {
 	
 	public ItemDespensa() {
 		movimentacao = new ArrayList<MovimentoItemDespensa>();
-	}
-	
-	public ItemDespensa(String descricao, String caracteristicas, Despensa despensa, UnidadeMedida unidade, int quantidade, double valor) {
-		this.descricao = descricao;
-		this.caracteristicas = caracteristicas;
-		this.despensa = despensa;
-		this.unidadeMedida = unidade;
-		this.quantidadeAtual = quantidade;
-		this.valor = valor;
-	}
-	
+	}	
 	
 	@Override
 	public String getLabel() {

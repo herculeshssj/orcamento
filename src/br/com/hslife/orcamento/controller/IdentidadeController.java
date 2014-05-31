@@ -94,40 +94,50 @@ public class IdentidadeController extends AbstractController {
 	public String startUp() {
 		try {
 			// Carrega o CPF
-			cpf = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
-			if (cpf == null) cpf = new Identidade(getUsuarioLogado(), TipoIdentidade.CPF);
+			cpf = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF) == null 
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.CPF) 
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
 			
 			// Carrega o RG
-			rg = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.RG);
-			if (rg == null) rg = new Identidade(getUsuarioLogado(), TipoIdentidade.RG);
+			rg = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.RG) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.RG)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.RG);
 			
 			// Carrega o título de eleitor
-			tituloEleitor = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR);
-			if (tituloEleitor == null) tituloEleitor = new Identidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR);
+			tituloEleitor = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR);
 			
 			// Carrega o PIS/PASEP
-			pisPasep = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP);
-			if (pisPasep == null) pisPasep = new Identidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP);
+			pisPasep = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP);
 			
 			// Carrega a carteira de trabalho
-			carteiraTrabalho = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO);
-			if (carteiraTrabalho == null) carteiraTrabalho = new Identidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO);
+			carteiraTrabalho = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO);
 			
 			// Carrega a certidão de nascimento
-			certidaoNascimento = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO);
-			if (certidaoNascimento == null) certidaoNascimento = new Identidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO);
+			certidaoNascimento = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO);
 			
 			// Carrega a carteira de motorista
-			cnh = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CNH);
-			if (cnh == null) cnh = new Identidade(getUsuarioLogado(), TipoIdentidade.CNH);
+			cnh = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CNH) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.CNH)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CNH);
 			
 			// Carrega o certificado de reservista
-			docMilitar = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
-			if (docMilitar == null) docMilitar = new Identidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
+			docMilitar = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
 			
 			// Carrega o passaporte
-			passaporte = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
-			if (passaporte == null) passaporte = new Identidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
+			passaporte = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE) == null
+					? new Identidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE)
+					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
+
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}		
