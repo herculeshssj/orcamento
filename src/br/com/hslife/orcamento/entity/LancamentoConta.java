@@ -71,9 +71,7 @@ import org.hibernate.annotations.CascadeType;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="lancamentoconta")
@@ -193,14 +191,6 @@ public class LancamentoConta extends EntityPersistence {
 
 	@Override
 	public String getLabel() {
-		/* Inclusão de rotina para quando o lançamento compor um lançamento periódico */
-		
-		if (this.lancamentoPeriodico.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
-			this.descricao = "Período " + this.periodo + " / " + this.ano + ", vencimento para " + Util.formataDataHora(this.dataVencimento, Util.DATA);
-		} else {
-			this.descricao = "Parcela " + this.parcela + " / " + this.lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(this.dataVencimento, Util.DATA);
-		}
-		
 		return this.descricao;
 	}
 

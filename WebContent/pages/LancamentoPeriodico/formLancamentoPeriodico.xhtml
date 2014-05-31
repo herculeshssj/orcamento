@@ -154,7 +154,7 @@
 				<h:panelGrid columns="2">
 				
 					Conta de pagamento:
-					<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
+					<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO' and managedBean.operation != 'create'}">
 						<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 					</h:selectOneMenu>
 					
@@ -192,19 +192,21 @@
 			
 			<p:tab title="Histórico de pagamento" rendered="#{managedBean.operation == 'edit'}">
 				
-				<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">									
+				<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">
+					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
+						<f:facet name="header">
+							<h:outputText value=""/>
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{item.quitado}" disabled="true"/>
+					</p:column>									
 					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
 						<f:facet name="header">
 							<h:outputText value="Período"/>
 						</f:facet>
 						<h:outputText value="#{item.periodo}"/>
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
-						<f:facet name="header">
-							<h:outputText value="Ano"/>
-						</f:facet>
+						<h:outputText value=" / "/>
 						<h:outputText value="#{item.ano}"/>
-					</p:column>
+					</p:column>					
 					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
 						<f:facet name="header">
 							<h:outputText value="Parcela"/>
