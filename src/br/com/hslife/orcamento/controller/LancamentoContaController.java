@@ -75,7 +75,6 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
@@ -84,7 +83,7 @@ import br.com.hslife.orcamento.util.Util;
 
 @Component("lancamentoContaMB")
 @Scope("session")
-public class LancamentoContaController extends AbstractCRUDController<LancamentoConta>{
+public class LancamentoContaController extends AbstractLancamentoContaController {
 	
 	/**
 	 * 
@@ -99,9 +98,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	@Autowired
 	private ICategoria categoriaService;
-	
-	@Autowired
-	private IFavorecido favorecidoService;
 	
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
@@ -127,9 +123,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private BuscaSalva buscaSalva = new BuscaSalva();
 	private List<BuscaSalva> buscasSalvas = new ArrayList<BuscaSalva>();
 	
-	public LancamentoContaController() {
-		super(new LancamentoConta());
-		
+	public LancamentoContaController() {		
 		moduleTitle = "Lançamentos da Conta";
 	}
 
@@ -480,10 +474,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setCategoriaService(ICategoria categoriaService) {
 		this.categoriaService = categoriaService;
-	}
-
-	public void setFavorecidoService(IFavorecido favorecidoService) {
-		this.favorecidoService = favorecidoService;
 	}
 
 	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {

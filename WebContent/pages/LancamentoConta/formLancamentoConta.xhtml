@@ -138,7 +138,7 @@
 			Favorecido/Sacado:
 			<h:selectOneMenu id="txtFavorecido" value="#{managedBean.entity.favorecido}" converter="entityConverter" rendered="#{managedBean.entity.conta.ativo}">
 				<f:selectItem itemLabel="Nenhum favorecido"/>
-				<f:selectItems value="#{entityCombo.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.favorecido.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
