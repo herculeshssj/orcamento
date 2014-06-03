@@ -56,3 +56,7 @@ alter table agenda change column `descricao` `descricao` varchar(200) not null;
 
 -- Remoção do panorama dos lançamentos do cartão
 drop table panoramalancamentocartao;
+
+-- Inclusão da coluna para salvar critérios com lançamentos quitados
+alter table buscasalva add column quitados boolean null;
+update buscasalva set quitados = 0;

@@ -99,6 +99,9 @@ public class BuscaSalva extends EntityPersistence {
 	private int agendados;
 	
 	@Column
+	private int quitados;
+	
+	@Column
 	private boolean exibirSaldoAnterior;
 
 	public BuscaSalva() {
@@ -193,5 +196,13 @@ public class BuscaSalva extends EntityPersistence {
 
 	public void setTextoParcela(String textoParcela) {
 		this.textoParcela = textoParcela;
+	}
+
+	public int getQuitados() {
+		return quitados;
+	}
+
+	public void setQuitados(int quitados) {
+		this.quitados = quitados;
 	}
 }

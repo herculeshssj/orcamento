@@ -117,6 +117,8 @@
 						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
 						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
 					</p:selectOneRadio>
+					<p:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
+					Exibir saldo anterior
 				</h:panelGroup>				
 				<h:panelGroup>   				
 					Exibir:
@@ -125,8 +127,11 @@
 						<f:selectItem itemLabel="Com lançamentos agendados" itemValue="0"/>
 						<f:selectItem itemLabel="Somente lançamentos agendados" itemValue="1"/>   					
 					</p:selectOneRadio>
-					<p:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
-					Exibir saldo anterior
+					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.quitado}">
+		  				<f:selectItem itemLabel="Sem lançamentos quitados" itemValue="-1"/>
+						<f:selectItem itemLabel="Com lançamentos quitados" itemValue="0"/>
+						<f:selectItem itemLabel="Somente lançamentos quitados" itemValue="1"/>   					
+					</p:selectOneRadio>					
 				</h:panelGroup>
 				
 			</h:panelGrid>			   				   				   				

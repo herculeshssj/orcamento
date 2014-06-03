@@ -92,6 +92,10 @@
 			<h:outputText value="#{managedBean.buscaSalva.agendados == 1 ? 'Somente' : managedBean.buscaSalva.agendados == -1 ? 'Sem' : 'Com'}"/>
 			<h:outputText />
 			
+			Lançamentos quitados:
+			<h:outputText value="#{managedBean.buscaSalva.quitados == 1 ? 'Somente' : managedBean.buscaSalva.quitados == -1 ? 'Sem' : 'Com'}"/>
+			<h:outputText />
+			
 			Exibir saldo anterior:
 			<p:selectBooleanCheckbox value="#{managedBean.buscaSalva.exibirSaldoAnterior}" disabled="true"/>
 			<h:outputText />
