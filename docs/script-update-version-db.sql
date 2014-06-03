@@ -53,3 +53,6 @@ insert into versao (versao, ativo) values ('JUL2014', true);
 -- Ampliado o campo de descrição das entidades Agenda e LançamentoConta
 alter table lancamentoconta change column `descricao` `descricao` varchar(200) not null;
 alter table agenda change column `descricao` `descricao` varchar(200) not null;
+
+-- Remoção do panorama dos lançamentos do cartão
+drop table panoramalancamentocartao;

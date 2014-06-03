@@ -48,14 +48,12 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.entity.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
+import br.com.hslife.orcamento.model.SaldoAtualConta;
 
 
 public interface IResumoEstatistica {
@@ -65,10 +63,6 @@ public interface IResumoEstatistica {
 	public List<PanoramaLancamentoConta> visualizarRelatorioPanoramaLancamentoConta(Conta conta, int ano) throws BusinessException;
 	
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean lancamentoAgendado, Usuario usuario) throws BusinessException;
-	
-	public void gerarRelatorioPanoramaLancamentoCartao(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException;
-	
-	public List<PanoramaLancamentoCartao> visualizarRelatorioPanoramaLancamentoCartao(Conta conta, int ano, Moeda moeda) throws BusinessException;
 	
 	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
 }
