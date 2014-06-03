@@ -58,6 +58,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="pessoal")
@@ -118,37 +119,14 @@ public class Pessoal extends EntityPersistence {
 			throw new BusinessException("Gênero inexistente!");
 		}
 		
-		if (this.etnia != null && this.etnia.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
-		
-		if (this.tipoSanguineo != null && this.tipoSanguineo.trim().length() > 5) {
-			throw new BusinessException("Campo aceita no máximo 5 caracteres!");
-		}
-		
-		if (this.naturalidade != null && this.naturalidade.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
-		
-		if (this.nacionalidade != null && this.nacionalidade.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
-		
-		if (this.escolaridade != null && this.escolaridade.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
-		
-		if (this.filiacaoPai != null && this.filiacaoPai.trim().length() > 100) {
-			throw new BusinessException("Campo aceita no máximo 100 caracteres!");
-		}
-		
-		if (this.filiacaoMae != null && this.filiacaoMae.trim().length() > 100) {
-			throw new BusinessException("Campo aceita no máximo 100 caracteres!");
-		}
-		
-		if (this.estadoCivil != null && this.estadoCivil.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Etnia", this.etnia, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Tipo Sanguíneo", this.tipoSanguineo, 5);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Naturalidade", this.naturalidade, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Nacionalidade", this.nacionalidade, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Escolaridade", this.escolaridade, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Filiação Pai", this.filiacaoPai, 100);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Filiação Mãe", this.filiacaoMae, 100);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Estado Civil", this.estadoCivil, 50);
 		
 		if (this.usuario == null) {
 			throw new BusinessException("Informe o usuário!");

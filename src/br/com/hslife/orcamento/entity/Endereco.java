@@ -54,6 +54,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="endereco")
@@ -133,41 +134,16 @@ public class Endereco extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		if (this.tipoLogradouro.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
 		
-		if (this.logradouro.trim().length() > 150) {
-			throw new BusinessException("Campo aceita no máximo 150 caracteres!");
-		}
-		
-		if (this.numero != null && this.numero.trim().length() > 10) {
-			throw new BusinessException("Campo aceita no máximo 10 caracteres!");
-		}
-		
-		if (this.complemento != null && this.complemento.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
-		
-		if (this.bairro.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
-		
-		if (this.cidade.trim().length() > 100) {
-			throw new BusinessException("Campo aceita no máximo 100 caracteres!");
-		}
-		
-		if (this.estado.trim().length() != 2) {
-			throw new BusinessException("Campo aceita exatamente 2 caracteres!");
-		}
-		
-		if (this.cep != null && this.cep.trim().length() != 8) {
-			throw new BusinessException("Campo aceita exatamente 8 caracteres!");
-		}
-		
-		if (this.descricao.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
-		}
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Tipo de logradouro", this.tipoLogradouro, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Logradouro", this.logradouro, 150);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Número", this.numero, 10);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Complemento", this.complemento, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Bairro", this.bairro, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Cidade", this.cidade, 100);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Estado", this.estado, 2);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("CEP", this.cep, 2);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		
 		if (this.usuario == null) {
 			throw new BusinessException("Informe o usuário!");
