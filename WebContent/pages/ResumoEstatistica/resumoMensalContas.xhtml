@@ -116,7 +116,7 @@
 						<f:facet name="header">
 							<h:outputText value="Créditos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoCredito}">
+						<h:outputText value="#{item.saldoCredito}" style="color: #0000FF;">
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
 					</p:column>
@@ -124,18 +124,10 @@
 						<f:facet name="header">
 							<h:outputText value="Débitos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoDebito}">
+						<h:outputText value="#{item.saldoDebito}" style="color: #FF0000;">
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
 					</p:column>					
-					<p:column style="text-align: right; vertical-align: middle;">
-						<f:facet name="header">
-							<h:outputText value="Total"/>
-						</f:facet>
-						<h:outputText value="#{item.saldoPago}" style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-						</h:outputText>						
-					</p:column>
 				</p:dataTable>
 			</p:tab>
 			<p:tab title="Meio de Pagamento" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
@@ -150,7 +142,7 @@
 						<f:facet name="header">
 							<h:outputText value="Créditos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoCredito}">
+						<h:outputText value="#{item.saldoCredito}" style="color: #0000FF;">
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
 					</p:column>
@@ -158,18 +150,10 @@
 						<f:facet name="header">
 							<h:outputText value="Débitos"/>
 						</f:facet>
-						<h:outputText value="#{item.saldoDebito}">
+						<h:outputText value="#{item.saldoDebito}" style="color: #FF0000;">
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
 					</p:column>					
-					<p:column style="text-align: right; vertical-align: middle;">
-						<f:facet name="header">
-							<h:outputText value="Total"/>
-						</f:facet>
-						<h:outputText value="#{item.saldoPago}" style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-						</h:outputText>						
-					</p:column>
 				</p:dataTable>
 			</p:tab>
 			<p:tab title="Receitas">

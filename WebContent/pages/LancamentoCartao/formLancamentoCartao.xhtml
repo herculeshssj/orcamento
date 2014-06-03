@@ -95,7 +95,16 @@
 			<h:outputText value="#{managedBean.entity.parcela}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
 			
-			Data de lançamento:
+			<h:outputText value="Data de vencimento:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
+			<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}" rendered="#{!managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null}">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>
+	    	<h:outputText value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null}">
+	    		<f:converter converterId="dateConverter"/>
+	    	</h:outputText>
+	    	<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
+			
+			Data de pagamento:
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataPagamento}" rendered="#{!managedBean.entity.quitado}">
 	    		<f:converter converterId="dateConverter"/>
 	    	</p:inputMask>
