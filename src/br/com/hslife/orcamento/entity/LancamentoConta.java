@@ -93,7 +93,7 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(nullable=true)
 	private Date dataPagamento;
 	
-	@Column(length=100, nullable=false)
+	@Column(length=200, nullable=false)
 	private String descricao;
 	
 	@Column(nullable=true)

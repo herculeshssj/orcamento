@@ -75,7 +75,7 @@ public class Agenda extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=50, nullable=false)
+	@Column(length=200, nullable=false)
 	private String descricao;
 	
 	@Column(length=200, nullable=false)
