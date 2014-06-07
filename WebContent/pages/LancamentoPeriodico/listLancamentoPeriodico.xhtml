@@ -80,7 +80,8 @@
 			<f:facet name="header">
 				<h:outputText value="Descrição"/>
 			</f:facet>
-			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>						
+			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>						
 	  	</p:column>
 	  	<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
