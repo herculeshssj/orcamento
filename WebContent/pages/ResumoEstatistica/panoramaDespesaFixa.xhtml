@@ -102,25 +102,15 @@
 		<p:tabView>
 		
 			<p:tab title="Despesa">
-				<p:barChart id="barPagamentosDespesa" value="#{managedBean.ultimosPagamentosDespesaModel}" legendPosition="s" title="Panorama dos Parcelamentos" min="0" max="#{managedBean.maxValueBarPagamentosDespesa}" 
+				<p:barChart id="barPagamentosDespesa" value="#{managedBean.ultimosPagamentosDespesaModel}" legendPosition="s" title="Panorama das Despesas Fixas" min="0" max="#{managedBean.maxValueBarPagamentosDespesa}" 
 					style="height:600px" stacked="true" extender="ext1" showDataTip="false" rendered="#{managedBean.exibirGraficoDespesa}"/>
-					
-				<h:outputText value="Saldo devedor parcelas anteriores: " rendered="#{managedBean.periodoAConsiderar == 'ANTERIOR'}"/>
-				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " rendered="#{managedBean.periodoAConsiderar == 'ANTERIOR'}"/>
-				<h:outputText value="#{managedBean.saldoDevedor}" rendered="#{managedBean.periodoAConsiderar == 'ANTERIOR'}">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>		
+						
 			</p:tab>
 			
 			<p:tab title="Receita">
-				<p:barChart id="barPagamentosReceita" value="#{managedBean.ultimosPagamentosReceitaModel}" legendPosition="s" title="Panorama dos Parcelamentos" min="0" max="#{managedBean.maxValueBarPagamentosReceita}" 
+				<p:barChart id="barPagamentosReceita" value="#{managedBean.ultimosPagamentosReceitaModel}" legendPosition="s" title="Panorama das Receitas Fixas" min="0" max="#{managedBean.maxValueBarPagamentosReceita}" 
 					style="height:600px" stacked="true" extender="ext1" showDataTip="false" rendered="#{managedBean.exibirGraficoReceita}"/>
-					
-				<h:outputText value="Saldo credor parcelas anteriores: "  rendered="#{managedBean.periodoAConsiderar == 'ANTERIOR'}"/>
-				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "  rendered="#{managedBean.periodoAConsiderar == 'ANTERIOR'}"/>
-				<h:outputText value="#{managedBean.saldoCredor}" rendered="#{managedBean.periodoAConsiderar == 'ANTERIOR'}">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>		
+						
 			</p:tab>		
 					
 		</p:tabView>
