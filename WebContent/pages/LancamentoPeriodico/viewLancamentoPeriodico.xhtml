@@ -144,8 +144,8 @@
 			Favorecido/Sacado:
 			<h:outputText value="#{managedBean.entity.favorecido.label}" />
 			
-			Meio de pagamento:
-			<h:outputText value="#{managedBean.entity.meioPagamento.label}" />			
+			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
+			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>			
 						
 		</h:panelGrid>
 		

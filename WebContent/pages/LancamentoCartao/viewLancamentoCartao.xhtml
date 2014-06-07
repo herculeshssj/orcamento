@@ -97,6 +97,9 @@
 			Favorecido/Sacado:
 			<h:outputText value="#{managedBean.entity.favorecido.nome}"/>
 			
+			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
+			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+			
 			Anexo:
 			<h:outputText value="#{managedBean.entity.arquivo.nomeArquivo}" rendered="#{managedBean.entity.arquivo != null}"/>
 			<h:outputText value="Sem anexo" rendered="#{managedBean.entity.arquivo == null}"/>

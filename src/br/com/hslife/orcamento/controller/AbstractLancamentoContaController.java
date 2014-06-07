@@ -54,8 +54,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 
 public abstract class AbstractLancamentoContaController extends AbstractCRUDController<LancamentoConta> {
 
@@ -66,6 +68,9 @@ public abstract class AbstractLancamentoContaController extends AbstractCRUDCont
 	
 	@Autowired
 	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
 
 	public AbstractLancamentoContaController() {
 		super(new LancamentoConta());
@@ -79,6 +84,23 @@ public abstract class AbstractLancamentoContaController extends AbstractCRUDCont
 				if (!resultado.contains(entity.getFavorecido())) {
 					entity.getFavorecido().setAtivo(true);
 					resultado.add(entity.getFavorecido());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			List<MeioPagamento> resultado = meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o favorecido inativo da entidade na combo
+			if (resultado != null && entity.getMeioPagamento() != null) {
+				if (!resultado.contains(entity.getMeioPagamento())) {
+					entity.getMeioPagamento().setAtivo(true);
+					resultado.add(entity.getMeioPagamento());
 				}
 			}
 			return resultado;

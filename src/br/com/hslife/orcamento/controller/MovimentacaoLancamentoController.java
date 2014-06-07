@@ -50,6 +50,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -63,6 +66,8 @@ import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMovimentacaoLancamento;
 
 @Component("movimentacaoLancamentoMB")
@@ -79,6 +84,12 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	
 	@Autowired
 	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
 	
 	private int quantADuplicar = 1;
 	private LancamentoConta lancamentoATransferir;
@@ -313,6 +324,24 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			errorMessage(be.getMessage());
 		} 
 		return new ArrayList<Categoria>();
+	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
 	}
 	
 	public IMovimentacaoLancamento getService() {

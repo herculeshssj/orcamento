@@ -84,7 +84,7 @@ import br.com.hslife.orcamento.util.Util;
 
 @Component("lancamentoCartaoMB")
 @Scope("session")
-public class LancamentoCartaoController extends AbstractCRUDController<LancamentoConta>{
+public class LancamentoCartaoController extends AbstractLancamentoContaController {
 	
 	/**
 	 * 
@@ -126,9 +126,7 @@ public class LancamentoCartaoController extends AbstractCRUDController<Lancament
 	
 	private String vincularFatura;
 	
-	public LancamentoCartaoController() {
-		super(new LancamentoConta());
-		
+	public LancamentoCartaoController() {		
 		moduleTitle = "Lançamentos do Cartão";
 		
 		goToListPage = "/pages/LancamentoCartao/listLancamentoCartao";

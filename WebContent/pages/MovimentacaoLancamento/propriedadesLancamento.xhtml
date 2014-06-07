@@ -80,13 +80,13 @@
 			Favorecido/Sacado:
 			<h:selectOneMenu id="txtFavorecido" value="#{managedBean.favorecidoSelecionado}" converter="entityConverter">
 				<f:selectItem itemLabel="Não alterar"/>
-				<f:selectItems value="#{entityCombo.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 			
 			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
 			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.meioPagamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 				<f:selectItem itemLabel="Não alterar"/>
-				<f:selectItems value="#{entityCombo.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>	
 			
 		</h:panelGrid>

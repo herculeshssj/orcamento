@@ -167,13 +167,13 @@
 					Favorecido/Sacado:
 					<h:selectOneMenu value="#{managedBean.entity.favorecido}" converter="entityConverter"  disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
 						<f:selectItem itemLabel="Nenhum favorecido"/>
-						<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+						<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 					</h:selectOneMenu>			
 					
-					Meio de pagamento:
-					<h:selectOneMenu value="#{managedBean.entity.meioPagamento}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
+					<h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+					<h:selectOneMenu value="#{managedBean.entity.meioPagamento}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 						<f:selectItem itemLabel="Nenhum meio de pagamento"/>
-						<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+						<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 					</h:selectOneMenu>
 								
 				</h:panelGrid>

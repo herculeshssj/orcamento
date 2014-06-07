@@ -147,7 +147,7 @@
 			<h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.entity.meioPagamento}" converter="entityConverter" rendered="#{managedBean.entity.conta.ativo and managedBean.opcoesSistema.exibirMeioPagamento}">
 				<f:selectItem itemLabel="Nenhum meio de pagamento"/>
-				<f:selectItems value="#{entityCombo.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{!managedBean.entity.conta.ativo and managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			<h:outputText value="" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>

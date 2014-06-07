@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
@@ -344,20 +345,36 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public List<Favorecido> getListaFavorecido() {
 		try {
-			return favorecidoService.buscarPorUsuario(getUsuarioLogado());
+			List<Favorecido> resultado = favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o favorecido inativo da entidade na combo
+			if (resultado != null && entity.getFavorecido() != null) {
+				if (!resultado.contains(entity.getFavorecido())) {
+					entity.getFavorecido().setAtivo(true);
+					resultado.add(entity.getFavorecido());
+				}
+			}
+			return resultado;
 		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
-		return new ArrayList<Favorecido>();
+		return new ArrayList<>();
 	}
 	
 	public List<MeioPagamento> getListaMeioPagamento() {
 		try {
-			return meioPagamentoService.buscarPorUsuario(getUsuarioLogado());
+			List<MeioPagamento> resultado = meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o favorecido inativo da entidade na combo
+			if (resultado != null && entity.getMeioPagamento() != null) {
+				if (!resultado.contains(entity.getMeioPagamento())) {
+					entity.getMeioPagamento().setAtivo(true);
+					resultado.add(entity.getMeioPagamento());
+				}
+			}
+			return resultado;
 		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
-		return new ArrayList<MeioPagamento>();
+		return new ArrayList<>();
 	}
 	
 	public List<Moeda> getListaMoeda() {
