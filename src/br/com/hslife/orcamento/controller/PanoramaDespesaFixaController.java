@@ -256,32 +256,29 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
-			
-			// Converte o valor do pagamento para a moeda padrão
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-			
-			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
 			if (pagamento.isQuitado()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosPagamento.get(dataKey) != null) {
-					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
-				} 
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
+					}
+				}
 			} else {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosAPagar.get(dataKey) != null) {
-					dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + (pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
+					}
 				} else {
 					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
 						saldoDevedor += pagamento.getLancamentoPeriodico().getValorParcela();
 					}
 				}
-			}	
+			}
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
@@ -345,32 +342,29 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
-			
-			// Converte o valor do pagamento para a moeda padrão
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-			
-			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
 			if (pagamento.isQuitado()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosPagamento.get(dataKey) != null) {
-					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
+					}
 				}
 			} else {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosAPagar.get(dataKey) != null) {
-					dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + (pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
+					}
 				} else {
 					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
 						saldoCredor += pagamento.getLancamentoPeriodico().getValorParcela();
 					}
 				}
-			}	
+			}
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição

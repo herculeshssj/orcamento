@@ -221,59 +221,50 @@ public class PanoramaParcelamentoController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
-			
-			// Converte o valor do pagamento para a moeda padrão
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-			
-			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
 			if (pagamento.isQuitado()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosPagamento.get(dataKey) != null) {
-					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
-					
-					// Determina o valor máximo do eixo Y
-					if (dadosPagamento.get(dataKey) > maxValueBarPagamentosDespesa)
-						maxValueBarPagamentosDespesa = dadosPagamento.get(dataKey) + 100;
-				} 
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
+					}
+				}
 			} else {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosAPagar.get(dataKey) != null) {
-					dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
-					
-					// Determina o valor máximo do eixo Y
-					if (dadosAPagar.get(dataKey) > maxValueBarPagamentosDespesa)
-						maxValueBarPagamentosDespesa = dadosAPagar.get(dataKey) + 100;
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + (pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
+					}
 				} else {
 					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
 						saldoDevedor += pagamento.getLancamentoPeriodico().getValorParcela();
 					}
 				}
-			}	
+			}
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
 		ultimosPagamentosDespesaModel = new CartesianChartModel();
 		
-		ChartSeries pagamentosSerie = new ChartSeries();
+		ChartSeries pagamentosSerie = new ChartSeries();		
+		ChartSeries aPagarSerie = new ChartSeries();
+		
 		pagamentosSerie.setLabel("Parcelas Pagas");
+		aPagarSerie.setLabel("Parcelas À Pagar");
+		
 		for (String key : dadosPagamento.keySet()) {
 			pagamentosSerie.set(key, dadosPagamento.get(key));
+			aPagarSerie.set(key, dadosAPagar.get(key));
+			
+			if ( (dadosPagamento.get(key) + dadosAPagar.get(key) + 100) > maxValueBarPagamentosDespesa) {
+				maxValueBarPagamentosDespesa = dadosPagamento.get(key) + dadosAPagar.get(key) + 100;
+			}
 		}
 		
 		ultimosPagamentosDespesaModel.addSeries(pagamentosSerie);
-		
-		ChartSeries aPagarSerie = new ChartSeries();
-		aPagarSerie.setLabel("Parcelas À Pagar");
-		for (String key : dadosAPagar.keySet()) {
-			aPagarSerie.set(key, dadosAPagar.get(key));
-		}
-		
 		ultimosPagamentosDespesaModel.addSeries(aPagarSerie);
 		
 		exibirGraficoDespesa = true;
@@ -316,59 +307,50 @@ public class PanoramaParcelamentoController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
-			
-			// Converte o valor do pagamento para a moeda padrão
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-			
-			// Verifica se o pagamento foi realizado ou não para colocar no Map correspondente
 			if (pagamento.isQuitado()) {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosPagamento.get(dataKey) != null) {
-					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
-					
-					// Determina o valor máximo do eixo Y
-					if (dadosPagamento.get(dataKey) > maxValueBarPagamentosReceita)
-						maxValueBarPagamentosReceita = dadosPagamento.get(dataKey) + 100;
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
+					}
 				}
 			} else {
 				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
 				if (dadosAPagar.get(dataKey) != null) {
-					dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
-					
-					// Determina o valor máximo do eixo Y
-					if (dadosAPagar.get(dataKey) > maxValueBarPagamentosReceita)
-						maxValueBarPagamentosReceita = dadosAPagar.get(dataKey) + 100;
+					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + (pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
+					} else {
+						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + pagamento.getLancamentoPeriodico().getValorParcela());
+					}
 				} else {
 					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
 						saldoCredor += pagamento.getLancamentoPeriodico().getValorParcela();
 					}
 				}
-			}	
+			}
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
 		ultimosPagamentosReceitaModel = new CartesianChartModel();
 		
-		ChartSeries pagamentosSerie = new ChartSeries();
+		ChartSeries pagamentosSerie = new ChartSeries();		
+		ChartSeries aPagarSerie = new ChartSeries();
+		
 		pagamentosSerie.setLabel("Parcelas Pagas");
+		aPagarSerie.setLabel("Parcelas À Pagar");
+		
 		for (String key : dadosPagamento.keySet()) {
 			pagamentosSerie.set(key, dadosPagamento.get(key));
+			aPagarSerie.set(key, dadosAPagar.get(key));
+			
+			if ( (dadosPagamento.get(key) + dadosAPagar.get(key) + 100) > maxValueBarPagamentosReceita) {
+				maxValueBarPagamentosReceita = dadosPagamento.get(key) + dadosAPagar.get(key) + 100;
+			}
 		}
 		
 		ultimosPagamentosReceitaModel.addSeries(pagamentosSerie);
-		
-		ChartSeries aPagarSerie = new ChartSeries();
-		aPagarSerie.setLabel("Parcelas À Pagar");
-		for (String key : dadosAPagar.keySet()) {
-			aPagarSerie.set(key, dadosAPagar.get(key));
-		}
-		
 		ultimosPagamentosReceitaModel.addSeries(aPagarSerie);
 		
 		exibirGraficoReceita = true;
