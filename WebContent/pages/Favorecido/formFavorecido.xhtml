@@ -68,7 +68,7 @@
 			</p:selectOneRadio>
 			
 			CPF/CNPJ:
-			<p:inputText value="#{managedBean.entity.cpfCnpj}" size="20"/>
+			<p:inputText value="#{managedBean.entity.cpfCnpj}" size="20" disabled="#{!managedBean.entity.ativo}"/>
 			
 			Contato:
 			<p:inputTextarea id="txtContato" value="#{managedBean.entity.contato}" disabled="#{!managedBean.entity.ativo}"/>						
