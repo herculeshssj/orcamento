@@ -121,6 +121,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public String cancel() {
 		try {
+			exibirInfoArquivo = false;
 			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
 			if (listEntity != null && !listEntity.isEmpty()) {
 				// Inicializa os objetos
@@ -143,6 +144,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public String goToStep1() {
+		exibirInfoArquivo = false;
 		return "/pages/ImportacaoLancamento/formImportacaoLancamentoPasso1";
 	}
 	
@@ -192,6 +194,8 @@ public class ImportacaoLancamentoController extends AbstractController {
 		} else {
 			try {
 				getService().processarArquivoImportado(arquivoAnexado, contaSelecionada);
+				infoArquivo = getService().obterInformacaoArquivoImportado(arquivoAnexado);
+				exibirInfoArquivo = true;
 				infoMessage("Arquivo processado com sucesso!");
 			} catch (Exception e) {
 				errorMessage(e.getMessage());
@@ -230,19 +234,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 			errorMessage(be.getMessage());
 		}
 		return goToListPage();
-	}
-
-	public void obterInformacaoArquivo() {
-		if (arquivoAnexado == null || arquivoAnexado.getDados() == null || arquivoAnexado.getDados().length == 0) {
-			warnMessage("Carregue um arquivo OFX antes de obter informações!");			
-		} else {
-			try {
-				infoArquivo = getService().obterInformacaoArquivoImportado(arquivoAnexado);
-				exibirInfoArquivo = true;
-			} catch (Exception e) {
-				errorMessage(e.getMessage());
-			}
-		}		
 	}
 	
 	public List<Conta> getListaConta() {
