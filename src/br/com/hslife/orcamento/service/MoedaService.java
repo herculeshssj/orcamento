@@ -120,4 +120,9 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario,	boolean ativo) throws BusinessException {
 		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
+	
+	@Override
+	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+		return getRepository().findActiveByUsuario(usuario);
+	}
 }

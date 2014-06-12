@@ -92,4 +92,11 @@ public class MoedaRepository extends AbstractCRUDRepository<Moeda> {
 				.setBoolean("ativo", ativo);
 		return query.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Moeda> findActiveByUsuario(Usuario usuario) {
+		return getQuery("FROM Moeda moeda WHERE moeda.usuario.id = :idUsuario AND moeda.ativo = true ORDER BY moeda.nome ASC")
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
 }

@@ -104,4 +104,11 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
 		return query.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Banco> findActiveByUsuario(Usuario usuario) {
+		return getQuery("FROM Banco banco WHERE banco.usuario.id = :idUsuario AND banco.ativo = true ORDER BY banco.nome ASC")
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
 }

@@ -379,7 +379,15 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public List<Moeda> getListaMoeda() {
 		try {
-			return moedaService.buscarPorUsuario(getUsuarioLogado());
+			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getMoeda() != null) {
+				if (!resultado.contains(entity.getMoeda())) {
+					entity.getMoeda().setAtivo(true);
+					resultado.add(entity.getMoeda());
+				}
+			}
+			return resultado;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

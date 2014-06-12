@@ -46,11 +46,13 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
@@ -183,6 +185,23 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	public List<Banco> getListaBanco() {
+		try {
+			List<Banco> resultado = bancoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getBanco() != null) {
+				if (!resultado.contains(entity.getBanco())) {
+					entity.getBanco().setAtivo(true);
+					resultado.add(entity.getBanco());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public ICartaoCredito getService() {

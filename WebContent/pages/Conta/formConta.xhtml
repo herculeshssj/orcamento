@@ -62,7 +62,7 @@
 			Banco:
 			<h:selectOneMenu value="#{managedBean.entity.banco}" disabled="#{!managedBean.entity.ativo}" converter="entityConverter">
 				<f:selectItem itemLabel="Nenhum"/>
-				<f:selectItems value="#{entityCombo.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 			<h:outputText/>	
 			
@@ -94,7 +94,7 @@
 			
 			Moeda:
 			<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" rendered="#{managedBean.operation == 'create'}">
-				<f:selectItems value="#{entityCombo.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{managedBean.operation == 'edit'}"/>
 			<h:outputText/> 

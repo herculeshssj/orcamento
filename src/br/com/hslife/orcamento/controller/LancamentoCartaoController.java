@@ -483,6 +483,23 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 		}
 		return buscasSalvas;
 	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getMoeda() != null) {
+				if (!resultado.contains(entity.getMoeda())) {
+					entity.getMoeda().setAtivo(true);
+					resultado.add(entity.getMoeda());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
 
 	public ILancamentoConta getService() {
 		return service;

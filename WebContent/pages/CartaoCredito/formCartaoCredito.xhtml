@@ -62,7 +62,7 @@
 			Banco:	     		
 			<h:selectOneMenu value="#{managedBean.entity.banco}" converter="entityConverter" disabled="#{!managedBean.entity.ativo}">
 				<f:selectItem itemLabel="Nenhum banco"/>
-				<f:selectItems value="#{entityCombo.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>									
+				<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 			</h:selectOneMenu>
 					
 			Descrição:				

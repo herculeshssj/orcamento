@@ -46,15 +46,20 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("contaMB")
 @Scope("session")
@@ -67,6 +72,12 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	
 	@Autowired
 	private IConta service;
+	
+	@Autowired
+	private IBanco bancoService;
+	
+	@Autowired
+	private IMoeda moedaService;
 	
 	private String descricaoConta;
 	private boolean somenteAtivos = true;
@@ -178,6 +189,40 @@ public class ContaController extends AbstractCRUDController<Conta> {
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	public List<Banco> getListaBanco() {
+		try {
+			List<Banco> resultado = bancoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getBanco() != null) {
+				if (!resultado.contains(entity.getBanco())) {
+					entity.getBanco().setAtivo(true);
+					resultado.add(entity.getBanco());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getMoeda() != null) {
+				if (!resultado.contains(entity.getMoeda())) {
+					entity.getMoeda().setAtivo(true);
+					resultado.add(entity.getMoeda());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public IConta getService() {

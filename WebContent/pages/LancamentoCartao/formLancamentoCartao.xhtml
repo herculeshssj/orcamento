@@ -85,7 +85,7 @@
 			
 			Moeda:
 			<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.quitado}">
-				<f:selectItems value="#{entityCombo.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>			
+				<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
