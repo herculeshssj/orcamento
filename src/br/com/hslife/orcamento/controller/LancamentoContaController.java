@@ -68,12 +68,10 @@ import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
-import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
-import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
@@ -97,9 +95,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	private IConta contaService;
 	
 	@Autowired
-	private ICategoria categoriaService;
-	
-	@Autowired
 	private IMeioPagamento meioPagamentoService;
 	
 	@Autowired
@@ -112,7 +107,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	
 	private String agrupamentoSelecionado;
 	private boolean exibirSaldoUltimoFechamento;
-	private TipoCategoria tipoCategoriaSelecionada;
+	
 	private boolean selecionarTodosLancamentos;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
@@ -210,16 +205,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		} else {
 			entity.setArquivo(null);
 			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
-		}
-	}
-	
-	public void atualizaComboCategorias() {
-		if (entity.getTipoLancamento() != null) {
-			if (entity.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
-				tipoCategoriaSelecionada = TipoCategoria.CREDITO;
-			} else {
-				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
-			}
 		}
 	}
 	
@@ -392,15 +377,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		return new ArrayList<Conta>();
 	}
 	
-	public List<Categoria> getListaCategoria() {
-		try {
-			if (tipoCategoriaSelecionada != null)
-				return categoriaService.buscarPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		} 
-		return new ArrayList<Categoria>();
-	}
+	
 	
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
@@ -472,10 +449,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		this.contaService = contaService;
 	}
 
-	public void setCategoriaService(ICategoria categoriaService) {
-		this.categoriaService = categoriaService;
-	}
-
 	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {
 		this.meioPagamentoService = meioPagamentoService;
 	}
@@ -502,14 +475,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 
 	public void setExibirSaldoUltimoFechamento(boolean exibirSaldoUltimoFechamento) {
 		this.exibirSaldoUltimoFechamento = exibirSaldoUltimoFechamento;
-	}
-
-	public TipoCategoria getTipoCategoriaSelecionada() {
-		return tipoCategoriaSelecionada;
-	}
-
-	public void setTipoCategoriaSelecionada(TipoCategoria tipoCategoriaSelecionada) {
-		this.tipoCategoriaSelecionada = tipoCategoriaSelecionada;
 	}
 
 	public List<Categoria> getAgrupamentoLancamentoPorCategoria() {

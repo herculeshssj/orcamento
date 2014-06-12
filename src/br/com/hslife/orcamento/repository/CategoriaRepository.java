@@ -117,4 +117,12 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
 		return query.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Categoria> findActiveByTipoCategoriaAndUsuario(TipoCategoria tipoCategoria, Usuario usuario) {
+		return getQuery("FROM Categoria categoria WHERE categoria.tipoCategoria = :tipoCategoria AND categoria.usuario.id = :idUsuario AND categoria.ativo = true ORDER BY categoria.descricao ASC")
+				.setParameter("tipoCategoria", tipoCategoria)
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
 }

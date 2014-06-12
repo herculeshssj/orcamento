@@ -335,8 +335,18 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public List<Categoria> getListaCategoria() {
 		try {
-			if (tipoCategoriaSelecionada != null)
-				return categoriaService.buscarPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
+			 
+			if (tipoCategoriaSelecionada != null) {
+				List<Categoria> resultado = categoriaService.buscarAtivosPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());				
+				// Lógica para incluir a categoria inativa da entidade na combo
+				if (resultado != null && entity.getCategoria() != null) {
+					if (!resultado.contains(entity.getCategoria())) {
+						entity.getCategoria().setAtivo(true);
+						resultado.add(entity.getCategoria());
+					}
+				}
+				return resultado;
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		} 

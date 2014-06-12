@@ -319,7 +319,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	public List<Categoria> getListaCategoria() {
 		try {
 			if (tipoCategoriaSelecionada != null)
-				return categoriaService.buscarPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
+				return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		} 

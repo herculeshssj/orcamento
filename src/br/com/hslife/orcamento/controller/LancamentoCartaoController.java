@@ -71,10 +71,8 @@ import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
-import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -96,9 +94,6 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 	
 	@Autowired
 	private IConta contaService;
-	
-	@Autowired
-	private ICategoria categoriaService;
 	
 	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
@@ -268,16 +263,6 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 		}
 	}
 	
-	public void atualizaComboCategorias() {
-		if (entity.getTipoLancamento() != null) {
-			if (entity.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
-				tipoCategoriaSelecionada = TipoCategoria.CREDITO;
-			} else {
-				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
-			}
-		}
-	}
-	
 	public void selecionarTodos() {
 		if (listEntity != null && listEntity.size() > 0)
 		for (LancamentoConta l : listEntity) {
@@ -440,16 +425,6 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 		return new ArrayList<Conta>();
 	}
 	
-	public List<Categoria> getListaCategoria() {
-		try {
-			if (tipoCategoriaSelecionada != null)
-				return categoriaService.buscarPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		} 
-		return new ArrayList<Categoria>();
-	}
-	
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
 		try {
@@ -511,10 +486,6 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 
 	public void setContaService(IConta contaService) {
 		this.contaService = contaService;
-	}
-
-	public void setCategoriaService(ICategoria categoriaService) {
-		this.categoriaService = categoriaService;
 	}
 
 	public CriterioLancamentoConta getCriterioBusca() {

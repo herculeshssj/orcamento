@@ -52,10 +52,14 @@ import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 
@@ -67,13 +71,48 @@ public abstract class AbstractLancamentoContaController extends AbstractCRUDCont
 	private static final long serialVersionUID = -8180594539371851973L;
 	
 	@Autowired
+	private ICategoria categoriaService;
+	
+	@Autowired
 	private IFavorecido favorecidoService;
 	
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
+	
+	private TipoCategoria tipoCategoriaSelecionada;
 
 	public AbstractLancamentoContaController() {
 		super(new LancamentoConta());
+	}
+	
+	public void atualizaComboCategorias() {
+		if (entity.getTipoLancamento() != null) {
+			if (entity.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+				tipoCategoriaSelecionada = TipoCategoria.CREDITO;
+			} else {
+				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
+			}
+		}
+	}
+	
+	public List<Categoria> getListaCategoria() {
+		try {
+			 
+			if (tipoCategoriaSelecionada != null) {
+				List<Categoria> resultado = categoriaService.buscarAtivosPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());				
+				// Lógica para incluir a categoria inativa da entidade na combo
+				if (resultado != null && entity.getCategoria() != null) {
+					if (!resultado.contains(entity.getCategoria())) {
+						entity.getCategoria().setAtivo(true);
+						resultado.add(entity.getCategoria());
+					}
+				}
+				return resultado;
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		} 
+		return new ArrayList<Categoria>();
 	}
 	
 	public List<Favorecido> getListaFavorecido() {
@@ -96,7 +135,7 @@ public abstract class AbstractLancamentoContaController extends AbstractCRUDCont
 	public List<MeioPagamento> getListaMeioPagamento() {
 		try {
 			List<MeioPagamento> resultado = meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
-			// Lógica para incluir o favorecido inativo da entidade na combo
+			// Lógica para incluir o meio de pagamento inativo da entidade na combo
 			if (resultado != null && entity.getMeioPagamento() != null) {
 				if (!resultado.contains(entity.getMeioPagamento())) {
 					entity.getMeioPagamento().setAtivo(true);
