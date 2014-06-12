@@ -83,7 +83,10 @@
 			     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 			     			</h:outputText>
 			     			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-			     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     				     			
+		     			<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
+		     			<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
+		     			<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
+		     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     				     			
 		     			</p:column>	     		
 		     			<p:column style="text-align: center; vertical-align: middle;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
