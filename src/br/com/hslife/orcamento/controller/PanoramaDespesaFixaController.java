@@ -256,8 +256,8 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
-			if (pagamento.isQuitado()) {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
+			dataKey = new SimpleDateFormat("MM/yyyy").format(this.determinarChaveMesAnoPagamento(pagamento));
+			if (pagamento.isQuitado()) {				
 				if (dadosPagamento.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
@@ -266,7 +266,6 @@ public class PanoramaDespesaFixaController extends AbstractController {
 					}
 				}
 			} else {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
 				if (dadosAPagar.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + (pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
@@ -342,8 +341,8 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
+			dataKey = new SimpleDateFormat("MM/yyyy").format(this.determinarChaveMesAnoPagamento(pagamento));
 			if (pagamento.isQuitado()) {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
 				if (dadosPagamento.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
@@ -352,7 +351,6 @@ public class PanoramaDespesaFixaController extends AbstractController {
 					}
 				}
 			} else {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
 				if (dadosAPagar.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosAPagar.put(dataKey, dadosAPagar.get(dataKey) + (pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
@@ -389,6 +387,33 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		ultimosPagamentosReceitaModel.addSeries(aPagarSerie);
 		
 		exibirGraficoReceita = true;
+	}
+	
+	private Date determinarChaveMesAnoPagamento(LancamentoConta pagamento) {
+		if (pagamento.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+			// Determina exatamente o mês/ano que um lançamento do cartão deve ser registrado
+			// de acordo com a data de vencimento da fatura do cartão
+			Calendar temp = Calendar.getInstance();
+			if (pagamento.isQuitado()) {
+				temp.setTime(pagamento.getDataPagamento());
+			} else {
+				temp.setTime(pagamento.getDataVencimento());
+			}
+			// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
+			if (temp.get(Calendar.DAY_OF_MONTH) <= pagamento.getConta().getCartaoCredito().getDiaFechamentoFatura()) {
+				temp.set(Calendar.DAY_OF_MONTH, pagamento.getConta().getCartaoCredito().getDiaFechamentoFatura());
+			} else {
+				temp.set(Calendar.DAY_OF_MONTH, pagamento.getConta().getCartaoCredito().getDiaFechamentoFatura());
+				temp.add(Calendar.MONTH, 1);
+			}
+			return temp.getTime();
+		} else {
+			if (pagamento.isQuitado()) {
+				return pagamento.getDataPagamento();
+			} else {
+				return pagamento.getDataVencimento();
+			}
+		}
 	}
 	
 	public List<LancamentoPeriodico> getListaLancamentoPeriodico() {
