@@ -159,6 +159,15 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	}
 
 	@Override
+	public void excluir(LancamentoConta entity) throws BusinessException {
+		// TODO remover esta validação na versão AGO2014 após concluir a tarefa #1045
+		if (entity.getLancamentoPeriodico() != null) {
+			throw new BusinessException("Este lançamento não pode ser excluído!");
+		}
+		super.excluir(entity);
+	}
+	
+	@Override
 	public List<LancamentoConta> buscarPorCriterioLancamentoConta(CriterioLancamentoConta criterio) throws BusinessException {
 		return getComponent().buscarPorCriterioLancamentoConta(criterio);
 	}
