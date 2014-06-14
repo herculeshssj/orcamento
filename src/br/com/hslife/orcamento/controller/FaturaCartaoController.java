@@ -81,7 +81,7 @@ import br.com.hslife.orcamento.util.Util;
 
 @Component("faturaCartaoMB")
 @Scope("session")
-public class FaturaCartaoController extends AbstractController {
+public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao> {
 	
 	/**
 	 * 
@@ -103,7 +103,6 @@ public class FaturaCartaoController extends AbstractController {
 	@Autowired
 	private IConta contaService;
 	
-	private FaturaCartao entity;
 	private Moeda moedaPadrao;
 	private boolean faturaFechada;
 	private double totalFatura;
@@ -117,30 +116,30 @@ public class FaturaCartaoController extends AbstractController {
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private LancamentoConta lancamento;
 	private Conta contaSelecionada;
+	private StatusFaturaCartao statusFatura;
 	
-	private List<LancamentoConta> listEntity = new ArrayList<>();
+	private List<LancamentoConta> detalhesFaturaCartao = new ArrayList<>();
 	private List<Moeda> moedas = new ArrayList<Moeda>();
 	private List<LancamentoConta> lancamentosEncontrados = new ArrayList<LancamentoConta>();
 	private List<LancamentoConta> lancamentosAdicionados = new ArrayList<LancamentoConta>();
 	
-	public FaturaCartaoController() {		
+	public FaturaCartaoController() {
+		super(new FaturaCartao());
+		
 		moduleTitle = "Fatura do Cartão";
-	}
-	
-	@Override
-	public String getModuleTitle() {
-		return super.getModuleTitle() + actionTitle;
 	}
 
 	@Override
 	protected void initializeEntity() {
-		listEntity = new ArrayList<LancamentoConta>();
+		detalhesFaturaCartao = new ArrayList<LancamentoConta>();
 		entity = new FaturaCartao();
 		lancamentosEncontrados.clear();
+		lancamentosAdicionados.clear();
 		moedas = new ArrayList<Moeda>();
 		criterioBusca = new CriterioLancamentoConta();
 	}
 
+	
 	@Override
 	public String startUp() {
 		// Pega a moeda padrão do usuário
@@ -149,11 +148,18 @@ public class FaturaCartaoController extends AbstractController {
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		
-		actionTitle = "";
-		return "/pages/FaturaCartao/listFaturaCartao";
+		return super.startUp();
 	}
 	
+	@Override
+	public void find() {
+		try {
+			listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	/*
 	public String find() {
 		try {
 			if (faturaSelecionada == null) {
@@ -168,7 +174,7 @@ public class FaturaCartaoController extends AbstractController {
 		}
 		return "";
 	}
-	
+	*/
 	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws BusinessException {
 
 		/* Pegando os totais para mostrar na fatura */
@@ -176,7 +182,7 @@ public class FaturaCartaoController extends AbstractController {
 		
 		for (Moeda moeda : moedas) {
 			moeda.setLancamentos(new ArrayList<LancamentoConta>());
-			for (LancamentoConta lancamento : listEntity) {
+			for (LancamentoConta lancamento : detalhesFaturaCartao) {
 				if (lancamento.getMoeda().equals(moeda)) {
 					// Adiciona o lançamento
 					moeda.getLancamentos().add(lancamento);
@@ -506,22 +512,20 @@ public class FaturaCartaoController extends AbstractController {
 		return "";
 	}
 	
-	public String detalheFatura() {
-		try {
-			if (faturaSelecionada == null) {
-				warnMessage("Selecione uma fatura!");
-			} else {
-				entity = getService().buscarPorID(faturaSelecionada.getId());
-				listEntity.clear(); 
-				listEntity.addAll(entity.getDetalheFatura());
-				this.calcularSaldoCompraSaqueParceladoPorMoeda();
-				for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
-					moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
-				}
-				this.calculaValorConversao();
-				actionTitle = " - Detalhes";
-				return "/pages/FaturaCartao/detalheFatura";
+	public String detalheFatura() {		
+		try {			
+			entity = getService().buscarPorID(idEntity);
+			lancamentosEncontrados.clear();
+			lancamentosEncontrados.addAll(entity.getDetalheFatura());
+			detalhesFaturaCartao.clear(); 
+			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+			for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
+				moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
 			}
+			this.calculaValorConversao();
+			actionTitle = " - Detalhes";
+			return "/pages/FaturaCartao/detalheFatura";			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -571,7 +575,7 @@ public class FaturaCartaoController extends AbstractController {
 	
 	private void reprocessarBusca() throws BusinessException {
 		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-		if (listEntity != null && !listEntity.isEmpty()) {
+		if (detalhesFaturaCartao != null && !detalhesFaturaCartao.isEmpty()) {
 			// Inicializa os objetos
 			initializeEntity();
 			
@@ -642,32 +646,20 @@ public class FaturaCartaoController extends AbstractController {
 		return listaSelectItem;
 	}
 
+	public IFaturaCartao getService() {
+		return service;
+	}
+
+	public void setService(IFaturaCartao service) {
+		this.service = service;
+	}
+
 	public Moeda getMoedaPadrao() {
 		return moedaPadrao;
 	}
 
 	public void setMoedaPadrao(Moeda moedaPadrao) {
 		this.moedaPadrao = moedaPadrao;
-	}
-
-	public List<LancamentoConta> getListEntity() {
-		return listEntity;
-	}
-
-	public void setListEntity(List<LancamentoConta> listEntity) {
-		this.listEntity = listEntity;
-	}
-
-	public void setMoedaService(IMoeda moedaService) {
-		this.moedaService = moedaService;
-	}
-
-	public List<Moeda> getMoedas() {
-		return moedas;
-	}
-
-	public void setMoedas(List<Moeda> moedas) {
-		this.moedas = moedas;
 	}
 
 	public boolean isFaturaFechada() {
@@ -686,8 +678,36 @@ public class FaturaCartaoController extends AbstractController {
 		this.totalFatura = totalFatura;
 	}
 
-	public void setCartaoCreditoService(ICartaoCredito cartaoCreditoService) {
-		this.cartaoCreditoService = cartaoCreditoService;
+	public boolean isExibirParcelarFatura() {
+		return exibirParcelarFatura;
+	}
+
+	public void setExibirParcelarFatura(boolean exibirParcelarFatura) {
+		this.exibirParcelarFatura = exibirParcelarFatura;
+	}
+
+	public int getFormaPagamentoFatura() {
+		return formaPagamentoFatura;
+	}
+
+	public void setFormaPagamentoFatura(int formaPagamentoFatura) {
+		this.formaPagamentoFatura = formaPagamentoFatura;
+	}
+
+	public double getValorAQuitar() {
+		return valorAQuitar;
+	}
+
+	public void setValorAQuitar(double valorAQuitar) {
+		this.valorAQuitar = valorAQuitar;
+	}
+
+	public Date getDataPagamento() {
+		return dataPagamento;
+	}
+
+	public void setDataPagamento(Date dataPagamento) {
+		this.dataPagamento = dataPagamento;
 	}
 
 	public CartaoCredito getCartaoSelecionado() {
@@ -706,20 +726,52 @@ public class FaturaCartaoController extends AbstractController {
 		this.faturaSelecionada = faturaSelecionada;
 	}
 
-	public IFaturaCartao getService() {
-		return service;
+	public CriterioLancamentoConta getCriterioBusca() {
+		return criterioBusca;
 	}
 
-	public void setService(IFaturaCartao service) {
-		this.service = service;
+	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
 	}
 
-	public FaturaCartao getEntity() {
-		return entity;
+	public LancamentoConta getLancamento() {
+		return lancamento;
 	}
 
-	public void setEntity(FaturaCartao entity) {
-		this.entity = entity;
+	public void setLancamento(LancamentoConta lancamento) {
+		this.lancamento = lancamento;
+	}
+
+	public Conta getContaSelecionada() {
+		return contaSelecionada;
+	}
+
+	public void setContaSelecionada(Conta contaSelecionada) {
+		this.contaSelecionada = contaSelecionada;
+	}
+
+	public StatusFaturaCartao getStatusFatura() {
+		return statusFatura;
+	}
+
+	public void setStatusFatura(StatusFaturaCartao statusFatura) {
+		this.statusFatura = statusFatura;
+	}
+
+	public List<LancamentoConta> getDetalhesFaturaCartao() {
+		return detalhesFaturaCartao;
+	}
+
+	public void setDetalhesFaturaCartao(List<LancamentoConta> detalhesFaturaCartao) {
+		this.detalhesFaturaCartao = detalhesFaturaCartao;
+	}
+
+	public List<Moeda> getMoedas() {
+		return moedas;
+	}
+
+	public void setMoedas(List<Moeda> moedas) {
+		this.moedas = moedas;
 	}
 
 	public List<LancamentoConta> getLancamentosEncontrados() {
@@ -738,65 +790,5 @@ public class FaturaCartaoController extends AbstractController {
 	public void setLancamentosAdicionados(
 			List<LancamentoConta> lancamentosAdicionados) {
 		this.lancamentosAdicionados = lancamentosAdicionados;
-	}
-
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
-	}
-
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
-	}
-
-	public void setLancamentoContaService(ILancamentoConta lancamentoContaService) {
-		this.lancamentoContaService = lancamentoContaService;
-	}
-
-	public LancamentoConta getLancamento() {
-		return lancamento;
-	}
-
-	public void setLancamento(LancamentoConta lancamento) {
-		this.lancamento = lancamento;
-	}
-
-	public boolean isExibirParcelarFatura() {
-		return exibirParcelarFatura;
-	}
-
-	public void setExibirParcelarFatura(boolean exibirParcelarFatura) {
-		this.exibirParcelarFatura = exibirParcelarFatura;
-	}
-
-	public int getFormaPagamentoFatura() {
-		return formaPagamentoFatura;
-	}
-
-	public void setFormaPagamentoFatura(int formaPagamentoFatura) {
-		this.formaPagamentoFatura = formaPagamentoFatura;
-	}
-
-	public Conta getContaSelecionada() {
-		return contaSelecionada;
-	}
-
-	public void setContaSelecionada(Conta contaSelecionada) {
-		this.contaSelecionada = contaSelecionada;
-	}
-
-	public double getValorAQuitar() {
-		return valorAQuitar;
-	}
-
-	public void setValorAQuitar(double valorAQuitar) {
-		this.valorAQuitar = valorAQuitar;
-	}
-
-	public Date getDataPagamento() {
-		return dataPagamento;
-	}
-
-	public void setDataPagamento(Date dataPagamento) {
-		this.dataPagamento = dataPagamento;
-	}
+	}	
 }

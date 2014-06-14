@@ -145,7 +145,7 @@
 	
 	<hr />
 	 
-	<p:dataTable var="item" value="#{managedBean.listEntity}">
+	<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}">
 		<p:column style="vertical-align: middle;">
 			<f:facet name="header">
 		    	<h:outputText value="Histórico"/>
@@ -166,6 +166,14 @@
 		    <h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
 		    <h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 		    <h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
+		</p:column>
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações"/>
+			</f:facet>
+			<h:commandButton title="Editar lançamento do cartão vinculado" image="/resources/images/alterar.png" action="#{lancamentoCartaoMB.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoCartaoMB.idEntity}"/>
+			</h:commandButton>
 		</p:column>		
 	</p:dataTable>
 	
@@ -209,7 +217,7 @@
 	
 	<h:dataTable var="moeda" value="#{managedBean.moedas}" width="100%">
 		<h:column>
-			Total:			
+			<strong>Total:</strong>			
 		</h:column>		
 		<h:column>
 			<h:panelGroup>
@@ -219,16 +227,18 @@
 				</h:outputText>
 			</h:panelGroup>						
 		</h:column>
-		<h:column>	
+		<h:column>
+			<strong>	
 			<h:outputText value="Taxa:" rendered="#{moeda.id != managedBean.moedaPadrao.id}"/>
+			</strong>
 		</h:column>
 		<h:column>			
 			<h:outputText value="#{moeda.taxaConversao}" rendered="#{moeda.id != managedBean.moedaPadrao.id}">
 				<f:convertNumber minFractionDigits="2" maxFractionDigits="4" />
 			</h:outputText>
 		</h:column>
-		<h:column>	
-			Convertido:			
+		<h:column>
+			<strong>Convertido:</strong>			
 		</h:column>
 		<h:column>
 			<h:panelGroup>			

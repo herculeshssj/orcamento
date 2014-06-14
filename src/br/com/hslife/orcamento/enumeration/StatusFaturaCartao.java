@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum StatusFaturaCartao {
-	ABERTA("Aberta"), FECHADA("Fechada"), VENCIDA("Vencida"), QUITADA("Quitada"), FUTURA("Futura");
+	ABERTA("Aberta"), FECHADA("Fechada"), VENCIDA("Vencida"), QUITADA("Quitada"), FUTURA("Futura"), ANTIGA("Antiga");
 	
 	private String descricao;
 	
