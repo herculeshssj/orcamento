@@ -90,10 +90,23 @@
 			<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 			<h:inputHidden/>
 			
-			Parcela:
-			<p:inputText id="txtParcela" value="#{managedBean.entity.parcela}" size="5" maxlength="20" disabled="#{managedBean.entity.quitado}"/>
-			<h:outputText value="#{managedBean.entity.parcela}" rendered="#{!managedBean.entity.conta.ativo}"/>
-			<h:inputHidden/>
+			<h:outputText value="Período / Ano:" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
+			<h:panelGroup rendered="#{!managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
+				<h:inputText value="#{managedBean.entity.periodo}" size="5"/>
+				<h:outputText value=" / " />
+				<h:inputText value="#{managedBean.entity.ano}" size="5"/>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
+				<h:outputText value="#{managedBean.entity.periodo}" />
+				<h:outputText value=" / " />
+				<h:outputText value="#{managedBean.entity.ano}" />
+			</h:panelGroup>
+			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
+			
+			<h:outputText value="Parcela" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
+			<h:inputText value="#{managedBean.entity.parcela}" size="5" rendered="#{!managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" />
+			<h:outputText value="#{managedBean.entity.parcela}" rendered="#{managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" />
+			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 			
 			<h:outputText value="Data de vencimento:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
 			<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}" rendered="#{!managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null}">

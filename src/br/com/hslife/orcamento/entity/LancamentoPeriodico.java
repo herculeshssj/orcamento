@@ -172,7 +172,8 @@ public class LancamentoPeriodico extends EntityPersistence {
 
 	@Override
 	public void validate() throws BusinessException {
-		
+		if (this.tipoLancamentoPeriodico == null)
+			throw new BusinessException("Informe o tipo de despesa!");
 	}
 	
 	public Long getId() {

@@ -86,6 +86,15 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
+	public void validar(LancamentoPeriodico entity) throws BusinessException {
+		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+			if (!entity.getMoeda().equals(entity.getConta().getMoeda())) {
+				throw new BusinessException("A moeda do lançamento deve ser igual a moeda da conta!");
+			}
+		}
+	}
+	
+	@Override
 	public void cadastrar(LancamentoPeriodico entity) throws BusinessException {
 		super.cadastrar(entity);
 		if (entity.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
