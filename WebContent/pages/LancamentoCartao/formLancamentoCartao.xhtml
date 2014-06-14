@@ -181,6 +181,10 @@
 				<h:commandButton title="Quebrar vínculo" action="#{managedBean.quebrarVinculo}" image="/resources/images/quebrar.png"/>
 			</h:panelGroup>
 			
+			<h:outputText value="Despesa fixa/parcelada:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
+			<h:outputText value="#{managedBean.entity.lancamentoPeriodico.label}" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />		
+			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
+			
 		</h:panelGrid>
 		
 		<h:panelGrid columns="1">

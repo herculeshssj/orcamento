@@ -348,4 +348,19 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		
 		return hqlQuery.list();
 	}
+	
+	public LancamentoConta findLancamentoByParcelaAndLancamentoPeriodico(int parcela, LancamentoPeriodico lancamentoPeriodico) {
+		return (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.parcela = :parcela AND lancamento.lancamentoPeriodico.id = :idLancamento")
+				.setInteger("parcela", parcela)
+				.setLong("idLancamento", lancamentoPeriodico.getId())
+				.uniqueResult();
+	}
+	
+	public LancamentoConta findLancamentoByPeriodoAndAnoAndLancamentoPeriodico(int periodo, int ano, LancamentoPeriodico lancamentoPeriodico) {
+		return (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.periodo = :periodo AND lancamento.ano = :ano AND lancamento.lancamentoPeriodico.id = :idLancamento")
+				.setInteger("periodo", periodo)
+				.setInteger("ano", ano)
+				.setLong("idLancamento", lancamentoPeriodico.getId())
+				.uniqueResult();
+	}
 }
