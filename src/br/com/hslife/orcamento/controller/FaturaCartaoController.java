@@ -70,6 +70,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.facade.IConta;
@@ -159,6 +160,59 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			errorMessage(be.getMessage());
 		}
 	}
+	
+	@Override
+	public String create() {
+		entity.setStatusFaturaCartao(StatusFaturaCartao.ANTIGA);
+		return super.create();
+	}
+	
+	@Override
+	public String edit() {
+		try {
+			entity = getService().buscarPorID(idEntity);
+			lancamentosAdicionados.clear();
+			lancamentosAdicionados.addAll(entity.getDetalheFatura());
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+			operation = "edit";
+			actionTitle = " - Editar";
+			return goToFormPage;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public String save() {
+		if (entity.getId() == null) {
+			entity.setConta(cartaoSelecionado.getConta());
+		}
+		entity.getDetalheFatura().clear();
+		entity.getDetalheFatura().addAll(lancamentosAdicionados);
+		return super.save();
+		/*
+		try {
+			// Vincula as modificações na fatura do cartão
+			entity.getDetalheFatura().clear();
+			entity.getDetalheFatura().addAll(lancamentosAdicionados);
+			
+			// Salva a fatura
+			getService().validar(entity);
+			getService().alterar(entity);
+			infoMessage("Fatura salva com sucesso!");
+			
+			this.reprocessarBusca();
+			
+			return "/pages/FaturaCartao/listFaturaCartao";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+		*/
+	}
+	
 	/*
 	public String find() {
 		try {
@@ -187,21 +241,21 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 					// Adiciona o lançamento
 					moeda.getLancamentos().add(lancamento);
 					
-					// Verifica e calcula a compra a vista
-					if (lancamento.getParcela() == 0) {
+					// Verifica e calcula as compras à vista e parceladas
+					if (lancamento.getLancamentoPeriodico() != null && 
+							lancamento.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+						// Calcula as compras parceladas						
+						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
+							moeda.setParcelado(moeda.getParcelado() + lancamento.getValorPago());
+						else
+							moeda.setParcelado(moeda.getParcelado() - lancamento.getValorPago());
+					} else {
+						// Calcula as compras à vista e mensalidades
 						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
 							moeda.setCompraSaque(moeda.getCompraSaque() + lancamento.getValorPago());
 						else
 							moeda.setCompraSaque(moeda.getCompraSaque() - lancamento.getValorPago());
-					}
-					
-					// Verifica e calcula a compra parcelada
-					if (lancamento.getParcela() != 0) {
-						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-							moeda.setParcelado(moeda.getParcelado() + lancamento.getValorPago());
-						else
-							moeda.setParcelado(moeda.getParcelado() - lancamento.getValorPago());							
-					}
+					}					
 				}
 			}
 						
@@ -221,7 +275,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			}
 		}
 	}
-	
+	/*
 	public String editarLancamentos() {
 		try {
 			if (faturaSelecionada == null) {
@@ -244,7 +298,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 		return "";
 	}
-	
+	*/
 	public String excluirFatura() {
 		if (faturaSelecionada == null) {
 			warnMessage("Selecione uma fatura!");
@@ -262,36 +316,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			}
 		}
 		return "";
-	}
-	
-	public String save() {
-		try {
-			// Vincula as modificações na fatura do cartão
-			entity.getDetalheFatura().clear();
-			entity.getDetalheFatura().addAll(lancamentosAdicionados);
-			
-			// Salva a fatura
-			getService().validar(entity);
-			getService().alterar(entity);
-			infoMessage("Fatura salva com sucesso!");
-			
-			this.reprocessarBusca();
-			
-			return "/pages/FaturaCartao/listFaturaCartao";
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	public String cancel() {
-		actionTitle = "";
-		try {
-			this.reprocessarBusca();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "/pages/FaturaCartao/listFaturaCartao";
 	}
 	
 	public void carregarArquivo(FileUploadEvent event) {
@@ -344,6 +368,9 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				}
 			}
 			lancamento = new LancamentoConta();
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(lancamentosAdicionados);
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
 		}
 		catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -367,6 +394,9 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				// Salva o lançamento
 				lancamentoContaService.cadastrar(lancamento);
 				lancamentosAdicionados.add(lancamento);
+				detalhesFaturaCartao.clear();
+				detalhesFaturaCartao.addAll(lancamentosAdicionados);
+				this.calcularSaldoCompraSaqueParceladoPorMoeda();
 				infoMessage("Lançamento cadastrado com sucesso e adicionado à fatura.");
 				criterioBusca = new CriterioLancamentoConta();
 			} catch (BusinessException be) {
@@ -376,7 +406,14 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	public void excluirLancamento() {
-		lancamentosAdicionados.remove(lancamento);
+		try {
+			lancamentosAdicionados.remove(lancamento);
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(lancamentosAdicionados);
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void pesquisarLancamento() {
@@ -566,7 +603,15 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public List<Moeda> getListaMoeda() {
 		try {
-			return moedaService.buscarPorUsuario(getUsuarioLogado());
+			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getMoeda() != null) {
+				if (!resultado.contains(entity.getMoeda())) {
+					entity.getMoeda().setAtivo(true);
+					resultado.add(entity.getMoeda());
+				}
+			}
+			return resultado;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

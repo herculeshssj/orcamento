@@ -110,7 +110,11 @@
 			<f:facet name="header">
 		    	<h:outputText value="Ações"/>
 		    </f:facet>
-		    <h:commandButton title="Visualizar detales"	image="/resources/images/pesquisar.png" action="#{managedBean.detalheFatura}">
+		    <h:commandButton title="Visualizar detalhes" image="/resources/images/pesquisar.png" action="#{managedBean.detalheFatura}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>
+			&nbsp;
+			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
 			</h:commandButton>
 		</p:column>
