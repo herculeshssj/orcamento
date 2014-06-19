@@ -106,6 +106,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 
 	@Override
 	public void validar(FaturaCartao entity) throws BusinessException {
+		/*
 		FaturaCartao ultimaFaturaFechada = getRepository().lastFaturaCartaoFechada(entity.getConta());
 		if (Util.formataDataHora(entity.getDataVencimento(), Util.DATA).equals(Util.formataDataHora(ultimaFaturaFechada.getDataVencimento(), Util.DATA)) 
 				|| entity.getDataVencimento().before(ultimaFaturaFechada.getDataVencimento())) {
@@ -114,6 +115,13 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		
 		// Impede que haja mais de uma fatura com a mesma data de vencimento para o cartão selecionado
 		List<FaturaCartao> faturas = getRepository().findByVencimentoAndStatusFatura(entity.getConta(), entity.getDataVencimento(), entity.getStatusFaturaCartao());
+		if (faturas != null && faturas.size() > 1) {
+			throw new BusinessException("Data de vencimento já informada para uma fatura cadastrada!");
+		}
+		*/
+		
+		// Impede que haja mais de uma fatura com a mesma data de vencimento para o cartão selecionado
+		List<FaturaCartao> faturas = getRepository().findByContaAndDataVencimento(entity.getConta(), entity.getDataVencimento());
 		if (faturas != null && faturas.size() > 1) {
 			throw new BusinessException("Data de vencimento já informada para uma fatura cadastrada!");
 		}

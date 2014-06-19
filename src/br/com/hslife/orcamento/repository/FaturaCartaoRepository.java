@@ -167,4 +167,12 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 				.setParameter("statusFatura", statusFatura)
 				.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<FaturaCartao> findByContaAndDataVencimento(Conta conta, Date dataVencimento) {
+		return getQuery("FROM FaturaCartao fatura WHERE fatura.conta.id = :idConta AND fatura.dataVencimento = :vencimento ORDER BY fatura.dataVencimento DESC")
+				.setLong("idConta", conta.getId())
+				.setDate("vencimento", dataVencimento)
+				.list();
+	}
 }
