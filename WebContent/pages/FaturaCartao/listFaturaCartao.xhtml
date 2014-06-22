@@ -129,112 +129,12 @@
 			<h:commandButton title="Reabrir fatura" image="/resources/images/voltar.png" action="#{managedBean.reabrirFatura}" rendered="#{item.statusFaturaCartao == 'FECHADA'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
 			</h:commandButton>
+			&nbsp;
+			<h:commandButton title="Excluir fatura" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.statusFaturaCartao == 'ANTIGA'}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+			</h:commandButton>
 		</p:column>
 	</ui:define>
-	<!-- 
-	<ui:define name="botoes">
 	
-	</ui:define>
-	
-	<ui:define name="pesquisa">
-	
-		<strong>Cartão:</strong>
-		&nbsp;
-		<h:selectOneMenu value="#{managedBean.cartaoSelecionado}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaCartaoSoCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-			<p:ajax update="txtFaturaCartao" listener="#{managedBean.atualizaListaFatura}"/>			
-		</h:selectOneMenu>
-		&nbsp;
-		<strong>Fatura:</strong>
-		&nbsp;
-		<h:selectOneMenu id="txtFaturaCartao" value="#{managedBean.faturaSelecionada}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaFaturaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		</h:selectOneMenu>
-	
-	</ui:define>
-	
-	<ui:define name="pesquisa_avancada">
-	
-		<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.editarLancamentos}"/>
-		&nbsp;&nbsp;&nbsp;
-		<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirFatura}"/>
-		
-	</ui:define>
-	
-	<ui:define name="colunas">
-	
-		<p:column style="vertical-align: middle;">
-			<f:facet name="header">
-		    	<h:outputText value="Histórico"/>
-		    </f:facet>
-		    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-		    	<f:converter converterId="dateConverter"/>
-		    </h:outputText>
-		    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-		    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-		    <h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
-		    <br/>
-		    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
-		    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-		     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		    </h:outputText>
-		    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-		    <h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
-		    <h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
-		    <h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
-		    <h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
-		</p:column>	
-	
-	</ui:define>
-	
-	<ui:define name="acoes">
-	
-	</ui:define>
-	
-	<ui:define name="outras_opcoes">
-	
-		<h:dataTable var="moeda" value="#{managedBean.moedas}">
-			<h:column>
-				<strong>Compras/Saques:</strong>
-			</h:column>
-			<h:column>
-				<h:panelGroup>
-					<h:outputText value="#{moeda.simboloMonetario} "/>
-					<h:outputText value="#{moeda.compraSaque}">
-						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-				</h:panelGroup>
-			</h:column>
-			<h:column>	
-				<strong>Parcelados:</strong>
-			</h:column>
-			<h:column>
-				<h:panelGroup>
-					<h:outputText value="#{moeda.simboloMonetario} "/>
-					<h:outputText value="#{moeda.parcelado}">
-						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-				</h:panelGroup>
-			</h:column>
-			<h:column>	
-				<strong>Total:</strong>
-			</h:column>
-			<h:column>
-				<h:panelGroup>
-					<h:outputText value="#{moeda.simboloMonetario} "/>
-					<h:outputText value="#{moeda.total}">
-						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-				</h:panelGroup>
-			</h:column>			
-		</h:dataTable>
-		
-		<p:commandButton value="Fechar fatura" action="#{managedBean.fecharFaturaView}" ajax="false" rendered="#{managedBean.faturaSelecionada.statusFaturaCartao == 'ABERTA'}"/>		
-		<p:commandButton value="Reabrir fatura" action="#{managedBean.reabrirFatura}" ajax="false" rendered="#{managedBean.faturaSelecionada.statusFaturaCartao == 'FECHADA'}"/>		
-		<p:commandButton value="Quitar fatura" action="#{managedBean.quitarFaturaView}" ajax="false" rendered="#{managedBean.faturaSelecionada.statusFaturaCartao == 'FECHADA'}"/>		
-		<p:commandButton value="Detalhes fatura" action="#{managedBean.detalheFatura}" ajax="false"/>
-			
-	</ui:define>
-	 -->	
 </ui:composition>
 </html>
