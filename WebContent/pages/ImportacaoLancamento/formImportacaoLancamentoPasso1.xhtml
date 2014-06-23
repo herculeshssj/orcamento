@@ -61,7 +61,7 @@
 			
 			Selecione a conta:
 			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter">
-				<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 			</h:selectOneMenu>					
 			
 			Selecione o arquivo:
@@ -74,7 +74,7 @@
 			
 		</h:panelGrid>
 	
-		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo}">
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.tipoImportacao == 'CONTA'}">
 			N° do banco: 
 			<h:outputText value="#{managedBean.infoArquivo.bancoID}"/>
 			
@@ -96,6 +96,28 @@
 			<h:outputText value="#{managedBean.infoArquivo.balancoFinal}">
 				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
+			
+			Moeda padrão:
+			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
+			
+			Quantidade de transações:
+			<h:outputText value="#{managedBean.infoArquivo.quantidadeTransacao}"/>
+			
+			Período:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.infoArquivo.inicioTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+				à
+				<h:outputText value="#{managedBean.infoArquivo.fimTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+			</h:panelGroup>			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.tipoImportacao == 'CARTAO'}">
+			Cartão:
+			<h:outputText value="#{managedBean.infoArquivo.conta}"/>
 			
 			Moeda padrão:
 			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>

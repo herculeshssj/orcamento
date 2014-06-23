@@ -113,6 +113,9 @@ public class CartaoCredito extends EntityPersistence {
 	@Enumerated(EnumType.STRING)
 	private Bandeira bandeira;
 	
+	@Transient
+	private String numeroCartao;
+	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;

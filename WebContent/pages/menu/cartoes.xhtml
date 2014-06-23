@@ -63,15 +63,17 @@
 	
 		<h:form id="frmMenuCadastros">
 		
-			<h:panelGrid columns="3" width="100%" style="text-align: center">
+			<h:panelGrid columns="4" width="100%" style="text-align: center">
 			
 				<h:commandButton action="#{cartaoCreditoMB.startUp}" image="/resources/images/cartaocredito.png" title="Cartão de crédito"/>
 				<h:commandButton action="#{lancamentoCartaoMB.startUp}" image="/resources/images/lancamento.png" title="Lançamentos do Cartão"/>
 				<h:commandButton action="#{faturaCartaoMB.startUp}" image="/resources/images/faturacartao.png" title="Fatura do Carão"/>
+				<h:commandButton action="#{importacaoLancamentoMB.startUpCartao}" image="/resources/images/importacao.png" title="Importação de Lançamentos"/>
 				
 				<h:outputText value="Cartão de Crédito"/>
 				<h:outputText value="Lançamentos do Cartão"/>
 				<h:outputText value="Fatura do Cartão"/>
+				<h:outputText value="Importação de Lançamentos"/>
 										
 			</h:panelGrid>
 		
