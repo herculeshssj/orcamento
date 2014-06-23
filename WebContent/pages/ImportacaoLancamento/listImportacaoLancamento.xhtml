@@ -82,11 +82,17 @@
 			</f:facet>
 			<h:outputText value="#{item.historico}"/>						
 	  	</p:column>
-	  	<p:column style="text-align: center; vertical-align: middle;">
+	  	<p:column style="text-align: center; vertical-align: middle;"  rendered="#{managedBean.tipoImportacao == 'CONTA'}">
 			<f:facet name="header">
 				<h:outputText value="Documento"/>
 			</f:facet>						
 			<h:outputText value="#{item.documento}"/>
+	  	</p:column>
+	  	<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.tipoImportacao == 'CARTAO'}">
+			<f:facet name="header">
+				<h:outputText value="Moeda"/>
+			</f:facet>						
+			<h:outputText value="#{item.moeda}"/>
 	  	</p:column>
 	  	<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
