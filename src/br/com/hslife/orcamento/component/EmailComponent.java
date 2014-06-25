@@ -88,4 +88,32 @@ public class EmailComponent {
 		email.setCharset((String)parametros.get("EMAIL_CHARSET"));
 		email.send();
 	}
+	
+	public void enviarEmail(String remetente, String emailRemetente, String destinatario, String emailDestinatario, String assunto, String mensagem) throws EmailException {
+		// Carrega as configurações de envio de e-mail
+		Map<String, Object> parametros = opcaoSistemaComponent.buscarOpcoesGlobalAdminPorCDU("email");
+		
+		// Instancia o objeto de e-mail
+		SimpleEmail email = new SimpleEmail();
+		
+		// Atribui ao objeto os parâmetros passados ao método
+		email.addTo(emailDestinatario, destinatario, (String)parametros.get("EMAIL_CHARSET"));
+		email.setFrom(emailRemetente, remetente, (String)parametros.get("EMAIL_CHARSET")); // remetente
+		email.setSubject(assunto);
+		email.setMsg(mensagem);
+		
+		// Atribui os demais parâmetros vindos de opções do sistema
+		email.setHostName((String)parametros.get("EMAIL_SERVIDOR"));
+		email.setSmtpPort((Integer)parametros.get("EMAIL_PORTA"));
+		email.setAuthentication((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
+		if ((Boolean)parametros.get("EMAIL_SSL_TLS")) {
+			email.setSSL(true);
+	        email.setTLS(true);  
+		} else {
+			email.setSSL(false);
+	        email.setTLS(false);
+		}
+		email.setCharset((String)parametros.get("EMAIL_CHARSET"));
+		email.send();
+	}
 }
