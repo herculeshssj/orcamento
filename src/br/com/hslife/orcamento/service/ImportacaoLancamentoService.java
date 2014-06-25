@@ -56,8 +56,6 @@ import net.sf.ofx4j.domain.data.ResponseMessageSet;
 import net.sf.ofx4j.domain.data.banking.BankStatementResponseTransaction;
 import net.sf.ofx4j.domain.data.banking.BankingResponseMessageSet;
 import net.sf.ofx4j.domain.data.common.Transaction;
-import net.sf.ofx4j.domain.data.creditcard.CreditCardResponseMessageSet;
-import net.sf.ofx4j.domain.data.creditcard.CreditCardStatementResponseTransaction;
 import net.sf.ofx4j.domain.data.signon.SignonResponse;
 import net.sf.ofx4j.io.AggregateUnmarshaller;
 
@@ -335,45 +333,29 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Override
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
+	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo) throws BusinessException {
 		InfoOFX info = new InfoOFX();
 		try {
-			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
-				AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
-				ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
-				CreditCardResponseMessageSet message = (CreditCardResponseMessageSet) re.getMessageSet(MessageSetType.creditcard);
-				if (message != null) {
-					List<CreditCardStatementResponseTransaction> creditcard = message.getStatementResponses();
-				    for (CreditCardStatementResponseTransaction c : creditcard) {
-				    	info.setQuantidadeTransacao(c.getMessage().getTransactionList().getTransactions().size());
-				    	info.setMoedaPadrao(c.getMessage().getCurrencyCode());
-				    	info.setInicioTransacoes(c.getMessage().getTransactionList().getStart());
-				    	info.setFimTransacoes(c.getMessage().getTransactionList().getEnd());
-				    	info.setConta(c.getMessage().getAccount().getAccountNumber());
-				   }
-				}
-			} else {
-				AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
-				ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));				
-				SignonResponse sr = re.getSignonResponse();			
-				MessageSetType type = MessageSetType.banking;
-				ResponseMessageSet message = re.getMessageSet(type);			
-				if (message != null) {
-					List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
-				    for (BankStatementResponseTransaction b : bank) {
-				    	info.setBancoID(b.getMessage().getAccount().getBankId());
-				    	info.setConta(b.getMessage().getAccount().getAccountNumber());
-				    	info.setAgencia(b.getMessage().getAccount().getBranchId());
-				    	info.setTipoConta(b.getMessage().getAccount().getAccountType().name());
-				        info.setBalancoFinal(b.getMessage().getLedgerBalance().getAmount());
-				        info.setDataArquivo(b.getMessage().getLedgerBalance().getAsOfDate());
-				        info.setMoedaPadrao(b.getMessage().getCurrencyCode());
-				        info.setQuantidadeTransacao(b.getMessage().getTransactionList().getTransactions().size());
-				        info.setInicioTransacoes(b.getMessage().getTransactionList().getStart());
-				        info.setFimTransacoes(b.getMessage().getTransactionList().getEnd());			        
-				   }
-				} 
-			}
+			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
+			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));				
+			SignonResponse sr = re.getSignonResponse();			
+			MessageSetType type = MessageSetType.banking;
+			ResponseMessageSet message = re.getMessageSet(type);			
+			if (message != null) {
+				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
+			    for (BankStatementResponseTransaction b : bank) {
+			    	info.setBancoID(b.getMessage().getAccount().getBankId());
+			    	info.setConta(b.getMessage().getAccount().getAccountNumber());
+			    	info.setAgencia(b.getMessage().getAccount().getBranchId());
+			    	info.setTipoConta(b.getMessage().getAccount().getAccountType().name());
+			        info.setBalancoFinal(b.getMessage().getLedgerBalance().getAmount());
+			        info.setDataArquivo(b.getMessage().getLedgerBalance().getAsOfDate());
+			        info.setMoedaPadrao(b.getMessage().getCurrencyCode());
+			        info.setQuantidadeTransacao(b.getMessage().getTransactionList().getTransactions().size());
+			        info.setInicioTransacoes(b.getMessage().getTransactionList().getStart());
+			        info.setFimTransacoes(b.getMessage().getTransactionList().getEnd());			        
+			   }
+			} 
 		}catch (Exception e) {
 			throw new BusinessException(e);
 		}
@@ -544,39 +526,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	//@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) throws BusinessException {
-		try {
-			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
-			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
-			CreditCardResponseMessageSet message = (CreditCardResponseMessageSet) re.getMessageSet(MessageSetType.creditcard);
-			if (message != null) {
-				List<CreditCardStatementResponseTransaction> creditcard = message.getStatementResponses();
-				for (CreditCardStatementResponseTransaction c : creditcard) {
-					
-					// Valida o número do cartão de crédito
-					//if (!conta.getContaCorrente().equals(c.getMessage().getAccount().getAccountNumber())) {
-			        	//throw new BusinessException("Número do cartão " + conta.getCartaoCredito().getNumeroCartao() + " não confere com do arquivo (" + c.getMessage().getAccount().getAccountNumber() + ")!");
-			        //}
-					
-					List<Transaction> list = c.getMessage().getTransactionList().getTransactions();
-			        for (Transaction transaction : list) {			        	
-			            if (this.lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId())) == null) {			            
-			            	LancamentoImportado li = new LancamentoImportado();
-			            	li.setConta(conta);
-			            	li.setData(transaction.getDatePosted());
-			            	//li.setMoeda(transaction.getCurrency() == null ? c.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
-			            	li.setHash(Util.MD5(transaction.getId()));
-			            	li.setHistorico(transaction.getMemo());
-			            	li.setValor(transaction.getAmount());
-				            
-			            	lancamentoImportadoRepository.save(li);			            	
-			            }
-			       }
-				}				
-			} 
-		} catch (Exception e) {
-			throw new BusinessException(e);
-		}
+		
 	}
 }

@@ -89,9 +89,6 @@ public class LancamentoImportado extends EntityPersistence {
 	@Column(length=32, nullable=false)
 	private String hash;
 	
-	@Column(length=5, nullable=true)
-	private String moeda;
-	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
@@ -168,13 +165,5 @@ public class LancamentoImportado extends EntityPersistence {
 
 	public void setConta(Conta conta) {
 		this.conta = conta;
-	}
-
-	public String getMoeda() {
-		return moeda;
-	}
-
-	public void setMoeda(String moeda) {
-		this.moeda = moeda;
 	}
 }

@@ -60,6 +60,3 @@ drop table panoramalancamentocartao;
 -- Inclusão da coluna para salvar critérios com lançamentos quitados
 alter table buscasalva add column quitados boolean null;
 update buscasalva set quitados = 0;
-
--- Inclusão do campo de moeda para os lançamento importados
-alter table lancamentoimportado add column moeda varchar(5) null;
