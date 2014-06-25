@@ -82,7 +82,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private boolean gerarNovosLancamentos;
 	private boolean exibirInfoArquivo;
 	private InfoOFX infoArquivo;
-	private String tipoImportacao = "CONTA";
 	
 	private List<LancamentoImportado> lancamentosImportadosValidos;
 	private List<LancamentoConta> lancamentoContaAInserir;
@@ -104,12 +103,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	@Override
 	public String startUp() {
-		tipoImportacao = "CONTA";
-		return goToListPage();
-	}
-	
-	public String startUpCartao() {
-		tipoImportacao = "CARTAO";
 		return goToListPage();
 	}
 	
@@ -201,7 +194,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		} else {
 			try {
 				getService().processarArquivoImportado(arquivoAnexado, contaSelecionada);
-				infoArquivo = getService().obterInformacaoArquivoImportado(arquivoAnexado, contaSelecionada);
+				infoArquivo = getService().obterInformacaoArquivoImportado(arquivoAnexado);
 				exibirInfoArquivo = true;
 				infoMessage("Arquivo processado com sucesso!");
 			} catch (Exception e) {
@@ -245,18 +238,27 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public List<Conta> getListaConta() {
 		try {
-			switch (tipoImportacao) {
-			case "CONTA":
+			// Obtém o valor da opção do sistema
+			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", getUsuarioLogado());
+			
+			// Determina qual listagem será retornada
+			if (opcao != null && Boolean.valueOf(opcao.getValor()))
+				return contaService.buscarPorUsuario(getUsuarioLogado());
+			else 
 				return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-			case "CARTAO":
-				return contaService.buscarSomenteTipoCartaoAtivosPorUsuario(getUsuarioLogado());
-			default:
-				break;
-			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<>();
+		return new ArrayList<Conta>();
+	}
+	
+	public List<Conta> getListaContaAtivo() {
+		try {
+			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<Conta>();
 	}
 	
 	public IImportacaoLancamento getService() {
@@ -360,13 +362,5 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setInfoArquivo(InfoOFX infoArquivo) {
 		this.infoArquivo = infoArquivo;
-	}
-
-	public String getTipoImportacao() {
-		return tipoImportacao;
-	}
-
-	public void setTipoImportacao(String tipoImportacao) {
-		this.tipoImportacao = tipoImportacao;
 	}
 }
