@@ -44,19 +44,8 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2014 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO AGO2014 ***/
 
 -- Atualização de versão
 update versao set ativo = false;
-insert into versao (versao, ativo) values ('JUL2014', true);
-
--- Ampliado o campo de descrição das entidades Agenda e LançamentoConta
-alter table lancamentoconta change column `descricao` `descricao` varchar(200) not null;
-alter table agenda change column `descricao` `descricao` varchar(200) not null;
-
--- Remoção do panorama dos lançamentos do cartão
-drop table panoramalancamentocartao;
-
--- Inclusão da coluna para salvar critérios com lançamentos quitados
-alter table buscasalva add column quitados boolean null;
-update buscasalva set quitados = 0;
+insert into versao (versao, ativo) values ('AGO2014', true);
