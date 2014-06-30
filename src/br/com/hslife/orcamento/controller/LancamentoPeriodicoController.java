@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -76,9 +77,11 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 
 @Component("lancamentoPeriodicoMB")
 @Scope("session")
@@ -107,6 +110,9 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
 	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
+	
 	private Conta contaSelecionada;
 	private LancamentoConta pagamentoPeriodo;
 	private Moeda moedaPadrao;
@@ -116,6 +122,10 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	private boolean parcelamento;
 	private boolean selecionarTodosLancamentos;
 	private boolean gerarLancamento;
+	private CriterioLancamentoConta criterioBusca;
+	private List<LancamentoConta> lancamentosEncontrados;
+	private LancamentoConta[] lancamentosSelecionados;
+	private String tipoSelecao;
 	
 	public LancamentoPeriodicoController() {
 		super(new LancamentoPeriodico());
@@ -220,6 +230,49 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	public String vincularLancamentoView() {
+		lancamentosEncontrados = new ArrayList<LancamentoConta>();
+		criterioBusca = new CriterioLancamentoConta();
+		actionTitle = " - Vincular Lançamento";
+		tipoSelecao = "single";
+		return "/pages/LancamentoPeriodico/vincularLancamentoConta";
+	}
+	
+	public String vincularNovoLancamentoView() {
+		lancamentosEncontrados = new ArrayList<LancamentoConta>();
+		criterioBusca = new CriterioLancamentoConta();
+		pagamentoPeriodo = null;
+		actionTitle = " - Vincular Lançamento";
+		tipoSelecao = "multiple";
+		return "/pages/LancamentoPeriodico/vincularLancamentoConta";
+	}
+	
+	public String vincularLancamento() {
+		return super.edit();
+	}
+	
+	public String retornarPaginaEdicao() {
+		return super.edit();
+	}
+	
+	public void pesquisarLancamento() {
+		try {
+			criterioBusca.setConta(entity.getConta());
+			lancamentosEncontrados.clear();
+			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
+			
+			// Remove os lançamentos que já estão vinculados a outros lançamentos periódicos
+			for (Iterator<LancamentoConta> i = lancamentosEncontrados.iterator(); i.hasNext(); ) {
+				if (i.next().getLancamentoPeriodico() != null) {
+					i.remove();
+				}
+			}
+			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	private void carregarMoedaPadrao() {
@@ -533,5 +586,38 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setPagamentoPeriodo(LancamentoConta pagamentoPeriodo) {
 		this.pagamentoPeriodo = pagamentoPeriodo;
+	}
+
+	public CriterioLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
+	}
+
+	public List<LancamentoConta> getLancamentosEncontrados() {
+		return lancamentosEncontrados;
+	}
+
+	public void setLancamentosEncontrados(
+			List<LancamentoConta> lancamentosEncontrados) {
+		this.lancamentosEncontrados = lancamentosEncontrados;
+	}
+
+	public LancamentoConta[] getLancamentosSelecionados() {
+		return lancamentosSelecionados;
+	}
+
+	public void setLancamentosSelecionados(LancamentoConta[] lancamentosSelecionados) {
+		this.lancamentosSelecionados = lancamentosSelecionados;
+	}
+
+	public String getTipoSelecao() {
+		return tipoSelecao;
+	}
+
+	public void setTipoSelecao(String tipoSelecao) {
+		this.tipoSelecao = tipoSelecao;
 	}
 }
