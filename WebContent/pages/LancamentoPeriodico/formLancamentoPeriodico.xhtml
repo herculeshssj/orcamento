@@ -238,7 +238,7 @@
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
 					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					<p:column style="text-align: center; vertical-align: middle; width: 100px;">
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>
@@ -278,7 +278,7 @@
 		    		
 		    	</h:panelGrid>
 		    	
-		    	<h:commandLink value="Vincular novos lançamentos" action="#{managedBean.vincularNovoLancamentoView}" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}"/>
+		    	<h:commandLink value="Vincular lançamentos existentes" action="#{managedBean.vincularNovoLancamentoView}" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}"/>
 				
 			</p:tab>
 	

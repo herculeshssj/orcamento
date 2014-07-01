@@ -173,12 +173,36 @@
 				</p:inputMask>
 			</h:panelGroup>
 			
-			<p:commandLink actionListener="#{managedBean.pesquisarLancamento}" title="Pesquisar" update="tableLancamentosEncontrados">
+			<p:commandLink actionListener="#{managedBean.pesquisarLancamento}" title="Pesquisar" update="tableLancamentosEncontradosSingle, tableLancamentosEncontradosMultiple">
 				<h:graphicImage value="/resources/images/pesquisar.png" />
 			</p:commandLink>
 		</h:panelGrid>
 		
-		<p:dataTable id="tableLancamentosEncontrados" var="item" value="#{managedBean.lancamentosEncontrados}" selectionMode="#{managedBean.tipoSelecao}" selection="#{managedBean.lancamentosSelecionados}" rowKey="#{item.id}">			
+		<p:dataTable id="tableLancamentosEncontradosSingle" var="item" value="#{managedBean.lancamentosEncontrados}" selectionMode="single" selection="#{managedBean.lancamentoSelecionado}" rowKey="#{item.id}" rendered="#{managedBean.pagamentoPeriodo != null}">			
+			<p:column style="vertical-align: middle;">
+				<f:facet name="header">
+			    	<h:outputText value="Histórico"/>
+			    </f:facet>
+			    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+			    	<f:converter converterId="dateConverter"/>
+			    </h:outputText>
+			    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			    <h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
+			    <br/>
+			    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+			    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			    </h:outputText>
+			    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+		     	<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
+		     	<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
+		     	<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
+		     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
+			</p:column>					
+		</p:dataTable>
+		
+		<p:dataTable id="tableLancamentosEncontradosMultiple" var="item" value="#{managedBean.lancamentosEncontrados}" selectionMode="multiple" selection="#{managedBean.lancamentosSelecionados}" rowKey="#{item.id}" rendered="#{managedBean.pagamentoPeriodo == null}">			
 			<p:column style="vertical-align: middle;">
 				<f:facet name="header">
 			    	<h:outputText value="Histórico"/>

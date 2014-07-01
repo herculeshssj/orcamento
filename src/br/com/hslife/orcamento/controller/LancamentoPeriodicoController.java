@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -124,6 +125,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	private boolean gerarLancamento;
 	private CriterioLancamentoConta criterioBusca;
 	private List<LancamentoConta> lancamentosEncontrados;
+	private LancamentoConta lancamentoSelecionado;
 	private LancamentoConta[] lancamentosSelecionados;
 	private String tipoSelecao;
 	
@@ -250,6 +252,32 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	}
 	
 	public String vincularLancamento() {
+		try {
+			if (this.tipoSelecao.equals("single")) {
+				if (lancamentoSelecionado == null) {
+					warnMessage("Selecione um lançamento para vincular!");
+					return "";
+				}
+			} else if (this.tipoSelecao.equals("multiple")) {
+				if (lancamentosSelecionados == null || lancamentosSelecionados.length == 0) {
+					warnMessage("Selecione pelo menos um lançamento para vincular!");
+					return "";
+				}
+			} else {
+				throw new BusinessException("Opção inválida!");
+			}
+			
+			if (this.tipoSelecao.equals("single")) {
+				getService().mesclarLancamentos(pagamentoPeriodo, lancamentoSelecionado);
+			} else if (this.tipoSelecao.equals("multiple")) {
+				getService().vincularLancamentos(entity, Arrays.asList(lancamentosSelecionados));
+			} else {
+				throw new BusinessException("Opção inválida!");
+			}
+			infoMessage("Vínculo realizado com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 		return super.edit();
 	}
 	
@@ -619,5 +647,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setTipoSelecao(String tipoSelecao) {
 		this.tipoSelecao = tipoSelecao;
+	}
+
+	public LancamentoConta getLancamentoSelecionado() {
+		return lancamentoSelecionado;
+	}
+
+	public void setLancamentoSelecionado(LancamentoConta lancamentoSelecionado) {
+		this.lancamentoSelecionado = lancamentoSelecionado;
 	}
 }

@@ -250,6 +250,38 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
+	public void mesclarLancamentos(LancamentoConta pagamentoPeriodo, LancamentoConta lancamentoAMesclar) throws BusinessException {
+		// Atribui a lançamento da conta as informações da parcela/mensalidade. Logo após apaga a mensalidade/parcela a mais.
+		lancamentoAMesclar.setLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico());
+		lancamentoAMesclar.setAno(pagamentoPeriodo.getAno());
+		lancamentoAMesclar.setDataVencimento(pagamentoPeriodo.getDataVencimento());
+		lancamentoAMesclar.setParcela(pagamentoPeriodo.getParcela());
+		lancamentoAMesclar.setPeriodo(pagamentoPeriodo.getPeriodo());
+		
+		// Caso o tipo de conta seja CARTAO e o lançamento periódico seja PARCELADO prevalece a data de pagamento da parcela
+		if (pagamentoPeriodo.getConta().getTipoConta().equals(TipoConta.CARTAO) && pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+			lancamentoAMesclar.setDataPagamento(pagamentoPeriodo.getDataPagamento());
+		}
+		
+		lancamentoContaRepository.update(lancamentoAMesclar);
+		
+		lancamentoContaRepository.delete(pagamentoPeriodo);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void vincularLancamentos(LancamentoPeriodico lancamentoPeriodico, List<LancamentoConta> lancamentosAVincular) throws BusinessException {
+		// Atribui aos lançamentos selecionados o lançamento periódico informado. O ano, período e vencimento é extraído da data de pagamento.
+		for (LancamentoConta l : lancamentosAVincular) {
+			l.setLancamentoPeriodico(lancamentoPeriodico);
+			l.setPeriodo(l.getDataPagamento().getMonth() + 1);
+			l.setAno(l.getDataPagamento().getYear() + 1900);
+			l.setDataVencimento(l.getDataPagamento());
+			lancamentoContaRepository.update(l);
+		}
+	}
+	
+	@Override
 	public List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento) throws BusinessException {
 		return getRepository().findByTipoLancamentoContaAndStatusLancamento(tipo, conta, statusLancamento);
 	}
