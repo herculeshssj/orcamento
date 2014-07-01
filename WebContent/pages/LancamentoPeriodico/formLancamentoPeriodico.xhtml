@@ -238,7 +238,7 @@
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
 					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					<p:column style="text-align: center; vertical-align: middle; width: 100px;">
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>
@@ -247,6 +247,10 @@
 						</h:commandButton>
 						<h:commandButton title="Editar lançamento do cartão vinculado" image="/resources/images/alterar.png" action="#{lancamentoCartaoMB.edit}" rendered="#{item.lancamentoPeriodico.conta.tipoConta == 'CARTAO'}">
 							<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoCartaoMB.idEntity}"/>
+						</h:commandButton>
+						&nbsp;
+						<h:commandButton title="Mesclar com lançamento existente" image="/resources/images/mesclar.png" action="#{managedBean.vincularLancamentoView}">
+							<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoPeriodo}"/>
 						</h:commandButton>
 					</p:column>
 				</p:dataTable>
@@ -273,6 +277,8 @@
 		    		</h:panelGroup>
 		    		
 		    	</h:panelGrid>
+		    	
+		    	<h:commandLink value="Vincular lançamentos existentes" action="#{managedBean.vincularNovoLancamentoView}" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}"/>
 				
 			</p:tab>
 	
