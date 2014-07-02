@@ -180,12 +180,12 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 				infoMessage("Registro cadastrado com sucesso!");
 				
 				// Vínculo com a fatura atual ou futura
-				/*
+				
 				if (vincularFatura.equalsIgnoreCase("ATUAL")) {
 					getService().vincularAFaturaAtual(entity);
 				} else if (vincularFatura.equalsIgnoreCase("FUTURA")) {
 					getService().vincularAProximaFatura(entity);
-				}*/
+				}
 				vincularFatura = "";
 				
 			} else {

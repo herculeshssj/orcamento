@@ -244,16 +244,14 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
-	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta contaCorrente,	double valorAQuitar, Date dataPagamento) throws BusinessException {
-		// TODO reativar a validação quando o problema de casas decimais e sinal dos valores monetários for completamente resolvido.
+	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta contaCorrente,	double valorAQuitar, Date dataPagamento) throws BusinessException {		
+		if (Math.abs(Util.arredondar(valorAQuitar)) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {
+			throw new BusinessException("Valor de pagamento não pode ser menor que o valor mínimo da fatura!");
+		}
 		
-		//if (Math.abs(Util.arredondar(valorAQuitar)) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {
-		//	throw new BusinessException("Valor de pagamento não pode ser menor que o valor mínimo da fatura!");
-		//}
-		
-		//if (Math.abs(Util.arredondar(valorAQuitar)) > Math.abs(Util.arredondar(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()))) {
-		//	throw new BusinessException("Não é possível quitar um valor maior que o valor total da fatura!");
-		//}
+		if (Math.abs(Util.arredondar(valorAQuitar)) > Math.abs(Util.arredondar(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()))) {
+			throw new BusinessException("Não é possível quitar um valor maior que o valor total da fatura!");
+		}
 			
 		// Traz a fatura e seta seus atributos
 		FaturaCartao fatura = getRepository().findById(faturaCartao.getId());
@@ -299,6 +297,16 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		// Verifica se o lançamento selecionado já foi vinculado com outra fatura
 		if (lancamentoContaRepository.existsLinkagePagamentoFaturaCartao(lancamentoConta)) {
 			throw new BusinessException("Lançamento selecionado já foi usado para quitar outra fatura!");
+		}
+		
+		// Verifica se o valor do lançamento selecionado é menor que o valor mínimo da fatura
+		if (Math.abs(Util.arredondar(lancamentoConta.getValorPago())) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {
+			throw new BusinessException("Valor de pagamento não pode ser menor que o valor mínimo da fatura!");
+		}
+		
+		// Verifica se o valor do lançamento selecionado é maior que o valor total da fatura
+		if (Math.abs(Util.arredondar(lancamentoConta.getValorPago())) > Math.abs(Util.arredondar(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()))) {
+			throw new BusinessException("Não é possível quitar um valor maior que o valor total da fatura!");
 		}
 		
 		FaturaCartao fatura = getRepository().findById(faturaCartao.getId());

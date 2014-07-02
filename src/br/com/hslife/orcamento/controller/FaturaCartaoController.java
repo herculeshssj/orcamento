@@ -364,6 +364,31 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	public String fecharFaturaView() {
+		try {
+			faturaSelecionada = getService().buscarPorID(idEntity);
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(faturaSelecionada.getDetalheFatura());
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+			
+			Calendar fechamento = Calendar.getInstance();
+			fechamento.setTime(faturaSelecionada.getDataVencimento());
+			// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
+			if (faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura() < faturaSelecionada.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
+				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
+			} else {
+				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
+				fechamento.add(Calendar.MONTH, -1);
+			}			
+			faturaSelecionada.setDataFechamento(fechamento.getTime());
+			this.calculaValorConversao();
+			actionTitle = " - Fechar fatura";
+			return "/pages/FaturaCartao/fecharFatura";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
+		return "";
+		/*
 		if (moedas == null || moedas.isEmpty()) {
 			warnMessage("Selecione uma fatura para fechar.");
 		} else if (faturaSelecionada == null || !faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA)) {
@@ -385,6 +410,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			return "/pages/FaturaCartao/fecharFatura";
 		}
 		return "";
+		*/
 	}
 	
 	public String fecharFatura() {
@@ -403,11 +429,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public void reabrirFatura() {
 		try {
-			if (faturaSelecionada == null || !faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.FECHADA)) {
-				warnMessage("Somente fatura com status FECHADA podem ser reabertas!");
-				return;
-			}
-			getService().reabrirFatura(faturaSelecionada);
+			getService().reabrirFatura(getService().buscarPorID(idEntity));
+			
 			infoMessage("Fatura reaberta com sucesso!");
 			
 			this.reprocessarBusca();
@@ -418,12 +441,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	public String quitarFaturaView() {
-		if (faturaSelecionada == null || !faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.FECHADA)) {
-			warnMessage("Somente faturas com status FECHADA podem ser quitadas!");
-		} else {
+		try {
+			faturaSelecionada = getService().buscarPorID(idEntity);
 			criterioBusca = new CriterioLancamentoConta();
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
 		return "";
 	}
@@ -541,7 +565,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	private void reprocessarBusca() throws BusinessException {
 		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-		if (detalhesFaturaCartao != null && !detalhesFaturaCartao.isEmpty()) {
+		if (listEntity != null && !listEntity.isEmpty()) {
 			// Inicializa os objetos
 			initializeEntity();
 			
