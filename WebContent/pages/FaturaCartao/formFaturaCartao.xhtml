@@ -73,9 +73,12 @@
 			<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{managedBean.operation != 'create'}"/>
 			
 			Data de vencimento:
-			<p:inputMask value="#{managedBean.entity.dataVencimento}" size="10" required="true" requiredMessage="Informe a data de vencimento da fatura!" mask="99/99/9999">
+			<p:inputMask value="#{managedBean.entity.dataVencimento}" size="10" required="true" requiredMessage="Informe a data de vencimento da fatura!" mask="99/99/9999" rendered="#{managedBean.operation == 'create'}">
 				<f:converter converterId="dateConverter"/>
 			</p:inputMask>
+			<h:outputText value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.operation != 'create'}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
 			
 			Status atual da fatura:
 			<h:outputText value="#{managedBean.entity.statusFaturaCartao}" style="font-weight: bold;"/>
