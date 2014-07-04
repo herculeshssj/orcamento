@@ -51,6 +51,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -627,6 +628,15 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
+	}
+	
+	public List<SelectItem> getListaStatusFaturaCartao() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (StatusFaturaCartao enumeration : StatusFaturaCartao.values()) {
+			if (!enumeration.equals(StatusFaturaCartao.ANTIGA))
+				listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
 	}
 
 	public IFaturaCartao getService() {

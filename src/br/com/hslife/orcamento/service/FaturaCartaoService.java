@@ -106,13 +106,6 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 
 	@Override
 	public void validar(FaturaCartao entity) throws BusinessException {
-		/*
-		FaturaCartao ultimaFaturaFechada = getRepository().lastFaturaCartaoFechada(entity.getConta());
-		if (Util.formataDataHora(entity.getDataVencimento(), Util.DATA).equals(Util.formataDataHora(ultimaFaturaFechada.getDataVencimento(), Util.DATA)) 
-				|| entity.getDataVencimento().before(ultimaFaturaFechada.getDataVencimento())) {
-			throw new BusinessException("Data de vencimento não pode ser igual ou anterior ao vencimento da última fatura fechada!");
-		}
-		*/
 		// Impede que haja mais de uma fatura com a mesma data de vencimento para o cartão selecionado
 		List<FaturaCartao> faturas = getRepository().findByContaAndDataVencimento(entity.getConta(), entity.getDataVencimento());
 		if (faturas != null && !faturas.isEmpty()) {
@@ -251,6 +244,10 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		
 		if (Math.abs(Util.arredondar(valorAQuitar)) > Math.abs(Util.arredondar(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()))) {
 			throw new BusinessException("Não é possível quitar um valor maior que o valor total da fatura!");
+		}
+		
+		if (dataPagamento.before(contaCorrente.getDataAbertura())) {
+			throw new BusinessException("Data de pagamento deve ser posterior a data de abertura da conta selecionada!");
 		}
 			
 		// Traz a fatura e seta seus atributos
