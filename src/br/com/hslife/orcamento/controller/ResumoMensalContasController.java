@@ -207,12 +207,23 @@ public class ResumoMensalContasController extends AbstractController {
 	}
 	
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
-		try {
-			return fechamentoPeriodoService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
+		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
+		try {			
+			
+			List<FechamentoPeriodo> resultado = fechamentoPeriodoService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
+			if (resultado != null) {
+				if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
+					for (int i = 1; i <= getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
+						fechamentos.add(resultado.get(i));
+					}
+				} else {
+					fechamentos.addAll(resultado);
+				}
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<FechamentoPeriodo>();
+		return fechamentos;
 	}
 	
 	public void atualizaListaFechamentoPeriodo() {

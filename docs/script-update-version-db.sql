@@ -57,3 +57,20 @@ alter table moeda add column codigoMonetario varchar(5) null;
 -- Inclusão da coluna numeroCartao na tabela cartaocredito
 -- Tarefa #1068
 alter table cartaocredito add column numeroCartao varchar(40) null;
+
+-- Limite de lançamentos de conta/cartão exibidos na busca
+-- Tarefa #1069
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso, idUsuario, versionEntity)
+	select
+	'RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS',
+	'12',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	'',
+	id,
+	'2014-06-01 00:00:00.000'
+	from
+	usuario;

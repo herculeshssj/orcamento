@@ -244,5 +244,16 @@ public class OpcaoSistemaComponent implements Serializable{
 		return 100; // valor padrão.
 	}
 	
+	public Integer getLimiteQuantidadeFechamentos() {
+		try {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", usuarioComponent.getUsuarioLogado());
+			if (opcao != null)
+				return Integer.valueOf(opcao.getValor());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 12; // valor padrão.
+	}
+	
 	/*** Métodos Setters das opções do sistema existentes ***/
 }
