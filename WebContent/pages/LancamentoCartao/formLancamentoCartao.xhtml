@@ -80,8 +80,10 @@
 			
 			Descrição:
 			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" rendered="#{managedBean.entity.conta.ativo}"/>
-			<h:outputText value="#{managedBean.entity.descricao} - Histórico: #{managedBean.entity.historico}" rendered="#{!managedBean.entity.conta.ativo}"/>			
-			<h:inputHidden/>
+			<h:outputText value="#{managedBean.entity.descricao}" rendered="#{!managedBean.entity.conta.ativo}"/>			
+			<p:tooltip for="txtDescricao">
+				<h:outputText value="Histórico: #{managedBean.entity.historico}"/>
+			</p:tooltip>
 			
 			Moeda:
 			<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.quitado}">

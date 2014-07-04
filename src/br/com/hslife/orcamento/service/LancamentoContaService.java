@@ -46,7 +46,6 @@ package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +64,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
@@ -135,17 +135,22 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public void alterar(LancamentoConta entity) throws BusinessException {
 		if (entity.getLancamentoImportado() != null) {
-			entity.setDataPagamento(entity.getLancamentoImportado().getData());
+			// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
+			entity.setMoeda(moedaRepository.findCodigoMoedaByUsuario(entity.getLancamentoImportado().getMoeda(), entity.getConta().getUsuario()) == null 
+					? moedaRepository.findDefaultByUsuario(entity.getConta().getUsuario()) 
+					: moedaRepository.findCodigoMoedaByUsuario(entity.getLancamentoImportado().getMoeda(), entity.getConta().getUsuario()));
+			
+			// Caso o lançamento seja uma parcela, a data de pagamento não será atualizada
+			if (entity.getLancamentoPeriodico() != null && entity.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+				// Não atualiza a data de pagamento
+			} else {
+				entity.setDataPagamento(entity.getLancamentoImportado().getData());
+			}
+			
 			entity.setHistorico(entity.getLancamentoImportado().getHistorico());
 			entity.setNumeroDocumento(entity.getLancamentoImportado().getDocumento());
 			entity.setValorPago(Math.abs(entity.getLancamentoImportado().getValor()));
 			entity.setHashImportacao(entity.getLancamentoImportado().getHash());
-			
-			if (entity.getLancamentoImportado().getData().after(new Date())) {
-				entity.setAgendado(true);
-			} else {
-				entity.setAgendado(false);
-			}
 			
 			if (entity.getLancamentoImportado().getValor() > 0) {
 				entity.setTipoLancamento(TipoLancamento.RECEITA);

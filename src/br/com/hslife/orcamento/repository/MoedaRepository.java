@@ -99,4 +99,12 @@ public class MoedaRepository extends AbstractCRUDRepository<Moeda> {
 				.setLong("idUsuario", usuario.getId())
 				.list();
 	}
+	
+	public Moeda findCodigoMoedaByUsuario(String codigo, Usuario usuario) {
+		return (Moeda)getQuery("FROM Moeda moeda WHERE moeda.codigoMonetario = :codigo AND moeda.usuario.id = :idUsuario")
+				.setString("codigo", codigo)
+				.setLong("idUsuario", usuario.getId())
+				.setMaxResults(1)
+				.uniqueResult();
+	}
 }

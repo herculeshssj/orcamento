@@ -434,9 +434,9 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 			// Carrega os lançamentos importados
 			for (LancamentoImportado importado : getService().buscarLancamentoImportadoPorConta(entity.getConta())) {
 				if (opcao != null && Boolean.valueOf(opcao.getValor())) {
-					listagem.add(new SelectItem(importado, Util.suprimirTextoMeio(Util.formataDataHora(importado.getData(), Util.DATA) + " - R$ " + importado.getValor() + " - " + importado.getHistorico(), 55)));
+					listagem.add(new SelectItem(importado, Util.suprimirTextoMeio(Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " "+ importado.getValor() + " - " + importado.getHistorico(), 55)));
 				} else {
-					listagem.add(new SelectItem(importado, Util.suprimirTextoFim(Util.formataDataHora(importado.getData(), Util.DATA) + " - R$ " + importado.getValor() + " - " + importado.getHistorico(), 55)));
+					listagem.add(new SelectItem(importado, Util.suprimirTextoFim(Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " " + importado.getValor() + " - " + importado.getHistorico(), 55)));
 				}
 			}
 		} catch (BusinessException be) {

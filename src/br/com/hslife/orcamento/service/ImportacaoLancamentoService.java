@@ -47,7 +47,6 @@ package br.com.hslife.orcamento.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import net.sf.ofx4j.domain.data.MessageSetType;
@@ -72,9 +71,11 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.model.InfoOFX;
@@ -83,6 +84,7 @@ import br.com.hslife.orcamento.repository.FavorecidoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
+import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("importacaoLancamentoService")
@@ -105,6 +107,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
+	
+	@Autowired
+	private MoedaRepository moedaRepository;
 
 	public void setLancamentoImportadoRepository(
 			LancamentoImportadoRepository lancamentoImportadoRepository) {
@@ -180,16 +185,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		
 		MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 		
+		Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+		
 		for (LancamentoImportado li : lancamentosImportados) {
 			if (lancamentoContaRepository.findByHash(li.getHash()) == null) {
 			
 				lc = new LancamentoConta();
-				
-				if (li.getData().after(new Date())) {
-					lc.setAgendado(true);
-				} else {
-					lc.setAgendado(false);
-				}
 				
 				if (li.getValor() > 0) {
 					lc.setTipoLancamento(TipoLancamento.RECEITA);
@@ -201,7 +202,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				lc.setFavorecido(favorecidoPadrao);
 				lc.setMeioPagamento(meioPagamentoPadrao);
 				
-				lc.setConta(li.getConta());
+				// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
+				lc.setMoeda(moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()) == null 
+						? moedaPadrao 
+						: moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()));				
+				
+				lc.setConta(li.getConta());				
 				lc.setDataPagamento(li.getData());
 				lc.setDescricao(li.getHistorico());
 				lc.setHistorico(li.getHistorico());
@@ -223,6 +229,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		
 		lancamentosAAtualizar = this.buscarLancamentoContaAAtualizar(this.buscarLancamentoImportadoPorConta(conta));
 		lancamentosAInserir = this.gerarLancamentoContaAInserir(buscarLancamentoImportadoPorConta(conta));
+		
+		Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 
 		// Cria os novos lançamentos
 		if (!gerarNovosLancamentos) {
@@ -239,16 +247,19 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		for (LancamentoConta l : lancamentosAAtualizar) {
 			li = lancamentoImportadoRepository.findByHash(l.getHashImportacao());
 			
-			l.setDataPagamento(li.getData());
+			// Caso o lançamento seja uma parcela, a data de pagamento não será atualizada
+			if (l.getLancamentoPeriodico() != null && l.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+				// Não atualiza a data de pagamento
+			} else {
+				l.setDataPagamento(li.getData());
+			}
+			
 			l.setHistorico(li.getHistorico());
 			l.setNumeroDocumento(li.getDocumento());
 			l.setValorPago(Math.abs(li.getValor()));
-			
-			if (li.getData().after(new Date())) {
-				l.setAgendado(true);
-			} else {
-				l.setAgendado(false);
-			}
+			l.setMoeda(moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()) == null 
+					? moedaPadrao 
+					: moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()));
 			
 			if (li.getValor() > 0) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
@@ -276,11 +287,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			
 			MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 			
-			if (entity.getData().after(new Date())) {
-				l.setAgendado(true);
-			} else {
-				l.setAgendado(false);
-			}
+			Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 			
 			if (entity.getValor() > 0) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
@@ -300,6 +307,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			l.setNumeroDocumento(entity.getDocumento());
 			l.setValorPago(Math.abs(entity.getValor()));
 			l.setHashImportacao(entity.getHash());
+			l.setMoeda(moedaRepository.findCodigoMoedaByUsuario(entity.getMoeda(), usuarioComponent.getUsuarioLogado()) == null 
+					? moedaPadrao 
+					: moedaRepository.findCodigoMoedaByUsuario(entity.getMoeda(), usuarioComponent.getUsuarioLogado()));
 			
 			// Salva o lançamento
 			lancamentoContaRepository.save(l);
@@ -309,16 +319,16 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		} else {
 			// Atualiza o lançamento existente
 			
-			l.setDataPagamento(entity.getData());
+			// Caso o lançamento seja uma parcela, a data de pagamento não será atualizada
+			if (l.getLancamentoPeriodico() != null && l.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+				// Não atualiza a data de pagamento
+			} else {
+				l.setDataPagamento(entity.getData());
+			}
+			
 			l.setHistorico(entity.getHistorico());
 			l.setNumeroDocumento(entity.getDocumento());
 			l.setValorPago(Math.abs(entity.getValor()));
-			
-			if (entity.getData().after(new Date())) {
-				l.setAgendado(true);
-			} else {
-				l.setAgendado(false);
-			}
 			
 			if (entity.getValor() > 0) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
@@ -349,7 +359,6 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				    	info.setMoedaPadrao(c.getMessage().getCurrencyCode());
 				    	info.setInicioTransacoes(c.getMessage().getTransactionList().getStart());
 				    	info.setFimTransacoes(c.getMessage().getTransactionList().getEnd());
-				    	info.setConta(c.getMessage().getAccount().getAccountNumber());
 				   }
 				}
 			} else {
@@ -375,7 +384,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				} 
 			}
 		}catch (Exception e) {
-			throw new BusinessException(e);
+			throw new BusinessException("Erro ao ler o arquivo OFX:" + e.getMessage(), e);
 		}
 		return info;
 	}
@@ -444,6 +453,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            		LancamentoImportado li = new LancamentoImportado();
 			            		li.setConta(conta);
 			            		li.setData(transaction.getDatePosted());
+			            		li.setMoeda(transaction.getCurrency() == null ? b.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
 			            		li.setDocumento(transaction.getReferenceNumber());
 			            		li.setHash(Util.MD5(transaction.getId()));
 			            		li.setHistorico(transaction.getMemo());
@@ -458,7 +468,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			   }
 			} 
 		}catch (Exception e) {
-			throw new BusinessException(e);
+			throw new BusinessException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
 	}
 	
@@ -526,6 +536,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            		LancamentoImportado li = new LancamentoImportado();
 			            		li.setConta(conta);
 			            		li.setData(transaction.getDatePosted());
+			            		li.setMoeda(transaction.getCurrency() == null ? b.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
 			            		li.setDocumento(transaction.getReferenceNumber());
 			            		li.setHash(Util.MD5(transaction.getId()));
 			            		li.setHistorico(transaction.getMemo());
@@ -540,7 +551,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			   }
 			} 
 		}catch (Exception e) {
-			throw new BusinessException(e);
+			throw new BusinessException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
 	}
 
@@ -555,9 +566,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				for (CreditCardStatementResponseTransaction c : creditcard) {
 					
 					// Valida o número do cartão de crédito
-					//if (!conta.getContaCorrente().equals(c.getMessage().getAccount().getAccountNumber())) {
-			        	//throw new BusinessException("Número do cartão " + conta.getCartaoCredito().getNumeroCartao() + " não confere com do arquivo (" + c.getMessage().getAccount().getAccountNumber() + ")!");
-			        //}
+					if (conta.getCartaoCredito().getNumeroCartao() == null || !conta.getCartaoCredito().getNumeroCartao().equals(Util.SHA1(c.getMessage().getAccount().getAccountNumber()))) {
+			        	throw new BusinessException("Número do cartão informado não confere com do arquivo!");
+			        }
 					
 					List<Transaction> list = c.getMessage().getTransactionList().getTransactions();
 			        for (Transaction transaction : list) {			        	
@@ -565,18 +576,18 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            	LancamentoImportado li = new LancamentoImportado();
 			            	li.setConta(conta);
 			            	li.setData(transaction.getDatePosted());
-			            	//li.setMoeda(transaction.getCurrency() == null ? c.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
+			            	li.setMoeda(transaction.getCurrency() == null ? c.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());			            	
 			            	li.setHash(Util.MD5(transaction.getId()));
 			            	li.setHistorico(transaction.getMemo());
 			            	li.setValor(transaction.getAmount());
-				            
+			            	
 			            	lancamentoImportadoRepository.save(li);			            	
 			            }
 			       }
 				}				
 			} 
 		} catch (Exception e) {
-			throw new BusinessException(e);
+			throw new BusinessException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
 	}
 }

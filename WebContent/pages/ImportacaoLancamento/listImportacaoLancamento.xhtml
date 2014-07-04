@@ -99,21 +99,21 @@
 				<h:outputText value="Valor"/>
 			</f:facet>						
 			<h:outputText value="#{item.valor}">
-				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 	  	</p:column>
 	
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<p:column style="text-align: center; vertical-align: middle;">
+		<p:column style="text-align: center; vertical-align: middle; width: 100px;">
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>			
 			<h:commandButton value="Importar" image="/resources/images/importar.png" action="#{managedBean.importarLancamento}" title="Importar">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>			
-			&nbsp;&nbsp;&nbsp;
+			&nbsp;
 			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirLancamentoImportado}" title="Excluir">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>

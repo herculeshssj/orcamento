@@ -105,7 +105,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		Date validade = new Date(entity.getAnoValidade() - 1900, entity.getMesValidade() - 1, entity.getDiaVencimentoFatura());
 		entity.setUsuario(getUsuarioLogado());
 		entity.setValidade(validade);
-		if (!Util.eVazio(numeroCartao) & numeroCartao.length() == 12 & Util.onlyNumber(numeroCartao)) {
+		if (!Util.eVazio(numeroCartao) & numeroCartao.length() == 16 & Util.onlyNumber(numeroCartao)) {
 			entity.setNumeroCartao(Util.SHA1(numeroCartao));
 		}
 		numeroCartao = "";

@@ -265,7 +265,8 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		
 		lancamentoContaRepository.update(lancamentoAMesclar);
 		
-		lancamentoContaRepository.delete(pagamentoPeriodo);
+		pagamentoPeriodo.setLancamentoPeriodico(null);
+		lancamentoContaRepository.update(pagamentoPeriodo);
 	}
 	
 	@SuppressWarnings("deprecation")

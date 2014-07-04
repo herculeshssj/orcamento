@@ -48,7 +48,6 @@
 
 -- Atualização de versão
 update versao set ativo = false;
-<<<<<<< HEAD
 insert into versao (versao, ativo) values ('JUL2014.1', true);
 
 -- Inclusão da coluna codigoMonetario na tabela moeda
@@ -75,20 +74,9 @@ insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, requ
 	'2014-06-01 00:00:00.000'
 	from
 	usuario;
-=======
-insert into versao (versao, ativo) values ('JUL2014', true);
-
--- Ampliado o campo de descrição das entidades Agenda e LançamentoConta
-alter table lancamentoconta change column `descricao` `descricao` varchar(200) not null;
-alter table agenda change column `descricao` `descricao` varchar(200) not null;
-
--- Remoção do panorama dos lançamentos do cartão
-drop table panoramalancamentocartao;
-
--- Inclusão da coluna para salvar critérios com lançamentos quitados
-alter table buscasalva add column quitados boolean null;
-update buscasalva set quitados = 0;
 
 -- Inclusão do campo de moeda para os lançamento importados
 alter table lancamentoimportado add column moeda varchar(5) null;
->>>>>>> 9d41e2f... Implementação inicial da importação dos lançamentos de cartão de
+
+-- Seta todos os lançamentos sem moeda com a moeda da conta
+update lancamentoconta l set l.idMoeda = (select moeda.id from moeda inner join conta on conta.idMoeda = moeda.id where conta.id = l.idConta) where l.idMoeda is null;

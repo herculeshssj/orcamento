@@ -115,10 +115,7 @@
 			</h:panelGroup>			
 		</h:panelGrid>
 		
-		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.tipoImportacao == 'CARTAO'}">
-			Cartão:
-			<h:outputText value="#{managedBean.infoArquivo.conta}"/>
-			
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.tipoImportacao == 'CARTAO'}">			
 			Moeda padrão:
 			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
 			
