@@ -52,7 +52,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:rich="http://richfaces.org/rich">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
 
@@ -167,14 +167,6 @@
 		    <h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 		    <h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
 		</p:column>
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Ações"/>
-			</f:facet>
-			<h:commandButton title="Editar lançamento do cartão vinculado" image="/resources/images/alterar.png" action="#{lancamentoCartaoMB.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoCartaoMB.idEntity}"/>
-			</h:commandButton>
-		</p:column>		
 	</p:dataTable>
 	
 	<h:dataTable var="moeda" value="#{managedBean.moedas}">
@@ -250,12 +242,6 @@
 		</h:column>			
 	</h:dataTable>
 	 
-	</ui:define>
-	
-	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
 	</ui:define>
 	
 </ui:composition>

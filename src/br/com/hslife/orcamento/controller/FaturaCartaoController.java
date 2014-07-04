@@ -70,6 +70,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.facade.IConta;
@@ -81,7 +82,7 @@ import br.com.hslife.orcamento.util.Util;
 
 @Component("faturaCartaoMB")
 @Scope("session")
-public class FaturaCartaoController extends AbstractController {
+public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao> {
 	
 	/**
 	 * 
@@ -103,7 +104,6 @@ public class FaturaCartaoController extends AbstractController {
 	@Autowired
 	private IConta contaService;
 	
-	private FaturaCartao entity;
 	private Moeda moedaPadrao;
 	private boolean faturaFechada;
 	private double totalFatura;
@@ -117,30 +117,31 @@ public class FaturaCartaoController extends AbstractController {
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private LancamentoConta lancamento;
 	private Conta contaSelecionada;
+	private StatusFaturaCartao statusFatura;
+	private boolean selecionarTodosLancamentos;
 	
-	private List<LancamentoConta> listEntity = new ArrayList<>();
+	private List<LancamentoConta> detalhesFaturaCartao = new ArrayList<>();
 	private List<Moeda> moedas = new ArrayList<Moeda>();
 	private List<LancamentoConta> lancamentosEncontrados = new ArrayList<LancamentoConta>();
 	private List<LancamentoConta> lancamentosAdicionados = new ArrayList<LancamentoConta>();
 	
-	public FaturaCartaoController() {		
+	public FaturaCartaoController() {
+		super(new FaturaCartao());
+		
 		moduleTitle = "Fatura do Cartão";
-	}
-	
-	@Override
-	public String getModuleTitle() {
-		return super.getModuleTitle() + actionTitle;
 	}
 
 	@Override
 	protected void initializeEntity() {
-		listEntity = new ArrayList<LancamentoConta>();
+		detalhesFaturaCartao = new ArrayList<LancamentoConta>();
 		entity = new FaturaCartao();
 		lancamentosEncontrados.clear();
+		lancamentosAdicionados.clear();
 		moedas = new ArrayList<Moeda>();
 		criterioBusca = new CriterioLancamentoConta();
 	}
 
+	
 	@Override
 	public String startUp() {
 		// Pega a moeda padrão do usuário
@@ -149,24 +150,67 @@ public class FaturaCartaoController extends AbstractController {
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		
-		actionTitle = "";
-		return "/pages/FaturaCartao/listFaturaCartao";
+		return super.startUp();
 	}
 	
-	public String find() {
+	@Override
+	public void find() {
 		try {
-			if (faturaSelecionada == null) {
-				warnMessage("Selecione uma fatura!");
-			} else {
-				listEntity.clear();
-				listEntity.addAll(faturaSelecionada.getDetalheFatura());
-				this.calcularSaldoCompraSaqueParceladoPorMoeda();
-			}
-		} catch(BusinessException be) {
+			listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	@Override
+	public String create() {
+		entity.setStatusFaturaCartao(StatusFaturaCartao.ANTIGA);
+		return super.create();
+	}
+	
+	@Override
+	public String edit() {
+		try {
+			entity = getService().buscarPorID(idEntity);
+			lancamentosAdicionados.clear();
+			lancamentosAdicionados.addAll(entity.getDetalheFatura());
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+			operation = "edit";
+			actionTitle = " - Editar";
+			return goToFormPage;
+		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	@Override
+	public String view() {
+		try {
+			entity = getService().buscarPorID(idEntity);
+			lancamentosAdicionados.clear();
+			lancamentosAdicionados.addAll(entity.getDetalheFatura());
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+			operation = "delete";
+			actionTitle = " - Excluir";
+			return goToViewPage;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public String save() {
+		if (entity.getId() == null) {
+			entity.setConta(cartaoSelecionado.getConta());
+		}
+		entity.getDetalheFatura().clear();
+		entity.getDetalheFatura().addAll(lancamentosAdicionados);
+		return super.save();
 	}
 	
 	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws BusinessException {
@@ -176,26 +220,26 @@ public class FaturaCartaoController extends AbstractController {
 		
 		for (Moeda moeda : moedas) {
 			moeda.setLancamentos(new ArrayList<LancamentoConta>());
-			for (LancamentoConta lancamento : listEntity) {
+			for (LancamentoConta lancamento : detalhesFaturaCartao) {
 				if (lancamento.getMoeda().equals(moeda)) {
 					// Adiciona o lançamento
 					moeda.getLancamentos().add(lancamento);
 					
-					// Verifica e calcula a compra a vista
-					if (lancamento.getParcela() == 0) {
+					// Verifica e calcula as compras à vista e parceladas
+					if (lancamento.getLancamentoPeriodico() != null && 
+							lancamento.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+						// Calcula as compras parceladas						
+						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
+							moeda.setParcelado(moeda.getParcelado() + lancamento.getValorPago());
+						else
+							moeda.setParcelado(moeda.getParcelado() - lancamento.getValorPago());
+					} else {
+						// Calcula as compras à vista e mensalidades
 						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
 							moeda.setCompraSaque(moeda.getCompraSaque() + lancamento.getValorPago());
 						else
 							moeda.setCompraSaque(moeda.getCompraSaque() - lancamento.getValorPago());
-					}
-					
-					// Verifica e calcula a compra parcelada
-					if (lancamento.getParcela() != 0) {
-						if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-							moeda.setParcelado(moeda.getParcelado() + lancamento.getValorPago());
-						else
-							moeda.setParcelado(moeda.getParcelado() - lancamento.getValorPago());							
-					}
+					}					
 				}
 			}
 						
@@ -214,78 +258,6 @@ public class FaturaCartaoController extends AbstractController {
 				i.remove();
 			}
 		}
-	}
-	
-	public String editarLancamentos() {
-		try {
-			if (faturaSelecionada == null) {
-				warnMessage("Selecione uma fatura!");
-			} else {
-				// Verifica se a fatura selecionada pode ser editada.
-				if (faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) || faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
-					entity = getService().buscarPorID(faturaSelecionada.getId());
-					lancamentosAdicionados.clear();
-					lancamentosAdicionados.addAll(entity.getDetalheFatura());
-					actionTitle = " - Editar lançamentos";				
-					return "/pages/FaturaCartao/formFaturaCartao";
-				} else {
-					warnMessage("Não é possível editar os lançamentos desta fatura!");
-					return "";
-				}		
-			}
-		} catch (Exception be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	public String excluirFatura() {
-		if (faturaSelecionada == null) {
-			warnMessage("Selecione uma fatura!");
-		} else {		
-			if (faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
-				try {
-					getService().excluir(faturaSelecionada);
-					infoMessage("Fatura excluída com sucesso!");
-					initializeEntity();				
-				} catch (BusinessException be) {
-					errorMessage(be.getMessage());
-				}
-			} else {
-				warnMessage("Não é possível excluir esta fatura!");
-			}
-		}
-		return "";
-	}
-	
-	public String save() {
-		try {
-			// Vincula as modificações na fatura do cartão
-			entity.getDetalheFatura().clear();
-			entity.getDetalheFatura().addAll(lancamentosAdicionados);
-			
-			// Salva a fatura
-			getService().validar(entity);
-			getService().alterar(entity);
-			infoMessage("Fatura salva com sucesso!");
-			
-			this.reprocessarBusca();
-			
-			return "/pages/FaturaCartao/listFaturaCartao";
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	public String cancel() {
-		actionTitle = "";
-		try {
-			this.reprocessarBusca();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "/pages/FaturaCartao/listFaturaCartao";
 	}
 	
 	public void carregarArquivo(FileUploadEvent event) {
@@ -327,62 +299,55 @@ public class FaturaCartaoController extends AbstractController {
 	
 	public void adicionarLancamento() {
 		try {
-			if (lancamento == null || lancamentosAdicionados.contains(lancamento)) {
-				warnMessage("Lançamento já foi adicionado na fatura!");
-			} else {
-				if (lancamentoContaService.existeVinculoFaturaCartao(lancamento)) {
-					warnMessage("O lançamento selecionado já está vinculado a uma outra fatura!");
-				} else {
-					lancamentosAdicionados.add(lancamento);
-					lancamentosEncontrados.remove(lancamento);
+			for (LancamentoConta l : lancamentosEncontrados) {
+				if (l.isSelecionado() && l.getFaturaCartao() == null) {
+					lancamentosAdicionados.add(l);
 				}
 			}
-			lancamento = new LancamentoConta();
-		}
-		catch (BusinessException be) {
+			lancamentosEncontrados.removeAll(lancamentosAdicionados);
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(lancamentosAdicionados);
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
 	
-	public void incluirLancamento() {
-		if (criterioBusca.getDataInicio() == null || criterioBusca.getDescricao() == null || criterioBusca.getDescricao().trim().isEmpty()) {
-			warnMessage("Preencha a data de lançamento e informe uma descrição!");
-		} else {			
-			try {
-				lancamento = new LancamentoConta();
-				lancamento.setConta(contaService.buscarPorID(entity.getConta().getId()));
-				lancamento.setDataPagamento(criterioBusca.getDataInicio());
-				lancamento.setDescricao(criterioBusca.getDescricao());
-				lancamento.setMoeda(criterioBusca.getMoeda());
-				lancamento.setParcela(criterioBusca.getParcela());
-				lancamento.setTipoLancamento(criterioBusca.getTipo());
-				lancamento.setValorPago(criterioBusca.getValor());
-				
-				// Salva o lançamento
-				lancamentoContaService.cadastrar(lancamento);
-				lancamentosAdicionados.add(lancamento);
-				infoMessage("Lançamento cadastrado com sucesso e adicionado à fatura.");
-				criterioBusca = new CriterioLancamentoConta();
-			} catch (BusinessException be) {
-				errorMessage(be.getMessage());
-			}
-		}		
-	}
-	
 	public void excluirLancamento() {
-		lancamentosAdicionados.remove(lancamento);
+		try {
+			for (Iterator<LancamentoConta> i = lancamentosAdicionados.iterator(); i.hasNext();) {
+				if (i.next().isSelecionado()) {
+					i.remove();
+				}
+			}
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(lancamentosAdicionados);
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void pesquisarLancamento() {
 		try {
-			criterioBusca.setDataFim(criterioBusca.getDataInicio());
-			criterioBusca.setConta(contaService.buscarPorID(entity.getConta().getId()));
+			criterioBusca.setConta(contaService.buscarPorID(cartaoSelecionado.getConta().getId()));
 			criterioBusca.setQuitado(false);
 			lancamentosEncontrados.clear();
 			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
 			lancamentosEncontrados.removeAll(lancamentosAdicionados);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void selecionarTodos() {
+		if (lancamentosEncontrados != null && lancamentosEncontrados.size() > 0)
+		for (LancamentoConta l : lancamentosEncontrados) {
+			if (selecionarTodosLancamentos) {
+				l.setSelecionado(true);
+			} else {
+				l.setSelecionado(false);
+			}
 		}
 	}
 	
@@ -400,6 +365,31 @@ public class FaturaCartaoController extends AbstractController {
 	}
 	
 	public String fecharFaturaView() {
+		try {
+			faturaSelecionada = getService().buscarPorID(idEntity);
+			detalhesFaturaCartao.clear();
+			detalhesFaturaCartao.addAll(faturaSelecionada.getDetalheFatura());
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+			
+			Calendar fechamento = Calendar.getInstance();
+			fechamento.setTime(faturaSelecionada.getDataVencimento());
+			// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
+			if (faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura() < faturaSelecionada.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
+				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
+			} else {
+				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
+				fechamento.add(Calendar.MONTH, -1);
+			}			
+			faturaSelecionada.setDataFechamento(fechamento.getTime());
+			this.calculaValorConversao();
+			actionTitle = " - Fechar fatura";
+			return "/pages/FaturaCartao/fecharFatura";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
+		return "";
+		/*
 		if (moedas == null || moedas.isEmpty()) {
 			warnMessage("Selecione uma fatura para fechar.");
 		} else if (faturaSelecionada == null || !faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA)) {
@@ -421,6 +411,7 @@ public class FaturaCartaoController extends AbstractController {
 			return "/pages/FaturaCartao/fecharFatura";
 		}
 		return "";
+		*/
 	}
 	
 	public String fecharFatura() {
@@ -439,11 +430,8 @@ public class FaturaCartaoController extends AbstractController {
 	
 	public void reabrirFatura() {
 		try {
-			if (faturaSelecionada == null || !faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.FECHADA)) {
-				warnMessage("Somente fatura com status FECHADA podem ser reabertas!");
-				return;
-			}
-			getService().reabrirFatura(faturaSelecionada);
+			getService().reabrirFatura(getService().buscarPorID(idEntity));
+			
 			infoMessage("Fatura reaberta com sucesso!");
 			
 			this.reprocessarBusca();
@@ -454,12 +442,13 @@ public class FaturaCartaoController extends AbstractController {
 	}
 	
 	public String quitarFaturaView() {
-		if (faturaSelecionada == null || !faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.FECHADA)) {
-			warnMessage("Somente faturas com status FECHADA podem ser quitadas!");
-		} else {
+		try {
+			faturaSelecionada = getService().buscarPorID(idEntity);
 			criterioBusca = new CriterioLancamentoConta();
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
 		return "";
 	}
@@ -506,22 +495,20 @@ public class FaturaCartaoController extends AbstractController {
 		return "";
 	}
 	
-	public String detalheFatura() {
-		try {
-			if (faturaSelecionada == null) {
-				warnMessage("Selecione uma fatura!");
-			} else {
-				entity = getService().buscarPorID(faturaSelecionada.getId());
-				listEntity.clear(); 
-				listEntity.addAll(entity.getDetalheFatura());
-				this.calcularSaldoCompraSaqueParceladoPorMoeda();
-				for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
-					moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
-				}
-				this.calculaValorConversao();
-				actionTitle = " - Detalhes";
-				return "/pages/FaturaCartao/detalheFatura";
+	public String detalheFatura() {		
+		try {			
+			entity = getService().buscarPorID(idEntity);
+			lancamentosEncontrados.clear();
+			lancamentosEncontrados.addAll(entity.getDetalheFatura());
+			detalhesFaturaCartao.clear(); 
+			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
+			this.calcularSaldoCompraSaqueParceladoPorMoeda();
+			for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
+				moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
 			}
+			this.calculaValorConversao();
+			actionTitle = " - Detalhes";
+			return "/pages/FaturaCartao/detalheFatura";			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -562,7 +549,15 @@ public class FaturaCartaoController extends AbstractController {
 	
 	public List<Moeda> getListaMoeda() {
 		try {
-			return moedaService.buscarPorUsuario(getUsuarioLogado());
+			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getMoeda() != null) {
+				if (!resultado.contains(entity.getMoeda())) {
+					entity.getMoeda().setAtivo(true);
+					resultado.add(entity.getMoeda());
+				}
+			}
+			return resultado;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -635,11 +630,21 @@ public class FaturaCartaoController extends AbstractController {
 		return new ArrayList<Conta>();
 	}
 	
-	public List<SelectItem> getListaTipoLancamento() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();		
-		listaSelectItem.add(new SelectItem(TipoLancamento.DESPESA, "Despesa"));
-		listaSelectItem.add(new SelectItem(TipoLancamento.RECEITA, "Receita"));
+	public List<SelectItem> getListaStatusFaturaCartao() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (StatusFaturaCartao enumeration : StatusFaturaCartao.values()) {
+			if (!enumeration.equals(StatusFaturaCartao.ANTIGA))
+				listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
 		return listaSelectItem;
+	}
+
+	public IFaturaCartao getService() {
+		return service;
+	}
+
+	public void setService(IFaturaCartao service) {
+		this.service = service;
 	}
 
 	public Moeda getMoedaPadrao() {
@@ -648,26 +653,6 @@ public class FaturaCartaoController extends AbstractController {
 
 	public void setMoedaPadrao(Moeda moedaPadrao) {
 		this.moedaPadrao = moedaPadrao;
-	}
-
-	public List<LancamentoConta> getListEntity() {
-		return listEntity;
-	}
-
-	public void setListEntity(List<LancamentoConta> listEntity) {
-		this.listEntity = listEntity;
-	}
-
-	public void setMoedaService(IMoeda moedaService) {
-		this.moedaService = moedaService;
-	}
-
-	public List<Moeda> getMoedas() {
-		return moedas;
-	}
-
-	public void setMoedas(List<Moeda> moedas) {
-		this.moedas = moedas;
 	}
 
 	public boolean isFaturaFechada() {
@@ -686,8 +671,36 @@ public class FaturaCartaoController extends AbstractController {
 		this.totalFatura = totalFatura;
 	}
 
-	public void setCartaoCreditoService(ICartaoCredito cartaoCreditoService) {
-		this.cartaoCreditoService = cartaoCreditoService;
+	public boolean isExibirParcelarFatura() {
+		return exibirParcelarFatura;
+	}
+
+	public void setExibirParcelarFatura(boolean exibirParcelarFatura) {
+		this.exibirParcelarFatura = exibirParcelarFatura;
+	}
+
+	public int getFormaPagamentoFatura() {
+		return formaPagamentoFatura;
+	}
+
+	public void setFormaPagamentoFatura(int formaPagamentoFatura) {
+		this.formaPagamentoFatura = formaPagamentoFatura;
+	}
+
+	public double getValorAQuitar() {
+		return valorAQuitar;
+	}
+
+	public void setValorAQuitar(double valorAQuitar) {
+		this.valorAQuitar = valorAQuitar;
+	}
+
+	public Date getDataPagamento() {
+		return dataPagamento;
+	}
+
+	public void setDataPagamento(Date dataPagamento) {
+		this.dataPagamento = dataPagamento;
 	}
 
 	public CartaoCredito getCartaoSelecionado() {
@@ -706,20 +719,52 @@ public class FaturaCartaoController extends AbstractController {
 		this.faturaSelecionada = faturaSelecionada;
 	}
 
-	public IFaturaCartao getService() {
-		return service;
+	public CriterioLancamentoConta getCriterioBusca() {
+		return criterioBusca;
 	}
 
-	public void setService(IFaturaCartao service) {
-		this.service = service;
+	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
 	}
 
-	public FaturaCartao getEntity() {
-		return entity;
+	public LancamentoConta getLancamento() {
+		return lancamento;
 	}
 
-	public void setEntity(FaturaCartao entity) {
-		this.entity = entity;
+	public void setLancamento(LancamentoConta lancamento) {
+		this.lancamento = lancamento;
+	}
+
+	public Conta getContaSelecionada() {
+		return contaSelecionada;
+	}
+
+	public void setContaSelecionada(Conta contaSelecionada) {
+		this.contaSelecionada = contaSelecionada;
+	}
+
+	public StatusFaturaCartao getStatusFatura() {
+		return statusFatura;
+	}
+
+	public void setStatusFatura(StatusFaturaCartao statusFatura) {
+		this.statusFatura = statusFatura;
+	}
+
+	public List<LancamentoConta> getDetalhesFaturaCartao() {
+		return detalhesFaturaCartao;
+	}
+
+	public void setDetalhesFaturaCartao(List<LancamentoConta> detalhesFaturaCartao) {
+		this.detalhesFaturaCartao = detalhesFaturaCartao;
+	}
+
+	public List<Moeda> getMoedas() {
+		return moedas;
+	}
+
+	public void setMoedas(List<Moeda> moedas) {
+		this.moedas = moedas;
 	}
 
 	public List<LancamentoConta> getLancamentosEncontrados() {
@@ -740,63 +785,11 @@ public class FaturaCartaoController extends AbstractController {
 		this.lancamentosAdicionados = lancamentosAdicionados;
 	}
 
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
+	public boolean isSelecionarTodosLancamentos() {
+		return selecionarTodosLancamentos;
 	}
 
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
-	}
-
-	public void setLancamentoContaService(ILancamentoConta lancamentoContaService) {
-		this.lancamentoContaService = lancamentoContaService;
-	}
-
-	public LancamentoConta getLancamento() {
-		return lancamento;
-	}
-
-	public void setLancamento(LancamentoConta lancamento) {
-		this.lancamento = lancamento;
-	}
-
-	public boolean isExibirParcelarFatura() {
-		return exibirParcelarFatura;
-	}
-
-	public void setExibirParcelarFatura(boolean exibirParcelarFatura) {
-		this.exibirParcelarFatura = exibirParcelarFatura;
-	}
-
-	public int getFormaPagamentoFatura() {
-		return formaPagamentoFatura;
-	}
-
-	public void setFormaPagamentoFatura(int formaPagamentoFatura) {
-		this.formaPagamentoFatura = formaPagamentoFatura;
-	}
-
-	public Conta getContaSelecionada() {
-		return contaSelecionada;
-	}
-
-	public void setContaSelecionada(Conta contaSelecionada) {
-		this.contaSelecionada = contaSelecionada;
-	}
-
-	public double getValorAQuitar() {
-		return valorAQuitar;
-	}
-
-	public void setValorAQuitar(double valorAQuitar) {
-		this.valorAQuitar = valorAQuitar;
-	}
-
-	public Date getDataPagamento() {
-		return dataPagamento;
-	}
-
-	public void setDataPagamento(Date dataPagamento) {
-		this.dataPagamento = dataPagamento;
+	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
+		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 }
