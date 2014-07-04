@@ -116,6 +116,14 @@
 				<p:inputText value="#{managedBean.entity.anoValidade}" size="4" required="true" requiredMessage="Informe o ano de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
 			</h:panelGroup>
 			
+			Número do cartão:
+			<h:panelGroup>
+				<h:inputText id="txtNumeroCartao" value="#{managedBean.numeroCartao}" />
+				<p:tooltip for="txtNumeroCartao">
+					<h:outputText value="Informe o nº do cartão para usar a importação de lançamentos. O número ficará registrado no sistema de forma criptografada."/>
+				</p:tooltip>
+			</h:panelGroup>
+			
 			<h:outputText value="Cartão substituto:" rendered="#{managedBean.operation == 'edit'}"/>			
 			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}" rendered="#{managedBean.operation == 'edit'}"/>
 						

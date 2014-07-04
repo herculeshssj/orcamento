@@ -53,3 +53,7 @@ insert into versao (versao, ativo) values ('AGO2014', true);
 -- Inclusão da coluna codigoMonetario na tabela moeda
 -- Tarefa #1067
 alter table moeda add column codigoMonetario varchar(5) null;
+
+-- Inclusão da coluna numeroCartao na tabela cartaocredito
+-- Tarefa #1068
+alter table cartaocredito add column numeroCartao varchar(40) null;

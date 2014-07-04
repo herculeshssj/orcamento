@@ -57,6 +57,7 @@ import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("cartaoCreditoMB")
 @Scope("session")
@@ -76,6 +77,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	private String descricaoCartao;
 	private boolean somenteAtivos = true;
 	private CartaoCredito novoCartao;
+	private String numeroCartao = "";
 	
 	public CartaoCreditoController() {
 		super(new CartaoCredito());
@@ -103,6 +105,10 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		Date validade = new Date(entity.getAnoValidade() - 1900, entity.getMesValidade() - 1, entity.getDiaVencimentoFatura());
 		entity.setUsuario(getUsuarioLogado());
 		entity.setValidade(validade);
+		if (!Util.eVazio(numeroCartao) & numeroCartao.length() == 12 & Util.onlyNumber(numeroCartao)) {
+			entity.setNumeroCartao(Util.SHA1(numeroCartao));
+		}
+		numeroCartao = "";
 		return super.save();
 	}
 	
@@ -122,7 +128,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}		
-		return "/pages/CartaoCredito/ativarDesativarCartao";
+		return "/pages/CartaoCredito/ativarDesativarCartao?faces-redirect=true";
 	}
 
 	public String ativarCartao() {
@@ -144,7 +150,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}		
-		return "/pages/CartaoCredito/ativarDesativarCartao";
+		return "/pages/CartaoCredito/ativarDesativarCartao?faces-redirect=true";
 	}
 	
 	public String desativarCartao() {
@@ -167,7 +173,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}		
-		return "/pages/CartaoCredito/substituirCartao";
+		return "/pages/CartaoCredito/substituirCartao?faces-redirect=true";
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -238,5 +244,13 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 
 	public void setSomenteAtivos(boolean somenteAtivos) {
 		this.somenteAtivos = somenteAtivos;
+	}
+
+	public String getNumeroCartao() {
+		return numeroCartao;
+	}
+
+	public void setNumeroCartao(String numeroCartao) {
+		this.numeroCartao = numeroCartao;
 	}
 }
