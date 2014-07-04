@@ -71,8 +71,11 @@
 			Símbolo monetário:
 			<p:inputText id="txtSimboloMonetario" value="#{managedBean.entity.simboloMonetario}" size="3" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>
 			
-			Valor de conversão moeda local:
-			<p:inputText value="#{managedBean.entity.valorConversao}" size="5">
+			Código monetário:
+			<p:inputText id="txtCodigoMonetario" value="#{managedBean.entity.codigoMonetario}" size="3" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>
+			
+			<h:outputText value="Valor de conversão moeda local:" rendered="#{!managedBean.entity.padrao}" />			
+			<p:inputText value="#{managedBean.entity.valorConversao}" size="5" rendered="#{!managedBean.entity.padrao}">
 				<f:convertNumber maxFractionDigits="4"/>
 			</p:inputText>		
 			

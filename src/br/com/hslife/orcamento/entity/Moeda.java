@@ -79,6 +79,9 @@ public class Moeda extends EntityPersistence {
 	@Column(nullable=false, length=5)
 	private String simboloMonetario;
 	
+	@Column(nullable=true, length=5)
+	private String codigoMonetario;
+	
 	@Column(nullable=false, precision=18, scale=4)
 	private double valorConversao;
 	
@@ -153,7 +156,7 @@ public class Moeda extends EntityPersistence {
 			throw new BusinessException("Informe o símbolo monetário!");
 		}
 		
-		if (this.valorConversao == 0) {
+		if (!this.padrao && this.valorConversao == 0) {
 			throw new BusinessException("Informe um valor de conversão diferente de 0!");
 		}
 	}
@@ -296,5 +299,13 @@ public class Moeda extends EntityPersistence {
 
 	public void setSaldoDebito(double saldoDebito) {
 		this.saldoDebito = saldoDebito;
+	}
+
+	public String getCodigoMonetario() {
+		return codigoMonetario;
+	}
+
+	public void setCodigoMonetario(String codigoMonetario) {
+		this.codigoMonetario = codigoMonetario;
 	}
 }

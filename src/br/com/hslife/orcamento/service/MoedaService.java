@@ -74,8 +74,10 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	public void cadastrar(Moeda entity) throws BusinessException {
 		if (entity.isPadrao()) {
 			Moeda moeda = getRepository().findDefaultByUsuario(entity.getUsuario());
-			moeda.setPadrao(false);
-			getRepository().update(moeda);
+			if (moeda != null && !moeda.equals(entity)) {
+				moeda.setPadrao(false);
+				getRepository().update(moeda);
+			}
 		}
 		super.cadastrar(entity);
 	}
@@ -84,8 +86,10 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	public void alterar(Moeda entity) throws BusinessException {
 		if (entity.isPadrao()) {
 			Moeda moeda = getRepository().findDefaultByUsuario(entity.getUsuario());
-			moeda.setPadrao(false);
-			getRepository().update(moeda);
+			if (moeda != null && !moeda.equals(entity)) {
+				moeda.setPadrao(false);
+				getRepository().update(moeda);
+			}
 		}
 		super.alterar(entity);
 	}

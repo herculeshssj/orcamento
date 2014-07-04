@@ -49,3 +49,7 @@
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('AGO2014', true);
+
+-- Inclusão da coluna codigoMonetario na tabela moeda
+-- Tarefa #1067
+alter table moeda add column codigoMonetario varchar(5) null;
