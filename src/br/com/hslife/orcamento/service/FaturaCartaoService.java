@@ -51,6 +51,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
@@ -82,6 +83,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	
 	@Autowired
 	private ContaRepository contaRepository;
+	
+	@Autowired
+	private ContaComponent contaComponent;
 	
 	public FaturaCartaoRepository getRepository() {
 		return repository;
@@ -182,8 +186,13 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		// Quita todos os lançamentos vinculados à fatura
 		for (LancamentoConta lancamento : faturaCartao.getDetalheFatura()) {
 			LancamentoConta l = lancamentoContaRepository.findById(lancamento.getId());
-			l.setQuitado(true);
-			lancamentoContaRepository.update(l);
+			if (l.getLancamentoPeriodico() != null) {
+				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
+				contaComponent.registrarPagamento(l);
+			} else {
+				l.setQuitado(true);
+				lancamentoContaRepository.update(l);
+			}
 		}
 		
 		// Verifica se existe fatura futura para alterar o status

@@ -128,7 +128,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}		
-		return "/pages/CartaoCredito/ativarDesativarCartao?faces-redirect=true";
+		return "/pages/CartaoCredito/ativarDesativarCartao";
 	}
 
 	public String ativarCartao() {
@@ -150,7 +150,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}		
-		return "/pages/CartaoCredito/ativarDesativarCartao?faces-redirect=true";
+		return "/pages/CartaoCredito/ativarDesativarCartao";
 	}
 	
 	public String desativarCartao() {
@@ -173,7 +173,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}		
-		return "/pages/CartaoCredito/substituirCartao?faces-redirect=true";
+		return "/pages/CartaoCredito/substituirCartao";
 	}
 	
 	@SuppressWarnings("deprecation")
