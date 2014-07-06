@@ -80,3 +80,7 @@ alter table lancamentoimportado add column moeda varchar(5) null;
 
 -- Seta todos os lançamentos sem moeda com a moeda da conta
 update lancamentoconta l set l.idMoeda = (select moeda.id from moeda inner join conta on conta.idMoeda = moeda.id where conta.id = l.idConta) where l.idMoeda is null;
+
+-- Renomeando o parâmetro de conexão SSL de envio de e-mail
+-- Tarefa #1071
+update opcaosistema set chave = 'EMAIL_USAR_SSL' where chave = 'EMAIL_SSL_TLS';

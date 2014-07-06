@@ -78,14 +78,14 @@ public class EmailComponent {
 		email.setHostName((String)parametros.get("EMAIL_SERVIDOR"));
 		email.setSmtpPort((Integer)parametros.get("EMAIL_PORTA"));
 		email.setAuthentication((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
-		if ((Boolean)parametros.get("EMAIL_SSL_TLS")) {
-			email.setSSL(true);
-	        email.setTLS(true);  
+		if ((Boolean)parametros.get("EMAIL_USAR_SSL")) {
+			email.setSSLOnConnect(true);
+			email.setSslSmtpPort(String.valueOf((Integer)parametros.get("EMAIL_PORTA")));
 		} else {
-			email.setSSL(false);
-	        email.setTLS(false);
+			email.setSSLOnConnect(false);
 		}
 		email.setCharset((String)parametros.get("EMAIL_CHARSET"));
+		email.setSSLCheckServerIdentity(false);
 		email.send();
 	}
 	
@@ -106,14 +106,14 @@ public class EmailComponent {
 		email.setHostName((String)parametros.get("EMAIL_SERVIDOR"));
 		email.setSmtpPort((Integer)parametros.get("EMAIL_PORTA"));
 		email.setAuthentication((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
-		if ((Boolean)parametros.get("EMAIL_SSL_TLS")) {
-			email.setSSL(true);
-	        email.setTLS(true);  
+		if ((Boolean)parametros.get("EMAIL_USAR_SSL")) {
+			email.setSSLOnConnect(true);
+			email.setSslSmtpPort(String.valueOf((Integer)parametros.get("EMAIL_PORTA")));
 		} else {
-			email.setSSL(false);
-	        email.setTLS(false);
+			email.setSSLOnConnect(false);
 		}
 		email.setCharset((String)parametros.get("EMAIL_CHARSET"));
+		email.setSSLCheckServerIdentity(false);
 		email.send();
 	}
 }
