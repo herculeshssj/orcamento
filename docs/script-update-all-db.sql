@@ -1782,3 +1782,44 @@ drop table panoramalancamentocartao;
 -- Inclusão da coluna para salvar critérios com lançamentos quitados
 alter table buscasalva add column quitados boolean null;
 update buscasalva set quitados = 0;
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2014.1 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('JUL2014.1', true);
+
+-- Inclusão da coluna codigoMonetario na tabela moeda
+-- Tarefa #1067
+alter table moeda add column codigoMonetario varchar(5) null;
+
+-- Inclusão da coluna numeroCartao na tabela cartaocredito
+-- Tarefa #1068
+alter table cartaocredito add column numeroCartao varchar(40) null;
+
+-- Limite de lançamentos de conta/cartão exibidos na busca
+-- Tarefa #1069
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso, idUsuario, versionEntity)
+	select
+	'RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS',
+	'12',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	'',
+	id,
+	'2014-06-01 00:00:00.000'
+	from
+	usuario;
+
+-- Inclusão do campo de moeda para os lançamento importados
+alter table lancamentoimportado add column moeda varchar(5) null;
+
+-- Seta todos os lançamentos sem moeda com a moeda da conta
+update lancamentoconta l set l.idMoeda = (select moeda.id from moeda inner join conta on conta.idMoeda = moeda.id where conta.id = l.idConta) where l.idMoeda is null;
+
+-- Renomeando o parâmetro de conexão SSL de envio de e-mail
+-- Tarefa #1071
+update opcaosistema set chave = 'EMAIL_USAR_SSL' where chave = 'EMAIL_SSL_TLS';
