@@ -59,7 +59,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
@@ -73,7 +73,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	private static final long serialVersionUID = 1909509361923924981L;
 
 	@Autowired
-	private ILancamentoConta service;
+	private IResumoEstatistica service;
 	
 	@Autowired
 	private IConta contaService;
@@ -212,11 +212,11 @@ public class PanoramaLancamentoContaController extends AbstractController {
 		this.mesAEstimar = mesAEstimar;
 	}
 
-	public ILancamentoConta getService() {
+	public IResumoEstatistica getService() {
 		return service;
 	}
 
-	public void setService(ILancamentoConta service) {
+	public void setService(IResumoEstatistica service) {
 		this.service = service;
 	}
 }

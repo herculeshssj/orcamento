@@ -46,10 +46,7 @@ package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,9 +61,6 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
-import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -332,141 +326,5 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException {
 		return getRepository().existsLinkageFaturaCartao(lancamento);
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, Integer mesAEstimar) throws BusinessException {
-		// Exclui o relatório existente
-		panoramaLancamentoContaRepository.deletePanoramaLancamentoConta(criterioBusca.getConta(), ano);
-				
-		// Declara o Map de previsão de lançamentos da conta
-		Map<String, PanoramaLancamentoConta> mapPanoramaLancamentos = new HashMap<String, PanoramaLancamentoConta>();
-		
-		// Insere no Map o panorama para o cálculo do saldo anterior
-		PanoramaLancamentoConta saldoAnterior = new PanoramaLancamentoConta();
-		saldoAnterior.setConta(criterioBusca.getConta());
-		saldoAnterior.setAno(ano);
-		saldoAnterior.setOid(Util.MD5("Saldo Anterior"));
-		saldoAnterior.setDescricao("Saldo Anterior");
-		saldoAnterior.setIndice(mapPanoramaLancamentos.values().size());
-		
-		mapPanoramaLancamentos.put(saldoAnterior.getOid(), saldoAnterior);
-		
-		// Busca os lançamentos e classifica-os em suas respectivas categorias
-		List<Categoria> categorias = component.organizarLancamentosPorCategoria(getRepository().findByCriterioLancamentoConta(criterioBusca));
-		
-		for (Categoria categoria : categorias) {
-			String oid = Util.MD5(categoria.getDescricao());
-			if (mapPanoramaLancamentos.containsKey(oid)) {
-				// Rotina de inserção dos valores dos lançamentos no panorama
-				for (LancamentoConta lancamento : categoria.getLancamentos()) {
-					mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
-				}
-			} else {
-				PanoramaLancamentoConta panorama = new PanoramaLancamentoConta();
-				panorama.setConta(criterioBusca.getConta());
-				panorama.setDescricao(categoria.getDescricao());
-				panorama.setAno(ano);
-				panorama.setOid(oid);								
-				panorama.setIndice(mapPanoramaLancamentos.values().size() + 1);
-				mapPanoramaLancamentos.put(oid, panorama);
-				
-				// Rotina de inserção dos valores dos lançamentos no panorama
-				for (LancamentoConta lancamento : categoria.getLancamentos()) {
-					mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
-					
-					// Verifica se o mês do pagamento é igual ao mês que será estimado
-					if (mesAEstimar != null && lancamento.getDataPagamento().getMonth() == mesAEstimar - 1) {
-						lancamento.getDataPagamento().setMonth(new Date().getMonth());
-						List<LancamentoConta> lancamentosEstimados = lancamento.clonarLancamentos(12 - (new Date().getMonth() + 1), IncrementoClonagemLancamento.MES);
-						
-						// Insere os valores no Map para os meses subsequentes
-						for (LancamentoConta l : lancamentosEstimados) {
-							mapPanoramaLancamentos.get(oid).setarMes(l.getDataPagamento().getMonth(), l);
-						}
-					}
-				}
-			}
-		}
-		
-		// Realiza o cálculo do saldo total
-		PanoramaLancamentoConta saldoTotal = new PanoramaLancamentoConta();
-		saldoTotal.setConta(criterioBusca.getConta());
-		saldoTotal.setAno(ano);
-		saldoTotal.setOid(Util.MD5("Saldo Total"));
-		saldoTotal.setDescricao("Saldo Total");
-		saldoTotal.setIndice(mapPanoramaLancamentos.values().size() + 1);
-		
-		for (PanoramaLancamentoConta panorama : mapPanoramaLancamentos.values()) {
-			saldoTotal.setJaneiro(saldoTotal.getJaneiro() + panorama.getJaneiro());
-			saldoTotal.setFevereiro(saldoTotal.getFevereiro() + panorama.getFevereiro());
-			saldoTotal.setMarco(saldoTotal.getMarco() + panorama.getMarco());
-			saldoTotal.setAbril(saldoTotal.getAbril() + panorama.getAbril());
-			saldoTotal.setMaio(saldoTotal.getMaio() + panorama.getMaio());
-			saldoTotal.setJunho(saldoTotal.getJunho() + panorama.getJunho());
-			saldoTotal.setJulho(saldoTotal.getJulho() + panorama.getJulho());
-			saldoTotal.setAgosto(saldoTotal.getAgosto() + panorama.getAgosto());
-			saldoTotal.setSetembro(saldoTotal.getSetembro() + panorama.getSetembro());
-			saldoTotal.setOutubro(saldoTotal.getOutubro() + panorama.getOutubro());
-			saldoTotal.setNovembro(saldoTotal.getNovembro() + panorama.getNovembro());
-			saldoTotal.setDezembro(saldoTotal.getDezembro() + panorama.getDezembro());
-		}
-		
-		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
-		
-		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total	
-		FechamentoPeriodo fechamento = fechamentoPeriodoRepository.findLastFechamentoPeriodoBeforeDateByContaAndOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
-		if (fechamento == null) {
-			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
-		} else {
-			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(fechamento.getSaldo());
-		}	
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJaneiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJaneiro());
-		
-		// Preenche o panorama do saldo anterior 		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setFevereiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setFevereiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getFevereiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getFevereiro());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setMarco(mapPanoramaLancamentos.get(saldoTotal.getOid()).getFevereiro());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setMarco(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMarco() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getMarco());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setAbril(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMarco());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setAbril(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAbril() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getAbril());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setMaio(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAbril());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setMaio(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMaio() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getMaio());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJunho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getMaio());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJunho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJunho() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJunho());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJulho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJunho());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJulho(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJulho() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJulho());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setAgosto(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJulho());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setAgosto(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAgosto() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getAgosto());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setSetembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getAgosto());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setSetembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getSetembro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getSetembro());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setOutubro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getSetembro());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setOutubro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getOutubro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getOutubro());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setNovembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getOutubro());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setNovembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getNovembro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getNovembro());
-		
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setDezembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getNovembro());
-		mapPanoramaLancamentos.get(saldoTotal.getOid()).setDezembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getDezembro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getDezembro());
-		
-		// Salva na base
-		for (PanoramaLancamentoConta panorama : mapPanoramaLancamentos.values()) {
-			panoramaLancamentoContaRepository.save(panorama);
-		}
-		
-		// Limpa o Map para facilitar o GC de recolher da memória
-		mapPanoramaLancamentos.clear();
-	}
-	
-	public List<PanoramaLancamentoConta> visualizarRelatorioPanoramaLancamentoConta(Conta conta, int ano) throws BusinessException {
-		return panoramaLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano);
 	}
 }

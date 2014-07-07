@@ -55,14 +55,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.ContaComponent;
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.LancamentoAgendado;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
-import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
@@ -181,18 +182,16 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return saldoAtualContas;
 	}
 	
-	public List<PanoramaLancamentoConta> visualizarRelatorioPanoramaLancamentoConta(Conta conta, int ano) throws BusinessException {
-		return panoramaLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano);
-	}
-	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException {
+	public void gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, Integer mesAEstimar) throws BusinessException {
 		// Exclui o relatório existente
 		panoramaLancamentoContaRepository.deletePanoramaLancamentoConta(criterioBusca.getConta(), ano);
-		
+				
 		// Declara o Map de previsão de lançamentos da conta
 		Map<String, PanoramaLancamentoConta> mapPanoramaLancamentos = new HashMap<String, PanoramaLancamentoConta>();
 		
+		// Insere no Map o panorama para o cálculo do saldo anterior
 		PanoramaLancamentoConta saldoAnterior = new PanoramaLancamentoConta();
 		saldoAnterior.setConta(criterioBusca.getConta());
 		saldoAnterior.setAno(ano);
@@ -202,34 +201,44 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		mapPanoramaLancamentos.put(saldoAnterior.getOid(), saldoAnterior);
 		
-		// Busca os lançamentos a partir do critério de busca fornecido
-		// Logo após itera os lançamentos
-		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca)) {
-			String oid;
-			if (lancamento.getCategoria() == null) {
-				oid = Util.MD5("Sem categoria");
-			} else {
-				oid = Util.MD5(lancamento.getCategoria().getDescricao());
-			}									
+		// Busca os lançamentos e classifica-os em suas respectivas categorias
+		List<Categoria> categorias = contaComponent.organizarLancamentosPorCategoria(lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca));
+		
+		for (Categoria categoria : categorias) {
+			String oid = Util.MD5(categoria.getDescricao());
 			if (mapPanoramaLancamentos.containsKey(oid)) {
-				this.inserirValorMesPanoramaLancamentoConta(mapPanoramaLancamentos, lancamento, oid);
+				// Rotina de inserção dos valores dos lançamentos no panorama
+				for (LancamentoConta lancamento : categoria.getLancamentos()) {
+					mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
+				}
 			} else {
 				PanoramaLancamentoConta panorama = new PanoramaLancamentoConta();
-				panorama.setConta(lancamento.getConta());
+				panorama.setConta(criterioBusca.getConta());
+				panorama.setDescricao(categoria.getDescricao());
 				panorama.setAno(ano);
-				panorama.setOid(oid);
-				if (lancamento.getCategoria() == null) {
-					panorama.setDescricao("Sem categoria");
-				} else {
-					panorama.setDescricao(lancamento.getCategoria().getDescricao());
-				}				
+				panorama.setOid(oid);								
 				panorama.setIndice(mapPanoramaLancamentos.values().size() + 1);
 				mapPanoramaLancamentos.put(oid, panorama);
-				this.inserirValorMesPanoramaLancamentoConta(mapPanoramaLancamentos, lancamento, oid);
+				
+				// Rotina de inserção dos valores dos lançamentos no panorama
+				for (LancamentoConta lancamento : categoria.getLancamentos()) {
+					mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
+					
+					// Verifica se o mês do pagamento é igual ao mês que será estimado
+					if (mesAEstimar != null && lancamento.getDataPagamento().getMonth() == mesAEstimar - 1) {
+						lancamento.getDataPagamento().setMonth(new Date().getMonth());
+						List<LancamentoConta> lancamentosEstimados = lancamento.clonarLancamentos(12 - (new Date().getMonth() + 1), IncrementoClonagemLancamento.MES);
+						
+						// Insere os valores no Map para os meses subsequentes
+						for (LancamentoConta l : lancamentosEstimados) {
+							mapPanoramaLancamentos.get(oid).setarMes(l.getDataPagamento().getMonth(), l);
+						}
+					}
+				}
 			}
 		}
 		
-		// Calcular o saldo total
+		// Realiza o cálculo do saldo total
 		PanoramaLancamentoConta saldoTotal = new PanoramaLancamentoConta();
 		saldoTotal.setConta(criterioBusca.getConta());
 		saldoTotal.setAno(ano);
@@ -254,7 +263,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
 		
-		// Pegar o valor do último fechamento do ano anterior		
+		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total	
 		FechamentoPeriodo fechamento = fechamentoPeriodoRepository.findLastFechamentoPeriodoBeforeDateByContaAndOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
 		if (fechamento == null) {
 			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
@@ -263,7 +272,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}	
 		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJaneiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJaneiro());
 		
-		// Preenche o saldo anterior		
+		// Preenche o panorama do saldo anterior 		
 		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setFevereiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro());
 		mapPanoramaLancamentos.get(saldoTotal.getOid()).setFevereiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getFevereiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getFevereiro());
 		
@@ -302,7 +311,13 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			panoramaLancamentoContaRepository.save(panorama);
 		}
 		
+		// Limpa o Map para facilitar o GC de recolher da memória
 		mapPanoramaLancamentos.clear();
+	}
+	
+	@Override
+	public List<PanoramaLancamentoConta> visualizarRelatorioPanoramaLancamentoConta(Conta conta, int ano) throws BusinessException {
+		return panoramaLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano);
 	}
 	
 	@Override
@@ -353,87 +368,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
 		}
 		
-		return resumoMensal;
+		return resumoMensal;	
 	}
 	
 	/*** Implementação dos métodos privados ***/
 	
-	@SuppressWarnings("deprecation")
-	private void inserirValorMesPanoramaLancamentoConta(Map<String, PanoramaLancamentoConta> mapPrevisaoLancamentos, LancamentoConta lancamento, String oid) {
-		int mes = lancamento.getDataPagamento().getMonth();
-		switch(mes) {
-			case Calendar.JANUARY :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setJaneiro(mapPrevisaoLancamentos.get(oid).getJaneiro() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setJaneiro(mapPrevisaoLancamentos.get(oid).getJaneiro() - lancamento.getValorPago());
-				break;
-			case Calendar.FEBRUARY :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setFevereiro(mapPrevisaoLancamentos.get(oid).getFevereiro() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setFevereiro(mapPrevisaoLancamentos.get(oid).getFevereiro() - lancamento.getValorPago());
-				break;
-			case Calendar.MARCH :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setMarco(mapPrevisaoLancamentos.get(oid).getMarco() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setMarco(mapPrevisaoLancamentos.get(oid).getMarco() - lancamento.getValorPago());
-				break;
-			case Calendar.APRIL :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setAbril(mapPrevisaoLancamentos.get(oid).getAbril() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setAbril(mapPrevisaoLancamentos.get(oid).getAbril() - lancamento.getValorPago());
-				break;
-			case Calendar.MAY :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setMaio(mapPrevisaoLancamentos.get(oid).getMaio() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setMaio(mapPrevisaoLancamentos.get(oid).getMaio() - lancamento.getValorPago());
-				break;
-			case Calendar.JUNE :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setJunho(mapPrevisaoLancamentos.get(oid).getJunho() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setJunho(mapPrevisaoLancamentos.get(oid).getJunho() - lancamento.getValorPago());
-				break;
-			case Calendar.JULY :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setJulho(mapPrevisaoLancamentos.get(oid).getJulho() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setJulho(mapPrevisaoLancamentos.get(oid).getJulho() - lancamento.getValorPago());
-				break;
-			case Calendar.AUGUST :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setAgosto(mapPrevisaoLancamentos.get(oid).getAgosto() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setAgosto(mapPrevisaoLancamentos.get(oid).getAgosto() - lancamento.getValorPago());
-				break;
-			case Calendar.SEPTEMBER :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setSetembro(mapPrevisaoLancamentos.get(oid).getSetembro() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setSetembro(mapPrevisaoLancamentos.get(oid).getSetembro() - lancamento.getValorPago());
-				break;
-			case Calendar.OCTOBER :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setOutubro(mapPrevisaoLancamentos.get(oid).getOutubro() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setOutubro(mapPrevisaoLancamentos.get(oid).getOutubro() - lancamento.getValorPago());
-				break;
-			case Calendar.NOVEMBER :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setNovembro(mapPrevisaoLancamentos.get(oid).getNovembro() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setNovembro(mapPrevisaoLancamentos.get(oid).getNovembro() - lancamento.getValorPago());
-				break;
-			case Calendar.DECEMBER :
-				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					mapPrevisaoLancamentos.get(oid).setDezembro(mapPrevisaoLancamentos.get(oid).getDezembro() + lancamento.getValorPago());
-				else
-					mapPrevisaoLancamentos.get(oid).setDezembro(mapPrevisaoLancamentos.get(oid).getDezembro() - lancamento.getValorPago());
-				break;
-		}
-	}
+	
 }
