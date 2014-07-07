@@ -45,8 +45,11 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -56,7 +59,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.facade.IResumoEstatistica;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
@@ -70,13 +73,14 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	private static final long serialVersionUID = 1909509361923924981L;
 
 	@Autowired
-	private IResumoEstatistica service;
-
+	private ILancamentoConta service;
+	
 	@Autowired
 	private IConta contaService;
 	
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private int ano;
+	private Integer mesAEstimar;
 	
 	private PanoramaLancamentoConta entity;
 	private List<PanoramaLancamentoConta> listEntity;
@@ -126,7 +130,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
 			criterioBusca.setDescricao("");
 			try {
-				getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano);
+				getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano, mesAEstimar);
 				infoMessage("Relatório gerado com sucesso!");
 			}
 			catch (BusinessException be) {
@@ -152,13 +156,16 @@ public class PanoramaLancamentoContaController extends AbstractController {
 		}
 		return new ArrayList<Conta>();
 	}
-
-	public IResumoEstatistica getService() {
-		return service;
-	}
-
-	public void setService(IResumoEstatistica service) {
-		this.service = service;
+	
+	@SuppressWarnings("deprecation")
+	public List<SelectItem> getListaMeses() {
+		List<SelectItem> lista = new ArrayList<SelectItem>();
+		int mes = new Date().getMonth() + 1;
+		for (int i = 1; i < 12; i++) {
+			if (i < mes)
+				lista.add(new SelectItem(Integer.valueOf(i), Integer.toString(i)));
+		}
+		return lista;
 	}
 
 	public void setContaService(IConta contaService) {
@@ -195,5 +202,21 @@ public class PanoramaLancamentoContaController extends AbstractController {
 
 	public void setListEntity(List<PanoramaLancamentoConta> listEntity) {
 		this.listEntity = listEntity;
+	}
+
+	public Integer getMesAEstimar() {
+		return mesAEstimar;
+	}
+
+	public void setMesAEstimar(Integer mesAEstimar) {
+		this.mesAEstimar = mesAEstimar;
+	}
+
+	public ILancamentoConta getService() {
+		return service;
+	}
+
+	public void setService(ILancamentoConta service) {
+		this.service = service;
 	}
 }

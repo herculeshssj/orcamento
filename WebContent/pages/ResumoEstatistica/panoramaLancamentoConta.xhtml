@@ -68,11 +68,10 @@
 		Ano:
 		<p:inputText size="5" value="#{managedBean.ano}"/>
 		&nbsp;
-		Lançamentos agendados:
-		<h:selectOneMenu value="#{managedBean.criterioBusca.agendado}">
-  			<f:selectItem itemLabel="Sem" itemValue="-1"/>
-			<f:selectItem itemLabel="Com" itemValue="0"/>
-			<f:selectItem itemLabel="Somente" itemValue="1"/>   					
+		Mês a estimar:
+		<h:selectOneMenu value="#{managedBean.mesAEstimar}">
+			<f:selectItem itemLabel="Nenhum" />	
+			<f:selectItems value="#{managedBean.listaMeses}" />
 		</h:selectOneMenu>
 	</ui:define>
 	

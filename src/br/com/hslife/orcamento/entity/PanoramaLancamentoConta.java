@@ -54,6 +54,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
@@ -67,6 +68,9 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	
 	@Transient
 	private String oid;
+	
+	@Transient
+	private final double mes[] = new double[12];
 	
 	@Column
 	private int ano;
@@ -118,7 +122,9 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	private int indice;
 	
 	public PanoramaLancamentoConta() {
-		
+		for (int i = 0; i < 12; i++) {
+			mes[i] = 0;
+		}
 	}
 
 	@Override
@@ -132,6 +138,30 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 		
 	}
 
+	public void setarMes(int indice, LancamentoConta lancamento) {
+		if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+			this.mes[indice] += lancamento.getValorPago();
+		} else {
+			this.mes[indice] -= lancamento.getValorPago();
+		}
+		this.setJaneiro(indice, mes[indice]);
+		this.setFevereiro(indice, mes[indice]);
+		this.setMarco(indice, mes[indice]);
+		this.setAbril(indice, mes[indice]);
+		this.setMaio(indice, mes[indice]);
+		this.setJunho(indice, mes[indice]);
+		this.setJulho(indice, mes[indice]);
+		this.setAgosto(indice, mes[indice]);
+		this.setSetembro(indice, mes[indice]);
+		this.setOutubro(indice, mes[indice]);
+		this.setNovembro(indice, mes[indice]);
+		this.setDezembro(indice, mes[indice]);
+	}
+	
+	public double obterMes(int indice) {
+		return mes[indice];
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -171,6 +201,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	public void setJaneiro(double janeiro) {
 		this.janeiro = janeiro;
 	}
+	
+	public void setJaneiro(int indice, double valor) {
+		if (indice == 0) 
+			this.janeiro = valor;
+	}
 
 	public double getFevereiro() {
 		return fevereiro;
@@ -180,12 +215,22 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 		this.fevereiro = fevereiro;
 	}
 
+	public void setFevereiro(int indice, double valor) {
+		if (indice == 1) 
+			this.fevereiro = valor;
+	}
+	
 	public double getMarco() {
 		return marco;
 	}
 
 	public void setMarco(double marco) {
 		this.marco = marco;
+	}
+	
+	public void setMarco(int indice, double valor) {
+		if (indice == 2) 
+			this.marco = valor;
 	}
 
 	public double getAbril() {
@@ -195,6 +240,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	public void setAbril(double abril) {
 		this.abril = abril;
 	}
+	
+	public void setAbril(int indice, double valor) {
+		if (indice == 3) 
+			this.abril = valor;
+	}
 
 	public double getMaio() {
 		return maio;
@@ -202,6 +252,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 
 	public void setMaio(double maio) {
 		this.maio = maio;
+	}
+	
+	public void setMaio(int indice, double valor) {
+		if (indice == 4) 
+			this.maio = valor;
 	}
 
 	public double getJunho() {
@@ -211,6 +266,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	public void setJunho(double junho) {
 		this.junho = junho;
 	}
+	
+	public void setJunho(int indice, double valor) {
+		if (indice == 5) 
+			this.junho = valor;
+	}
 
 	public double getJulho() {
 		return julho;
@@ -218,6 +278,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 
 	public void setJulho(double julho) {
 		this.julho = julho;
+	}
+	
+	public void setJulho(int indice, double valor) {
+		if (indice == 6) 
+			this.julho = valor;
 	}
 
 	public double getAgosto() {
@@ -228,12 +293,22 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 		this.agosto = agosto;
 	}
 
+	public void setAgosto(int indice, double valor) {
+		if (indice == 7) 
+			this.agosto = valor;
+	}
+	
 	public double getSetembro() {
 		return setembro;
 	}
 
 	public void setSetembro(double setembro) {
 		this.setembro = setembro;
+	}
+	
+	public void setSetembro(int indice, double valor) {
+		if (indice == 8) 
+			this.setembro = valor;
 	}
 
 	public double getOutubro() {
@@ -243,6 +318,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	public void setOutubro(double outubro) {
 		this.outubro = outubro;
 	}
+	
+	public void setOutubro(int indice, double valor) {
+		if (indice == 9) 
+			this.outubro = valor;
+	}
 
 	public double getNovembro() {
 		return novembro;
@@ -251,6 +331,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	public void setNovembro(double novembro) {
 		this.novembro = novembro;
 	}
+	
+	public void setNovembro(int indice, double valor) {
+		if (indice == 10) 
+			this.novembro = valor;
+	}
 
 	public double getDezembro() {
 		return dezembro;
@@ -258,6 +343,11 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 
 	public void setDezembro(double dezembro) {
 		this.dezembro = dezembro;
+	}
+	
+	public void setDezembro(int indice, double valor) {
+		if (indice == 11) 
+			this.dezembro = valor;
 	}
 
 	public int getIndice() {

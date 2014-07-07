@@ -53,6 +53,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
@@ -83,4 +84,8 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	public void vincularAProximaFatura(LancamentoConta lancamento) throws BusinessException;
 	
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException;
+	
+	public void gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, Integer mesAEstimar) throws BusinessException;
+	
+	public List<PanoramaLancamentoConta> visualizarRelatorioPanoramaLancamentoConta(Conta conta, int ano) throws BusinessException;
 }
