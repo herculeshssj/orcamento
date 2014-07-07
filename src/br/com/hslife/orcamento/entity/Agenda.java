@@ -206,48 +206,57 @@ public class Agenda extends EntityPersistence {
 	
 	public String comporTextoAgendamento(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
 		switch (tipoAgendamento) {
-		case PREVISAO :
-			if (inicio == null) {
-				throw new BusinessException("Informe a data de início!");
-			} else {
-				return Util.formataDataHora(inicio, Util.DATA);
-			}
-		case TAREFA :
-			if (inicio == null) {
-				throw new BusinessException("Informe a data de início!");
-			}
-			if (fim == null) {
-				if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0) {
-					return Util.formataDataHora(inicio, Util.DATA);
-				} else {
-					return Util.formataDataHora(inicio, Util.DATAHORA);
-				}
-			} else {
-				if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0 && this.extrairHora(fim) == 0 && this.extrairMinuto(fim) == 0) {
-					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATA)).toString();
-				} else {
-					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
-				}
-			}				
-		case COMPROMISSO :
-			if (inicio == null) {
-				throw new BusinessException("Informe a data de início!");
-			}
-			if (diaInteiro) {
-				if (fim == null) {
-					return Util.formataDataHora(inicio, Util.DATA);
-				} else {
-					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATA)).toString();
-				}
-			} else {
-				if (fim == null) {
-					return Util.formataDataHora(inicio, Util.DATAHORA);
-				} else {
-					return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
-				}
-			}				
+			case PREVISAO : return this.comporTextoAgendamentoPrevisao(inicio, fim, diaInteiro, tipoAgendamento);
+			case TAREFA : return this.comporTextoAgendamentoTarefa(inicio, fim, diaInteiro, tipoAgendamento);
+			case COMPROMISSO : return this.comporTextoAgendamentoCompromisso(inicio, fim, diaInteiro, tipoAgendamento);							
+		}
+		return "";
 	}
-	return "";
+	
+	private String comporTextoAgendamentoPrevisao(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+		if (inicio == null) {
+			throw new BusinessException("Informe a data de início!");
+		} else {
+			return Util.formataDataHora(inicio, Util.DATA);
+		}
+	}
+	
+	private String comporTextoAgendamentoTarefa(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+		if (inicio == null) {
+			throw new BusinessException("Informe a data de início!");
+		}
+		if (fim == null) {
+			if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0) {
+				return Util.formataDataHora(inicio, Util.DATA);
+			} else {
+				return Util.formataDataHora(inicio, Util.DATAHORA);
+			}
+		} else {
+			if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0 && this.extrairHora(fim) == 0 && this.extrairMinuto(fim) == 0) {
+				return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATA)).toString();
+			} else {
+				return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
+			}
+		}				
+	}
+	
+	private String comporTextoAgendamentoCompromisso(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+		if (inicio == null) {
+			throw new BusinessException("Informe a data de início!");
+		}
+		if (diaInteiro) {
+			if (fim == null) {
+				return Util.formataDataHora(inicio, Util.DATA);
+			} else {
+				return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATA)).toString();
+			}
+		} else {
+			if (fim == null) {
+				return Util.formataDataHora(inicio, Util.DATAHORA);
+			} else {
+				return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
+			}
+		}				
 	}
 	
 	public Long getId() {
