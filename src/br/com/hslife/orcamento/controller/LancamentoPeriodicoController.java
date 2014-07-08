@@ -224,7 +224,6 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public String registrarPagamento() {
 		try {
-			//pagamentoPeriodo.setGerarLancamento(gerarLancamento);
 			getService().registrarPagamento(pagamentoPeriodo);
 			infoMessage("Pagamento registrado com sucesso!");
 			pagamentoPeriodo = new LancamentoConta();

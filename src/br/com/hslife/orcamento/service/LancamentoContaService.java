@@ -74,7 +74,6 @@ import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
-import br.com.hslife.orcamento.repository.PanoramaLancamentoContaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("lancamentoContaService")
@@ -97,9 +96,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
-
-	@Autowired
-	private PanoramaLancamentoContaRepository panoramaLancamentoContaRepository;
 
 	public LancamentoContaRepository getRepository() {
 		return repository;

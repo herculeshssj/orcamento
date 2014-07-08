@@ -120,7 +120,7 @@
 		
 		<hr />
 	
-		<h:selectOneMenu value="#{managedBean.pagamentoPeriodo}" converter="entityConverter">
+		<h:selectOneMenu value="#{managedBean.pagamentoPeriodo}" converter="entityConverter" required="true" requiredMessage="Selecione uma parcela/mensalidade!">
 			<f:selectItem itemLabel="Selecione um período/parcela"/>
 			<f:selectItems value="#{managedBean.listaPagamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			<p:ajax event="change" update="pnlPagamentoPeriodo" listener="#{lancamentoPeriodicoMB.carregarPagamentoPeriodo}"/>
