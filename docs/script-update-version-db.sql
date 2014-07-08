@@ -49,3 +49,5 @@
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('JUL2014.2', true);
+
+alter table lancamentoconta change column `idMoeda` `idMoeda` bigint not null;

@@ -149,7 +149,7 @@ public class LancamentoConta extends EntityPersistence {
 	private MeioPagamento meioPagamento;
 	
 	@ManyToOne
-	@JoinColumn(name="idMoeda", nullable=true)
+	@JoinColumn(name="idMoeda", nullable=false)
 	private Moeda moeda;
 	
 	@Column
