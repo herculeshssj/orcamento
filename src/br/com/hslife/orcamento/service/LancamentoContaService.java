@@ -165,7 +165,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 
 	@Override
 	public void excluir(LancamentoConta entity) throws BusinessException {
-		// TODO remover esta validação na versão AGO2014 após concluir a tarefa #1045
 		if (entity.getLancamentoPeriodico() != null && entity.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
 			throw new BusinessException("Este lançamento não pode ser excluído pois representa uma parcela!");
 		}
