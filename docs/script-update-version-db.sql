@@ -51,3 +51,7 @@ update versao set ativo = false;
 insert into versao (versao, ativo) values ('JUL2014.2', true);
 
 alter table lancamentoconta change column `idMoeda` `idMoeda` bigint not null;
+
+-- Remoção da tabela de panoramalancamentoconta
+-- Tarefa #1077
+drop table panoramalancamentoconta;

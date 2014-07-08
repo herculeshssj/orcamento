@@ -68,17 +68,11 @@
 		Ano:
 		<p:inputText size="5" value="#{managedBean.ano}"/>
 		&nbsp;
-		Mês a estimar:
+		Mês a considerar nas estimativas:
 		<h:selectOneMenu value="#{managedBean.mesAEstimar}">
-			<f:selectItem itemLabel="Nenhum" />	
+			<f:selectItem itemLabel="Nenhum" itemValue="99"/>	
 			<f:selectItems value="#{managedBean.listaMeses}" />
 		</h:selectOneMenu>
-	</ui:define>
-	
-	<ui:define name="pesquisa_avancada">
-		<h:commandLink title="Gerar relatório" action="#{managedBean.gerarRelatorio}">
-     		<p:graphicImage value="/resources/images/circular.png"/>
-     	</h:commandLink>
 	</ui:define>
 	
 	<ui:define name="tabela">

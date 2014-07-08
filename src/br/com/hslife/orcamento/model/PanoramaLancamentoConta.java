@@ -42,100 +42,54 @@
   
  ***/
 
-package br.com.hslife.orcamento.entity;
+package br.com.hslife.orcamento.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.exception.BusinessException;
 
-@Entity
-@Table(name="panoramalancamentoconta")
-@SuppressWarnings("serial")
-public class PanoramaLancamentoConta extends EntityPersistence {
+public class PanoramaLancamentoConta {
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	
-	@Transient
 	private String oid;
 	
-	@Transient
 	private final double mes[] = new double[12];
 	
-	@Column
 	private int ano;
 	
-	@Column(nullable=false)
 	private String descricao;
 	
-	@ManyToOne
-	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double janeiro;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double fevereiro;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double marco;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double abril;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double maio;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double junho;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double julho;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double agosto;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double setembro;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double outubro;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double novembro;
 	
-	@Column(nullable=false, precision=18, scale=2)
 	private double dezembro;
 	
-	@Column(nullable=false)
 	private int indice;
 	
 	public PanoramaLancamentoConta() {
 		for (int i = 0; i < 12; i++) {
 			mes[i] = 0;
 		}
-	}
-
-	@Override
-	public String getLabel() {
-		return descricao;
-	}
-
-	@Override
-	public void validate() throws BusinessException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void setarMes(int indice, LancamentoConta lancamento) {
@@ -160,14 +114,6 @@ public class PanoramaLancamentoConta extends EntityPersistence {
 	
 	public double obterMes(int indice) {
 		return mes[indice];
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getOid() {

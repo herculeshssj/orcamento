@@ -47,7 +47,8 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,6 @@ import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.LancamentoAgendado;
@@ -67,21 +67,18 @@ import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.repository.PanoramaLancamentoContaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("resumoEstatisticaService")
 public class ResumoEstatisticaService implements IResumoEstatistica {
 
 	/*** Declaração dos repositórios ***/
-	
-	@Autowired
-	private PanoramaLancamentoContaRepository panoramaLancamentoContaRepository;
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
@@ -111,11 +108,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	public void setFechamentoPeriodoRepository(
 			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
 		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-
-	public void setPanoramaLancamentoContaRepository(
-			PanoramaLancamentoContaRepository panoramaLancamentoContaRepository) {
-		this.panoramaLancamentoContaRepository = panoramaLancamentoContaRepository;
 	}
 
 	/*** Declaração dos métodos Setters dos componentes ***/
@@ -184,12 +176,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, Integer mesAEstimar) throws BusinessException {
-		// Exclui o relatório existente
-		panoramaLancamentoContaRepository.deletePanoramaLancamentoConta(criterioBusca.getConta(), ano);
+	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, Integer mesAEstimar) throws BusinessException {
 				
 		// Declara o Map de previsão de lançamentos da conta
-		Map<String, PanoramaLancamentoConta> mapPanoramaLancamentos = new HashMap<String, PanoramaLancamentoConta>();
+		Map<String, PanoramaLancamentoConta> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoConta>();
 		
 		// Insere no Map o panorama para o cálculo do saldo anterior
 		PanoramaLancamentoConta saldoAnterior = new PanoramaLancamentoConta();
@@ -225,7 +215,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
 					
 					// Verifica se o mês do pagamento é igual ao mês que será estimado
-					if (mesAEstimar != null && lancamento.getDataPagamento().getMonth() == mesAEstimar - 1) {
+					if (mesAEstimar != null && lancamento.getDataPagamento().getMonth() == mesAEstimar) {
 						lancamento.getDataPagamento().setMonth(new Date().getMonth());
 						List<LancamentoConta> lancamentosEstimados = lancamento.clonarLancamentos(12 - (new Date().getMonth() + 1), IncrementoClonagemLancamento.MES);
 						
@@ -306,18 +296,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setDezembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getNovembro());
 		mapPanoramaLancamentos.get(saldoTotal.getOid()).setDezembro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getDezembro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getDezembro());
 		
-		// Salva na base
-		for (PanoramaLancamentoConta panorama : mapPanoramaLancamentos.values()) {
-			panoramaLancamentoContaRepository.save(panorama);
-		}
-		
-		// Limpa o Map para facilitar o GC de recolher da memória
-		mapPanoramaLancamentos.clear();
-	}
-	
-	@Override
-	public List<PanoramaLancamentoConta> visualizarRelatorioPanoramaLancamentoConta(Conta conta, int ano) throws BusinessException {
-		return panoramaLancamentoContaRepository.findByContaAnoAndAgrupamento(conta, ano);
+		// Salva o resultado em um List e depois retorna os valores adicionados
+		List<PanoramaLancamentoConta> resultado = new LinkedList<>(mapPanoramaLancamentos.values());
+
+		return resultado;
 	}
 	
 	@Override

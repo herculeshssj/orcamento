@@ -57,7 +57,6 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -68,7 +67,6 @@ import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
-import br.com.hslife.orcamento.repository.PanoramaLancamentoContaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("contaService")
@@ -88,9 +86,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
-	
-	@Autowired
-	private PanoramaLancamentoContaRepository previsaoLancamentoContaRepository;
 	
 	@Autowired
 	private BuscaSalvaRepository buscaSalvaRepository;
@@ -124,11 +119,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	public void setFechamentoPeriodoRepository(
 			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
 		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-
-	public void setPrevisaoLancamentoContaRepository(
-			PanoramaLancamentoContaRepository previsaoLancamentoContaRepository) {
-		this.previsaoLancamentoContaRepository = previsaoLancamentoContaRepository;
 	}
 
 	public void setBuscaSalvaRepository(BuscaSalvaRepository buscaSalvaRepository) {
@@ -212,10 +202,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 		if (getRepository().existsLinkages(entity)) {
 			throw new BusinessException("Não é possível excluir! Existem registros relacionamentos com a conta!");
 		} else {
-			// Exclui as previsões dos lançamentos da conta
-			for (PanoramaLancamentoConta previsao : previsaoLancamentoContaRepository.findByConta(entity)) {
-				previsaoLancamentoContaRepository.delete(previsao);
-			}
 			
 			// Exclui as buscas salvas
 			for (BuscaSalva busca : buscaSalvaRepository.findContaAndTipoContaAndContaAtivaByUsuario(entity, null, null, entity.getUsuario())) {

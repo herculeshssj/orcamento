@@ -56,11 +56,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("panoramaLancamentoContaMB")
@@ -85,6 +85,8 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	private PanoramaLancamentoConta entity;
 	private List<PanoramaLancamentoConta> listEntity;
 	
+	private String[] mes = new String[]{"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
+	
 	public PanoramaLancamentoContaController() {
 		moduleTitle = "Panorama dos Lançamentos da Conta";
 	}
@@ -108,11 +110,16 @@ public class PanoramaLancamentoContaController extends AbstractController {
 			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
 			criterioBusca.setDescricao("");
 			try {
-				listEntity = getService().visualizarRelatorioPanoramaLancamentoConta(criterioBusca.getConta(), ano);
+				// Correção de bug por usar tipo Wrapper
+				if (mesAEstimar == 99)
+					listEntity = getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano, null);
+				else
+					listEntity = getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano, mesAEstimar);
+				
 				if (listEntity == null || listEntity.size() == 0) {
 					warnMessage("Nenhum resultado encontrado. Relatório não disponível para visualização.");
 				} else {
-					infoMessage("Relatório " + ano + " disponível para visualização");
+					infoMessage("Relatório " + ano + " gerado com sucesso!");
 				}
 			}
 			catch (BusinessException be) {
@@ -120,23 +127,6 @@ public class PanoramaLancamentoContaController extends AbstractController {
 			}
 		}
 		return "";
-	}
-	
-	public void gerarRelatorio() {
-		if (ano <= 0) {
-			warnMessage("Ano deve ser maior que zero (0)!");
-		} else {
-			criterioBusca.setDataInicio(Util.primeiroDiaAno(ano));
-			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
-			criterioBusca.setDescricao("");
-			try {
-				getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano, mesAEstimar);
-				infoMessage("Relatório gerado com sucesso!");
-			}
-			catch (BusinessException be) {
-				errorMessage(be.getMessage());
-			}
-		}		
 	}
 	
 	public String verRelatorioCompleto() {
@@ -160,10 +150,10 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	@SuppressWarnings("deprecation")
 	public List<SelectItem> getListaMeses() {
 		List<SelectItem> lista = new ArrayList<SelectItem>();
-		int mes = new Date().getMonth() + 1;
-		for (int i = 1; i < 12; i++) {
+		int mes = new Date().getMonth();
+		for (int i = 0; i < 11; i++) {
 			if (i < mes)
-				lista.add(new SelectItem(Integer.valueOf(i), Integer.toString(i)));
+				lista.add(new SelectItem(Integer.valueOf(i), this.mes[i]));
 		}
 		return lista;
 	}
