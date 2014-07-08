@@ -258,11 +258,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		lancamentoAMesclar.setParcela(pagamentoPeriodo.getParcela());
 		lancamentoAMesclar.setPeriodo(pagamentoPeriodo.getPeriodo());
 		
-		// Caso o tipo de conta seja CARTAO e o lançamento periódico seja PARCELADO prevalece a data de pagamento da parcela
-		if (pagamentoPeriodo.getConta().getTipoConta().equals(TipoConta.CARTAO) && pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
-			lancamentoAMesclar.setDataPagamento(pagamentoPeriodo.getDataPagamento());
-		}
-		
 		lancamentoContaRepository.update(lancamentoAMesclar);
 		
 		pagamentoPeriodo.setLancamentoPeriodico(null);
