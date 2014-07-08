@@ -75,7 +75,6 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.model.InfoOFX;
@@ -247,12 +246,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		for (LancamentoConta l : lancamentosAAtualizar) {
 			li = lancamentoImportadoRepository.findByHash(l.getHashImportacao());
 			
-			// Caso o lançamento seja uma parcela, a data de pagamento não será atualizada
-			if (l.getLancamentoPeriodico() != null && l.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
-				// Não atualiza a data de pagamento
-			} else {
-				l.setDataPagamento(li.getData());
-			}
+			l.setDataPagamento(li.getData());			
 			
 			l.setHistorico(li.getHistorico());
 			l.setNumeroDocumento(li.getDocumento());
@@ -318,14 +312,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			lancamentoImportadoRepository.delete(entity);
 		} else {
 			// Atualiza o lançamento existente
-			
-			// Caso o lançamento seja uma parcela, a data de pagamento não será atualizada
-			if (l.getLancamentoPeriodico() != null && l.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
-				// Não atualiza a data de pagamento
-			} else {
-				l.setDataPagamento(entity.getData());
-			}
-			
+						
+			l.setDataPagamento(entity.getData());						
 			l.setHistorico(entity.getHistorico());
 			l.setNumeroDocumento(entity.getDocumento());
 			l.setValorPago(Math.abs(entity.getValor()));
