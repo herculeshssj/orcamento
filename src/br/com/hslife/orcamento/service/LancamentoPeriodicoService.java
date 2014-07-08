@@ -246,6 +246,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			
 			lancamentoContaRepository.save(parcela);
 			dataVencimento.add(Calendar.MONTH, 1);
+			dataVencimento.set(Calendar.DAY_OF_MONTH, entity.getDiaVencimento());
 		}
 	}
 	
