@@ -281,6 +281,28 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return super.edit();
 	}
 	
+	public String removerVinculoLancamentoView() {
+		lancamentosEncontrados = entity.getPagamentos();
+		lancamentosSelecionados = null;
+		actionTitle = " - Remover Vínculos";
+		return "/pages/LancamentoPeriodico/removerVinculoLancamento";
+	}
+	
+	public String removerVinculoLancamento() {
+		try {
+			if (lancamentosSelecionados == null || lancamentosSelecionados.length == 0) {
+				warnMessage("Selecione pelo menos um lançamento para remover!");
+				return "";
+			} else {
+				getService().removerLancamentos(Arrays.asList(lancamentosSelecionados));
+			}
+			infoMessage("Vínculos removidos com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return super.edit();
+	}
+	
 	public String retornarPaginaEdicao() {
 		return super.edit();
 	}

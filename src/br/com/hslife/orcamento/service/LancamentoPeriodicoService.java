@@ -283,6 +283,15 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
+	public void removerLancamentos(List<LancamentoConta> lancamentosARemover) throws BusinessException {
+		// Remove os lançamentos selecionados do lançamento periódico informado.
+		for (LancamentoConta l : lancamentosARemover) {
+			l.setLancamentoPeriodico(null);
+			lancamentoContaRepository.update(l);
+		}		
+	}
+	
+	@Override
 	public List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento) throws BusinessException {
 		return getRepository().findByTipoLancamentoContaAndStatusLancamento(tipo, conta, statusLancamento);
 	}
