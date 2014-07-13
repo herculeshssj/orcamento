@@ -182,10 +182,11 @@ public class ResumoMensalContasController extends AbstractController {
         barComparativo.addSeries(despesaSeries);
         
         if (Math.abs(receitas) >= Math.abs(despesas)) {
-        	maxValueBarComparativo = new BigDecimal(Math.abs(receitas)).intValue();
+        	maxValueBarComparativo = new BigDecimal(Math.abs(receitas + (receitas * 0.10))).intValue();
         } else {
-        	maxValueBarComparativo = new BigDecimal(Math.abs(despesas)).intValue();
+        	maxValueBarComparativo = new BigDecimal(Math.abs(despesas + (despesas * 0.10))).intValue();
         }
+        
 	}
 	
 	public List<Conta> getListaConta() {
