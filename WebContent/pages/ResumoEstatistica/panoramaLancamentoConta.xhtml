@@ -68,7 +68,7 @@
 		Ano:
 		<p:inputText size="5" value="#{managedBean.ano}"/>
 		&nbsp;
-		Mês a considerar nas estimativas:
+		Mês-base para estimativas:
 		<h:selectOneMenu value="#{managedBean.mesAEstimar}">
 			<f:selectItem itemLabel="Nenhum" itemValue="99"/>	
 			<f:selectItems value="#{managedBean.listaMeses}" />
@@ -76,6 +76,18 @@
 	</ui:define>
 	
 	<ui:define name="tabela">
+	
+		<script type="text/javascript">
+	    function ext1() {
+	        this.cfg.legend= {
+	             show: true,
+	             location: 's',
+	             placement: 'outsideGrid'
+	           }   
+	    }
+		</script>
+		
+		<p:lineChart id="linePanoramaLancamentoConta" value="#{managedBean.saldoTotalModel}" legendPosition="s" title="Panorama dos Lançamentos da Conta" style="height:600px" extender="ext1" rendered="#{managedBean.exibirGrafico}"/>
 	
     	<h:commandLink value="Visualizar relatório completo" action="#{managedBean.verRelatorioCompleto}" target="_blank"/>
 	

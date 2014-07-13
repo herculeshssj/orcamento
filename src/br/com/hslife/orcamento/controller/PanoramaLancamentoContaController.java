@@ -51,6 +51,8 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -87,6 +89,9 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	
 	private String[] mes = new String[]{"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
 	
+	private CartesianChartModel saldoTotalModel;
+	private boolean exibirGrafico = false;
+	
 	public PanoramaLancamentoContaController() {
 		moduleTitle = "Panorama dos Lançamentos da Conta";
 	}
@@ -120,6 +125,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 					warnMessage("Nenhum resultado encontrado. Relatório não disponível para visualização.");
 				} else {
 					infoMessage("Relatório " + ano + " gerado com sucesso!");
+					this.gerarGrafico();
 				}
 			}
 			catch (BusinessException be) {
@@ -127,6 +133,32 @@ public class PanoramaLancamentoContaController extends AbstractController {
 			}
 		}
 		return "";
+	}
+	
+	private void gerarGrafico(){
+		saldoTotalModel = new CartesianChartModel();
+		LineChartSeries serie = new LineChartSeries();
+		serie.setLabel("Saldo total");
+		
+		for (PanoramaLancamentoConta panorama : listEntity) {
+			if (panorama.getDescricao().equals("Saldo Total")) {
+				serie.set("JAN", panorama.getJaneiro());
+				serie.set("FEV", panorama.getFevereiro());
+				serie.set("MAR", panorama.getMarco());
+				serie.set("ABR", panorama.getAbril());
+				serie.set("MAI", panorama.getMaio());
+				serie.set("JUN", panorama.getJunho());
+				serie.set("JUL", panorama.getJulho());
+				serie.set("AGO", panorama.getAgosto());
+				serie.set("SET", panorama.getSetembro());
+				serie.set("OUT", panorama.getOutubro());
+				serie.set("NOV", panorama.getNovembro());
+				serie.set("DEZ", panorama.getDezembro());
+			}
+		}
+		
+		saldoTotalModel.addSeries(serie);
+		exibirGrafico = true;
 	}
 	
 	public String verRelatorioCompleto() {
@@ -208,5 +240,21 @@ public class PanoramaLancamentoContaController extends AbstractController {
 
 	public void setService(IResumoEstatistica service) {
 		this.service = service;
+	}
+
+	public CartesianChartModel getSaldoTotalModel() {
+		return saldoTotalModel;
+	}
+
+	public void setSaldoTotalModel(CartesianChartModel saldoTotalModel) {
+		this.saldoTotalModel = saldoTotalModel;
+	}
+
+	public boolean isExibirGrafico() {
+		return exibirGrafico;
+	}
+
+	public void setExibirGrafico(boolean exibirGrafico) {
+		this.exibirGrafico = exibirGrafico;
 	}
 }
