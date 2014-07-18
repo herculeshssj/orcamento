@@ -159,15 +159,10 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		faturaCartao.setValorMinimo(Util.arredondar((Math.abs(totalFatura + faturaCartao.getSaldoDevedor()) * 15) / 100)); // 15% do valor da fatura
 		
 		// Verifica se o valor do lançamento selecionado é menor que o valor mínimo da fatura
-		if (Math.abs(Util.arredondar(lancamentoPagamento.getValorPago())) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {
+		if (Math.abs(Util.arredondar(lancamentoPagamento.getValorPago())) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {			
 			throw new BusinessException("Valor de pagamento não pode ser menor que o valor mínimo da fatura!");
 		}
-		
-		// Verifica se o valor do lançamento selecionado é maior que o valor total da fatura
-		if (Math.abs(Util.arredondar(lancamentoPagamento.getValorPago())) > Math.abs(Util.arredondar(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()))) {
-			throw new BusinessException("Não é possível quitar um valor maior que o valor total da fatura!");
-		}
-		
+				
 		// Popula a lista de conversões de moeda
 		for (Moeda moeda : conversoes) {
 			ConversaoMoeda conversao = new ConversaoMoeda();
