@@ -428,6 +428,26 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
+	public String fecharFaturaAntiga() {
+		try {
+			// Verifica se um lançamento foi selecionado na listagem				
+			if(lancamento ==  null || lancamento.getConta() == null) {
+				warnMessage("Selecione um lançamento!");
+				return "";
+			}
+			
+			getService().fecharFaturaAntiga(faturaSelecionada, moedas, lancamento);
+			infoMessage("Fatura antiga fechada e quitada com sucesso!");
+			
+			this.reprocessarBusca();
+			
+			return "/pages/FaturaCartao/listFaturaCartao";			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public void reabrirFatura() {
 		try {
 			getService().reabrirFatura(getService().buscarPorID(idEntity));
@@ -633,8 +653,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<SelectItem> getListaStatusFaturaCartao() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (StatusFaturaCartao enumeration : StatusFaturaCartao.values()) {
-			if (!enumeration.equals(StatusFaturaCartao.ANTIGA))
-				listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;
 	}

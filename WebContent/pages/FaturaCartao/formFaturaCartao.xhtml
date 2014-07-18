@@ -80,6 +80,17 @@
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			
+			Saldo devedor faturas anteriores:
+			<p:inputText value="#{managedBean.entity.saldoDevedor}" rendered="#{managedBean.operation == 'create'}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</p:inputText>
+			<h:panelGroup rendered="#{managedBean.operation != 'create'}">
+				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
+				<h:outputText value="#{managedBean.entity.saldoDevedor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>				
+			</h:panelGroup>	
+			
 			Status atual da fatura:
 			<h:outputText value="#{managedBean.entity.statusFaturaCartao}" style="font-weight: bold;"/>
 		</h:panelGrid>

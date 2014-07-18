@@ -129,6 +129,78 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
+	public void fecharFaturaAntiga(FaturaCartao entity, List<Moeda> conversoes, LancamentoConta lancamentoPagamento) throws BusinessException {
+		// Verifica se o lançamento selecionado já foi vinculado com outra fatura
+		if (lancamentoContaRepository.existsLinkagePagamentoFaturaCartao(lancamentoPagamento)) {
+			throw new BusinessException("Lançamento selecionado já foi usado para quitar outra fatura!");
+		}
+		
+		// Busca a fatura que será fechada
+		FaturaCartao faturaCartao = this.buscarPorID(entity.getId());		
+		
+		// Atribuições dos valores
+		faturaCartao.setDataFechamento(entity.getDataFechamento());
+		faturaCartao.setStatusFaturaCartao(StatusFaturaCartao.QUITADA);
+		
+		// Calcula o valor total da fatura
+		double totalFatura = 0.0;
+		for (Moeda moeda : conversoes) {
+			if (moeda.isPadrao()) { 
+				faturaCartao.setMoeda(moeda);
+				moeda.setTotalConvertido(Util.arredondar(moeda.getTotal()));
+			} else {
+				moeda.setTotalConvertido(Util.arredondar(moeda.getTotal() * moeda.getTaxaConversao()));
+			}
+			totalFatura += moeda.getTotalConvertido();
+		}
+		
+		// Adiciona ao total da fatura o valor da fatura vencida		
+		faturaCartao.setValorFatura(totalFatura);
+		faturaCartao.setValorMinimo(Util.arredondar((Math.abs(totalFatura + faturaCartao.getSaldoDevedor()) * 15) / 100)); // 15% do valor da fatura
+		
+		// Verifica se o valor do lançamento selecionado é menor que o valor mínimo da fatura
+		if (Math.abs(Util.arredondar(lancamentoPagamento.getValorPago())) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {
+			throw new BusinessException("Valor de pagamento não pode ser menor que o valor mínimo da fatura!");
+		}
+		
+		// Verifica se o valor do lançamento selecionado é maior que o valor total da fatura
+		if (Math.abs(Util.arredondar(lancamentoPagamento.getValorPago())) > Math.abs(Util.arredondar(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()))) {
+			throw new BusinessException("Não é possível quitar um valor maior que o valor total da fatura!");
+		}
+		
+		// Popula a lista de conversões de moeda
+		for (Moeda moeda : conversoes) {
+			ConversaoMoeda conversao = new ConversaoMoeda();
+			conversao.setFaturaCartao(faturaCartao);
+			conversao.setMoeda(moeda);
+			conversao.setTaxaConversao(moeda.getTaxaConversao());
+			conversao.setValor(moeda.getTotalConvertido());
+			faturaCartao.getConversoesMoeda().add(conversao);
+		}
+		
+		// Quita todos os lançamentos vinculados à fatura
+		for (LancamentoConta lancamento : faturaCartao.getDetalheFatura()) {
+			LancamentoConta l = lancamentoContaRepository.findById(lancamento.getId());
+			if (l.getLancamentoPeriodico() != null) {
+				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
+				contaComponent.registrarPagamento(l);
+			} else {
+				l.setQuitado(true);
+				lancamentoContaRepository.update(l);
+			}
+		}
+		
+		faturaCartao.setDataPagamento(lancamentoPagamento.getDataPagamento());
+		faturaCartao.setValorPago(lancamentoPagamento.getValorPago());
+		
+		// Atribui o lançamento à fatura
+		faturaCartao.setLancamentoPagamento(lancamentoPagamento);
+				
+		// Salva a fatura paga
+		getRepository().update(faturaCartao);
+	}
+	
+	@Override
 	public void fecharFatura(FaturaCartao entity, List<Moeda> conversoes) throws BusinessException {
 		// Busca a fatura que será fechada
 		FaturaCartao faturaCartao = this.buscarPorID(entity.getId());		
@@ -230,7 +302,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		FaturaCartao fatura = getRepository().findById(entity.getId());
 
 		// Atribuições dos valores
-		fatura.setDataFechamento(null);
+		//fatura.setDataFechamento(null);
 		fatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
 
 		// Salva a fatura do cartão

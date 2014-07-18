@@ -82,7 +82,7 @@
 		    	<h:outputText value="Valor"/>
 		    </f:facet>
 		    <h:outputText value="#{item.moeda.simboloMonetario} " />
-		    <h:outputText value="#{item.valorFatura}">
+		    <h:outputText value="#{item.valorFatura + item.saldoDevedor}">
 		    	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		    </h:outputText>
 		</p:column>
