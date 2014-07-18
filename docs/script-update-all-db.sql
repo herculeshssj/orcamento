@@ -1823,3 +1823,11 @@ update lancamentoconta l set l.idMoeda = (select moeda.id from moeda inner join 
 -- Renomeando o parâmetro de conexão SSL de envio de e-mail
 -- Tarefa #1071
 update opcaosistema set chave = 'EMAIL_USAR_SSL' where chave = 'EMAIL_SSL_TLS';
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2014.2 ***/
+
+-- Atualização de versão
+update versao set ativo = false;
+insert into versao (versao, ativo) values ('JUL2014.2', true);
+
+alter table lancamentoconta change column `idMoeda` `idMoeda` bigint not null;

@@ -222,7 +222,11 @@ public class PanoramaParcelamentoController extends AbstractController {
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
 			if (pagamento.isQuitado()) {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
+				if (pagamento.getFaturaCartao() != null && pagamento.getFaturaCartao().getDataFechamento() != null)
+					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getFaturaCartao().getDataFechamento());
+				else
+					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
+				
 				if (dadosPagamento.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
@@ -308,7 +312,11 @@ public class PanoramaParcelamentoController extends AbstractController {
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
 			if (pagamento.isQuitado()) {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
+				if (pagamento.getFaturaCartao() != null && pagamento.getFaturaCartao().getDataFechamento() != null)
+					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getFaturaCartao().getDataFechamento());
+				else
+					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
+				
 				if (dadosPagamento.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));

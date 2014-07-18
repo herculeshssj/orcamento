@@ -44,10 +44,8 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2014.2 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO SET2014 ***/
 
 -- Atualização de versão
 update versao set ativo = false;
-insert into versao (versao, ativo) values ('JUL2014.2', true);
-
-alter table lancamentoconta change column `idMoeda` `idMoeda` bigint not null;
+insert into versao (versao, ativo) values ('SET2014', true);
