@@ -246,6 +246,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			
 			lancamentoContaRepository.save(parcela);
 			dataVencimento.add(Calendar.MONTH, 1);
+			dataVencimento.set(Calendar.DAY_OF_MONTH, entity.getDiaVencimento());
 		}
 	}
 	
@@ -257,11 +258,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		lancamentoAMesclar.setDataVencimento(pagamentoPeriodo.getDataVencimento());
 		lancamentoAMesclar.setParcela(pagamentoPeriodo.getParcela());
 		lancamentoAMesclar.setPeriodo(pagamentoPeriodo.getPeriodo());
-		
-		// Caso o tipo de conta seja CARTAO e o lançamento periódico seja PARCELADO prevalece a data de pagamento da parcela
-		if (pagamentoPeriodo.getConta().getTipoConta().equals(TipoConta.CARTAO) && pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
-			lancamentoAMesclar.setDataPagamento(pagamentoPeriodo.getDataPagamento());
-		}
 		
 		lancamentoContaRepository.update(lancamentoAMesclar);
 		
@@ -280,6 +276,15 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			l.setDataVencimento(l.getDataPagamento());
 			lancamentoContaRepository.update(l);
 		}
+	}
+	
+	@Override
+	public void removerLancamentos(List<LancamentoConta> lancamentosARemover) throws BusinessException {
+		// Remove os lançamentos selecionados do lançamento periódico informado.
+		for (LancamentoConta l : lancamentosARemover) {
+			l.setLancamentoPeriodico(null);
+			lancamentoContaRepository.update(l);
+		}		
 	}
 	
 	@Override

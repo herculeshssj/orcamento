@@ -165,7 +165,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	@Override
 	public String save() {
 		// Salva a informação da moeda no lançamento da conta
-		entity.setMoeda(entity.getMoeda());
+		entity.setMoeda(entity.getConta().getMoeda());
 		
 		return super.save();
 	}

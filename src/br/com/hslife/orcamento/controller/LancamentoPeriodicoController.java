@@ -224,7 +224,6 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public String registrarPagamento() {
 		try {
-			//pagamentoPeriodo.setGerarLancamento(gerarLancamento);
 			getService().registrarPagamento(pagamentoPeriodo);
 			infoMessage("Pagamento registrado com sucesso!");
 			pagamentoPeriodo = new LancamentoConta();
@@ -275,6 +274,28 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				throw new BusinessException("Opção inválida!");
 			}
 			infoMessage("Vínculo realizado com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return super.edit();
+	}
+	
+	public String removerVinculoLancamentoView() {
+		lancamentosEncontrados = entity.getPagamentos();
+		lancamentosSelecionados = null;
+		actionTitle = " - Remover Vínculos";
+		return "/pages/LancamentoPeriodico/removerVinculoLancamento";
+	}
+	
+	public String removerVinculoLancamento() {
+		try {
+			if (lancamentosSelecionados == null || lancamentosSelecionados.length == 0) {
+				warnMessage("Selecione pelo menos um lançamento para remover!");
+				return "";
+			} else {
+				getService().removerLancamentos(Arrays.asList(lancamentosSelecionados));
+			}
+			infoMessage("Vínculos removidos com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

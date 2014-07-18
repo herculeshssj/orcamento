@@ -87,4 +87,6 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	public void mesclarLancamentos(LancamentoConta pagamentoPeriodo, LancamentoConta lancamentoAMesclar) throws BusinessException;
 	
 	public void vincularLancamentos(LancamentoPeriodico lancamentoPeriodico, List<LancamentoConta> lancamentosAVincular) throws BusinessException;
+
+	public void removerLancamentos(List<LancamentoConta> lancamentosARemover) throws BusinessException;
 }

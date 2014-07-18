@@ -279,6 +279,8 @@
 		    	</h:panelGrid>
 		    	
 		    	<h:commandLink value="Vincular lançamentos existentes" action="#{managedBean.vincularNovoLancamentoView}" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}"/>
+		    	&nbsp;&nbsp;&nbsp;
+		    	<h:commandLink value="Remover lançamentos existentes" action="#{managedBean.removerVinculoLancamentoView}" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}"/>
 				
 			</p:tab>
 	

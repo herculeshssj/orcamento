@@ -74,7 +74,6 @@ import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
-import br.com.hslife.orcamento.repository.PanoramaLancamentoContaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("lancamentoContaService")
@@ -97,9 +96,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
-
-	@Autowired
-	private PanoramaLancamentoContaRepository panoramaLancamentoContaRepository;
 
 	public LancamentoContaRepository getRepository() {
 		return repository;
@@ -169,7 +165,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 
 	@Override
 	public void excluir(LancamentoConta entity) throws BusinessException {
-		// TODO remover esta validação na versão AGO2014 após concluir a tarefa #1045
 		if (entity.getLancamentoPeriodico() != null && entity.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
 			throw new BusinessException("Este lançamento não pode ser excluído pois representa uma parcela!");
 		}
