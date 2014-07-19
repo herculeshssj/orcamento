@@ -48,14 +48,4 @@
 
 -- Atualização de versão
 update versao set ativo = false;
-<<<<<<< HEAD
 insert into versao (versao, ativo) values ('SET2014', true);
-=======
-insert into versao (versao, ativo) values ('JUL2014.2', true);
-
-alter table lancamentoconta change column `idMoeda` `idMoeda` bigint not null;
-
--- Remoção da tabela de panoramalancamentoconta
--- Tarefa #1077
-drop table panoramalancamentoconta;
->>>>>>> c28ff27168f516df41a60a9e34da2aa7ca6db88e
