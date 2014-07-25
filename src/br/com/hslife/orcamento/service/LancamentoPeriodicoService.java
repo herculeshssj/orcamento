@@ -46,6 +46,7 @@ package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -208,7 +209,10 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		proximaMensalidade.setFavorecido(lancamentoPeriodico.getFavorecido());
 		proximaMensalidade.setMeioPagamento(lancamentoPeriodico.getMeioPagamento());
 		proximaMensalidade.setMoeda(lancamentoPeriodico.getMoeda());
-		proximaMensalidade.setAgendado(true);
+		if (proximaMensalidade.getDataVencimento().before(new Date()))
+			proximaMensalidade.setAgendado(false);
+		else
+			proximaMensalidade.setAgendado(true);
 		
 		// Define a descrição definitiva do lançamento a ser criado
 		proximaMensalidade.setDescricao(lancamentoPeriodico.getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
@@ -239,7 +243,10 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			parcela.setFavorecido(entity.getFavorecido());
 			parcela.setMeioPagamento(entity.getMeioPagamento());
 			parcela.setMoeda(entity.getMoeda());
-			parcela.setAgendado(true);
+			if (parcela.getDataVencimento().before(new Date()))
+				parcela.setAgendado(false);
+			else
+				parcela.setAgendado(true);
 			
 			// Define a descrição definitiva do lançamento a ser criado
 			parcela.setDescricao(entity.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + entity.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA)); 
