@@ -361,6 +361,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 				.setInteger("periodo", periodo)
 				.setInteger("ano", ano)
 				.setLong("idLancamento", lancamentoPeriodico.getId())
+				.setMaxResults(1)
 				.uniqueResult();
 	}
 }
