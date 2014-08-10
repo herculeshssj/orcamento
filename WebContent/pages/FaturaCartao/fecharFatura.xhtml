@@ -153,6 +153,12 @@
 		<p:outputPanel rendered="#{managedBean.faturaSelecionada.statusFaturaCartao == 'ANTIGA'}">
 			<h:panelGrid columns="3">
 			
+				Pagamento mínimo:
+				<p:inputText value="#{managedBean.faturaSelecionada.valorMinimo}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</p:inputText>
+				<h:outputText />
+			
 				Escolha a conta corrente/poupança:
 				<h:selectOneMenu value="#{managedBean.criterioBusca.conta}" converter="entityConverter" required="true" requiredMessage="Escolha uma conta!">
 					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
