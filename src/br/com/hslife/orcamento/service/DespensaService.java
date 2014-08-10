@@ -50,7 +50,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Despensa;
-import br.com.hslife.orcamento.entity.ItemDespensa;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IDespensa;
@@ -81,10 +80,11 @@ public class DespensaService extends AbstractCRUDService<Despensa> implements ID
 	
 	@Override
 	public void excluir(Despensa entity) throws BusinessException {
-		for (ItemDespensa item : itemDespensaRepository.findByDespensa(entity)) {
-			itemDespensaRepository.delete(item);
+		if (itemDespensaRepository.findByDespensa(entity) != null
+				&& !itemDespensaRepository.findByDespensa(entity).isEmpty()) {
+			throw new BusinessException("Não é possível excluir! Existem itens vinculados a esta despensa!");
 		}
-		super.excluir(entity);		
+		super.excluir(entity);
 	}
 	
 	@Override
