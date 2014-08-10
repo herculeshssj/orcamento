@@ -106,8 +106,7 @@
 			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
 			
 			<h:outputText value="Parcela" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
-			<h:inputText value="#{managedBean.entity.parcela}" size="5" rendered="#{!managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" />
-			<h:outputText value="#{managedBean.entity.parcela}" rendered="#{managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" />
+			<h:outputText value="#{managedBean.entity.parcela}" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" />
 			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 			
 			<h:outputText value="Data de vencimento:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
