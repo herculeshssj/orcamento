@@ -176,6 +176,18 @@ public class LancamentoPeriodico extends EntityPersistence {
 			throw new BusinessException("Informe o tipo de despesa!");
 	}
 	
+	public boolean podeEncerrar() {
+		if (this.tipoLancamentoPeriodico.equals(TipoLancamentoPeriodico.FIXO))
+			return false;
+		
+		int resultado = this.totalParcela;
+		for (LancamentoConta lancamento : pagamentos) {
+			if (lancamento.isQuitado()) 
+				resultado--;
+		}
+		return resultado == 0;
+	}
+	
 	public Long getId() {
 		return id;
 	}

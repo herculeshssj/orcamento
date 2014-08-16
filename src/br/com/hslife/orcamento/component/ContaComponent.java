@@ -62,6 +62,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -69,6 +70,7 @@ import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.util.EntityLabelComparator;
 import br.com.hslife.orcamento.util.Util;
 
@@ -83,6 +85,9 @@ public class ContaComponent {
 	
 	@Autowired
 	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
+	
+	@Autowired
+	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
@@ -548,6 +553,12 @@ public class ContaComponent {
 			
 			lancamentoContaRepository.save(proximaMensalidade);
 			
+		} else {
+			// Verifica se o lançamento periódico vinculado já pode ser encerrado.
+			if (pagamentoPeriodo.getLancamentoPeriodico().podeEncerrar()) {
+				pagamentoPeriodo.getLancamentoPeriodico().setStatusLancamento(StatusLancamento.ENCERRADO);
+				lancamentoPeriodicoRepository.update(pagamentoPeriodo.getLancamentoPeriodico());
+			}
 		}
 	}
 }
