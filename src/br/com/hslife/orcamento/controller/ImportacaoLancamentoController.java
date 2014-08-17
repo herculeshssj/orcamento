@@ -217,7 +217,21 @@ public class ImportacaoLancamentoController extends AbstractController {
 			entity = getService().buscarPorID(idEntity);
 			getService().excluirLancamentoImportado(entity);
 			infoMessage("Lançamento excluído com sucesso!");
-			initializeEntity();
+			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
+			if (listEntity != null && !listEntity.isEmpty()) {
+				// Inicializa os objetos
+				initializeEntity();
+				
+				// Obtém o valor da opção do sistema
+				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
+							
+				// Determina se a busca será executada novamente
+				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
+					find();
+				}
+			} else {
+				initializeEntity();
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
