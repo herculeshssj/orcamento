@@ -46,7 +46,6 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -124,7 +123,7 @@ public class CartaoCredito extends EntityPersistence {
 	@OneToOne(mappedBy="cartaoCredito")
 	private Conta conta;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="idCartaoSubstituto", nullable=true)
 	private CartaoCredito cartaoSubstituto;
 	

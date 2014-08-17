@@ -179,6 +179,11 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	@SuppressWarnings("deprecation")
 	public String substituirCartao() {
 		try {
+			novoCartao.setBanco(entity.getBanco());
+			novoCartao.setLimiteSaque(entity.getLimiteSaque());
+			novoCartao.setLimiteCartao(entity.getLimiteCartao());
+			novoCartao.setJuros(entity.getJuros());
+			novoCartao.setMulta(entity.getMulta());
 			Date validade = new Date(novoCartao.getAnoValidade() - 1900, novoCartao.getMesValidade() - 1, novoCartao.getDiaVencimentoFatura());
 			novoCartao.setValidade(validade);
 			novoCartao.setUsuario(getUsuarioLogado());
