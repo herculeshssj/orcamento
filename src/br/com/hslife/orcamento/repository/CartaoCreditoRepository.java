@@ -100,7 +100,7 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 	public boolean existsLinkages(CartaoCredito cartaoCredito) {		
 		boolean result = true;
 		
-		String sqlFatura = "select count(id) from faturacartao where idConta = " + cartaoCredito.getConta().getId();
+		String sqlFatura = "select count(id) from faturacartao where idConta = " + cartaoCredito.getConta().getId() + " and statusFaturaCartao <> 'ABERTA'";
 		String sqlLancamento = "select count(*) from lancamentoconta l inner join conta cc on cc.id = l.idConta inner join cartaocredito c on c.id = cc.idCartao where c.id = " + cartaoCredito.getId();
 		
 		Query queryFatura = getSession().createSQLQuery(sqlFatura);

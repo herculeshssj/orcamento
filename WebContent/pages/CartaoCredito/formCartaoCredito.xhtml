@@ -69,9 +69,10 @@
 			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" maxlength="50" size="50" required="true" requiredMessage="Informe a descrição!" disabled="#{!managedBean.entity.ativo}"/>			
 			
 			Tipo de cartão:
-			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.entity.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!" disabled="#{!managedBean.entity.ativo}">
+			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.entity.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!" disabled="#{!managedBean.entity.ativo}" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}">
 				<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
-			</p:selectOneRadio>			
+			</p:selectOneRadio>
+			<h:outputText value="#{managedBean.entity.tipoCartao}" rendered="#{managedBean.entity.tipoCartao == 'CREDITO' and managedBean.operation != 'create'}" />			
 			
 			Bandeira:
 			<h:selectOneMenu id="txtBandeira" value="#{managedBean.entity.bandeira}" required="true" requiredMessage="Informe o bandeira do cartão!" disabled="#{!managedBean.entity.ativo}">

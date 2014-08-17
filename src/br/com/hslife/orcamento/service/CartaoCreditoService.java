@@ -44,6 +44,7 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,10 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
@@ -71,7 +75,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	
 	@Autowired
 	private ContaRepository contaRepository;
-	
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
@@ -123,29 +126,27 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		super.cadastrar(entity);
 		contaRepository.save(conta);	
 		
-		//TODO terminar a implementação de criação de nova fatura e criar mecanismos para excluir um cartão junto com sua fatura recém-criada.
-		
-		/*
-		// Cria uma nova fatura para o cartão criado
-		FaturaCartao novaFatura = new FaturaCartao();
-		novaFatura.setConta(entity.getConta());
-		novaFatura.setMoeda(moedaRepository.findDefaultByUsuario(entity.getConta().getUsuario()));
-		novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
-		// Data de vencimento da fatura
-		Calendar vencimento = Calendar.getInstance();
-		vencimento.setTime(new Date());
-		// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
-		if (novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura() < novaFatura.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
-			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
-		} else {
-			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
-			vencimento.add(Calendar.MONTH, -1);
-		}			
-		novaFatura.setDataVencimento(vencimento.getTime());
-				
-		// Salva a nova fatura
-		faturaCartaoRepository.save(novaFatura);
-		*/
+		if (entity.getTipoCartao().equals(TipoCartao.CREDITO)) {
+			// Cria uma nova fatura para o cartão criado
+			FaturaCartao novaFatura = new FaturaCartao();
+			novaFatura.setConta(conta);
+			novaFatura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
+			novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
+			// Data de vencimento da fatura
+			Calendar vencimento = Calendar.getInstance();
+			vencimento.setTime(new Date());
+			// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
+			if (novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura() < novaFatura.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
+				vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
+			} else {
+				vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
+				vencimento.add(Calendar.MONTH, -1);
+			}			
+			novaFatura.setDataVencimento(vencimento.getTime());
+					
+			// Salva a nova fatura
+			faturaCartaoRepository.save(novaFatura);
+		}
 	}
 	
 	@Override
@@ -167,9 +168,14 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		// Feito um pequeno ajuste para viabilizar a exclusão de um cartão de crédito
 		// cadastrado e sem conta vinculada. O erro foi reportado na tarefa #1108
 		if (conta != null) {
+			// Procura uma fatura aberta para a conta do cartão selecionado
+			FaturaCartao faturaAberta = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+			
 			if (getRepository().existsLinkages(entity)) {
 				throw new BusinessException("Não é possível excluir! Existe vínculo com lançamentos e/ou faturas cadastradas!");
 			} else {
+				// Exclui a fatura aberta caso exista
+				if (faturaAberta != null) faturaCartaoRepository.delete(faturaAberta);
 				contaRepository.delete(conta);
 				super.excluir(entity);
 			}
