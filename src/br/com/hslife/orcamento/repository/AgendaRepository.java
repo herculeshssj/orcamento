@@ -101,4 +101,13 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 				.setBoolean("alerta", emiteAlerta)
 				.uniqueResult();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Agenda> findAgendamentoByDataInicioAndDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta) {
+		return (List<Agenda>)getQuery("FROM Agenda agenda WHERE agenda.inicio >= :inicio AND agenda.fim <= :fim AND agenda.emitirAlerta = :alerta")
+				.setTimestamp("inicio", inicio)
+				.setTimestamp("fim", fim)
+				.setBoolean("alerta", emiteAlerta)
+				.list();
+	}
 }

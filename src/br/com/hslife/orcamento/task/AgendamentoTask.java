@@ -52,6 +52,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.EmailComponent;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
@@ -68,6 +69,9 @@ public class AgendamentoTask {
 	
 	@Autowired
 	private AgendaRepository agendaRepository;
+	
+	@Autowired
+	private EmailComponent emailComponent;
 
 	public void setLancamentoContaRepository(
 			LancamentoContaRepository lancamentoContaRepository) {
@@ -76,6 +80,42 @@ public class AgendamentoTask {
 
 	public void setAgendaRepository(AgendaRepository agendaRepository) {
 		this.agendaRepository = agendaRepository;
+	}
+	
+	@Scheduled(fixedDelay=3600000)
+	@SuppressWarnings("deprecation")
+	public void enviarEmailNotificacao() {
+		Date inicio = new Date();
+		inicio.setHours(0);
+		inicio.setMinutes(0);
+		inicio.setSeconds(0);
+
+		Date fim = new Date(inicio.getTime());
+		fim.setHours(23);
+		fim.setMinutes(59);
+		fim.setSeconds(59);
+		List<Agenda> agendamentos =  agendaRepository.findAgendamentoByDataInicioAndDataFimAndAlerta(inicio, fim, true);
+		
+		// Itera a lista de agendamentos encontrados, e para cada uma envia um e-mail para o usuário
+		for (Agenda a : agendamentos) {
+			StringBuilder mensagemEmail = new StringBuilder();
+			
+			mensagemEmail.append("Prezado " + a.getUsuario().getNome() + ",\n\n");
+			mensagemEmail.append("O seguinte agendamento foi marcado para notificá-lo:\n\n");
+			mensagemEmail.append(a.getDescricao() + "\n");
+			mensagemEmail.append("Tipo: " + a.getTipoAgendamento() + "\n");
+			mensagemEmail.append("Período: \n" + a.getDateLabel() + "\n");
+			mensagemEmail.append("Dia inteiro: " + (a.isDiaInteiro() ? "SIM" : "NÃO") + "\n");
+			mensagemEmail.append("Notas: " + a.getNotas() + "\n\n");
+			mensagemEmail.append("Caso não queira mais receber notificações a respeito desse evento, desmarque a caixa 'Emitir Alerta' nas propriedades do agendamento.\n\n\n");
+			mensagemEmail.append("HSlife Serviços de TI");
+			
+			try {
+				emailComponent.enviarEmail(a.getUsuario().getNome(), a.getUsuario().getEmail(), "Orçamento Doméstico - Lembrete de agendamento", mensagemEmail.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Scheduled(fixedDelay=3600000)
