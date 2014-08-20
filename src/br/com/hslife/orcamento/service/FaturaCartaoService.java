@@ -160,6 +160,8 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		// Calcula o valor mínimo da fatura caso o campo seja menor ou igual a zero
 		if (entity.getValorMinimo() <= 0)
 			faturaCartao.setValorMinimo(Util.arredondar((Math.abs(totalFatura + faturaCartao.getSaldoDevedor()) * 15) / 100)); // 15% do valor da fatura
+		else
+			faturaCartao.setValorMinimo(entity.getValorMinimo());
 		
 		// Verifica se o valor do lançamento selecionado é menor que o valor mínimo da fatura
 		if (Math.abs(Util.arredondar(lancamentoPagamento.getValorPago())) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {			
