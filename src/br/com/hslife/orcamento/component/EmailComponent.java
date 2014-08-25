@@ -70,7 +70,7 @@ public class EmailComponent {
 		
 		// Atribui ao objeto os parâmetros passados ao método
 		email.addTo(emailDestinatario, destinatario, (String)parametros.get("EMAIL_CHARSET"));
-		email.setFrom((String)parametros.get("EMAIL_EMAIL_REMETENTE"), (String)parametros.get("EMAIL_REMETENTE")); // remetente
+		email.setFrom((String)parametros.get("EMAIL_EMAIL_REMETENTE"), (String)parametros.get("EMAIL_REMETENTE"), (String)parametros.get("EMAIL_CHARSET")); // remetente
 		email.setSubject(assunto);
 		email.setMsg(mensagem);
 		
