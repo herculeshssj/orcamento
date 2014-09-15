@@ -47,7 +47,9 @@ package br.com.hslife.orcamento.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.ofx4j.domain.data.MessageSetType;
 import net.sf.ofx4j.domain.data.ResponseEnvelope;
@@ -72,6 +74,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -174,18 +177,31 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 
 	@Override
 	public List<LancamentoConta> gerarLancamentoContaAInserir(List<LancamentoImportado> lancamentosImportados) throws BusinessException {
+		// Armazena o usuário logado para diminuir o acesso a base
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
 		
 		LancamentoConta lc;
-		Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.CREDITO);
-		Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.DEBITO);
+		Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioLogado, TipoCategoria.CREDITO);
+		Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioLogado, TipoCategoria.DEBITO);
 		
-		Favorecido favorecidoPadrao = favorecidoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+		Favorecido favorecidoPadrao = favorecidoRepository.findDefaultByUsuario(usuarioLogado);
 		
-		MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+		MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioLogado);
 		
-		Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+		// Itera a lista de todas as moedas existentes e guarda em um Map todas elas
+		// e na variável moedaPadrao a moeda padrão do usuário. 
+		Moeda moedaPadrao = new Moeda();
+		Map<String, Moeda> moedas = new HashMap<String, Moeda>();
+		for (Moeda moeda : moedaRepository.findByUsuario(usuarioLogado)) {
+			if (moeda.isPadrao()) {
+				moedaPadrao = moeda;
+			}
+			moedas.put(moeda.getCodigoMonetario(), moeda);
+		}
 		
+		// Itera a lista de lançamentos importados para gerar os lançamentos da conta correspondentes
 		for (LancamentoImportado li : lancamentosImportados) {
 			if (lancamentoContaRepository.findByHash(li.getHash()) == null) {
 			
@@ -202,9 +218,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				lc.setMeioPagamento(meioPagamentoPadrao);
 				
 				// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
-				lc.setMoeda(moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()) == null 
-						? moedaPadrao 
-						: moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()));				
+				lc.setMoeda(moedas.get(li.getMoeda()) == null ? moedaPadrao : moedas.get(li.getMoeda()));				
 				
 				lc.setConta(li.getConta());				
 				lc.setDataPagamento(li.getData());
