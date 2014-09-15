@@ -84,7 +84,8 @@
 			<f:facet name="header">
 				<h:outputText value="Moeda"/>
 			</f:facet>						
-			<h:outputText value="#{item.moeda}"/>
+			<h:outputText value="#{item.moeda}" rendered="#{item.conta.tipoConta == 'CARTAO'}"/>
+			<h:outputText value="#{item.conta.moeda.codigoMonetario}" rendered="#{item.conta.tipoConta != 'CARTAO'}"/>
 	  	</p:column>
 	  	<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
