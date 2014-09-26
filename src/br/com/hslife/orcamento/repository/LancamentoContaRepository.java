@@ -112,6 +112,13 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(Restrictions.ge("valorPago", criterio.getValor()));
 		}
 		
+		switch(criterio.getAgrupamentoSelecionado()) {
+			case "CAT" : criteria.add(Restrictions.eq("categoria.id", criterio.getIdAgrupamento())); break;
+			case "FAV" : criteria.add(Restrictions.eq("favorecido.id", criterio.getIdAgrupamento())); break;
+			case "PAG" : criteria.add(Restrictions.eq("meioPagamento.id", criterio.getIdAgrupamento())); break;
+			default:
+		}
+		
 		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
 	}
 	

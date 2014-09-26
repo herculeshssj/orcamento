@@ -115,6 +115,23 @@ public abstract class AbstractLancamentoContaController extends AbstractCRUDCont
 		return new ArrayList<Categoria>();
 	}
 	
+	public List<Categoria> getListaCategoriaSemTipoCategoria() {
+		try {
+			 List<Categoria> resultado = categoriaService.buscarAtivosPorUsuario(getUsuarioLogado());				
+			// Lógica para incluir a categoria inativa da entidade na combo
+			if (resultado != null && entity.getCategoria() != null) {
+				if (!resultado.contains(entity.getCategoria())) {
+					entity.getCategoria().setAtivo(true);
+					resultado.add(entity.getCategoria());
+				}
+			}
+			return resultado;			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		} 
+		return new ArrayList<Categoria>();
+	}
+	
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			List<Favorecido> resultado = favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());

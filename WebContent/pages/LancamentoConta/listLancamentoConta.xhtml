@@ -109,6 +109,7 @@
 						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
 						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
 						<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
+						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 					</p:selectOneRadio>
 					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->     			
 		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
@@ -116,9 +117,17 @@
 		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
 						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
 						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
+						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 					</p:selectOneRadio>
 					<p:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
 					Exibir saldo anterior
+					<br/>
+					<p:selectBooleanCheckbox value="#{managedBean.pesquisarTermoNoAgrupamento}"/>
+					Pesquisar termo no agrupamento
+					<br/>
+					<h:selectOneMenu id="txtPesquisaAgrupamento" value="#{managedBean.criterioBusca.idAgrupamento}">
+						<f:selectItems value="#{managedBean.listaPesquisaAgrupamento}"/>
+					</h:selectOneMenu>
 				</h:panelGroup>				
 				<h:panelGroup>   				
 					Exibir:

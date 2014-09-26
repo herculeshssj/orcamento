@@ -103,6 +103,9 @@ public class BuscaSalva extends EntityPersistence {
 	
 	@Column
 	private boolean exibirSaldoAnterior;
+	
+	@Column
+	private boolean pesquisarTermo;
 
 	public BuscaSalva() {
 		tipoAgrupamentoBusca = TipoAgrupamentoBusca.NENHUM;
@@ -204,5 +207,13 @@ public class BuscaSalva extends EntityPersistence {
 
 	public void setQuitados(int quitados) {
 		this.quitados = quitados;
+	}
+
+	public boolean isPesquisarTermo() {
+		return pesquisarTermo;
+	}
+
+	public void setPesquisarTermo(boolean pesquisarTermo) {
+		this.pesquisarTermo = pesquisarTermo;
 	}
 }

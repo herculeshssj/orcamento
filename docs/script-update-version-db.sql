@@ -49,3 +49,5 @@
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('SET2014', true);
+
+alter table buscasalva add column pesquisarTermo tinyint(1) default 0;

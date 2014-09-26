@@ -69,6 +69,10 @@ public class CriterioLancamentoConta {
 	
 	private Double valor;
 	
+	private Long idAgrupamento; // ID da categoria, favorecido ou meio de pagamento
+	
+	private String agrupamentoSelecionado = ""; // agrupamento selecionado
+	
 	private LancamentoAgendado lancamentoAgendado;
 	
 	private LancamentoAgendado lancamentoQuitado;
@@ -218,5 +222,21 @@ public class CriterioLancamentoConta {
 
 	public void setParcela(int parcela) {
 		this.parcela = parcela;
+	}
+
+	public Long getIdAgrupamento() {
+		return idAgrupamento;
+	}
+
+	public void setIdAgrupamento(Long idAgrupamento) {
+		this.idAgrupamento = idAgrupamento;
+	}
+
+	public String getAgrupamentoSelecionado() {
+		return agrupamentoSelecionado;
+	}
+
+	public void setAgrupamentoSelecionado(String agrupamentoSelecionado) {
+		this.agrupamentoSelecionado = agrupamentoSelecionado;
 	}
 }

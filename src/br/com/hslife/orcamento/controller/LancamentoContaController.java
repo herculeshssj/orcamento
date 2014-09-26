@@ -107,6 +107,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	
 	private String agrupamentoSelecionado;
 	private boolean exibirSaldoUltimoFechamento;
+	private boolean pesquisarTermoNoAgrupamento;
 	
 	private boolean selecionarTodosLancamentos;
 	
@@ -141,6 +142,8 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			if (criterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
 			} else {
+				if (this.pesquisarTermoNoAgrupamento)
+					criterioBusca.setAgrupamentoSelecionado(this.agrupamentoSelecionado);
 				listEntity = getService().buscarPorCriterioLancamentoConta(criterioBusca);
 				if (listEntity != null & listEntity.size() > getOpcoesSistema().getLimiteQuantidadeRegistros()) {
 					listEntity.clear();
@@ -444,6 +447,30 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		listaSelectItem.add(new SelectItem(TipoLancamento.DESPESA, "Despesa"));
 		return listaSelectItem;
 	}
+	
+	public void atualizarListaPesquisaAgrupamento() {
+		this.getListaPesquisaAgrupamento();
+	}
+	
+	public List<SelectItem> getListaPesquisaAgrupamento() {
+		List<SelectItem> resultado = new ArrayList<SelectItem>();
+		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("CAT")) {
+			for (Categoria c : super.getListaCategoriaSemTipoCategoria()) {
+				resultado.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
+			}
+		}
+		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("FAV")) {
+			for (Favorecido f : super.getListaFavorecido()) {
+				resultado.add(new SelectItem(f.getId(), f.getNome()));
+			}
+		}
+		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("PAG")) {
+			for (MeioPagamento m : super.getListaMeioPagamento()) {
+				resultado.add(new SelectItem(m.getId(), m.getDescricao()));
+			}
+		}
+		return resultado;
+	}
 
 	public ILancamentoConta getService() {
 		return service;
@@ -539,5 +566,13 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 
 	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
+	}
+
+	public boolean isPesquisarTermoNoAgrupamento() {
+		return pesquisarTermoNoAgrupamento;
+	}
+
+	public void setPesquisarTermoNoAgrupamento(boolean pesquisarTermoNoAgrupamento) {
+		this.pesquisarTermoNoAgrupamento = pesquisarTermoNoAgrupamento;
 	}
 }
