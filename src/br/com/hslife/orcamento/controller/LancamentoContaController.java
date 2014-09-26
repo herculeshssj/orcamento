@@ -144,6 +144,8 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			} else {
 				if (this.pesquisarTermoNoAgrupamento)
 					criterioBusca.setAgrupamentoSelecionado(this.agrupamentoSelecionado);
+				else
+					criterioBusca.setAgrupamentoSelecionado("");
 				listEntity = getService().buscarPorCriterioLancamentoConta(criterioBusca);
 				if (listEntity != null & listEntity.size() > getOpcoesSistema().getLimiteQuantidadeRegistros()) {
 					listEntity.clear();
@@ -297,6 +299,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			criterioBusca.setAgendado(buscaSalva.getAgendados());
 			criterioBusca.setQuitado(buscaSalva.getQuitados());
 			exibirSaldoUltimoFechamento = buscaSalva.isExibirSaldoAnterior();
+			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
 				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
@@ -318,6 +321,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
 		buscaSalva.setDataFim(criterioBusca.getDataFim());
 		buscaSalva.setExibirSaldoAnterior(exibirSaldoUltimoFechamento);
+		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
 		buscaSalva.setAgendados(criterioBusca.getAgendado());
 		buscaSalva.setQuitados(criterioBusca.getQuitado());
 		
