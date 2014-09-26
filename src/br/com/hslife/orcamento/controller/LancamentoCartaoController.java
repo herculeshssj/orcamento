@@ -109,6 +109,7 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 	private String agrupamentoSelecionado;
 	private TipoCategoria tipoCategoriaSelecionada;
 	private boolean selecionarTodosLancamentos;
+	private boolean pesquisarTermoNoAgrupamento;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
@@ -149,6 +150,10 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 			if (criterioBusca.getConta() == null) {
 				warnMessage("Informe o cartão!");
 			} else {
+				if (this.pesquisarTermoNoAgrupamento)
+					criterioBusca.setAgrupamentoSelecionado(this.agrupamentoSelecionado);
+				else
+					criterioBusca.setAgrupamentoSelecionado("");
 				listEntity = getService().buscarPorCriterioLancamentoConta(criterioBusca);
 				if (listEntity != null & listEntity.size() > getOpcoesSistema().getLimiteQuantidadeRegistros()) {
 					listEntity.clear();
@@ -333,7 +338,10 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 			criterioBusca.setDescricao(buscaSalva.getTextoBusca());
 			criterioBusca.setDataInicio(buscaSalva.getDataInicio());
 			criterioBusca.setDataFim(buscaSalva.getDataFim());
-			//criterioBusca.setParcela(buscaSalva.getTextoParcela());			
+			criterioBusca.setAgendado(buscaSalva.getAgendados());
+			criterioBusca.setQuitado(buscaSalva.getQuitados());
+			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
+			criterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());						
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
 				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
@@ -353,9 +361,12 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 		
 		buscaSalva.setConta(criterioBusca.getConta());
 		buscaSalva.setTextoBusca(criterioBusca.getDescricao());
-		//buscaSalva.setTextoParcela(criterioBusca.getParcela());
 		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
 		buscaSalva.setDataFim(criterioBusca.getDataFim());
+		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
+		buscaSalva.setAgendados(criterioBusca.getAgendado());
+		buscaSalva.setQuitados(criterioBusca.getQuitado());
+		buscaSalva.setIdAgrupamento(criterioBusca.getIdAgrupamento());
 		
 		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);
 		if (agrupamentoSelecionado.equals("CAT")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.CATEGORIA);
@@ -475,6 +486,30 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 		}
 		return new ArrayList<>();
 	}
+	
+	public void atualizarListaPesquisaAgrupamento() {
+		this.getListaPesquisaAgrupamento();
+	}
+	
+	public List<SelectItem> getListaPesquisaAgrupamento() {
+		List<SelectItem> resultado = new ArrayList<SelectItem>();
+		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("CAT")) {
+			for (Categoria c : super.getListaCategoriaSemTipoCategoria()) {
+				resultado.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
+			}
+		}
+		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("FAV")) {
+			for (Favorecido f : super.getListaFavorecido()) {
+				resultado.add(new SelectItem(f.getId(), f.getNome()));
+			}
+		}
+		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("PAG")) {
+			for (MeioPagamento m : super.getListaMeioPagamento()) {
+				resultado.add(new SelectItem(m.getId(), m.getDescricao()));
+			}
+		}		
+		return resultado;
+	}
 
 	public ILancamentoConta getService() {
 		return service;
@@ -587,5 +622,13 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 	public void setAgrupamentoLancamentoPorMoeda(
 			List<Moeda> agrupamentoLancamentoPorMoeda) {
 		this.agrupamentoLancamentoPorMoeda = agrupamentoLancamentoPorMoeda;
+	}
+
+	public boolean isPesquisarTermoNoAgrupamento() {
+		return pesquisarTermoNoAgrupamento;
+	}
+
+	public void setPesquisarTermoNoAgrupamento(boolean pesquisarTermoNoAgrupamento) {
+		this.pesquisarTermoNoAgrupamento = pesquisarTermoNoAgrupamento;
 	}
 }

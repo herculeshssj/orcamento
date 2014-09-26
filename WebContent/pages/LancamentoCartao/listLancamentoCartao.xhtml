@@ -94,26 +94,49 @@
 		<p:commandLink id="linkBuscaAvancada" value="Mais opções >>>"/>
 		
 		<p:overlayPanel for="linkBuscaAvancada">
-			<h:panelGroup>
-				Agrupar por:     	
-				<!-- selectOneRadio exibido quando a exibição de meio de pagamento está ativada -->		
-	  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
-	  				<f:selectItem itemLabel="Nenhum"/>
-	  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
-					<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-					<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
-					<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
-					<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
-				</p:selectOneRadio>
-				<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->
-				<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
-	  				<f:selectItem itemLabel="Nenhum"/>
-	  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
-					<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-					<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
-					<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
-				</p:selectOneRadio>
-			</h:panelGroup>			   				   				
+			<h:panelGrid columns="2">
+				<h:panelGroup>
+					Agrupar por:     	
+					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está ativada -->		
+		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+		  				<f:selectItem itemLabel="Nenhum"/>
+		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
+		  				<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
+						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
+						<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
+						<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>						
+						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoCartaoMB.atualizarListaPesquisaAgrupamento}" />
+					</p:selectOneRadio>
+					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->
+					<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
+		  				<f:selectItem itemLabel="Nenhum"/>
+		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
+		  				<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
+						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
+						<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>						
+						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoCartaoMB.atualizarListaPesquisaAgrupamento}" />
+					</p:selectOneRadio>
+					<p:selectBooleanCheckbox value="#{managedBean.pesquisarTermoNoAgrupamento}"/>
+					Pesquisar termo no agrupamento
+					<br/>
+					<h:selectOneMenu id="txtPesquisaAgrupamento" value="#{managedBean.criterioBusca.idAgrupamento}">
+						<f:selectItems value="#{managedBean.listaPesquisaAgrupamento}"/>
+					</h:selectOneMenu>
+				</h:panelGroup>
+				<h:panelGroup>   				
+					Exibir:
+					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.agendado}">
+		  				<f:selectItem itemLabel="Sem lançamentos agendados" itemValue="-1"/>
+						<f:selectItem itemLabel="Com lançamentos agendados" itemValue="0"/>
+						<f:selectItem itemLabel="Somente lançamentos agendados" itemValue="1"/>   					
+					</p:selectOneRadio>
+					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.quitado}">
+		  				<f:selectItem itemLabel="Sem lançamentos quitados" itemValue="-1"/>
+						<f:selectItem itemLabel="Com lançamentos quitados" itemValue="0"/>
+						<f:selectItem itemLabel="Somente lançamentos quitados" itemValue="1"/>   					
+					</p:selectOneRadio>					
+				</h:panelGroup>
+			</h:panelGrid>	   				   				
   		</p:overlayPanel>
 	</ui:define>
 	

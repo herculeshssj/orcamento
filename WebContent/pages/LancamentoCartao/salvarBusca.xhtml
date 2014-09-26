@@ -80,7 +80,19 @@
 			</h:outputText>
 			
 			Tipo de agrupamento:	
-			<h:outputText value="#{managedBean.buscaSalva.tipoAgrupamentoBusca}"/>				
+			<h:outputText value="#{managedBean.buscaSalva.tipoAgrupamentoBusca}"/>	
+			
+			Lançamentos agendados:
+			<h:outputText value="#{managedBean.buscaSalva.agendados == 1 ? 'Somente' : managedBean.buscaSalva.agendados == -1 ? 'Sem' : 'Com'}"/>
+			
+			Lançamentos quitados:
+			<h:outputText value="#{managedBean.buscaSalva.quitados == 1 ? 'Somente' : managedBean.buscaSalva.quitados == -1 ? 'Sem' : 'Com'}"/>
+			
+			Pesquisar termo no agrupamento:
+			<p:selectBooleanCheckbox value="#{managedBean.buscaSalva.pesquisarTermo}" disabled="true"/>
+			
+			<h:outputText value="ID do agrupamento" rendered="#{managedBean.buscaSalva.pesquisarTermo}"/>
+			<h:outputText value="#{managedBean.buscaSalva.idAgrupamento}" rendered="#{managedBean.buscaSalva.pesquisarTermo}"/>
 			
 		</h:panelGrid>
 		

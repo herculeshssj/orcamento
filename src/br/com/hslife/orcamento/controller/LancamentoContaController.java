@@ -300,6 +300,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			criterioBusca.setQuitado(buscaSalva.getQuitados());
 			exibirSaldoUltimoFechamento = buscaSalva.isExibirSaldoAnterior();
 			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
+			criterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
 				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
@@ -324,6 +325,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
 		buscaSalva.setAgendados(criterioBusca.getAgendado());
 		buscaSalva.setQuitados(criterioBusca.getQuitado());
+		buscaSalva.setIdAgrupamento(criterioBusca.getIdAgrupamento());
 		
 		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);
 		if (agrupamentoSelecionado.equals("CAT")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.CATEGORIA);

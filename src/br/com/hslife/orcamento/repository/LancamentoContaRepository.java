@@ -155,10 +155,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(Restrictions.eq("lancamento.moeda.id", criterio.getMoeda().getId()));
 		}
 		
-		//if (criterio.getParcela() != null && !criterio.getParcela().isEmpty()) {
-		//	criteria.add(Restrictions.ilike("lancamento.parcela", criterio.getParcela(), MatchMode.ANYWHERE));
-		//}
-		
 		if (criterio.getTipo() != null) {
 			criteria.add(Restrictions.eq("lancamento.tipoLancamento", criterio.getTipo()));
 		}
@@ -166,6 +162,13 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		if (criterio.getValor() != null && criterio.getValor().doubleValue() != 0) {
 			criteria.add(Restrictions.ge("lancamento.valorPago", criterio.getValor()));
 		}
+		
+		switch(criterio.getAgrupamentoSelecionado()) {
+			case "CAT" : criteria.add(Restrictions.eq("lancamento.categoria.id", criterio.getIdAgrupamento())); break;
+			case "FAV" : criteria.add(Restrictions.eq("lancamento.favorecido.id", criterio.getIdAgrupamento())); break;
+			case "PAG" : criteria.add(Restrictions.eq("lancamento.meioPagamento.id", criterio.getIdAgrupamento())); break;
+		default:
+	}
 		
 		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
 	}
