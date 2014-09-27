@@ -49,7 +49,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.EmailComponent;
-import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.facade.IUsuario;
 
 @Component("ajudaMB")
@@ -88,8 +87,7 @@ public class AjudaController extends AbstractController {
 			warnMessage("Informe o assunto e o texto da mensagem!");
 		} else {
 			try {
-				Usuario admin = usuarioService.buscarPorLogin("admin");
-				emailComponent.enviarEmail(getUsuarioLogado().getNome(), getUsuarioLogado().getEmail(), admin.getNome(), admin.getEmail(), assuntoMensagem, mensagem);
+				usuarioService.enviarMensagemParaAdmin(assuntoMensagem, mensagem);
 				infoMessage("Mensagem enviada com sucesso!");
 				initializeEntity();
 			} catch (Exception e) {

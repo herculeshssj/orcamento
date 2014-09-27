@@ -70,4 +70,5 @@ public interface IUsuario extends ICRUDService<Usuario> {
 	
 	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) throws BusinessException;
 	
+	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws BusinessException;	
 }
