@@ -192,19 +192,11 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		
 		if (entity.getLancamentoPeriodico() != null) {
 			LancamentoConta lancamento = null;
-			switch (entity.getLancamentoPeriodico().getTipoLancamentoPeriodico()) {
-				case FIXO :
-					lancamento = getRepository().findLancamentoByPeriodoAndAnoAndLancamentoPeriodico(entity.getPeriodo(), entity.getAno(), entity.getLancamentoPeriodico());					 
-					if (lancamento != null && !lancamento.equals(entity)) {
-						throw new BusinessException("Já existe lançamento com o período e ano informados!");
-					}
-					break;
-				case PARCELADO : 
-					lancamento = getRepository().findLancamentoByParcelaAndLancamentoPeriodico(entity.getParcela(), entity.getLancamentoPeriodico());
-					if (lancamento != null && !lancamento.equals(entity)) {
-						throw new BusinessException("Já existe lançamento com a parcela informada!");
-					}
-					break;
+			if (entity.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+				lancamento = getRepository().findLancamentoByParcelaAndLancamentoPeriodico(entity.getParcela(), entity.getLancamentoPeriodico());
+				if (lancamento != null && !lancamento.equals(entity)) {
+					throw new BusinessException("Já existe lançamento com a parcela informada!");
+				}
 			}
 		}
 	}
