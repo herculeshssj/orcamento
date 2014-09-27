@@ -102,9 +102,6 @@ public class BuscaSalva extends EntityPersistence {
 	private int quitados;
 	
 	@Column
-	private boolean exibirSaldoAnterior;
-	
-	@Column
 	private boolean pesquisarTermo;
 	
 	@Column(nullable=true)
@@ -174,14 +171,6 @@ public class BuscaSalva extends EntityPersistence {
 
 	public void setConta(Conta conta) {
 		this.conta = conta;
-	}
-
-	public boolean isExibirSaldoAnterior() {
-		return exibirSaldoAnterior;
-	}
-
-	public void setExibirSaldoAnterior(boolean exibirSaldoAnterior) {
-		this.exibirSaldoAnterior = exibirSaldoAnterior;
 	}
 
 	public void setId(Long id) {

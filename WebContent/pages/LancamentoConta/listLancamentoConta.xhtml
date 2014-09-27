@@ -119,9 +119,6 @@
 						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
 						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 					</p:selectOneRadio>
-					<p:selectBooleanCheckbox value="#{managedBean.exibirSaldoUltimoFechamento}"/>
-					Exibir saldo anterior
-					<br/>
 					<p:selectBooleanCheckbox value="#{managedBean.pesquisarTermoNoAgrupamento}"/>
 					Pesquisar termo no agrupamento
 					<br/>

@@ -50,5 +50,9 @@
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('SET2014', true);
 
+-- Inclusão de pesquisa dentro de categoria, favorecido e meio de pagamento - Tarefa #1125
 alter table buscasalva add column pesquisarTermo tinyint(1) default 0;
 alter table buscasalva add column idAgrupamento bigint null;
+
+-- Remoção do saldo do último fechamento - Tarefa #1131
+alter table buscasalva drop column exibirSaldoAnterior;

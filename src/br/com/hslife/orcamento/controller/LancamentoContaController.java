@@ -106,7 +106,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	
 	private String agrupamentoSelecionado;
-	private boolean exibirSaldoUltimoFechamento;
 	private boolean pesquisarTermoNoAgrupamento;
 	
 	private boolean selecionarTodosLancamentos;
@@ -298,7 +297,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			criterioBusca.setDataFim(buscaSalva.getDataFim());
 			criterioBusca.setAgendado(buscaSalva.getAgendados());
 			criterioBusca.setQuitado(buscaSalva.getQuitados());
-			exibirSaldoUltimoFechamento = buscaSalva.isExibirSaldoAnterior();
 			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
 			criterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
@@ -321,7 +319,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		buscaSalva.setTextoBusca(criterioBusca.getDescricao());
 		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
 		buscaSalva.setDataFim(criterioBusca.getDataFim());
-		buscaSalva.setExibirSaldoAnterior(exibirSaldoUltimoFechamento);
 		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
 		buscaSalva.setAgendados(criterioBusca.getAgendado());
 		buscaSalva.setQuitados(criterioBusca.getQuitado());
@@ -434,17 +431,8 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		if (listEntity == null || listEntity.isEmpty()) {
 			return Util.moedaBrasil(0.0);
 		} else {
-			if(exibirSaldoUltimoFechamento)
-				try {
-					return Util.moedaBrasil(getService().saldoUltimoFechamento(criterioBusca.getConta()) + getService().calcularSaldoLancamentos(listEntity));
-				}
-				catch (BusinessException be) {
-					errorMessage(be.getMessage());
-				}
-			else
-				return Util.moedaBrasil(getService().calcularSaldoLancamentos(listEntity));
+			return Util.moedaBrasil(getService().calcularSaldoLancamentos(listEntity));
 		}
-		return Util.moedaBrasil(0.0);
 	}
 	
 	public List<SelectItem> getListaTipoLancamento() {
@@ -508,14 +496,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 
 	public void setAgrupamentoSelecionado(String agrupamentoSelecionado) {
 		this.agrupamentoSelecionado = agrupamentoSelecionado;
-	}
-
-	public boolean isExibirSaldoUltimoFechamento() {
-		return exibirSaldoUltimoFechamento;
-	}
-
-	public void setExibirSaldoUltimoFechamento(boolean exibirSaldoUltimoFechamento) {
-		this.exibirSaldoUltimoFechamento = exibirSaldoUltimoFechamento;
 	}
 
 	public List<Categoria> getAgrupamentoLancamentoPorCategoria() {
