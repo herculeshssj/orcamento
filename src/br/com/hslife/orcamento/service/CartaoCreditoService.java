@@ -240,11 +240,19 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	public void ativarCartao(CartaoCredito entity) throws BusinessException {
 		entity.setAtivo(true);
 		getRepository().update(entity);
+		
+		Conta conta = contaRepository.findByCartaoCredito(entity);
+		conta.setAtivo(true);
+		contaRepository.update(conta);
 	}
 	
 	@Override
 	public void desativarCartao(CartaoCredito entity) throws BusinessException {
 		entity.setAtivo(false);
 		getRepository().update(entity);
+		
+		Conta conta = contaRepository.findByCartaoCredito(entity);
+		conta.setAtivo(false);
+		contaRepository.update(conta);
 	}
 }

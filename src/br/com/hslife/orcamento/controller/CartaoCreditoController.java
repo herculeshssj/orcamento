@@ -124,6 +124,10 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	public String ativarCartaoView() {
 		try {
 			entity = getService().buscarPorID(idEntity);
+			if (entity.getValidade().before(new Date())) {
+				warnMessage("Não é possível ativar! Cartão fora da validade!");
+				return "";
+			}
 			actionTitle = " - Ativar";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
