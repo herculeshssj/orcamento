@@ -210,6 +210,10 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return this.alterarStatus(StatusLancamento.ENCERRADO);
 	}
 	
+	public String reativarLancamento() {
+		return this.alterarStatus(StatusLancamento.ATIVO);
+	}
+	
 	public String registrarPagamentoView() {
 		try {
 			entity = getService().buscarPorID(idEntity);
