@@ -192,4 +192,9 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado) throws BusinessException {
 		return getRepository().findByUsuarioAndArquivado(usuario, arquivado);
 	}
+	
+	public void apagarHistorico(ItemDespensa entity) throws BusinessException {
+		entity.getMovimentacao().clear();
+		getRepository().update(entity);
+	}
 }

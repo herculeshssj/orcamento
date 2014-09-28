@@ -69,4 +69,5 @@ public interface IItemDespensa extends ICRUDService<ItemDespensa> {
 	
 	public void desfazerRegistroCompraConsumo(ItemDespensa entity) throws BusinessException;
 	
+	public void apagarHistorico(ItemDespensa entity) throws BusinessException;
 }

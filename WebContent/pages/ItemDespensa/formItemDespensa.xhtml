@@ -173,6 +173,10 @@
 		<h:commandLink title="Desarquivar" action="#{managedBean.desarquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == true}">
 			<p:graphicImage value="/resources/images/desarquivar.png" />
 		</h:commandLink>
+		&nbsp;
+		<h:commandLink title="Apagar histórico de movimentação" action="#{managedBean.apagarHistorico}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
+			<p:graphicImage value="/resources/images/lixeira.png" />
+		</h:commandLink>		
 	</ui:define>
 
 </ui:composition>

@@ -264,6 +264,32 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 		return "";
 	}
 	
+	public String apagarHistorico() {
+		try {
+			getService().apagarHistorico(entity);
+			infoMessage("Histórico de movimentações apagado com sucesso!");
+			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
+			if (listEntity != null && !listEntity.isEmpty()) {
+				// Inicializa os objetos
+				initializeEntity();
+				
+				// Obtém o valor da opção do sistema
+				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
+							
+				// Determina se a busca será executada novamente
+				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
+					find();
+				}
+			} else {
+				initializeEntity();
+			}
+			return list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public void adicionarItemListaCompra() {
 		if (itemDespensa == null || listaCompras.contains(itemDespensa)) {
 			warnMessage("Item selecionado já está na listagem!");
