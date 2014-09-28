@@ -113,7 +113,7 @@
 			<h:selectBooleanCheckbox value="#{managedBean.entity.concluido}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>
 			
 			Emitir alerta:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.emitirAlerta}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}"/>
+			<h:selectBooleanCheckbox value="#{managedBean.entity.emitirAlerta}"/>
 			
 			Notas:
 			<h:inputTextarea value="#{managedBean.entity.notas}" size="70" rows="3" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO'}"></h:inputTextarea>

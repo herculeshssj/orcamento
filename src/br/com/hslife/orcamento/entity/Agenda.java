@@ -138,8 +138,8 @@ public class Agenda extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		if (this.descricao != null && this.descricao.trim().length() > 50) {
-			throw new BusinessException("Campo aceita no máximo 50 caracteres!");
+		if (this.descricao != null && this.descricao.trim().length() > 200) {
+			throw new BusinessException("Campo aceita no máximo 200 caracteres!");
 		}
 		
 		if (this.localAgendamento != null && this.localAgendamento.trim().length() > 200) {
