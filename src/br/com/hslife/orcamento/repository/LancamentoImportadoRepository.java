@@ -49,23 +49,17 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 
 @Repository
-@Transactional
-public class LancamentoImportadoRepository extends AbstractRepository {
-	
-	public void save(LancamentoImportado entity) {
-		getSession().persist(entity);
+public class LancamentoImportadoRepository extends AbstractCRUDRepository<LancamentoImportado> {
+		
+	public LancamentoImportadoRepository() {
+		super(new LancamentoImportado());
 	}
 
-	public void delete(LancamentoImportado entity) {
-		getSession().delete(entity);
-	}
-	
 	public LancamentoImportado findByID(Long id) {
 		return (LancamentoImportado)getSession().get(LancamentoImportado.class, id);
 	}

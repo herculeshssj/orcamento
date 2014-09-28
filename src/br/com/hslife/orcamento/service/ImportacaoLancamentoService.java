@@ -447,12 +447,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            System.out.println("");
 			            
 			            /* Aqui começa meu código */
-			            
-			            if (this.lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId())) == null) {
-			            
+			            LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
+			            if (li == null) {			            
 			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
 			            	if (transaction.getDatePosted().after(conta.getDataAbertura())) {
-			            		LancamentoImportado li = new LancamentoImportado();
+			            		li = new LancamentoImportado();
 			            		li.setConta(conta);
 			            		li.setData(transaction.getDatePosted());
 			            		li.setMoeda(transaction.getCurrency() == null ? b.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
@@ -463,6 +462,17 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				            
 			            		lancamentoImportadoRepository.save(li);
 			            	}
+			            } else {
+			            	// Caso o lançamento importado já exista, o mesmo será atualizado
+			            	li.setConta(conta);
+		            		li.setData(transaction.getDatePosted());
+		            		li.setMoeda(transaction.getCurrency() == null ? b.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
+		            		li.setDocumento(transaction.getReferenceNumber());
+		            		li.setHash(Util.MD5(transaction.getId()));
+		            		li.setHistorico(transaction.getMemo());
+		            		li.setValor(transaction.getAmount());
+			            
+		            		lancamentoImportadoRepository.update(li);
 			            }
 			            
 			            /* Fim do meu código */
@@ -530,12 +540,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            System.out.println("");
 			            
 			            /* Aqui começa meu código */
-			            
-			            if (this.lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId())) == null) {
-			            
+			            LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
+			            if (li == null) {			            
 			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
 			            	if (transaction.getDatePosted().after(conta.getDataAbertura())) {
-			            		LancamentoImportado li = new LancamentoImportado();
+			            		li = new LancamentoImportado();
 			            		li.setConta(conta);
 			            		li.setData(transaction.getDatePosted());
 			            		li.setMoeda(transaction.getCurrency() == null ? b.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
@@ -546,6 +555,17 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				            
 			            		lancamentoImportadoRepository.save(li);
 			            	}
+			            } else {
+			            	// Caso o lançamento já exista ele será atualizado
+			            	li.setConta(conta);
+		            		li.setData(transaction.getDatePosted());
+		            		li.setMoeda(transaction.getCurrency() == null ? b.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());
+		            		li.setDocumento(transaction.getReferenceNumber());
+		            		li.setHash(Util.MD5(transaction.getId()));
+		            		li.setHistorico(transaction.getMemo());
+		            		li.setValor(transaction.getAmount());
+			            
+		            		lancamentoImportadoRepository.update(li);
 			            }
 			            
 			            /* Fim do meu código */
@@ -574,8 +594,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					
 					List<Transaction> list = c.getMessage().getTransactionList().getTransactions();
 			        for (Transaction transaction : list) {			        	
-			            if (this.lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId())) == null) {			            
-			            	LancamentoImportado li = new LancamentoImportado();
+			        	LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
+			            if (li == null) {			            
+			            	li = new LancamentoImportado();
 			            	li.setConta(conta);
 			            	li.setData(transaction.getDatePosted());
 			            	li.setMoeda(transaction.getCurrency() == null ? c.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());			            	
@@ -584,6 +605,16 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            	li.setValor(transaction.getAmount());
 			            	
 			            	lancamentoImportadoRepository.save(li);			            	
+			            } else {
+			            	// Caso o lançamento já exista o mesmo será atualizado
+			            	li.setConta(conta);
+			            	li.setData(transaction.getDatePosted());
+			            	li.setMoeda(transaction.getCurrency() == null ? c.getMessage().getCurrencyCode() : transaction.getCurrency().getCode());			            	
+			            	li.setHash(Util.MD5(transaction.getId()));
+			            	li.setHistorico(transaction.getMemo());
+			            	li.setValor(transaction.getAmount());
+			            	
+			            	lancamentoImportadoRepository.update(li);
 			            }
 			       }
 				}				
