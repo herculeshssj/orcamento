@@ -97,7 +97,10 @@
 			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.quitado}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>							
-				</p:column>		  				   	
+				</p:column>
+			<f:facet name="footer">
+       			<h:outputText value="#{managedBean.quantRegistros} item(ns) encontrado(s)"></h:outputText>
+   			</f:facet>		  				   	
 	   	</p:dataTable>
 	     	
 </ui:composition>

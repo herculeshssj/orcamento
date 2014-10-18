@@ -290,6 +290,14 @@ public class ImportacaoLancamentoController extends AbstractController {
 		return new ArrayList<>();
 	}
 	
+	public int getQuantRegistros() {
+		if (listEntity == null || listEntity.isEmpty()) {
+			return 0;
+		} else {
+			return listEntity.size();
+		}
+	}
+	
 	public IImportacaoLancamento getService() {
 		return service;
 	}

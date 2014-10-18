@@ -109,7 +109,12 @@
 						</h:commandButton>
 	  				</p:column>
      			</ui:insert>
-     		
+     			
+     			<ui:insert name="tabela_rodape">
+	     			<f:facet name="footer">
+	        			<h:outputText value="#{managedBean.quantRegistros} item(ns) encontrado(s)"></h:outputText>
+	    			</f:facet>
+    			</ui:insert>
      		</p:dataTable>
      		
      		</ui:insert>

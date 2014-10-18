@@ -215,6 +215,14 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 		}
 		return list();
 	}
+	
+	public int getQuantRegistros() {
+		if (listEntity == null || listEntity.isEmpty()) {
+			return 0;
+		} else {
+			return listEntity.size();
+		}
+	}
 
 	public E getEntity() {
 		return entity;

@@ -168,6 +168,14 @@ public class AuditoriaController extends AbstractController {
 		return new ArrayList<String>();
 	}
 	
+	public int getQuantRegistros() {
+		if (listEntity == null || listEntity.isEmpty()) {
+			return 0;
+		} else {
+			return listEntity.size();
+		}
+	}
+	
 	/* Métodos Getters e Setters */
 
 	public CriterioAuditoria getCriterio() {
