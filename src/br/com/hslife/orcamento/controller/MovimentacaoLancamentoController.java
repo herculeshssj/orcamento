@@ -326,6 +326,24 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		return new ArrayList<Categoria>();
 	}
 	
+	public List<Categoria> getListaCategoriaCredito() {
+		try {
+			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Categoria> getListaCategoriaDebito() {
+		try {
+			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());

@@ -49,8 +49,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:rich="http://richfaces.org/rich">
+    xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/formulario.xhtml">
 
@@ -94,12 +93,12 @@
 			
 			Categoria de origem:
 			<h:selectOneMenu id="txtCategoriaOrigem" value="#{managedBean.categoriaSelecionada}"  converter="entityConverter">
-				<f:selectItems value="#{entityCombo.listaCategoriaDebito}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaCategoriaDebito}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
 			
 			Categoria de destino:
 			<h:selectOneMenu id="txtCategoriaDestino" value="#{managedBean.categoriaDestino}"  converter="entityConverter">
-				<f:selectItems value="#{entityCombo.listaCategoriaCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+				<f:selectItems value="#{managedBean.listaCategoriaCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
 			</h:selectOneMenu>
 			
 			Favorecido/Sacado:

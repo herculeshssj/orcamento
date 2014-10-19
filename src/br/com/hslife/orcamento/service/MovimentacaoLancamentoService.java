@@ -134,12 +134,14 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		LancamentoConta lancamentoDestino = new LancamentoConta(lancamentoATransferir);
 		
 		lancamentoOrigem.setConta(contaOrigem);
+		lancamentoOrigem.setMoeda(contaOrigem.getMoeda());
 		lancamentoOrigem.setTipoLancamento(TipoLancamento.DESPESA);
 		lancamentoOrigem.setCategoria(parametros.get("CATEGORIA_ORIGEM") == null ? null : (Categoria)parametros.get("CATEGORIA_ORIGEM"));
 		lancamentoOrigem.setFavorecido(parametros.get("FAVORECIDO_DESTINO") == null ? null : (Favorecido)parametros.get("FAVORECIDO_DESTINO"));
 		lancamentoOrigem.setMeioPagamento(parametros.get("MEIOPAGAMENTO_DESTINO") == null ? null : (MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 		
 		lancamentoDestino.setConta(contaDestino);
+		lancamentoDestino.setMoeda(contaDestino.getMoeda());
 		lancamentoDestino.setTipoLancamento(TipoLancamento.RECEITA);
 		lancamentoDestino.setCategoria(parametros.get("CATEGORIA_DESTINO") == null ? null : (Categoria)parametros.get("CATEGORIA_DESTINO"));
 		lancamentoDestino.setFavorecido(parametros.get("FAVORECIDO_DESTINO") == null ? null : (Favorecido)parametros.get("FAVORECIDO_DESTINO"));
