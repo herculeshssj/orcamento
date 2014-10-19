@@ -341,6 +341,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		// Cria o lançamento que irá quitar a fatura
 		LancamentoConta lancamentoPagamento = new LancamentoConta();
 		lancamentoPagamento.setConta(contaCorrente);
+		lancamentoPagamento.setMoeda(contaCorrente.getMoeda());
 		lancamentoPagamento.setDataPagamento(dataPagamento);
 		lancamentoPagamento.setDescricao("Pagamento Fatura " + fatura.getLabel() + ", " + faturaCartao.getConta().getCartaoCredito().getDescricao());
 		lancamentoPagamento.setQuitado(true);
