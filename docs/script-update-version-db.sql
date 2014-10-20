@@ -49,3 +49,44 @@
 -- Atualização de versão
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('DEZ2014', true);
+
+-- Tabelas orcamento e detalheorcamento - Tarefa #969
+create table orcamento(
+	id bigint not null,
+	descricao varchar(50) not null,
+	tipoOrcamento varchar(10) not null,
+	tipoConta varchar(10) null,
+	inicio date not null,
+	fim date not null,
+	periodoLancamento varchar(15) not null,
+	automatico boolean,
+	arquivar boolean,
+	ativo boolean,
+	abrangenciaOrcamento varchar(10) not null,
+	idConta bigint null,
+	primary key(id)
+) engine=InnoDB; 
+
+alter table orcamento add constraint fk_conta_orcamento foreign key (idConta) references conta(id);
+
+create table detalheorcamento (
+	id bigint not null,
+	descricao varchar(50) not null,
+	idEntity bigint not null,
+	previsao decimal (18,2) default 0.0,
+	previsaoCredito decimal (18,2) default 0.0,
+	previsaoDebito decimal (18,2) default 0.0,
+	realizado decimal (18,2) default 0.0,
+	realizadoCredito decimal (18,2) default 0.0,
+	realizadoDebito decimal (18,2) default 0.0,
+	primary key(id)
+);
+
+create table orcamento_detalheorcamento (
+	orcamento_id bigint not null,
+	detalhes_id bigint not null,
+	unique(detalhes_id)
+) engine=InnoDB;
+
+alter table orcamento_detalheorcamento add constraint fk_orcamento foreign key (orcamento_id) references orcamento(id);
+alter table orcamento_detalheorcamento add constraint fk_detalheorcamento foreign key (detalhes_id) references detalheorcamento(id);

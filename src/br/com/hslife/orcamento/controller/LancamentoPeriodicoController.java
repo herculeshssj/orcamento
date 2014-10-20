@@ -535,7 +535,8 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	public List<SelectItem> getListaPeriodoLancamento() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (PeriodoLancamento periodo : PeriodoLancamento.values()) {
-			listaSelectItem.add(new SelectItem(periodo, periodo.toString()));
+			if (!periodo.equals(PeriodoLancamento.FIXO))
+				listaSelectItem.add(new SelectItem(periodo, periodo.toString()));
 		}
 		return listaSelectItem;
 	}

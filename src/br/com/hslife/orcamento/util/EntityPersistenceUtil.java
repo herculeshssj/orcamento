@@ -72,5 +72,11 @@ public class EntityPersistenceUtil {
 			throw new BusinessException("Campo " + nomeCampo + " aceita no máximo "+ tamanho + " caracteres!");
 		}		
 	}
+	
+	public static void validaCampoNulo(String nomeCampo, Object campo) throws BusinessException {
+		if (campo == null) {
+			throw new BusinessException("Campo " + nomeCampo + " não pode ser nulo.");
+		}
+	}
 }
 
