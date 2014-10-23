@@ -91,9 +91,14 @@ public class DetalheOrcamento extends EntityPersistence {
 		
 	}
 	
+	public DetalheOrcamento(Long idEntity, String descricao) {
+		this.idEntity = idEntity;
+		this.descricao = descricao;
+	}
+	
 	@Override
 	public String getLabel() {
-		return this.toString();
+		return this.descricao;
 	}
 	
 	@Override

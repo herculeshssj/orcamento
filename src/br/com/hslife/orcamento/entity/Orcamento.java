@@ -67,6 +67,7 @@ import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
@@ -85,7 +86,7 @@ public class Orcamento extends EntityPersistence {
 	
 	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
-	private String tipoOrcamento;
+	private TipoOrcamento tipoOrcamento;
 	
 	@Column(length=10, nullable = true)
 	@Enumerated(EnumType.STRING)
@@ -126,6 +127,9 @@ public class Orcamento extends EntityPersistence {
 	public Orcamento() {
 		detalhes = new ArrayList<DetalheOrcamento>();
 		ativo = true;
+		tipoOrcamento = TipoOrcamento.SEMDISTINCAO;
+		periodoLancamento = PeriodoLancamento.MENSAL;
+		abrangenciaOrcamento = AbrangenciaOrcamento.CREDITODEBITO;
 	}	
 	
 	@Override
@@ -157,6 +161,11 @@ public class Orcamento extends EntityPersistence {
 		
 		for (DetalheOrcamento detalhe : detalhes) {
 			detalhe.validate();
+		}
+		
+		// Valida o preenchimento do campo conta de acordo com o tipo de orçamento selecionado
+		if (this.tipoOrcamento.equals(TipoOrcamento.CONTA)) {
+			EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		}
 	}
 
@@ -243,14 +252,6 @@ public class Orcamento extends EntityPersistence {
 		this.descricao = descricao;
 	}
 
-	public String getTipoOrcamento() {
-		return tipoOrcamento;
-	}
-
-	public void setTipoOrcamento(String tipoOrcamento) {
-		this.tipoOrcamento = tipoOrcamento;
-	}
-
 	public String getTipoConta() {
 		return tipoConta;
 	}
@@ -329,5 +330,13 @@ public class Orcamento extends EntityPersistence {
 
 	public void setDetalhes(List<DetalheOrcamento> detalhes) {
 		this.detalhes = detalhes;
+	}
+
+	public TipoOrcamento getTipoOrcamento() {
+		return tipoOrcamento;
+	}
+
+	public void setTipoOrcamento(TipoOrcamento tipoOrcamento) {
+		this.tipoOrcamento = tipoOrcamento;
 	}	
 }

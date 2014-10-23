@@ -60,51 +60,62 @@
 		<h:panelGrid columns="2">
 		
 			Descrição:
-			<p:inputText />
+			<p:inputText value="#{managedBean.entity.descricao}" size="50"/>
 			
 			Tipo de orçamento:
-			<p:selectOneRadio>
-				<f:selectItem itemLabel="Sem distinção de conta" />
-				<f:selectItem itemLabel="Conta" />
-				<f:selectItem itemLabel="Tipo de conta" />
-			</p:selectOneRadio>
+			<h:selectOneMenu value="#{managedBean.entity.tipoOrcamento}">
+				<f:selectItems value="#{managedBean.listaTipoOrcamento}" />
+				<p:ajax event="change" update="pnlContaTipoConta"/>
+			</h:selectOneMenu>	
 			
 			Conta / Tipo de conta:
-			<h:selectOneMenu></h:selectOneMenu>
+			<p:outputPanel id="pnlContaTipoConta">			
+				<h:outputText value="Sem distinção de conta / Tipo e conta" rendered="#{managedBean.entity.tipoOrcamento == 'SEMDISTINCAO'}"/>
+				<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{managedBean.entity.tipoOrcamento == 'CONTA'}">
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>	
+				</h:selectOneMenu>
+				<h:selectOneMenu value="#{managedBean.entity.tipoConta}" rendered="#{managedBean.entity.tipoOrcamento == 'TIPOCONTA'}">
+					<f:selectItems value="#{managedBean.listaTipoConta}" />
+				</h:selectOneMenu>
+			</p:outputPanel>			
 			
 			Tipo de período:
-			<h:selectOneMenu></h:selectOneMenu>
+			<h:selectOneMenu value="#{managedBean.entity.periodoLancamento}">
+				<f:selectItems value="#{managedBean.listaPeriodoLancamento}" />
+				<p:ajax event="change" update="pnlLabelFim,pnlFieldFim"/>
+			</h:selectOneMenu>
 			
-			Início:
-			<p:inputText />
-			<!-- 
-			<p:inputMask value="" mask="99/99/9999">
+			Início:			 
+			<p:inputMask value="#{managedBean.entity.inicio}" mask="99/99/9999">
 				<f:converter converterId="dateConverter"/>
 			</p:inputMask>
-			-->
-			Fim:
-			<p:inputText />
-			<!-- 
-			<p:inputMask value="" mask="99/99/9999">
-				<f:converter converterId="dateConverter"/>
-			</p:inputMask>
-			-->
+			
+			<p:outputPanel id="pnlLabelFim">
+				<h:outputText value="Fim:" rendered="#{managedBean.entity.periodoLancamento == 'FIXO'}"/>
+			</p:outputPanel>
+			<p:outputPanel id="pnlFieldFim">
+				<p:inputMask value="#{managedBean.entity.fim}" mask="99/99/9999" rendered="#{managedBean.entity.periodoLancamento == 'FIXO'}">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>
+			</p:outputPanel>
+	
 			Automático:
-			<p:selectBooleanCheckbox/>
+			<p:selectBooleanCheckbox value="#{managedBean.entity.automatico}"/>
 			
 			Arquivar:
-			<p:selectBooleanCheckbox />
+			<p:selectBooleanCheckbox value="#{managedBean.entity.arquivar}"/>
 			
 			Abrangência:
-			<p:selectOneRadio>
-				<f:selectItem itemLabel="Crédito / Débito" />
-				<f:selectItem itemLabel="Categoria" />
-				<f:selectItem itemLabel="Favorecido" />
-				<f:selectItem itemLabel="Meio de pagamento" />
-			</p:selectOneRadio>
-		
+			<h:selectOneMenu value="#{managedBean.entity.abrangenciaOrcamento}">
+				<f:selectItem itemLabel="Selecione a abrangência" />
+				<f:selectItems value="#{managedBean.listaAbrangenciaOrcamento}" />
+				<p:ajax update="txtItens" listener="#{managedBean.atualizaListaItens}"/>
+			</h:selectOneMenu>
+			
 			Item:
-			<h:selectOneMenu></h:selectOneMenu>
+			<h:selectOneMenu id="txtItens" value="#{managedBean.detalheOrcamento}">
+				<f:selectItems value="#{managedBean.listaItensDetalheOrcamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>	
+			</h:selectOneMenu>
 			
 		</h:panelGrid>
 		
