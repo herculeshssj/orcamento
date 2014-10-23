@@ -50,6 +50,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -87,6 +88,21 @@ public class DetalheOrcamento extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)
 	private double realizadoDebito;
 	
+	@Transient
+	private double porcentagem;
+	
+	@Transient
+	private double porcentagemCredito;
+	
+	@Transient
+	private double porcentagemDebito;
+	
+	@Transient
+	private boolean selecionado;
+	
+	@Transient
+	private boolean idChanged;
+	
 	public DetalheOrcamento() {
 		
 	}
@@ -94,6 +110,9 @@ public class DetalheOrcamento extends EntityPersistence {
 	public DetalheOrcamento(Long idEntity, String descricao) {
 		this.idEntity = idEntity;
 		this.descricao = descricao;
+		
+		this.id = idEntity;
+		this.idChanged = true;
 	}
 	
 	@Override
@@ -107,7 +126,7 @@ public class DetalheOrcamento extends EntityPersistence {
 		
 		EntityPersistenceUtil.validaCampoNulo("ID do item", idEntity);
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -178,5 +197,45 @@ public class DetalheOrcamento extends EntityPersistence {
 
 	public void setRealizadoDebito(double realizadoDebito) {
 		this.realizadoDebito = realizadoDebito;
+	}
+
+	public boolean isSelecionado() {
+		return selecionado;
+	}
+
+	public void setSelecionado(boolean selecionado) {
+		this.selecionado = selecionado;
+	}
+
+	public boolean isIdChanged() {
+		return idChanged;
+	}
+
+	public void setIdChanged(boolean idChanged) {
+		this.idChanged = idChanged;
+	}
+
+	public double getPorcentagem() {
+		return porcentagem;
+	}
+
+	public void setPorcentagem(double porcentagem) {
+		this.porcentagem = porcentagem;
+	}
+
+	public double getPorcentagemCredito() {
+		return porcentagemCredito;
+	}
+
+	public void setPorcentagemCredito(double porcentagemCredito) {
+		this.porcentagemCredito = porcentagemCredito;
+	}
+
+	public double getPorcentagemDebito() {
+		return porcentagemDebito;
+	}
+
+	public void setPorcentagemDebito(double porcentagemDebito) {
+		this.porcentagemDebito = porcentagemDebito;
 	}
 }

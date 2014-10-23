@@ -45,7 +45,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum AbrangenciaOrcamento {
-	CATEGORIA("Categoria"), FAVORECIDO("Favorecido"), MEIOPAGAMENTO("Meio de Pagamento"), CREDITODEBITO("Crédito/Débito");
+	CATEGORIA("Categoria"), FAVORECIDO("Favorecido"), MEIOPAGAMENTO("Meio de Pagamento");
 	
 	private String descricao;
 	

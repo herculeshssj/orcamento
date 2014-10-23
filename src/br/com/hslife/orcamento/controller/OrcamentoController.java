@@ -45,6 +45,8 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -53,15 +55,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.DetalheOrcamento;
+import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IOrcamento;
 
 @Component("orcamentoMB")
@@ -79,7 +89,28 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	@Autowired
 	private IConta contaService;
 	
+	@Autowired
+	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
+	
+	@Autowired
+	private IMoeda moedaService;
+	
+	private Orcamento orcamentoSelecionado;
 	private DetalheOrcamento detalheOrcamento;
+	private List<DetalheOrcamento> listaDetalheOrcamento = new ArrayList<DetalheOrcamento>();
+	private List<DetalheOrcamento> listaItemDetalheOrcamento = new ArrayList<DetalheOrcamento>();
+	
+	private double previsao;
+	private double previsaoCredito;
+	private double previsaoDebito;
+	
+	private boolean mostrarInformacao;
 	
 	public OrcamentoController() {
 		super(new Orcamento());
@@ -89,35 +120,162 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	@Override
 	protected void initializeEntity() {
 		entity = new Orcamento();
+		orcamentoSelecionado = null;
 		listEntity = new ArrayList<Orcamento>();
-		detalheOrcamento = new DetalheOrcamento();
+		listaDetalheOrcamento = new ArrayList<DetalheOrcamento>();
+		listaItemDetalheOrcamento = new ArrayList<DetalheOrcamento>();
 	}
 	
 	@Override
 	public void find() {
-		
+		if (orcamentoSelecionado != null) {
+			listaDetalheOrcamento.clear();
+			listaDetalheOrcamento.addAll(orcamentoSelecionado.getDetalhes());
+			mostrarInformacao = true;
+			orcamentoSelecionado.calculaPorcentagens();
+		}
+	}
+	
+	@Override
+	public List<Orcamento> getListEntity() {
+		try {
+			return getService().buscarTodosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		mostrarInformacao = false;
+		return new ArrayList<Orcamento>();
+	}
+	
+	@Override
+	public String create() {
+		initializeEntity();
+		return super.create();
+	}
+	
+	@Override
+	public String edit() {
+		if (idEntity == null) {
+			warnMessage("Selecione um orçamento!");
+			return "";
+		}
+		super.edit();
+		listaItemDetalheOrcamento.clear();
+		listaItemDetalheOrcamento.addAll(entity.getDetalhes());
+		return goToFormPage;
+	}
+	
+	@Override
+	public String view() {
+		if (idEntity == null) {
+			warnMessage("Selecione um orçamento!");
+			return "";
+		}
+		super.view();
+		listaItemDetalheOrcamento.clear();
+		listaItemDetalheOrcamento.addAll(entity.getDetalhes());
+		return goToViewPage;
+	}
+	
+	@Override
+	public String cancel() {
+		mostrarInformacao = false;
+		return super.cancel();
+	}
+	
+	@Override
+	public String save() {
+		// Preenche a data de fim do período
+		if (!entity.getPeriodoLancamento().equals(PeriodoLancamento.FIXO)) {
+			Calendar temp = Calendar.getInstance();
+			temp.setTime(entity.getInicio());
+			
+			switch (entity.getPeriodoLancamento()) {
+				case MENSAL : temp.add(Calendar.MONTH, 1); temp.add(Calendar.DAY_OF_YEAR, -1); break;
+				case BIMESTRAL : temp.add(Calendar.MONTH, 2); temp.add(Calendar.DAY_OF_YEAR, -1); break;
+				case TRIMESTRAL : temp.add(Calendar.MONTH, 3); temp.add(Calendar.DAY_OF_YEAR, -1); break;
+				case QUADRIMESTRAL : temp.add(Calendar.MONTH, 4); temp.add(Calendar.DAY_OF_YEAR, -1); break;
+				case SEMESTRAL : temp.add(Calendar.MONTH, 6); temp.add(Calendar.DAY_OF_YEAR, -1); break;
+				case ANUAL : temp.add(Calendar.YEAR, 1); temp.add(Calendar.DAY_OF_YEAR, -1); break;
+				default : errorMessage("Opção inválida!"); return "";
+			}
+			
+			entity.setFim(temp.getTime());
+		}
+		entity.setDetalhes(listaItemDetalheOrcamento);
+		entity.setUsuario(getUsuarioLogado());
+		return super.save();
+	}
+	
+	public void atualizarValores() {
+		try {
+			getService().atualizarValores(orcamentoSelecionado);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void atualizaListaItens() {
+		listaItemDetalheOrcamento.clear();
 		this.getListaItensDetalheOrcamento();
+	}
+	
+	public void adicionarItem() {
+		if (detalheOrcamento != null) {
+			detalheOrcamento.setPrevisao(previsao);
+			detalheOrcamento.setPrevisaoCredito(previsaoCredito);
+			detalheOrcamento.setPrevisaoDebito(previsaoDebito);
+			listaItemDetalheOrcamento.add(detalheOrcamento);
+		}
+	}
+	
+	public void removerItem() {
+		for (Iterator<DetalheOrcamento> i = listaItemDetalheOrcamento.iterator(); i.hasNext();) {
+			if ((i.next()).isSelecionado()) {
+				i.remove();
+			}
+		}
 	}
 	
 	public List<DetalheOrcamento> getListaItensDetalheOrcamento() {
 		List<DetalheOrcamento> resultado = new ArrayList<DetalheOrcamento>();
 		if (entity.getAbrangenciaOrcamento() != null) {
-			switch (entity.getAbrangenciaOrcamento()) {
-				case CREDITODEBITO:
-					resultado.add(new DetalheOrcamento(null, "Crédito"));
-					resultado.add(new DetalheOrcamento(null, "Débito"));
-					break;
-				case CATEGORIA : System.out.println("Categorias carregadas"); break;
-				case FAVORECIDO : System.out.println("Favorecidos carregados"); break;
-				case MEIOPAGAMENTO : System.out.println("Meios de pagamento carregados"); break;
+			try {
+				switch (entity.getAbrangenciaOrcamento()) {
+					case CATEGORIA :						
+						for (Categoria c : categoriaService.buscarAtivosPorUsuario(getUsuarioLogado())) {
+							resultado.add(new DetalheOrcamento(c.getId(), c.getDescricao()));
+						}						
+						break;
+					case FAVORECIDO :
+						for (Favorecido f : favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado())) {
+							resultado.add(new DetalheOrcamento(f.getId(), f.getNome()));
+						}
+						break;
+					case MEIOPAGAMENTO :
+						for (MeioPagamento m : meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado())) {
+							resultado.add(new DetalheOrcamento(m.getId(), m.getDescricao()));
+						}
+						break;
+				}
+			} catch (BusinessException be) {
+				errorMessage(be.getMessage());
 			}
 		}
+		
+		resultado.removeAll(listaItemDetalheOrcamento);
 		return resultado;
 	}
-
+	
+	public Moeda getMoedaPadrao() {
+		try {
+			return moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return null;
+	}
+	
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarPorUsuario(getUsuarioLogado());
@@ -175,6 +333,61 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		this.detalheOrcamento = detalheOrcamento;
 	}
 
-	
-	
+	public List<DetalheOrcamento> getListaDetalheOrcamento() {
+		return listaDetalheOrcamento;
+	}
+
+	public void setListaDetalheOrcamento(
+			List<DetalheOrcamento> listaDetalheOrcamento) {
+		this.listaDetalheOrcamento = listaDetalheOrcamento;
+	}
+
+	public double getPrevisao() {
+		return previsao;
+	}
+
+	public void setPrevisao(double previsao) {
+		this.previsao = previsao;
+	}
+
+	public double getPrevisaoCredito() {
+		return previsaoCredito;
+	}
+
+	public void setPrevisaoCredito(double previsaoCredito) {
+		this.previsaoCredito = previsaoCredito;
+	}
+
+	public double getPrevisaoDebito() {
+		return previsaoDebito;
+	}
+
+	public void setPrevisaoDebito(double previsaoDebito) {
+		this.previsaoDebito = previsaoDebito;
+	}
+
+	public List<DetalheOrcamento> getListaItemDetalheOrcamento() {
+		return listaItemDetalheOrcamento;
+	}
+
+	public void setListaItemDetalheOrcamento(
+			List<DetalheOrcamento> listaItemDetalheOrcamento) {
+		this.listaItemDetalheOrcamento = listaItemDetalheOrcamento;
+	}
+
+	public boolean isMostrarInformacao() {
+		return mostrarInformacao;
+	}
+
+	public void setMostrarInformacao(boolean mostrarInformacao) {
+		this.mostrarInformacao = mostrarInformacao;
+	}
+
+	public Orcamento getOrcamentoSelecionado() {
+		return orcamentoSelecionado;
+	}
+
+	public void setOrcamentoSelecionado(Orcamento orcamentoSelecionado) {
+		this.orcamentoSelecionado = orcamentoSelecionado;
+	}
 }

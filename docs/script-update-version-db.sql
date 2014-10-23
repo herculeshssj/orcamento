@@ -52,9 +52,9 @@ insert into versao (versao, ativo) values ('DEZ2014', true);
 
 -- Tabelas orcamento e detalheorcamento - Tarefa #969
 create table orcamento(
-	id bigint not null,
+	id bigint not null auto_increment,
 	descricao varchar(50) not null,
-	tipoOrcamento varchar(10) not null,
+	tipoOrcamento varchar(15) not null,
 	tipoConta varchar(10) null,
 	inicio date not null,
 	fim date not null,
@@ -64,13 +64,16 @@ create table orcamento(
 	ativo boolean,
 	abrangenciaOrcamento varchar(10) not null,
 	idConta bigint null,
+	idUsuario bigint not null,
+	versionEntity datetime not null default '2014-11-01 00:00:00',
 	primary key(id)
 ) engine=InnoDB; 
 
 alter table orcamento add constraint fk_conta_orcamento foreign key (idConta) references conta(id);
+alter table orcamento add constraint fk_usuario_orcamento foreign key (idUsuario) references usuario(id);
 
 create table detalheorcamento (
-	id bigint not null,
+	id bigint not null auto_increment,
 	descricao varchar(50) not null,
 	idEntity bigint not null,
 	previsao decimal (18,2) default 0.0,
@@ -79,6 +82,7 @@ create table detalheorcamento (
 	realizado decimal (18,2) default 0.0,
 	realizadoCredito decimal (18,2) default 0.0,
 	realizadoDebito decimal (18,2) default 0.0,
+	versionEntity datetime not null default '2014-11-01 00:00:00', 
 	primary key(id)
 );
 

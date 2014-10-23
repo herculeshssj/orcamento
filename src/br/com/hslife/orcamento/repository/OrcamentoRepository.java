@@ -44,14 +44,24 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Orcamento;
+import br.com.hslife.orcamento.entity.Usuario;
 
 @Repository
 public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
 	
 	public OrcamentoRepository() {
 		super(new Orcamento());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Orcamento> findAllByUsuario(Usuario usuario) {
+		return getQuery("FROM Orcamento orcamento WHERE orcamento.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.list();
 	}
 }

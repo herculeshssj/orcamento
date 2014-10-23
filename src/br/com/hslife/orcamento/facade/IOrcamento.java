@@ -46,7 +46,6 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -54,5 +53,8 @@ import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IOrcamento extends ICRUDService<Orcamento>{
 	
+	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario) throws BusinessException;
+	
+	public void atualizarValores(Orcamento entity) throws BusinessException;
 	
 }

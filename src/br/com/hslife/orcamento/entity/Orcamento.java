@@ -121,6 +121,10 @@ public class Orcamento extends EntityPersistence {
 	@JoinColumn(name="idConta", nullable=true)
 	private Conta conta;
 	
+	@ManyToOne
+	@JoinColumn(name="idUsuario", nullable=false)
+	private Usuario usuario;
+	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)	
 	private List<DetalheOrcamento> detalhes;
 	
@@ -129,7 +133,7 @@ public class Orcamento extends EntityPersistence {
 		ativo = true;
 		tipoOrcamento = TipoOrcamento.SEMDISTINCAO;
 		periodoLancamento = PeriodoLancamento.MENSAL;
-		abrangenciaOrcamento = AbrangenciaOrcamento.CREDITODEBITO;
+		abrangenciaOrcamento = AbrangenciaOrcamento.CATEGORIA;
 	}	
 	
 	@Override
@@ -154,6 +158,8 @@ public class Orcamento extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Início", inicio);
 		
 		EntityPersistenceUtil.validaCampoNulo("Fim", fim);
+		
+		EntityPersistenceUtil.validaCampoNulo("Usuário", usuario);
 		
 		if (detalhes == null || detalhes.isEmpty()) {
 			throw new BusinessException("Entre com pelo menos um item nos detalhes!");
@@ -238,6 +244,18 @@ public class Orcamento extends EntityPersistence {
 		novoOrcamento.setTipoOrcamento(this.tipoOrcamento);
 		
 		return novoOrcamento;
+	}
+	
+	public void calculaPorcentagens() {
+		// Calcula a porcentagem
+		switch (this.abrangenciaOrcamento) {
+		case CATEGORIA : 
+			for (DetalheOrcamento detalhe : this.detalhes) {
+				detalhe.setPorcentagem( Util.arredondar( (detalhe.getPrevisao()/detalhe.getRealizado())*100  ) );
+			}
+		case FAVORECIDO : 
+		case MEIOPAGAMENTO :
+		}
 	}
 
 	public void setId(Long id) {
@@ -338,5 +356,13 @@ public class Orcamento extends EntityPersistence {
 
 	public void setTipoOrcamento(TipoOrcamento tipoOrcamento) {
 		this.tipoOrcamento = tipoOrcamento;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}	
 }
