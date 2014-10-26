@@ -510,7 +510,8 @@ public class ContaComponent {
 		lancamentoContaRepository.update(pagamentoPeriodo);
 		
 		// Gera o próximo pagamento para os lançamentos fixos
-		if (pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+		if (pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)
+				&& pagamentoPeriodo.getLancamentoPeriodico().getStatusLancamento().equals(StatusLancamento.ATIVO)) {
 			
 			// Busca o pagamento mais recente
 			LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(pagamentoPeriodo.getLancamentoPeriodico());
