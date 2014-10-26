@@ -106,7 +106,7 @@ public class AgendamentoTask {
 			mensagemEmail.append("Tipo: " + a.getTipoAgendamento() + "\n");
 			mensagemEmail.append("Período: \n" + a.getDateLabel() + "\n");
 			mensagemEmail.append("Dia inteiro: " + (a.isDiaInteiro() ? "SIM" : "NÃO") + "\n");
-			mensagemEmail.append("Notas: " + a.getNotas() + "\n\n");
+			mensagemEmail.append("Notas: " + (a.getNotas() == null ? "-" : a.getNotas()) + "\n\n");
 			mensagemEmail.append("Caso não queira mais receber notificações a respeito desse evento, desmarque a caixa 'Emitir Alerta' nas propriedades do agendamento.\n\n\n");
 			mensagemEmail.append("HSlife Serviços de TI");
 			
