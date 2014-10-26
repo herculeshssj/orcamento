@@ -88,7 +88,7 @@
 					</p:selectOneRadio>
 					
 					Moeda:
-					<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.operation == 'edit'}">
+					<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.conta.tipoConta != 'CARTAO'}">
 						<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 					</h:selectOneMenu>
 					
