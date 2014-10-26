@@ -212,6 +212,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 			faturaCartao.setSaldoDevedor(this.saldoDevedorUltimaFatura(entity.getConta().getCartaoCredito()));
 		
 		// Atribuições dos valores
+		faturaCartao.setDataVencimento(entity.getDataVencimento());
 		faturaCartao.setDataFechamento(entity.getDataFechamento());
 		faturaCartao.setStatusFaturaCartao(StatusFaturaCartao.FECHADA);
 		
