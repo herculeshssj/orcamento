@@ -76,6 +76,7 @@ create table detalheorcamento (
 	id bigint not null auto_increment,
 	descricao varchar(50) not null,
 	idEntity bigint not null,
+	tipoCategoria varchar(10) null,
 	previsao decimal (18,2) default 0.0,
 	previsaoCredito decimal (18,2) default 0.0,
 	previsaoDebito decimal (18,2) default 0.0,

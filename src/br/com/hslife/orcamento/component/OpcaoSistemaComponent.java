@@ -233,6 +233,17 @@ public class OpcaoSistemaComponent implements Serializable{
 		return false;
 	}
 	
+	public Boolean getExibirBuscasRealizadas() {
+		try {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", usuarioComponent.getUsuarioLogado());
+			if (opcao != null)
+				return Boolean.valueOf(opcao.getValor());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public Integer getLimiteQuantidadeRegistros() {
 		try {
 			OpcaoSistema opcao = buscarPorChaveEUsuario("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", usuarioComponent.getUsuarioLogado());

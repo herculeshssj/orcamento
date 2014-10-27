@@ -245,18 +245,6 @@ public class Orcamento extends EntityPersistence {
 		
 		return novoOrcamento;
 	}
-	
-	public void calculaPorcentagens() {
-		// Calcula a porcentagem
-		switch (this.abrangenciaOrcamento) {
-		case CATEGORIA : 
-			for (DetalheOrcamento detalhe : this.detalhes) {
-				detalhe.setPorcentagem( Util.arredondar( (detalhe.getPrevisao()/detalhe.getRealizado())*100  ) );
-			}
-		case FAVORECIDO : 
-		case MEIOPAGAMENTO :
-		}
-	}
 
 	public void setId(Long id) {
 		this.id = id;

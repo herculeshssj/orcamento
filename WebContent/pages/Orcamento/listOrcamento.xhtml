@@ -101,14 +101,14 @@
 				<f:facet name="header">
 					<h:outputText value="Descrição"/>
 				</f:facet>
-				<h:outputText value="#{item.descricao}" />					
+				<h:outputText value="#{item.descricao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>					
 			</p:column>
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Previsto"/>
 				</f:facet>
-				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
-			    <h:outputText value="#{item.previsao}">
+				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+			    <h:outputText value="#{item.previsao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			    </h:outputText>				
 			</p:column>
@@ -116,18 +116,29 @@
 				<f:facet name="header">
 					<h:outputText value="Realizado"/>
 				</f:facet>
-				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
-			    <h:outputText value="#{item.realizado}">
+				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+			    <h:outputText value="#{item.realizado}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			    </h:outputText>				
 			</p:column>					
-			<p:column style="text-align: center; vertical-align: middle;">
+			<p:column style="text-align: center; vertical-align: middle; font-weight: bold;">
 				<f:facet name="header">
 					<h:outputText value="%"/>
-				</f:facet>
-				<h:outputText value="#{item.porcentagem}">
+				</f:facet>				
+				<h:outputText value="#{item.porcentagem}" rendered="#{item.situacao == 'RUIM'}" style="color: #FF0000;">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>					
+				</h:outputText>
+				<h:outputText value=" %" rendered="#{item.situacao == 'RUIM'}" style="color: #FF0000;" />
+				
+				<h:outputText value="#{item.porcentagem}" rendered="#{item.situacao == 'REGULAR'}" style="color: #CFCF00;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+				<h:outputText value=" %" rendered="#{item.situacao == 'REGULAR'}" style="color: #CFCF00;" />
+				
+				<h:outputText value="#{item.porcentagem}" rendered="#{item.situacao == 'BOM'}" style="color: #339900;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>										
+				<h:outputText value=" %" rendered="#{item.situacao == 'BOM'}" style="color: #339900;" />
 			</p:column>
 		</p:dataTable>
 		

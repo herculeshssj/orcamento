@@ -132,7 +132,6 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 			listaDetalheOrcamento.clear();
 			listaDetalheOrcamento.addAll(orcamentoSelecionado.getDetalhes());
 			mostrarInformacao = true;
-			orcamentoSelecionado.calculaPorcentagens();
 		}
 	}
 	
@@ -210,6 +209,14 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	public void atualizarValores() {
 		try {
 			getService().atualizarValores(orcamentoSelecionado);
+			infoMessage("Valores do orçamento atualizados com sucesso!");
+			
+			if (getOpcoesSistema().getExibirBuscasRealizadas()) {
+				find();
+			} else {
+				initializeEntity();
+			}
+			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -244,7 +251,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 				switch (entity.getAbrangenciaOrcamento()) {
 					case CATEGORIA :						
 						for (Categoria c : categoriaService.buscarAtivosPorUsuario(getUsuarioLogado())) {
-							resultado.add(new DetalheOrcamento(c.getId(), c.getDescricao()));
+							resultado.add(new DetalheOrcamento(c.getId(), c.getDescricao(), c.getTipoCategoria()));
 						}						
 						break;
 					case FAVORECIDO :

@@ -47,6 +47,8 @@ package br.com.hslife.orcamento.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.junit.Test;
+
 public class TestDouble {
 
 	//@Test
@@ -84,5 +86,12 @@ public class TestDouble {
 	        System.out.println(ci);  
 	        System.out.println(di);       
 	      
+	}
+	
+	//@Test
+	public void testCasaDecimal() {
+		System.out.println(Math.floor(5.97));
+		System.out.println(Math.ceil(5.97));
+		System.out.println(Math.round(5.97));
 	}
 }

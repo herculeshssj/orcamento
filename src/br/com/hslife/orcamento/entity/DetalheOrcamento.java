@@ -46,14 +46,19 @@ package br.com.hslife.orcamento.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import br.com.hslife.orcamento.enumeration.SituacaoOrcamento;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="detalheorcamento")
@@ -68,7 +73,11 @@ public class DetalheOrcamento extends EntityPersistence {
 	private String descricao;
 	
 	@Column(nullable=false)
-	private Long idEntity;	
+	private Long idEntity;
+	
+	@Column(length=10, nullable = true)
+	@Enumerated(EnumType.STRING)
+	private TipoCategoria tipoCategoria;
 	
 	@Column(nullable=false, precision=18, scale=2)
 	private double previsao;
@@ -115,6 +124,15 @@ public class DetalheOrcamento extends EntityPersistence {
 		this.idChanged = true;
 	}
 	
+	public DetalheOrcamento(Long idEntity, String descricao, TipoCategoria tipoCategoria) {
+		this.idEntity = idEntity;
+		this.descricao = descricao;
+		this.tipoCategoria = tipoCategoria;
+		
+		this.id = idEntity;
+		this.idChanged = true;
+	}
+	
 	@Override
 	public String getLabel() {
 		return this.descricao;
@@ -126,6 +144,76 @@ public class DetalheOrcamento extends EntityPersistence {
 		
 		EntityPersistenceUtil.validaCampoNulo("ID do item", idEntity);
 	}
+	
+	public double getPorcentagem() {
+		try {
+			return Util.arredondar( (this.realizado / this.previsao) * 100 ); 
+			/*
+			if (this.previsao > this.realizado) {
+				return Util.arredondar( (this.realizado / this.previsao) * 100 );
+			} else if (this.previsao < this.realizado) {
+				return Util.arredondar( (this.previsao / this.realizado) * 100 );
+			} else {
+				return 100;
+			}*/
+		} catch (NumberFormatException nfe) {
+			System.out.println("Houve divisão por zero ou NaN");
+			return 0;
+		}
+	}
+	
+	public double getPorcentagemCredito() {
+		return 0;
+	}
+	
+	public double getPorcentagemDebito() {
+		return 0;
+	}
+	
+	public SituacaoOrcamento getSituacao() {
+		if (this.tipoCategoria.equals(TipoCategoria.CREDITO)) {
+			if (Math.floor(getPorcentagem()) <= 70) return SituacaoOrcamento.RUIM;
+			if (Math.floor(getPorcentagem()) > 70 && Math.floor(getPorcentagem()) <= 100) return SituacaoOrcamento.REGULAR;
+			if (Math.floor(getPorcentagem()) > 100) return SituacaoOrcamento.BOM;
+		} else {
+			if (Math.floor(getPorcentagem()) <= 70) return SituacaoOrcamento.BOM;
+			if (Math.floor(getPorcentagem()) > 70 && Math.floor(getPorcentagem()) <= 100) return SituacaoOrcamento.REGULAR;
+			if (Math.floor(getPorcentagem()) > 100) return SituacaoOrcamento.RUIM;			
+		}
+		return SituacaoOrcamento.BOM;
+	}
+	
+	public SituacaoOrcamento getSituacaoCredito() {
+		return SituacaoOrcamento.BOM;
+	}
+	
+	public SituacaoOrcamento getSituacaoDebito() {
+		return SituacaoOrcamento.BOM;
+	}
+	
+//	public double getPorcentagem() {
+//		try {
+//			return Util.arredondar( (this.previsao/this.realizado)*100  );
+//		} catch (NumberFormatException nfe) {
+//			return 0.0;
+//		}
+//	}
+//
+//	public double getPorcentagemCredito() {
+//		try {
+//			return Util.arredondar( (this.previsaoCredito/this.realizadoCredito)*100  );
+//		} catch (NumberFormatException nfe) {
+//			return 0.0;
+//		}
+//	}
+//
+//	public double getPorcentagemDebito() {
+//		try {
+//			return Util.arredondar( (this.previsaoDebito/this.realizadoDebito)*100  );
+//		} catch (NumberFormatException nfe) {
+//			return 0.0;
+//		}
+//	}
 	
 	public Long getId() {
 		return id;
@@ -215,27 +303,15 @@ public class DetalheOrcamento extends EntityPersistence {
 		this.idChanged = idChanged;
 	}
 
-	public double getPorcentagem() {
-		return porcentagem;
-	}
-
-	public void setPorcentagem(double porcentagem) {
-		this.porcentagem = porcentagem;
-	}
-
-	public double getPorcentagemCredito() {
-		return porcentagemCredito;
-	}
-
-	public void setPorcentagemCredito(double porcentagemCredito) {
-		this.porcentagemCredito = porcentagemCredito;
-	}
-
-	public double getPorcentagemDebito() {
-		return porcentagemDebito;
-	}
-
 	public void setPorcentagemDebito(double porcentagemDebito) {
 		this.porcentagemDebito = porcentagemDebito;
+	}
+
+	public TipoCategoria getTipoCategoria() {
+		return tipoCategoria;
+	}
+
+	public void setTipoCategoria(TipoCategoria tipoCategoria) {
+		this.tipoCategoria = tipoCategoria;
 	}
 }
