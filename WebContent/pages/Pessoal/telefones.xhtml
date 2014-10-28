@@ -60,16 +60,16 @@
 		<h:panelGrid columns="4">
 		
 			Descrição:
-			<h:inputText value="#{managedBean.telefone.descricao}"/>
+			<p:inputText value="#{managedBean.telefone.descricao}"/>
 						
 			DDD:
-			<h:inputText value="#{managedBean.telefone.ddd}"/>
+			<p:inputText value="#{managedBean.telefone.ddd}"/>
 			
 			Número:
-			<h:inputText value="#{managedBean.telefone.numero}"/>
+			<p:inputText value="#{managedBean.telefone.numero}"/>
 			
 			Ramal:
-			<h:inputText value="#{managedBean.telefone.ramal}"/>
+			<p:inputText value="#{managedBean.telefone.ramal}"/>
 			
 			<h:outputText />
 			<h:commandButton title="Salvar telefone" image="/resources/images/gravar.png" action="#{managedBean.salvarTelefone}"/>

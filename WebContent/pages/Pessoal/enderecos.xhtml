@@ -60,31 +60,31 @@
 		<h:panelGrid columns="4">
 		
 			Descrição:
-			<h:inputText value="#{managedBean.endereco.descricao}"/>
+			<p:inputText value="#{managedBean.endereco.descricao}"/>
 			
 			Tipo de logradouro:
-			<h:inputText value="#{managedBean.endereco.tipoLogradouro}"/>
+			<p:inputText value="#{managedBean.endereco.tipoLogradouro}"/>
 			
 			Logradouro:
-			<h:inputText value="#{managedBean.endereco.logradouro}"/>
+			<p:inputText value="#{managedBean.endereco.logradouro}"/>
 			
 			Número:
-			<h:inputText value="#{managedBean.endereco.numero}" size="5"/>
+			<p:inputText value="#{managedBean.endereco.numero}" size="5"/>
 			
 			Complemento:
-			<h:inputText value="#{managedBean.endereco.complemento}"/>
+			<p:inputText value="#{managedBean.endereco.complemento}"/>
 			
 			Bairro:
-			<h:inputText value="#{managedBean.endereco.bairro}"/>
+			<p:inputText value="#{managedBean.endereco.bairro}"/>
 			
 			Cidade:
-			<h:inputText value="#{managedBean.endereco.cidade}"/>
+			<p:inputText value="#{managedBean.endereco.cidade}"/>
 			
 			Estado:
-			<h:inputText value="#{managedBean.endereco.estado}" size="2" maxlength="2"/>
+			<p:inputText value="#{managedBean.endereco.estado}" size="2" maxlength="2"/>
 			
 			CEP:
-			<h:inputText value="#{managedBean.endereco.cep}" size="8" maxlength="8"/>
+			<p:inputText value="#{managedBean.endereco.cep}" size="8" maxlength="8"/>
 			
 			<h:outputText />
 			<h:commandButton title="Salvar Endereço" image="/resources/images/gravar.png" action="#{managedBean.salvarEndereco}"/>

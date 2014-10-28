@@ -58,7 +58,7 @@
 	
 	<ui:define name="pesquisa">
 		Banco:
-	    <h:inputText value="#{managedBean.nomeBanco}" />
+	    <p:inputText value="#{managedBean.nomeBanco}" />
 	    &nbsp;
 	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
 	    Somente ativos
@@ -91,7 +91,7 @@
 			<f:facet name="header">
 				<h:outputText value="Ativo" />
 			</f:facet>
-			<h:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
+			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
 		</p:column>
 
 	</ui:define>

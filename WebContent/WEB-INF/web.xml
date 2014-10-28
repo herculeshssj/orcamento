@@ -78,6 +78,12 @@
     	<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>  
     	<param-value>true</param-value>  
 	</context-param> 
+	
+	<!-- Aplicação do tema Bootstrap do PrimeFaces -->
+	<context-param>  
+	    <param-name>primefaces.THEME</param-name>  
+	    <param-value>bootstrap</param-value>  
+	</context-param> 
     
     <listener>
     	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

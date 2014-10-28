@@ -58,7 +58,7 @@
 
 	<ui:define name="pesquisa">
 		Descrição:
-	    <h:inputText value="#{managedBean.descricaoMeioPagamento}" />
+	    <p:inputText value="#{managedBean.descricaoMeioPagamento}" />
 	    &nbsp;
 	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
 	    Somente ativos
@@ -76,7 +76,7 @@
 			<f:facet name="header">
 				<h:outputText value="Ativo"/>
 			</f:facet>
-			<h:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
+			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
    		</p:column>
 	</ui:define>
 	
