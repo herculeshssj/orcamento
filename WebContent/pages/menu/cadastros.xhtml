@@ -62,39 +62,47 @@
 		<h:form id="frmMenuCadastros">
 		
 			<!-- panelGrid exibido quando a exibição de meio de pagamento está ativada -->
-			<h:panelGrid columns="3" width="100%" style="text-align: center" rendered="#{meioPagamentoMB.opcoesSistema.exibirMeioPagamento}">
-			
-								
+			<h:panelGrid columns="4" width="100%" style="text-align: center" rendered="#{meioPagamentoMB.opcoesSistema.exibirMeioPagamento}">
+											
+				<h:commandButton action="#{bancoMB.startUp}" image="/resources/images/bancos.png" title="Bancos"/>
 				<h:commandButton action="#{categoriaMB.startUp}" image="/resources/images/categorias.png" title="Categorias"/>
 				<h:commandButton action="#{favorecidoMB.startUp}" image="/resources/images/favorecido.png" title="Favorecidos"/>
 				<h:commandButton action="#{meioPagamentoMB.startUp}" image="/resources/images/meiopagamento.png" title="Meios de Pagamento"/>
 				
-								
+				<h:outputText value="Bancos"/>								
 				<h:outputText value="Categorias"/>
 				<h:outputText value="Favorecido/Sacado"/>
 				<h:outputText value="Meios de Pagamento"/>
 				
-				<h:commandButton action="#{bancoMB.startUp}" image="/resources/images/bancos.png" title="Bancos"/>
+				<h:commandButton action="#{contaMB.startUp}" image="/resources/images/conta.png" title="Contas"/>
+				<h:commandButton action="#{cartaoCreditoMB.startUp}" image="/resources/images/cartaocredito.png" title="Cartão de crédito"/>
 				<h:commandButton action="#{moedaMB.startUp}" image="/resources/images/moeda.png" title="Moedas"/>
 				<h:outputText value=""/>
 				
-				<h:outputText value="Bancos"/>
+				<h:outputText value="Contas"/>
+				<h:outputText value="Cartão de Crédito"/>
 				<h:outputText value="Moedas"/>
 				<h:outputText value=""/>
 				
 			</h:panelGrid>
 			
 			<!-- panelGrid exibido quando a exibição de meio de pagamento está desativado -->
-			<h:panelGrid columns="4" width="100%" style="text-align: center" rendered="#{!meioPagamentoMB.opcoesSistema.exibirMeioPagamento}">
+			<h:panelGrid columns="3" width="100%" style="text-align: center" rendered="#{!meioPagamentoMB.opcoesSistema.exibirMeioPagamento}">
 			
-				<h:commandButton action="#{bancoMB.startUp}" image="/resources/images/bancos.png" title="Bancos"/>				
+				<h:commandButton action="#{bancoMB.startUp}" image="/resources/images/bancos.png" title="Bancos"/>
 				<h:commandButton action="#{categoriaMB.startUp}" image="/resources/images/categorias.png" title="Categorias"/>
 				<h:commandButton action="#{favorecidoMB.startUp}" image="/resources/images/favorecido.png" title="Favorecidos"/>
-				<h:commandButton action="#{moedaMB.startUp}" image="/resources/images/moeda.png" title="Moedas"/>
-				
-				<h:outputText value="Bancos"/>				
+												
+				<h:outputText value="Bancos"/>
 				<h:outputText value="Categorias"/>
 				<h:outputText value="Favorecido/Sacado"/>
+				
+				<h:commandButton action="#{contaMB.startUp}" image="/resources/images/conta.png" title="Contas"/>
+				<h:commandButton action="#{cartaoCreditoMB.startUp}" image="/resources/images/cartaocredito.png" title="Cartão de crédito"/>
+				<h:commandButton action="#{moedaMB.startUp}" image="/resources/images/moeda.png" title="Moedas"/>
+				
+				<h:outputText value="Contas"/>
+				<h:outputText value="Cartão de Crédito"/>
 				<h:outputText value="Moedas"/>
 				
 			</h:panelGrid>

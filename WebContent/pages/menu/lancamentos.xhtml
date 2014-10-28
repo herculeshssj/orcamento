@@ -63,13 +63,29 @@
 		
 			<h:panelGrid columns="3" width="100%" style="text-align: center">
 			
-				<h:commandButton id="menuDocumento" action="#{documentoMB.startUp}" image="/resources/images/documentos.png" title="Documentos"/>
-				<h:commandButton id="menuDespensa" action="#{despensaMB.startUp}" image="/resources/images/despensa.png" title="Despensa"/>
-				<h:commandButton id="menuAgendamento" action="#{parcelamentoMB.startUp}" image="/resources/images/parcelamento.png" title="Parcelamento"/>
+				<h:commandButton action="#{lancamentoPeriodicoMB.startUp}" image="/resources/images/parcelamento.png" title="Despesas fixas e parceladas"/>
+				<h:commandButton action="#{lancamentoContaMB.startUp}" image="/resources/images/lancamento.png" title="Lançamentos da Conta"/>
+				<h:commandButton action="#{faturaCartaoMB.startUp}" image="/resources/images/faturacartao.png" title="Fatura do Carão"/>
 				
-				<h:outputText value="Documentos"/>	
-				<h:outputText value="Despensa"/>
-				<h:outputText value="Parcelamento"/>
+				<h:outputText value="Despesas fixas e parceladas"/>
+				<h:outputText value="Lançamentos da Conta"/>
+				<h:outputText value="Fatura do Cartão"/>
+				
+				<h:commandButton action="#{importacaoLancamentoMB.startUp}" image="/resources/images/importacao.png" title="Importação de Lançamentos (Conta)"/>
+				<h:commandButton action="#{fechamentoPeriodoMB.startUp}" image="/resources/images/fechamentoperiodo.png" title="Fechamento de Período"/>
+				<h:commandButton action="#{orcamentoMB.startUp}" image="/resources/images/orcamento.png" title="Orçamento do Período"/>
+				
+				<h:outputText value="Importação de Lançamentos (Conta)"/>
+				<h:outputText value="Fechamento de Período"/>
+				<h:outputText value="Orçamento do Período"/>	
+				
+				<h:commandButton action="#{lancamentoCartaoMB.startUp}" image="/resources/images/lancamento.png" title="Lançamentos do Cartão"/>				
+				<h:commandButton action="#{importacaoLancamentoMB.startUpCartao}" image="/resources/images/importacao.png" title="Importação de Lançamentos (Cartão)"/>
+				<h:outputText value=""/>
+				
+				<h:outputText value="Lançamentos do Cartão"/>				
+				<h:outputText value="Importação de Lançamentos (Cartão)"/>
+				<h:outputText value=""/>
 				
 			</h:panelGrid>
 		

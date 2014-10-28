@@ -63,22 +63,22 @@
 		
 			<h:panelGrid columns="3" width="100%" style="text-align: center">
 			
-				<h:commandButton action="#{lancamentoPeriodicoMB.startUp}" image="/resources/images/parcelamento.png" title="Despesas fixas e parceladas"/>				
+				<h:commandButton action="#{panoramaLancamentoContaMB.startUp}" image="/resources/images/planejamento.png" title="Panorama dos Lançamentos da Conta"/>
+				<h:commandButton action="#{saldoAtualContasMB.startUp}" image="/resources/images/saldoconta.png" title="Saldo Atual das Contas"/>
+				<h:commandButton action="#{resumoMensalContasMB.startUp}" image="/resources/images/resumomensalcontas.png" title="Resumo Mensal das Contas"/>
+				
+				<h:outputText value="Panorama dos Lançamentos da Conta"/>
+				<h:outputText value="Saldo Atual das Contas"/>
+				<h:outputText value="Resumo Mensal das Contas"/>
+				
 				<h:commandButton action="#{panoramaDespesaFixaMB.startUp}" image="/resources/images/pagamentos.png" title="Panorama das Despesas Fixas"/>
 				<h:commandButton action="#{panoramaParcelamentoMB.startUp}" image="/resources/images/panoramaparcela.png" title="Panorama dos Parcelamentos"/>
+				<h:outputText value=""/>
 				
-				<h:outputText value="Despesas fixas e parceladas"/>				
 				<h:outputText value="Panorama das Despesas Fixas"/>
 				<h:outputText value="Panorama dos Parcelamentos"/>
-				
-				<h:commandButton action="#{orcamentoMB.startUp}" image="/resources/images/orcamento.png" title="Orçamento do Período"/>
-				<h:commandButton action="#{panoramaLancamentoContaMB.startUp}" image="/resources/images/planejamento.png" title="Panorama dos Lançamentos da Conta"/>
 				<h:outputText value=""/>
-				
-				<h:outputText value="Orçamento do Período"/>
-				<h:outputText value="Panorama dos Lançamentos da Conta"/>
-				<h:outputText value=""/>
-										
+			
 			</h:panelGrid>
 		
 		</h:form>

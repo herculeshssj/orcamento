@@ -61,34 +61,24 @@
 		
 		<h:form id="frmMenuPrincipal">
 			
-			<h:panelGrid columns="4" width="100%" style="text-align: center">
+			<h:panelGrid columns="3" width="100%" style="text-align: center">
 			
-				<h:commandButton action="#{calendarioAtividadesMB.startUp}" image="/resources/images/agenda.png" title="Calendário de Atividades"/>
-				<h:panelGroup><a href="#{request.contextPath}/pages/menu/cadastros.faces"><h:graphicImage value="/resources/images/cadastros.png"/></a></h:panelGroup>
-				<h:panelGroup><a href="#{request.contextPath}/pages/menu/contas.faces"><h:graphicImage value="/resources/images/conta.png"/></a></h:panelGroup>
-				<h:panelGroup><a href="#{request.contextPath}/pages/menu/cartoes.faces"><h:graphicImage value="/resources/images/cartaocredito.png"/></a></h:panelGroup>
-				
-				<h:panelGroup>
-					<h:outputText value="Agenda "/>
-					<h:outputText value="(" style="color: #FF0000"/>
-					<h:outputText value="#{agendaMB.agendamentosDeHoje}" style="color: #FF0000"/>
-					<h:outputText value=")" style="color: #FF0000"/>
-				</h:panelGroup>
+				<h:panelGroup><a href="#{request.contextPath}/pages/menu/cadastros.faces"><h:graphicImage value="/resources/images/lancamento.png"/></a></h:panelGroup>
+				<h:panelGroup><a href="#{request.contextPath}/pages/menu/lancamentos.faces"><h:graphicImage value="/resources/images/conta.png"/></a></h:panelGroup>
+				<h:panelGroup><a href="#{request.contextPath}/pages/menu/planejamento.faces"><h:graphicImage value="/resources/images/planejamento.png"/></a></h:panelGroup>
+			
 				<h:outputText value="Cadastros"/>
-				<h:outputText value="Contas"/>
-				<h:outputText value="Cartão de Crédito"/>
-				
-				<h:panelGroup><a href="#{request.contextPath}/pages/menu/planejamento.faces"><h:graphicImage value="/resources/images/planejamento.png"/></a></h:panelGroup>															
+				<h:outputText value="Lançamentos"/>
+				<h:outputText value="Planejamento"/>
+																			
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/despensa.faces"><h:graphicImage value="/resources/images/despensa.png"/></a></h:panelGroup>
 				<h:panelGroup><a href="#{request.contextPath}/pages/menu/documentos.faces"><h:graphicImage value="/resources/images/documentos.png"/></a></h:panelGroup>													
 				<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}"><a href="#{request.contextPath}/pages/menu/opcoes.faces"><h:graphicImage value="/resources/images/opcoes.png"/></a></h:panelGroup>
 				<h:commandButton rendered="#{usuarioMB.usuarioLogado.login != 'admin'}" action="#{opcaoSistemaMB.startUp}" image="/resources/images/opcoes.png" />
 				
-				<h:outputText value="Planejamento"/>
 				<h:outputText value="Despensa"/>
 				<h:outputText value="Documentos"/>												
 				<h:outputText value="Opções"/>
-				
 								
 			</h:panelGrid>
 		
