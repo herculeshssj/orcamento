@@ -44,7 +44,11 @@
 
 package br.com.hslife.orcamento.util;
 
+import java.util.UUID;
+
 import junit.framework.Assert;
+
+import org.junit.Test;
 
 public class TestString {
 
@@ -68,6 +72,11 @@ public class TestString {
 		
 		obj = " oi ";
 		Assert.assertFalse(Util.eVazio(obj));
+	}
+	
+	@Test
+	public void testGenerateUUID() {
+		System.out.println(UUID.randomUUID());
 	}
 	
 }

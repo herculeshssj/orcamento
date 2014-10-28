@@ -62,7 +62,7 @@ create table orcamento(
 	automatico boolean,
 	arquivar boolean,
 	ativo boolean,
-	abrangenciaOrcamento varchar(10) not null,
+	abrangenciaOrcamento varchar(15) not null,
 	idConta bigint null,
 	idUsuario bigint not null,
 	versionEntity datetime not null default '2014-11-01 00:00:00',

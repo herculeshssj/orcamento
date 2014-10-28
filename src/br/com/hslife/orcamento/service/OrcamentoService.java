@@ -52,7 +52,9 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.DetalheOrcamento;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -122,11 +124,18 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	}
 	
 	@Override
+	public void gerarOrcamento(Orcamento entity) throws BusinessException {
+		getRepository().save(entity.gerarOrcamento());
+	}
+	
+	@Override
 	public void atualizarValores(Orcamento entity) throws BusinessException {
 		// Busca todos os lançamentos no período indicado no orçamento
 		CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 		criterioBusca.setDataInicio(entity.getInicio());
 		criterioBusca.setDataFim(entity.getFim());
+		criterioBusca.setConta(entity.getConta());
+		criterioBusca.setTipoConta(entity.getTipoConta());
 		
 		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
 		
@@ -137,8 +146,8 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 				resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), 0, contaComponent.calcularSaldoLancamentos(lancamentos));
 				
 				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
-					
-					for (Categoria c : resumoMensal.getCategorias()) {
+					detalhe.setRealizado(0); // Apaga o valor registrado anteriormente
+					for (Categoria c : resumoMensal.getCategorias()) {						
 						if (c.getDescricao().equals(detalhe.getDescricao())) {
 							detalhe.setRealizado(Math.abs(c.getSaldoPago()));
 						}
@@ -149,9 +158,35 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 				break;
 			case FAVORECIDO : 
 				resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos), 0, contaComponent.calcularSaldoLancamentos(lancamentos));
+				
+				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
+					detalhe.setRealizadoCredito(0); // Apaga o valor registrado anteriormente
+					detalhe.setRealizadoDebito(0); // Apaga o valor registrado anteriormente
+					for (Favorecido f : resumoMensal.getFavorecidos()) {						
+						if (f.getNome().equals(detalhe.getDescricao())) {
+							detalhe.setRealizadoCredito(Math.abs(f.getSaldoCredito()));
+							detalhe.setRealizadoDebito(Math.abs(f.getSaldoDebito()));
+						}
+					}
+					
+				}
+				
 				break;
 			case MEIOPAGAMENTO : 
 				resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos), 0, contaComponent.calcularSaldoLancamentos(lancamentos));
+				
+				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
+					detalhe.setRealizadoCredito(0); // Apaga o valor registrado anteriormente
+					detalhe.setRealizadoDebito(0); // Apaga o valor registrado anteriormente
+					for (MeioPagamento m : resumoMensal.getMeiosPagamento()) {						
+						if (m.getDescricao().equals(detalhe.getDescricao())) {
+							detalhe.setRealizadoCredito(Math.abs(m.getSaldoCredito()));
+							detalhe.setRealizadoDebito(Math.abs(m.getSaldoDebito()));
+						}
+					}
+					
+				}
+								
 				break;
 		}
 		

@@ -98,15 +98,6 @@ public class DetalheOrcamento extends EntityPersistence {
 	private double realizadoDebito;
 	
 	@Transient
-	private double porcentagem;
-	
-	@Transient
-	private double porcentagemCredito;
-	
-	@Transient
-	private double porcentagemDebito;
-	
-	@Transient
 	private boolean selecionado;
 	
 	@Transient
@@ -148,26 +139,28 @@ public class DetalheOrcamento extends EntityPersistence {
 	public double getPorcentagem() {
 		try {
 			return Util.arredondar( (this.realizado / this.previsao) * 100 ); 
-			/*
-			if (this.previsao > this.realizado) {
-				return Util.arredondar( (this.realizado / this.previsao) * 100 );
-			} else if (this.previsao < this.realizado) {
-				return Util.arredondar( (this.previsao / this.realizado) * 100 );
-			} else {
-				return 100;
-			}*/
 		} catch (NumberFormatException nfe) {
-			System.out.println("Houve divisão por zero ou NaN");
+			System.out.println("Houve divisão por zero, infinity ou NaN");
 			return 0;
 		}
 	}
 	
 	public double getPorcentagemCredito() {
-		return 0;
+		try {
+			return Util.arredondar( (this.realizadoCredito / this.previsaoCredito) * 100 ); 
+		} catch (NumberFormatException nfe) {
+			System.out.println("Houve divisão por zero, infinity ou NaN");
+			return 0;
+		}
 	}
 	
 	public double getPorcentagemDebito() {
-		return 0;
+		try {
+			return Util.arredondar( (this.realizadoDebito / this.previsaoDebito) * 100 ); 
+		} catch (NumberFormatException nfe) {
+			System.out.println("Houve divisão por zero, infinity ou NaN");
+			return 0;
+		}
 	}
 	
 	public SituacaoOrcamento getSituacao() {
@@ -184,36 +177,18 @@ public class DetalheOrcamento extends EntityPersistence {
 	}
 	
 	public SituacaoOrcamento getSituacaoCredito() {
+		if (Math.floor(getPorcentagemCredito()) <= 70) return SituacaoOrcamento.RUIM;
+		if (Math.floor(getPorcentagemCredito()) > 70 && Math.floor(getPorcentagemCredito()) <= 100) return SituacaoOrcamento.REGULAR;
+		if (Math.floor(getPorcentagemCredito()) > 100) return SituacaoOrcamento.BOM;
 		return SituacaoOrcamento.BOM;
 	}
 	
 	public SituacaoOrcamento getSituacaoDebito() {
+		if (Math.floor(getPorcentagemDebito()) <= 70) return SituacaoOrcamento.BOM;
+		if (Math.floor(getPorcentagemDebito()) > 70 && Math.floor(getPorcentagemDebito()) <= 100) return SituacaoOrcamento.REGULAR;
+		if (Math.floor(getPorcentagemDebito()) > 100) return SituacaoOrcamento.RUIM;			
 		return SituacaoOrcamento.BOM;
 	}
-	
-//	public double getPorcentagem() {
-//		try {
-//			return Util.arredondar( (this.previsao/this.realizado)*100  );
-//		} catch (NumberFormatException nfe) {
-//			return 0.0;
-//		}
-//	}
-//
-//	public double getPorcentagemCredito() {
-//		try {
-//			return Util.arredondar( (this.previsaoCredito/this.realizadoCredito)*100  );
-//		} catch (NumberFormatException nfe) {
-//			return 0.0;
-//		}
-//	}
-//
-//	public double getPorcentagemDebito() {
-//		try {
-//			return Util.arredondar( (this.previsaoDebito/this.realizadoDebito)*100  );
-//		} catch (NumberFormatException nfe) {
-//			return 0.0;
-//		}
-//	}
 	
 	public Long getId() {
 		return id;
@@ -301,10 +276,6 @@ public class DetalheOrcamento extends EntityPersistence {
 
 	public void setIdChanged(boolean idChanged) {
 		this.idChanged = idChanged;
-	}
-
-	public void setPorcentagemDebito(double porcentagemDebito) {
-		this.porcentagemDebito = porcentagemDebito;
 	}
 
 	public TipoCategoria getTipoCategoria() {

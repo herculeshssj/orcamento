@@ -49,6 +49,7 @@ import java.util.Date;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.LancamentoAgendado;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 
 public class CriterioLancamentoConta {
@@ -66,6 +67,8 @@ public class CriterioLancamentoConta {
 	private Moeda moeda;
 	
 	private TipoLancamento tipo;
+	
+	private TipoConta tipoConta;
 	
 	private Double valor;
 	
@@ -238,5 +241,13 @@ public class CriterioLancamentoConta {
 
 	public void setAgrupamentoSelecionado(String agrupamentoSelecionado) {
 		this.agrupamentoSelecionado = agrupamentoSelecionado;
+	}
+
+	public TipoConta getTipoConta() {
+		return tipoConta;
+	}
+
+	public void setTipoConta(TipoConta tipoConta) {
+		this.tipoConta = tipoConta;
 	}
 }

@@ -222,6 +222,30 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		}
 	}
 	
+	public String gerarNovoOrcamento() {
+		try {
+			getService().gerarOrcamento(entity);
+			infoMessage("Orçamento gerado com sucesso!");
+			
+			if (getOpcoesSistema().getExibirBuscasRealizadas()) {
+				find();
+			} else {
+				initializeEntity();
+			}
+			
+			return goToListPage;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
+		return "";
+	}
+	
+	public void atualizaCampoContaTipoConta() {
+		entity.setTipoConta(null);
+		entity.setConta(null);
+	}
+	
 	public void atualizaListaItens() {
 		listaItemDetalheOrcamento.clear();
 		this.getListaItensDetalheOrcamento();
@@ -251,17 +275,41 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 				switch (entity.getAbrangenciaOrcamento()) {
 					case CATEGORIA :						
 						for (Categoria c : categoriaService.buscarAtivosPorUsuario(getUsuarioLogado())) {
-							resultado.add(new DetalheOrcamento(c.getId(), c.getDescricao(), c.getTipoCategoria()));
+							boolean encontrado = false;
+							for (DetalheOrcamento detalhe : listaItemDetalheOrcamento) {
+								if (detalhe.getIdEntity().equals(c.getId())) {
+									encontrado = true;
+									break;
+								}							
+							}
+							if (!encontrado) 
+								resultado.add(new DetalheOrcamento(c.getId(), c.getDescricao(), c.getTipoCategoria()));
 						}						
 						break;
 					case FAVORECIDO :
 						for (Favorecido f : favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado())) {
-							resultado.add(new DetalheOrcamento(f.getId(), f.getNome()));
+							boolean encontrado = false;
+							for (DetalheOrcamento detalhe : listaItemDetalheOrcamento) {
+								if (detalhe.getIdEntity().equals(f.getId())) {
+									encontrado = true;
+									break;
+								}							
+							}
+							if (!encontrado) 
+								resultado.add(new DetalheOrcamento(f.getId(), f.getNome()));
 						}
 						break;
 					case MEIOPAGAMENTO :
 						for (MeioPagamento m : meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado())) {
-							resultado.add(new DetalheOrcamento(m.getId(), m.getDescricao()));
+							boolean encontrado = false;
+							for (DetalheOrcamento detalhe : listaItemDetalheOrcamento) {
+								if (detalhe.getIdEntity().equals(m.getId())) {
+									encontrado = true;
+									break;
+								}							
+							}
+							if (!encontrado) 
+								resultado.add(new DetalheOrcamento(m.getId(), m.getDescricao()));
 						}
 						break;
 				}
@@ -270,7 +318,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 			}
 		}
 		
-		resultado.removeAll(listaItemDetalheOrcamento);
+		//resultado.removeAll(listaItemDetalheOrcamento);
 		return resultado;
 	}
 	

@@ -171,11 +171,24 @@
 					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 					    </h:outputText>				
 					</p:column>					
-					<p:column style="text-align: center; vertical-align: middle;">
+					<p:column style="text-align: center; vertical-align: middle; font-weight: bold;">
 						<f:facet name="header">
 							<h:outputText value="%"/>
-						</f:facet>
-						<h:outputText value="#{item.porcentagemCredito}" />					
+						</f:facet>				
+						<h:outputText value="#{item.porcentagemCredito}" rendered="#{item.situacaoCredito == 'RUIM'}" style="color: #FF0000;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+						<h:outputText value=" %" rendered="#{item.situacaoCredito == 'RUIM'}" style="color: #FF0000;" />
+						
+						<h:outputText value="#{item.porcentagemCredito}" rendered="#{item.situacaoCredito == 'REGULAR'}" style="color: #CFCF00;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+						<h:outputText value=" %" rendered="#{item.situacaoCredito == 'REGULAR'}" style="color: #CFCF00;" />
+						
+						<h:outputText value="#{item.porcentagemCredito}" rendered="#{item.situacaoCredito == 'BOM'}" style="color: #339900;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>										
+						<h:outputText value=" %" rendered="#{item.situacaoCredito == 'BOM'}" style="color: #339900;" />
 					</p:column>					
 				</p:dataTable>
 			
@@ -208,11 +221,24 @@
 					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 					    </h:outputText>				
 					</p:column>					
-					<p:column style="text-align: center; vertical-align: middle;">
+					<p:column style="text-align: center; vertical-align: middle; font-weight: bold;">
 						<f:facet name="header">
 							<h:outputText value="%"/>
-						</f:facet>
-						<h:outputText value="#{item.porcentagemDebito}" />					
+						</f:facet>				
+						<h:outputText value="#{item.porcentagemDebito}" rendered="#{item.situacaoDebito == 'RUIM'}" style="color: #FF0000;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+						<h:outputText value=" %" rendered="#{item.situacaoDebito == 'RUIM'}" style="color: #FF0000;" />
+						
+						<h:outputText value="#{item.porcentagemDebito}" rendered="#{item.situacaoDebito == 'REGULAR'}" style="color: #CFCF00;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+						<h:outputText value=" %" rendered="#{item.situacaoDebito == 'REGULAR'}" style="color: #CFCF00;" />
+						
+						<h:outputText value="#{item.porcentagemDebito}" rendered="#{item.situacaoDebito == 'BOM'}" style="color: #339900;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>										
+						<h:outputText value=" %" rendered="#{item.situacaoDebito == 'BOM'}" style="color: #339900;" />
 					</p:column>
 				</p:dataTable>	
 			

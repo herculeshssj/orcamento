@@ -57,4 +57,6 @@ public interface IOrcamento extends ICRUDService<Orcamento>{
 	
 	public void atualizarValores(Orcamento entity) throws BusinessException;
 	
+	public void gerarOrcamento(Orcamento entity) throws BusinessException;
+	
 }

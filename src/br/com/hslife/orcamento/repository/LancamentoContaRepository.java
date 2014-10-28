@@ -74,48 +74,55 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findByCriterioLancamentoConta(CriterioLancamentoConta criterio) {
-		Criteria criteria = getSession().createCriteria(LancamentoConta.class);
+		Criteria criteria = getSession().createCriteria(LancamentoConta.class, "lancamento")
+				.createAlias("lancamento.conta", "con");
 		
-		if (criterio.getConta() != null && criterio.getConta().getId() != null) {
-			criteria.add(Restrictions.eq("conta.id", criterio.getConta().getId()));
+		// Tipo de conta prevalece sobre a conta, portanto se tipoConta é diferente de nulo,
+		// a busca não considera a conta setada
+		if (criterio.getTipoConta() != null) {
+			criteria.add(Restrictions.eq("con.tipoConta", criterio.getTipoConta()));
+		} else {
+			if (criterio.getConta() != null && criterio.getConta().getId() != null) {
+				criteria.add(Restrictions.eq("lancamento.conta.id", criterio.getConta().getId()));
+			}
 		}
 		
 		if (criterio.getDescricao() != null && !criterio.getDescricao().isEmpty()) {
-			criteria.add(Restrictions.ilike("descricao", criterio.getDescricao(), MatchMode.ANYWHERE));
+			criteria.add(Restrictions.ilike("lancamento.descricao", criterio.getDescricao(), MatchMode.ANYWHERE));
 		}
 		
 		if (criterio.getDataInicio() != null) {
-			criteria.add(Restrictions.ge("dataPagamento", criterio.getDataInicio()));			
+			criteria.add(Restrictions.ge("lancamento.dataPagamento", criterio.getDataInicio()));			
 		}
 		
 		if (criterio.getDataFim() != null) {
-			criteria.add(Restrictions.le("dataPagamento", criterio.getDataFim()));
+			criteria.add(Restrictions.le("lancamento.dataPagamento", criterio.getDataFim()));
 		}
 		
 		if (criterio.getAgendado() == 1 || criterio.getAgendado() == -1) {
-			criteria.add(Restrictions.eq("agendado", criterio.getAgendadoBoolean()));
+			criteria.add(Restrictions.eq("lancamento.agendado", criterio.getAgendadoBoolean()));
 		}
 		
 		if (criterio.getQuitado() == 1 || criterio.getQuitado() == -1) {
-			criteria.add(Restrictions.eq("quitado", criterio.getQuitadoBoolean()));
+			criteria.add(Restrictions.eq("lancamento.quitado", criterio.getQuitadoBoolean()));
 		}
 		
 		if (criterio.getMoeda() != null) {
-			criteria.add(Restrictions.eq("moeda.id", criterio.getMoeda().getId()));
+			criteria.add(Restrictions.eq("lancamento.moeda.id", criterio.getMoeda().getId()));
 		}
 		
 		if (criterio.getTipo() != null) {
-			criteria.add(Restrictions.eq("tipoLancamento", criterio.getTipo()));
+			criteria.add(Restrictions.eq("lancamento.tipoLancamento", criterio.getTipo()));
 		}
 		
 		if (criterio.getValor() != null && criterio.getValor().doubleValue() != 0) {
-			criteria.add(Restrictions.ge("valorPago", criterio.getValor()));
+			criteria.add(Restrictions.ge("lancamento.valorPago", criterio.getValor()));
 		}
 		
 		switch(criterio.getAgrupamentoSelecionado()) {
-			case "CAT" : criteria.add(Restrictions.eq("categoria.id", criterio.getIdAgrupamento())); break;
-			case "FAV" : criteria.add(Restrictions.eq("favorecido.id", criterio.getIdAgrupamento())); break;
-			case "PAG" : criteria.add(Restrictions.eq("meioPagamento.id", criterio.getIdAgrupamento())); break;
+			case "CAT" : criteria.add(Restrictions.eq("lancamento.categoria.id", criterio.getIdAgrupamento())); break;
+			case "FAV" : criteria.add(Restrictions.eq("lancamento.favorecido.id", criterio.getIdAgrupamento())); break;
+			case "PAG" : criteria.add(Restrictions.eq("lancamento.meioPagamento.id", criterio.getIdAgrupamento())); break;
 			default:
 		}
 		

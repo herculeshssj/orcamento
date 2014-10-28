@@ -66,7 +66,7 @@
 			Tipo de orçamento:
 			<h:selectOneMenu value="#{managedBean.entity.tipoOrcamento}">
 				<f:selectItems value="#{managedBean.listaTipoOrcamento}" />
-				<p:ajax event="change" update="pnlContaTipoConta"/>
+				<p:ajax event="change" update="pnlContaTipoConta" listener="#{managedBean.atualizaCampoContaTipoConta}"/>
 			</h:selectOneMenu>	
 			<h:outputText value=""/>
 			
@@ -106,14 +106,6 @@
 			<p:outputPanel id="pnlSpaceFim">
 				<h:outputText value="" rendered="#{managedBean.entity.periodoLancamento == 'FIXO'}"/>
 			</p:outputPanel>
-	
-			Automático:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.automatico}"/>
-			<h:outputText value=""/>
-			
-			Arquivar:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.arquivar}"/>
-			<h:outputText value=""/>
 			
 			Moeda padrão:
 			<h:outputText value="#{managedBean.moedaPadrao.label}" />
@@ -204,12 +196,8 @@
    			<p:graphicImage value="/resources/images/gravar.png" />
    		</h:commandLink>
    		&nbsp;&nbsp;&nbsp;
-   		<h:commandLink title="Gerar novo orçamento" rendered="#{managedBean.operation != 'create'}">
+   		<h:commandLink title="Gerar novo orçamento" action="#{managedBean.gerarNovoOrcamento}" rendered="#{managedBean.operation != 'create'}">
    			<p:graphicImage value="/resources/images/duplicar.png" />
-   		</h:commandLink>
-   		&nbsp;&nbsp;&nbsp;
-   		<h:commandLink title="Arquivar orçamento" rendered="#{managedBean.operation != 'create'}">
-   			<p:graphicImage value="/resources/images/arquivar.png" />
    		</h:commandLink>
 	</ui:define>
 

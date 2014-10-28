@@ -67,6 +67,7 @@ import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -90,7 +91,7 @@ public class Orcamento extends EntityPersistence {
 	
 	@Column(length=10, nullable = true)
 	@Enumerated(EnumType.STRING)
-	private String tipoConta;
+	private TipoConta tipoConta;
 	
 	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)
@@ -125,7 +126,7 @@ public class Orcamento extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	private List<DetalheOrcamento> detalhes;
 	
 	public Orcamento() {
@@ -220,12 +221,12 @@ public class Orcamento extends EntityPersistence {
 		tempFim.setTime(novoOrcamento.getInicio());
 		
 		switch (this.periodoLancamento) {
-			case MENSAL : tempFim.add(Calendar.MONTH, 1); break;
-			case BIMESTRAL : tempFim.add(Calendar.MONTH, 2); break;
-			case TRIMESTRAL : tempFim.add(Calendar.MONTH, 3); break;
-			case QUADRIMESTRAL : tempFim.add(Calendar.MONTH, 4); break;
-			case SEMESTRAL : tempFim.add(Calendar.MONTH, 6); break;
-			case ANUAL : tempFim.add(Calendar.YEAR, 1); break;
+			case MENSAL : tempFim.add(Calendar.MONTH, 1); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
+			case BIMESTRAL : tempFim.add(Calendar.MONTH, 2); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
+			case TRIMESTRAL : tempFim.add(Calendar.MONTH, 3); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
+			case QUADRIMESTRAL : tempFim.add(Calendar.MONTH, 4); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
+			case SEMESTRAL : tempFim.add(Calendar.MONTH, 6); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
+			case ANUAL : tempFim.add(Calendar.YEAR, 1); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
 			default : throw new BusinessException("Não é possível gerar novos orçamentos a partir de um com período fixo!");
 		}
 		
@@ -237,11 +238,27 @@ public class Orcamento extends EntityPersistence {
 		novoOrcamento.setAtivo(this.ativo);
 		novoOrcamento.setAutomatico(this.automatico);
 		novoOrcamento.setConta(this.conta);
-		novoOrcamento.setDescricao(this.descricao);
-		novoOrcamento.getDetalhes().addAll(this.detalhes);
+		novoOrcamento.setDescricao(this.descricao + " - " + Util.formataDataHora(novoOrcamento.getInicio(), Util.DATA));
 		novoOrcamento.setPeriodoLancamento(this.periodoLancamento);
 		novoOrcamento.setTipoConta(this.tipoConta);
 		novoOrcamento.setTipoOrcamento(this.tipoOrcamento);
+		novoOrcamento.setUsuario(this.usuario);
+		
+		DetalheOrcamento novoDetalhe;
+		for (DetalheOrcamento detalhe : this.detalhes) {
+			novoDetalhe = new DetalheOrcamento();
+			novoDetalhe.setDescricao(detalhe.getDescricao());
+			novoDetalhe.setIdEntity(detalhe.getIdEntity());
+			novoDetalhe.setPrevisao(detalhe.getPrevisao());
+			novoDetalhe.setPrevisaoCredito(detalhe.getPrevisaoCredito());
+			novoDetalhe.setPrevisaoDebito(detalhe.getPrevisaoDebito());
+			novoDetalhe.setRealizado(detalhe.getRealizado());
+			novoDetalhe.setRealizadoCredito(detalhe.getRealizadoCredito());
+			novoDetalhe.setRealizadoDebito(detalhe.getRealizadoDebito());
+			novoDetalhe.setTipoCategoria(detalhe.getTipoCategoria());
+			
+			novoOrcamento.getDetalhes().add(novoDetalhe);
+		}
 		
 		return novoOrcamento;
 	}
@@ -258,11 +275,11 @@ public class Orcamento extends EntityPersistence {
 		this.descricao = descricao;
 	}
 
-	public String getTipoConta() {
+	public TipoConta getTipoConta() {
 		return tipoConta;
 	}
 
-	public void setTipoConta(String tipoConta) {
+	public void setTipoConta(TipoConta tipoConta) {
 		this.tipoConta = tipoConta;
 	}
 
