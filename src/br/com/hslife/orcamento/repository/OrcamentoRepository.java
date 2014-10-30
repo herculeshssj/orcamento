@@ -60,7 +60,7 @@ public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Orcamento> findAllByUsuario(Usuario usuario) {
-		return getQuery("FROM Orcamento orcamento WHERE orcamento.usuario.id = :idUsuario")
+		return getQuery("FROM Orcamento orcamento WHERE orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
 				.setLong("idUsuario", usuario.getId())
 				.list();
 	}
