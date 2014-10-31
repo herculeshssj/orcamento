@@ -72,6 +72,7 @@ import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -154,6 +155,9 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	@Override
 	public String save() {
+		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+			entity.setMoeda(entity.getConta().getMoeda());
+		}
 		entity.setUsuario(getUsuarioLogado());
 		return super.save();
 	}

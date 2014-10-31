@@ -229,6 +229,10 @@ public class LancamentoConta extends EntityPersistence {
 				case DIA : temp.add(Calendar.DAY_OF_YEAR, i); break;
 				case MES : temp.add(Calendar.MONTH, i); break;
 				case ANO : temp.add(Calendar.YEAR, i); break;
+				case BIMESTRE : temp.add(Calendar.MONTH, i * 2); break;
+				case TRIMESTRE : temp.add(Calendar.MONTH, i * 3); break;
+				case QUADRIMESTRE : temp.add(Calendar.MONTH, i *  4); break;
+				case SEMESTRE : temp.add(Calendar.MONTH, i * 6); break;
 				default : // faz nada com a data de pagamento
 			}
 			lancamentoDestino.setDataPagamento(temp.getTime());

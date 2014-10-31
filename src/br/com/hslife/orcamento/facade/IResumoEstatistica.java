@@ -62,6 +62,6 @@ public interface IResumoEstatistica {
 	
 	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
 	
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, Integer mesAEstimar) throws BusinessException;
+	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, int mesAEstimar, int anoAEstimar) throws BusinessException;
 	
 }

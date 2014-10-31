@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,10 +61,14 @@ import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.LancamentoAgendado;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
@@ -73,6 +78,7 @@ import br.com.hslife.orcamento.model.SaldoAtualConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("resumoEstatisticaService")
@@ -88,6 +94,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@Autowired
 	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
+	
+	@Autowired
+	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
 
 	/*** Declaração dos componentes ***/
 	
@@ -176,8 +185,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, Integer mesAEstimar) throws BusinessException {
-				
+	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, int mesAEstimar, int anoAEstimar) throws BusinessException {
+		
+		// Pega a data atual
+		Calendar hoje = Calendar.getInstance();
+		
 		// Declara o Map de previsão de lançamentos da conta
 		Map<String, PanoramaLancamentoConta> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoConta>();
 		
@@ -191,42 +203,150 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		mapPanoramaLancamentos.put(saldoAnterior.getOid(), saldoAnterior);
 		
-		// Busca os lançamentos e classifica-os em suas respectivas categorias
-		List<Categoria> categorias = contaComponent.organizarLancamentosPorCategoria(lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca));
+		// Criação das listas que serão usadas
+		List<LancamentoConta> avulsos = new ArrayList<LancamentoConta>();
+		List<LancamentoConta> mensalidades = new ArrayList<LancamentoConta>();
+		List<LancamentoConta> parcelas = new ArrayList<LancamentoConta>();
+		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
 		
-		for (Categoria categoria : categorias) {
-			String oid = Util.MD5(categoria.getDescricao());
-			if (mapPanoramaLancamentos.containsKey(oid)) {
-				// Rotina de inserção dos valores dos lançamentos no panorama
-				for (LancamentoConta lancamento : categoria.getLancamentos()) {
-					mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
-				}
-			} else {
-				PanoramaLancamentoConta panorama = new PanoramaLancamentoConta();
-				panorama.setConta(criterioBusca.getConta());
-				panorama.setDescricao(categoria.getDescricao());
-				panorama.setAno(ano);
-				panorama.setOid(oid);								
-				panorama.setIndice(mapPanoramaLancamentos.values().size() + 1);
-				mapPanoramaLancamentos.put(oid, panorama);
-				
-				// Rotina de inserção dos valores dos lançamentos no panorama
-				for (LancamentoConta lancamento : categoria.getLancamentos()) {
-					mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
-					
-					// Verifica se o mês do pagamento é igual ao mês que será estimado
-					if (mesAEstimar != null && lancamento.getDataPagamento().getMonth() == mesAEstimar) {
-						lancamento.getDataPagamento().setMonth(new Date().getMonth());
-						List<LancamentoConta> lancamentosEstimados = lancamento.clonarLancamentos(12 - (new Date().getMonth() + 1), IncrementoClonagemLancamento.MES);
-						
-						// Insere os valores no Map para os meses subsequentes
-						for (LancamentoConta l : lancamentosEstimados) {
-							mapPanoramaLancamentos.get(oid).setarMes(l.getDataPagamento().getMonth(), l);
-						}
+		if (ano <= hoje.get(Calendar.YEAR)) {
+			// Ano atual e anteriores é trazido o que está atualmente registrado na conta
+			lancamentosProcessados = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+		} else {
+			// Anos posteriores é realizado a estimativa baseado no mês e ano informado e os lançamentos periódicos ativos da conta
+			
+			/*** Lançamentos parcelados ***/
+			// Traz todos os lançamentos parcelados ativos da conta selecionada
+			List<LancamentoPeriodico> parcelamentos = lancamentoPeriodicoRepository.
+					findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+			
+			// Itera os lançamentos parcelados a adiciona suas parcelas caso esteja no mesmo ano que o relatório
+			for (LancamentoPeriodico parcelamento : parcelamentos) {
+				for (LancamentoConta parcela : parcelamento.getPagamentos()) {
+					int anoParcela = parcela.getDataPagamento().getYear() + 1900;
+					if (anoParcela == ano) {
+						parcelas.add(parcela);
 					}
 				}
 			}
+			
+			// Adiciona as parcelas nos lançamentos processados
+			lancamentosProcessados.addAll(parcelas);
+			
+			/*** Lançamentos fixos ***/
+			// Traz todos os lançamentos fixos ativos da conta selecionada
+			List<LancamentoPeriodico> despesasFixas = lancamentoPeriodicoRepository.
+					findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+			
+			// Itera os lançamentos fixos
+			for (LancamentoPeriodico despesaFixa : despesasFixas) {
+				
+				// Busca a última mensalidade paga
+				LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(despesaFixa);
+				
+				// Verifica se a despesa fixa é mensal
+				if (despesaFixa.getPeriodoLancamento().equals(PeriodoLancamento.MENSAL)) {
+					// Seta o mês da data de pagamento da mensalidade para Janeiro e duplica os lançamentos
+					Calendar temp = Calendar.getInstance();
+					temp.setTime(ultimaMensalidade.getDataPagamento());
+					temp.set(Calendar.DAY_OF_MONTH, despesaFixa.getDiaVencimento());
+					temp.set(Calendar.MONTH, Calendar.JANUARY);
+					temp.set(Calendar.YEAR, ano);
+					ultimaMensalidade.setDataPagamento(temp.getTime());
+					
+					// Seta o valor definido na despesa fixa
+					ultimaMensalidade.setValorPago(despesaFixa.getValorParcela());
+					
+					lancamentosProcessados.add(ultimaMensalidade);
+					lancamentosProcessados.addAll(ultimaMensalidade.clonarLancamentos(11, IncrementoClonagemLancamento.MES));
+				} else {
+					// TODO Os valores inseridos estão vindo com o dobro do registrado na despesa fixa. Ver depois o que está acontecendo.
+					/* 
+					// Inclui a última mensalidade na lista de mensalidades
+					mensalidades.add(ultimaMensalidade);
+					
+					// Gera mais 12 mensalidades e inclui na lista de acordo com o período da despesa fixa
+					switch (despesaFixa.getPeriodoLancamento()) {
+						case BIMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.BIMESTRE)); break;
+						case TRIMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.TRIMESTRE)); break;
+						case QUADRIMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.QUADRIMESTRE)); break;
+						case SEMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.SEMESTRE)); break;
+						case ANUAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.ANO)); break;
+						default : // não faz nada
+					}
+					
+					// Inclui na listagem de lançamentos processados aqueles que o ano é igual ao do relatório
+					for (LancamentoConta mensalidade : mensalidades) {
+						if ((mensalidade.getDataPagamento().getYear() + 1900) == ano) 
+							lancamentosProcessados.add(mensalidade);
+					}
+					*/
+				}
+				
+			}
+			
+			
+			/*** Lançamentos avulsos ***/
+			// Traz os lançamentos avulsos existente no ano do relatório
+			avulsos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+			
+			// Itera os lançamentos avulsos para remover as mensalidades e parcelas
+			for (Iterator<LancamentoConta> iterator = avulsos.iterator(); iterator.hasNext(); ) {
+				if (iterator.next().getLancamentoPeriodico() != null) {
+					iterator.remove();
+				}
+			}
+			
+			// Inclui os lançamentos avulsos
+			lancamentosProcessados.addAll(avulsos);
+			
+			if (mesAEstimar != 99) { // Diz que é pra gerar a previsão usando os dados passados do mês e ano
+			
+				// Traz os lançamentos avulsos do mês e ano informados
+				criterioBusca.setDataInicio(Util.primeiroDiaMes(mesAEstimar, anoAEstimar));
+				criterioBusca.setDataFim(Util.ultimoDiaMes(mesAEstimar, anoAEstimar));
+				
+				avulsos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+				
+				// Itera os lançamentos avulsos para remover as mensalidades e parcelas
+				for (Iterator<LancamentoConta> iterator = avulsos.iterator(); iterator.hasNext(); ) {
+					if (iterator.next().getLancamentoPeriodico() != null) {
+						iterator.remove();
+					}
+				}
+				
+				// Seta o mês de pagamento para Janeiro e cria 12 novas instâncias do lançamento
+				for (LancamentoConta lancamento : avulsos) {
+					Calendar temp = Calendar.getInstance();
+					temp.setTime(lancamento.getDataPagamento());
+					temp.set(Calendar.MONTH, Calendar.JANUARY);
+					lancamento.setDataPagamento(temp.getTime());
+					
+					lancamentosProcessados.add(lancamento);
+					lancamentosProcessados.addAll(lancamento.clonarLancamentos(11, IncrementoClonagemLancamento.MES));
+				}
+			}
+			
 		}
+		
+		// Busca os lançamentos e classifica-os em suas respectivas categorias
+		List<Categoria> categorias = contaComponent.organizarLancamentosPorCategoria(lancamentosProcessados);
+		
+		for (Categoria categoria : categorias) {
+			String oid = Util.MD5(categoria.getDescricao());
+			PanoramaLancamentoConta panorama = new PanoramaLancamentoConta();
+			panorama.setConta(criterioBusca.getConta());
+			panorama.setDescricao(categoria.getDescricao());
+			panorama.setAno(ano);
+			panorama.setOid(oid);								
+			panorama.setIndice(mapPanoramaLancamentos.values().size() + 1);
+			mapPanoramaLancamentos.put(oid, panorama);
+				
+			// Rotina de inserção dos valores dos lançamentos no panorama
+			for (LancamentoConta lancamento : categoria.getLancamentos()) {
+				mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
+			}
+		}		
 		
 		// Realiza o cálculo do saldo total
 		PanoramaLancamentoConta saldoTotal = new PanoramaLancamentoConta();

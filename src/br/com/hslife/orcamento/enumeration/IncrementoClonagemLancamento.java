@@ -45,7 +45,14 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum IncrementoClonagemLancamento {
-	NENHUM("Não incrementar"), DIA("Por dia"), MES("Por mês"), ANO("Por ano");
+	NENHUM("Não incrementar"), 
+	DIA("Por dia"), 
+	MES("Por mês"), 
+	ANO("Por ano"), 
+	BIMESTRE("Por bimestre"), 
+	TRIMESTRE("Por trimestre"), 
+	QUADRIMESTRE("Por quadrimestre"),
+	SEMESTRE("Por semestre");
 	
 	private String descricao;
 	

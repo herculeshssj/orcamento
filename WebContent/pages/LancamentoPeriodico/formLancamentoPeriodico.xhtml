@@ -154,10 +154,9 @@
 				<h:panelGrid columns="2">
 				
 					Conta de pagamento:
-					<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{managedBean.entity.tipoLancamentoPeriodico != 'PARCELADO'}" disabled="#{managedBean.operation != 'create' and managedBean.entity.statusLancamento != 'ATIVO'}">
+					<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO' or (managedBean.operation != 'create' and managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO')}">
 						<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 					</h:selectOneMenu>
-					<h:outputText value="#{managedBean.entity.conta.label}" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 					
 					Categoria:
 					<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoria}"  converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
