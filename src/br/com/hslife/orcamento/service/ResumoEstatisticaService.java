@@ -205,7 +205,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		// Criação das listas que serão usadas
 		List<LancamentoConta> avulsos = new ArrayList<LancamentoConta>();
-		List<LancamentoConta> mensalidades = new ArrayList<LancamentoConta>();
 		List<LancamentoConta> parcelas = new ArrayList<LancamentoConta>();
 		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
 		
@@ -261,26 +260,42 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					lancamentosProcessados.addAll(ultimaMensalidade.clonarLancamentos(11, IncrementoClonagemLancamento.MES));
 				} else {
 					// TODO Os valores inseridos estão vindo com o dobro do registrado na despesa fixa. Ver depois o que está acontecendo.
-					/* 
-					// Inclui a última mensalidade na lista de mensalidades
-					mensalidades.add(ultimaMensalidade);
 					
 					// Gera mais 12 mensalidades e inclui na lista de acordo com o período da despesa fixa
 					switch (despesaFixa.getPeriodoLancamento()) {
-						case BIMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.BIMESTRE)); break;
-						case TRIMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.TRIMESTRE)); break;
-						case QUADRIMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.QUADRIMESTRE)); break;
-						case SEMESTRAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.SEMESTRE)); break;
-						case ANUAL : mensalidades.addAll(ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.ANO)); break;
+						case BIMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.BIMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosProcessados.add(l);
+							}							
+							break;
+						case TRIMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.TRIMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosProcessados.add(l);
+							}							
+							break;
+						case QUADRIMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.QUADRIMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosProcessados.add(l);
+							}							
+							break;
+						case SEMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.SEMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosProcessados.add(l);
+							}							
+							break;
+						case ANUAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.ANO)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosProcessados.add(l);
+							}							
+							break;
 						default : // não faz nada
 					}
 					
-					// Inclui na listagem de lançamentos processados aqueles que o ano é igual ao do relatório
-					for (LancamentoConta mensalidade : mensalidades) {
-						if ((mensalidade.getDataPagamento().getYear() + 1900) == ano) 
-							lancamentosProcessados.add(mensalidade);
-					}
-					*/
 				}
 				
 			}
