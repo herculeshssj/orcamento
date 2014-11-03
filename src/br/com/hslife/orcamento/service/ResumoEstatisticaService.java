@@ -315,7 +315,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Inclui os lançamentos avulsos
 			lancamentosProcessados.addAll(avulsos);
 			
-			if (mesAEstimar != 99) { // Diz que é pra gerar a previsão usando os dados passados do mês e ano
+			if (mesAEstimar != 99 && anoAEstimar != ano) { // Diz que é pra gerar a previsão usando os dados passados do mês e ano
 			
 				// Traz os lançamentos avulsos do mês e ano informados
 				criterioBusca.setDataInicio(Util.primeiroDiaMes(mesAEstimar, anoAEstimar));
