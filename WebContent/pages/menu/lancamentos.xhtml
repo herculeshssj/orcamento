@@ -68,16 +68,16 @@
 				<h:commandButton action="#{faturaCartaoMB.startUp}" image="/resources/images/faturacartao.png" title="Fatura do Carão"/>
 				
 				<h:outputText value="Despesas fixas e parceladas"/>
-				<h:outputText value="Lançamentos da Conta"/>
+				<h:outputText value="Lançamentos da Conta/Cartão"/>
 				<h:outputText value="Fatura do Cartão"/>
 				
-				<h:commandButton action="#{orcamentoMB.startUp}" image="/resources/images/orcamento.png" title="Orçamento do Período"/>
+				<h:commandButton action="#{importacaoLancamentoMB.startUp}" image="/resources/images/importacao.png" title="Importação de Lançamentos (Conta)"/>				
 				<h:commandButton action="#{fechamentoPeriodoMB.startUp}" image="/resources/images/fechamentoperiodo.png" title="Fechamento de Período"/>
-				<h:commandButton action="#{importacaoLancamentoMB.startUp}" image="/resources/images/importacao.png" title="Importação de Lançamentos (Conta)"/>
-				
-				<h:outputText value="Orçamento do Período"/>	
+				<h:commandButton action="#{orcamentoMB.startUp}" image="/resources/images/orcamento.png" title="Orçamento do Período"/>
+								
+				<h:outputText value="Importação de Lançamentos"/>	
 				<h:outputText value="Fechamento de Período"/>
-				<h:outputText value="Importação de Lançamentos"/>				
+				<h:outputText value="Orçamento do Período"/>				
 				
 				<h:commandButton action="#{lancamentoCartaoMB.startUp}" image="/resources/images/lancamento.png" title="Lançamentos do Cartão"/>				
 				<h:commandButton action="#{importacaoLancamentoMB.startUpCartao}" image="/resources/images/importacao.png" title="Importação de Lançamentos (Cartão)"/>

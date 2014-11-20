@@ -48,8 +48,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
-
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,13 +79,9 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private int ano;
-	private int mesAEstimar;
-	private int anoAEstimar;
 	
 	private PanoramaLancamentoConta entity;
 	private List<PanoramaLancamentoConta> listEntity;
-	
-	private String[] mes = new String[]{"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
 	
 	private CartesianChartModel saldoTotalModel;
 	private boolean exibirGrafico = false;
@@ -115,7 +109,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 			criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
 			criterioBusca.setDescricao("");
 			try {
-				listEntity = getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano, mesAEstimar, anoAEstimar);
+				listEntity = getService().gerarRelatorioPanoramaLancamentoConta(criterioBusca, ano);
 				
 				if (listEntity == null || listEntity.size() == 0) {
 					warnMessage("Nenhum resultado encontrado. Relatório não disponível para visualização.");
@@ -173,14 +167,6 @@ public class PanoramaLancamentoContaController extends AbstractController {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
-	}
-	
-	public List<SelectItem> getListaMeses() {
-		List<SelectItem> lista = new ArrayList<SelectItem>();
-		for (int i = 0; i < 12; i++) {
-			lista.add(new SelectItem(Integer.valueOf(i), this.mes[i]));
-		}
-		return lista;
 	}
 
 	public void setContaService(IConta contaService) {
@@ -241,21 +227,5 @@ public class PanoramaLancamentoContaController extends AbstractController {
 
 	public void setExibirGrafico(boolean exibirGrafico) {
 		this.exibirGrafico = exibirGrafico;
-	}
-
-	public int getMesAEstimar() {
-		return mesAEstimar;
-	}
-
-	public void setMesAEstimar(int mesAEstimar) {
-		this.mesAEstimar = mesAEstimar;
-	}
-
-	public int getAnoAEstimar() {
-		return anoAEstimar;
-	}
-
-	public void setAnoAEstimar(int anoAEstimar) {
-		this.anoAEstimar = anoAEstimar;
 	}
 }

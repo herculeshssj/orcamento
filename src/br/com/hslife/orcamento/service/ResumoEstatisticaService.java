@@ -185,7 +185,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano, int mesAEstimar, int anoAEstimar) throws BusinessException {
+	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException {
 		
 		// Pega a data atual
 		Calendar hoje = Calendar.getInstance();
@@ -313,35 +313,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 			
 			// Inclui os lançamentos avulsos
-			lancamentosProcessados.addAll(avulsos);
-			
-			if (mesAEstimar != 99 && anoAEstimar != ano) { // Diz que é pra gerar a previsão usando os dados passados do mês e ano
-			
-				// Traz os lançamentos avulsos do mês e ano informados
-				criterioBusca.setDataInicio(Util.primeiroDiaMes(mesAEstimar, anoAEstimar));
-				criterioBusca.setDataFim(Util.ultimoDiaMes(mesAEstimar, anoAEstimar));
-				
-				avulsos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
-				
-				// Itera os lançamentos avulsos para remover as mensalidades e parcelas
-				for (Iterator<LancamentoConta> iterator = avulsos.iterator(); iterator.hasNext(); ) {
-					if (iterator.next().getLancamentoPeriodico() != null) {
-						iterator.remove();
-					}
-				}
-				
-				// Seta o mês de pagamento para Janeiro e cria 12 novas instâncias do lançamento
-				for (LancamentoConta lancamento : avulsos) {
-					Calendar temp = Calendar.getInstance();
-					temp.setTime(lancamento.getDataPagamento());
-					temp.set(Calendar.MONTH, Calendar.JANUARY);
-					lancamento.setDataPagamento(temp.getTime());
-					
-					lancamentosProcessados.add(lancamento);
-					lancamentosProcessados.addAll(lancamento.clonarLancamentos(11, IncrementoClonagemLancamento.MES));
-				}
-			}
-			
+			lancamentosProcessados.addAll(avulsos);			
 		}
 		
 		// Busca os lançamentos e classifica-os em suas respectivas categorias

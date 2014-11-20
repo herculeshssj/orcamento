@@ -67,14 +67,10 @@
 		&nbsp;
 		Ano:
 		<p:inputText size="5" value="#{managedBean.ano}"/>
-		&nbsp;
-		Mês/Ano a estimar:
-		<h:selectOneMenu value="#{managedBean.mesAEstimar}">
-			<f:selectItem itemLabel="Nenhum" itemValue="99" />	
-			<f:selectItems value="#{managedBean.listaMeses}" />
-		</h:selectOneMenu>
-		/
-		<p:inputText value="#{managedBean.anoAEstimar}" size="5"></p:inputText>
+	</ui:define>
+	
+	<ui:define name="pesquisa_avancada">
+		<h:commandLink value="Visualizar relatório completo" action="#{managedBean.verRelatorioCompleto}" target="_blank"/>
 	</ui:define>
 	
 	<ui:define name="tabela">
@@ -90,8 +86,6 @@
 		</script>
 		
 		<p:lineChart id="linePanoramaLancamentoConta" value="#{managedBean.saldoTotalModel}" legendPosition="s" title="Panorama dos Lançamentos da Conta" style="height:600px" extender="ext1" rendered="#{managedBean.exibirGrafico}"/>
-	
-    	<h:commandLink value="Visualizar relatório completo" action="#{managedBean.verRelatorioCompleto}" target="_blank"/>
 	
 	</ui:define>
 	
