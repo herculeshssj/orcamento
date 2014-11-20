@@ -57,6 +57,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
@@ -104,19 +105,16 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	@Override
 	public String startUp() {
-		initializeEntity();
-		tipoImportacao = "CONTA";
-		return goToListPage();
-	}
-	
-	public String startUpCartao() {
-		initializeEntity();
-		tipoImportacao = "CARTAO";
 		return goToListPage();
 	}
 	
 	public String find() {
 		try {
+			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
+				tipoImportacao = "CARTAO";
+			} else {
+				tipoImportacao = "CONTA";
+			}
 			listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -159,6 +157,11 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public String goToStep2() {
 		try {
+			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
+				tipoImportacao = "CARTAO";
+			} else {
+				tipoImportacao = "CONTA";
+			}
 			lancamentosImportadosValidos = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -276,14 +279,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public List<Conta> getListaConta() {
 		try {
-			switch (tipoImportacao) {
-			case "CONTA":
-				return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-			case "CARTAO":
-				return contaService.buscarSomenteTipoCartaoAtivosPorUsuario(getUsuarioLogado());
-			default:
-				break;
-			}
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
