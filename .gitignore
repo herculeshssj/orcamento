@@ -1,2 +1,3 @@
 *.bak
 build/
+.DS_Store

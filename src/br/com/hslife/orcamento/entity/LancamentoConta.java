@@ -70,9 +70,9 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.util.Util;
 
 
 @Entity
@@ -110,6 +110,10 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(length=10)
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipoLancamento;
+	
+	@Column(length=15)
+	@Enumerated(EnumType.STRING)
+	private StatusLancamentoConta statusLancamentoConta;
 	
 	@Column(nullable=false)
 	private boolean agendado;
@@ -436,5 +440,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
 		this.lancamentoPeriodico = lancamentoPeriodico;
+	}
+
+	public StatusLancamentoConta getStatusLancamentoConta() {
+		return statusLancamentoConta;
+	}
+
+	public void setStatusLancamentoConta(StatusLancamentoConta statusLancamentoConta) {
+		this.statusLancamentoConta = statusLancamentoConta;
 	}
 }

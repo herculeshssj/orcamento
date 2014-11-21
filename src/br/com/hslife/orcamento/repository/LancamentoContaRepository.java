@@ -50,6 +50,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -63,6 +64,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Repository
@@ -70,6 +72,17 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	public LancamentoContaRepository() {
 		super(new LancamentoConta());
+	}
+	
+	public List<LancamentoConta> findByCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
+		Criteria criteria = getSession().createCriteria(LancamentoConta.class, "lancamento")
+				.createAlias("lancamento.conta", "con");
+		
+		for (Criterion criterion : criterioBusca.buildCriteria()) {
+			criteria.add(criterion);
+		}
+		
+		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
 	}
 	
 	@SuppressWarnings("unchecked")

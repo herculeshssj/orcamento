@@ -95,3 +95,10 @@ create table orcamento_detalheorcamento (
 
 alter table orcamento_detalheorcamento add constraint fk_orcamento foreign key (orcamento_id) references orcamento(id);
 alter table orcamento_detalheorcamento add constraint fk_detalheorcamento foreign key (detalhes_id) references detalheorcamento(id);
+
+-- Inclusão da coluna de statusLancamento - Tarefa #1023
+alter table lancamentoconta add column statusLancamentoConta varchar(15) null;
+update lancamentoconta set statusLancamentoConta = 'AGENDADO' where agendado = true;
+update lancamentoconta set statusLancamentoConta = 'QUITADO' where quitado = true;
+update lancamentoconta set statusLancamentoConta = 'REGISTRADO' where statusLancamentoConta is null;
+alter table lancamentoconta change column `statusLancamentoConta` `statusLancamentoConta` varchar(15) not null;

@@ -57,8 +57,11 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.service.ICRUDService;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
+	
+	public List<LancamentoConta> buscarPorCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) throws BusinessException;
 	
 	public List<LancamentoConta> buscarPorCriterioLancamentoConta(CriterioLancamentoConta criterio) throws BusinessException;
 	

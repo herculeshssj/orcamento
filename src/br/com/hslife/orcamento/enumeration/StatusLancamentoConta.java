@@ -44,12 +44,12 @@
 
 package br.com.hslife.orcamento.enumeration;
 
-public enum StatusLancamento {
-	ATIVO("Ativo"), SUSPENSO("Suspenso"), ENCERRADO("Encerrado");
+public enum StatusLancamentoConta {
+	AGENDADO("Agendado"), QUITADO("Quitado"), REGISTRADO("Registrado");
 	
 	private String descricao;
 	
-	private StatusLancamento(String descricao) {
+	private StatusLancamentoConta(String descricao) {
 		this.descricao = descricao;
 	}
 

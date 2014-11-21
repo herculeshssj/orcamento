@@ -42,18 +42,43 @@
   
  ***/
 
-package br.com.hslife.orcamento.enumeration;
+package br.com.hslife.orcamento.converter;
 
-public enum StatusLancamento {
-	ATIVO("Ativo"), SUSPENSO("Suspenso"), ENCERRADO("Encerrado");
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import javax.faces.convert.FacesConverter;
+
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+
+@FacesConverter(value="statusLancamentoContaConverter")
+public class StatusLancamentoContaConverter implements Converter{
 	
-	private String descricao;
-	
-	private StatusLancamento(String descricao) {
-		this.descricao = descricao;
+	@Override
+	public Object getAsObject(FacesContext contexto, UIComponent componente, String valor) {
+		try {
+			for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
+				if (status.toString().equalsIgnoreCase(valor))
+					return status;
+			}
+			return null;
+		} catch (Exception e) {
+			throw new ConverterException(e);
+		}
 	}
 
-	public String toString() {
-		return descricao;
+	@Override
+	public String getAsString(FacesContext contexto, UIComponent componente, Object valor) {
+		try {
+			for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
+				if ( ((StatusLancamentoConta)valor).equals(status) )
+					return status.toString();
+			}
+			return "";
+		} catch (Exception e) {
+			throw new ConverterException(e);
+		}
 	}
+
 }

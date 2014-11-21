@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -77,6 +78,7 @@ import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("lancamentoContaMB")
@@ -104,6 +106,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	private IBuscaSalva buscaSalvaService;
 	
 	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+	private CriterioBuscaLancamentoConta novoCriterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private String agrupamentoSelecionado;
 	private boolean pesquisarTermoNoAgrupamento;
@@ -138,9 +141,11 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	@Override
 	public void find() {
 		try {
-			if (criterioBusca.getConta() == null) {
+			if (novoCriterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
 			} else {
+				listEntity = getService().buscarPorCriterioBusca(novoCriterioBusca);
+				/* Trecho comentado para dar lugar ao novo mecanismo de busca
 				if (this.pesquisarTermoNoAgrupamento)
 					criterioBusca.setAgrupamentoSelecionado(this.agrupamentoSelecionado);
 				else
@@ -160,6 +165,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 					agrupamentoLancamentoPorMeioPagamento = getService().organizarLancamentosPorMeioPagamento(listEntity);
 				if (agrupamentoSelecionado.equals("CD"))
 					agrupamentoLancamentoPorDebitoCredito = getService().organizarLancamentosPorDebitoCredito(listEntity);
+				*/
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -465,6 +471,14 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		}
 		return resultado;
 	}
+	
+	public List<SelectItem> getListaStatusLancamentoConta() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
+			listaSelectItem.add(new SelectItem(status, status.toString()));
+		}
+		return listaSelectItem;
+	}
 
 	public ILancamentoConta getService() {
 		return service;
@@ -560,5 +574,13 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 
 	public void setPesquisarTermoNoAgrupamento(boolean pesquisarTermoNoAgrupamento) {
 		this.pesquisarTermoNoAgrupamento = pesquisarTermoNoAgrupamento;
+	}
+
+	public CriterioBuscaLancamentoConta getNovoCriterioBusca() {
+		return novoCriterioBusca;
+	}
+
+	public void setNovoCriterioBusca(CriterioBuscaLancamentoConta novoCriterioBusca) {
+		this.novoCriterioBusca = novoCriterioBusca;
 	}
 }

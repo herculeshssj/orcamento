@@ -74,6 +74,7 @@ import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("lancamentoContaService")
@@ -174,6 +175,11 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public List<LancamentoConta> buscarPorCriterioLancamentoConta(CriterioLancamentoConta criterio) throws BusinessException {
 		return getComponent().buscarPorCriterioLancamentoConta(criterio);
+	}
+	
+	@Override
+	public List<LancamentoConta> buscarPorCriterioBusca(CriterioBuscaLancamentoConta criterioBusca)	throws BusinessException {
+		return getRepository().findByCriterioBusca(criterioBusca);
 	}
 
 	@Override

@@ -83,14 +83,14 @@
     </ui:define>
 	
 	<ui:define name="pesquisa">
-    	<p:inputText value="#{managedBean.criterioBusca.descricao}" size="20"/>
+    	<p:inputText value="#{managedBean.novoCriterioBusca.descricao}" size="20"/>
     	&nbsp;
 	    De:
-	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.dataInicio}">
+	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.novoCriterioBusca.dataInicio}">
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>	         		     					
 		À
-		<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.dataFim}">
+		<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.novoCriterioBusca.dataFim}">
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>
 	</ui:define>
@@ -128,16 +128,9 @@
 				</h:panelGroup>				
 				<h:panelGroup>   				
 					Exibir:
-					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.agendado}">
-		  				<f:selectItem itemLabel="Sem lançamentos agendados" itemValue="-1"/>
-						<f:selectItem itemLabel="Com lançamentos agendados" itemValue="0"/>
-						<f:selectItem itemLabel="Somente lançamentos agendados" itemValue="1"/>   					
-					</p:selectOneRadio>
-					<p:selectOneRadio layout="pageDirection" value="#{managedBean.criterioBusca.quitado}">
-		  				<f:selectItem itemLabel="Sem lançamentos quitados" itemValue="-1"/>
-						<f:selectItem itemLabel="Com lançamentos quitados" itemValue="0"/>
-						<f:selectItem itemLabel="Somente lançamentos quitados" itemValue="1"/>   					
-					</p:selectOneRadio>					
+					<p:selectManyCheckbox value="#{managedBean.novoCriterioBusca.statusLancamentoConta}" converter="statusLancamentoContaConverter" layout="pageDirection">
+						<f:selectItems value="#{managedBean.listaStatusLancamentoConta}"/>
+					</p:selectManyCheckbox>					
 				</h:panelGroup>				
 			</h:panelGrid>			   				   				   				
   		</p:overlayPanel>
@@ -164,7 +157,7 @@
 	<ui:define name="outras_opcoes">
 		<strong>Conta:</strong>
 		&nbsp;
-		<h:selectOneMenu id="txtConta" value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
+		<h:selectOneMenu id="txtConta" value="#{managedBean.novoCriterioBusca.conta}" converter="entityConverter">
 			<f:selectItems value="#{entityCombo.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			<p:ajax update="txtBuscaSalva" listener="#{managedBean.atualizaComboBuscasSalvas}"/>			
 		</h:selectOneMenu>
