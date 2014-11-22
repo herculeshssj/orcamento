@@ -138,7 +138,7 @@ public class AgendamentoTask {
 				lancamento = lancamentoContaRepository.findById(agenda.getIdEntity());
 				if (lancamento != null) {
 					dataLancamento = new Date(lancamento.getDataPagamento().getYear()+1900, lancamento.getDataPagamento().getMonth(), lancamento.getDataPagamento().getDate(), 0, 0, 0);
-					if (lancamento.isAgendado() && dataLancamento.equals(dataAgenda)) {
+					if (lancamento.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO) && dataLancamento.equals(dataAgenda)) {
 						lancamentosAtualizados.add(lancamento);
 					} else {
 						agendaRepository.delete(agenda);

@@ -338,8 +338,6 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 			criterioBusca.setDescricao(buscaSalva.getTextoBusca());
 			criterioBusca.setDataInicio(buscaSalva.getDataInicio());
 			criterioBusca.setDataFim(buscaSalva.getDataFim());
-			criterioBusca.setAgendado(buscaSalva.getAgendados());
-			criterioBusca.setQuitado(buscaSalva.getQuitados());
 			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
 			criterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());						
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
@@ -364,8 +362,6 @@ public class LancamentoCartaoController extends AbstractLancamentoContaControlle
 		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
 		buscaSalva.setDataFim(criterioBusca.getDataFim());
 		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
-		buscaSalva.setAgendados(criterioBusca.getAgendado());
-		buscaSalva.setQuitados(criterioBusca.getQuitado());
 		buscaSalva.setIdAgrupamento(criterioBusca.getIdAgrupamento());
 		
 		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);

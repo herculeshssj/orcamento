@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -122,7 +123,7 @@ public class CalendarioAtividadesServiceTest extends AbstractTestServices {
 		// Cria três lançamentos agendados para a conta
 		lancamentos = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
-			lancamento.setAgendado(true);
+			lancamento.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
 			lancamento.setConta(conta);
 			lancamento.setDataPagamento(new Date());
 			lancamento.setDescricao("Lançamento de teste 0" + i);

@@ -130,13 +130,13 @@ public class CriterioBuscaLancamentoConta {
 	public void setAgrupamento(String agrupamento) {
 		this.agrupamento = agrupamento;
 	
-		if (agrupamento != null && !agrupamento.isEmpty()) {
-			// Remove os agrupamentos anteriormente setados
-			hibernateCriterions.remove("categoria");
-			hibernateCriterions.remove("favorecido");
-			hibernateCriterions.remove("meiopagamento");
-			hibernateCriterions.remove("moeda");
-			
+		// Remove os agrupamentos anteriormente setados
+		hibernateCriterions.remove("categoria");
+		hibernateCriterions.remove("favorecido");
+		hibernateCriterions.remove("meiopagamento");
+		hibernateCriterions.remove("moeda");
+		
+		if (agrupamento != null && !agrupamento.isEmpty()) {			
 			switch(agrupamento) {
 				case "CAT" : hibernateCriterions.put("categoria", Restrictions.eq("lancamento.categoria.id", idAgrupamento)); break;
 				case "FAV" : hibernateCriterions.put("favorecido", Restrictions.eq("lancamento.favorecido.id", idAgrupamento)); break;

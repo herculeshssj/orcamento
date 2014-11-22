@@ -415,7 +415,7 @@ public class ContaComponent {
 				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
 				this.registrarPagamento(lancamento);
 			} else {
-				lancamento.setQuitado(true);
+				lancamento.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 				lancamentoContaRepository.update(lancamento);
 			}
 		}
@@ -505,8 +505,7 @@ public class ContaComponent {
 	}
 	
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException {		
-		pagamentoPeriodo.setQuitado(true);
-		pagamentoPeriodo.setAgendado(false);
+		pagamentoPeriodo.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 		
 		// Atualiza o pagamento
 		lancamentoContaRepository.update(pagamentoPeriodo);

@@ -45,6 +45,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -171,7 +172,11 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	public String save() {
 		// Salva a informação da moeda no lançamento da conta
 		entity.setMoeda(entity.getConta().getMoeda());
-		
+		if (entity.getDataPagamento().before(new Date())) {
+			entity.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+		} else {
+			entity.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+		}
 		return super.save();
 	}
 	
@@ -296,8 +301,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			novoCriterioBusca.setDescricao(buscaSalva.getTextoBusca());
 			novoCriterioBusca.setDataInicio(buscaSalva.getDataInicio());
 			novoCriterioBusca.setDataFim(buscaSalva.getDataFim());
-			//criterioBusca.setAgendado(buscaSalva.getAgendados());
-			//criterioBusca.setQuitado(buscaSalva.getQuitados());
 			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
 			novoCriterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
@@ -321,8 +324,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		buscaSalva.setDataInicio(novoCriterioBusca.getDataInicio());
 		buscaSalva.setDataFim(novoCriterioBusca.getDataFim());
 		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
-		//buscaSalva.setAgendados(criterioBusca.getAgendado());
-		//buscaSalva.setQuitados(criterioBusca.getQuitado());
 		buscaSalva.setIdAgrupamento(novoCriterioBusca.getIdAgrupamento());
 		
 		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);

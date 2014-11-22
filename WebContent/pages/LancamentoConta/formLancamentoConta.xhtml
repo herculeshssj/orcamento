@@ -64,19 +64,19 @@
 		<h:panelGrid columns="3" style="font-size: 16px;">
 		
 			Conta:			
-			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{!managedBean.entity.quitado}">
+			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
 				<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 				<p:ajax update="txtLancamentoImportado" listener="#{managedBean.atualizaComboLancamentosImportado}"/>			
 			</h:selectOneMenu>
-			<h:outputText value="#{managedBean.entity.conta.descricao}" rendered="#{managedBean.entity.quitado}"/>
+			<h:outputText value="#{managedBean.entity.conta.descricao}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}"/>
 			<h:inputHidden/>
 						
 			Tipo de Lançamento:
-			<p:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" rendered="#{!managedBean.entity.quitado}">
+			<p:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
 				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
 				<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>				
 			</p:selectOneRadio>
-			<h:outputText value="#{managedBean.entity.tipoLancamento}" rendered="#{managedBean.entity.quitado}"/>
+			<h:outputText value="#{managedBean.entity.tipoLancamento}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}"/>
 			<h:inputHidden/>
 			
 			Descrição:
@@ -92,12 +92,12 @@
 			<h:inputHidden/>
 			
 			<h:outputText value="Período / Ano:" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
-			<h:panelGroup rendered="#{!managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
+			<h:panelGroup rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
 				<h:inputText value="#{managedBean.entity.periodo}" size="5"/>
 				<h:outputText value=" / " />
 				<h:inputText value="#{managedBean.entity.ano}" size="5"/>
 			</h:panelGroup>
-			<h:panelGroup rendered="#{managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
+			<h:panelGroup rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO' and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
 				<h:outputText value="#{managedBean.entity.periodo}" />
 				<h:outputText value=" / " />
 				<h:outputText value="#{managedBean.entity.ano}" />
@@ -109,28 +109,28 @@
 			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 			
 			<h:outputText value="Data de vencimento:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
-			<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}" rendered="#{!managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null}">
+			<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null}">
 	    		<f:converter converterId="dateConverter"/>
 	    	</p:inputMask>
-	    	<h:outputText value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.quitado and managedBean.entity.lancamentoPeriodico != null}">
+	    	<h:outputText value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO' and managedBean.entity.lancamentoPeriodico != null}">
 	    		<f:converter converterId="dateConverter"/>
 	    	</h:outputText>
 	    	<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
 			
 			Data de pagamento:
-			<p:inputMask id="txtDataPagamento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataPagamento}" rendered="#{!managedBean.entity.quitado}">
+			<p:inputMask id="txtDataPagamento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataPagamento}" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
 	    		<f:converter converterId="dateConverter"/>
 	    	</p:inputMask>
-	    	<h:outputText value="#{managedBean.entity.dataPagamento}" rendered="#{managedBean.entity.quitado}">
+	    	<h:outputText value="#{managedBean.entity.dataPagamento}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
 	    		<f:converter converterId="dateConverter"/>
 	    	</h:outputText>
 	    	<h:inputHidden/>
 	    	
 	    	Valor Pago:
-	    	<p:inputText id="txtValorPago" value="#{managedBean.entity.valorPago}" size="10" rendered="#{!managedBean.entity.quitado}">
+	    	<p:inputText id="txtValorPago" value="#{managedBean.entity.valorPago}" size="10" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
 				<f:convertNumber type="currency" pattern="###.##"/>
 			</p:inputText>
-			<h:outputText value="#{managedBean.entity.valorPago}" rendered="#{managedBean.entity.quitado}">
+			<h:outputText value="#{managedBean.entity.valorPago}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
 				<f:convertNumber type="currency" pattern="###.##"/>
 			</h:outputText>
 			<h:inputHidden/>
@@ -138,10 +138,6 @@
 			Observação:
 			<p:inputTextarea value="#{managedBean.entity.observacao}" size="70" rows="3" rendered="#{managedBean.entity.conta.ativo}"/>
 			<h:outputText value="#{managedBean.entity.observacao}" rendered="#{!managedBean.entity.conta.ativo}"/>
-			<h:inputHidden/>
-			
-			Lançamento agendado:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.agendado}" disabled="#{managedBean.entity.quitado}"/>
 			<h:inputHidden/>
 			
 			Categoria:
@@ -158,8 +154,7 @@
 				<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.favorecido.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
-			<h:inputHidden/>
-			
+			<h:inputHidden/>			
 			
 			<h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.entity.meioPagamento}" converter="entityConverter" rendered="#{managedBean.entity.conta.ativo and managedBean.opcoesSistema.exibirMeioPagamento}">
