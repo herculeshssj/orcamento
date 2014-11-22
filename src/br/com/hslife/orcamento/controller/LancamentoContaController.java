@@ -77,7 +77,6 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
@@ -105,7 +104,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	@Autowired
 	private IBuscaSalva buscaSalvaService;
 	
-	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
 	private CriterioBuscaLancamentoConta novoCriterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private String agrupamentoSelecionado;
@@ -144,18 +142,15 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			if (novoCriterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
 			} else {
-				listEntity = getService().buscarPorCriterioBusca(novoCriterioBusca);
-				/* Trecho comentado para dar lugar ao novo mecanismo de busca
 				if (this.pesquisarTermoNoAgrupamento)
-					criterioBusca.setAgrupamentoSelecionado(this.agrupamentoSelecionado);
+					novoCriterioBusca.setAgrupamento(this.agrupamentoSelecionado);					
 				else
-					criterioBusca.setAgrupamentoSelecionado("");
-				listEntity = getService().buscarPorCriterioLancamentoConta(criterioBusca);
-				if (listEntity != null & listEntity.size() > getOpcoesSistema().getLimiteQuantidadeRegistros()) {
-					listEntity.clear();
-					warnMessage("Resultado ultrapassa os " + getOpcoesSistema().getLimiteQuantidadeRegistros() + " registros configurados. Refine sua busca!");
-					return;
-				}
+					novoCriterioBusca.setAgrupamento(null);
+				
+				// Seta o limite de resultado da pesquisa
+				novoCriterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+				
+				listEntity = getService().buscarPorCriterioBusca(novoCriterioBusca);
 				
 				if (agrupamentoSelecionado.equals("CAT"))
 					agrupamentoLancamentoPorCategoria = getService().organizarLancamentosPorCategoria(listEntity);
@@ -165,7 +160,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 					agrupamentoLancamentoPorMeioPagamento = getService().organizarLancamentosPorMeioPagamento(listEntity);
 				if (agrupamentoSelecionado.equals("CD"))
 					agrupamentoLancamentoPorDebitoCredito = getService().organizarLancamentosPorDebitoCredito(listEntity);
-				*/
+				
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -232,7 +227,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	
 	public void atualizaComboBuscasSalvas() {
 		try {
-			buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, null, getUsuarioLogado());
+			buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), null, null, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -297,14 +292,14 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	
 	public void processarBuscaSalva() {
 		if (buscaSalva != null) {
-			criterioBusca.setConta(buscaSalva.getConta());
-			criterioBusca.setDescricao(buscaSalva.getTextoBusca());
-			criterioBusca.setDataInicio(buscaSalva.getDataInicio());
-			criterioBusca.setDataFim(buscaSalva.getDataFim());
-			criterioBusca.setAgendado(buscaSalva.getAgendados());
-			criterioBusca.setQuitado(buscaSalva.getQuitados());
+			novoCriterioBusca.setConta(buscaSalva.getConta());
+			novoCriterioBusca.setDescricao(buscaSalva.getTextoBusca());
+			novoCriterioBusca.setDataInicio(buscaSalva.getDataInicio());
+			novoCriterioBusca.setDataFim(buscaSalva.getDataFim());
+			//criterioBusca.setAgendado(buscaSalva.getAgendados());
+			//criterioBusca.setQuitado(buscaSalva.getQuitados());
 			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
-			criterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
+			novoCriterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
 				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
@@ -321,14 +316,14 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	public String salvarBuscaView() {
 		buscaSalva = new BuscaSalva();
 		
-		buscaSalva.setConta(criterioBusca.getConta());
-		buscaSalva.setTextoBusca(criterioBusca.getDescricao());
-		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
-		buscaSalva.setDataFim(criterioBusca.getDataFim());
+		buscaSalva.setConta(novoCriterioBusca.getConta());
+		buscaSalva.setTextoBusca(novoCriterioBusca.getDescricao());
+		buscaSalva.setDataInicio(novoCriterioBusca.getDataInicio());
+		buscaSalva.setDataFim(novoCriterioBusca.getDataFim());
 		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
-		buscaSalva.setAgendados(criterioBusca.getAgendado());
-		buscaSalva.setQuitados(criterioBusca.getQuitado());
-		buscaSalva.setIdAgrupamento(criterioBusca.getIdAgrupamento());
+		//buscaSalva.setAgendados(criterioBusca.getAgendado());
+		//buscaSalva.setQuitados(criterioBusca.getQuitado());
+		buscaSalva.setIdAgrupamento(novoCriterioBusca.getIdAgrupamento());
 		
 		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);
 		if (agrupamentoSelecionado.equals("CAT")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.CATEGORIA);
@@ -423,9 +418,9 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		try {
 			if (buscasSalvas.isEmpty()) {
 				if (getOpcoesSistema().getExibirContasInativas())
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, null, getUsuarioLogado());
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, null, getUsuarioLogado());
 				else
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, true, getUsuarioLogado());
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, true, getUsuarioLogado());
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -494,14 +489,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 
 	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {
 		this.meioPagamentoService = meioPagamentoService;
-	}
-
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
-	}
-
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
 	}
 
 	public String getAgrupamentoSelecionado() {

@@ -179,6 +179,7 @@ public class LancamentoConta extends EntityPersistence {
 	public LancamentoConta() {
 		conta = new Conta();
 		tipoLancamento = TipoLancamento.DESPESA;
+		statusLancamentoConta = StatusLancamentoConta.REGISTRADO;
 	}
 	
 	public LancamentoConta(LancamentoConta lancamento) {

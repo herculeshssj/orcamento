@@ -67,8 +67,12 @@ public class CriterioBuscaLancamentoConta {
 	private String descricao;
 	private Date dataInicio;
 	private Date dataFim;
+	private String agrupamento;
+	private Long idAgrupamento;
 	private TipoConta[] tipoConta;
 	private StatusLancamentoConta[] statusLancamentoConta;
+	
+	private Integer limiteResultado = 0;
 	
 	public String getDescricao() {
 		return descricao;
@@ -119,6 +123,31 @@ public class CriterioBuscaLancamentoConta {
 		}
 	}
 
+	public String getAgrupamento() {
+		return agrupamento;
+	}
+
+	public void setAgrupamento(String agrupamento) {
+		this.agrupamento = agrupamento;
+	
+		if (agrupamento != null && !agrupamento.isEmpty()) {
+			// Remove os agrupamentos anteriormente setados
+			hibernateCriterions.remove("categoria");
+			hibernateCriterions.remove("favorecido");
+			hibernateCriterions.remove("meiopagamento");
+			hibernateCriterions.remove("moeda");
+			
+			switch(agrupamento) {
+				case "CAT" : hibernateCriterions.put("categoria", Restrictions.eq("lancamento.categoria.id", idAgrupamento)); break;
+				case "FAV" : hibernateCriterions.put("favorecido", Restrictions.eq("lancamento.favorecido.id", idAgrupamento)); break;
+				case "PAG" : hibernateCriterions.put("meiopagamento", Restrictions.eq("lancamento.meioPagamento.id", idAgrupamento)); break;
+				case "MOE" : hibernateCriterions.put("moeda", Restrictions.eq("lancamento.moeda.id", idAgrupamento)); break;
+				default:
+			}
+		}
+		
+	}
+
 	public TipoConta[] getTipoConta() {
 		return tipoConta;
 	}
@@ -150,5 +179,21 @@ public class CriterioBuscaLancamentoConta {
 
 	public List<Criterion> buildCriteria() {
 		return new ArrayList<Criterion>(hibernateCriterions.values());
+	}
+
+	public Long getIdAgrupamento() {
+		return idAgrupamento;
+	}
+
+	public void setIdAgrupamento(Long idAgrupamento) {
+		this.idAgrupamento = idAgrupamento;
+	}
+
+	public Integer getLimiteResultado() {
+		return limiteResultado;
+	}
+
+	public void setLimiteResultado(Integer limiteResultado) {
+		this.limiteResultado = limiteResultado;
 	}
 }

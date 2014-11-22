@@ -74,6 +74,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		super(new LancamentoConta());
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findByCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
 		Criteria criteria = getSession().createCriteria(LancamentoConta.class, "lancamento")
 				.createAlias("lancamento.conta", "con");
@@ -82,7 +83,11 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(criterion);
 		}
 		
-		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
+		if (criterioBusca.getLimiteResultado() == 0) {
+			return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
+		} else {
+			return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).setMaxResults(criterioBusca.getLimiteResultado()).list();
+		}		
 	}
 	
 	@SuppressWarnings("unchecked")
