@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
@@ -221,7 +222,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
-			if (pagamento.isQuitado()) {
+			if (pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 				if (pagamento.getFaturaCartao() != null && pagamento.getFaturaCartao().getDataFechamento() != null)
 					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getFaturaCartao().getDataFechamento());
 				else
@@ -311,7 +312,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 		
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
-			if (pagamento.isQuitado()) {
+			if (pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 				if (pagamento.getFaturaCartao() != null && pagamento.getFaturaCartao().getDataFechamento() != null)
 					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getFaturaCartao().getDataFechamento());
 				else

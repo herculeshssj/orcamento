@@ -71,6 +71,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -414,7 +415,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		double valor = 0.0;
 		if (entity.getPagamentos() != null && entity.getPagamentos().size() > 0) {
 			for (LancamentoConta pagamento : entity.getPagamentos()) {
-				if (!pagamento.isQuitado()) {
+				if (!pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 					valor += entity.getValorParcela();
 				}
 			}
@@ -426,7 +427,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		double valor = 0.0;
 		if (entity.getPagamentos() != null && entity.getPagamentos().size() > 0) {
 			for (LancamentoConta pagamento : entity.getPagamentos()) {
-				if (pagamento.isQuitado()) {
+				if (pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 					valor += pagamento.getValorPago();
 				}
 			}
