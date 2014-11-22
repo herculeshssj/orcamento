@@ -58,8 +58,8 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("panoramaLancamentoContaMB")
@@ -77,7 +77,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	@Autowired
 	private IConta contaService;
 	
-	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	private int ano;
 	
 	private PanoramaLancamentoConta entity;
@@ -173,14 +173,6 @@ public class PanoramaLancamentoContaController extends AbstractController {
 		this.contaService = contaService;
 	}
 
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
-	}
-
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
-	}
-
 	public int getAno() {
 		return ano;
 	}
@@ -227,5 +219,13 @@ public class PanoramaLancamentoContaController extends AbstractController {
 
 	public void setExibirGrafico(boolean exibirGrafico) {
 		this.exibirGrafico = exibirGrafico;
+	}
+
+	public CriterioBuscaLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
 	}
 }

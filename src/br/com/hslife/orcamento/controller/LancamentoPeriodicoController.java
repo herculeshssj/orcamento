@@ -83,7 +83,7 @@ import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Component("lancamentoPeriodicoMB")
 @Scope("session")
@@ -124,7 +124,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	private boolean parcelamento;
 	private boolean selecionarTodosLancamentos;
 	private boolean gerarLancamento;
-	private CriterioLancamentoConta criterioBusca;
+	private CriterioBuscaLancamentoConta criterioBusca;
 	private List<LancamentoConta> lancamentosEncontrados;
 	private LancamentoConta lancamentoSelecionado;
 	private LancamentoConta[] lancamentosSelecionados;
@@ -243,7 +243,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public String vincularLancamentoView() {
 		lancamentosEncontrados = new ArrayList<LancamentoConta>();
-		criterioBusca = new CriterioLancamentoConta();
+		criterioBusca = new CriterioBuscaLancamentoConta();
 		actionTitle = " - Vincular Lançamento";
 		tipoSelecao = "single";
 		return "/pages/LancamentoPeriodico/vincularLancamentoConta";
@@ -251,7 +251,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public String vincularNovoLancamentoView() {
 		lancamentosEncontrados = new ArrayList<LancamentoConta>();
-		criterioBusca = new CriterioLancamentoConta();
+		criterioBusca = new CriterioBuscaLancamentoConta();
 		pagamentoPeriodo = null;
 		actionTitle = " - Vincular Lançamento";
 		tipoSelecao = "multiple";
@@ -318,7 +318,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		try {
 			criterioBusca.setConta(entity.getConta());
 			lancamentosEncontrados.clear();
-			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
+			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			
 			// Remove os lançamentos que já estão vinculados a outros lançamentos periódicos
 			for (Iterator<LancamentoConta> i = lancamentosEncontrados.iterator(); i.hasNext(); ) {
@@ -646,14 +646,6 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		this.pagamentoPeriodo = pagamentoPeriodo;
 	}
 
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
-	}
-
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
-	}
-
 	public List<LancamentoConta> getLancamentosEncontrados() {
 		return lancamentosEncontrados;
 	}
@@ -685,5 +677,13 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setLancamentoSelecionado(LancamentoConta lancamentoSelecionado) {
 		this.lancamentoSelecionado = lancamentoSelecionado;
+	}
+
+	public CriterioBuscaLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
 	}
 }

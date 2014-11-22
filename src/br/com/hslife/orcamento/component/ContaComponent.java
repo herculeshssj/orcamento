@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -71,6 +72,7 @@ import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.EntityLabelComparator;
 import br.com.hslife.orcamento.util.Util;
 
@@ -384,13 +386,13 @@ public class ContaComponent {
 		
 		
 		// Calcula o saldo do período
-		CriterioLancamentoConta criterio = new CriterioLancamentoConta();
+		CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
 		criterio.setConta(conta);
 		criterio.setDescricao("");
 		criterio.setDataInicio(temp.getTime());
 		criterio.setDataFim(dataFechamento);
-		criterio.setAgendado(false);
-		double saldoFechamento = this.calcularSaldoLancamentos(this.buscarPorCriterioLancamentoConta(criterio));
+		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		double saldoFechamento = this.calcularSaldoLancamentos(lancamentoContaRepository.findByCriterioBusca(criterio));
 		
 		// Cria o novo fechamento para a conta
 		FechamentoPeriodo novoFechamento = new FechamentoPeriodo();
@@ -407,7 +409,7 @@ public class ContaComponent {
 		novoFechamento.setAno(temp.get(Calendar.YEAR));
 		
 		// Quita os lançamentos do período
-		for (LancamentoConta l : this.buscarPorCriterioLancamentoConta(criterio)) {
+		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
 			LancamentoConta lancamento = this.lancamentoContaRepository.findById(l.getId());
 			if (lancamento.getLancamentoPeriodico() != null) {
 				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos

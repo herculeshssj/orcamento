@@ -57,9 +57,9 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOrcamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.repository.CategoriaRepository;
 import br.com.hslife.orcamento.repository.FavorecidoRepository;
@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.OrcamentoRepository;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Service("orcamentoService")
 public class OrcamentoService extends AbstractCRUDService<Orcamento> implements IOrcamento {
@@ -131,13 +132,13 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	@Override
 	public void atualizarValores(Orcamento entity) throws BusinessException {
 		// Busca todos os lançamentos no período indicado no orçamento
-		CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		criterioBusca.setDataInicio(entity.getInicio());
 		criterioBusca.setDataFim(entity.getFim());
 		criterioBusca.setConta(entity.getConta());
-		criterioBusca.setTipoConta(entity.getTipoConta());
+		criterioBusca.setTipoConta(new TipoConta[]{entity.getTipoConta()});
 		
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
 		
 		// Organiza os lançamentos e calcula seu saldo
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();

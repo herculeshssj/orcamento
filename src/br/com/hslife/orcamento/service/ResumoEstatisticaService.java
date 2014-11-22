@@ -64,14 +64,13 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.LancamentoAgendado;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
@@ -79,6 +78,7 @@ import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("resumoEstatisticaService")
@@ -150,11 +150,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 			
 			// Traz os lançamentos da data de fechamento em diante			
-			CriterioLancamentoConta criterio = new CriterioLancamentoConta();
-			if (lancamentoAgendado)
-				criterio.setAgendado(LancamentoAgendado.COM);
-			else
-				criterio.setAgendado(LancamentoAgendado.SEM);
+			CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
+			criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});						
 			criterio.setConta(conta);
 			if (ultimoFechamento == null) {
 				criterio.setDataInicio(conta.getDataAbertura());
@@ -166,7 +163,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				criterio.setDataInicio(temp.getTime());
 			}				
 			
-			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioLancamentoConta(criterio);
+			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterio);
 			
 			// Calcula o saldo dos lançamentos e registra no saldo atual
 			saldoAtual.setSaldoRegistrado(contaComponent.calcularSaldoLancamentos(lancamentos));
@@ -185,7 +182,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioLancamentoConta criterioBusca, int ano) throws BusinessException {
+	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws BusinessException {
 		
 		// Pega a data atual
 		Calendar hoje = Calendar.getInstance();
@@ -210,7 +207,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		if (ano <= hoje.get(Calendar.YEAR)) {
 			// Ano atual e anteriores é trazido o que está atualmente registrado na conta
-			lancamentosProcessados = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+			lancamentosProcessados = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
 		} else {
 			// Anos posteriores é realizado a estimativa baseado no mês e ano informado e os lançamentos periódicos ativos da conta
 			
@@ -303,7 +300,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			/*** Lançamentos avulsos ***/
 			// Traz os lançamentos avulsos existente no ano do relatório
-			avulsos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+			avulsos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
 			
 			// Itera os lançamentos avulsos para remover as mensalidades e parcelas
 			for (Iterator<LancamentoConta> iterator = avulsos.iterator(); iterator.hasNext(); ) {
@@ -412,7 +409,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Override
 	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
-		CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		FechamentoPeriodo fechamentoAnterior = null;
 				
 		// Busca o fechamento do período anterior
@@ -422,7 +419,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
 		
 		// Preenche os parâmetros de busca
-		criterioBusca.setAgendado(false);
+		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
 		criterioBusca.setConta(conta);
 		
 		// Determina a data de início do período
@@ -444,7 +441,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}
 		
 		// Realiza a busca
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca);
+		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
 		
 		// Processa as categorias
 		if (fechamentoAnterior == null) {
