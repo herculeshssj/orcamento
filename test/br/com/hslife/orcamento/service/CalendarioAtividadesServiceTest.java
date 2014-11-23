@@ -69,7 +69,7 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 public class CalendarioAtividadesServiceTest extends AbstractTestServices {
@@ -137,8 +137,8 @@ public class CalendarioAtividadesServiceTest extends AbstractTestServices {
 	
 	@Test
 	public void testBuscarAgendamentosLancamentosAgendados() throws BusinessException {
-		CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
-		criterioBusca.setAgendado(true);
+		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
 		int contador = 0;
 		for (Agenda agenda : calendarioAtividadesService.buscarAgendamentoLancamentosAgendados(conta, new Date(), new Date())) {
 			for (int i = 0; i < 3; i++) {

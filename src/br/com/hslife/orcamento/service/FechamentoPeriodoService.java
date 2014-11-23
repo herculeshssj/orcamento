@@ -163,7 +163,7 @@ public class FechamentoPeriodoService extends AbstractCRUDService<FechamentoPeri
 		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
 		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
 			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
-			lancamento.setQuitado(false);
+			lancamento.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			lancamentoContaRepository.update(lancamento);
 		}
 	}

@@ -156,12 +156,21 @@ public class CriterioBuscaLancamentoConta {
 		this.tipoConta = tipoConta;
 		
 		// Caso conta esteja setado, remove para dar lugar a tipoConta
-		if (tipoConta != null && tipoConta.length > 0) {
+		if (tipoConta != null && tipoConta.length > 0 && this.containsValidObjects(tipoConta)) {
 			if (hibernateCriterions.containsKey("conta"))
 				hibernateCriterions.remove("conta");
 			
 			hibernateCriterions.put("tipoConta", Restrictions.in("con.tipoConta", tipoConta));
 		}
+	}
+	
+	
+	private boolean containsValidObjects(Object[] array) {
+		int countValidObjects = 0;
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] != null) countValidObjects++;
+		}
+		return countValidObjects == 0 ? false : true; 
 	}
 
 	public StatusLancamentoConta[] getStatusLancamentoConta() {
@@ -172,7 +181,7 @@ public class CriterioBuscaLancamentoConta {
 			StatusLancamentoConta[] statusLancamentoConta) {
 		this.statusLancamentoConta = statusLancamentoConta;
 		
-		if (statusLancamentoConta != null && statusLancamentoConta.length > 0) {
+		if (statusLancamentoConta != null && statusLancamentoConta.length > 0 && this.containsValidObjects(statusLancamentoConta)) {
 			hibernateCriterions.put("statusLancamentoConta", Restrictions.in("lancamento.statusLancamentoConta", statusLancamentoConta));
 		}
 	}

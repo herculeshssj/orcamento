@@ -69,6 +69,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -77,7 +78,7 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("faturaCartaoMB")
@@ -114,7 +115,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	private CartaoCredito cartaoSelecionado;
 	private FaturaCartao faturaSelecionada;
-	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	private LancamentoConta lancamento;
 	private Conta contaSelecionada;
 	private StatusFaturaCartao statusFatura;
@@ -138,7 +139,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		lancamentosEncontrados.clear();
 		lancamentosAdicionados.clear();
 		moedas = new ArrayList<Moeda>();
-		criterioBusca = new CriterioLancamentoConta();
+		criterioBusca = new CriterioBuscaLancamentoConta();
 	}
 
 	
@@ -331,9 +332,9 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public void pesquisarLancamento() {
 		try {
 			criterioBusca.setConta(contaService.buscarPorID(cartaoSelecionado.getConta().getId()));
-			criterioBusca.setQuitado(false);
+			criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO});
 			lancamentosEncontrados.clear();
-			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
+			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			lancamentosEncontrados.removeAll(lancamentosAdicionados);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -464,7 +465,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public String quitarFaturaView() {
 		try {
 			faturaSelecionada = getService().buscarPorID(idEntity);
-			criterioBusca = new CriterioLancamentoConta();
+			criterioBusca = new CriterioBuscaLancamentoConta();
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
 		} catch (BusinessException be) {
@@ -480,7 +481,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			} else {				
 				criterioBusca.setDataFim(criterioBusca.getDataInicio());
 				lancamentosEncontrados.clear();
-				lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
+				lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -738,14 +739,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		this.faturaSelecionada = faturaSelecionada;
 	}
 
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
-	}
-
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
-	}
-
 	public LancamentoConta getLancamento() {
 		return lancamento;
 	}
@@ -810,5 +803,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
+	}
+
+	public CriterioBuscaLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
 	}
 }

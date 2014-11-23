@@ -51,7 +51,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -63,7 +62,6 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
@@ -88,114 +86,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		} else {
 			return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).setMaxResults(criterioBusca.getLimiteResultado()).list();
 		}		
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<LancamentoConta> findByCriterioLancamentoConta(CriterioLancamentoConta criterio) {
-		Criteria criteria = getSession().createCriteria(LancamentoConta.class, "lancamento")
-				.createAlias("lancamento.conta", "con");
-		
-		// Tipo de conta prevalece sobre a conta, portanto se tipoConta é diferente de nulo,
-		// a busca não considera a conta setada
-		if (criterio.getTipoConta() != null) {
-			criteria.add(Restrictions.eq("con.tipoConta", criterio.getTipoConta()));
-		} else {
-			if (criterio.getConta() != null && criterio.getConta().getId() != null) {
-				criteria.add(Restrictions.eq("lancamento.conta.id", criterio.getConta().getId()));
-			}
-		}
-		
-		if (criterio.getDescricao() != null && !criterio.getDescricao().isEmpty()) {
-			criteria.add(Restrictions.ilike("lancamento.descricao", criterio.getDescricao(), MatchMode.ANYWHERE));
-		}
-		
-		if (criterio.getDataInicio() != null) {
-			criteria.add(Restrictions.ge("lancamento.dataPagamento", criterio.getDataInicio()));			
-		}
-		
-		if (criterio.getDataFim() != null) {
-			criteria.add(Restrictions.le("lancamento.dataPagamento", criterio.getDataFim()));
-		}
-		
-		if (criterio.getAgendado() == 1 || criterio.getAgendado() == -1) {
-			criteria.add(Restrictions.eq("lancamento.agendado", criterio.getAgendadoBoolean()));
-		}
-		
-		if (criterio.getQuitado() == 1 || criterio.getQuitado() == -1) {
-			criteria.add(Restrictions.eq("lancamento.quitado", criterio.getQuitadoBoolean()));
-		}
-		
-		if (criterio.getMoeda() != null) {
-			criteria.add(Restrictions.eq("lancamento.moeda.id", criterio.getMoeda().getId()));
-		}
-		
-		if (criterio.getTipo() != null) {
-			criteria.add(Restrictions.eq("lancamento.tipoLancamento", criterio.getTipo()));
-		}
-		
-		if (criterio.getValor() != null && criterio.getValor().doubleValue() != 0) {
-			criteria.add(Restrictions.ge("lancamento.valorPago", criterio.getValor()));
-		}
-		
-		switch(criterio.getAgrupamentoSelecionado()) {
-			case "CAT" : criteria.add(Restrictions.eq("lancamento.categoria.id", criterio.getIdAgrupamento())); break;
-			case "FAV" : criteria.add(Restrictions.eq("lancamento.favorecido.id", criterio.getIdAgrupamento())); break;
-			case "PAG" : criteria.add(Restrictions.eq("lancamento.meioPagamento.id", criterio.getIdAgrupamento())); break;
-			default:
-		}
-		
-		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<LancamentoConta> findByCriterioLancamentoCartao(CriterioLancamentoConta criterio) {
-		Criteria criteria = getSession().createCriteria(LancamentoConta.class, "lancamento")
-				.createAlias("lancamento.faturaCartao", "fatura");
-		
-		if (criterio.getConta() != null && criterio.getConta().getId() != null) {
-			criteria.add(Restrictions.eq("lancamento.conta.id", criterio.getConta().getId()));
-		}
-		
-		if (criterio.getDescricao() != null && !criterio.getDescricao().isEmpty()) {
-			criteria.add(Restrictions.ilike("lancamento.descricao", criterio.getDescricao(), MatchMode.ANYWHERE));
-		}
-		
-		if (criterio.getDataInicio() != null) {
-			criteria.add(Restrictions.ge("fatura.dataVencimento", criterio.getDataInicio()));			
-		}
-		
-		if (criterio.getDataFim() != null) {
-			criteria.add(Restrictions.le("fatura.dataVencimento", criterio.getDataFim()));
-		}
-		
-		if (criterio.getAgendado() == 1 || criterio.getAgendado() == -1) {
-			criteria.add(Restrictions.eq("lancamento.agendado", criterio.getAgendadoBoolean()));
-		}
-		
-		if (criterio.getQuitado() == 1 || criterio.getQuitado() == -1) {
-			criteria.add(Restrictions.eq("lancamento.quitado", criterio.getQuitadoBoolean()));
-		}
-		
-		if (criterio.getMoeda() != null) {
-			criteria.add(Restrictions.eq("lancamento.moeda.id", criterio.getMoeda().getId()));
-		}
-		
-		if (criterio.getTipo() != null) {
-			criteria.add(Restrictions.eq("lancamento.tipoLancamento", criterio.getTipo()));
-		}
-		
-		if (criterio.getValor() != null && criterio.getValor().doubleValue() != 0) {
-			criteria.add(Restrictions.ge("lancamento.valorPago", criterio.getValor()));
-		}
-		
-		switch(criterio.getAgrupamentoSelecionado()) {
-			case "CAT" : criteria.add(Restrictions.eq("lancamento.categoria.id", criterio.getIdAgrupamento())); break;
-			case "FAV" : criteria.add(Restrictions.eq("lancamento.favorecido.id", criterio.getIdAgrupamento())); break;
-			case "PAG" : criteria.add(Restrictions.eq("lancamento.meioPagamento.id", criterio.getIdAgrupamento())); break;
-		default:
-	}
-		
-		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
 	}
 	
 	public LancamentoConta findLastLancamentoContaByConta(Conta conta) {

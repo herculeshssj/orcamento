@@ -68,7 +68,6 @@ import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
@@ -170,11 +169,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			throw new BusinessException("Este lançamento não pode ser excluído pois representa uma parcela!");
 		}
 		super.excluir(entity);
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarPorCriterioLancamentoConta(CriterioLancamentoConta criterio) throws BusinessException {
-		return getComponent().buscarPorCriterioLancamentoConta(criterio);
 	}
 	
 	@Override

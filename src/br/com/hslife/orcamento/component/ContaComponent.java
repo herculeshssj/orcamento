@@ -67,7 +67,6 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
@@ -110,10 +109,6 @@ public class ContaComponent {
 	
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
 		this.usuarioComponent = usuarioComponent;
-	}
-	
-	public List<LancamentoConta> buscarPorCriterioLancamentoConta(CriterioLancamentoConta criterio) throws BusinessException {
-		return lancamentoContaRepository.findByCriterioLancamentoConta(criterio);
 	}
 	
 	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) {

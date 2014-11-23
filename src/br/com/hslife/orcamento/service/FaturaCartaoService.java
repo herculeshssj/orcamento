@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
@@ -185,7 +186,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
 				contaComponent.registrarPagamento(l);
 			} else {
-				l.setQuitado(true);
+				l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 				lancamentoContaRepository.update(l);
 			}
 		}
@@ -263,7 +264,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
 				contaComponent.registrarPagamento(l);
 			} else {
-				l.setQuitado(true);
+				l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 				lancamentoContaRepository.update(l);
 			}
 		}
@@ -313,7 +314,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		// Reabre todos os lançamentos vinculados à fatura
 		for (LancamentoConta lancamento : fatura.getDetalheFatura()) {
 			LancamentoConta l = lancamentoContaRepository.findById(lancamento.getId());
-			l.setQuitado(false);
+			l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			lancamentoContaRepository.update(l);
 		}
 	}
@@ -345,7 +346,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		lancamentoPagamento.setMoeda(contaCorrente.getMoeda());
 		lancamentoPagamento.setDataPagamento(dataPagamento);
 		lancamentoPagamento.setDescricao("Pagamento Fatura " + fatura.getLabel() + ", " + faturaCartao.getConta().getCartaoCredito().getDescricao());
-		lancamentoPagamento.setQuitado(true);
+		lancamentoPagamento.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 		lancamentoPagamento.setValorPago(valorAQuitar);
 		lancamentoPagamento.setTipoLancamento(TipoLancamento.DESPESA);
 		
