@@ -70,7 +70,6 @@ import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="faturacartao")
@@ -150,11 +149,11 @@ public class FaturaCartao extends EntityPersistence {
 	@Override
 	public String getLabel() {
 		switch (this.statusFaturaCartao) {
-			case ABERTA : return "Vence em " + Util.formataDataHora(dataVencimento, Util.DATA);
-			case FECHADA : return "Vence em " + Util.formataDataHora(dataVencimento, Util.DATA) + " (FECHADA)";
-			case FUTURA : return "À vencer em " + Util.formataDataHora(dataVencimento, Util.DATA);
-			case QUITADA : return "Quitada em " + Util.formataDataHora(dataPagamento, Util.DATA);
-			case VENCIDA : return "Vencida em " + Util.formataDataHora(dataVencimento, Util.DATA);
+			case ABERTA : return "Fatura " + mes + "/" + ano + " (ATUAL)";
+			case FECHADA : return "Fatura " + mes + "/" + ano + " (FECHADA)";
+			case FUTURA : return "Fatura " + mes + "/" + ano + " (FUTURA)";
+			case QUITADA : return "Fatura " + mes + "/" + ano + " (QUITADA)";
+			case VENCIDA : return "Fatura " + mes + "/" + ano + " (VENCIDA)";
 			default : return "";
 		}
 	}
