@@ -205,12 +205,17 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
+	@SuppressWarnings("deprecation")
 	public String save() {
 		if (entity.getId() == null) {
 			entity.setConta(cartaoSelecionado.getConta());
 		}
 		entity.getDetalheFatura().clear();
 		entity.getDetalheFatura().addAll(lancamentosAdicionados);
+		
+		entity.setMes(entity.getDataVencimento().getMonth() + 1);
+		entity.setAno(entity.getDataVencimento().getYear() + 1900);
+		
 		return super.save();
 	}
 	

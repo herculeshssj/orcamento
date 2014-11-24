@@ -106,6 +106,12 @@ public class FaturaCartao extends EntityPersistence {
 	@Column
 	private boolean parcelado;
 	
+	@Column(nullable=false)
+	private int mes;
+	
+	@Column(nullable=false)
+	private int ano;
+	
 	@Column(precision=18, scale=2)
 	private double saldoDevedor;
 	
@@ -285,5 +291,21 @@ public class FaturaCartao extends EntityPersistence {
 
 	public void setConta(Conta conta) {
 		this.conta = conta;
+	}
+
+	public int getMes() {
+		return mes;
+	}
+
+	public void setMes(int mes) {
+		this.mes = mes;
+	}
+
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
 	}
 }

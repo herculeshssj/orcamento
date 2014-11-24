@@ -113,3 +113,13 @@ alter table buscasalva drop column textoParcela;
 -- Remoção das colunas agendado e quitado da entidade LancamentoConta - Tarefa #1023
 alter table lancamentoconta drop column agendado;
 alter table lancamentoconta drop column quitado;
+
+-- Inclusão das colunas de período e ano na entidade de FaturaCartao - Tarefa #1211
+alter table faturacartao add column mes integer null;
+alter table faturacartao add column ano integer null;
+
+update faturacartao set mes = extract(month from dataVencimento);
+update faturacartao set ano = extract(year from dataVencimento);
+
+alter table faturacartao change column `mes` `mes` integer not null;
+alter table faturacartao change column `ano` `ano` integer not null;

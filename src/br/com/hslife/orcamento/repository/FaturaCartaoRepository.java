@@ -131,6 +131,15 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<FaturaCartao> findAllByContaAndUsuarioOrderedByMesAndAno(Conta conta, Usuario usuario) {
+		String hql = "SELECT f FROM FaturaCartao f INNER JOIN f.conta c WHERE c.usuario.id = :idUsuario AND c.id = :idConta ORDER BY f.ano DESC, f.mes DESC";
+		Query query = getSession().createQuery(hql);
+		query.setLong("idUsuario", usuario.getId());
+		query.setLong("idConta", conta.getId());
+		return query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public FaturaCartao findNextFaturaCartaoFuturaByVencimento(Conta conta, Date dataVencimento) {
 		Criteria criteria = getSession().createCriteria(FaturaCartao.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
