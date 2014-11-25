@@ -152,7 +152,7 @@ public class FaturaCartao extends EntityPersistence {
 			case ABERTA : return "Fatura " + mes + "/" + ano + " (ATUAL)";
 			case FECHADA : return "Fatura " + mes + "/" + ano + " (FECHADA)";
 			case FUTURA : return "Fatura " + mes + "/" + ano + " (FUTURA)";
-			case QUITADA : return "Fatura " + mes + "/" + ano + " (QUITADA)";
+			case QUITADA : return "Fatura " + mes + "/" + ano;
 			case VENCIDA : return "Fatura " + mes + "/" + ano + " (VENCIDA)";
 			default : return "";
 		}

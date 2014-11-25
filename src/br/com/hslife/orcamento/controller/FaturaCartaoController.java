@@ -157,7 +157,17 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
+			int contFaturas = 1;
+			
+			listEntity = new ArrayList<FaturaCartao>();
+			
+			for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
+				if (contFaturas <= 5) {
+					listEntity.add(fatura);
+					contFaturas++;
+				}
+			}
+
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

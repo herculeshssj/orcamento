@@ -81,5 +81,5 @@ public interface IFaturaCartao extends ICRUDService<FaturaCartao>{
 	
 	public void fecharFaturaAntiga(FaturaCartao fatura, List<Moeda> conversoes, LancamentoConta lancamentoPagamento) throws BusinessException;
 	
-	public List<FaturaCartao> buscarPorContaEUsuarioOrdenadoPorMesEAno(Conta conta, Usuario usuario) throws BusinessException;
+	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta) throws BusinessException;
 }

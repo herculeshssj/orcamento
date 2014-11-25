@@ -63,5 +63,14 @@
 		</h:selectOneMenu>		
 	</ui:define>
 	
+	<ui:define name="tabela">
+		
+		<p:tabView value="#{managedBean.listEntity}" var="fatura" rendered="#{not empty managedBean.listEntity}">
+			<p:tab title="#{fatura.label}">
+			</p:tab>
+		</p:tabView>
+	
+	</ui:define>
+	
 </ui:composition>
 </html>

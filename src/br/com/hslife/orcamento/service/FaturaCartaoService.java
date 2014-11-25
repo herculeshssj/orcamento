@@ -431,7 +431,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
-	public List<FaturaCartao> buscarPorContaEUsuarioOrdenadoPorMesEAno(Conta conta, Usuario usuario) throws BusinessException {
-		return getRepository().findAllByContaAndUsuarioOrderedByMesAndAno(conta, usuario);
+	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta) throws BusinessException {
+		return getRepository().findAllByContaOrderedByMesAndAno(conta);
 	}
 }
