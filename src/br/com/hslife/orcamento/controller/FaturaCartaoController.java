@@ -47,8 +47,11 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -56,6 +59,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -125,6 +129,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private List<Moeda> moedas = new ArrayList<Moeda>();
 	private List<LancamentoConta> lancamentosEncontrados = new ArrayList<LancamentoConta>();
 	private List<LancamentoConta> lancamentosAdicionados = new ArrayList<LancamentoConta>();
+	private Map<String, Set<LancamentoConta>> mapFaturasEncontradas = new HashMap<>();
 	
 	public FaturaCartaoController() {
 		super(new FaturaCartao());
@@ -164,13 +169,27 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
 				if (contFaturas <= 5) {
 					listEntity.add(fatura);
+					
+					// Adiciona os detalhes da fatura no Map
+					mapFaturasEncontradas.put(fatura.getLabel(), fatura.getDetalheFatura());
+					
+					if (contFaturas == 1 && !mapFaturasEncontradas.isEmpty()) {
+						// Pegar o primeiro elemento inserido no Map para mostrar logo na interface
+						detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
+					}
+					
 					contFaturas++;
-				}
+				} 
 			}
 
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+	}
+	
+	public void atualizarListaLancamentosFatura(TabChangeEvent event) {
+		detalhesFaturaCartao.clear();
+		detalhesFaturaCartao.addAll(mapFaturasEncontradas.get(event.getTab().getTitle()));
 	}
 	
 	@Override
