@@ -51,7 +51,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -59,7 +58,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -129,7 +127,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private List<Moeda> moedas = new ArrayList<Moeda>();
 	private List<LancamentoConta> lancamentosEncontrados = new ArrayList<LancamentoConta>();
 	private List<LancamentoConta> lancamentosAdicionados = new ArrayList<LancamentoConta>();
-	private Map<String, Set<LancamentoConta>> mapFaturasEncontradas = new HashMap<>();
+	private Map<String, List<LancamentoConta>> mapFaturasEncontradas = new HashMap<>();
+	private Map<String, List<Moeda>> mapMoedasEncontradas = new HashMap<>();
 	
 	public FaturaCartaoController() {
 		super(new FaturaCartao());
@@ -165,18 +164,27 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			int contFaturas = 1;
 			
 			listEntity = new ArrayList<FaturaCartao>();
+			mapFaturasEncontradas.clear();
 			
 			for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
 				if (contFaturas <= 5) {
 					listEntity.add(fatura);
 					
 					// Adiciona os detalhes da fatura no Map
-					mapFaturasEncontradas.put(fatura.getLabel(), fatura.getDetalheFatura());
+					mapFaturasEncontradas.put(fatura.getLabel(), new ArrayList<LancamentoConta>(fatura.getDetalheFatura()));
 					
-					if (contFaturas == 1 && !mapFaturasEncontradas.isEmpty()) {
-						// Pegar o primeiro elemento inserido no Map para mostrar logo na interface
-						detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
+					// Adiciona os detalhes da fatura no List detalhesFaturaCartao para realizar o 
+					// cálculo dos totais
+					detalhesFaturaCartao.clear();
+					detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
+					this.calcularSaldoCompraSaqueParceladoPorMoeda();
+					for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
+						moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
 					}
+					this.calculaValorConversao();
+					
+					// Adiciona as moedas com seus totais no map correspondente
+					mapMoedasEncontradas.put(fatura.getLabel(), new ArrayList<Moeda>(moedas));
 					
 					contFaturas++;
 				} 
@@ -185,11 +193,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-	}
-	
-	public void atualizarListaLancamentosFatura(TabChangeEvent event) {
-		detalhesFaturaCartao.clear();
-		detalhesFaturaCartao.addAll(mapFaturasEncontradas.get(event.getTab().getTitle()));
 	}
 	
 	@Override
@@ -570,7 +573,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
-	public void calculaValorConversao() {
+	private void calculaValorConversao() {
 		totalFatura = 0.0;
 		for (Moeda moeda : moedas) {
 			if (moeda.isPadrao()) 
@@ -845,5 +848,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
 		this.criterioBusca = criterioBusca;
+	}
+
+	public Map<String, List<LancamentoConta>> getMapFaturasEncontradas() {
+		return mapFaturasEncontradas;
+	}
+
+	public Map<String, List<Moeda>> getMapMoedasEncontradas() {
+		return mapMoedasEncontradas;
 	}
 }

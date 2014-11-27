@@ -58,6 +58,7 @@
 	
 	<ui:define name="pesquisa">
 		<strong>Cartão:</strong>
+		&nbsp;
 		<h:selectOneMenu value="#{managedBean.cartaoSelecionado}" converter="entityConverter">
 			<f:selectItems value="#{managedBean.listaCartaoSoCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 		</h:selectOneMenu>		
@@ -65,10 +66,9 @@
 	
 	<ui:define name="tabela">
 		
-		<p:tabView  value="#{managedBean.listEntity}" var="fatura" rendered="#{not empty managedBean.listEntity}">
-			<p:ajax event="tabChange" listener="#{faturaCartaoMB.atualizarListaLancamentosFatura}" update="@form"/>			
-			<p:tab title="#{fatura.label}">				
-				<p:dataTable var="item" value="#{managedBean.detalhesFaturaCartao}">
+		<p:tabView  value="#{managedBean.listEntity}" var="fatura" rendered="#{not empty managedBean.listEntity}">						
+			<p:tab title="#{fatura.label}">								
+				<p:dataTable var="item" value="#{managedBean.mapFaturasEncontradas[fatura.label]}">
 					<p:column style="vertical-align: middle;">
 						<f:facet name="header">
 					    	<h:outputText value="Histórico"/>
@@ -99,6 +99,83 @@
 						</h:commandButton>
 					</p:column>		
 				</p:dataTable>
+				
+				<h:dataTable var="moeda" value="#{managedBean.mapMoedasEncontradas[fatura.label]}">					
+					<h:column>
+						<h:panelGroup>
+							<strong>Compras/Saques:</strong>
+							<br/>
+							<h:outputText value="#{moeda.simboloMonetario} "/>
+							<h:outputText value="#{moeda.compraSaque}">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+							</h:outputText>
+						</h:panelGroup>
+					</h:column>					
+					<h:column>
+						<h:panelGroup>
+							<strong>Parcelados:</strong>
+							<br/>
+							<h:outputText value="#{moeda.simboloMonetario} "/>
+							<h:outputText value="#{moeda.parcelado}">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+							</h:outputText>
+						</h:panelGroup>
+					</h:column>					
+					<h:column>
+						<h:panelGroup>
+							<strong>Total:</strong>
+							<br/>
+							<h:outputText value="#{moeda.simboloMonetario} "/>
+							<h:outputText value="#{moeda.total}">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+							</h:outputText>
+						</h:panelGroup>
+					</h:column>			
+				</h:dataTable>
+				
+				<hr />
+				
+				<h:dataTable var="moeda" value="#{managedBean.mapMoedasEncontradas[fatura.label]}" width="100%">						
+					<h:column>
+						<h:panelGroup>
+							<strong>Total:</strong>
+							<br/>
+							<h:outputText value="#{moeda.simboloMonetario} "/>
+							<h:outputText value="#{moeda.total}">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+							</h:outputText>
+						</h:panelGroup>						
+					</h:column>					
+					<h:column>
+						<strong>	
+						<h:outputText value="Cotação:" rendered="#{moeda.id != managedBean.moedaPadrao.id}"/>
+						</strong>
+						<br/>			
+						<h:outputText value="#{moeda.taxaConversao}" rendered="#{moeda.id != managedBean.moedaPadrao.id}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="4" />
+						</h:outputText>
+					</h:column>					
+					<h:column>
+						<h:panelGroup>
+							<strong>Convertido:</strong>
+							<br/>			
+							<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
+							<h:outputText value="#{moeda.totalConvertido}">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+							</h:outputText>
+						</h:panelGroup>
+					</h:column>
+					<f:facet name="footer">
+						<center><strong>
+							<h:outputText value="Total da fatura: "/>
+							<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
+							<h:outputText value="#{fatura.valorFatura}">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+							</h:outputText>
+						</strong></center>
+					</f:facet>			
+				</h:dataTable>
+				
 			</p:tab>
 			
 		</p:tabView>
