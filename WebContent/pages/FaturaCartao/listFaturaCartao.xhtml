@@ -57,18 +57,50 @@
 	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
 	
 	<ui:define name="pesquisa">
-		<strong>Cartão:</strong>
-		&nbsp;
+		<strong>Cartão:</strong>		
 		<h:selectOneMenu value="#{managedBean.cartaoSelecionado}" converter="entityConverter">
 			<f:selectItems value="#{managedBean.listaCartaoSoCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+		</h:selectOneMenu>
+		&nbsp;
+		<strong>Status:</strong>
+		<h:selectOneMenu value="#{managedBean.statusFatura}">
+			<f:selectItems value="#{managedBean.listaStatusFaturaCartao}"/>
 		</h:selectOneMenu>		
 	</ui:define>
 	
 	<ui:define name="tabela">
 		
+		<h:panelGroup rendered="#{managedBean.statusFatura == null}">
+		
 		<p:tabView  value="#{managedBean.listEntity}" var="fatura" rendered="#{not empty managedBean.listEntity}">						
 			<p:tab title="#{fatura.label}">								
 				<p:dataTable var="item" value="#{managedBean.mapFaturasEncontradas[fatura.label]}">
+					<f:facet name="header">
+						<h:commandButton title="Visualizar detalhes" image="/resources/images/pesquisar.png" action="#{managedBean.detalheFatura}">
+							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
+						</h:commandButton>
+						<h:outputText value="Visualizar detalhes" />
+						&nbsp;
+						<h:commandButton title="Editar fatura" image="/resources/images/alterar.png" action="#{managedBean.edit}" rendered="#{fatura.statusFaturaCartao == 'ABERTA' or fatura.statusFaturaCartao == 'FUTURA' or fatura.statusFaturaCartao == 'ANTIGA'}">
+							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
+						</h:commandButton>
+						<h:outputText value="Editar fatura" rendered="#{fatura.statusFaturaCartao == 'ABERTA' or fatura.statusFaturaCartao == 'FUTURA' or fatura.statusFaturaCartao == 'ANTIGA'}"/>
+						&nbsp;
+						<h:commandButton title="Fechar fatura" image="/resources/images/fechar.png" action="#{managedBean.fecharFaturaView}" rendered="#{fatura.statusFaturaCartao == 'ABERTA' or fatura.statusFaturaCartao == 'ANTIGA'}">
+							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
+						</h:commandButton>
+						<h:outputText value="Fechar fatura" rendered="#{fatura.statusFaturaCartao == 'ABERTA' or fatura.statusFaturaCartao == 'ANTIGA'}"/>
+						&nbsp;
+						<h:commandButton title="Quitar fatura" image="/resources/images/baixa.png" action="#{managedBean.quitarFaturaView}" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}">
+							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
+						</h:commandButton>
+						<h:outputText value="Quitar fatura" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>
+						&nbsp;
+						<h:commandButton title="Reabrir fatura" image="/resources/images/voltar.png" action="#{managedBean.reabrirFatura}" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}">
+							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
+						</h:commandButton>
+						<h:outputText value="Reabrir fatura" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>						
+					</f:facet>										
 					<p:column style="vertical-align: middle;">
 						<f:facet name="header">
 					    	<h:outputText value="Histórico"/>
@@ -89,15 +121,7 @@
 					    <h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
 					    <h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 					    <h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
-						<f:facet name="header">
-							<h:outputText value="Ações"/>
-						</f:facet>
-						<h:commandButton title="Editar lançamento do cartão vinculado" image="/resources/images/alterar.png" action="#{lancamentoCartaoMB.edit}">
-							<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoCartaoMB.idEntity}"/>
-						</h:commandButton>
-					</p:column>		
+					</p:column>							
 				</p:dataTable>
 				
 				<h:dataTable var="moeda" value="#{managedBean.mapMoedasEncontradas[fatura.label]}">					
@@ -169,7 +193,7 @@
 						<center><strong>
 							<h:outputText value="Total da fatura: "/>
 							<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
-							<h:outputText value="#{fatura.valorFatura}">
+							<h:outputText value="#{fatura.valorFatura + fatura.saldoDevedor}">
 								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 							</h:outputText>
 						</strong></center>
@@ -179,6 +203,82 @@
 			</p:tab>
 			
 		</p:tabView>
+		
+		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{managedBean.statusFatura != null}">
+		
+			<p:dataTable id="tableListEntity" width="100%" rows="15" value="#{managedBean.listEntity}" var="item" paginator="true">
+     			
+     			<p:column style="vertical-align: middle; text-align: center;">
+					<f:facet name="header">
+				    	<h:outputText value="Vencimento"/>
+				    </f:facet>
+				    <h:outputText value="#{item.dataVencimento}">
+				    	<f:converter converterId="dateConverter"/>
+				    </h:outputText>
+				</p:column>
+				<p:column style="vertical-align: middle; text-align: center;">
+					<f:facet name="header">
+				    	<h:outputText value="Valor"/>
+				    </f:facet>
+				    <h:outputText value="#{item.moeda.simboloMonetario} " />
+				    <h:outputText value="#{item.valorFatura + item.saldoDevedor}">
+				    	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				    </h:outputText>
+				</p:column>
+				<p:column style="vertical-align: middle; text-align: center;">
+					<f:facet name="header">
+				    	<h:outputText value="Pagamento"/>
+				    </f:facet>
+				    <h:outputText value="#{item.dataPagamento}">
+				    	<f:converter converterId="dateConverter"/>
+				    </h:outputText>
+				</p:column>
+				<p:column style="vertical-align: middle; text-align: center;">
+					<f:facet name="header">
+				    	<h:outputText value="Valor Pago"/>
+				    </f:facet>
+				    <h:outputText value="#{item.moeda.simboloMonetario} " />
+				    <h:outputText value="#{item.valorPago}">
+				    	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				    </h:outputText>
+				</p:column>
+     			<p:column style="vertical-align: middle; text-align: center;">
+					<f:facet name="header">
+				    	<h:outputText value="Ações"/>
+				    </f:facet>
+				    <h:commandButton title="Visualizar detalhes" image="/resources/images/pesquisar.png" action="#{managedBean.detalheFatura}">
+						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+					</h:commandButton>
+					&nbsp;
+					<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}" rendered="#{item.statusFaturaCartao == 'ABERTA' or item.statusFaturaCartao == 'FUTURA' or item.statusFaturaCartao == 'ANTIGA'}">
+						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+					</h:commandButton>
+					&nbsp;
+					<h:commandButton title="Fechar fatura" image="/resources/images/fechar.png" action="#{managedBean.fecharFaturaView}" rendered="#{item.statusFaturaCartao == 'ABERTA' or item.statusFaturaCartao == 'ANTIGA'}">
+						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+					</h:commandButton>
+					&nbsp;
+					<h:commandButton title="Quitar fatura" image="/resources/images/baixa.png" action="#{managedBean.quitarFaturaView}" rendered="#{item.statusFaturaCartao == 'FECHADA'}">
+						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+					</h:commandButton>
+					&nbsp;
+					<h:commandButton title="Reabrir fatura" image="/resources/images/voltar.png" action="#{managedBean.reabrirFatura}" rendered="#{item.statusFaturaCartao == 'FECHADA'}">
+						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+					</h:commandButton>
+					&nbsp;
+					<h:commandButton title="Excluir fatura" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.statusFaturaCartao == 'ANTIGA'}">
+						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+					</h:commandButton>
+				</p:column>
+     			<f:facet name="footer">
+        			<h:outputText value="#{managedBean.quantRegistros} item(ns) encontrado(s)"></h:outputText>
+    			</f:facet>
+    			
+     		</p:dataTable>
+		
+		</h:panelGroup>
 	
 	</ui:define>
 	

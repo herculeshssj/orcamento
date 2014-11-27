@@ -46,6 +46,7 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -81,6 +82,7 @@ import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.util.DetalheFaturaComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("faturaCartaoMB")
@@ -161,33 +163,45 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	@Override
 	public void find() {
 		try {
-			int contFaturas = 1;
 			
-			listEntity = new ArrayList<FaturaCartao>();
-			mapFaturasEncontradas.clear();
+			if (statusFatura == null) {
 			
-			for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
-				if (contFaturas <= 5) {
-					listEntity.add(fatura);
-					
-					// Adiciona os detalhes da fatura no Map
-					mapFaturasEncontradas.put(fatura.getLabel(), new ArrayList<LancamentoConta>(fatura.getDetalheFatura()));
-					
-					// Adiciona os detalhes da fatura no List detalhesFaturaCartao para realizar o 
-					// cálculo dos totais
-					detalhesFaturaCartao.clear();
-					detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
-					this.calcularSaldoCompraSaqueParceladoPorMoeda();
-					for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
-						moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
-					}
-					this.calculaValorConversao();
-					
-					// Adiciona as moedas com seus totais no map correspondente
-					mapMoedasEncontradas.put(fatura.getLabel(), new ArrayList<Moeda>(moedas));
-					
-					contFaturas++;
-				} 
+				int contFaturas = 1;
+				
+				listEntity = new ArrayList<FaturaCartao>();
+				mapFaturasEncontradas.clear();
+				
+				for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
+					if (contFaturas <= 5) {
+						listEntity.add(fatura);
+						
+						// Adiciona os detalhes da fatura no Map						
+						mapFaturasEncontradas.put(fatura.getLabel(), new ArrayList<LancamentoConta>(fatura.getDetalheFatura()));
+						
+						// Ordena os detalhes da fatura
+						Collections.sort(mapFaturasEncontradas.get(fatura.getLabel()), new DetalheFaturaComparator());
+						
+						// Adiciona os detalhes da fatura no List detalhesFaturaCartao para realizar o 
+						// cálculo dos totais
+						detalhesFaturaCartao.clear();
+						detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
+						this.calcularSaldoCompraSaqueParceladoPorMoeda();
+						for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
+							moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
+						}
+						this.calculaValorConversao();
+						
+						// Adiciona as moedas com seus totais no map correspondente
+						mapMoedasEncontradas.put(fatura.getLabel(), new ArrayList<Moeda>(moedas));
+						
+						contFaturas++;
+					} 
+				}
+			
+			} else {
+				
+				listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
+				
 			}
 
 		} catch (BusinessException be) {
@@ -690,9 +704,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public List<SelectItem> getListaStatusFaturaCartao() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (StatusFaturaCartao enumeration : StatusFaturaCartao.values()) {
-			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
-		}
+		listaSelectItem.add(new SelectItem(null, "Fatura mais recentes"));
+		listaSelectItem.add(new SelectItem(StatusFaturaCartao.ANTIGA, "Faturas antigas"));
+		listaSelectItem.add(new SelectItem(StatusFaturaCartao.QUITADA, "Faturas quitadas"));
+		listaSelectItem.add(new SelectItem(StatusFaturaCartao.VENCIDA, "Faturas vencidas"));
 		return listaSelectItem;
 	}
 
