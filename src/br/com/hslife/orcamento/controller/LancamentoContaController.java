@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
@@ -116,12 +117,13 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
 	private List<MeioPagamento> agrupamentoLancamentoPorMeioPagamento = new ArrayList<MeioPagamento>();
 	private List<AgrupamentoLancamento> agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
+	private List<Moeda> agrupamentoLancamentoPorMoeda = new ArrayList<>();
 	
 	private BuscaSalva buscaSalva = new BuscaSalva();
 	private List<BuscaSalva> buscasSalvas = new ArrayList<BuscaSalva>();
 	
 	public LancamentoContaController() {		
-		moduleTitle = "Lançamentos da Conta";
+		moduleTitle = "Lançamentos da Conta/Cartão";
 	}
 
 	@Override
@@ -133,6 +135,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
 		agrupamentoLancamentoPorMeioPagamento = new ArrayList<MeioPagamento>();
 		agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
+		agrupamentoLancamentoPorMoeda = new ArrayList<>();
 		
 		buscasSalvas.clear();
 	}
@@ -161,6 +164,8 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 					agrupamentoLancamentoPorMeioPagamento = getService().organizarLancamentosPorMeioPagamento(listEntity);
 				if (agrupamentoSelecionado.equals("CD"))
 					agrupamentoLancamentoPorDebitoCredito = getService().organizarLancamentosPorDebitoCredito(listEntity);
+				if (agrupamentoSelecionado.equals("MOE"))
+					agrupamentoLancamentoPorMoeda = getService().organizarLancamentosPorMoeda(listEntity);
 				
 			}
 		} catch (BusinessException be) {
@@ -308,6 +313,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
 				case FAVORECIDO : agrupamentoSelecionado = "FAV"; break;
 				case MEIOPAGAMENTO : agrupamentoSelecionado = "PAG"; break;
+				case MOEDA : agrupamentoSelecionado = "MOE"; break;
 				default : agrupamentoSelecionado = "";
 			}
 			this.find();
@@ -330,6 +336,7 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		if (agrupamentoSelecionado.equals("CAT")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.CATEGORIA);
 		if (agrupamentoSelecionado.equals("PAG")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.MEIOPAGAMENTO);
 		if (agrupamentoSelecionado.equals("FAV")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.FAVORECIDO);
+		if (agrupamentoSelecionado.equals("MOE")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.MOEDA);
 		
 		actionTitle = " - Salvar busca";
 		return "/pages/LancamentoConta/salvarBusca";
@@ -370,14 +377,11 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	
 	public List<Conta> getListaConta() {
 		try {
-			// Obtém o valor da opção do sistema
-			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", getUsuarioLogado());
-			
-			// Determina qual listagem será retornada
-			if (opcao != null && Boolean.valueOf(opcao.getValor()))
-				return contaService.buscarPorUsuario(getUsuarioLogado());
-			else 
-				return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			if (getOpcoesSistema().getExibirContasInativas()) {
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), null);
+			} else {
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
+			}			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -570,5 +574,14 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 
 	public void setNovoCriterioBusca(CriterioBuscaLancamentoConta novoCriterioBusca) {
 		this.novoCriterioBusca = novoCriterioBusca;
+	}
+
+	public List<Moeda> getAgrupamentoLancamentoPorMoeda() {
+		return agrupamentoLancamentoPorMoeda;
+	}
+
+	public void setAgrupamentoLancamentoPorMoeda(
+			List<Moeda> agrupamentoLancamentoPorMoeda) {
+		this.agrupamentoLancamentoPorMoeda = agrupamentoLancamentoPorMoeda;
 	}
 }

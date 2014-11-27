@@ -200,6 +200,11 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
+	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario) throws BusinessException {
+		return getRepository().findEnabledOnlyCartaoTipoCreditoByUsuario(usuario);
+	}
+	
+	@Override
 	public List<CartaoCredito> buscarDescricaoOuAtivoPorUsuario(String descricao, Usuario usuario, Boolean ativo) throws BusinessException {
 		return getRepository().findDescricaoOrAtivoByUsuario(descricao, usuario, ativo);
 	}

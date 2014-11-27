@@ -612,7 +612,11 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public List<CartaoCredito> getListaCartaoSoCredito() {
 		try {
-			return cartaoCreditoService.buscarSomenteCreditoPorUsuario(getUsuarioLogado());
+			if (getOpcoesSistema().getExibirContasInativas()) {
+				return cartaoCreditoService.buscarSomenteCreditoPorUsuario(getUsuarioLogado());
+			} else {
+				return cartaoCreditoService.buscarAtivosSomenteCreditoPorUsuario(getUsuarioLogado());
+			}			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

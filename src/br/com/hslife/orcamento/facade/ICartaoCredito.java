@@ -63,6 +63,8 @@ public interface ICartaoCredito extends ICRUDService<CartaoCredito> {
 	
 	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario) throws BusinessException;
 	
+	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario) throws BusinessException;
+	
 	public void ativarCartao(CartaoCredito entity) throws BusinessException;
 	
 	public void desativarCartao(CartaoCredito entity) throws BusinessException;

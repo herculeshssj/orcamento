@@ -109,6 +109,7 @@
 						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
 						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
 						<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
+						<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
 						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 					</p:selectOneRadio>
 					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->     			
@@ -117,6 +118,7 @@
 		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
 						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
 						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
+						<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
 						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 					</p:selectOneRadio>
 					<p:selectBooleanCheckbox value="#{managedBean.pesquisarTermoNoAgrupamento}"/>
@@ -152,13 +154,16 @@
 	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'PAG'}">
 		     	<ui:include src="meioPagamentoAgrupamento.xhtml"/>
 	     	</h:panelGroup>
+	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'MOE'}">
+		     	<ui:include src="moedaAgrupamento.xhtml"/>
+	     	</h:panelGroup>
 	</ui:define>
 	
 	<ui:define name="outras_opcoes">
-		<strong>Conta:</strong>
+		<strong>Conta/Cartão:</strong>
 		&nbsp;
 		<h:selectOneMenu id="txtConta" value="#{managedBean.novoCriterioBusca.conta}" converter="entityConverter">
-			<f:selectItems value="#{entityCombo.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			<p:ajax update="txtBuscaSalva" listener="#{managedBean.atualizaComboBuscasSalvas}"/>			
 		</h:selectOneMenu>
 		&nbsp;

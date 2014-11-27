@@ -88,11 +88,11 @@
 		     			<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 		     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>	
 		     			</p:column>	     		
-		     			<p:column style="text-align: center; vertical-align: middle;">
+		     			<p:column style="text-align: center; vertical-align: middle; width: 100px;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 							</h:commandButton>
-							&nbsp;
+							<p:spacer width="10"/>
 							<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.statusLancamentoConta != 'QUITADO'}">
 								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 							</h:commandButton>							
