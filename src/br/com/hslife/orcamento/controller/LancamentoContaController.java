@@ -49,6 +49,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
@@ -71,20 +72,24 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
+import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("lancamentoContaMB")
 @Scope("session")
-public class LancamentoContaController extends AbstractLancamentoContaController {
+public class LancamentoContaController extends AbstractCRUDController<LancamentoConta> {
 	
 	/**
 	 * 
@@ -98,7 +103,16 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	private IConta contaService;
 	
 	@Autowired
+	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
 	private IMeioPagamento meioPagamentoService;
+	
+	@Autowired
+	private IMoeda moedaService;
 	
 	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
@@ -109,9 +123,10 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	private CriterioBuscaLancamentoConta novoCriterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private String agrupamentoSelecionado;
-	private boolean pesquisarTermoNoAgrupamento;
-	
+	private TipoCategoria tipoCategoriaSelecionada;
+	private boolean pesquisarTermoNoAgrupamento;	
 	private boolean selecionarTodosLancamentos;
+	private String vincularFatura;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
@@ -122,7 +137,8 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	private BuscaSalva buscaSalva = new BuscaSalva();
 	private List<BuscaSalva> buscasSalvas = new ArrayList<BuscaSalva>();
 	
-	public LancamentoContaController() {		
+	public LancamentoContaController() {
+		super(new LancamentoConta());
 		moduleTitle = "Lançamentos da Conta/Cartão";
 	}
 
@@ -390,14 +406,12 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	
 	public List<Conta> getListaContaAtivo() {
 		try {
-			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
 	}
-	
-	
 	
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
@@ -455,17 +469,17 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	public List<SelectItem> getListaPesquisaAgrupamento() {
 		List<SelectItem> resultado = new ArrayList<SelectItem>();
 		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("CAT")) {
-			for (Categoria c : super.getListaCategoriaSemTipoCategoria()) {
+			for (Categoria c : this.getListaCategoriaSemTipoCategoria()) {
 				resultado.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
 			}
 		}
 		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("FAV")) {
-			for (Favorecido f : super.getListaFavorecido()) {
+			for (Favorecido f : this.getListaFavorecido()) {
 				resultado.add(new SelectItem(f.getId(), f.getNome()));
 			}
 		}
 		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("PAG")) {
-			for (MeioPagamento m : super.getListaMeioPagamento()) {
+			for (MeioPagamento m : this.getListaMeioPagamento()) {
 				resultado.add(new SelectItem(m.getId(), m.getDescricao()));
 			}
 		}
@@ -479,6 +493,104 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		}
 		return listaSelectItem;
 	}
+	
+	public void atualizaComboCategorias() {
+		if (entity.getTipoLancamento() != null) {
+			if (entity.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+				tipoCategoriaSelecionada = TipoCategoria.CREDITO;
+			} else {
+				tipoCategoriaSelecionada = TipoCategoria.DEBITO;
+			}
+		}
+	}
+	
+	public List<Categoria> getListaCategoria() {
+		try {
+			 
+			if (tipoCategoriaSelecionada != null) {
+				List<Categoria> resultado = categoriaService.buscarAtivosPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());				
+				// Lógica para incluir a categoria inativa da entidade na combo
+				if (resultado != null && entity.getCategoria() != null) {
+					if (!resultado.contains(entity.getCategoria())) {
+						entity.getCategoria().setAtivo(true);
+						resultado.add(entity.getCategoria());
+					}
+				}
+				return resultado;
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		} 
+		return new ArrayList<Categoria>();
+	}
+	
+	public List<Categoria> getListaCategoriaSemTipoCategoria() {
+		try {
+			 List<Categoria> resultado = categoriaService.buscarAtivosPorUsuario(getUsuarioLogado());				
+			// Lógica para incluir a categoria inativa da entidade na combo
+			if (resultado != null && entity.getCategoria() != null) {
+				if (!resultado.contains(entity.getCategoria())) {
+					entity.getCategoria().setAtivo(true);
+					resultado.add(entity.getCategoria());
+				}
+			}
+			return resultado;			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		} 
+		return new ArrayList<Categoria>();
+	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			List<Favorecido> resultado = favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o favorecido inativo da entidade na combo
+			if (resultado != null && entity.getFavorecido() != null) {
+				if (!resultado.contains(entity.getFavorecido())) {
+					entity.getFavorecido().setAtivo(true);
+					resultado.add(entity.getFavorecido());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			List<MeioPagamento> resultado = meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o meio de pagamento inativo da entidade na combo
+			if (resultado != null && entity.getMeioPagamento() != null) {
+				if (!resultado.contains(entity.getMeioPagamento())) {
+					entity.getMeioPagamento().setAtivo(true);
+					resultado.add(entity.getMeioPagamento());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getMoeda() != null) {
+				if (!resultado.contains(entity.getMoeda())) {
+					entity.getMoeda().setAtivo(true);
+					resultado.add(entity.getMoeda());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
 
 	public ILancamentoConta getService() {
 		return service;
@@ -488,12 +600,61 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 		this.service = service;
 	}
 
+	public IConta getContaService() {
+		return contaService;
+	}
+
 	public void setContaService(IConta contaService) {
 		this.contaService = contaService;
 	}
 
+	public ICategoria getCategoriaService() {
+		return categoriaService;
+	}
+
+	public void setCategoriaService(ICategoria categoriaService) {
+		this.categoriaService = categoriaService;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
+	}
+
+	public void setFavorecidoService(IFavorecido favorecidoService) {
+		this.favorecidoService = favorecidoService;
+	}
+
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
+	}
+
 	public void setMeioPagamentoService(IMeioPagamento meioPagamentoService) {
 		this.meioPagamentoService = meioPagamentoService;
+	}
+
+	public MovimentacaoLancamentoController getMovimentacaoLancamentoMB() {
+		return movimentacaoLancamentoMB;
+	}
+
+	public void setMovimentacaoLancamentoMB(
+			MovimentacaoLancamentoController movimentacaoLancamentoMB) {
+		this.movimentacaoLancamentoMB = movimentacaoLancamentoMB;
+	}
+
+	public IBuscaSalva getBuscaSalvaService() {
+		return buscaSalvaService;
+	}
+
+	public void setBuscaSalvaService(IBuscaSalva buscaSalvaService) {
+		this.buscaSalvaService = buscaSalvaService;
+	}
+
+	public CriterioBuscaLancamentoConta getNovoCriterioBusca() {
+		return novoCriterioBusca;
+	}
+
+	public void setNovoCriterioBusca(CriterioBuscaLancamentoConta novoCriterioBusca) {
+		this.novoCriterioBusca = novoCriterioBusca;
 	}
 
 	public String getAgrupamentoSelecionado() {
@@ -502,6 +663,30 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 
 	public void setAgrupamentoSelecionado(String agrupamentoSelecionado) {
 		this.agrupamentoSelecionado = agrupamentoSelecionado;
+	}
+
+	public TipoCategoria getTipoCategoriaSelecionada() {
+		return tipoCategoriaSelecionada;
+	}
+
+	public void setTipoCategoriaSelecionada(TipoCategoria tipoCategoriaSelecionada) {
+		this.tipoCategoriaSelecionada = tipoCategoriaSelecionada;
+	}
+
+	public boolean isPesquisarTermoNoAgrupamento() {
+		return pesquisarTermoNoAgrupamento;
+	}
+
+	public void setPesquisarTermoNoAgrupamento(boolean pesquisarTermoNoAgrupamento) {
+		this.pesquisarTermoNoAgrupamento = pesquisarTermoNoAgrupamento;
+	}
+
+	public boolean isSelecionarTodosLancamentos() {
+		return selecionarTodosLancamentos;
+	}
+
+	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
+		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 
 	public List<Categoria> getAgrupamentoLancamentoPorCategoria() {
@@ -539,42 +724,6 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 			List<AgrupamentoLancamento> agrupamentoLancamentoPorDebitoCredito) {
 		this.agrupamentoLancamentoPorDebitoCredito = agrupamentoLancamentoPorDebitoCredito;
 	}
-	
-	public BuscaSalva getBuscaSalva() {
-		return buscaSalva;
-	}
-
-	public void setBuscaSalva(BuscaSalva buscaSalva) {
-		this.buscaSalva = buscaSalva;
-	}
-
-	public void setBuscaSalvaService(IBuscaSalva buscaSalvaService) {
-		this.buscaSalvaService = buscaSalvaService;
-	}
-
-	public boolean isSelecionarTodosLancamentos() {
-		return selecionarTodosLancamentos;
-	}
-
-	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
-		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
-	}
-
-	public boolean isPesquisarTermoNoAgrupamento() {
-		return pesquisarTermoNoAgrupamento;
-	}
-
-	public void setPesquisarTermoNoAgrupamento(boolean pesquisarTermoNoAgrupamento) {
-		this.pesquisarTermoNoAgrupamento = pesquisarTermoNoAgrupamento;
-	}
-
-	public CriterioBuscaLancamentoConta getNovoCriterioBusca() {
-		return novoCriterioBusca;
-	}
-
-	public void setNovoCriterioBusca(CriterioBuscaLancamentoConta novoCriterioBusca) {
-		this.novoCriterioBusca = novoCriterioBusca;
-	}
 
 	public List<Moeda> getAgrupamentoLancamentoPorMoeda() {
 		return agrupamentoLancamentoPorMoeda;
@@ -583,5 +732,33 @@ public class LancamentoContaController extends AbstractLancamentoContaController
 	public void setAgrupamentoLancamentoPorMoeda(
 			List<Moeda> agrupamentoLancamentoPorMoeda) {
 		this.agrupamentoLancamentoPorMoeda = agrupamentoLancamentoPorMoeda;
+	}
+
+	public BuscaSalva getBuscaSalva() {
+		return buscaSalva;
+	}
+
+	public void setBuscaSalva(BuscaSalva buscaSalva) {
+		this.buscaSalva = buscaSalva;
+	}
+
+	public void setBuscasSalvas(List<BuscaSalva> buscasSalvas) {
+		this.buscasSalvas = buscasSalvas;
+	}
+
+	public String getVincularFatura() {
+		return vincularFatura;
+	}
+
+	public void setVincularFatura(String vincularFatura) {
+		this.vincularFatura = vincularFatura;
+	}
+
+	public IMoeda getMoedaService() {
+		return moedaService;
+	}
+
+	public void setMoedaService(IMoeda moedaService) {
+		this.moedaService = moedaService;
 	}
 }

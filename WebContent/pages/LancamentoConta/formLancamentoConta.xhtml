@@ -66,7 +66,7 @@
 			Conta:			
 			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
 				<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-				<p:ajax update="txtLancamentoImportado" listener="#{managedBean.atualizaComboLancamentosImportado}"/>			
+				<p:ajax event="change" update="txtLancamentoImportado,pnlLancamentoCartao" listener="#{managedBean.atualizaComboLancamentosImportado}"/>			
 			</h:selectOneMenu>
 			<h:outputText value="#{managedBean.entity.conta.descricao}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}"/>
 			<h:inputHidden/>
@@ -178,6 +178,27 @@
 			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
 			
 		</h:panelGrid>
+		
+		<p:outputPanel id="pnlLancamentoCartao">
+			
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}">
+			
+				Moeda:
+				<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+				</h:selectOneMenu>
+				<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
+				
+				<h:outputText value="Vincular à fatura:" rendered="#{managedBean.operation == 'create'}"/>
+				<p:selectOneRadio layout="lineDirection" value="#{managedBean.vincularFatura}" rendered="#{managedBean.operation == 'create'}">
+					<f:selectItem itemLabel="Não vincular" />
+					<f:selectItem itemLabel="Atual" itemValue="ATUAL"/>
+					<f:selectItem itemLabel="Próxima" itemValue="FUTURA"/>
+				</p:selectOneRadio>
+			
+			</h:panelGrid>
+			
+		</p:outputPanel>
 		
 		<h:panelGrid columns="1">
 			Comprovante:

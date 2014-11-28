@@ -174,7 +174,8 @@
 						<strong>	
 						<h:outputText value="Cotação:" rendered="#{moeda.id != managedBean.moedaPadrao.id}"/>
 						</strong>
-						<br/>			
+						<br/>		
+						<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>	
 						<h:outputText value="#{moeda.taxaConversao}" rendered="#{moeda.id != managedBean.moedaPadrao.id}">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="4" />
 						</h:outputText>
@@ -182,7 +183,7 @@
 					<h:column>
 						<h:panelGroup>
 							<strong>Convertido:</strong>
-							<br/>			
+							<br/>						
 							<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
 							<h:outputText value="#{moeda.totalConvertido}">
 								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
