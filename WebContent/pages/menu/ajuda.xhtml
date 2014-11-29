@@ -64,37 +64,10 @@
 
 		<p align="left">Destinado a controlar as despesas domésticas de uma família. Tem opções para controlar contas a pagar e receber, pagamentos, lançamentos bancários, saldos de contas, realizar fechamento de períodos e categorizar as informações. Permite que mais de uma pessoa possa gerenciar suas despesas, compartilhando com uma ou mais pessoas. Pode gerenciar as contas de micros empresas que buscam um sistema simples de controle de despesas.</p>
 
-		<p><strong>Página do projeto:</strong> <a href="http://hslife.com.br/projects/orcamento">http://hslife.com.br/projects/orcamento</a></p>
-	
-		<hr />
+		<p><strong>Página do projeto:</strong> <a href="http://hslife.com.br/projects/orcamento">http://hslife.com.br/projects/orcamento</a></p>	
 		
-		<p>Entre em contato para dúvidas, críticas e sugestões.</p>
+		<p>Entre em contato para dúvidas, críticas e sugestões através do e-mail <a href="mailto:contato@hslife.com.br">contato@hslife.com.br</a></p>
 			
-			<h:form id="frmMenuCadastros">
-			
-			<p:messages />
-			
-			<h:panelGrid columns="2" width="100%" style="text-align: left">
-			
-				Nome:
-				<h:outputText value="#{ajudaMB.usuarioLogado.nome}"/>
-				
-				E-Mail:
-				<h:outputText value="#{ajudaMB.usuarioLogado.email}"/>
-				
-				Assunto:
-				<p:inputText value="#{ajudaMB.assuntoMensagem}" size="50"/>
-				
-				Mensagem:
-				<p:inputTextarea value="#{ajudaMB.mensagem}" rows="5" cols="50"/>
-				
-				<h:outputText />
-				<h:commandButton title="Enviar" image="/resources/images/enviar.png" action="#{ajudaMB.enviarMensagem}" />
-										
-			</h:panelGrid>
-		
-		</h:form>
-     
 	</ui:define>
 	
 </ui:composition>
