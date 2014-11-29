@@ -97,6 +97,9 @@
 			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
 			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			
+			<h:outputText value="Moeda:" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}"/>
+			<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}"/>
+			
 			Anexo:
 			<h:outputText value="#{managedBean.entity.arquivo.nomeArquivo}" rendered="#{managedBean.entity.arquivo != null}"/>
 			<h:outputText value="Sem anexo" rendered="#{managedBean.entity.arquivo == null}"/>

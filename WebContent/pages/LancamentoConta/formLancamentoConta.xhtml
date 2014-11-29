@@ -189,13 +189,6 @@
 				</h:selectOneMenu>
 				<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 				
-				<h:outputText value="Vincular à fatura:" rendered="#{managedBean.operation == 'create'}"/>
-				<p:selectOneRadio layout="lineDirection" value="#{managedBean.vincularFatura}" rendered="#{managedBean.operation == 'create'}">
-					<f:selectItem itemLabel="Não vincular" />
-					<f:selectItem itemLabel="Atual" itemValue="ATUAL"/>
-					<f:selectItem itemLabel="Próxima" itemValue="FUTURA"/>
-				</p:selectOneRadio>
-			
 			</h:panelGrid>
 			
 		</p:outputPanel>

@@ -78,9 +78,5 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
 	
-	public void vincularAFaturaAtual(LancamentoConta lancamento) throws BusinessException;
-	
-	public void vincularAProximaFatura(LancamentoConta lancamento) throws BusinessException;
-	
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException;
 }

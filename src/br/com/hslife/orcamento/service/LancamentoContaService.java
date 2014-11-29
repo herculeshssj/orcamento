@@ -45,7 +45,6 @@
 package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,14 +53,12 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
@@ -266,48 +263,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException {
 		return lancamentoImportadoRepository.findByConta(conta);
-	}
-	
-	@Override
-	public void vincularAFaturaAtual(LancamentoConta lancamento) throws BusinessException {
-		FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(lancamento.getConta());
-		faturaAtual.getDetalheFatura().add(lancamento);
-		faturaCartaoRepository.update(faturaAtual);		
-	}
-	
-	@Override
-	public void vincularAProximaFatura(LancamentoConta lancamento) throws BusinessException {
-		FaturaCartao faturaFutura = faturaCartaoRepository.findNextFaturaCartaoFutura(lancamento.getConta());
-		if (faturaFutura == null) {
-			// Busca a fatura atual
-			FaturaCartao faturaAtual = faturaCartaoRepository.findFaturaCartaoAberta(lancamento.getConta());
-			
-			// Instancia uma nova fatura futura
-			faturaFutura = new FaturaCartao();
-			
-			// Preenche os atributos da fatura futura
-			faturaFutura.setConta(lancamento.getConta());
-			faturaFutura.setMoeda(lancamento.getMoeda());
-			faturaFutura.setStatusFaturaCartao(StatusFaturaCartao.FUTURA);
-			
-			// Data de vencimento da próxima fatura
-			Calendar vencimento = Calendar.getInstance();
-			vencimento.setTime(faturaAtual.getDataVencimento());		
-			vencimento.add(Calendar.MONTH, 1);		
-			faturaFutura.setDataVencimento(vencimento.getTime());
-					
-			// Salva a nova fatura
-			faturaCartaoRepository.save(faturaFutura);
-			
-			// Adiciona o lançamento criado a fatura
-			faturaFutura.getDetalheFatura().add(lancamento);
-			
-			// Atualiza a nova fatura
-			faturaCartaoRepository.update(faturaFutura);
-		} else {
-			faturaFutura.getDetalheFatura().add(lancamento);
-			faturaCartaoRepository.update(faturaFutura);
-		}		
 	}
 	
 	@Override
