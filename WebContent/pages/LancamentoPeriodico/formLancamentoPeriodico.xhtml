@@ -242,12 +242,9 @@
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>
-						<h:commandButton title="Editar lançamento da conta vinculado" image="/resources/images/alterar.png" action="#{lancamentoContaMB.edit}" rendered="#{item.lancamentoPeriodico.conta.tipoConta != 'CARTAO'}">
+						<h:commandButton title="Editar lançamento da conta vinculado" image="/resources/images/alterar.png" action="#{lancamentoContaMB.edit}">
 							<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoContaMB.idEntity}"/>
-						</h:commandButton>
-						<h:commandButton title="Editar lançamento do cartão vinculado" image="/resources/images/alterar.png" action="#{lancamentoCartaoMB.edit}" rendered="#{item.lancamentoPeriodico.conta.tipoConta == 'CARTAO'}">
-							<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoCartaoMB.idEntity}"/>
-						</h:commandButton>
+						</h:commandButton>						
 						&nbsp;
 						<h:commandButton title="Mesclar com lançamento existente" image="/resources/images/mesclar.png" action="#{managedBean.vincularLancamentoView}" rendered="#{managedBean.entity.statusLancamento != 'ENCERRADO'}">
 							<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoPeriodo}"/>

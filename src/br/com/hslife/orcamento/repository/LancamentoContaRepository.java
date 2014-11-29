@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
@@ -90,7 +91,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	public LancamentoConta findLastLancamentoContaByConta(Conta conta) {
 		Criteria criteria = getSession().createCriteria(LancamentoConta.class);
-		criteria.add(Restrictions.eq("agendado", false));
+		criteria.add(Restrictions.ne("statusLancamentoConta", StatusLancamentoConta.QUITADO));
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
 		return (LancamentoConta)criteria.addOrder(Order.desc("dataPagamento")).setMaxResults(1).uniqueResult();
 	}
@@ -141,7 +142,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.quitado = true ORDER BY pagamento.dataVencimento DESC")
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.statusLancamentoConta = 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
@@ -155,7 +156,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findNotPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.quitado = false ORDER BY pagamento.dataVencimento DESC")
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.statusLancamentoConta <> 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
@@ -169,7 +170,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findAllPagamentosPagosActivedLancamentosByTipoLancamentoAndUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.quitado = true ORDER BY pagamento.dataVencimento DESC")
+		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.statusLancamentoConta = 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
 				.setParameter("status", StatusLancamento.ATIVO)
 				.setParameter("tipo", tipo)
 				.setLong("idUsuario", usuario.getId())
@@ -177,11 +178,11 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<LancamentoConta> findPagamentosByLancamentoPeriodicoAndPago(LancamentoPeriodico lancamento, Boolean pago) {
+	public List<LancamentoConta> findPagamentosByLancamentoPeriodicoAndPago(LancamentoPeriodico lancamento, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM LancamentoConta pagamento WHERE ");
 		if (pago != null) {
-			hql.append("pagamento.quitado = :pago AND ");
+			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
 		
 		hql.append("pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC");
@@ -197,11 +198,11 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<LancamentoConta> findPagamentosByTipoLancamentoAndUsuarioAndPago(TipoLancamentoPeriodico tipo, Usuario usuario, Boolean pago) {
+	public List<LancamentoConta> findPagamentosByTipoLancamentoAndUsuarioAndPago(TipoLancamentoPeriodico tipo, Usuario usuario, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM LancamentoConta pagamento WHERE ");
 		if (pago != null) {
-			hql.append("pagamento.quitado = :pago AND ");
+			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
 		if (tipo != null) {
 			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
@@ -223,11 +224,11 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<LancamentoConta> findPagamentosByTipoLancamentoAndContaAndPago(TipoLancamentoPeriodico tipo, Conta conta, Boolean pago) {
+	public List<LancamentoConta> findPagamentosByTipoLancamentoAndContaAndPago(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM LancamentoConta pagamento WHERE ");
 		if (pago != null) {
-			hql.append("pagamento.quitado = :pago AND ");
+			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
 		if (tipo != null) {
 			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");
@@ -249,11 +250,11 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<LancamentoConta> findPagamentosByTipoLancamentoAndTipoContaAndPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, Boolean pago) {
+	public List<LancamentoConta> findPagamentosByTipoLancamentoAndTipoContaAndPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM LancamentoConta pagamento WHERE ");
 		if (pago != null) {
-			hql.append("pagamento.quitado = :pago AND ");
+			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
 		if (tipo != null) {
 			hql.append("pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND ");

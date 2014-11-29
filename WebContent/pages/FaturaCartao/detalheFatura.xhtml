@@ -166,14 +166,6 @@
 		    <h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
 		    <h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 		    <h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
-		</p:column>
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Ações"/>
-			</f:facet>
-			<h:commandButton title="Editar lançamento do cartão vinculado" image="/resources/images/alterar.png" action="#{lancamentoCartaoMB.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoCartaoMB.idEntity}"/>
-			</h:commandButton>
 		</p:column>		
 	</p:dataTable>
 	

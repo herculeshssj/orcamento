@@ -175,7 +175,7 @@
 						<h:outputText value="Cotação:" rendered="#{moeda.id != managedBean.moedaPadrao.id}"/>
 						</strong>
 						<br/>		
-						<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>	
+						<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " rendered="#{moeda.id != managedBean.moedaPadrao.id}"/>	
 						<h:outputText value="#{moeda.taxaConversao}" rendered="#{moeda.id != managedBean.moedaPadrao.id}">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="4" />
 						</h:outputText>

@@ -280,33 +280,28 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public String mover() {
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
-		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
 		initializeEntity();
 		return movimentacaoLancamentoMB.moverView();
 	}
 	
 	public String duplicar() {
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
-		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
 		initializeEntity();
 		return movimentacaoLancamentoMB.duplicarView();
 	}
 	
 	public String excluir() {
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
-		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
 		initializeEntity();
 		return movimentacaoLancamentoMB.excluirView();
 	}
 	
-	public String transferir() {
-		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");		
+	public String transferir() {	
 		return movimentacaoLancamentoMB.transferirView();
 	}
 	
 	public String alterarPropriedades() {
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
-		movimentacaoLancamentoMB.setManagedBeanOrigem("lancamentoContaMB");
 		initializeEntity();
 		return movimentacaoLancamentoMB.alterarPropriedadesView();
 	}

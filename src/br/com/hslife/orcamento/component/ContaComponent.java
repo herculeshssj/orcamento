@@ -59,6 +59,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
@@ -558,4 +559,50 @@ public class ContaComponent {
 			}
 		}
 	}
+	
+	public void gerarParcelamento(LancamentoPeriodico lancamentoPeriodico) {
+		if (lancamentoPeriodico.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
+			lancamentoPeriodicoRepository.save(lancamentoPeriodico);
+			
+			this.gerarParcelas(lancamentoPeriodico);
+		}
+	}
+
+	private void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) {
+		
+		LancamentoConta parcela;
+		Calendar dataVencimento = Calendar.getInstance();
+		dataVencimento.setTime(lancamentoPeriodico.getDataPrimeiraParcela());
+				
+		for (int i = 1; i <= lancamentoPeriodico.getTotalParcela(); i++) {
+			parcela = new LancamentoConta();			
+			parcela.setAno(dataVencimento.get(Calendar.YEAR));
+			parcela.setLancamentoPeriodico(lancamentoPeriodico);
+			parcela.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
+			parcela.setDataVencimento(dataVencimento.getTime());
+			parcela.setParcela(i);
+			
+			// Setando os demais atributos
+			parcela.setConta(lancamentoPeriodico.getConta());
+			parcela.setDescricao(lancamentoPeriodico.getDescricao());
+			parcela.setValorPago(lancamentoPeriodico.getValorParcela());
+			parcela.setDataPagamento(parcela.getDataVencimento());
+			parcela.setCategoria(lancamentoPeriodico.getCategoria());
+			parcela.setFavorecido(lancamentoPeriodico.getFavorecido());
+			parcela.setMeioPagamento(lancamentoPeriodico.getMeioPagamento());
+			parcela.setMoeda(lancamentoPeriodico.getMoeda());
+			if (parcela.getDataVencimento().before(new Date()))
+				parcela.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			else
+				parcela.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			
+			// Define a descrição definitiva do lançamento a ser criado
+			parcela.setDescricao(lancamentoPeriodico.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA)); 
+			
+			lancamentoContaRepository.save(parcela);
+			dataVencimento.add(Calendar.MONTH, 1);
+			dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
+		}
+	}
+	
 }

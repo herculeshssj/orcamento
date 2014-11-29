@@ -71,7 +71,7 @@ public interface IFaturaCartao extends ICRUDService<FaturaCartao>{
 	
 	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta conta, double valorAQuitar, Date dataPagamento) throws BusinessException;
 	
-	public void quitarFaturaParcelamento() throws BusinessException;
+	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento) throws BusinessException;
 	
 	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) throws BusinessException;
 	

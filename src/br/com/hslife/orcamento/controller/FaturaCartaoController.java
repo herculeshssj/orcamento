@@ -116,6 +116,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private int formaPagamentoFatura; // 1 - débito em conta; -1 - parcelar fatura
 	private double valorAQuitar;
 	private Date dataPagamento;
+	private int quantParcelas;
+	private Date dataParcelamento;
 	
 	private CartaoCredito cartaoSelecionado;
 	private FaturaCartao faturaSelecionada;
@@ -549,10 +551,23 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				}
 			}
 			
+			if (formaPagamentoFatura == 2) {
+				// Verifica se a quantidade de parcelas é superior a 1
+				if (quantParcelas < 2) {
+					warnMessage("Informe uma quantidade de parcelas maior de 1!");
+					return "";
+				}
+				// Verifica se a data de parcelamento foi preenchida 
+				if (dataParcelamento == null) {
+					warnMessage("Informe a data de parcelamento!");
+					return "";
+				}
+			}
+			
 			// Determina a forma de pagamento da fatura
 			switch(formaPagamentoFatura) {
 				case 1 : getService().quitarFaturaDebitoConta(faturaSelecionada, contaSelecionada, valorAQuitar, dataPagamento); break;
-				case 2 : getService().quitarFaturaParcelamento(); break;
+				case 2 : getService().quitarFaturaParcelamento(faturaSelecionada, quantParcelas, dataParcelamento); break;
 				case 3 : getService().quitarFaturaLancamentoSelecionado(faturaSelecionada, lancamento); break;
 				default : throw new BusinessException("Opção inválida!");
 			}			
@@ -875,5 +890,21 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public Map<String, List<Moeda>> getMapMoedasEncontradas() {
 		return mapMoedasEncontradas;
+	}
+
+	public int getQuantParcelas() {
+		return quantParcelas;
+	}
+
+	public void setQuantParcelas(int quantParcelas) {
+		this.quantParcelas = quantParcelas;
+	}
+
+	public Date getDataParcelamento() {
+		return dataParcelamento;
+	}
+
+	public void setDataParcelamento(Date dataParcelamento) {
+		this.dataParcelamento = dataParcelamento;
 	}
 }

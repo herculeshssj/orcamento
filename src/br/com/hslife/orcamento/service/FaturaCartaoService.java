@@ -57,16 +57,24 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
+import br.com.hslife.orcamento.repository.CategoriaRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
+import br.com.hslife.orcamento.repository.FavorecidoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.Util;
 
@@ -87,6 +95,15 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	
 	@Autowired
 	private ContaComponent contaComponent;
+	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private FavorecidoRepository favorecidoRepository;
+	
+	@Autowired
+	private MeioPagamentoRepository meioPagamentoRepository;
 	
 	public FaturaCartaoRepository getRepository() {
 		return repository;
@@ -201,6 +218,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		getRepository().update(faturaCartao);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void fecharFatura(FaturaCartao entity, List<Moeda> conversoes) throws BusinessException {
 		// Busca a fatura que será fechada
@@ -281,6 +299,10 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 			vencimento.setTime(entity.getDataVencimento());		
 			vencimento.add(Calendar.MONTH, 1);		
 			novaFatura.setDataVencimento(vencimento.getTime());
+			
+			// Seta o mês e ano da fatura
+			novaFatura.setMes(novaFatura.getDataVencimento().getMonth() + 1);
+			novaFatura.setAno(novaFatura.getDataVencimento().getYear() + 1900);
 					
 			// Salva a nova fatura
 			getRepository().save(novaFatura);
@@ -369,8 +391,55 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
-	public void quitarFaturaParcelamento() throws BusinessException {
-		throw new BusinessException("Não implementado!");
+	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento) throws BusinessException {
+		
+		/* Efetua a quitação da fatura */
+		FaturaCartao fatura = getRepository().findById(faturaCartao.getId());
+		fatura.setStatusFaturaCartao(StatusFaturaCartao.QUITADA);
+		fatura.setDataPagamento(dataParcelamento);
+		fatura.setValorPago(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor());
+		fatura.setValorMinimo(faturaCartao.getValorMinimo());
+				
+		// Salva a fatura paga
+		getRepository().update(fatura);
+		
+		/* Efetua o parcelamento da fatura */
+		
+		// Traz as informações da fatura atualmente aberta
+		FaturaCartao faturaAberta = getRepository().findFaturaCartaoAberta(faturaCartao.getConta());
+		
+		// Determina a data de fechamento da fatura atual
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(faturaAberta.getDataVencimento());
+		if (faturaAberta.getConta().getCartaoCredito().getDiaFechamentoFatura() < faturaAberta.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
+			temp.set(Calendar.DAY_OF_MONTH, faturaAberta.getConta().getCartaoCredito().getDiaFechamentoFatura());
+		} else {
+			temp.add(Calendar.MONTH, 1);
+			temp.set(Calendar.DAY_OF_MONTH, faturaAberta.getConta().getCartaoCredito().getDiaFechamentoFatura());
+		}
+		
+		LancamentoPeriodico parcelamentoFatura = new LancamentoPeriodico();
+		parcelamentoFatura.setConta(faturaCartao.getConta());
+		parcelamentoFatura.setDataAquisicao(dataParcelamento);		
+		parcelamentoFatura.setDataPrimeiraParcela(temp.getTime());
+		parcelamentoFatura.setDescricao("Parcelamento Fatura " + faturaCartao.getMes() + "/" + faturaCartao.getAno());
+		parcelamentoFatura.setDiaVencimento(faturaCartao.getConta().getCartaoCredito().getDiaFechamentoFatura());
+		parcelamentoFatura.setMoeda(faturaCartao.getMoeda());
+		parcelamentoFatura.setPeriodoLancamento(PeriodoLancamento.MENSAL);
+		parcelamentoFatura.setStatusLancamento(StatusLancamento.ATIVO);
+		parcelamentoFatura.setTipoLancamento(TipoLancamento.DESPESA);
+		parcelamentoFatura.setTipoLancamentoPeriodico(TipoLancamentoPeriodico.PARCELADO);
+		parcelamentoFatura.setTotalParcela(quantParcelas);
+		parcelamentoFatura.setUsuario(faturaCartao.getConta().getUsuario());
+		parcelamentoFatura.setValorCompra(fatura.getValorPago());
+		parcelamentoFatura.setValorParcela(Util.arredondar(fatura.getValorPago() / quantParcelas));
+		parcelamentoFatura.setCategoria(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(faturaCartao.getConta().getUsuario(), TipoCategoria.DEBITO));
+		parcelamentoFatura.setFavorecido(favorecidoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
+		parcelamentoFatura.setMeioPagamento(meioPagamentoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
+		
+		// Realiza o parcelamento
+		contaComponent.gerarParcelamento(parcelamentoFatura);
+		
 	}
 	
 	@Override

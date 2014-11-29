@@ -126,7 +126,12 @@
 				</f:facet>		
 				
 				Informe a quantidade de parcelas:
-				<p:inputText />
+				<p:inputText value="#{managedBean.quantParcelas}"/>
+				
+				Informe a data de parcelamento:
+				<p:inputMask value="#{managedBean.dataParcelamento}" size="10" required="true" requiredMessage="Informe a data de parcelamento da fatura!" mask="99/99/9999">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>
 			</h:panelGrid>
 			
 			<p:outputPanel rendered="#{managedBean.formaPagamentoFatura == 3}">

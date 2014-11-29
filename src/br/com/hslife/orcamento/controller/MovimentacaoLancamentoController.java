@@ -66,6 +66,7 @@ import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMovimentacaoLancamento;
@@ -81,6 +82,9 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	
 	@Autowired
 	private IMovimentacaoLancamento service;
+	
+	@Autowired
+	private IConta contaService;
 	
 	@Autowired
 	private ICategoria categoriaService;
@@ -113,12 +117,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	
 	private MeioPagamento meioPagamentoSelecionado;
 	
-	private String goToListCartaoPage = "/pages/LancamentoCartao/listLancamentoCartao";
 	private String goToListContaPage = "/pages/LancamentoConta/listLancamentoConta";
-	
-	private String vincularFatura;
-	
-	private String managedBeanOrigem;
 
 	public MovimentacaoLancamentoController() {
 		lancamentosSelecionados = new ArrayList<LancamentoConta>();
@@ -144,10 +143,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		
 	public String cancel() {
 		initializeEntity();
-		if (managedBeanOrigem.equals("lancamentoContaMB")) 
-			return goToListContaPage;
-		else
-			return goToListCartaoPage;
+		return goToListContaPage;
 	}
 	
 	public String moverView() {
@@ -362,6 +358,15 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		return new ArrayList<>();
 	}
 	
+	public List<Conta> getListaContaAtivo() {
+		try {
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<Conta>();
+	}
+	
 	public IMovimentacaoLancamento getService() {
 		return service;
 	}
@@ -465,22 +470,6 @@ public class MovimentacaoLancamentoController extends AbstractController {
 
 	public void setLancamentoATransferir(LancamentoConta lancamentoATransferir) {
 		this.lancamentoATransferir = lancamentoATransferir;
-	}
-
-	public String getVincularFatura() {
-		return vincularFatura;
-	}
-
-	public void setVincularFatura(String vincularFatura) {
-		this.vincularFatura = vincularFatura;
-	}
-
-	public String getManagedBeanOrigem() {
-		return managedBeanOrigem;
-	}
-
-	public void setManagedBeanOrigem(String managedBeanOrigem) {
-		this.managedBeanOrigem = managedBeanOrigem;
 	}
 
 	public IncrementoClonagemLancamento getIncremento() {
