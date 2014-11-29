@@ -59,6 +59,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
@@ -71,10 +72,12 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
+import br.com.hslife.orcamento.model.PanoramaFaturaCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
+import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
@@ -97,6 +100,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@Autowired
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
+	
+	@Autowired
+	private FaturaCartaoRepository faturaCartaoRepository;
 
 	/*** Declaração dos componentes ***/
 	
@@ -256,7 +262,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					lancamentosProcessados.add(ultimaMensalidade);
 					lancamentosProcessados.addAll(ultimaMensalidade.clonarLancamentos(11, IncrementoClonagemLancamento.MES));
 				} else {
-					// TODO Os valores inseridos estão vindo com o dobro do registrado na despesa fixa. Ver depois o que está acontecendo.
 					
 					// Gera mais 12 mensalidades e inclui na lista de acordo com o período da despesa fixa
 					switch (despesaFixa.getPeriodoLancamento()) {
@@ -402,6 +407,176 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		// Salva o resultado em um List e depois retorna os valores adicionados
 		List<PanoramaLancamentoConta> resultado = new LinkedList<>(mapPanoramaLancamentos.values());
+
+		return resultado;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<PanoramaFaturaCartao> gerarRelatorioPanoramaFaturaCartao(Conta conta, int ano) throws BusinessException {
+		
+		// Pega a data atual
+		Calendar hoje = Calendar.getInstance();
+		
+		// Declara o Map de previsão das faturas do cartão
+		Map<String, PanoramaFaturaCartao> mapPanoramaFaturas = new LinkedHashMap<String, PanoramaFaturaCartao>();
+		
+		// Busca todas as faturas do ano selecionado
+		List<FaturaCartao> faturasDoAno = faturaCartaoRepository.findAllByContaAndAnoOrderedByMesAndAno(conta, ano);
+		
+		// Busca todos os lançamentos do cartão não vinculados a faturas
+		List<LancamentoConta> lancamentosNaoVinculados = lancamentoContaRepository.findAllWithoutFatura(conta);
+		
+		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
+		
+		// Adiciona todos os lançamentos da fatura no List
+		for (FaturaCartao fatura : faturasDoAno) {
+			lancamentosProcessados.addAll(fatura.getDetalheFatura());
+		}
+		
+		/* Lançamentos fixos da conta */
+		// Traz todos os lançamentos fixos ativos da conta selecionada
+		// O processamento dos lançamentos fixos ocorre somente para anos posteriores ao ano atual
+		if (ano > hoje.get(Calendar.YEAR)) {
+			List<LancamentoPeriodico> despesasFixas = lancamentoPeriodicoRepository.
+					findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico.FIXO, conta, StatusLancamento.ATIVO);
+			
+			// Itera os lançamentos fixos
+			for (LancamentoPeriodico despesaFixa : despesasFixas) {
+				
+				// Busca a última mensalidade paga
+				LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(despesaFixa);
+				
+				// Verifica se a despesa fixa é mensal
+				if (despesaFixa.getPeriodoLancamento().equals(PeriodoLancamento.MENSAL)) {
+					// Seta o mês da data de pagamento da mensalidade para Janeiro e duplica os lançamentos
+					Calendar temp = Calendar.getInstance();
+					temp.setTime(ultimaMensalidade.getDataPagamento());
+					temp.set(Calendar.DAY_OF_MONTH, despesaFixa.getDiaVencimento());
+					temp.set(Calendar.MONTH, Calendar.JANUARY);
+					temp.set(Calendar.YEAR, ano);
+					ultimaMensalidade.setDataPagamento(temp.getTime());
+					
+					// Seta o valor definido na despesa fixa
+					ultimaMensalidade.setValorPago(despesaFixa.getValorParcela());
+					
+					lancamentosNaoVinculados.add(ultimaMensalidade);
+					lancamentosNaoVinculados.addAll(ultimaMensalidade.clonarLancamentos(11, IncrementoClonagemLancamento.MES));
+				} else {
+					
+					// Gera mais 12 mensalidades e inclui na lista de acordo com o período da despesa fixa
+					switch (despesaFixa.getPeriodoLancamento()) {
+						case BIMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.BIMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosNaoVinculados.add(l);
+							}							
+							break;
+						case TRIMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.TRIMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosNaoVinculados.add(l);
+							}							
+							break;
+						case QUADRIMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.QUADRIMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosNaoVinculados.add(l);
+							}							
+							break;
+						case SEMESTRAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.SEMESTRE)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosNaoVinculados.add(l);
+							}							
+							break;
+						case ANUAL : 
+							for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.ANO)) {
+								if ((l.getDataPagamento().getYear() + 1900) == ano)  
+									lancamentosNaoVinculados.add(l);
+							}							
+							break;
+						default : // não faz nada
+					}
+					
+				}
+				
+			}
+		}
+		
+		// Itera os lançamentos não vinculados para poder ajustar a data de pagamento
+		for (LancamentoConta lancamento : lancamentosNaoVinculados) {
+			
+			// Ajusta a data de pagamento para enquadrar no mês correspondente
+			Calendar temp = Calendar.getInstance();
+			temp.setTime(lancamento.getDataPagamento());
+			if (temp.get(Calendar.DAY_OF_MONTH) > lancamento.getConta().getCartaoCredito().getDiaFechamentoFatura()) {
+				temp.add(Calendar.MONTH, 1);
+			}
+			lancamento.setDataPagamento(temp.getTime());
+			
+			// Verifica se a data de pagamento do lançamento está dentro do ano selecionado
+			// A adição do lançamento ocorre somente quando o ano for posterior ao ano atual
+			if (lancamento.getDataPagamento().getYear() + 1900 == ano) {	
+				// Adiciona na lista de lançamentos processados
+				lancamentosProcessados.add(lancamento);
+			}
+		}
+		
+		// Organiza os lançamentos da fatura
+		List<Categoria> categorias = contaComponent.organizarLancamentosPorCategoria(lancamentosProcessados);
+		
+		// Itera as categorias para organizar no Map dentro do mês correspondente
+		for (Categoria categoria : categorias) {
+			String oid = Util.MD5(categoria.getDescricao());
+			PanoramaFaturaCartao panorama = new PanoramaFaturaCartao();
+			panorama.setConta(conta);
+			panorama.setDescricao(categoria.getDescricao());
+			panorama.setAno(ano);
+			panorama.setOid(oid);								
+			panorama.setIndice(mapPanoramaFaturas.values().size() + 1);
+			mapPanoramaFaturas.put(oid, panorama);
+				
+			// Rotina de inserção dos valores dos lançamentos no panorama
+			for (LancamentoConta lancamento : categoria.getLancamentos()) {
+				// Caso o lançamento esteja vinculado a uma fatura adiciona no mesmo mês da fatura
+				if (lancamento.getFaturaCartao() != null)
+					mapPanoramaFaturas.get(oid).setarMes(lancamento.getFaturaCartao().getMes() - 1, lancamento);
+				else {
+					mapPanoramaFaturas.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
+				}
+			}
+		}
+		
+		// Realiza o cálculo do saldo total
+		PanoramaFaturaCartao saldoTotal = new PanoramaFaturaCartao();
+		saldoTotal.setConta(conta);
+		saldoTotal.setAno(ano);
+		saldoTotal.setOid(Util.MD5("Total da fatura"));
+		saldoTotal.setDescricao("Total da fatura");
+		saldoTotal.setIndice(mapPanoramaFaturas.values().size() + 1);
+		
+		for (FaturaCartao faturaCartao : faturasDoAno) {
+			switch (faturaCartao.getMes()) {
+				case 1 : saldoTotal.setJaneiro(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 2 : saldoTotal.setFevereiro(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 3 : saldoTotal.setMarco(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 4 : saldoTotal.setAbril(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 5 : saldoTotal.setMaio(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 6 : saldoTotal.setJunho(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 7 : saldoTotal.setJulho(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 8 : saldoTotal.setAgosto(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 9 : saldoTotal.setSetembro(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 10 : saldoTotal.setOutubro(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 11 : saldoTotal.setNovembro(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+				case 12 : saldoTotal.setDezembro(faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()); break;
+			}
+		}
+		
+		mapPanoramaFaturas.put(saldoTotal.getOid(), saldoTotal);
+		
+		// Salva o resultado em um List e depois retorna os valores adicionados
+		List<PanoramaFaturaCartao> resultado = new LinkedList<>(mapPanoramaFaturas.values());
 
 		return resultado;
 	}

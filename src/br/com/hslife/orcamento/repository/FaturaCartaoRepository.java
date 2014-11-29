@@ -138,6 +138,14 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<FaturaCartao> findAllByContaAndAnoOrderedByMesAndAno(Conta conta, int ano) {
+		return getQuery("FROM FaturaCartao f WHERE f.conta.id = :idConta AND f.ano = :ano ORDER BY f.ano DESC, f.mes DESC")
+				.setLong("idConta", conta.getId())
+				.setInteger("ano", ano)
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public FaturaCartao findNextFaturaCartaoFuturaByVencimento(Conta conta, Date dataVencimento) {
 		Criteria criteria = getSession().createCriteria(FaturaCartao.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));

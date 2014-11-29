@@ -289,4 +289,11 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 				.setMaxResults(1)
 				.uniqueResult();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findAllWithoutFatura(Conta conta) {
+		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.faturaCartao IS NULL")
+				.setLong("idConta", conta.getId())
+				.list();
+	}
 }
