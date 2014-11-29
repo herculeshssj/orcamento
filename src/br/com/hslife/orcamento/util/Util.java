@@ -97,6 +97,20 @@ public class Util {
         return sen;
     }
     
+    public static String SHA256(String texto) {
+        String sen = "";
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            BigInteger hash = new BigInteger(1, md.digest(texto.getBytes()));
+            sen = hash.toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        
+        return sen;
+    }
+    
     public static String moedaBrasil(double valor) {
     	NumberFormat formatarMoeda = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
     	return formatarMoeda.format(valor);  

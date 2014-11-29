@@ -249,7 +249,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			if (u != null) {
 				throw new BusinessException("Login já cadastrado para outro usuário!");
 			} else {
-				entity.setSenha(Util.SHA1(confirmaSenha));
+				entity.setSenha(Util.SHA256(confirmaSenha));
 				getRepository().save(entity);
 			}
 		} else {
@@ -264,10 +264,10 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	public void alterar(Usuario entity, String novaSenha, String confirmaSenha) throws BusinessException {
 		if (novaSenha != null && confirmaSenha != null && !novaSenha.trim().isEmpty() && !confirmaSenha.trim().isEmpty() && novaSenha.equals(confirmaSenha)) {
 			Usuario u = getRepository().findById(entity.getId());
-			if (u.getSenha().equals(Util.SHA1(confirmaSenha))) {
+			if (u.getSenha().equals(Util.SHA256(confirmaSenha))) {
 				throw new BusinessException("Nova senha não pode ser igual a senha atual!");
 			} else 
-				entity.setSenha(Util.SHA1(confirmaSenha));			
+				entity.setSenha(Util.SHA256(confirmaSenha));			
 		} else {
 			if (!novaSenha.equals(confirmaSenha)) {
 				throw new BusinessException("As senhas não coincidem!");
@@ -282,7 +282,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		String hash = Util.MD5((new Date().toString()));
 		
 		// Extrai do hash a senha aleatória do usuário
-		String senha = hash.substring(0, 8);
+		String senha = hash.substring(0, 16);
 		
 		// invoca o método de cadastrar usuário
 		this.cadastrar(entity, senha, senha);
@@ -315,7 +315,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			String hash = Util.MD5((new Date().toString()));
 			
 			// Extrai do hash a senha aleatória do usuário
-			String senha = hash.substring(0, 8);
+			String senha = hash.substring(0, 16);
 			
 			// invoca o método de alterar usuário
 			this.alterar(u, senha, senha);

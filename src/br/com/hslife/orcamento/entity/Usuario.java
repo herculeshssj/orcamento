@@ -75,7 +75,7 @@ public class Usuario extends EntityPersistence {
 	@Column(length=50, nullable=false, unique=true)
 	private String login;
 	
-	@Column(length=40, nullable=false)
+	@Column(length=64, nullable=false)
 	private String senha;
 	
 	@Temporal(TemporalType.TIMESTAMP)

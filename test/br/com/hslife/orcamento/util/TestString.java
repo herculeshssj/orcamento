@@ -52,17 +52,17 @@ import org.junit.Test;
 
 public class TestString {
 
-	//@Test
+	@Test
 	public void testSuprimirFim() {
 		System.out.println(Util.suprimirTextoFim("abcdefghijklmnopqrstuvwxyz", 20));
 	}
 
-	//@Test
+	@Test
 	public void testSuprimirMeio() {
 		System.out.println(Util.suprimirTextoMeio("abcdefghijklmnopqrstuvwxyz", 20));
 	}
 	
-	//@Test
+	@Test
 	public void testStringVazia() {
 		String obj = null;
 		Assert.assertTrue(Util.eVazio(obj));
@@ -79,4 +79,10 @@ public class TestString {
 		System.out.println(UUID.randomUUID());
 	}
 	
+	@Test
+	public void textSHA256() {
+		System.out.println("Texto criptografado em SHA-256\n");
+		System.out.println(Util.SHA256("Texto criptografado em SHA-256") + "\n");
+		System.out.println("Tamanho do SHA-256: " + Util.SHA256("Texto criptografado em SHA-256").length());
+	}
 }

@@ -124,5 +124,11 @@ update faturacartao set ano = extract(year from dataVencimento);
 alter table faturacartao change column `mes` `mes` integer not null;
 alter table faturacartao change column `ano` `ano` integer not null;
 
+-- Remoção de opções não utilizadas - Tarefa #1214
 delete from opcaosistema where chave = 'FATURA_EXIBIR_QUITADAS';
 delete from opcaosistema where chave = 'FATURA_EXIBIR_VENCIDAS';
+
+-- Mudança da algoritmo de criptografia de senha - Tarefa #1200
+alter table usuario change column `senha` `senha` varchar(64) not null;
+
+update usuario set senha = '982a3d231f726406cd28f29e1e0809e0ffadbb68abfde30031cd4ff7b23076f' where login = 'admin'; -- Setando a senha do usuário 'admin' para A4m1n@01$

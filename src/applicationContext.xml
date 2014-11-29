@@ -117,7 +117,7 @@
 	
 	<sec:authentication-manager>
 	    <sec:authentication-provider>
-	    	<sec:password-encoder hash="sha"/>
+	    	<sec:password-encoder hash="sha-256"/>
 	        <sec:jdbc-user-service data-source-ref="dataSource"
 	            users-by-username-query="select login as username, senha as password, ativo as enable from usuario where login=?"
 	            authorities-by-username-query="select login as username, tipoUsuario as authority from usuario where login=?" />
