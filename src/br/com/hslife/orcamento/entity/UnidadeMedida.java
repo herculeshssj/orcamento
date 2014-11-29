@@ -80,7 +80,7 @@ public class UnidadeMedida extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return this.descricao;
+		return this.descricao + " (" + sigla + ")";
 	}
 	
 	@Override
