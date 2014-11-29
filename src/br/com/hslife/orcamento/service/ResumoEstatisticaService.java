@@ -133,7 +133,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 
 	/*** Implementação dos métodos da interface ***/
 	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean lancamentoAgendado, Usuario usuario) throws BusinessException {
+	public List<SaldoAtualConta> gerarSaldoAtualContas(Usuario usuario) throws BusinessException {
 		// Declaração dos objetos
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
@@ -167,7 +167,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				temp.setTime(ultimoFechamento.getData());
 				temp.add(Calendar.DAY_OF_YEAR, 1);
 				criterio.setDataInicio(temp.getTime());
-			}				
+			}
+			criterio.setDataFim(new Date());
 			
 			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterio);
 			

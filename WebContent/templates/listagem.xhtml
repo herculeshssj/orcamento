@@ -74,9 +74,11 @@
      			PESQUISA SIMPLES
      		</ui:insert>     		
      		&nbsp;
-     		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
-     			<p:graphicImage value="/resources/images/pesquisar.png"/>
-     		</h:commandLink>
+     		<ui:insert name="botao_pesquisa">
+	     		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+	     			<p:graphicImage value="/resources/images/pesquisar.png"/>
+	     		</h:commandLink>
+     		</ui:insert>
      		&nbsp;
      		<ui:insert name="pesquisa_avancada">
      			

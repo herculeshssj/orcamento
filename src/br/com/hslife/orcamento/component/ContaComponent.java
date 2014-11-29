@@ -545,6 +545,7 @@ public class ContaComponent {
 			proximaMensalidade.setFavorecido(pagamentoPeriodo.getFavorecido());
 			proximaMensalidade.setMeioPagamento(pagamentoPeriodo.getMeioPagamento());
 			proximaMensalidade.setMoeda(pagamentoPeriodo.getMoeda());
+			proximaMensalidade.setStatusLancamentoConta(proximaMensalidade.getDataPagamento().after(new Date()) ? StatusLancamentoConta.AGENDADO : StatusLancamentoConta.REGISTRADO);
 			
 			// Define a descrição definitiva do lançamento a ser criado
 			proximaMensalidade.setDescricao(pagamentoPeriodo.getLancamentoPeriodico().getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));

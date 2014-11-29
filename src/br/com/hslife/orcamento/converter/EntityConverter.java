@@ -49,11 +49,9 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
 
-@FacesConverter(value="entityConverter")
 public class EntityConverter implements Converter {
 
 	@Override

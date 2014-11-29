@@ -113,7 +113,6 @@ public class CalendarioAtividadesController extends AbstractController {
 	
 	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {  
         event = selectEvent.getScheduleEvent();
-        System.out.println(event.getId());
     }
 	    
 	public ScheduleModel getCalendario() {

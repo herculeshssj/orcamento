@@ -71,14 +71,12 @@ public class AjudaController extends AbstractController {
 
 	@Override
 	protected void initializeEntity() {
-		// TODO Auto-generated method stub
 		assuntoMensagem = "";
 		mensagem = "";
 	}
 
 	@Override
 	public String startUp() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

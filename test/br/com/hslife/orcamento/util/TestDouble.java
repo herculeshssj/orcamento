@@ -47,8 +47,6 @@ package br.com.hslife.orcamento.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.junit.Test;
-
 public class TestDouble {
 
 	//@Test

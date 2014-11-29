@@ -63,5 +63,30 @@
             br.com.hslife.orcamento.exception.CustomExceptionHandlerFactory
         </exception-handler-factory>
 	</factory>
+	
+	<converter>
+		<converter-id>dateConverter</converter-id>
+		<converter-class>br.com.hslife.orcamento.converter.DateConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<converter-id>entityConverter</converter-id>
+		<converter-class>br.com.hslife.orcamento.converter.EntityConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<converter-id>statusLancamentoContaConverter</converter-id>
+		<converter-class>br.com.hslife.orcamento.converter.StatusLancamentoContaConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<converter-id>usuarioRoleConverter</converter-id>
+		<converter-class>br.com.hslife.orcamento.converter.UsuarioRoleConverter</converter-class>
+	</converter>
+	
+	<validator>
+		<validator-id>emailValidator</validator-id>
+		<validator-class>br.com.hslife.orcamento.validator.EmailValidator</validator-class>
+	</validator>
 
 </faces-config>

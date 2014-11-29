@@ -160,8 +160,7 @@ public class FaturaCartao extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		// TODO Auto-generated method stub
-		
+		//TODO implementar as validações da entidade
 	}
 
 	public Long getId() {

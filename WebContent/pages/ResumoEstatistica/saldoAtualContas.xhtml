@@ -60,8 +60,11 @@
 	</ui:define>
 	
 	<ui:define name="pesquisa">
-		Calcular com lançamentos agendados:
-		<p:selectBooleanCheckbox value="#{managedBean.lancamentoAgendado}"/>		
+				
+	</ui:define>
+	
+	<ui:define name="botao_pesquisa">
+	
 	</ui:define>
 	
 	<ui:define name="tabela">
@@ -117,7 +120,7 @@
      		
 		<h:commandLink title="Exportar para MS-Excel">
 			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
-			<p:dataExporter type="xls" target="tableListEntityContaAtivas" fileName="saldoAtualContas" encoding="iso-8859-1" preProcessor="#{managedBean.getListaSaldoAtualConta}"/> 
+			<p:dataExporter type="xls" target="tableListEntityContaAtivas" fileName="saldoAtualContas" encoding="iso-8859-1" /> 
 		</h:commandLink>	
 		<br/>
 		<p:accordionPanel activeIndex="1">

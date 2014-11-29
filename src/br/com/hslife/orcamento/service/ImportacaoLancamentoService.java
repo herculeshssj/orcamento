@@ -410,13 +410,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			if (message != null) {
 				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
 			    for (BankStatementResponseTransaction b : bank) {			    	
-			    	System.out.println("bank ID: " + b.getMessage().getAccount().getBankId());
-			    	System.out.println("cc: " + b.getMessage().getAccount().getAccountNumber());
-			        System.out.println("ag: " + b.getMessage().getAccount().getBranchId());
-			        System.out.println("tipo da conta: " + b.getMessage().getAccount().getAccountType());
-			        System.out.println("balanço final: " + b.getMessage().getLedgerBalance().getAmount());
-			        System.out.println("dataDoArquivo: " + b.getMessage().getLedgerBalance().getAsOfDate());
-			        
+			    				        
 			        /* Aqui começa meu código de validação de conta */
 			        
 			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
@@ -434,18 +428,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			        
 			        /* Término do código do meu código de validação de conta */
 			        
-			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();
-			        System.out.println("TRANSAÇÕES\n");
+			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();			        
 			        for (Transaction transaction : list) {
-			        	System.out.println("tipo: " + transaction.getTransactionType().name());
-			            System.out.println("id: " + transaction.getId());
-			            System.out.println("data: " + transaction.getDatePosted());
-			            System.out.println("num. doc.: " + transaction.getReferenceNumber());
-			            System.out.println("check number: " + transaction.getCheckNumber());
-			            System.out.println("valor: " + transaction.getAmount());
-			            System.out.println("descricao: " + transaction.getMemo());
-			            System.out.println("");
-			            
+			        				            
 			            /* Aqui começa meu código */
 			            LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
 			            if (li == null) {			            
@@ -502,13 +487,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 			if (message != null) {
 				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
-			    for (BankStatementResponseTransaction b : bank) {
-			    	System.out.println("bank ID: " + b.getMessage().getAccount().getBankId());
-			    	System.out.println("cc: " + b.getMessage().getAccount().getAccountNumber());
-			        System.out.println("ag: " + b.getMessage().getAccount().getBranchId());
-			        System.out.println("tipo da conta: " + b.getMessage().getAccount().getAccountType());
-			        System.out.println("balanço final: " + b.getMessage().getLedgerBalance().getAmount());
-			        System.out.println("dataDoArquivo: " + b.getMessage().getLedgerBalance().getAsOfDate());
+			    for (BankStatementResponseTransaction b : bank) {			    
 			        
 			        /* Aqui começa meu código de validação de conta */
 			        
@@ -527,18 +506,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			        
 			        /* Término do código do meu código de validação de conta */
 			        
-			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();
-			        System.out.println("TRANSAÇÕES\n");
+			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();			        
 			        for (Transaction transaction : list) {
-			        	System.out.println("tipo: " + transaction.getTransactionType().name());
-			            System.out.println("id: " + transaction.getId());
-			            System.out.println("data: " + transaction.getDatePosted());
-			            System.out.println("num. doc.: " + transaction.getReferenceNumber());
-			            System.out.println("check number: " + transaction.getCheckNumber());
-			            System.out.println("valor: " + transaction.getAmount());
-			            System.out.println("descricao: " + transaction.getMemo());
-			            System.out.println("");
-			            
+			        				            
 			            /* Aqui começa meu código */
 			            LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
 			            if (li == null) {			            

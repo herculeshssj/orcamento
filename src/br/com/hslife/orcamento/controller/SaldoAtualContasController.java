@@ -64,10 +64,7 @@ public class SaldoAtualContasController extends AbstractController {
 	 */
 	private static final long serialVersionUID = 1202530011221580347L;
 
-	private boolean lancamentoAgendado;
 	private double saldoTotalContas;
-	private List<SaldoAtualConta> contasAtivas = new ArrayList<>();
-	private List<SaldoAtualConta> contasInativas = new ArrayList<>();
 	
 	@Autowired
 	private IResumoEstatistica service;
@@ -78,46 +75,13 @@ public class SaldoAtualContasController extends AbstractController {
 
 	@Override
 	protected void initializeEntity() {
-		contasAtivas = new ArrayList<>();
-		contasInativas = new ArrayList<>();
-		saldoTotalContas = 0;
+		
 	}
 	
 	@Override
 	public String startUp() {
-		initializeEntity();
-		this.getListaSaldoAtualConta(new Object());
+		this.getContasAtivas();
 		return "/pages/ResumoEstatistica/saldoAtualContas";
-	}
-	
-	public String find() {
-		this.getListaSaldoAtualConta(new Object());
-		return "";
-	}
-	
-	public void getListaSaldoAtualConta(Object document) {
-		try {
-			List<SaldoAtualConta> saldos = new ArrayList<>();
-			saldos = getService().gerarSaldoAtualContas(lancamentoAgendado, getUsuarioLogado());
-			for (SaldoAtualConta saldo : saldos) {
-				if (saldo.isAtivo()) {
-					contasAtivas.add(saldo);
-					saldoTotalContas += saldo.getSaldoAtual();
-				} else {
-					contasInativas.add(saldo);
-				}
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}		
-	}
-
-	public boolean isLancamentoAgendado() {
-		return lancamentoAgendado;
-	}
-
-	public void setLancamentoAgendado(boolean lancamentoAgendado) {
-		this.lancamentoAgendado = lancamentoAgendado;
 	}
 
 	public IResumoEstatistica getService() {
@@ -129,11 +93,19 @@ public class SaldoAtualContasController extends AbstractController {
 	}
 
 	public List<SaldoAtualConta> getContasAtivas() {
-		return contasAtivas;
-	}
-
-	public void setContasAtivas(List<SaldoAtualConta> contasAtivas) {
-		this.contasAtivas = contasAtivas;
+		try {
+			List<SaldoAtualConta> saldos = new ArrayList<>();
+			for (SaldoAtualConta saldo : getService().gerarSaldoAtualContas(getUsuarioLogado())) {
+				if (saldo.isAtivo()) {
+					saldos.add(saldo);
+					saldoTotalContas += saldo.getSaldoAtual();
+				}
+			}
+			return saldos;			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<SaldoAtualConta>();
 	}
 
 	public double getSaldoTotalContas() {
@@ -145,10 +117,17 @@ public class SaldoAtualContasController extends AbstractController {
 	}
 
 	public List<SaldoAtualConta> getContasInativas() {
-		return contasInativas;
-	}
-
-	public void setContasInativas(List<SaldoAtualConta> contasInativas) {
-		this.contasInativas = contasInativas;
+		try {
+			List<SaldoAtualConta> saldos = new ArrayList<>();
+			for (SaldoAtualConta saldo : getService().gerarSaldoAtualContas(getUsuarioLogado())) {
+				if (!saldo.isAtivo()) {
+					saldos.add(saldo);
+				}
+			}
+			return saldos;			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<SaldoAtualConta>();
 	}
 }
