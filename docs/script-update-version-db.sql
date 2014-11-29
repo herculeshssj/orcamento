@@ -123,3 +123,6 @@ update faturacartao set ano = extract(year from dataVencimento);
 
 alter table faturacartao change column `mes` `mes` integer not null;
 alter table faturacartao change column `ano` `ano` integer not null;
+
+delete from opcaosistema where chave = 'FATURA_EXIBIR_QUITADAS';
+delete from opcaosistema where chave = 'FATURA_EXIBIR_VENCIDAS';
