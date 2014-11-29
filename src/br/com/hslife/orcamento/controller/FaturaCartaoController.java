@@ -46,9 +46,12 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -69,6 +72,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -77,7 +81,8 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.util.DetalheFaturaComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("faturaCartaoMB")
@@ -114,7 +119,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	private CartaoCredito cartaoSelecionado;
 	private FaturaCartao faturaSelecionada;
-	private CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	private LancamentoConta lancamento;
 	private Conta contaSelecionada;
 	private StatusFaturaCartao statusFatura;
@@ -124,6 +129,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private List<Moeda> moedas = new ArrayList<Moeda>();
 	private List<LancamentoConta> lancamentosEncontrados = new ArrayList<LancamentoConta>();
 	private List<LancamentoConta> lancamentosAdicionados = new ArrayList<LancamentoConta>();
+	private Map<String, List<LancamentoConta>> mapFaturasEncontradas = new HashMap<>();
+	private Map<String, List<Moeda>> mapMoedasEncontradas = new HashMap<>();
 	
 	public FaturaCartaoController() {
 		super(new FaturaCartao());
@@ -138,7 +145,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		lancamentosEncontrados.clear();
 		lancamentosAdicionados.clear();
 		moedas = new ArrayList<Moeda>();
-		criterioBusca = new CriterioLancamentoConta();
+		criterioBusca = new CriterioBuscaLancamentoConta();
 	}
 
 	
@@ -156,7 +163,47 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
+			
+			if (statusFatura == null) {
+			
+				int contFaturas = 1;
+				
+				listEntity = new ArrayList<FaturaCartao>();
+				mapFaturasEncontradas.clear();
+				
+				for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
+					if (contFaturas <= 5) {
+						listEntity.add(fatura);
+						
+						// Adiciona os detalhes da fatura no Map						
+						mapFaturasEncontradas.put(fatura.getLabel(), new ArrayList<LancamentoConta>(fatura.getDetalheFatura()));
+						
+						// Ordena os detalhes da fatura
+						Collections.sort(mapFaturasEncontradas.get(fatura.getLabel()), new DetalheFaturaComparator());
+						
+						// Adiciona os detalhes da fatura no List detalhesFaturaCartao para realizar o 
+						// cálculo dos totais
+						detalhesFaturaCartao.clear();
+						detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
+						this.calcularSaldoCompraSaqueParceladoPorMoeda();
+						for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
+							moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
+						}
+						this.calculaValorConversao();
+						
+						// Adiciona as moedas com seus totais no map correspondente
+						mapMoedasEncontradas.put(fatura.getLabel(), new ArrayList<Moeda>(moedas));
+						
+						contFaturas++;
+					} 
+				}
+			
+			} else {
+				
+				listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
+				
+			}
+
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -204,12 +251,17 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
+	@SuppressWarnings("deprecation")
 	public String save() {
 		if (entity.getId() == null) {
 			entity.setConta(cartaoSelecionado.getConta());
 		}
 		entity.getDetalheFatura().clear();
 		entity.getDetalheFatura().addAll(lancamentosAdicionados);
+		
+		entity.setMes(entity.getDataVencimento().getMonth() + 1);
+		entity.setAno(entity.getDataVencimento().getYear() + 1900);
+		
 		return super.save();
 	}
 	
@@ -331,9 +383,9 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public void pesquisarLancamento() {
 		try {
 			criterioBusca.setConta(contaService.buscarPorID(cartaoSelecionado.getConta().getId()));
-			criterioBusca.setQuitado(false);
+			criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO});
 			lancamentosEncontrados.clear();
-			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
+			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			lancamentosEncontrados.removeAll(lancamentosAdicionados);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -464,7 +516,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public String quitarFaturaView() {
 		try {
 			faturaSelecionada = getService().buscarPorID(idEntity);
-			criterioBusca = new CriterioLancamentoConta();
+			criterioBusca = new CriterioBuscaLancamentoConta();
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
 		} catch (BusinessException be) {
@@ -480,7 +532,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			} else {				
 				criterioBusca.setDataFim(criterioBusca.getDataInicio());
 				lancamentosEncontrados.clear();
-				lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioLancamentoConta(criterioBusca));
+				lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -535,7 +587,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
-	public void calculaValorConversao() {
+	private void calculaValorConversao() {
 		totalFatura = 0.0;
 		for (Moeda moeda : moedas) {
 			if (moeda.isPadrao()) 
@@ -560,7 +612,11 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public List<CartaoCredito> getListaCartaoSoCredito() {
 		try {
-			return cartaoCreditoService.buscarSomenteCreditoPorUsuario(getUsuarioLogado());
+			if (getOpcoesSistema().getExibirContasInativas()) {
+				return cartaoCreditoService.buscarSomenteCreditoPorUsuario(getUsuarioLogado());
+			} else {
+				return cartaoCreditoService.buscarAtivosSomenteCreditoPorUsuario(getUsuarioLogado());
+			}			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -652,9 +708,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public List<SelectItem> getListaStatusFaturaCartao() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (StatusFaturaCartao enumeration : StatusFaturaCartao.values()) {
-			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
-		}
+		listaSelectItem.add(new SelectItem(null, "Fatura mais recentes"));
+		listaSelectItem.add(new SelectItem(StatusFaturaCartao.ANTIGA, "Faturas antigas"));
+		listaSelectItem.add(new SelectItem(StatusFaturaCartao.QUITADA, "Faturas quitadas"));
+		listaSelectItem.add(new SelectItem(StatusFaturaCartao.VENCIDA, "Faturas vencidas"));
 		return listaSelectItem;
 	}
 
@@ -738,14 +795,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		this.faturaSelecionada = faturaSelecionada;
 	}
 
-	public CriterioLancamentoConta getCriterioBusca() {
-		return criterioBusca;
-	}
-
-	public void setCriterioBusca(CriterioLancamentoConta criterioBusca) {
-		this.criterioBusca = criterioBusca;
-	}
-
 	public LancamentoConta getLancamento() {
 		return lancamento;
 	}
@@ -810,5 +859,21 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
+	}
+
+	public CriterioBuscaLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
+	}
+
+	public Map<String, List<LancamentoConta>> getMapFaturasEncontradas() {
+		return mapFaturasEncontradas;
+	}
+
+	public Map<String, List<Moeda>> getMapMoedasEncontradas() {
+		return mapMoedasEncontradas;
 	}
 }

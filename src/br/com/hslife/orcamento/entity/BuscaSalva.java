@@ -76,9 +76,6 @@ public class BuscaSalva extends EntityPersistence {
 	@Column(nullable=true, length=50)
 	private String textoBusca;
 	
-	@Column(nullable=true, length=20)
-	private String textoParcela;
-	
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)
 	private Date dataInicio;
@@ -94,12 +91,6 @@ public class BuscaSalva extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
-	
-	@Column
-	private int agendados;
-	
-	@Column
-	private int quitados;
 	
 	@Column
 	private boolean pesquisarTermo;
@@ -175,30 +166,6 @@ public class BuscaSalva extends EntityPersistence {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public int getAgendados() {
-		return agendados;
-	}
-
-	public void setAgendados(int agendados) {
-		this.agendados = agendados;
-	}
-
-	public String getTextoParcela() {
-		return textoParcela;
-	}
-
-	public void setTextoParcela(String textoParcela) {
-		this.textoParcela = textoParcela;
-	}
-
-	public int getQuitados() {
-		return quitados;
-	}
-
-	public void setQuitados(int quitados) {
-		this.quitados = quitados;
 	}
 
 	public boolean isPesquisarTermo() {

@@ -42,26 +42,26 @@
   
  ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.util;
 
-import java.util.List;
+import java.util.Comparator;
 
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
-import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 
+public class DetalheFaturaComparator implements Comparator<LancamentoConta>{
 
-public interface IResumoEstatistica {
-	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean lancamentoAgendado, Usuario usuario) throws BusinessException;
-	
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
-	
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws BusinessException;
-	
+	@Override
+	public int compare(LancamentoConta oneEntity, LancamentoConta otherEntity) {
+		try {
+			
+			if (oneEntity != null && otherEntity != null) {
+				if (oneEntity.getDataPagamento() != null && otherEntity.getDataPagamento() != null) {
+					return oneEntity.getDataPagamento().compareTo(otherEntity.getDataPagamento());
+				}
+			}			
+		} catch (NullPointerException npe) {
+			System.out.println(npe.getMessage());
+		}
+		return 0;
+	}
 }

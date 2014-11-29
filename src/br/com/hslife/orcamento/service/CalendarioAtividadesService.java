@@ -54,12 +54,13 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICalendarioAtividades;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Service("calendarioAtividadesService")
 public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> implements ICalendarioAtividades {
@@ -80,17 +81,17 @@ public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> imp
 	
 	@Override
 	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) throws BusinessException {
-		CriterioLancamentoConta criterioBusca = new CriterioLancamentoConta();
+		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		List<Agenda> agendamentos = new ArrayList<>();
 		Agenda agenda = new Agenda();
 		criterioBusca.setConta(conta);
 		criterioBusca.setDataInicio(dataInicio);
 		criterioBusca.setDataFim(dataFim);
-		criterioBusca.setAgendado(true);
-		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioLancamentoConta(criterioBusca)) {
+		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
+		
+		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioBusca(criterioBusca)) {
 			agenda.setDataInicio(lancamento.getDataPagamento());
 			agenda.setDescricao(lancamento.getConta().getLabel() + " - " + lancamento.getDescricao());
-			//agenda.setLancamentoAgendado(lancamento);
 			agenda.setUsuario(lancamento.getConta().getUsuario());
 			agendamentos.add(agenda);
 			agenda = new Agenda();

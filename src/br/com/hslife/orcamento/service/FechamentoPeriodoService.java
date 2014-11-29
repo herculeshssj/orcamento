@@ -57,11 +57,12 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Service("fechamentoPeriodoService")
 public class FechamentoPeriodoService extends AbstractCRUDService<FechamentoPeriodo> implements IFechamentoPeriodo {
@@ -154,15 +155,15 @@ public class FechamentoPeriodoService extends AbstractCRUDService<FechamentoPeri
 		temp.add(Calendar.DAY_OF_YEAR, 1);
 		
 		// Busca os lançamentos do intervalo e seta como não quitados
-		CriterioLancamentoConta criterio = new CriterioLancamentoConta();
+		CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
 		criterio.setConta(entity.getConta());
 		criterio.setDescricao("");
 		criterio.setDataInicio(temp.getTime());
 		criterio.setDataFim(dataFim);
-		criterio.setAgendado(false);
-		for (LancamentoConta l : getComponent().buscarPorCriterioLancamentoConta(criterio)) {
+		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
 			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
-			lancamento.setQuitado(false);
+			lancamento.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			lancamentoContaRepository.update(lancamento);
 		}
 	}

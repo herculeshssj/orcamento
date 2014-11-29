@@ -55,11 +55,12 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.component.EmailComponent;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Component
 public class AgendamentoTask {
@@ -137,7 +138,7 @@ public class AgendamentoTask {
 				lancamento = lancamentoContaRepository.findById(agenda.getIdEntity());
 				if (lancamento != null) {
 					dataLancamento = new Date(lancamento.getDataPagamento().getYear()+1900, lancamento.getDataPagamento().getMonth(), lancamento.getDataPagamento().getDate(), 0, 0, 0);
-					if (lancamento.isAgendado() && dataLancamento.equals(dataAgenda)) {
+					if (lancamento.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO) && dataLancamento.equals(dataAgenda)) {
 						lancamentosAtualizados.add(lancamento);
 					} else {
 						agendaRepository.delete(agenda);
@@ -151,12 +152,11 @@ public class AgendamentoTask {
 			}
 		}
 						
-		CriterioLancamentoConta criterioLancamentoConta = new CriterioLancamentoConta();
-		criterioLancamentoConta.setAgendado(true);
-		criterioLancamentoConta.setDataInicio(new Date());
-		criterioLancamentoConta.setQuitado(false);
+		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
+		criterioBusca.setDataInicio(new Date());
 		
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioLancamentoConta(criterioLancamentoConta);
+		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
 		lancamentos.removeAll(lancamentosAtualizados);
 		
 		for (LancamentoConta l : lancamentos) {

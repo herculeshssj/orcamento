@@ -70,6 +70,7 @@ import org.hibernate.annotations.OrderBy;
 
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -182,7 +183,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 		
 		int resultado = this.totalParcela;
 		for (LancamentoConta lancamento : pagamentos) {
-			if (lancamento.isQuitado()) 
+			if (lancamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) 
 				resultado--;
 		}
 		return resultado == 0;

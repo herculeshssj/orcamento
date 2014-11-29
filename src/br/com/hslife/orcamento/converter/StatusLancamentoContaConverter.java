@@ -42,26 +42,43 @@
   
  ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.converter;
 
-import java.util.List;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import javax.faces.convert.FacesConverter;
 
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
-import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 
+@FacesConverter(value="statusLancamentoContaConverter")
+public class StatusLancamentoContaConverter implements Converter{
+	
+	@Override
+	public Object getAsObject(FacesContext contexto, UIComponent componente, String valor) {
+		try {
+			for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
+				if (status.toString().equalsIgnoreCase(valor))
+					return status;
+			}
+			return null;
+		} catch (Exception e) {
+			throw new ConverterException(e);
+		}
+	}
 
-public interface IResumoEstatistica {
-	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean lancamentoAgendado, Usuario usuario) throws BusinessException;
-	
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
-	
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws BusinessException;
-	
+	@Override
+	public String getAsString(FacesContext contexto, UIComponent componente, Object valor) {
+		try {
+			for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
+				if ( ((StatusLancamentoConta)valor).equals(status) )
+					return status.toString();
+			}
+			return "";
+		} catch (Exception e) {
+			throw new ConverterException(e);
+		}
+	}
+
 }

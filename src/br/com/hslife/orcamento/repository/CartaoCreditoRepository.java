@@ -93,6 +93,15 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 		Criteria criteria = getSession().createCriteria(CartaoCredito.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("tipoCartao", TipoCartao.CREDITO));
+		criteria.add(Restrictions.isNull("cartaoSubstituto"));
+		return criteria.addOrder(Order.asc("descricao")).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<CartaoCredito> findEnabledOnlyCartaoTipoCreditoByUsuario(Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(CartaoCredito.class);
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		criteria.add(Restrictions.eq("tipoCartao", TipoCartao.CREDITO));
 		criteria.add(Restrictions.eq("ativo", true));
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}

@@ -95,3 +95,31 @@ create table orcamento_detalheorcamento (
 
 alter table orcamento_detalheorcamento add constraint fk_orcamento foreign key (orcamento_id) references orcamento(id);
 alter table orcamento_detalheorcamento add constraint fk_detalheorcamento foreign key (detalhes_id) references detalheorcamento(id);
+
+-- Inclusão da coluna de statusLancamento - Tarefa #1023
+alter table lancamentoconta add column statusLancamentoConta varchar(15) null;
+update lancamentoconta set statusLancamentoConta = 'AGENDADO' where agendado = true;
+update lancamentoconta set statusLancamentoConta = 'QUITADO' where quitado = true;
+update lancamentoconta set statusLancamentoConta = 'REGISTRADO' where statusLancamentoConta is null;
+alter table lancamentoconta change column `statusLancamentoConta` `statusLancamentoConta` varchar(15) not null;
+
+-- Remoção das colunas de agendados e quitados da entidade BuscaSalva - Tarefa #1023
+alter table buscasalva drop column agendados;
+alter table buscasalva drop column quitados;
+
+-- Remoção da coluna textoParcela que não estava mais sendo usada - Tarefa #1023
+alter table buscasalva drop column textoParcela;
+
+-- Remoção das colunas agendado e quitado da entidade LancamentoConta - Tarefa #1023
+alter table lancamentoconta drop column agendado;
+alter table lancamentoconta drop column quitado;
+
+-- Inclusão das colunas de período e ano na entidade de FaturaCartao - Tarefa #1211
+alter table faturacartao add column mes integer null;
+alter table faturacartao add column ano integer null;
+
+update faturacartao set mes = extract(month from dataVencimento);
+update faturacartao set ano = extract(year from dataVencimento);
+
+alter table faturacartao change column `mes` `mes` integer not null;
+alter table faturacartao change column `ano` `ano` integer not null;

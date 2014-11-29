@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
@@ -257,7 +258,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
 			dataKey = new SimpleDateFormat("MM/yyyy").format(this.determinarChaveMesAnoPagamento(pagamento));
-			if (pagamento.isQuitado()) {				
+			if (pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {				
 				if (dadosPagamento.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
@@ -342,7 +343,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		// Itera a lista de pagamentos para somar no mês/ano correspondente
 		for (LancamentoConta pagamento : pagamentos) {
 			dataKey = new SimpleDateFormat("MM/yyyy").format(this.determinarChaveMesAnoPagamento(pagamento));
-			if (pagamento.isQuitado()) {
+			if (pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 				if (dadosPagamento.get(dataKey) != null) {
 					if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
 						dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + (pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao()));
@@ -394,7 +395,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 			// Determina exatamente o mês/ano que um lançamento do cartão deve ser registrado
 			// de acordo com a data de vencimento da fatura do cartão
 			Calendar temp = Calendar.getInstance();
-			if (pagamento.isQuitado()) {
+			if (pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 				temp.setTime(pagamento.getDataPagamento());
 			} else {
 				temp.setTime(pagamento.getDataVencimento());
@@ -408,7 +409,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 			}
 			return temp.getTime();
 		} else {
-			if (pagamento.isQuitado()) {
+			if (pagamento.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 				return pagamento.getDataPagamento();
 			} else {
 				return pagamento.getDataVencimento();

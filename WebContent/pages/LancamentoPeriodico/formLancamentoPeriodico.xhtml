@@ -197,7 +197,7 @@
 						<f:facet name="header">
 							<h:outputText value=""/>
 						</f:facet>
-						<p:selectBooleanCheckbox value="#{item.quitado}" disabled="true"/>
+						<p:selectBooleanCheckbox value="#{item.statusLancamentoConta == 'QUITADO'}" disabled="true"/>
 					</p:column>									
 					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
 						<f:facet name="header">

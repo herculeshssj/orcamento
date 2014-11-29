@@ -42,26 +42,18 @@
   
  ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.enumeration;
 
-import java.util.List;
+public enum StatusLancamentoConta {
+	AGENDADO("Agendado"), QUITADO("Quitado"), REGISTRADO("Registrado");
+	
+	private String descricao;
+	
+	private StatusLancamentoConta(String descricao) {
+		this.descricao = descricao;
+	}
 
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
-import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
-
-
-public interface IResumoEstatistica {
-	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean lancamentoAgendado, Usuario usuario) throws BusinessException;
-	
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
-	
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws BusinessException;
-	
+	public String toString() {
+		return descricao;
+	}
 }

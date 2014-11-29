@@ -70,9 +70,9 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.util.Util;
 
 
 @Entity
@@ -107,15 +107,13 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)
 	private double valorPago;
 	
-	@Column(length=10)
+	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipoLancamento;
 	
-	@Column(nullable=false)
-	private boolean agendado;
-	
-	@Column(nullable=false)
-	private boolean quitado;
+	@Column(length=15, nullable=false)
+	@Enumerated(EnumType.STRING)
+	private StatusLancamentoConta statusLancamentoConta;
 	
 	@Column
 	private int periodo;
@@ -175,6 +173,7 @@ public class LancamentoConta extends EntityPersistence {
 	public LancamentoConta() {
 		conta = new Conta();
 		tipoLancamento = TipoLancamento.DESPESA;
+		statusLancamentoConta = StatusLancamentoConta.REGISTRADO;
 	}
 	
 	public LancamentoConta(LancamentoConta lancamento) {
@@ -187,8 +186,12 @@ public class LancamentoConta extends EntityPersistence {
 		meioPagamento = lancamento.getMeioPagamento();
 		favorecido = lancamento.getFavorecido();
 		tipoLancamento = lancamento.getTipoLancamento();
-		agendado = lancamento.isAgendado();
 		moeda = lancamento.getMoeda();
+		if (lancamento.getDataPagamento().before(new Date())) {
+			statusLancamentoConta = StatusLancamentoConta.REGISTRADO;
+		} else {
+			statusLancamentoConta = StatusLancamentoConta.AGENDADO;
+		}		
 	}
 
 	@Override
@@ -237,6 +240,11 @@ public class LancamentoConta extends EntityPersistence {
 				default : // faz nada com a data de pagamento
 			}
 			lancamentoDestino.setDataPagamento(temp.getTime());
+			if (lancamentoDestino.getDataPagamento().before(new Date())) {
+				lancamentoDestino.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			} else {
+				lancamentoDestino.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			}
 			lancamentos.add(lancamentoDestino);
 		}
 		return lancamentos;
@@ -300,22 +308,6 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setTipoLancamento(TipoLancamento tipoLancamento) {
 		this.tipoLancamento = tipoLancamento;
-	}
-
-	public boolean isAgendado() {
-		return agendado;
-	}
-
-	public void setAgendado(boolean agendado) {
-		this.agendado = agendado;
-	}
-
-	public boolean isQuitado() {
-		return quitado;
-	}
-
-	public void setQuitado(boolean quitado) {
-		this.quitado = quitado;
 	}
 
 	public String getHashImportacao() {
@@ -436,5 +428,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
 		this.lancamentoPeriodico = lancamentoPeriodico;
+	}
+
+	public StatusLancamentoConta getStatusLancamentoConta() {
+		return statusLancamentoConta;
+	}
+
+	public void setStatusLancamentoConta(StatusLancamentoConta statusLancamentoConta) {
+		this.statusLancamentoConta = statusLancamentoConta;
 	}
 }

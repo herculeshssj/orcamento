@@ -77,7 +77,7 @@
 			     			</h:outputText>
 			     			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
 			     			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			     			<h:outputText value=" - AGENDADO" rendered="#{item.agendado}" style="text-align: left"/>
+			     			<h:outputText value=" - AGENDADO" rendered="#{item.statusLancamentoConta == 'AGENDADO'}" style="text-align: left"/>
 			     			<br/>
 			     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 			     				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
@@ -88,12 +88,12 @@
 		     			<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 		     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>     				     			
 		     			</p:column>	     		
-		     			<p:column style="text-align: center; vertical-align: middle;">
+		     			<p:column style="text-align: center; vertical-align: middle; width: 100px;">
 							<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 							</h:commandButton>
-							&nbsp;
-							<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.quitado}">
+							<p:spacer width="10"/>
+							<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.statusLancamentoConta != 'QUITADO'}">
 								<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 							</h:commandButton>							
 		  				</p:column>

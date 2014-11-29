@@ -55,12 +55,12 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
-import br.com.hslife.orcamento.model.CriterioLancamentoConta;
 import br.com.hslife.orcamento.service.ICRUDService;
+import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
-	public List<LancamentoConta> buscarPorCriterioLancamentoConta(CriterioLancamentoConta criterio) throws BusinessException;
+	public List<LancamentoConta> buscarPorCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) throws BusinessException;
 	
 	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos);
 	
@@ -77,10 +77,6 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	public List<AgrupamentoLancamento> organizarLancamentosPorDebitoCredito(List<LancamentoConta> lancamentos) throws BusinessException;
 	
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
-	
-	public void vincularAFaturaAtual(LancamentoConta lancamento) throws BusinessException;
-	
-	public void vincularAProximaFatura(LancamentoConta lancamento) throws BusinessException;
 	
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException;
 }

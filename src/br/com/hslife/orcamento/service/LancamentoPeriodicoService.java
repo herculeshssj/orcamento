@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -210,9 +211,9 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		proximaMensalidade.setMeioPagamento(lancamentoPeriodico.getMeioPagamento());
 		proximaMensalidade.setMoeda(lancamentoPeriodico.getMoeda());
 		if (proximaMensalidade.getDataVencimento().before(new Date()))
-			proximaMensalidade.setAgendado(false);
+			proximaMensalidade.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 		else
-			proximaMensalidade.setAgendado(true);
+			proximaMensalidade.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
 		
 		// Define a descrição definitiva do lançamento a ser criado
 		proximaMensalidade.setDescricao(lancamentoPeriodico.getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
@@ -244,9 +245,9 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			parcela.setMeioPagamento(entity.getMeioPagamento());
 			parcela.setMoeda(entity.getMoeda());
 			if (parcela.getDataVencimento().before(new Date()))
-				parcela.setAgendado(false);
+				parcela.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			else
-				parcela.setAgendado(true);
+				parcela.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
 			
 			// Define a descrição definitiva do lançamento a ser criado
 			parcela.setDescricao(entity.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + entity.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA)); 
