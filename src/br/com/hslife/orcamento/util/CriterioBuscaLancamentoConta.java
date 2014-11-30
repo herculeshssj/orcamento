@@ -46,9 +46,9 @@ package br.com.hslife.orcamento.util;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -61,7 +61,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 public class CriterioBuscaLancamentoConta {
 	
 	// Atributo que armazena os critérios selecionados
-	private Map<String, Criterion> hibernateCriterions = new HashMap<String, Criterion>();
+	private Map<String, Criterion> hibernateCriterions = new TreeMap<String, Criterion>();
 	
 	private Conta conta;
 	private String descricao;

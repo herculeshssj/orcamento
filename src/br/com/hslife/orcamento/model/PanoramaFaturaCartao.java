@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.model;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.util.Util;
 
 public class PanoramaFaturaCartao {
 	
@@ -92,7 +93,12 @@ public class PanoramaFaturaCartao {
 		}
 	}
 
-	public void setarMes(int indice, LancamentoConta lancamento) {
+	public void setarMes(int indice, LancamentoConta lancamento, Double taxaConversao) {
+		 // Se a taxa de conversão não vier nula, converter o valor pago do lançamento
+		if (taxaConversao != null) {
+			lancamento.setValorPago(Util.arredondar(lancamento.getValorPago() * taxaConversao));
+		}			
+		
 		if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
 			this.mes[indice] += lancamento.getValorPago();
 		} else {

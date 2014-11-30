@@ -73,7 +73,6 @@ import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
@@ -313,6 +312,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public void processarBuscaSalva() {
 		if (buscaSalva != null) {
+			novoCriterioBusca = new CriterioBuscaLancamentoConta();
 			novoCriterioBusca.setConta(buscaSalva.getConta());
 			novoCriterioBusca.setDescricao(buscaSalva.getTextoBusca());
 			novoCriterioBusca.setDataInicio(buscaSalva.getDataInicio());
@@ -432,9 +432,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		try {
 			if (buscasSalvas.isEmpty()) {
 				if (getOpcoesSistema().getExibirContasInativas())
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, null, getUsuarioLogado());
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), null, null, getUsuarioLogado());
 				else
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, true, getUsuarioLogado());
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), null, true, getUsuarioLogado());
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());

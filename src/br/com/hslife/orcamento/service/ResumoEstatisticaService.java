@@ -59,6 +59,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
@@ -67,6 +68,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
@@ -540,11 +542,30 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				
 			// Rotina de inserção dos valores dos lançamentos no panorama
 			for (LancamentoConta lancamento : categoria.getLancamentos()) {
+				// Pega a taxa de conversão para passar para o método
+				Double taxaConversao = null;
+				if (lancamento.getFaturaCartao().getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+						|| lancamento.getFaturaCartao().getStatusFaturaCartao().equals(StatusFaturaCartao.ANTIGA)
+						|| lancamento.getFaturaCartao().getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
+					if (lancamento.getMoeda().isPadrao()) {
+						taxaConversao = null;
+					} else {
+						taxaConversao = new Double(lancamento.getMoeda().getTaxaConversao());
+					}					
+				} else {
+					for (ConversaoMoeda conversao : lancamento.getFaturaCartao().getConversoesMoeda()) {
+						if (!conversao.getMoeda().isPadrao() && conversao.getMoeda().equals(lancamento.getMoeda())) {
+							taxaConversao = new Double(conversao.getTaxaConversao());
+							break;
+						}
+					}
+				}
+				
 				// Caso o lançamento esteja vinculado a uma fatura adiciona no mesmo mês da fatura
 				if (lancamento.getFaturaCartao() != null)
-					mapPanoramaFaturas.get(oid).setarMes(lancamento.getFaturaCartao().getMes() - 1, lancamento);
+					mapPanoramaFaturas.get(oid).setarMes(lancamento.getFaturaCartao().getMes() - 1, lancamento, taxaConversao);
 				else {
-					mapPanoramaFaturas.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
+					mapPanoramaFaturas.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento, taxaConversao);
 				}
 			}
 		}
