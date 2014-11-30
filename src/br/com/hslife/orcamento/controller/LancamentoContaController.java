@@ -73,6 +73,7 @@ import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
@@ -191,7 +192,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Override
 	public String save() {
 		// Salva a informação da moeda no lançamento da conta
-		entity.setMoeda(entity.getConta().getMoeda());
+		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO))
+			entity.setMoeda(entity.getConta().getMoeda());
+		
 		if (entity.getDataPagamento().before(new Date())) {
 			entity.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 		} else {

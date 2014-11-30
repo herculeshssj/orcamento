@@ -144,6 +144,7 @@ public class FaturaCartao extends EntityPersistence {
 	public FaturaCartao() {
 		conversoesMoeda = new ArrayList<ConversaoMoeda>();
 		detalheFatura = new HashSet<LancamentoConta>();
+		statusFaturaCartao = StatusFaturaCartao.ABERTA;
 	}
 	
 	@Override

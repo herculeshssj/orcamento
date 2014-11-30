@@ -520,7 +520,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			// Verifica se a data de pagamento do lançamento está dentro do ano selecionado
 			// A adição do lançamento ocorre somente quando o ano for posterior ao ano atual
-			if (lancamento.getDataPagamento().getYear() + 1900 == ano) {	
+			if ((lancamento.getDataPagamento().getYear() + 1900) == ano) {	
 				// Adiciona na lista de lançamentos processados
 				lancamentosProcessados.add(lancamento);
 			}
@@ -544,7 +544,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			for (LancamentoConta lancamento : categoria.getLancamentos()) {
 				// Pega a taxa de conversão para passar para o método
 				Double taxaConversao = null;
-				if (lancamento.getFaturaCartao().getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+				if (lancamento.getFaturaCartao() == null || lancamento.getFaturaCartao().getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
 						|| lancamento.getFaturaCartao().getStatusFaturaCartao().equals(StatusFaturaCartao.ANTIGA)
 						|| lancamento.getFaturaCartao().getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
 					if (lancamento.getMoeda().isPadrao()) {
