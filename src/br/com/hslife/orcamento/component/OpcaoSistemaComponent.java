@@ -174,16 +174,18 @@ public class OpcaoSistemaComponent implements Serializable{
 				opcao.setCasoDeUso("");
 				opcao.setChave(chave);
 				opcao.setTipoOpcaoSistema(TipoOpcaoSistema.USER);
-				opcao.setValor((String)opcoesSistema.get(chave));
 				opcao.setUsuario(usuario);
 				if (opcoesSistema.get(chave) instanceof String) {
 					opcao.setTipoValor("STRING");
+					opcao.setValor((String)opcoesSistema.get(chave));
 				}
 				if (opcoesSistema.get(chave) instanceof Boolean) {
 					opcao.setTipoValor("BOOLEAN");
+					opcao.setValor(Boolean.toString((Boolean)opcoesSistema.get(chave)));
 				}
 				if (opcoesSistema.get(chave) instanceof Integer) {
 					opcao.setTipoValor("INTEGER");
+					opcao.setValor(Integer.toString((Integer)opcoesSistema.get(chave)));
 				}
 				opcaoSistemaRepository.save(opcao);
 			}

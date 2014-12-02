@@ -46,6 +46,7 @@ package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.EmailComponent;
+import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
@@ -107,6 +109,9 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
+	
+	@Autowired
+	private OpcaoSistemaComponent opcaoSistemaComponent;
 
 	public UsuarioRepository getRepository() {
 		return repository;
@@ -251,6 +256,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			} else {
 				entity.setSenha(Util.SHA256(confirmaSenha));
 				getRepository().save(entity);
+				this.setarOpcoesUsuario(entity);
 			}
 		} else {
 			if (!novaSenha.equals(confirmaSenha)) {
@@ -260,6 +266,19 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		}
 	}
 	
+	private void setarOpcoesUsuario(Usuario entity) throws BusinessException {
+		// Seta as opções do sistema que são individuais para cada usuário
+		Map<String, Object> opcoesUsuario = new HashMap<String, Object>();
+		opcoesUsuario.put("GERAL_SUPRIMIR_TEXTO_MEIO", Boolean.FALSE);
+		opcoesUsuario.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.FALSE);
+		opcoesUsuario.put("CONTA_EXIBIR_INATIVAS", Boolean.TRUE);
+		opcoesUsuario.put("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", Integer.valueOf(100));
+		opcoesUsuario.put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", "INDIVIDUAL");
+		opcoesUsuario.put("CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.FALSE);
+		opcoesUsuario.put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(12));
+		opcaoSistemaComponent.salvarOpcoesUser(opcoesUsuario, entity);
+	}
+
 	@Override
 	public void alterar(Usuario entity, String novaSenha, String confirmaSenha) throws BusinessException {
 		if (novaSenha != null && confirmaSenha != null && !novaSenha.trim().isEmpty() && !confirmaSenha.trim().isEmpty() && novaSenha.equals(confirmaSenha)) {
@@ -375,4 +394,6 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findUserActivity(usuario);
 	}
+	
+	
 }

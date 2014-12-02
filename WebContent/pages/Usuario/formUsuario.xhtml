@@ -108,10 +108,10 @@
 			<p:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
-   		<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.login == 'admin'}">
+   		<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
    			<p:graphicImage value="/resources/images/gravar.png" />
    		</h:commandLink>
-   		<h:commandLink title="Salvar registro" action="#{managedBean.saveUser}" rendered="#{managedBean.entity.login != 'admin'}">
+   		<h:commandLink title="Salvar registro" action="#{managedBean.saveUser}" rendered="#{managedBean.usuarioLogado.login != 'admin'}">
    			<p:graphicImage value="/resources/images/gravar.png" />
    		</h:commandLink>
 	</ui:define>
