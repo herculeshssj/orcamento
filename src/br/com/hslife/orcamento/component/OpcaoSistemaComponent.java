@@ -192,12 +192,32 @@ public class OpcaoSistemaComponent implements Serializable{
 		}
 	}
 	
+	public void excluirOpcoesUsuario(Usuario usuario) {
+		// Exclui as opções do sistema do usuário
+		for (OpcaoSistema opcao : opcaoSistemaRepository.findByUsuario(usuario)) {
+			opcaoSistemaRepository.delete(opcao);
+		}
+	}
+	
 	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) throws BusinessException {
 		if (opcao.isRequired()) {
 			if (valor == null || ((String)valor).isEmpty()) {
 				throw new BusinessException("Campo " + opcao.getChave() + " não pode ser vazio!");
 			}
 		}
+	}
+	
+	public void setarOpcoesPadraoUsuario(Usuario entity) throws BusinessException {
+		// Seta as opções do sistema que são individuais para cada usuário
+		Map<String, Object> opcoesUsuario = new HashMap<String, Object>();
+		opcoesUsuario.put("GERAL_SUPRIMIR_TEXTO_MEIO", Boolean.FALSE);
+		opcoesUsuario.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.FALSE);
+		opcoesUsuario.put("CONTA_EXIBIR_INATIVAS", Boolean.TRUE);
+		opcoesUsuario.put("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", Integer.valueOf(100));
+		opcoesUsuario.put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", "INDIVIDUAL");
+		opcoesUsuario.put("CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.FALSE);
+		opcoesUsuario.put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(12));
+		this.salvarOpcoesUser(opcoesUsuario, entity);
 	}
 	
 	/*** Métodos Getters das opções do sistema existentes ***/
