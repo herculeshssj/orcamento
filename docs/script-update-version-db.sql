@@ -132,3 +132,113 @@ delete from opcaosistema where chave = 'FATURA_EXIBIR_VENCIDAS';
 alter table usuario change column `senha` `senha` varchar(64) not null;
 
 update usuario set senha = '982a3d231f726406cd28f29e1e0809e0ffadbb68abfde30031cd4ff7b23076f' where login = 'admin'; -- Setando a senha do usuário 'admin' para A4m1n@01$
+
+-- Preenchendo as opções do sistema com os valores padrão para cada usuário - Tarefa #1218
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+	select
+	'LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS',
+	'100',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	id,
+	'2014-12-01 00:00:00.000',
+	'LancamentoConta'
+	from
+	usuario
+	where
+	id not in (select distinct idUsuario from opcaosistema where chave = 'LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS');
+
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+	select
+	'RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS',
+	'12',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	id,
+	'2014-12-01 00:00:00.000',
+	'LancamentoConta'
+	from
+	usuario
+	where
+	id not in (select distinct idUsuario from opcaosistema where chave = 'RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS');
+	
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+	select
+	'GERAL_SUPRIMIR_TEXTO_MEIO',
+	'false',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	id,
+	'2014-12-01 00:00:00.000',
+	'LancamentoConta'
+	from
+	usuario
+	where
+	id not in (select distinct idUsuario from opcaosistema where chave = 'GERAL_SUPRIMIR_TEXTO_MEIO');
+	
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+	select
+	'CONTA_EXIBIR_INATIVAS',
+	'true',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	id,
+	'2014-12-01 00:00:00.000',
+	'LancamentoConta'
+	from
+	usuario
+	where
+	id not in (select distinct idUsuario from opcaosistema where chave = 'CONTA_EXIBIR_INATIVAS');
+	
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+	select
+	'GERAL_EXIBIR_BUSCAS_REALIZADAS',
+	'false',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	id,
+	'2014-12-01 00:00:00.000',
+	'LancamentoConta'
+	from
+	usuario
+	where
+	id not in (select distinct idUsuario from opcaosistema where chave = 'GERAL_EXIBIR_BUSCAS_REALIZADAS');
+	
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+	select
+	'CONTA_EXIBIR_MEIO_PAGAMENTO',
+	'false',
+	'USER',
+	true,
+	true,
+	false,
+	'INTEGER',
+	id,
+	'2014-12-01 00:00:00.000',
+	'LancamentoConta'
+	from
+	usuario
+	where
+	id not in (select distinct idUsuario from opcaosistema where chave = 'CONTA_EXIBIR_MEIO_PAGAMENTO');
+
+update opcaosistema set valor = '100', tipoValor = 'INTEGER' where chave = 'LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS';
+update opcaosistema set valor = '12', tipoValor = 'INTEGER' where chave = 'RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS';
+update opcaosistema set valor = 'false', tipoValor = 'BOOLEAN' where chave = 'GERAL_SUPRIMIR_TEXTO_MEIO';
+update opcaosistema set valor = 'false', tipoValor = 'BOOLEAN' where chave = 'GERAL_EXIBIR_BUSCAS_REALIZADAS';
+update opcaosistema set valor = 'true', tipoValor = 'BOOLEAN' where chave = 'CONTA_EXIBIR_INATIVAS';
+update opcaosistema set valor = 'false', tipoValor = 'BOOLEAN' where chave = 'CONTA_EXIBIR_MEIO_PAGAMENTO';
