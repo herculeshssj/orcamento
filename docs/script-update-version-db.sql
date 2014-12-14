@@ -242,3 +242,6 @@ update opcaosistema set valor = 'false', tipoValor = 'BOOLEAN' where chave = 'GE
 update opcaosistema set valor = 'false', tipoValor = 'BOOLEAN' where chave = 'GERAL_EXIBIR_BUSCAS_REALIZADAS';
 update opcaosistema set valor = 'true', tipoValor = 'BOOLEAN' where chave = 'CONTA_EXIBIR_INATIVAS';
 update opcaosistema set valor = 'false', tipoValor = 'BOOLEAN' where chave = 'CONTA_EXIBIR_MEIO_PAGAMENTO';
+
+-- Ajusta a taxa de conversão das moedas que estão com valor 0.0 - Tarefa #1233
+update moeda set valorConversao = 1.0000 where valorConversao = 0.0000; 

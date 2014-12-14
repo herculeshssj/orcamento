@@ -128,6 +128,24 @@ public class ContaComponent {
 		return Util.arredondar(total);
 	}
 	
+	public double calcularSaldoLancamentosComConversao(List<LancamentoConta> lancamentos) {		
+		double total = 0.0;
+		for (LancamentoConta l : lancamentos) {
+			if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+				if (l.getMoeda().isPadrao())
+					total += l.getValorPago();
+				else
+					total += l.getValorPago() * l.getMoeda().getValorConversao();
+			} else {
+				if (l.getMoeda().isPadrao())
+					total -= l.getValorPago();
+				else
+					total -= l.getValorPago() * l.getMoeda().getValorConversao();
+			}
+		}
+		return Util.arredondar(total);
+	}
+	
 	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) throws BusinessException {
 		List<Categoria> categorias = new ArrayList<Categoria>();
 		

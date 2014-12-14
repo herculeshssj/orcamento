@@ -71,6 +71,7 @@ import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
@@ -141,7 +142,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
 		
 		// Itera todas as contas do usuário
-		for (Conta conta : contaRepository.findByUsuario(usuario)) {
+		for (Conta conta : contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, null, usuario, null)) {
 			
 			// Define a descrição da conta
 			saldoAtual.setDescricaoConta(conta.getDescricao());
@@ -149,33 +150,47 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Define a situação da conta
 			saldoAtual.setAtivo(conta.isAtivo());
 			
-			// Traz o último período de fechamento da conta
-			FechamentoPeriodo ultimoFechamento = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta); 
-			if (ultimoFechamento == null) {
-				saldoAtual.setSaldoPeriodo(conta.getSaldoInicial());
-			} else {
-				saldoAtual.setSaldoPeriodo(ultimoFechamento.getSaldo());
-			}
-			
-			// Traz os lançamentos da data de fechamento em diante			
+			// Declara o critério de busca
 			CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
-			criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});						
-			criterio.setConta(conta);
-			if (ultimoFechamento == null) {
-				criterio.setDataInicio(conta.getDataAbertura());
+			
+			// Verifica se a conta é do tipo CARTAO
+			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
+				// Seta o saldo do período com o limite do cartão
+				saldoAtual.setSaldoPeriodo(conta.getCartaoCredito().getLimiteCartao());
+				
+				// Traz todos os lançamentos do cartão que ainda não foram quitados
+				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
+				
+				// Seta a conta
+				criterio.setConta(conta);
+			} else {
+				// Traz o último período de fechamento da conta
+				FechamentoPeriodo ultimoFechamento = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta); 
+				if (ultimoFechamento == null) {
+					saldoAtual.setSaldoPeriodo(conta.getSaldoInicial());
+				} else {
+					saldoAtual.setSaldoPeriodo(ultimoFechamento.getSaldo());
+				}
+				
+				// Traz os lançamentos da data de fechamento em diante					
+				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});						
+				criterio.setConta(conta);
+				if (ultimoFechamento == null) {
+					criterio.setDataInicio(conta.getDataAbertura());
+				}
+				else {
+					Calendar temp = Calendar.getInstance();
+					temp.setTime(ultimoFechamento.getData());
+					temp.add(Calendar.DAY_OF_YEAR, 1);
+					criterio.setDataInicio(temp.getTime());
+				}
+				criterio.setDataFim(new Date());
 			}
-			else {
-				Calendar temp = Calendar.getInstance();
-				temp.setTime(ultimoFechamento.getData());
-				temp.add(Calendar.DAY_OF_YEAR, 1);
-				criterio.setDataInicio(temp.getTime());
-			}
-			criterio.setDataFim(new Date());
 			
 			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterio);
 			
 			// Calcula o saldo dos lançamentos e registra no saldo atual
-			saldoAtual.setSaldoRegistrado(contaComponent.calcularSaldoLancamentos(lancamentos));
+			saldoAtual.setSaldoRegistrado(contaComponent.calcularSaldoLancamentosComConversao(lancamentos));
 			
 			// Calcula o saldo atual da conta
 			saldoAtual.setSaldoAtual(saldoAtual.getSaldoPeriodo() + saldoAtual.getSaldoRegistrado());
