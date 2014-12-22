@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="2" x="48" y="64" width="940" height="720" measuredWidth="940" measuredHeight="720"/>
+  <widgets xsi:type="model:Image" id="5" x="48" y="64" measuredWidth="940" measuredHeight="198" src="Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="6" x="48" y="261" width="940" text="Início,Cadastros,Contas,Cartão,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="108" y="0" width="47" height="23" text="Contas"/>
+    <items x="155" y="0" width="46" height="23" text="Cartão"/>
+    <items x="201" y="0" width="62" height="23" text="Despensa"/>
+    <items x="263" y="0" width="78" height="23" text="Documentos"/>
+    <items x="341" y="0" width="59" height="23" text="Resumos"/>
+    <items x="400" y="0" width="50" height="23" text="Opções"/>
+    <items x="450" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="491" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="7" x="80" y="312" text="Menu Principal" measuredWidth="134" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="20" x="344" y="536" text="Contas" measuredWidth="42" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="21" x="584" y="736" text="Opções" measuredWidth="45" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="22" x="144" y="536" text="Cadastros" measuredWidth="59" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="23" x="344" y="736" text="Resumos" measuredWidth="54" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="24" x="48" y="16" measuredWidth="88" measuredHeight="31" src="Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Image" id="25" x="112" y="384" measuredWidth="128" measuredHeight="128" src="Imagens/cadastros.png"/>
+  <widgets xsi:type="model:Image" id="28" x="304" y="592" measuredWidth="128" measuredHeight="128" src="Imagens/resumos.png"/>
+  <widgets xsi:type="model:Image" id="29" x="543" y="592" measuredWidth="128" measuredHeight="128" src="Imagens/opcoes.png"/>
+  <widgets xsi:type="model:Label" id="31" x="560" y="536" text="Cartão de Crédito" measuredWidth="100" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="32" x="304" y="384" measuredWidth="128" measuredHeight="128" src="Imagens/conta.png"/>
+  <widgets xsi:type="model:Image" id="33" x="543" y="392" measuredWidth="128" measuredHeight="128" src="Imagens/cartaocredito.png"/>
+  <widgets xsi:type="model:Image" id="35" x="784" y="392" measuredWidth="128" measuredHeight="128" src="Imagens/despensa.png"/>
+  <widgets xsi:type="model:Label" id="36" x="811" y="536" text="Despensa" measuredWidth="57" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="37" x="112" y="592" measuredWidth="128" measuredHeight="128" src="Imagens/documentos.png"/>
+  <widgets xsi:type="model:Label" id="38" x="144" y="736" text="Documentos" measuredWidth="73" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="39" x="792" y="592" measuredWidth="128" measuredHeight="128" src="Imagens/ajuda.png"/>
+  <widgets xsi:type="model:Label" id="40" x="832" y="736" text="Ajuda" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="42" x="1000" y="296" text="Funcionalidades a implementar&#xA;- Moeda&#xA;- Cartão de crédito&#xA;- Fatura do Cartão&#xA;- Lançamento periódicos&#xA;&#xA;Funcionalidades a refatorar&#xA;- Conta&#xA;- Lançamento da conta&#xA;- Fechamento de período&#xA;- Importação de lançamento" measuredWidth="177" measuredHeight="153" annotation="true">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

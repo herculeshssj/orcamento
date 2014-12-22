@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="849" measuredWidth="940" measuredHeight="849"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Cadastros,Contas,Cartão,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="108" y="0" width="47" height="23" text="Contas"/>
+    <items x="155" y="0" width="46" height="23" text="Cartão"/>
+    <items x="201" y="0" width="62" height="23" text="Despensa"/>
+    <items x="263" y="0" width="78" height="23" text="Documentos"/>
+    <items x="341" y="0" width="59" height="23" text="Resumos"/>
+    <items x="400" y="0" width="50" height="23" text="Opções"/>
+    <items x="450" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="491" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Fatura do Cartão" measuredWidth="152" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Label" id="28" x="79" y="369" text="Cartão:" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="29" x="122" y="369" text="BB - Ourocard Visa Platinum International" measuredWidth="247" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="30" x="383" y="369" text="Fatura:" measuredWidth="42" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="31" x="424" y="369" text="Vence em 24/11/2014" measuredWidth="147" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="35" x="535" y="254" width="337" text="Rótulos das faturas no combo:&#xA;Quitada em 24/08/2014&#xA;Vencida em 24/09/2014&#xA;Vencida em 24/10/2014&#xA;Vence em 24/11/2014 (FECHADA)&#xA;Vence em 24/12/2014&#xA;À vencer em 24/01/2015" measuredWidth="337" measuredHeight="116">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="36" x="1000" y="328" text="No cadastro de lançamento do cartão&#xA;ter uma opção para marcar se o&#xA;lançamento será registrado na fatura&#xA;atual ou na próxima fatura." measuredWidth="210" measuredHeight="62" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="37" x="80" y="568" width="889" height="176" text="Data, Descrição,Valor&#xA;01/10/2014,Compra parcelado 1,R$ 100 &#xA;01/10/2014,Compra parcelado 2,R$ 100 &#xA;01/10/2014,Compra parcelado 3,R$ 100 &#xA;01/10/2014,Compra à vista 1,R$ 100 &#xA;01/10/2014,Compra à vista 2,R$ 100 &#xA;01/10/2014,Compra internacional 1,US$ 100 &#xA;01/10/2014,Compra internacional 2,US$ 100 " measuredWidth="889" measuredHeight="176" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="42" x="1000" y="400" text="&quot;Editar lançamentos da fatura&quot; permite&#xA;editar os lançamentos que irão constar&#xA;na fatura. Exclusivo para faturas abertas." measuredWidth="229" measuredHeight="49" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="43" x="1000" y="464" text="A exclusão de uma fatura só será&#xA;possível para as faturas à vencer." measuredWidth="188" measuredHeight="36" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="44" x="224" y="544" text="Lançamentos agrupados por débito/crédito, categoria ou favorecido" measuredWidth="375" measuredHeight="38">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="45" x="727" y="369" text="Mais opções >>>" measuredWidth="99" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Group" id="48" x="727" y="395" width="145" height="161" text="Mais opções >>>" measuredWidth="145" measuredHeight="161">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="47" x="745" y="415" text="Agrupar por:" measuredWidth="74" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:List" id="49" x="745" y="441" text="( ) Não agrupar&#xA;(o) Crédito / Débito&#xA;( ) Categoria&#xA;( ) Favorecido" measuredWidth="117" measuredHeight="96" border="false" alpha="0">
+    <font/>
+    <items x="0" y="2" width="117" height="23" text="( ) Não agrupar"/>
+    <items x="0" y="25" width="117" height="23" text="(o) Crédito / Débito"/>
+    <items x="0" y="48" width="117" height="23" text="( ) Categoria"/>
+    <items x="0" y="71" width="117" height="23" text="( ) Favorecido"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="50" x="583" y="362" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Image" id="51" x="631" y="364" measuredWidth="32" measuredHeight="32" src="../Imagens/alterar.png"/>
+  <widgets xsi:type="model:Image" id="52" x="679" y="364" measuredWidth="32" measuredHeight="32" src="../Imagens/excluir.png"/>
+  <widgets xsi:type="model:Label" id="54" x="80" y="776" text="Compras/Saques:" measuredWidth="100" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="55" x="200" y="776" text="R$ 200" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="56" x="272" y="776" text="Parcelados:" measuredWidth="66" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="57" x="363" y="776" text="R$ 300" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="58" x="421" y="776" text="Total:" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="59" x="472" y="776" text="R$ 500" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="60" x="80" y="808" text="Compras/Saques:" measuredWidth="100" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="61" x="200" y="808" text="US$ 200" measuredWidth="50" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="62" x="272" y="808" text="Parcelados:" measuredWidth="66" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="63" x="363" y="808" text="US$ 0" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="64" x="421" y="808" text="Total:" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="65" x="472" y="808" text="US$ 200" measuredWidth="50" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="66" x="80" y="856" width="100" height="35" text="Fechar fatura" measuredWidth="100" measuredHeight="35">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="67" x="322" y="856" width="100" height="35" text="Reabrir fatura" measuredWidth="100" measuredHeight="35">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="69" x="58" y="401" text="Status da fatura:&#xA;ABERTA - fatura atual, pode-se adicionar e remover lançamentos livremente.&#xA;FECHADA - Pronta para ser quitada até a data de vencimento. Pode-se reabrir para editar lançamentos até o vencimento.&#xA;QUITADA - Fatura paga. Nenhuma informação pode ser alterada na fatura.&#xA;VENCIDA - Fatura não paga até a data de vencimento. Nenhum informação pode ser alterada na fatura.&#xA;FUTURA - Fatura futura, pode-se adicionar e remover lançamentos livremente." measuredWidth="658" measuredHeight="88" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="71" x="1000" y="514" text="Quando se cadastra uma fatura&#xA;manualmente, dependendo das informa-&#xA;ções inseridas, a fatura pode ganhar uma&#xA;das cinco situações automaticamente.&#xA;Lembrando que a criação de uma nova&#xA;fatura é feita automaticamente pelos &#xA;lançamentos." measuredWidth="232" measuredHeight="101" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="72" x="200" y="856" width="100" height="35" text="Quitar fatura" measuredWidth="100" measuredHeight="35">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="73" x="406" y="828" text="Simplesmente valida se a fatura está em condições de ser reaberta e altera o status da mesma." measuredWidth="517" measuredHeight="38">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="74" x="1000" y="632" text="Caso a fatura não seja paga até a data de&#xA;vencimento o status dela muda para &#xA;VENCIDA e ela passa a ser um lançamento&#xA;do cartão já quitado vinculado a fatura &#xA;subsequente." measuredWidth="236" measuredHeight="75" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="76" x="449" y="856" width="135" height="35" text="Registrar pagamento" measuredWidth="135" measuredHeight="35">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="77" x="1000" y="721" text="O registro de pagamento estará disponível&#xA;às faturas vencidas. Pode ocorrer que o &#xA;pagamento de uma fatura já foi efetuado&#xA;mas não registrado no sistema.&#xA;" measuredWidth="238" measuredHeight="62" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="78" x="608" y="856" width="163" height="35" text="Informações de pagamento" measuredWidth="163" measuredHeight="35">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:CrossOut" id="79" x="727" y="369" width="145" height="187" measuredWidth="145" measuredHeight="187" annotation="true"/>
+  <widgets xsi:type="model:Tooltip" id="80" x="760" y="848" text="Mostra também os débitos existentes de faturas anteriores." measuredWidth="329" measuredHeight="38">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

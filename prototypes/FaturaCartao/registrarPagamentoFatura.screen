@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Image" id="1" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Group" id="3" x="48" y="56" width="785" height="633" text="Registrar pagamento" measuredWidth="785" measuredHeight="633">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="16" x="72" y="112" text="Valor total da fatura:" measuredWidth="116" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="17" x="200" y="112" text="R$ 1000" measuredWidth="51" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="20" x="72" y="640" width="137" height="35" text="Registrar pagamento" measuredWidth="137" measuredHeight="35">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="21" x="72" y="144" text="Pagamento mínimo:" measuredWidth="112" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="22" x="200" y="144" text="R$ 150" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Group" id="27" x="72" y="288" width="727" height="249" text="Pagamento único" measuredWidth="727" measuredHeight="249">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="28" x="93" y="320" text="Escolha a conta:" measuredWidth="91" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="29" x="192" y="320" text="BB - Ag.: 2496-1 - C/C.: 12844-9" measuredWidth="209" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Group" id="33" x="72" y="552" width="727" height="65" text="Pagamento parcelado" measuredWidth="727" measuredHeight="65">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="37" x="72" y="176" text="Data de vencimento:" measuredWidth="115" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="38" x="200" y="176" text="24 / 05 / 2014 " measuredWidth="90" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="39" x="72" y="248" text="Pagamento:" measuredWidth="68" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="40" x="200" y="248" text="Único" measuredWidth="51" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="41" x="277" y="248" text="Parcelado" measuredWidth="72" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="42" x="93" y="360" text="Informe a data de pagamento:" measuredWidth="167" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="43" x="272" y="360" text="20 / 05 / 2014" measuredWidth="92" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="44" x="384" y="355" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Table" id="45" x="93" y="424" width="676" height="97" text="Selecionar,Data, Descrição,Valor&#xA;{checked}, 20/05/2014,Pagamento cartão,R$ 1000&#xA;{unchecked}, 20/05/2014,Saque com cartão,R$ 100&#xA;{unchecked}, 20/05/2014,Cheque compensado,R$ 100&#xA;" measuredWidth="676" measuredHeight="97" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="46" x="93" y="400" text="Lançamentos encontrados:" measuredWidth="149" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="47" x="72" y="208" text="Moeda da fatura:" measuredWidth="96" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="48" x="200" y="208" text="R$ - Real" measuredWidth="55" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="49" x="363" y="268" text="Só pode mostrar as contas de cartão ou as contas corrente/poupança&#xA;compatíveis com a moeda da fatura." measuredWidth="382" measuredHeight="51">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="50" x="84" y="576" text="Escolha o parcelamento:" measuredWidth="135" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="51" x="232" y="576" text="Fatura do cartão final 9999 vencida em 24/05/2014" measuredWidth="304" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="52" x="72" y="80" text="Cartão de crédito:" measuredWidth="101" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="53" x="200" y="80" text="BB - Ourocard Visa Platinum International" measuredWidth="228" measuredHeight="21">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

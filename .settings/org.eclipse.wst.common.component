@@ -4,6 +4,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/docs"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/prototypes"/>
         <property name="context-root" value="Orcamento"/>
         <property name="java-output-path" value="/Orcamento/build/classes"/>
     </wb-module>

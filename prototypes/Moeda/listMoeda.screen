@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="561" measuredWidth="940" measuredHeight="561"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Cadastros,Contas,Cartão,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="108" y="0" width="47" height="23" text="Contas"/>
+    <items x="155" y="0" width="46" height="23" text="Cartão"/>
+    <items x="201" y="0" width="62" height="23" text="Despensa"/>
+    <items x="263" y="0" width="78" height="23" text="Documentos"/>
+    <items x="341" y="0" width="59" height="23" text="Resumos"/>
+    <items x="400" y="0" width="50" height="23" text="Opções"/>
+    <items x="450" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="491" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Moeda" measuredWidth="63" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Image" id="23" x="80" y="368" measuredWidth="32" measuredHeight="32" src="../Imagens/novo.png"/>
+  <widgets xsi:type="model:Label" id="24" x="135" y="379" text="Nome:" measuredWidth="40" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="25" x="184" y="379" width="134" measuredWidth="134" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="26" x="336" y="374" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Table" id="27" x="80" y="432" width="881" text="Nome,País,Ações&#xA;R$ - Real,Brasil - BR,{edit} {delete}&#xA;US$ - Dolar,Estados Unidos - US, {edit} {delete}&#xA;€ - Euro,União Europeia - UE, {edit} {delete}" measuredWidth="881" measuredHeight="93" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="625" measuredWidth="940" measuredHeight="625"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Cadastros,Lançamentos,Agendamento,Resumos,Opções,Sair" measuredWidth="940" measuredHeight="27">
+    <items x="5" y="0" width="39" height="27" text="Início"/>
+    <items x="44" y="0" width="62" height="27" text="Cadastros"/>
+    <items x="106" y="0" width="81" height="27" text="Lançamentos"/>
+    <items x="187" y="0" width="86" height="27" text="Agendamento"/>
+    <items x="273" y="0" width="58" height="27" text="Resumos"/>
+    <items x="331" y="0" width="50" height="27" text="Opções"/>
+    <items x="381" y="0" width="29" height="27" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Parcelamentos" measuredWidth="160" measuredHeight="40">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="5" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Panel" id="6" x="80" y="368" width="881" height="49" measuredWidth="881" measuredHeight="49"/>
+  <widgets xsi:type="model:Label" id="7" x="135" y="380" text="Mensagens de aviso do sistema" measuredWidth="270" measuredHeight="33">
+    <font size="14"/>
+  </widgets>
+  <widgets xsi:type="model:Icon" id="8" x="90" y="377" measuredWidth="32" measuredHeight="32" icon="info (large)"/>
+  <widgets xsi:type="model:Label" id="9" x="80" y="443" text="Novo" measuredWidth="32" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="20" x="770" y="19" text="Seja bem vindo Administrador" measuredWidth="165" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="23" x="195" y="457" width="217" measuredWidth="217" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Icon" id="26" x="576" y="453" measuredWidth="32" measuredHeight="32" icon="find (large)"/>
+  <widgets xsi:type="model:Table" id="37" x="80" y="512" width="881" text="Usuário,Histórico,Parcelamento,Parcelado em,Parcelas,Editar e Excluir,Encerrar&#xA;João,Videogame,R$ 1500,20/01/2013,12,{edit} {delete},{close}&#xA;Roberto,Tablet,R$ 2000,20/02/2013,6,{edit} {delete},{close}&#xA;Carlos,TV LCD,R$ 2500,20/03/2013,24,{edit} {delete},{close}&#xA;João,Viagem a roma,R$ 5500,20/06/2013,36,{edit} {delete},{close}&#xA;Carlos,Empréstimo cunhado,R$ 1000,20/08/2013,5,{edit} {delete},{close}&#xA;Roberto,Capitalização,R$3000,01/01/2013,60,{edit} {delete},{close}&#xA;" measuredWidth="881" measuredHeight="157" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="41" x="128" y="457" text="Histórico:" measuredWidth="56" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="42" x="432" y="457" text="Somente encerrados" measuredWidth="129" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="43" x="621" y="479" text="Colorir de acordo com o tipo de parcelamento (débito ou crédito)" measuredWidth="357" measuredHeight="40">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

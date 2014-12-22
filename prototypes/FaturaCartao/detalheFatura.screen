@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="21" x="48" y="64" width="940" height="1153" measuredWidth="940" measuredHeight="1153"/>
+  <widgets xsi:type="model:Image" id="1" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Image" id="22" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="23" x="48" y="261" width="940" text="Início,Cadastros,Contas,Cartão,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="108" y="0" width="47" height="23" text="Contas"/>
+    <items x="155" y="0" width="46" height="23" text="Cartão"/>
+    <items x="201" y="0" width="62" height="23" text="Despensa"/>
+    <items x="263" y="0" width="78" height="23" text="Documentos"/>
+    <items x="341" y="0" width="59" height="23" text="Resumos"/>
+    <items x="400" y="0" width="50" height="23" text="Opções"/>
+    <items x="450" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="491" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="24" x="80" y="312" text="Fatura do Cartão - Detalhes" measuredWidth="249" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="26" x="73" y="1168" measuredWidth="32" measuredHeight="32" src="../Imagens/voltar.png"/>
+  <widgets xsi:type="model:Label" id="36" x="80" y="368" text="Cartão:" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="37" x="208" y="368" text="BB - Ourocard Visa Platinum International" measuredWidth="228" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="38" x="80" y="448" text="Data de vencimento:" measuredWidth="115" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="39" x="208" y="448" text="24 / 05 / 2014 " measuredWidth="90" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="40" x="80" y="408" text="Data de fechamento:" measuredWidth="116" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="41" x="208" y="408" text="24 / 05 / 2014 " measuredWidth="90" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="42" x="80" y="488" text="Moeda da fatura:" measuredWidth="96" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="43" x="208" y="488" text="R$ - Real" measuredWidth="55" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="44" x="82" y="536" text="Fatura anexa:" measuredWidth="78" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="45" x="208" y="530" measuredWidth="33" measuredHeight="33" src="../Imagens/baixa.png"/>
+  <widgets xsi:type="model:HLine" id="46" x="80" y="760" width="873" measuredWidth="873" measuredHeight="6"/>
+  <widgets xsi:type="model:Table" id="47" x="73" y="784" width="889" height="176" text="Data, Descrição,Valor&#xA;01/10/2014,Compra parcelado 1,R$ 100 &#xA;01/10/2014,Compra parcelado 2,R$ 100 &#xA;01/10/2014,Compra parcelado 3,R$ 100 &#xA;01/10/2014,Compra à vista 1,R$ 100 &#xA;01/10/2014,Compra à vista 2,R$ 100 &#xA;01/10/2014,Compra internacional 1,US$ 100 &#xA;01/10/2014,Compra internacional 2,US$ 100 " measuredWidth="889" measuredHeight="176" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="48" x="73" y="984" text="Compras/Saques:" measuredWidth="100" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="49" x="193" y="984" text="R$ 200" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="50" x="265" y="984" text="Parcelados:" measuredWidth="66" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="51" x="356" y="984" text="R$ 300" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="52" x="414" y="984" text="Total:" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="53" x="465" y="984" text="R$ 500" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="54" x="73" y="1016" text="Compras/Saques:" measuredWidth="100" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="55" x="193" y="1016" text="US$ 200" measuredWidth="50" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="56" x="265" y="1016" text="Parcelados:" measuredWidth="66" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="57" x="356" y="1016" text="US$ 0" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="58" x="414" y="1016" text="Total:" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="59" x="465" y="1016" text="US$ 200" measuredWidth="50" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="60" x="74" y="1088" text="Total:" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="61" x="130" y="1088" text="R$ 500" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="64" x="426" y="1088" text="Convertido:" measuredWidth="67" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="65" x="514" y="1088" text="R$ 500" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="66" x="74" y="1128" text="Total:" measuredWidth="36" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="67" x="130" y="1128" text="US$ 200" measuredWidth="50" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="68" x="210" y="1128" text="Taxa:" measuredWidth="35" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="69" x="258" y="1128" width="129" text="2,5" measuredWidth="129" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="70" x="426" y="1128" text="Convertido:" measuredWidth="67" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="71" x="514" y="1128" text="R$ 500" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" id="72" x="73" y="1056" width="873" measuredWidth="873" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" id="74" x="448" y="448" text="Saldo devedor faturas anteriores:" measuredWidth="182" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="75" x="664" y="408" text="R$ 1000" measuredWidth="51" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="76" x="448" y="536" text="Pagamento mínimo:" measuredWidth="112" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="77" x="664" y="536" text="R$ 150" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="79" x="448" y="408" text="Valor da fatura:" measuredWidth="88" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="80" x="664" y="448" text="R$ 0" measuredWidth="30" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="81" x="80" y="592" text="Data de pagamento:" measuredWidth="114" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="82" x="209" y="592" text="24 / 05 / 2014 " measuredWidth="90" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="83" x="448" y="592" text="Valor pago:" measuredWidth="67" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="84" x="664" y="592" text="R$ 1000" measuredWidth="51" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="85" x="448" y="488" text="Valor total da fatura:" measuredWidth="116" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="86" x="664" y="488" text="R$ 1000" measuredWidth="51" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="87" x="82" y="680" text="Lançamento vinculado:" measuredWidth="128" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="88" x="216" y="680" text="Pagamento Fatura Quitada em 24/05/2014 Cartão BB Ourocard Visa Platinum International" measuredWidth="492" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="89" x="82" y="640" text="Conta:" measuredWidth="40" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="90" x="216" y="640" text="BB - Conta Corrente Ag. 1234-1/ C.C. 12.345-9" measuredWidth="265" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="91" x="82" y="728" text="Status atual da fatura:" measuredWidth="123" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="92" x="216" y="728" text="QUITADA" measuredWidth="59" measuredHeight="21">
+    <font bold="true"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

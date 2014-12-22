@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="2" x="48" y="64" width="940" height="713" measuredWidth="940" measuredHeight="713"/>
+  <widgets xsi:type="model:Image" id="5" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="6" x="48" y="261" width="940" text="Início,Cadastros,Lançamentos,Planejamento,Resumos,Agenda,Opções,Sair" measuredWidth="940" measuredHeight="30">
+    <items x="5" y="0" width="46" height="30" text="Início"/>
+    <items x="51" y="0" width="79" height="30" text="Cadastros"/>
+    <items x="130" y="0" width="100" height="30" text="Lançamentos"/>
+    <items x="230" y="0" width="103" height="30" text="Planejamento"/>
+    <items x="333" y="0" width="71" height="30" text="Resumos"/>
+    <items x="404" y="0" width="62" height="30" text="Agenda"/>
+    <items x="466" y="0" width="61" height="30" text="Opções"/>
+    <items x="527" y="0" width="36" height="30" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="7" x="80" y="312" text="Opções" measuredWidth="88" measuredHeight="36">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="8" x="167" y="384" measuredWidth="128" measuredHeight="128" src="../Imagens/usuarios.png"/>
+  <widgets xsi:type="model:Label" id="9" x="195" y="528" text="Usuários" measuredWidth="64" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="10" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Label" id="11" x="727" y="528" text=" Opções do Sistema" measuredWidth="137" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="12" x="727" y="384" measuredWidth="128" measuredHeight="128" src="../Imagens/opcoes.png"/>
+  <widgets xsi:type="model:Image" id="14" x="447" y="384" measuredWidth="128" measuredHeight="128" src="../Imagens/compartilhamentos.png"/>
+  <widgets xsi:type="model:Label" id="15" x="435" y="528" text="Compartilhamentos" measuredWidth="140" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="16" x="727" y="576" measuredWidth="128" measuredHeight="128" src="../Imagens/atualizacao.png"/>
+  <widgets xsi:type="model:Label" id="17" x="719" y="720" text="Atualizações do Sistema" measuredWidth="169" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="18" x="167" y="576" measuredWidth="128" measuredHeight="128" src="../Imagens/auditoria.png"/>
+  <widgets xsi:type="model:Image" id="19" x="447" y="576" measuredWidth="128" measuredHeight="128" src="../Imagens/ferramentaavancada.png"/>
+  <widgets xsi:type="model:Label" id="20" x="423" y="720" text="Ferramentas Avançadas" measuredWidth="166" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="21" x="190" y="728" text="Auditoria" measuredWidth="69" measuredHeight="25">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>
