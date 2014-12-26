@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,7 @@ import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -228,6 +230,13 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				lc.setValorPago(Math.abs(li.getValor()));
 				lc.setHashImportacao(li.getHash());
 				
+				// Seta o status do lançamento a ser inserido
+				if (li.getData().after(new Date())) {
+					lc.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+				} else if (lc.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
+					lc.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+				}
+				
 				lancamentos.add(lc);
 			
 			}
@@ -260,7 +269,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		for (LancamentoConta l : lancamentosAAtualizar) {
 			li = lancamentoImportadoRepository.findByHash(l.getHashImportacao());
 			
-			l.setDataPagamento(li.getData());			
+			l.setDataPagamento(li.getData());	
+
+			// Seta o status do lançamento a ser inserido
+			if (li.getData().after(new Date())) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			} else if (l.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			}
 			
 			l.setHistorico(li.getHistorico());
 			l.setNumeroDocumento(li.getDocumento());
@@ -305,6 +321,13 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setCategoria(categoriaPadraoDebito);
 			}
 			
+			// Seta o status do lançamento a ser inserido
+			if (entity.getData().after(new Date())) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			} else if (l.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			}
+			
 			l.setFavorecido(favorecidoPadrao);
 			l.setMeioPagamento(meioPagamentoPadrao);
 			
@@ -336,6 +359,13 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
 			} else {
 				l.setTipoLancamento(TipoLancamento.DESPESA);
+			}
+			
+			// Seta o status do lançamento a ser atualizado
+			if (entity.getData().after(new Date())) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			} else if (l.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			}
 			
 			lancamentoContaRepository.update(l);
