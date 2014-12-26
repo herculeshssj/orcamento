@@ -602,7 +602,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
-	private void calculaValorConversao() {
+	public void calculaValorConversao() {
 		totalFatura = 0.0;
 		for (Moeda moeda : moedas) {
 			if (moeda.isPadrao()) 
