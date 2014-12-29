@@ -197,7 +197,15 @@
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>										
 						<h:outputText value=" %" rendered="#{item.situacaoCredito == 'BOM'}" style="color: #339900;" />
-					</p:column>					
+					</p:column>
+					<p:columnGroup type="footer">
+						<p:row>
+							<p:column footerText="Saldo:"/>
+							<p:column footerText="#{managedBean.saldoCreditoPrevistoDetalheOrcamento}"/>
+							<p:column footerText="#{managedBean.saldoCreditoRealizadoDetalheOrcamento}"/>
+							<p:column footerText="#{managedBean.porcentagemSaldoCreditoDetalheOrcamento}"/>
+						</p:row>
+					</p:columnGroup>					
 				</p:dataTable>
 			
 			</p:tab>
@@ -248,6 +256,14 @@
 						</h:outputText>										
 						<h:outputText value=" %" rendered="#{item.situacaoDebito == 'BOM'}" style="color: #339900;" />
 					</p:column>
+					<p:columnGroup type="footer">
+						<p:row>
+							<p:column footerText="Saldo:"/>
+							<p:column footerText="#{managedBean.saldoDebitoPrevistoDetalheOrcamento}"/>
+							<p:column footerText="#{managedBean.saldoDebitoRealizadoDetalheOrcamento}"/>
+							<p:column footerText="#{managedBean.porcentagemSaldoDebitoDetalheOrcamento}"/>
+						</p:row>
+					</p:columnGroup>
 				</p:dataTable>	
 			
 			</p:tab>

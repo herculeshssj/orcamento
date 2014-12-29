@@ -363,39 +363,42 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO));
 	}
 	
-	public String getSaldoCreditoPrevistoDetalheOrcamento() {
-		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_CREDITO));
-	}
-	
-	public String getSaldoDebitoPrevistoDetalheOrcamento() {
-		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_DEBITO));
-	}
-	
 	public String getSaldoRealizadoDetalheOrcamento() {
 		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO));
 	}
 	
-	public String getSaldoDebitoRealizadoDetalheOrcamento() {
-		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_DEBITO));
+	public String getPorcentagemSaldoDetalheOrcamento() {
+		return NumberFormat.getNumberInstance()
+				.format(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO)) * 100))
+				+ " %";
+	}
+	
+	public String getSaldoCreditoPrevistoDetalheOrcamento() {
+		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_CREDITO));
 	}
 	
 	public String getSaldoCreditoRealizadoDetalheOrcamento() {
 		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_CREDITO));
 	}
 	
-	public String getPorcentagemSaldoDetalheOrcamento() {
-		return NumberFormat.getPercentInstance()
-				.format((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO)) / 100);
+	public String getPorcentagemSaldoCreditoDetalheOrcamento() {
+		return NumberFormat.getNumberInstance()
+				.format(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_CREDITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_CREDITO)) * 100))
+		+ " %";
 	}
 	
-	public String getPorcentagemSaldoCreditoDetalheOrcamento() {
-		return NumberFormat.getPercentInstance()
-				.format((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_CREDITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_CREDITO)) / 100);
+	public String getSaldoDebitoPrevistoDetalheOrcamento() {
+		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_DEBITO));
+	}
+	
+	public String getSaldoDebitoRealizadoDetalheOrcamento() {
+		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_DEBITO));
 	}
 	
 	public String getPorcentagemSaldoDebitoDetalheOrcamento() {
-		return NumberFormat.getPercentInstance()
-				.format((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_DEBITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_DEBITO)) / 100);
+		return NumberFormat.getNumberInstance()
+				.format(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_DEBITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_DEBITO)) * 100))
+				+ " %";
 	}
 	
 	public Moeda getMoedaPadrao() {

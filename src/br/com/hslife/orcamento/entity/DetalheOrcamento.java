@@ -164,6 +164,9 @@ public class DetalheOrcamento extends EntityPersistence {
 	}
 	
 	public SituacaoOrcamento getSituacao() {
+		// Evitando o NullPointerException ao ler o campo durante a mudança de orçamentos de abrangências diferentes
+		if (this.tipoCategoria == null) return SituacaoOrcamento.BOM;
+		
 		if (this.tipoCategoria.equals(TipoCategoria.CREDITO)) {
 			if (Math.floor(getPorcentagem()) <= 70) return SituacaoOrcamento.RUIM;
 			if (Math.floor(getPorcentagem()) > 70 && Math.floor(getPorcentagem()) <= 100) return SituacaoOrcamento.REGULAR;
