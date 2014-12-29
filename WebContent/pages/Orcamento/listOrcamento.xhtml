@@ -140,6 +140,14 @@
 				</h:outputText>										
 				<h:outputText value=" %" rendered="#{item.situacao == 'BOM'}" style="color: #339900;" />
 			</p:column>
+			<p:columnGroup type="footer">
+				<p:row>
+					<p:column footerText="Saldo:"/>
+					<p:column footerText="#{managedBean.saldoPrevistoDetalheOrcamento}"/>
+					<p:column footerText="#{managedBean.saldoRealizadoDetalheOrcamento}"/>
+					<p:column footerText="#{managedBean.porcentagemSaldoDetalheOrcamento}"/>
+				</p:row>
+			</p:columnGroup>
 		</p:dataTable>
 		
 		<p:tabView rendered="#{managedBean.orcamentoSelecionado.abrangenciaOrcamento == 'FAVORECIDO' or managedBean.orcamentoSelecionado.abrangenciaOrcamento == 'MEIOPAGAMENTO'}">

@@ -44,6 +44,8 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -64,6 +66,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -73,6 +76,7 @@ import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IOrcamento;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("orcamentoMB")
 @Scope("session")
@@ -320,6 +324,48 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		
 		//resultado.removeAll(listaItemDetalheOrcamento);
 		return resultado;
+	}
+	
+	private enum TipoSaldoDetalheOrcamento {
+		PREVISAO, REALIZADO;
+	}
+	
+	private double getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento tipoSaldo) {
+		double resultado = 0.0;
+		
+		for (DetalheOrcamento detalhe : listaDetalheOrcamento) {
+			switch(tipoSaldo) {
+				case PREVISAO :
+					if (detalhe.getTipoCategoria().equals(TipoCategoria.CREDITO)) {
+						resultado += detalhe.getPrevisao();
+					} else {
+						resultado -= detalhe.getPrevisao();
+					}
+					break;
+				case REALIZADO :
+					if (detalhe.getTipoCategoria().equals(TipoCategoria.CREDITO)) {
+						resultado += detalhe.getRealizado();
+					} else {
+						resultado -= detalhe.getRealizado();
+					}
+					break;
+			}
+		}
+		
+		return Util.arredondar(resultado);
+	}
+	
+	public String getSaldoPrevistoDetalheOrcamento() {
+		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO));
+	}
+	
+	public String getSaldoRealizadoDetalheOrcamento() {
+		return this.getMoedaPadrao().getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO));
+	}
+	
+	public String getPorcentagemSaldoDetalheOrcamento() {
+		return NumberFormat.getPercentInstance()
+				.format((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO)) / 100);
 	}
 	
 	public Moeda getMoedaPadrao() {
