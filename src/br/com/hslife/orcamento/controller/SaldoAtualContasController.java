@@ -51,6 +51,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
@@ -63,8 +64,8 @@ public class SaldoAtualContasController extends AbstractController {
 	 * 
 	 */
 	private static final long serialVersionUID = 1202530011221580347L;
-
-	private double saldoTotalContas;
+	
+	private List<SaldoAtualConta> listEntity = new ArrayList<SaldoAtualConta>();
 	
 	@Autowired
 	private IResumoEstatistica service;
@@ -80,8 +81,17 @@ public class SaldoAtualContasController extends AbstractController {
 	
 	@Override
 	public String startUp() {
-		this.getContasAtivas();
+		this.gerarSaldoAtualContas();
 		return "/pages/ResumoEstatistica/saldoAtualContas";
+	}
+	
+	private void gerarSaldoAtualContas() {
+		listEntity = new ArrayList<SaldoAtualConta>();
+		try {
+			listEntity = getService().gerarSaldoAtualContas(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 
 	public IResumoEstatistica getService() {
@@ -92,42 +102,43 @@ public class SaldoAtualContasController extends AbstractController {
 		this.service = service;
 	}
 
-	public List<SaldoAtualConta> getContasAtivas() {
-		try {
-			List<SaldoAtualConta> saldos = new ArrayList<>();
-			for (SaldoAtualConta saldo : getService().gerarSaldoAtualContas(getUsuarioLogado())) {
-				if (saldo.isAtivo()) {
-					saldos.add(saldo);
-					saldoTotalContas += saldo.getSaldoAtual();
-				}
+	public List<SaldoAtualConta> getLimiteCartaoCredito() {
+		List<SaldoAtualConta> saldos = new ArrayList<>();
+		for (SaldoAtualConta saldo : listEntity) {
+			if (saldo.isAtivo() && saldo.getTipoConta().equals(TipoConta.CARTAO)) {
+				saldos.add(saldo);
 			}
-			return saldos;			
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
 		}
-		return new ArrayList<SaldoAtualConta>();
+		return saldos;
+	}
+	
+	public List<SaldoAtualConta> getContasAtivas() {
+		List<SaldoAtualConta> saldos = new ArrayList<>();
+		for (SaldoAtualConta saldo : listEntity) {
+			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) {
+				saldos.add(saldo);
+			}
+		}
+		return saldos;				
 	}
 
 	public double getSaldoTotalContas() {
+		double saldoTotalContas = 0.0;
+		for (SaldoAtualConta saldo : listEntity) {
+			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) {
+				saldoTotalContas += saldo.getSaldoAtual();
+			}
+		}
 		return saldoTotalContas;
 	}
 
-	public void setSaldoTotalContas(double saldoTotalContas) {
-		this.saldoTotalContas = saldoTotalContas;
-	}
-
-	public List<SaldoAtualConta> getContasInativas() {
-		try {
-			List<SaldoAtualConta> saldos = new ArrayList<>();
-			for (SaldoAtualConta saldo : getService().gerarSaldoAtualContas(getUsuarioLogado())) {
-				if (!saldo.isAtivo()) {
-					saldos.add(saldo);
-				}
+	public List<SaldoAtualConta> getContasInativas() {		
+		List<SaldoAtualConta> saldos = new ArrayList<>();
+		for (SaldoAtualConta saldo : listEntity) {
+			if (!saldo.isAtivo()) {
+				saldos.add(saldo);
 			}
-			return saldos;			
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
 		}
-		return new ArrayList<SaldoAtualConta>();
+		return saldos;			
 	}
 }

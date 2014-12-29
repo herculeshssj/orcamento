@@ -146,6 +146,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			// Define a descrição da conta
 			saldoAtual.setDescricaoConta(conta.getDescricao());
+			saldoAtual.setTipoConta(conta.getTipoConta());
 			
 			// Define a situação da conta
 			saldoAtual.setAtivo(conta.isAtivo());

@@ -117,12 +117,49 @@
 	  		</f:facet>
      		
      	</p:dataTable>
+		
+		<p:dataTable id="tableListEntityCartaoAtivas" width="100%" value="#{managedBean.limiteCartaoCredito}" var="item">
+    	
+    		<f:facet name="header">
+    			<h:outputText value="Limites dos Cartões"/>
+    		</f:facet>
+     		    		
+     		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Cartão"/>
+				</f:facet>
+				<h:outputText value="#{item.descricaoConta}"/>						
+	  		</p:column>
+	  		
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Limite"/>
+				</f:facet>
+				<h:outputText value="#{item.saldoPeriodo}">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</p:column>	  				
+	  		
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Registrado"/>
+				</f:facet>
+				<h:outputText value="#{item.saldoRegistrado}">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</p:column>		
+	  		
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Limite Disponível"/>					
+				</f:facet>
+				<h:outputText value="#{item.saldoAtual}">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</p:column>
      		
-		<h:commandLink title="Exportar para MS-Excel">
-			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
-			<p:dataExporter type="xls" target="tableListEntityContaAtivas" fileName="saldoAtualContas" encoding="iso-8859-1" /> 
-		</h:commandLink>	
-		<br/>
+     	</p:dataTable>
+     		
 		<p:accordionPanel activeIndex="1">
 			<p:tab title="Contas inativas">
 	
