@@ -1,6 +1,6 @@
 /***
   
-  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
+  	Copyright (c) 2012 - 2015 Hércules S. S. José
 
     Este arquivo é parte do programa Orçamento Doméstico.
     
@@ -25,22 +25,24 @@
 
     Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
 
-    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
     
-    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
     
-    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
     
 
-    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
 
-    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
+    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
 
     Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
- ***/
+***/
 
 package br.com.hslife.orcamento.validator;
 
