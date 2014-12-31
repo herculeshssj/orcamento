@@ -371,7 +371,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	
 	public String getPorcentagemSaldoDetalheOrcamento() {
 		return NumberFormat.getNumberInstance()
-				.format(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO)) * 100))
+				.format(Math.abs(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO)) * 100)))
 				+ " %";
 	}
 	
@@ -385,7 +385,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	
 	public String getPorcentagemSaldoCreditoDetalheOrcamento() {
 		return NumberFormat.getNumberInstance()
-				.format(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_CREDITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_CREDITO)) * 100))
+				.format(Math.abs(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_CREDITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_CREDITO)) * 100)))
 		+ " %";
 	}
 	
@@ -399,7 +399,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	
 	public String getPorcentagemSaldoDebitoDetalheOrcamento() {
 		return NumberFormat.getNumberInstance()
-				.format(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_DEBITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_DEBITO)) * 100))
+				.format(Math.abs(Util.arredondar((getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.REALIZADO_DEBITO) / getSaldoDetalheOrcamento(TipoSaldoDetalheOrcamento.PREVISAO_DEBITO)) * 100)))
 				+ " %";
 	}
 	
