@@ -63,7 +63,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 
 @Entity
-@Table(name="usuario")
+@Table(name="usuario", schema="orcamento")
 @SuppressWarnings("serial")
 public class Usuario extends EntityPersistence {
 	

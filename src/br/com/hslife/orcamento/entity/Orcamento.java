@@ -61,6 +61,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -76,7 +77,7 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="orcamento")
+@Table(name="orcamento", schema="orcamento")
 @SuppressWarnings("serial")
 public class Orcamento extends EntityPersistence {
 	
@@ -129,6 +130,7 @@ public class Orcamento extends EntityPersistence {
 	private Usuario usuario;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinTable(name="orcamento_detalheorcamento", schema="orcamento")
 	private List<DetalheOrcamento> detalhes;
 	
 	public Orcamento() {

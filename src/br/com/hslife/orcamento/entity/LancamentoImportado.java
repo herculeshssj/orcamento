@@ -63,7 +63,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="lancamentoimportado")
+@Table(name="lancamentoimportado", schema="orcamento")
 public class LancamentoImportado extends EntityPersistence {
 
 	/**

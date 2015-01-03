@@ -58,6 +58,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -67,7 +68,7 @@ import javax.persistence.TemporalType;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="itemdespensa")
+@Table(name="itemdespensa", schema="orcamento")
 @SuppressWarnings("serial")
 public class ItemDespensa extends EntityPersistence {
 	
@@ -114,7 +115,8 @@ public class ItemDespensa extends EntityPersistence {
 	@JoinColumn(name="idDespensa")
 	private Despensa despensa;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	@JoinTable(name="itemdespensa_movimentoitemdespensa", schema="orcamento")
 	private List<MovimentoItemDespensa> movimentacao;
 	
 	/*** Aplicando o padrão Builder para eliminar o construtor com n parâmetros ***/

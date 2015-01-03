@@ -58,7 +58,7 @@ import javax.persistence.Table;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="unidademedida")
+@Table(name="unidademedida", schema="orcamento")
 @SuppressWarnings("serial")
 public class UnidadeMedida extends EntityPersistence {
 	

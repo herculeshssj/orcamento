@@ -57,7 +57,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="arquivo")
+@Table(name="arquivo", schema="orcamento")
 @SuppressWarnings("serial")
 public class Arquivo extends EntityPersistence {
 

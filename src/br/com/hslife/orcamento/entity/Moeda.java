@@ -61,7 +61,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="moeda")
+@Table(name="moeda", schema="orcamento")
 @SuppressWarnings("serial")
 public class Moeda extends EntityPersistence {
 

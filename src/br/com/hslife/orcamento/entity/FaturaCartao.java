@@ -74,7 +74,7 @@ import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="faturacartao")
+@Table(name="faturacartao", schema="orcamento")
 public class FaturaCartao extends EntityPersistence {
 
 	/**
@@ -132,11 +132,11 @@ public class FaturaCartao extends EntityPersistence {
 	@JoinColumn(name="idLancamento", nullable=true)
 	private LancamentoConta lancamentoPagamento;
 	
-	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<ConversaoMoeda> conversoesMoeda;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=false)
-	@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")})
+	@JoinTable(name="detalhefatura", schema="orcamento", joinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")})
 	private Set<LancamentoConta> detalheFatura;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)

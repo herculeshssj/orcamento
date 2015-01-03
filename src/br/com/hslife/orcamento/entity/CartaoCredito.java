@@ -69,7 +69,7 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="cartaocredito")
+@Table(name="cartaocredito", schema="orcamento")
 @SuppressWarnings("serial")
 public class CartaoCredito extends EntityPersistence {
 

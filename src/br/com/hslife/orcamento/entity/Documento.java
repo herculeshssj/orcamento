@@ -61,7 +61,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @Entity
-@Table(name="documento")
+@Table(name="documento", schema="orcamento")
 @SuppressWarnings("serial")
 public class Documento extends EntityPersistence {
 

@@ -58,7 +58,7 @@ import javax.persistence.Table;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="banco")
+@Table(name="banco", schema="orcamento")
 @SuppressWarnings("serial")
 public class Banco extends EntityPersistence {
 

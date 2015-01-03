@@ -66,7 +66,7 @@ import br.com.hslife.orcamento.util.Util;
 
 
 @Entity
-@Table(name="categoria")
+@Table(name="categoria", schema="orcamento")
 @SuppressWarnings("serial")
 public class Categoria extends EntityPersistence {
 

@@ -56,7 +56,7 @@ import javax.persistence.Table;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="versao")
+@Table(name="versao", schema="orcamento")
 @SuppressWarnings("serial")
 public class Versao extends EntityPersistence {
 

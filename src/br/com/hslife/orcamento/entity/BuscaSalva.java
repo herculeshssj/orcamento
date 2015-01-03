@@ -65,7 +65,7 @@ import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name="buscasalva")
+@Table(name="buscasalva", schema="orcamento")
 public class BuscaSalva extends EntityPersistence {
 	
 	@Id

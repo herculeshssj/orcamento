@@ -62,7 +62,7 @@ import javax.persistence.TemporalType;
 import br.com.hslife.orcamento.enumeration.OperacaoDespensa;
 
 @Entity
-@Table(name="movimentoitemdespensa")
+@Table(name="movimentoitemdespensa", schema="orcamento")
 @SuppressWarnings("serial")
 public class MovimentoItemDespensa extends EntityPersistence {
 	
