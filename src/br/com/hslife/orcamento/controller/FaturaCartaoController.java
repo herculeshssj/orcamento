@@ -190,9 +190,21 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 						detalhesFaturaCartao.clear();
 						detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
 						this.calcularSaldoCompraSaqueParceladoPorMoeda();
-						for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
-							moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
-						}
+						
+						// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
+						// o valor registrado durante o fechamento da fatura
+						if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+								|| fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)
+								|| fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.ANTIGA)) {
+							for (Moeda m : moedas) {
+								m.setTaxaConversao(m.getValorConversao());
+							}
+						} else {
+							for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
+								moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
+							}	
+						}						
+						
 						this.calculaValorConversao();
 						
 						// Adiciona as moedas com seus totais no map correspondente
@@ -445,29 +457,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 		
 		return "";
-		/*
-		if (moedas == null || moedas.isEmpty()) {
-			warnMessage("Selecione uma fatura para fechar.");
-		} else if (faturaSelecionada == null || !faturaSelecionada.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA)) {
-			warnMessage("Somente faturas com status ABERTA podem ser fechada!");
-		} 
-		else {
-			Calendar fechamento = Calendar.getInstance();
-			fechamento.setTime(faturaSelecionada.getDataVencimento());
-			// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
-			if (faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura() < faturaSelecionada.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
-				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
-			} else {
-				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
-				fechamento.add(Calendar.MONTH, -1);
-			}			
-			faturaSelecionada.setDataFechamento(fechamento.getTime());
-			this.calculaValorConversao();
-			actionTitle = " - Fechar fatura";
-			return "/pages/FaturaCartao/fecharFatura";
-		}
-		return "";
-		*/
 	}
 	
 	public String fecharFatura() {
@@ -592,8 +581,18 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			detalhesFaturaCartao.clear(); 
 			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
 			this.calcularSaldoCompraSaqueParceladoPorMoeda();
-			for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
-				moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());
+			// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
+			// o valor registrado durante o fechamento da fatura
+			if (entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+					|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)
+					|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ANTIGA)) {
+				for (Moeda m : moedas) {
+					m.setTaxaConversao(m.getValorConversao());
+				}
+			} else {
+				for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
+					moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
+				}	
 			}
 			this.calculaValorConversao();
 			actionTitle = " - Detalhes";
