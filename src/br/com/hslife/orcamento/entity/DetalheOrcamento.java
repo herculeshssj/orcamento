@@ -74,7 +74,7 @@ public class DetalheOrcamento extends EntityPersistence {
 	@Column(length=50, nullable=false)
 	private String descricao;
 	
-	@Column(nullable=false)
+	@Column(name="entityID", nullable=false)
 	private Long idEntity;
 	
 	@Column(length=10, nullable = true)

@@ -127,7 +127,7 @@ public class Agenda extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	@Column(nullable=true)
+	@Column(name="entityID", nullable=true)
 	private Long idEntity;
 	
 	@Column(length=30, nullable=true)

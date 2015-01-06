@@ -58,3 +58,7 @@ alter table lancamentoconta add column idFaturaCartao bigint null;
 update lancamentoconta set idFaturaCartao = (select idFaturaCartao from detalhefatura where idLancamento = id) where id in (select idLancamento from detalhefatura);
 
 drop table detalhefatura;
+
+-- Alteração na nomenclatura de colunas - Github issue #23
+alter table agenda change column `idEntity` `entityID` bigint null;
+alter table detalheorcamento change column `idEntity` `entityID` bigint not null;
