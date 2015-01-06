@@ -60,7 +60,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -161,8 +160,10 @@ public class LancamentoConta extends EntityPersistence {
 	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;
 	
-	@ManyToOne(optional=true)
-	@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")})
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="idFaturaCartao", nullable=true)
+	//@ManyToOne(optional=true)
+	//@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id", unique=true)}, inverseJoinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")})
 	private FaturaCartao faturaCartao;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

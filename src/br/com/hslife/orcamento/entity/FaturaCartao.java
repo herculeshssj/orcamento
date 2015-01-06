@@ -62,7 +62,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -132,11 +131,13 @@ public class FaturaCartao extends EntityPersistence {
 	@JoinColumn(name="idLancamento", nullable=true)
 	private LancamentoConta lancamentoPagamento;
 	
-	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<ConversaoMoeda> conversoesMoeda;
 	
-	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=false)
-	@JoinTable(name="detalhefatura", schema="orcamento", joinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id")})
+	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, orphanRemoval=false)
+	//@OneToMany(orphanRemoval=false)
+	//@JoinTable(name="detalhefatura", schema="orcamento", joinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id", unique=true)})
+	//@Fetch(FetchMode.JOIN)
 	private Set<LancamentoConta> detalheFatura;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)

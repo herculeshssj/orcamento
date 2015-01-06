@@ -52,4 +52,9 @@
 update versao set ativo = false;
 insert into versao (versao, ativo) values ('MAR2015', true);
 
+-- Remoção da tabela de junção detalhefatura - Github issue #25
+alter table lancamentoconta add column idFaturaCartao bigint null;
 
+update lancamentoconta set idFaturaCartao = (select idFaturaCartao from detalhefatura where idLancamento = id) where id in (select idLancamento from detalhefatura);
+
+drop table detalhefatura;
