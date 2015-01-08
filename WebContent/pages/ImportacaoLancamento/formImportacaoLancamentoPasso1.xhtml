@@ -76,7 +76,7 @@
 			
 		</h:panelGrid>
 	
-		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.tipoImportacao == 'CONTA'}">
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.contaSelecionada.tipoConta != 'CARTAO'}">
 			N° do banco: 
 			<h:outputText value="#{managedBean.infoArquivo.bancoID}"/>
 			
@@ -117,7 +117,7 @@
 			</h:panelGroup>			
 		</h:panelGrid>
 		
-		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.tipoImportacao == 'CARTAO'}">			
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.contaSelecionada.tipoConta == 'CARTAO'}">			
 			Moeda padrão:
 			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
 			

@@ -109,4 +109,10 @@ public class MoedaRepository extends AbstractCRUDRepository<Moeda> {
 				.setMaxResults(1)
 				.uniqueResult();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> findAllCodigoMonetarioByUsuario(Usuario usuario) {
+		return getSession().createSQLQuery("select distinct codigoMonetario from orcamento.moeda where codigoMonetario is not null and idUsuario = " 
+				+ usuario.getId()).list();				
+	}
 }

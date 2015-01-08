@@ -85,8 +85,10 @@
 	  	<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Moeda"/>
-			</f:facet>						
-			<h:outputText value="#{item.moeda}" rendered="#{item.conta.tipoConta == 'CARTAO'}"/>
+			</f:facet>	
+			<h:selectOneMenu value="#{item.moeda}" rendered="#{item.conta.tipoConta == 'CARTAO'}">
+				<f:selectItems value="#{managedBean.listaCodigoMonetario}" />
+			</h:selectOneMenu>
 			<h:outputText value="#{item.conta.moeda.codigoMonetario}" rendered="#{item.conta.tipoConta != 'CARTAO'}"/>
 	  	</p:column>
 	  	<p:column style="text-align: center; vertical-align: middle;">

@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.InfoOFX;
 
 @Component("importacaoLancamentoMB")
@@ -79,6 +80,9 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	@Autowired
 	private IImportacaoLancamento service;
+	
+	@Autowired
+	private IMoeda moedaService;
 	
 	private Conta contaSelecionada;
 	private Arquivo arquivoAnexado;
@@ -173,6 +177,14 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public String goToStep3() {
 		try {
+			// Altera a moeda dos lançamentos importados que foram alterados
+			for (LancamentoImportado li : getService().buscarLancamentoImportadoPorConta(contaSelecionada)) {
+				if (!li.getMoeda().equals(lancamentosImportadosValidos.get(lancamentosImportadosValidos.indexOf(li)).getMoeda())) {
+					// Salva o lançamento importado
+					getService().atualizarLancamentoImportado(lancamentosImportadosValidos.get(lancamentosImportadosValidos.indexOf(li)));
+				}
+			}
+			
 			lancamentoContaAAtualizar = getService().buscarLancamentoContaAAtualizar(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
 			lancamentoContaAInserir = getService().gerarLancamentoContaAInserir(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
 		} catch (BusinessException be) {
@@ -294,6 +306,15 @@ public class ImportacaoLancamentoController extends AbstractController {
 		} else {
 			return listEntity.size();
 		}
+	}
+	
+	public List<String> getListaCodigoMonetario() {
+		try {
+			return moedaService.buscarTodosCodigoMonetarioPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<String>();
 	}
 	
 	public IImportacaoLancamento getService() {

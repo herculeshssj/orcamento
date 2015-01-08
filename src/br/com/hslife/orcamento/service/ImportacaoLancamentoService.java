@@ -154,6 +154,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		lancamentoImportadoRepository.delete(entity);
 	}
 	
+	@Override
+	public void atualizarLancamentoImportado(LancamentoImportado entity) throws BusinessException {
+		lancamentoImportadoRepository.update(entity);		
+	}
+	
 	public LancamentoImportado buscarPorID(Long id) throws BusinessException {
 		return lancamentoImportadoRepository.findByID(id);
 	}

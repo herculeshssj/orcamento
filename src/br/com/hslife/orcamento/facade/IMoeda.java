@@ -64,4 +64,6 @@ public interface IMoeda extends ICRUDService<Moeda>{
 	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException;
 
 	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	
+	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) throws BusinessException;
 }

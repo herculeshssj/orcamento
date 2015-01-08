@@ -62,6 +62,8 @@ public interface IImportacaoLancamento {
 
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
 
+	public void atualizarLancamentoImportado(LancamentoImportado entity) throws BusinessException;
+	
 	public void excluirLancamentoImportado(LancamentoImportado entity) throws BusinessException;
 	
 	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException;
