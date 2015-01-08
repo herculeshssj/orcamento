@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,6 +98,29 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	@Override
 	public void find() {
 		try {
+			// Caso a data de início ou fim estejam preenchidos, 
+			// seta o horário com o limite correspondente para
+			// cada um
+			if (criterioBusca.getInicio() != null) {
+				Calendar temp = Calendar.getInstance();
+				temp.setTime(criterioBusca.getInicio());
+				temp.set(Calendar.HOUR, 0);
+				temp.set(Calendar.MINUTE, 0);
+				temp.set(Calendar.SECOND, 0);
+				temp.set(Calendar.MILLISECOND, 0);
+				criterioBusca.setInicio(temp.getTime());
+			}
+			
+			if (criterioBusca.getFim() != null) {
+				Calendar temp = Calendar.getInstance();
+				temp.setTime(criterioBusca.getFim());
+				temp.set(Calendar.HOUR, 23);
+				temp.set(Calendar.MINUTE, 59);
+				temp.set(Calendar.SECOND, 59);
+				temp.set(Calendar.MILLISECOND, 999);
+				criterioBusca.setFim(temp.getTime());
+			}
+			
 			listEntity = getService().buscarPorCriterioAgendamento(criterioBusca);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -151,6 +175,11 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 			errorMessage(be.getMessage());
 		}
 		return 0l;
+	}
+	
+	public String getAgendaDoDia() {
+		Long quantCompromissos = this.getAgendamentosDeHoje();
+		return "Agenda (" + quantCompromissos.toString() + ")";
 	}
 	
 	public List<Integer> getListaHoras() {
