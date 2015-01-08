@@ -103,11 +103,11 @@ public class AuditoriaRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")
 	public List<String> findClasses() {
-		return getSession().createSQLQuery("select distinct classe from auditoria order by classe asc").list();
+		return getSession().createSQLQuery("select distinct classe from orcamento.auditoria order by classe asc").list();
 	}
 	
 	public long countRegistroAuditoriaByUsuario(String usuario) {
-		String sql = "select count(*) from auditoria where usuario = '" + usuario + "'";		
+		String sql = "select count(*) from orcamento.auditoria where usuario = '" + usuario + "'";		
 		Query query = getSession().createSQLQuery(sql);		
 		BigInteger queryResult = (BigInteger)query.uniqueResult();
 		return queryResult.longValue();

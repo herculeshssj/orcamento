@@ -116,8 +116,8 @@
 								</li>
 								
 								<li class="page_item page-item-8">
-									<h:outputLink value="#{request.contextPath}/pages/menu/opcoes.faces" rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">Opções</h:outputLink>
-									<h:commandLink value="Opções" action="#{opcaoSistemaMB.startUp}" rendered="#{usuarioMB.usuarioLogado.login != 'admin'}" />																	
+									<h:outputLink value="#{request.contextPath}/pages/menu/opcoes.faces" rendered="#{usuarioMB.usuarioLogado.login == 'admin' or usuarioMB.usuarioLogado.logado == true}">Opções</h:outputLink>
+									<h:commandLink value="Opções" action="#{opcaoSistemaMB.startUp}" rendered="#{usuarioMB.usuarioLogado.login != 'admin' and usuarioMB.usuarioLogado.logado == false}" />																	
 								</li>
 								
 								<li class="page_item page-item-8"><a
