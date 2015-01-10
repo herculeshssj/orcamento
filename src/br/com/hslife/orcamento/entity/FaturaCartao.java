@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -134,7 +135,7 @@ public class FaturaCartao extends EntityPersistence {
 	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<ConversaoMoeda> conversoesMoeda;
 	
-	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, orphanRemoval=false)
+	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=false)
 	//@OneToMany(orphanRemoval=false)
 	//@JoinTable(name="detalhefatura", schema="orcamento", joinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id", unique=true)})
 	//@Fetch(FetchMode.JOIN)
@@ -165,6 +166,32 @@ public class FaturaCartao extends EntityPersistence {
 	@Override
 	public void validate() throws BusinessException {
 		//TODO implementar as validações da entidade
+	}
+	
+	public void adicionarTodosLancamentos(Collection<LancamentoConta> lancamentos) {
+		List<LancamentoConta> detalhes = new ArrayList<LancamentoConta>(detalheFatura);
+		
+		// Itera a lista de detalhes para setar a fatura como nulo
+		for (LancamentoConta l : detalhes) {
+			l.setFaturaCartao(null);
+		}
+		
+		// Itera a lista de lançamentos recebidos
+		for (LancamentoConta l : lancamentos) {
+			// Verifca se a lista de detalhes contém o lançamento
+			if (detalhes.contains(l)) {
+				// Seta a fatura no lançamentos
+				detalhes.get(detalhes.indexOf(l)).setFaturaCartao(this);
+			} else {
+				// Seta a fatura no lançamento e adiciona na lista de detalhes
+				l.setFaturaCartao(this);
+				detalhes.add(l);
+			}
+		}
+		
+		// Atualiza o Set detalheFatura
+		detalheFatura.clear();
+		detalheFatura.addAll(detalhes);
 	}
 
 	public Long getId() {

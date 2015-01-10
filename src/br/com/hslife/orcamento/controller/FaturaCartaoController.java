@@ -272,8 +272,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		if (entity.getId() == null) {
 			entity.setConta(cartaoSelecionado.getConta());
 		}
-		entity.getDetalheFatura().clear();
-		entity.getDetalheFatura().addAll(lancamentosAdicionados);
+		
+		entity.adicionarTodosLancamentos(lancamentosAdicionados);
 		
 		entity.setMes(entity.getDataVencimento().getMonth() + 1);
 		entity.setAno(entity.getDataVencimento().getYear() + 1900);
@@ -675,6 +675,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	}
 	
+	@Deprecated
 	public List<FaturaCartao> getListaFaturaCartao() {
 		List<FaturaCartao> listaFaturas = new ArrayList<FaturaCartao>();
 		try {
