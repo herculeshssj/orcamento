@@ -69,6 +69,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -162,8 +164,6 @@ public class LancamentoConta extends EntityPersistence {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="idFaturaCartao", nullable=true)
-	//@ManyToOne(optional=true)
-	//@JoinTable(name="detalhefatura", joinColumns={@JoinColumn(name="idLancamento", referencedColumnName="id", unique=true)}, inverseJoinColumns={@JoinColumn(name="idFaturaCartao", referencedColumnName="id")})
 	private FaturaCartao faturaCartao;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

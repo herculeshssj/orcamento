@@ -184,7 +184,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findPagamentosByLancamentoPeriodicoAndPago(LancamentoPeriodico lancamento, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
-		hql.append("FROM LancamentoConta pagamento WHERE ");
+		hql.append("FROM LancamentoConta pagamento LEFT JOIN FETCH pagamento.faturaCartao WHERE ");
 		if (pago != null) {
 			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
@@ -204,7 +204,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findPagamentosByTipoLancamentoAndUsuarioAndPago(TipoLancamentoPeriodico tipo, Usuario usuario, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
-		hql.append("FROM LancamentoConta pagamento WHERE ");
+		hql.append("FROM LancamentoConta pagamento LEFT JOIN FETCH pagamento.faturaCartao WHERE ");
 		if (pago != null) {
 			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
@@ -230,7 +230,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findPagamentosByTipoLancamentoAndContaAndPago(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
-		hql.append("FROM LancamentoConta pagamento WHERE ");
+		hql.append("FROM LancamentoConta pagamento LEFT JOIN FETCH pagamento.faturaCartao WHERE ");
 		if (pago != null) {
 			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
@@ -256,7 +256,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findPagamentosByTipoLancamentoAndTipoContaAndPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamentoConta pago) {
 		StringBuilder hql = new StringBuilder();
-		hql.append("FROM LancamentoConta pagamento WHERE ");
+		hql.append("FROM LancamentoConta pagamento LEFT JOIN FETCH pagamento.faturaCartao WHERE ");
 		if (pago != null) {
 			hql.append("pagamento.statusLancamentoConta = :pago AND ");
 		}
