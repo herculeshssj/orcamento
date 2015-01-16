@@ -76,6 +76,7 @@ public class RecuperarSenhaController {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Senha de acesso foi enviada para o e-mail cadastrado."));
 			entity = new Usuario();
 		} catch (Exception e) {
+			e.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(),null));
 		}
 		return "";

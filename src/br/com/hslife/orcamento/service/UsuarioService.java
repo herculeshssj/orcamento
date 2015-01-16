@@ -324,7 +324,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			mensagemEmail.append("Administrador do Sistema");
 			
 			try {
-				emailComponent.enviarEmail(entity.getNome(), entity.getEmail(), "Orçamento Doméstico - Recuperação de senha", mensagemEmail.toString());
+				emailComponent.enviarEmail(u.getNome(), u.getEmail(), "Orçamento Doméstico - Recuperação de senha", mensagemEmail.toString());
 			} catch (Exception e) {
 				throw new BusinessException(e);
 			}

@@ -62,3 +62,6 @@ drop table detalhefatura;
 -- Alteração na nomenclatura de colunas - Github issue #23
 alter table agenda change column `idEntity` `entityID` bigint null;
 alter table detalheorcamento change column `idEntity` `entityID` bigint not null;
+
+-- Inclusão de opção de sistema para o usuário admin
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso) values ('EMAIL_METODO_ENVIO', 'JAVAMAIL', 'GLOBAL_ADMIN', true, true, true, 'STRING', 'email');

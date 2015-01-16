@@ -110,6 +110,15 @@
 				
 				Charset:
 				<p:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_CHARSET']}"/>
+				
+				Método de envio:
+				<h:selectOneMenu value="#{managedBean.opcoesGlobalAdmin['EMAIL_METODO_ENVIO']}">
+					<f:selectItem itemLabel="JavaMail" itemValue="JAVAMAIL" />
+					<f:selectItem itemLabel="SendGrid" itemValue="SENDGRID" />
+				</h:selectOneMenu>
+				
+				<h:outputText value="" />
+				<h:outputText value="" />
 			
 			</h:panelGrid>
 			

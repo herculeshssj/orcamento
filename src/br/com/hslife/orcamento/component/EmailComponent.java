@@ -53,6 +53,9 @@ import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
+
 @Component
 public class EmailComponent {
 	
@@ -63,9 +66,28 @@ public class EmailComponent {
 		this.opcaoSistemaComponent = opcaoSistemaComponent;
 	}
 	
-	public void enviarEmail(String destinatario, String emailDestinatario, String assunto, String mensagem) throws EmailException {
+	void enviarEmailSendGrid(Map<String, Object> parametros, String destinatario, String emailDestinatario, String assunto, String mensagem) throws SendGridException {
+		SendGrid sendGrid = new SendGrid((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
+		
+		SendGrid.Email email = new SendGrid.Email();
+		email.addTo(emailDestinatario, destinatario);
+		email.setFrom((String)parametros.get("EMAIL_EMAIL_REMETENTE")); // remetente
+		email.setFromName((String)parametros.get("EMAIL_REMETENTE"));
+		email.setSubject(assunto);
+		email.setText(mensagem);
+		
+		SendGrid.Response response = sendGrid.send(email);
+		System.out.println(response.getMessage());
+	}
+	
+	public void enviarEmail(String destinatario, String emailDestinatario, String assunto, String mensagem) throws EmailException, SendGridException {
 		// Carrega as configurações de envio de e-mail
 		Map<String, Object> parametros = opcaoSistemaComponent.buscarOpcoesGlobalAdminPorCDU("email");
+		
+		if (((String)parametros.get("EMAIL_METODO_ENVIO")).equals("SENDGRID")) {
+			this.enviarEmailSendGrid(parametros, destinatario, emailDestinatario, assunto, mensagem);
+			return;
+		}
 		
 		// Instancia o objeto de e-mail
 		SimpleEmail email = new SimpleEmail();
@@ -91,9 +113,28 @@ public class EmailComponent {
 		email.send();
 	}
 	
-	public void enviarEmail(String remetente, String emailRemetente, String destinatario, String emailDestinatario, String assunto, String mensagem) throws EmailException {
+	void enviarEmailSendGrid(Map<String, Object> parametros, String rementente, String emailRemetente, String destinatario, String emailDestinatario, String assunto, String mensagem) throws SendGridException {
+		SendGrid sendGrid = new SendGrid((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
+		
+		SendGrid.Email email = new SendGrid.Email();
+		email.addTo(emailDestinatario, destinatario);
+		email.setFrom(emailRemetente); // remetente
+		email.setFromName(rementente);
+		email.setSubject(assunto);
+		email.setText(mensagem);
+		
+		SendGrid.Response response = sendGrid.send(email);
+		System.out.println(response.getMessage());
+	}
+	
+	public void enviarEmail(String remetente, String emailRemetente, String destinatario, String emailDestinatario, String assunto, String mensagem) throws EmailException, SendGridException {
 		// Carrega as configurações de envio de e-mail
 		Map<String, Object> parametros = opcaoSistemaComponent.buscarOpcoesGlobalAdminPorCDU("email");
+		
+		if (((String)parametros.get("EMAIL_METODO_ENVIO")).equals("SENDGRID")) {
+			this.enviarEmailSendGrid(parametros, remetente, emailRemetente, destinatario, emailDestinatario, assunto, mensagem);
+			return;
+		}
 		
 		// Instancia o objeto de e-mail
 		SimpleEmail email = new SimpleEmail();
