@@ -1,6 +1,6 @@
 <!--
   
-  	Copyright (c) 2012 - 2015 Hércules S. S. José
+  	Copyright (c) 2012, 2013, 2014 Hércules S. S. José
 
     Este arquivo é parte do programa Orçamento Doméstico.
     
@@ -25,18 +25,16 @@
 
     Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
 
-    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site HSlife
     
-    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    no endereco www.hslife.com.br ou escreva para a Fundação do Software 
     
-    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
-    
-    Boston, MA  02110-1301, USA.
+    Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
     
 
-    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor acesse o 
 
-    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
+    endereço www.hslife.com.br, pelo e-mail contato@hslife.com.br ou escreva para 
 
     Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
 
@@ -66,10 +64,37 @@
 
 		<p align="left">Destinado a controlar as despesas domésticas de uma família. Tem opções para controlar contas a pagar e receber, pagamentos, lançamentos bancários, saldos de contas, realizar fechamento de períodos e categorizar as informações. Permite que mais de uma pessoa possa gerenciar suas despesas, compartilhando com uma ou mais pessoas. Pode gerenciar as contas de micros empresas que buscam um sistema simples de controle de despesas.</p>
 
-		<p><strong>Página do projeto:</strong> <a href="https://github.com/herculeshssj/orcamento">https://github.com/herculeshssj/orcamento</a></p>	
+		<p><strong>Página do projeto:</strong> <a href="https://github.com/herculeshssj/orcamento">https://github.com/herculeshssj/orcamento</a></p>
+	
+		<hr />
 		
-		<p>Entre em contato para dúvidas, críticas e sugestões através do e-mail <a href="mailto:herculeshssj@gmail.com">herculeshssj@gmail.com</a></p>
+		<p>Entre em contato para dúvidas, críticas e sugestões.</p>
 			
+			<h:form id="frmMenuCadastros">
+			
+			<p:messages />
+			
+			<h:panelGrid columns="2" width="100%" style="text-align: left">
+			
+				Nome:
+				<h:outputText value="#{ajudaMB.usuarioLogado.nome}"/>
+				
+				E-Mail:
+				<h:outputText value="#{ajudaMB.usuarioLogado.email}"/>
+				
+				Assunto:
+				<p:inputText value="#{ajudaMB.assuntoMensagem}" size="50"/>
+				
+				Mensagem:
+				<p:inputTextarea value="#{ajudaMB.mensagem}" rows="5" cols="50"/>
+				
+				<h:outputText />
+				<h:commandButton title="Enviar" image="/resources/images/enviar.png" action="#{ajudaMB.enviarMensagem}" />
+										
+			</h:panelGrid>
+		
+		</h:form>
+     
 	</ui:define>
 	
 </ui:composition>
