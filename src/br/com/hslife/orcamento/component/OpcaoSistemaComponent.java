@@ -219,6 +219,7 @@ public class OpcaoSistemaComponent implements Serializable{
 		opcoesUsuario.put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", "INDIVIDUAL");
 		opcoesUsuario.put("CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.FALSE);
 		opcoesUsuario.put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(12));
+		opcoesUsuario.put("NOTIFICAR_AGENDAMENTO_EMAIL", Boolean.FALSE);
 		this.salvarOpcoesUser(opcoesUsuario, entity);
 	}
 	
@@ -288,6 +289,17 @@ public class OpcaoSistemaComponent implements Serializable{
 			e.printStackTrace();
 		}
 		return 12; // valor padrão.
+	}
+	
+	public Boolean getNotificarAgendamentosEmail() {
+		try {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("NOTIFICAR_AGENDAMENTO_EMAIL", usuarioComponent.getUsuarioLogado());
+			if (opcao != null)
+				return Boolean.valueOf(opcao.getValor());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	/*** Métodos Setters das opções do sistema existentes ***/
