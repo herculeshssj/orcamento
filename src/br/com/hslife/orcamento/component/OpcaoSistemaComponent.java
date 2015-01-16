@@ -291,9 +291,9 @@ public class OpcaoSistemaComponent implements Serializable{
 		return 12; // valor padrão.
 	}
 	
-	public Boolean getNotificarAgendamentosEmail() {
+	public Boolean getNotificarAgendamentosEmail(Usuario usuario) {
 		try {
-			OpcaoSistema opcao = buscarPorChaveEUsuario("NOTIFICAR_AGENDAMENTO_EMAIL", usuarioComponent.getUsuarioLogado());
+			OpcaoSistema opcao = buscarPorChaveEUsuario("NOTIFICAR_AGENDAMENTO_EMAIL", usuario);
 			if (opcao != null)
 				return Boolean.valueOf(opcao.getValor());
 		} catch (Exception e) {

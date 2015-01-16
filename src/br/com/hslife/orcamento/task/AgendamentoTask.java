@@ -103,10 +103,12 @@ public class AgendamentoTask {
 		fim.setSeconds(59);
 		List<Agenda> agendamentos =  agendaRepository.findAgendamentoByDataInicioAndDataFimAndAlerta(inicio, fim, true);
 		
-		// Se a notificação de envio de e-mail estiver habilitado, manda o e-mail
-		if (opcaoSistemaComponent.getNotificarAgendamentosEmail()) {
-			// Itera a lista de agendamentos encontrados, e para cada uma envia um e-mail para o usuário
-			for (Agenda a : agendamentos) {
+		
+		// Itera a lista de agendamentos encontrados, e para cada uma envia um e-mail para o usuário
+		for (Agenda a : agendamentos) {
+			// Se o usuário marcou para não receber notificação o e-mail não será enviado
+			if (opcaoSistemaComponent.getNotificarAgendamentosEmail(a.getUsuario())) {
+			
 				StringBuilder mensagemEmail = new StringBuilder();
 				
 				mensagemEmail.append("Prezado " + a.getUsuario().getNome() + ",\n\n");
@@ -126,6 +128,7 @@ public class AgendamentoTask {
 				}
 			}
 		}
+		
 	}
 	
 	@Scheduled(fixedDelay=3600000)

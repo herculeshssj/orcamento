@@ -63,5 +63,8 @@ drop table detalhefatura;
 alter table agenda change column `idEntity` `entityID` bigint null;
 alter table detalheorcamento change column `idEntity` `entityID` bigint not null;
 
+-- Opção para notificação de agendamento por e-mail
+
+
 -- Inclusão de opção de sistema para o usuário admin
 insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso) values ('EMAIL_METODO_ENVIO', 'JAVAMAIL', 'GLOBAL_ADMIN', true, true, true, 'STRING', 'email');
