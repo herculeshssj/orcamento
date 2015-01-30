@@ -72,6 +72,7 @@ import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -220,7 +221,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			entity.getArquivo().setDados(event.getFile().getContents());
 			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
 			entity.getArquivo().setContentType(event.getFile().getContentType());
-			entity.getArquivo().setTamanho(event.getFile().getSize());			
+			entity.getArquivo().setTamanho(event.getFile().getSize());	
+			entity.getArquivo().setContainer(Container.LANCAMENTOCONTA);
 		} 
 	}
 	

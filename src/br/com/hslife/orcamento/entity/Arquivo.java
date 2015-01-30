@@ -46,15 +46,23 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import br.com.hslife.orcamento.enumeration.Container;
 
 @Entity
 @Table(name="arquivo", schema="orcamento")
@@ -74,13 +82,22 @@ public class Arquivo extends EntityPersistence {
 	@Column
 	private long tamanho;
 	
+	@Column(nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCriacao;
+	
+	@Column(nullable=false, length=30)
+	@Enumerated(EnumType.STRING)
+	private Container container;
+	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column(length=16777216)
 	private byte[] dados;
 	
 	public Arquivo() {
-		
+		dataCriacao = new Date();
+		container = Container.ARQUIVO;
 	}
 
 	public Long getId() {
@@ -131,5 +148,21 @@ public class Arquivo extends EntityPersistence {
 
 	public void setTamanho(long tamanho) {
 		this.tamanho = tamanho;
+	}
+
+	public Date getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(Date dataCriacao) {
+		this.dataCriacao = dataCriacao;
+	}
+
+	public Container getContainer() {
+		return container;
+	}
+
+	public void setContainer(Container container) {
+		this.container = container;
 	}
 }

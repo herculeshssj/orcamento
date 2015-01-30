@@ -73,6 +73,7 @@ import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -334,7 +335,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			entity.getArquivo().setDados(event.getFile().getContents());
 			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
 			entity.getArquivo().setContentType(event.getFile().getContentType());
-			entity.getArquivo().setTamanho(event.getFile().getSize());			
+			entity.getArquivo().setTamanho(event.getFile().getSize());	
+			entity.getArquivo().setContainer(Container.FATURACARTAO);
 		} 
 	}
 	

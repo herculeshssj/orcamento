@@ -68,3 +68,16 @@ alter table detalheorcamento change column `idEntity` `entityID` bigint not null
 
 -- Inclusão de opção de sistema para o usuário admin
 insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso) values ('EMAIL_METODO_ENVIO', 'JAVAMAIL', 'GLOBAL_ADMIN', true, true, true, 'STRING', 'email');
+
+-- Informações para a implementação do GED - Github issue #30
+alter table arquivo add column container varchar(30) null;
+
+update arquivo set container = 'DOCUMENTOS' where id in (select idArquivo from documento);
+update arquivo set container = 'LANCAMENTOCONTA' where id in (select idArquivo from lancamentoconta);
+update arquivo set container = 'LANCAMENTOPERIODICO' where id in (select idArquivo from lancamentoperiodico);
+update arquivo set container = 'FATURACARTAO' where id in (select idArquivo from faturacartao);
+update arquivo set container = 'ARQUIVO' where container is null;
+
+alter table arquivo change column `container` `container` not null;
+
+alter table arquivo add column dataCriacao datetime not null default '2015-01-01 00:00:00.000';

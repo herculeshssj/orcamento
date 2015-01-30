@@ -71,6 +71,7 @@ import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -351,7 +352,8 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			entity.getArquivo().setDados(event.getFile().getContents());
 			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
 			entity.getArquivo().setContentType(event.getFile().getContentType());
-			entity.getArquivo().setTamanho(event.getFile().getSize());			
+			entity.getArquivo().setTamanho(event.getFile().getSize());		
+			entity.getArquivo().setContainer(Container.LANCAMENTOPERIODO);
 		} 
 	}
 	

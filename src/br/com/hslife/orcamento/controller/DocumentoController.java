@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Documento;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
@@ -175,7 +176,8 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 			entity.getArquivo().setDados(event.getFile().getContents());
 			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
 			entity.getArquivo().setContentType(event.getFile().getContentType());
-			entity.getArquivo().setTamanho(event.getFile().getSize());			
+			entity.getArquivo().setTamanho(event.getFile().getSize());
+			entity.getArquivo().setContainer(Container.DOCUMENTOS);
 		} 
 	}
 	
