@@ -71,6 +71,7 @@ insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, requ
 
 -- Informações para a implementação do GED - Github issue #30
 alter table arquivo add column container varchar(30) null;
+alter table arquivo add column idUsuario bigint null;
 
 update arquivo set container = 'DOCUMENTOS' where id in (select idArquivo from documento);
 update arquivo set container = 'LANCAMENTOCONTA' where id in (select idArquivo from lancamentoconta);
@@ -78,6 +79,13 @@ update arquivo set container = 'LANCAMENTOPERIODICO' where id in (select idArqui
 update arquivo set container = 'FATURACARTAO' where id in (select idArquivo from faturacartao);
 update arquivo set container = 'ARQUIVO' where container is null;
 
-alter table arquivo change column `container` `container` not null;
+update arquivo a set a.idUsuario = (select cd.idUsuario from categoriadocumento cd inner join documento d on d.idCategoriaDocumento = cd.id where d.idArquivo = a.id) where a.container = 'DOCUMENTOS';
+update arquivo a set a.idUsuario = (select c.idUsuario from lancamentoconta l inner join conta c on c.id = l.idConta where l.idArquivo = a.id) where a.container = 'LANCAMENTOCONTA';
+update arquivo a set a.idUsuario = (select l.idUsuario from lancamentoperiodico l where l.idArquivo = a.id) where container = 'LANCAMENTOPERIODICO';
+update arquivo a set a.idUsuario = (select c.idUsuario from faturacartao f inner join conta c on c.id = f.idConta where f.idArquivo = a.id) where container = 'FATURACARTAO'
+update arquivo set idUsuario = (select id from usuario where login = 'admin') where container = 'ARQUIVO';
+
+alter table arquivo change column `container` `container` varchar(30) not null;
+alter table arquivo change column `idUsuario` `idUsuario` bigint not null;
 
 alter table arquivo add column dataCriacao datetime not null default '2015-01-01 00:00:00.000';

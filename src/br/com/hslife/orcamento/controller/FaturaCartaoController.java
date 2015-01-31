@@ -337,6 +337,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			entity.getArquivo().setContentType(event.getFile().getContentType());
 			entity.getArquivo().setTamanho(event.getFile().getSize());	
 			entity.getArquivo().setContainer(Container.FATURACARTAO);
+			entity.getArquivo().setUsuario(getUsuarioLogado());
 		} 
 	}
 	

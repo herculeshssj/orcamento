@@ -1,0 +1,127 @@
+<!--
+  
+  	Copyright (c) 2012 - 2015 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{arquivoMB}" />
+	
+	<ui:define name="botoes"></ui:define>
+	
+	<ui:define name="pesquisa">
+		Nome:
+		<p:inputText value="#{managedBean.criterio.nome}"/>
+		&nbsp;
+		De:
+		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.inicio}">
+	    	<f:converter converterId="dateConverter"/>
+	    </p:inputMask>
+		&nbsp;
+		Fim:
+		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.fim}">
+	    	<f:converter converterId="dateConverter"/>
+	    </p:inputMask>
+		&nbsp;		
+		Container:
+		<h:selectOneMenu value="#{managedBean.criterio.container}">
+			<f:selectItem itemLabel="Todos"/>
+			<f:selectItems value="#{managedBean.listaContainer}"/>
+		</h:selectOneMenu>
+		&nbsp;
+	</ui:define>
+
+	<ui:define name="colunas">
+		<p:column style="text-align: left; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição" />
+			</f:facet>
+			<h:outputText value="#{item.nomeArquivo}" styleClass="break-word"/>
+			<br/>
+			<h:outputText value="#{item.tamanho} "/> bytes
+			<br/>
+			Criado em
+			<h:outputText value="#{item.dataCriacao}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+		</p:column>
+		<p:column style="text-align: center; vertical-align: middle; width: 180px;">
+			<f:facet name="header">
+				<h:outputText value="Container" />
+			</f:facet>
+			<h:outputText value="#{item.container}" />
+			<br/>
+			<h:graphicImage name="greenlight.png" library="images" />
+			<h:graphicImage name="yellowlight.png" library="images" />
+			<h:graphicImage name="redlight.png" library="images"  />
+		</p:column>
+	</ui:define>
+
+	<ui:define name="acoes">
+		<p:column style="text-align: center; vertical-align: middle; width: 100px;">
+			<f:facet name="header">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandButton title="Baixar" image="/resources/images/baixa.png" action="#{managedBean.baixarArquivo}">
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}" />
+			</h:commandButton>
+			<p:spacer width="10"/>			
+			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}" />
+			</h:commandButton>
+		</p:column>
+	</ui:define>
+
+</ui:composition>
+</html>

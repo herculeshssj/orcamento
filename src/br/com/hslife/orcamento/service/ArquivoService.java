@@ -44,19 +44,37 @@
   
 ***/
 
-package br.com.hslife.orcamento.enumeration;
+package br.com.hslife.orcamento.service;
 
-public enum Container {
-	ARQUIVO("Arquivo"), DOCUMENTOS("Documentos"), LANCAMENTOCONTA("LancamentoConta"), LANCAMENTOPERIODICO("LancamentoPeriodico"),
-	FATURACARTAO("FaturaCartao");
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IArquivo;
+import br.com.hslife.orcamento.model.CriterioArquivo;
+import br.com.hslife.orcamento.repository.ArquivoRepository;
+
+@Service("arquivoService")
+@Transactional
+public class ArquivoService implements IArquivo {
 	
-	private String descricao;
-	
-	private Container(String descricao) {
-		this.descricao = descricao;
+	@Autowired
+	private ArquivoRepository repository;
+
+	public ArquivoRepository getRepository() {
+		return repository;
 	}
 
-	public String toString() {
-		return descricao;
+	public void setRepository(ArquivoRepository repository) {
+		this.repository = repository;
+	}
+
+	@Override
+	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) throws BusinessException {
+		return getRepository().findByCriterioArquivo(criterio);
 	}
 }

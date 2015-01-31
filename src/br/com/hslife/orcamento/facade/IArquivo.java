@@ -44,19 +44,17 @@
   
 ***/
 
-package br.com.hslife.orcamento.enumeration;
+package br.com.hslife.orcamento.facade;
 
-public enum Container {
-	ARQUIVO("Arquivo"), DOCUMENTOS("Documentos"), LANCAMENTOCONTA("LancamentoConta"), LANCAMENTOPERIODICO("LancamentoPeriodico"),
-	FATURACARTAO("FaturaCartao");
-	
-	private String descricao;
-	
-	private Container(String descricao) {
-		this.descricao = descricao;
-	}
+import java.util.List;
 
-	public String toString() {
-		return descricao;
-	}
+import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.model.CriterioArquivo;
+
+
+public interface IArquivo {
+	
+	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) throws BusinessException;
+
 }

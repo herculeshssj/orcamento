@@ -527,6 +527,10 @@ div.menu li {
 #content tr.odd td {
 	background: #f2f7fc;
 }
+.break-word {
+	width: 150px;
+	word-wrap: break-word;
+}
 .hentry {
 	margin: 0 0 48px 0;
 }

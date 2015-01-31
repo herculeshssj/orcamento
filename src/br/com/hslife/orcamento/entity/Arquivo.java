@@ -57,7 +57,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -89,6 +91,10 @@ public class Arquivo extends EntityPersistence {
 	@Column(nullable=false, length=30)
 	@Enumerated(EnumType.STRING)
 	private Container container;
+	
+	@OneToOne
+	@JoinColumn(name="idUsuario", nullable=false)
+	private Usuario usuario;
 	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
@@ -164,5 +170,13 @@ public class Arquivo extends EntityPersistence {
 
 	public void setContainer(Container container) {
 		this.container = container;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }
