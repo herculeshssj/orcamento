@@ -159,6 +159,8 @@ public class ArquivoController extends AbstractController {
 				// Determina se a busca será executada novamente
 				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
 					find();
+				} else {
+					initializeEntity();
 				}
 			} else {
 				initializeEntity();

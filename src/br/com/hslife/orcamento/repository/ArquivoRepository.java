@@ -91,6 +91,10 @@ public class ArquivoRepository extends AbstractRepository {
 		return criteria.addOrder(Order.asc("nomeArquivo")).list();
 	}
 	
+	public void delete(Arquivo arquivo) {
+		getSession().delete(arquivo);
+	}
+	
 	public boolean deleteFromLancamentoConta(Arquivo arquivo) {
 		LancamentoConta lancamento = (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.arquivo.id = :idArquivo")
 				.setLong("idArquivo", arquivo.getId())

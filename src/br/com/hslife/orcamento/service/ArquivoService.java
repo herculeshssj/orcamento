@@ -81,7 +81,9 @@ public class ArquivoService implements IArquivo {
 	@Override
 	public void excluir(Arquivo arquivo) throws BusinessException {
 		switch (arquivo.getContainer()) {
-			case ARQUIVO : break;
+			case ARQUIVO :
+				getRepository().delete(arquivo);
+				break;
 			case DOCUMENTOS :
 				if (getRepository().deleteFromDocumento(arquivo)) {
 					// Nada a fazer
