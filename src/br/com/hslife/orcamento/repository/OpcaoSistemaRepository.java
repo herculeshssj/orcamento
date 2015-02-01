@@ -108,6 +108,15 @@ public class OpcaoSistemaRepository extends AbstractRepository implements IRepos
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<OpcaoSistema> findOpcoesUserByCasoUso(String casoDeUso, Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
+		criteria.add(Restrictions.eq("tipoOpcaoSistema", TipoOpcaoSistema.USER));
+		criteria.add(Restrictions.eq("casoDeUso", casoDeUso));
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<OpcaoSistema> findOpcoesUser(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);
 		criteria.add(Restrictions.eq("tipoOpcaoSistema", TipoOpcaoSistema.USER));

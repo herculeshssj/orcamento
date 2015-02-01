@@ -77,4 +77,39 @@ public class ArquivoService implements IArquivo {
 	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) throws BusinessException {
 		return getRepository().findByCriterioArquivo(criterio);
 	}
+	
+	@Override
+	public void excluir(Arquivo arquivo) throws BusinessException {
+		switch (arquivo.getContainer()) {
+			case ARQUIVO : break;
+			case DOCUMENTOS :
+				if (getRepository().deleteFromDocumento(arquivo)) {
+					// Nada a fazer
+				} else {
+					throw new BusinessException("Não foi possível excluir o arquivo.");
+				}
+				break;
+			case FATURACARTAO :
+				if (getRepository().deleteFromFaturaCartao(arquivo)) {
+					// Nada a fazer
+				} else {
+					throw new BusinessException("Não foi possível excluir o arquivo.");
+				}
+				break;
+			case LANCAMENTOCONTA : 
+				if (getRepository().deleteFromLancamentoConta(arquivo)) {
+					// Nada a fazer
+				} else {
+					throw new BusinessException("Não foi possível excluir o arquivo.");
+				}
+				break;
+			case LANCAMENTOPERIODICO :
+				if (getRepository().deleteFromLancamentoPeriodico(arquivo)) {
+					// Nada a fazer
+				} else {
+					throw new BusinessException("Não foi possível excluir o arquivo.");
+				}
+				break;
+		}
+	}
 }

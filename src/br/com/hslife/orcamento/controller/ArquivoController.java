@@ -46,8 +46,11 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -59,6 +62,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IArquivo;
@@ -81,6 +85,8 @@ public class ArquivoController extends AbstractController {
 	private Arquivo entity;
 	private List<Arquivo> listEntity;
 	private Long idEntity;
+	
+	private BigDecimal espacoOcupado = new BigDecimal(0);
 
 	public ArquivoController() {		
 		moduleTitle = "Arquivos Anexados";
@@ -121,11 +127,51 @@ public class ArquivoController extends AbstractController {
 		try {
 			criterio.setUsuario(getUsuarioLogado());
 			listEntity = getService().buscarPorCriterioArquivo(criterio);
+			
+			// Calcula o espaço ocupado e injeta as opções do sistema nas entidades
+			espacoOcupado = new BigDecimal(0);
+			Map<String, Integer> opcoesSistema = getOpcoesSistema().getOpcoesArquivosAnexados(getUsuarioLogado());
+			for (Arquivo a : listEntity) {
+				espacoOcupado = espacoOcupado.add(new BigDecimal(a.getTamanho()));
+				a.setOpcoesSistema(opcoesSistema);
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		
 		return "";
+	}
+	
+	public String view() {
+		return "/pages/Arquivo/viewArquivo";
+	}
+	
+	public String delete() {
+		try {
+			getService().excluir(entity);			
+			infoMessage("Registro excluído com sucesso!");
+		
+			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
+			if (listEntity != null && !listEntity.isEmpty()) {				
+				// Obtém o valor da opção do sistema
+				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
+							
+				// Determina se a busca será executada novamente
+				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
+					find();
+				}
+			} else {
+				initializeEntity();
+			}
+			return "/pages/Arquivo/listArquivo"; 
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public String cancel() {
+		return "/pages/Arquivo/listArquivo";
 	}
 	
 	public void baixarArquivo() {		
@@ -156,6 +202,10 @@ public class ArquivoController extends AbstractController {
 		} else {
 			return listEntity.size();
 		}
+	}
+	
+	public String getEspacoOcupado() {
+		return new DecimalFormat("#,##0.##").format(espacoOcupado);
 	}
 
 	public IArquivo getService() {

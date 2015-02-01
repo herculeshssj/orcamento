@@ -220,6 +220,11 @@ public class OpcaoSistemaComponent implements Serializable{
 		opcoesUsuario.put("CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.FALSE);
 		opcoesUsuario.put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(12));
 		opcoesUsuario.put("NOTIFICAR_AGENDAMENTO_EMAIL", Boolean.FALSE);
+		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_GERAL", Integer.valueOf(1));
+		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA", Integer.valueOf(1));
+		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_FATURACARTAO", Integer.valueOf(1));
+		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO", Integer.valueOf(1));
+		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS", Integer.valueOf(1));
 		this.salvarOpcoesUser(opcoesUsuario, entity);
 	}
 	
@@ -300,6 +305,19 @@ public class OpcaoSistemaComponent implements Serializable{
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public Map<String, Integer> getOpcoesArquivosAnexados(Usuario usuario) {
+		Map<String, Integer> opcoes = new HashMap<String, Integer>();
+		try {
+			for (OpcaoSistema opcao : opcaoSistemaRepository.findOpcoesUserByCasoUso("Arquivo", usuario)) {
+				opcoes.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
+			}
+			return opcoes;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return opcoes; 
 	}
 	
 	/*** Métodos Setters das opções do sistema existentes ***/

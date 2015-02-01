@@ -46,7 +46,9 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -63,6 +65,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.Container;
 
@@ -101,6 +104,9 @@ public class Arquivo extends EntityPersistence {
 	@Column(length=16777216)
 	private byte[] dados;
 	
+	@Transient
+	private Map<String, Integer> opcoesSistema;
+	
 	public Arquivo() {
 		dataCriacao = new Date();
 		container = Container.ARQUIVO;
@@ -118,6 +124,40 @@ public class Arquivo extends EntityPersistence {
 	@Override
 	public void validate() {
 				
+	}
+
+	public void setOpcoesSistema(Map<String, Integer> opcoesSistema) {
+		this.opcoesSistema = opcoesSistema;
+	}
+	
+	public boolean isPrazoExpirado() {
+		// Salva a data de criação do arquivo
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(this.dataCriacao);
+		
+		switch (this.container) {
+			case ARQUIVO :
+				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_GERAL"));
+				if (temp.getTime().before(new Date())) return true;
+				break;
+			case DOCUMENTOS : 
+				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS"));
+				if (temp.getTime().before(new Date())) return true;
+				break;
+			case FATURACARTAO :
+				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_FATURACARTAO"));
+				if (temp.getTime().before(new Date())) return true;
+				break;
+			case LANCAMENTOCONTA :
+				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA"));
+				if (temp.getTime().before(new Date())) return true;
+				break;
+			case LANCAMENTOPERIODICO : 
+				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO"));
+				if (temp.getTime().before(new Date())) return true;
+				break;
+		}
+		return false;
 	}
 
 	public void setId(Long id) {

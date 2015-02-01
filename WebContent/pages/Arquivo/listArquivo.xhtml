@@ -102,9 +102,8 @@
 			</f:facet>
 			<h:outputText value="#{item.container}" />
 			<br/>
-			<h:graphicImage name="greenlight.png" library="images" />
-			<h:graphicImage name="yellowlight.png" library="images" />
-			<h:graphicImage name="redlight.png" library="images"  />
+			<h:graphicImage name="greenlight.png" library="images" rendered="#{!item.prazoExpirado}"/>
+			<h:graphicImage name="redlight.png" library="images"  rendered="#{item.prazoExpirado}"/>
 		</p:column>
 	</ui:define>
 
@@ -117,10 +116,14 @@
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}" />
 			</h:commandButton>
 			<p:spacer width="10"/>			
-			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.prazoExpirado}">
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}" />
 			</h:commandButton>
 		</p:column>
+	</ui:define>
+	
+	<ui:define name="outras_opcoes">
+		<strong>Espaço ocupado em disco: </strong> <h:outputText value="#{managedBean.espacoOcupado}"/> KB
 	</ui:define>
 
 </ui:composition>

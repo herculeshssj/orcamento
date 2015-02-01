@@ -56,5 +56,7 @@ import br.com.hslife.orcamento.model.CriterioArquivo;
 public interface IArquivo {
 	
 	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) throws BusinessException;
+	
+	public void excluir(Arquivo arquivo) throws BusinessException;
 
 }

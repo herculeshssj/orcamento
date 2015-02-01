@@ -56,6 +56,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.entity.Documento;
+import br.com.hslife.orcamento.entity.FaturaCartao;
+import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioArquivo;
 
 @Repository
@@ -87,4 +91,58 @@ public class ArquivoRepository extends AbstractRepository {
 		return criteria.addOrder(Order.asc("nomeArquivo")).list();
 	}
 	
+	public boolean deleteFromLancamentoConta(Arquivo arquivo) {
+		LancamentoConta lancamento = (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.arquivo.id = :idArquivo")
+				.setLong("idArquivo", arquivo.getId())
+				.uniqueResult();
+		
+		if (lancamento == null)
+			return false;
+		else {
+			lancamento.setArquivo(null);
+			getSession().update(lancamento);
+			return true;
+		}
+	}
+	
+	public boolean deleteFromFaturaCartao(Arquivo arquivo) {
+		FaturaCartao fatura = (FaturaCartao)getQuery("FROM FaturaCartao fatura WHERE fatura.arquivo.id = :idArquivo")
+				.setLong("idArquivo", arquivo.getId())
+				.uniqueResult();
+		
+		if (fatura == null)
+			return false;
+		else {
+			fatura.setArquivo(null);
+			getSession().update(fatura);
+			return true;
+		}
+	}
+	
+	public boolean deleteFromDocumento(Arquivo arquivo) {
+		Documento documento = (Documento)getQuery("FROM Documento documento WHERE documento.arquivo.id = :idArquivo")
+				.setLong("idArquivo", arquivo.getId())
+				.uniqueResult();
+		
+		if (documento == null)
+			return false;
+		else {
+			getSession().delete(documento);
+			return true;
+		}
+	}
+	
+	public boolean deleteFromLancamentoPeriodico(Arquivo arquivo) {
+		LancamentoPeriodico lancamento = (LancamentoPeriodico)getQuery("FROM LancamentoPeriodico lancamento WHERE lancamento.arquivo.id = :idArquivo")
+				.setLong("idArquivo", arquivo.getId())
+				.uniqueResult();
+		
+		if (lancamento == null)
+			return false;
+		else {
+			lancamento.setArquivo(null);
+			getSession().update(lancamento);
+			return true;
+		}
+	}
 }

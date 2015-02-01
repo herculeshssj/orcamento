@@ -44,7 +44,6 @@
   
   -->
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -52,49 +51,39 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/visualizar.xhtml">
+<ui:composition>
 
-	<ui:param name="managedBean" value="#{arquivoMB}" />
+	<ui:param name="managedBean" value="#{opcaoSistemaMB}" />
 
-	<ui:define name="campos">
+	<p:tab title="Arquivos">
+		<h:panelGroup>
+		<fieldset>
+			<legend>Tempo de guarda</legend>
 			
-		<h:panelGrid columns="2">		
+			<h:panelGrid columns="2">
+			
+				Tempo de guarda dos anexos em geral (anos):
+				<p:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_GERAL']}"/>
+				
+				Tempo de guarda dos anexos em Lançamentos da conta/cartão (anos):
+				<p:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA']}"/>
+				
+				Tempo de guarda dos anexos em Faturas do Cartão (anos):
+				<p:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_FATURACARTAO']}"/>
+				
+				Tempo de guarda dos anexos em Lançamentos Periódicos (anos):
+				<p:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO']}"/>
+				
+				Tempo de guarda dos anexos em Documento (anos):
+				<p:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_DOCUMENTOS']}"/>
+				
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>	
+	</p:tab>
 		
-			Nome:
-			<h:outputText value="#{managedBean.entity.nomeArquivo}" />
-			
-			Tamanho:
-			<h:panelGroup>
-				<h:outputText value="#{managedBean.entity.tamanho}" />
-				bytes
-			</h:panelGroup>
-			
-			ContentType:
-			<h:outputText value="#{managedBean.entity.contentType}" />
-			
-			Data de criação:
-			<h:outputText value="#{managedBean.entity.dataCriacao}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
-			Container:
-			<h:outputText value="#{managedBean.entity.container}" />		
-			
-		</h:panelGrid>
-		
-	</ui:define>
-	
-	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		<p:spacer width="10"/>
-		<h:commandLink title="Voltar" action="#{managedBean.delete}">
-			<p:graphicImage value="/resources/images/excluir.png" />
-		</h:commandLink>
-	</ui:define>
-	
 </ui:composition>
 </html>
