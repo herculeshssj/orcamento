@@ -83,7 +83,13 @@ public class CriterioArquivo {
 		return inicio;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setInicio(Date inicio) {
+		if (inicio != null) {
+			inicio.setHours(0);
+			inicio.setMinutes(0);
+			inicio.setSeconds(0);
+		}
 		this.inicio = inicio;
 	}
 
@@ -91,8 +97,14 @@ public class CriterioArquivo {
 		return fim;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setFim(Date fim) {
-		this.fim = fim;
+		if (fim != null) {
+			fim.setHours(23);
+			fim.setMinutes(59);
+			fim.setSeconds(59);
+		}
+		this.fim = fim;		
 	}
 
 	public Usuario getUsuario() {
