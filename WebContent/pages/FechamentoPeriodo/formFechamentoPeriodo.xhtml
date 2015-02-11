@@ -66,7 +66,7 @@
 			<h:panelGrid columns="3">
 			
 				Conta:
-				<h:selectOneMenu id="txtConta" value="#{managedBean.entity.conta}" converter="entityConverter">
+				<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter">
 					<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 				</h:selectOneMenu>
 				<h:inputHidden/>
