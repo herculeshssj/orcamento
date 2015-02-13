@@ -83,6 +83,9 @@ public class CriterioBuscaLancamentoConta {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 		
+		// Remove a descrição anteriormente setada
+		hibernateCriterions.remove("descricao");
+		
 		if (descricao != null && !descricao.isEmpty())
 			hibernateCriterions.put("descricao", Restrictions.ilike("lancamento.descricao", descricao, MatchMode.ANYWHERE));
 	}
@@ -94,8 +97,11 @@ public class CriterioBuscaLancamentoConta {
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
 		
+		// Remove a data de início anteriormente setada
+		hibernateCriterions.remove("dataInicio");
+		
 		if (dataInicio != null)
-			hibernateCriterions.put("dataInicio", Restrictions.ge("lancamento.dataPagamento", dataInicio));
+			hibernateCriterions.put("dataInicio", Restrictions.ge("lancamento.dataPagamento", dataInicio));			
 	}
 
 	public Date getDataFim() {
@@ -105,8 +111,11 @@ public class CriterioBuscaLancamentoConta {
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 		
+		// Remove a data final anteriormente setada
+		hibernateCriterions.remove("dataFim");
+		
 		if (dataFim != null)
-			hibernateCriterions.put("dataFim", Restrictions.le("lancamento.dataPagamento", dataFim));
+			hibernateCriterions.put("dataFim", Restrictions.le("lancamento.dataPagamento", dataFim));			
 	}
 	
 	public Conta getConta() {
