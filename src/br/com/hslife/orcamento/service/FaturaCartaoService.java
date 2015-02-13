@@ -373,6 +373,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		lancamentoPagamento.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 		lancamentoPagamento.setValorPago(valorAQuitar);
 		lancamentoPagamento.setTipoLancamento(TipoLancamento.DESPESA);
+		lancamentoPagamento.setCategoria(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(faturaCartao.getConta().getUsuario(), TipoCategoria.DEBITO));
+		lancamentoPagamento.setFavorecido(favorecidoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
+		lancamentoPagamento.setMeioPagamento(meioPagamentoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
 		
 		// Determina o valor do saldo devedor
 		double saldoDevedor = (faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()) - valorAQuitar;
