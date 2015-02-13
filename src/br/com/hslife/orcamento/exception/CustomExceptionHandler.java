@@ -53,6 +53,7 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.FacesContext;
@@ -87,6 +88,10 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
  
             // get the exception from context
             Throwable t = context.getException();
+            
+            // Verifica se a exceção é ViewExpiredException
+            boolean sessaoExpirada = false;
+            if (t instanceof ViewExpiredException) sessaoExpirada = true;
  
             final FacesContext fc = FacesContext.getCurrentInstance();
             final Map<String, Object> requestMap = fc.getExternalContext().getRequestMap();
@@ -111,10 +116,17 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 	                }
                 }
  
-                //redirect error page
-                requestMap.put("exceptionMessage", stackTraceBuilder.toString());
-                nav.handleNavigation(fc, null, "/excecao");
-                fc.renderResponse();
+                if (sessaoExpirada) {
+                	//redirect login page
+                    requestMap.put("exceptionMessage", stackTraceBuilder.toString());
+                    nav.handleNavigation(fc, null, "/login");
+                    fc.renderResponse();
+                } else {
+                	//redirect error page
+                    requestMap.put("exceptionMessage", stackTraceBuilder.toString());
+                    nav.handleNavigation(fc, null, "/excecao");
+                    fc.renderResponse();
+                }
  
                 // remove the comment below if you want to report the error in a jsf error message
                 //JsfUtil.addErrorMessage(t.getMessage());

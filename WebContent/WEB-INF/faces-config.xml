@@ -66,6 +66,11 @@
         </exception-handler-factory>
 	</factory>
 	
+	<lifecycle>
+		<phase-listener>br.com.hslife.orcamento.listener.AccessLoginPageListener</phase-listener>
+	</lifecycle>
+	
+	
 	<converter>
 		<converter-id>dateConverter</converter-id>
 		<converter-class>br.com.hslife.orcamento.converter.DateConverter</converter-class>
