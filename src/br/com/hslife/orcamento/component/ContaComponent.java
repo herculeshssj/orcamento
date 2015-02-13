@@ -580,16 +580,8 @@ public class ContaComponent {
 			}
 		}
 	}
-	
-	public void gerarParcelamento(LancamentoPeriodico lancamentoPeriodico) {
-		if (lancamentoPeriodico.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
-			lancamentoPeriodicoRepository.save(lancamentoPeriodico);
-			
-			this.gerarParcelas(lancamentoPeriodico);
-		}
-	}
 
-	private void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) {
+	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) {
 		
 		LancamentoConta parcela;
 		Calendar dataVencimento = Calendar.getInstance();

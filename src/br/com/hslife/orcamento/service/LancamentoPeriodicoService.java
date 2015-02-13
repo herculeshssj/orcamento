@@ -104,7 +104,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		if (entity.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
 			gerarMensalidade(entity);
 		} else {
-			contaComponent.gerarParcelamento(entity);
+			contaComponent.gerarParcelas(entity);
 		}
 	}
 	

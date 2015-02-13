@@ -76,6 +76,7 @@ import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FavorecidoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -88,6 +89,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
+	
+	@Autowired
+	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
@@ -441,9 +445,10 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		parcelamentoFatura.setCategoria(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(faturaCartao.getConta().getUsuario(), TipoCategoria.DEBITO));
 		parcelamentoFatura.setFavorecido(favorecidoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
 		parcelamentoFatura.setMeioPagamento(meioPagamentoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
+		lancamentoPeriodicoRepository.save(parcelamentoFatura);
 		
 		// Realiza o parcelamento
-		contaComponent.gerarParcelamento(parcelamentoFatura);
+		contaComponent.gerarParcelas(parcelamentoFatura);
 		
 	}
 	
