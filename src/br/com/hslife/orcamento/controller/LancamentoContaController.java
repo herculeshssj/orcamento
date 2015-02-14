@@ -198,11 +198,14 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO))
 			entity.setMoeda(entity.getConta().getMoeda());
 		
-		if (entity.getDataPagamento().before(new Date())) {
-			entity.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-		} else {
-			entity.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+		if (!entity.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
+			if (entity.getDataPagamento().before(new Date())) {
+				entity.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			} else {
+				entity.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			}
 		}
+		
 		return super.save();
 	}
 	
