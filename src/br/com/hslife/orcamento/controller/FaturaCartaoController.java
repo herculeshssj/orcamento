@@ -513,6 +513,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		try {
 			faturaSelecionada = getService().buscarPorID(idEntity);
 			criterioBusca = new CriterioBuscaLancamentoConta();
+			contaSelecionada = null;
+			valorAQuitar = 0;
+			dataPagamento = null;
+			quantParcelas = 0;
+			dataPagamento = null;
+			formaPagamentoFatura = 0;
+			lancamentosEncontrados = new ArrayList<LancamentoConta>();
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
 		} catch (BusinessException be) {
