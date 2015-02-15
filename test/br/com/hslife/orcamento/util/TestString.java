@@ -46,13 +46,13 @@
 
 package br.com.hslife.orcamento.util;
 
-import java.util.UUID;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.Assert;
+import java.util.UUID;
 
 import org.junit.Test;
 
-@SuppressWarnings("deprecation")
 public class TestString {
 
 	@Test
@@ -68,13 +68,13 @@ public class TestString {
 	@Test
 	public void testStringVazia() {
 		String obj = null;
-		Assert.assertTrue(Util.eVazio(obj));
+		assertTrue(Util.eVazio(obj));
 		
 		obj = "";
-		Assert.assertTrue(Util.eVazio(obj));
+		assertTrue(Util.eVazio(obj));
 		
 		obj = " oi ";
-		Assert.assertFalse(Util.eVazio(obj));
+		assertFalse(Util.eVazio(obj));
 	}
 	
 	@Test

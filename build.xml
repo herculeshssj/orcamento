@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+  
+  	Copyright (c) 2012 - 2015 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+
+  -->
+
+<project name="Orçamento Doméstico" default="deploy">
+	
+	<!-- Carrega o arquivo de propriedades com os valores das variáveis -->
+	<property file="build.properties"/>
+	
+	<!-- Define as variáveis com os caminhos do código fonte -->
+	<property name="src.dir" value="src"/>
+	<property name="test.dir" value="test"/>
+	<property name="web.dir" value="WebContent"/>
+	<property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
+	<property name="target" value="1.8"/>
+	<property name="source" value="1.8"/>
+	
+	<!-- Informações sobre copyright-->
+	<target name="info">
+		<echo>Geração do build do projeto Orçamento Doméstico</echo>
+		<echo>Todos os direitos reservados a ${copyright}.</echo>
+		<echo>${website}.</echo>
+	</target>
+
+	<!-- Compilação dos arquivos fonte -->
+	<target name="compile" depends="info">
+		<echo>Compilando os arquivos fonte do projeto...</echo>
+				
+		<path id="master-classpath">
+			<!-- Definição da pasta com as libs do projeto -->
+		   	<fileset dir="${web.dir}/WEB-INF/lib">
+		    	<include name="*.jar"/>
+		   	</fileset>
+			
+			<!-- Definição da pasta de instalação do Tomcat -->
+			<fileset dir="${tomcat_install}/lib">
+		    	<include name="*.jar"/>
+		   	</fileset>
+			
+		   	<pathelement path="${build.dir}"/>
+		</path>
+		
+		<!-- Compila os arquivos .java do projeto -->
+		<mkdir dir="${build.dir}"/>
+	   	<javac destdir="${build.dir}" source="${source}" target="${target}" debug="true" deprecation="false" optimize="false" failonerror="true" includeantruntime="false">
+	    	<src path="${src.dir}"/>
+	    	<classpath refid="master-classpath"/>
+	   	</javac>
+		
+		<!-- Copia os arquivos de configuração -->
+		<copy includeemptydirs="false" todir="${build.dir}">
+            <fileset dir="src">
+            	<include name="*.xml"/>
+            	<include name="*.properties"/>
+            </fileset>
+        </copy>
+	</target>
+	
+	<target name="package" depends="compile">
+		<echo>Gerando o WAR do projeto...</echo>
+		
+		<!-- Geração do arquivo WAR -->
+		<war destfile="ROOT.war" webxml="${web.dir}/WEB-INF/web.xml">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</war>
+	</target>
+	
+	<target name="deploy" depends="package">
+		<echo>Realizando o deploy para o servidor...</echo>
+		
+		<!-- Copia o arquivo .WAR para a pasta webapps do Tomcat -->
+		<copy todir = "${tomcat_install}/webapps" preservelastmodified = "true">
+        	<fileset dir=".">
+           		<include name="*.war"/>
+         	</fileset>
+      	</copy>
+		
+		<!-- Limpeza da pasta de build -->
+		<echo>Limpando a pasta de build...</echo>
+		<delete dir="${build.dir}"/>
+		
+		<!-- Exclui o arquivo .WAR da pasta do projeto -->
+		<delete>
+			<fileset dir=".">
+				<include name="*.war"/>
+			</fileset>
+		</delete>
+	</target>
+	
+</project>	
