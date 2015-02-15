@@ -114,6 +114,16 @@
 	<target name="deploy" depends="package">
 		<echo>Realizando o deploy para o servidor...</echo>
 		
+		<!-- Exclui o diretório atual do projeto no Tomcat -->
+		<delete dir="${tomcat_install}/webapps/ROOT"/>
+		
+		<!-- Exclui o arquivo .WAR da pasta webapps do Tomcat -->
+		<delete>
+			<fileset dir=".">
+				<include name="*.war"/>
+			</fileset>
+		</delete>
+		
 		<!-- Copia o arquivo .WAR para a pasta webapps do Tomcat -->
 		<copy todir = "${tomcat_install}/webapps" preservelastmodified = "true">
         	<fileset dir=".">
