@@ -91,9 +91,7 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-    update versao set ativo = false;
-    delete from versao where versao = 'MAR2015';
-	insert into versao (versao, ativo) values ('MAR2015', true);
+    alter table itemdespensa add column marca varchar(50) null;
 
     /*** Fim do bloco de atualizações da base ***/
     
