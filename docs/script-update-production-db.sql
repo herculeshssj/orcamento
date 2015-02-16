@@ -92,7 +92,7 @@ begin
     /*** Entre com as atualizações da base aqui ***/
     
     update versao set ativo = false;
-	insert into versao (versao, ativo) values ('MAR2015', true);
+	insert into versao (id, versao, ativo) values (1, 'MAR2015', true);
 
     /*** Fim do bloco de atualizações da base ***/
     
