@@ -199,6 +199,9 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	
 	public void apagarHistorico(ItemDespensa entity) throws BusinessException {
 		entity.getMovimentacao().clear();
+		entity.setQuantidadeAtual(0);
+		entity.setValidade(null);
+		entity.setValor(0);
 		getRepository().update(entity);
 	}
 }
