@@ -64,7 +64,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 @Component
 public class AuditoriaAspect {
 	
-	@Autowired
+	@Autowired 
 	private SessionFactory sessionFactory;
 	
 	@Autowired
