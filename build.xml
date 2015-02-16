@@ -114,7 +114,7 @@
 	
 	<target name="update_db" depends="package">
 		<echo>Atualizando a base de dados...</echo>
-		<exec executable="${mysql_install}/bin/mysql" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
+		<exec executable="${mysql_command}" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
 			<arg value="--user=${jdbc.username}"/>
 			<arg value="--password=${jdbc.password}"/>
 			<arg value="${jdbc.database}"/>
