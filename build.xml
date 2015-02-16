@@ -54,6 +54,7 @@
 	<!-- Define as variáveis com os caminhos do código fonte -->
 	<property name="src.dir" value="src"/>
 	<property name="test.dir" value="test"/>
+	<property name="docs.dir" value="docs"/>
 	<property name="web.dir" value="WebContent"/>
 	<property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
 	<property name="target" value="1.8"/>
@@ -111,7 +112,16 @@
 		</war>
 	</target>
 	
-	<target name="deploy" depends="package">
+	<target name="update_db" depends="package">
+		<echo>Atualizando a base de dados...</echo>
+		<exec executable="${mysql_install}/bin/mysql" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
+			<arg value="--user=${jdbc.username}"/>
+			<arg value="--password=${jdbc.password}"/>
+			<arg value="${jdbc.database}"/>
+		</exec>
+	</target>
+	
+	<target name="deploy" depends="update_db">
 		<echo>Realizando o deploy para o servidor...</echo>
 		
 		<!-- Exclui o diretório atual do projeto no Tomcat -->
