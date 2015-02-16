@@ -170,3 +170,6 @@ insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, requ
 	'2015-02-01 00:00:00.000'
 	from
 	usuario;
+	
+-- Inclusão de marca favorita no item de despensa
+alter table itemdespensa add column marca varchar(50) null;

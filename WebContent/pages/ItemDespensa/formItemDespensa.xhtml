@@ -59,21 +59,18 @@
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="2">
 			
 			Descrição:
 			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{managedBean.entity.arquivado}"/>				
-			<p:message for="txtDescricao"/>
 			
 			Despensa:
 			<h:selectOneMenu id="txtDespensa" value="#{managedBean.entity.despensa}" converter="entityConverter" disabled="#{managedBean.entity.arquivado}">
 	    		<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 	    	</h:selectOneMenu>
-	    	<p:message for="txtDespensa"/>
 			
 			Características:
 			<p:inputTextarea id="txtCaracteristicas" value="#{managedBean.entity.caracteristicas}" rows="3" cols="50" disabled="#{managedBean.entity.arquivado}"/>				
-			<h:outputText/>
 			
 			Unidade de Medida:
 			<h:selectOneMenu id="txtUnidadeMedida" value="#{managedBean.entity.unidadeMedida}" converter="entityConverter" rendered="#{empty managedBean.entity.movimentacao}">
@@ -82,39 +79,34 @@
 	    	<h:panelGroup rendered="#{not empty managedBean.entity.movimentacao}">
 	    		<h:outputText value="#{managedBean.entity.unidadeMedida.descricao}" />&nbsp;(<h:outputText value="#{managedBean.entity.unidadeMedida.sigla}" />)
 	    	</h:panelGroup>
-	    	<p:message for="txtUnidadeMedida"/>
+	    	
+	    	Marca favorita:
+	    	<p:inputText value="#{managedBean.entity.marca}"/>
 			
 			<h:outputText value="Quantidade atual:" rendered="#{managedBean.operation == 'edit'}"/>
 			<h:outputText id="txtQuantidadeAtual" value="#{managedBean.entity.quantidadeAtual}" rendered="#{managedBean.operation == 'edit'}"/>				
-			<h:outputText rendered="#{managedBean.operation == 'edit'}"/>
 			
 			Estoque (VERDE):
 			<p:inputText id="txtQuantidadeVerde" value="#{managedBean.entity.quantidadeVerde}" size="10" disabled="#{managedBean.entity.arquivado}"/>				
-			<p:message for="txtQuantidadeVerde"/>
 			
 			Estoque (AMARELO):
 			<p:inputText id="txtQuantidadeAmarelo" value="#{managedBean.entity.quantidadeAmarelo}" size="10" disabled="#{managedBean.entity.arquivado}"/>				
-			<p:message for="txtQuantidadeAmarelo"/>
 			
 			Estoque (VERMELHO):
 			<p:inputText id="txtQuantidadeVermelho" value="#{managedBean.entity.quantidadeVermelho}" size="10" disabled="#{managedBean.entity.arquivado}"/>				
-			<p:message for="txtQuantidadeVermelho"/>
 			
 			Perecível:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="#{managedBean.entity.arquivado}"/>
-			<h:outputText />	
+			<p:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="#{managedBean.entity.arquivado}"/>	
 			
 			<h:outputText value="Validade do estoque atual:" rendered="#{managedBean.operation == 'edit'}"/>			
 			<h:outputText value="#{managedBean.entity.validade}" rendered="#{managedBean.operation == 'edit'}">
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
-			<h:outputText rendered="#{managedBean.operation == 'edit'}"/>
 			
 			<h:outputText value="Valor unitário do estoque:" rendered="#{managedBean.operation == 'edit'}"/>
 			<h:outputText value="#{managedBean.entity.valor}" rendered="#{managedBean.operation == 'edit'}">
 				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-			</h:outputText>			
-			<h:outputText rendered="#{managedBean.operation == 'edit'}"/>	
+			</h:outputText>				
 			
 		</h:panelGrid>
 		

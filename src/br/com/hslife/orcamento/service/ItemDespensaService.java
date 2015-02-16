@@ -151,6 +151,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 				
 				ItemDespensa item = new ItemDespensa();
 				item.setDescricao(despensa.getDescricao());
+				item.setMarca(despensa.getMarca());
 				item.setCaracteristicas(despensa.getCaracteristicas());
 				item.setDespensa(despensa.getDespensa());
 				item.setUnidadeMedida(despensa.getUnidadeMedida());
@@ -172,6 +173,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 				
 				ItemDespensa item = new ItemDespensa();
 				item.setDescricao(despensa.getDescricao());
+				item.setMarca(despensa.getMarca());
 				item.setCaracteristicas(despensa.getCaracteristicas());
 				item.setDespensa(despensa.getDespensa());
 				item.setUnidadeMedida(despensa.getUnidadeMedida());

@@ -66,6 +66,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="itemdespensa", schema="orcamento")
@@ -104,6 +105,9 @@ public class ItemDespensa extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)
 	private double valor;
 	
+	@Column(length=50, nullable=true)	
+	private String marca;
+	
 	@Column
 	private boolean perecivel;
 	
@@ -129,6 +133,7 @@ public class ItemDespensa extends EntityPersistence {
 		private int quantidade = 0;
 		private double valor = 0.0;
 		private boolean perecivel = false;
+		private String marca = "";
 
 		public Builder() {}
 		
@@ -139,6 +144,7 @@ public class ItemDespensa extends EntityPersistence {
 		public Builder quantidade(int valor) {this.valor = valor; return this;}
 		public Builder valor(double valor) {this.valor = valor; return this;}
 		public Builder perecivel(boolean valor) {this.perecivel = valor; return this;}
+		public Builder marca(String valor) {this.marca = valor; return this;}
 		
 		public ItemDespensa build() {
 			return new ItemDespensa(this);
@@ -154,6 +160,7 @@ public class ItemDespensa extends EntityPersistence {
 		this.quantidadeAtual = builder.quantidade;
 		this.valor = builder.valor;
 		this.perecivel = builder.perecivel;
+		this.marca = builder.marca;
 	}
 	
 	public ItemDespensa() {
@@ -170,6 +177,8 @@ public class ItemDespensa extends EntityPersistence {
 		if (this.descricao == null || this.descricao.trim().isEmpty()) {
 			throw new BusinessException("Informe uma descrição!");
 		}
+		
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Marca favorita", marca, 50);
 		
 		if (this.despensa == null) {
 			throw new BusinessException("Informe a despensa!");
@@ -294,5 +303,13 @@ public class ItemDespensa extends EntityPersistence {
 
 	public void setPerecivel(boolean perecivel) {
 		this.perecivel = perecivel;
+	}
+
+	public String getMarca() {
+		return marca;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
 	}
 }
