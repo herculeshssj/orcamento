@@ -119,7 +119,7 @@
 	<target name="test" depends="update_db">
 		<echo>Rodando os testes unitários...</echo>
 		
-		<junit printsummary="on" fork="on" haltonerror="yes" haltonfailure="yes">
+		<junit printsummary="on" fork="on" haltonerror="yes" haltonfailure="no">
 			<classpath refid="master-classpath"></classpath>
 			<batchtest todir="${build.dir}">
 				<fileset dir="${test.dir}">
