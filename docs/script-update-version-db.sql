@@ -173,3 +173,17 @@ insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, requ
 	
 -- Inclusão de marca favorita no item de despensa
 alter table itemdespensa add column marca varchar(50) null;
+
+-- Regras de importação
+create table regraimportacao (
+	id bigint not null auto_increment,
+	texto varchar(100) not null,
+	idCategoria bigint null,
+	idFavorecido bigint null,
+	idMeioPagamento bigint null,
+	idConta bigint not null,
+	versionEntity datetime not null default '2015-04-01 00:00:00',
+	primary key (id)
+) Engine=InnoDB;
+
+alter table regraimportacao add constraint fk_regraimportacao_conta foreign key(idConta) references conta(id);

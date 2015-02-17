@@ -60,6 +60,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
+import br.com.hslife.orcamento.util.EntityInitializerFactory;
 import br.com.hslife.orcamento.util.Util;
 
 public class TelefoneRepositoryTest extends AbstractTestRepositories {
@@ -87,11 +88,7 @@ public class TelefoneRepositoryTest extends AbstractTestRepositories {
 		usuarioRepository.save(usuario);
 		
 		// Cria uma nova instância de endereço para testar os recursos do CRUD
-		telefone.setDdd("21");
-		telefone.setDescricao("Comercial");
-		telefone.setNumero("32936010");
-		telefone.setRamal("6010");
-		telefone.setUsuario(usuario);
+		telefone = EntityInitializerFactory.initializeTelefone(usuario);
 	}
 
 	@Test

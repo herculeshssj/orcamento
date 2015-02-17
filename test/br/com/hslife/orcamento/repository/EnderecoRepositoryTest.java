@@ -50,7 +50,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -59,8 +58,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoUsuario;
-import br.com.hslife.orcamento.util.Util;
+import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
 public class EnderecoRepositoryTest extends AbstractTestRepositories {
 	
@@ -79,24 +77,11 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 	@Before
 	public void initializeEntities() {
 		// Cria um novo usuário
-		usuario.setEmail("contato@hslife.com.br");
-		usuario.setLogin("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA));
-		usuario.setNome("Usuário de Teste - PessoalRepository");
-		usuario.setSenha(Util.SHA1("teste"));
-		usuario.setTipoUsuario(TipoUsuario.ROLE_USER);
+		usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioRepository.save(usuario);
 		
 		// Cria uma nova instância de endereço para testar os recursos do CRUD
-		endereco.setTipoLogradouro("Avenida");
-		endereco.setLogradouro("Ministro Lafaeyte de Andrade");
-		endereco.setNumero("1683");
-		endereco.setComplemento("Bl. 3 Apt. 404");
-		endereco.setBairro("Marco II");
-		endereco.setCidade("Nova Iguaçu");
-		endereco.setEstado("RJ");
-		endereco.setCep("26261220");
-		endereco.setDescricao("Residencial");
-		endereco.setUsuario(usuario);
+		endereco = EntityInitializerFactory.initializeEndereco(usuario);
 	}
 
 	@Test
