@@ -48,13 +48,18 @@ package br.com.hslife.orcamento.util;
 
 import java.util.Date;
 
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Endereco;
+import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 
 public class EntityInitializerFactory {
@@ -130,5 +135,34 @@ public class EntityInitializerFactory {
 		regra.setIdMeioPagamento(1l);
 		regra.setConta(conta);
 		return regra;
+	}
+	
+	public static Categoria initializeCategoria(Usuario usuario, TipoCategoria tipoCategoria, boolean padrao) {
+		Categoria categoria = new Categoria();
+		categoria.setAtivo(true);
+		categoria.setPadrao(padrao);
+		categoria.setTipoCategoria(tipoCategoria);
+		categoria.setDescricao("Categoria de teste - " + tipoCategoria);
+		categoria.setUsuario(usuario);
+		return categoria;
+	}
+	
+	public static Favorecido initializeFavorecido(Usuario usuario, TipoPessoa tipoPessoa, boolean padrao) {
+		Favorecido favorecido = new Favorecido();
+		favorecido.setAtivo(true);
+		favorecido.setNome("Favorecido de teste - " + tipoPessoa);
+		favorecido.setPadrao(padrao);
+		favorecido.setTipoPessoa(tipoPessoa);
+		favorecido.setUsuario(usuario);
+		return favorecido;
+	}
+	
+	public static MeioPagamento initializeMeioPagamento(Usuario usuario, boolean padrao) {
+		MeioPagamento meioPagamento = new MeioPagamento();
+		meioPagamento.setAtivo(true);
+		meioPagamento.setDescricao("Meio de pagamento de teste");
+		meioPagamento.setPadrao(padrao);
+		meioPagamento.setUsuario(usuario);
+		return meioPagamento;
 	}
 }

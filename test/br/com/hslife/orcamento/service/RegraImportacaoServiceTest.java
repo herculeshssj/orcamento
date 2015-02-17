@@ -68,7 +68,7 @@ import br.com.hslife.orcamento.facade.IRegraImportacao;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
-public class ImportacaoLancamentoServiceTest extends AbstractTestServices {
+public class RegraImportacaoServiceTest extends AbstractTestServices {
 	
 	private RegraImportacao regra = new RegraImportacao();
 	private List<RegraImportacao> listaRegra = new ArrayList<RegraImportacao>();

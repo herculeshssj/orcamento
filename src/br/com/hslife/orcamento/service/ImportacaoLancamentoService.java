@@ -68,6 +68,7 @@ import net.sf.ofx4j.io.AggregateUnmarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.RegraImportacaoComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Categoria;
@@ -116,6 +117,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
+	
+	@Autowired
+	private RegraImportacaoComponent regraImportacaoComponent;
 
 	public void setLancamentoImportadoRepository(
 			LancamentoImportadoRepository lancamentoImportadoRepository) {
@@ -210,6 +214,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			moedas.put(moeda.getCodigoMonetario(), moeda);
 		}
 		
+		Conta conta = null;
+		
 		// Itera a lista de lançamentos importados para gerar os lançamentos da conta correspondentes
 		for (LancamentoImportado li : lancamentosImportados) {
 			if (lancamentoContaRepository.findByHash(li.getHash()) == null) {
@@ -245,10 +251,10 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				}
 				
 				lancamentos.add(lc);
-			
+				conta = lc.getConta();
 			}
 		}
-		return lancamentos;
+		return regraImportacaoComponent.processarRegras(conta, lancamentos);
 	}
 
 	@Override
