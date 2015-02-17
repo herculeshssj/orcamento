@@ -54,7 +54,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public abstract class AbstractCRUDController<E extends EntityPersistence> extends AbstractController {
+public abstract class AbstractSimpleCRUDController<E extends EntityPersistence> extends AbstractController {
 	
 	/**
 	 * 
@@ -65,29 +65,24 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	protected Long idEntity;
 	protected List<E> listEntity;
 	
-	protected String goToListPage;
-	protected String goToFormPage;
-	protected String goToViewPage;
+	protected String goToPage;
+	protected String goToModule;
 	
-	protected String operation = "list";
-	
-	public AbstractCRUDController(E entity) {
+	public AbstractSimpleCRUDController(E entity) {
 		this.entity = entity;
-		goToListPage = "/pages/" + entity.getClass().getSimpleName() + "/list" + entity.getClass().getSimpleName();
-		goToFormPage = "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
-		goToViewPage = "/pages/" + entity.getClass().getSimpleName() + "/view" + entity.getClass().getSimpleName();
+		goToPage = "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
+		goToModule = "/pages/menu/inicio.faces";
 	}
 	
 	protected abstract ICRUDService getService();
 	
-	protected void validate(String action) throws BusinessException {
+	protected void validate() throws BusinessException {
 		entity.validate();
 		getService().validar(entity);
 	}
 
 	public String startUp() {
-		operation = "list";
-		return goToListPage;
+		return goToPage;
 	}
 	
 	@Override
@@ -95,29 +90,27 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 		return super.getModuleTitle() + actionTitle;
 	}
 	
-	public String list() {
-		operation = "list";
+	public String goToModule() {
+		return goToModule;
+	}
+	
+	public void create() {
 		actionTitle = "";
-		return goToListPage;
+		initializeEntity();
 	}
 	
-	public String create() {
-		operation = "create";
-		actionTitle = " - Novo";
-		return goToFormPage;
-	}
-	
-	public String save() {
+	public void save() {
 		try {
 			if (entity.getId() == null) {
-				validate(operation);
+				validate();
 				getService().cadastrar(entity);
 				infoMessage("Registro cadastrado com sucesso!");
 			} else {
-				validate(operation);
+				validate();
 				getService().alterar(entity);
 				infoMessage("Registro alterado com sucesso!");
 			}
+			actionTitle = "";
 			
 			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
 			if (listEntity != null && !listEntity.isEmpty()) {
@@ -134,41 +127,23 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 			} else {
 				initializeEntity();
 			}
-			
-			return list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return "";
 	}
 	
-	public String view() {
+	public void edit() {
 		try {
 			entity = (E) getService().buscarPorID(idEntity);
-			operation = "delete";
-			actionTitle = " - Excluir";
-			return goToViewPage;
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	public String edit() {
-		try {
-			entity = (E) getService().buscarPorID(idEntity);
-			operation = "edit";
 			actionTitle = " - Editar";
-			return goToFormPage;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return "";
 	}
 	
-	public String delete() {
+	public void delete() {
 		try {
-			validate(operation);
+			entity = (E) getService().buscarPorID(idEntity);
 			getService().excluir(entity);
 			infoMessage("Registro excluído com sucesso!");
 			
@@ -188,37 +163,13 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 				initializeEntity();
 			}
 						
-			return list();
+			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return "";
 	}
 	
 	public abstract void find();
-	
-	public String cancel() {
-		try {
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-					find();
-				}
-			} else {
-				initializeEntity();
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return list();
-	}
 	
 	public int getQuantRegistros() {
 		if (listEntity == null || listEntity.isEmpty()) {
@@ -250,13 +201,5 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 
 	public void setListEntity(List<E> listEntity) {
 		this.listEntity = listEntity;
-	}
-	
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
 	}
 }

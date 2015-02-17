@@ -123,7 +123,6 @@ public class MovimentacaoLancamentoController extends AbstractController {
 
 	public MovimentacaoLancamentoController() {
 		lancamentosSelecionados = new ArrayList<LancamentoConta>();
-		operation = "list";
 		
 		moduleTitle = "Movimentação de Lançamentos";
 	}

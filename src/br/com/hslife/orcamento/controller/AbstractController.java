@@ -70,8 +70,6 @@ public abstract class AbstractController implements Serializable {
 	protected String moduleTitle = "";
 	protected String actionTitle = "";
 	
-	protected String operation = "list";
-	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
@@ -143,14 +141,6 @@ public abstract class AbstractController implements Serializable {
 
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
 		this.usuarioComponent = usuarioComponent;
-	}
-
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
 	}
 
 	public void setVersaoComponent(VersaoComponent versaoComponent) {
