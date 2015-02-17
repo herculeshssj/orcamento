@@ -61,6 +61,12 @@ public class EntityPersistenceUtil {
 		}		
 	}
 	
+	public static void validaTamanhoExatoCampoStringOpcional(String nomeCampo, String campo, int tamanho) throws BusinessException {
+		if (campo != null && campo.trim().length() != tamanho) {
+			throw new BusinessException("Campo " + nomeCampo + " aceita exatamente "+ tamanho + " caracteres!");
+		}		
+	}
+	
 	public static void validaTamanhoCampoStringObrigatorio(String nomeCampo, String campo, int tamanho) throws BusinessException {
 		if (campo == null) {
 			throw new BusinessException("Campo " + nomeCampo + " não pode ser nulo.");
@@ -72,6 +78,20 @@ public class EntityPersistenceUtil {
 		
 		if (campo.trim().length() > tamanho) {
 			throw new BusinessException("Campo " + nomeCampo + " aceita no máximo "+ tamanho + " caracteres!");
+		}		
+	}
+	
+	public static void validaTamanhoExatoCampoStringObrigatorio(String nomeCampo, String campo, int tamanho) throws BusinessException {
+		if (campo == null) {
+			throw new BusinessException("Campo " + nomeCampo + " não pode ser nulo.");
+		}
+		
+		if (campo.trim().isEmpty()) {
+			throw new BusinessException("Campo " + nomeCampo + " não pode ser vazio.");
+		}
+		
+		if (campo.trim().length() != tamanho) {
+			throw new BusinessException("Campo " + nomeCampo + " aceita exatamente "+ tamanho + " caracteres!");
 		}		
 	}
 	

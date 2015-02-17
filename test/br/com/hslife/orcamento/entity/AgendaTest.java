@@ -93,10 +93,10 @@ public class AgendaTest {
 	@Test
 	public void testValidateDescricao() {
 		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
+			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo aceita no máximo 200 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -218,7 +218,7 @@ public class AgendaTest {
 	@Test
 	public void testComporTextoAgendamentoPrevisao() throws BusinessException {
 		Calendar dataTest = Calendar.getInstance();
-		dataTest.set(Calendar.DAY_OF_MONTH, 0);
+		dataTest.set(Calendar.DAY_OF_MONTH, 1);
 		dataTest.set(Calendar.MONTH, 2);
 		dataTest.set(Calendar.YEAR, 2005);
 		dataTest.set(Calendar.HOUR, 15);
@@ -235,7 +235,7 @@ public class AgendaTest {
 	@Test
 	public void testComporTextoAgendamentoCompromisso() throws BusinessException {
 		Calendar dataTest = Calendar.getInstance();
-		dataTest.set(Calendar.DAY_OF_MONTH, 0);
+		dataTest.set(Calendar.DAY_OF_MONTH, 1);
 		dataTest.set(Calendar.MONTH, 2);
 		dataTest.set(Calendar.YEAR, 2005);
 		dataTest.set(Calendar.HOUR, 15);
@@ -264,16 +264,16 @@ public class AgendaTest {
 		assertEquals("01/03/2005\nà\n02/03/2005", entity.comporTextoAgendamento());
 				
 		entity.setDiaInteiro(false);
-		dataTest.set(Calendar.HOUR, 15);
+		dataTest.set(Calendar.HOUR, 3);
 		dataTest.set(Calendar.MINUTE, 30);
 		entity.setFim(dataTest.getTime());
-		assertEquals("01/03/2005 03:30\nà\n02/03/2005 15:30", entity.comporTextoAgendamento());
+		assertEquals("01/03/2005 15:30\nà\n02/03/2005 15:30", entity.comporTextoAgendamento());
 	}
 	
 	@Test
 	public void testComporTextoAgendamentoTarefa() throws BusinessException {
 		Calendar dataTest = Calendar.getInstance();
-		dataTest.set(Calendar.DAY_OF_MONTH, 0);
+		dataTest.set(Calendar.DAY_OF_MONTH, 1);
 		dataTest.set(Calendar.MONTH, 2);
 		dataTest.set(Calendar.YEAR, 2005);
 		dataTest.set(Calendar.HOUR, 15);
@@ -294,16 +294,16 @@ public class AgendaTest {
 		}
 		
 		entity.setInicio(dataTest.getTime());
-		assertEquals("01/03/2005 03:30", entity.comporTextoAgendamento());
+		assertEquals("01/03/2005 15:30", entity.comporTextoAgendamento());
 		
 		dataTest.set(Calendar.DAY_OF_MONTH, 2);
 		entity.setFim(dataTest.getTime());
-		assertEquals("01/03/2005\nà\n02/03/2005", entity.comporTextoAgendamento());
+		assertEquals("01/03/2005 15:30\nà\n02/03/2005 15:30", entity.comporTextoAgendamento());
 				
 		entity.setDiaInteiro(false);
-		dataTest.set(Calendar.HOUR, 15);
+		dataTest.set(Calendar.HOUR, 3);
 		dataTest.set(Calendar.MINUTE, 30);
 		entity.setFim(dataTest.getTime());
-		assertEquals("01/03/2005\nà\n02/03/2005", entity.comporTextoAgendamento());
+		assertEquals("01/03/2005 15:30\nà\n02/03/2005 15:30", entity.comporTextoAgendamento());
 	}
 }

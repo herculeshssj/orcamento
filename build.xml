@@ -77,6 +77,11 @@
 		    	<include name="*.jar"/>
 		   	</fileset>
 			
+			<!-- Definição da pasta com as libs do JUnit -->
+		   	<fileset dir="${test.dir}/lib">
+		    	<include name="*.jar"/>
+		   	</fileset>
+			
 			<!-- Definição da pasta de instalação do Tomcat -->
 			<fileset dir="${tomcat_install}/lib">
 		    	<include name="*.jar"/>
@@ -89,6 +94,7 @@
 		<mkdir dir="${build.dir}"/>
 	   	<javac destdir="${build.dir}" source="${source}" target="${target}" debug="true" deprecation="false" optimize="false" failonerror="true" includeantruntime="false">
 	    	<src path="${src.dir}"/>
+	   		<src path="${test.dir}"/>
 	    	<classpath refid="master-classpath"/>
 	   	</javac>
 		
@@ -101,7 +107,29 @@
         </copy>
 	</target>
 	
-	<target name="package" depends="compile">
+	<target name="update_db" depends="compile">
+		<echo>Atualizando a base de dados...</echo>
+		<exec executable="${mysql_command}" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
+			<arg value="--user=${jdbc.username}"/>
+			<arg value="--password=${jdbc.password}"/>
+			<arg value="${jdbc.database}"/>
+		</exec>
+	</target>
+	
+	<target name="test" depends="update_db">
+		<echo>Rodando os testes unitários...</echo>
+		
+		<junit printsummary="on" fork="on" haltonerror="yes" haltonfailure="yes">
+			<classpath refid="master-classpath"></classpath>
+			<batchtest todir="${build.dir}">
+				<fileset dir="${test.dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="package" depends="test">
 		<echo>Gerando o WAR do projeto...</echo>
 		
 		<!-- Geração do arquivo WAR -->
@@ -112,16 +140,7 @@
 		</war>
 	</target>
 	
-	<target name="update_db" depends="package">
-		<echo>Atualizando a base de dados...</echo>
-		<exec executable="${mysql_command}" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
-			<arg value="--user=${jdbc.username}"/>
-			<arg value="--password=${jdbc.password}"/>
-			<arg value="${jdbc.database}"/>
-		</exec>
-	</target>
-	
-	<target name="deploy" depends="update_db">
+	<target name="deploy" depends="package">
 		<echo>Realizando o deploy para o servidor...</echo>
 		
 		<!-- Exclui o diretório atual do projeto no Tomcat -->

@@ -143,8 +143,8 @@ public class Endereco extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Complemento", this.complemento, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Bairro", this.bairro, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Cidade", this.cidade, 100);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Estado", this.estado, 2);
-		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("CEP", this.cep, 8);
+		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("Estado", this.estado, 2);
+		EntityPersistenceUtil.validaTamanhoExatoCampoStringOpcional("CEP", this.cep, 8);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		
 		if (this.usuario == null) {
