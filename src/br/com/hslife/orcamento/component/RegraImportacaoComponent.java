@@ -92,7 +92,7 @@ public class RegraImportacaoComponent {
 			for (RegraImportacao regra : regras) {
 				//Pattern p = Pattern.compile(regra.getTexto());
 		        //Matcher m = p.matcher(lancamento.getDescricao());
-		        boolean matchFound = lancamento.getDescricao().contains(regra.getTexto());
+				boolean matchFound = lancamento.getDescricao().toUpperCase().contains(regra.getTexto().toUpperCase());
 		        if (matchFound) {
 		        	if (regra.getIdCategoria() != null) {
 		        		lancamento.setCategoria(categoriaRepository.findById(regra.getIdCategoria()));
