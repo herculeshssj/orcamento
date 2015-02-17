@@ -129,15 +129,15 @@
 		
 		<!-- Exclui o arquivo .WAR da pasta webapps do Tomcat -->
 		<delete>
-			<fileset dir=".">
-				<include name="*.war"/>
+			<fileset dir="${tomcat_install}/webapps">
+				<include name="ROOT.war"/>
 			</fileset>
 		</delete>
 		
 		<!-- Copia o arquivo .WAR para a pasta webapps do Tomcat -->
-		<copy todir = "${tomcat_install}/webapps" preservelastmodified = "true">
+		<copy todir = "${tomcat_install}/webapps">
         	<fileset dir=".">
-           		<include name="*.war"/>
+           		<include name="ROOT.war"/>
          	</fileset>
       	</copy>
 		
