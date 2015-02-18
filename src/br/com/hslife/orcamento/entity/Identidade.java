@@ -66,7 +66,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="identidade", schema="orcamento")
+@Table(name="identidade")
 @SuppressWarnings("serial")
 public class Identidade extends EntityPersistence {
 	

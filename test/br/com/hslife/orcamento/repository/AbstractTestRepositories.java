@@ -54,7 +54,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/applicationContext.xml"})
+@ContextConfiguration(locations = {"classpath:/spring-config-junit.xml"})
 @TransactionConfiguration
 @Transactional
 public abstract class AbstractTestRepositories extends AbstractTransactionalJUnit4SpringContextTests {

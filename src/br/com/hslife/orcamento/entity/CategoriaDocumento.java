@@ -56,7 +56,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="categoriadocumento", schema="orcamento")
+@Table(name="categoriadocumento")
 @SuppressWarnings("serial")
 public class CategoriaDocumento extends EntityPersistence {
 

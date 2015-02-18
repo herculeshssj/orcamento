@@ -65,7 +65,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="favorecido", schema="orcamento")
+@Table(name="favorecido")
 @SuppressWarnings("serial")
 public class Favorecido extends EntityPersistence {
 

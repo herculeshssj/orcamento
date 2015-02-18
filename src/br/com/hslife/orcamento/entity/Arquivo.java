@@ -70,7 +70,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.Container;
 
 @Entity
-@Table(name="arquivo", schema="orcamento")
+@Table(name="arquivo")
 @SuppressWarnings("serial")
 public class Arquivo extends EntityPersistence {
 

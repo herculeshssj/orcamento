@@ -66,7 +66,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="conta", schema="orcamento")
+@Table(name="conta")
 public class Conta extends EntityPersistence {
 	
 	/**

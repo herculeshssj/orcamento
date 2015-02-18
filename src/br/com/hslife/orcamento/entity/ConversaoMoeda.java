@@ -58,7 +58,7 @@ import javax.persistence.Table;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="conversaomoeda", schema="orcamento")
+@Table(name="conversaomoeda")
 public class ConversaoMoeda extends EntityPersistence {
 
 	/**

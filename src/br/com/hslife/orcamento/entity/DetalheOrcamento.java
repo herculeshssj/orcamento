@@ -63,7 +63,7 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="detalheorcamento", schema="orcamento")
+@Table(name="detalheorcamento")
 @SuppressWarnings("serial")
 public class DetalheOrcamento extends EntityPersistence {
 	

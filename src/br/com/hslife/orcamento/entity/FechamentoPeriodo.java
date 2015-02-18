@@ -65,7 +65,7 @@ import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="fechamentoperiodo", schema="orcamento")
+@Table(name="fechamentoperiodo")
 @SuppressWarnings("serial")
 public class FechamentoPeriodo extends EntityPersistence {
 	

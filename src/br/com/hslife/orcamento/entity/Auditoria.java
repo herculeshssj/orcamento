@@ -65,7 +65,7 @@ import javax.persistence.Version;
 import org.json.JSONObject;
 
 @Entity
-@Table(name="auditoria", schema="orcamento")
+@Table(name="auditoria")
 public class Auditoria implements Serializable {
 
 	/**

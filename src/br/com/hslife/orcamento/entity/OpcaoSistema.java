@@ -60,7 +60,7 @@ import javax.persistence.Table;
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
 
 @Entity
-@Table(name="opcaosistema", schema="orcamento")
+@Table(name="opcaosistema")
 public class OpcaoSistema extends EntityPersistence {
 	
 	/**

@@ -74,7 +74,7 @@ import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="faturacartao", schema="orcamento")
+@Table(name="faturacartao")
 public class FaturaCartao extends EntityPersistence {
 
 	/**

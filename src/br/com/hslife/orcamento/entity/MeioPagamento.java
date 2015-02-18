@@ -62,7 +62,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="meiopagamento", schema="orcamento")
+@Table(name="meiopagamento")
 @SuppressWarnings({"serial"})
 public class MeioPagamento extends EntityPersistence {
 

@@ -65,7 +65,7 @@ import org.hibernate.annotations.FetchMode;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="despensa", schema="orcamento")
+@Table(name="despensa")
 @SuppressWarnings("serial")
 public class Despensa extends EntityPersistence {
 	

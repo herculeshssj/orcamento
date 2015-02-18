@@ -69,7 +69,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="agenda", schema="orcamento")
+@Table(name="agenda")
 @SuppressWarnings("serial")
 public class Agenda extends EntityPersistence {
 	

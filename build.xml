@@ -107,16 +107,17 @@
         </copy>
 	</target>
 	
-	<target name="update_db" depends="compile">
-		<echo>Atualizando a base de dados...</echo>
+	<target name="update_db_test" depends="compile">
+		<echo>Atualizando a base de dados de teste...</echo>
+		<!-- Executa o script de atualização -->
 		<exec executable="${mysql_command}" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
 			<arg value="--user=${jdbc.username}"/>
 			<arg value="--password=${jdbc.password}"/>
-			<arg value="${jdbc.database}"/>
+			<arg value="${jdbc.test.database}"/>
 		</exec>
 	</target>
 	
-	<target name="test" depends="update_db">
+	<target name="test" depends="update_db_test">
 		<echo>Rodando os testes unitários...</echo>
 		
 		<junit printsummary="on" fork="on" haltonerror="yes" haltonfailure="no">
@@ -140,7 +141,35 @@
 		</war>
 	</target>
 	
-	<target name="deploy" depends="package">
+	<target name="update_db" depends="package">
+		<echo>Atualizando a base de dados...</echo>
+		
+		<!-- Exclui o backup existente -->
+		<delete>
+			<fileset dir="${mysql_backup_dir}">
+				<include name="orcamento.sql"/>
+			</fileset>
+		</delete>
+		
+		<!-- Realiza o backup da base -->
+		<exec executable="${mysql_command}" output="${mysql_backup_dir}/orcamento.sql" failonerror="true">
+			<arg value="--add-drop-table"/>
+			<arg value="--hex-blob"/>
+			<arg value="--host=${jdbc.hostname}"/>
+			<arg value="--user=${jdbc.username}"/>
+			<arg value="--password=${jdbc.password}"/>
+			<arg value="${jdbc.database}"/>
+		</exec>		
+		
+		<!-- Realiza as mudanças na base -->
+		<exec executable="${mysql_command}" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
+			<arg value="--user=${jdbc.username}"/>
+			<arg value="--password=${jdbc.password}"/>
+			<arg value="${jdbc.database}"/>
+		</exec>
+	</target>
+	
+	<target name="deploy" depends="update_db">
 		<echo>Realizando o deploy para o servidor...</echo>
 		
 		<!-- Exclui o diretório atual do projeto no Tomcat -->

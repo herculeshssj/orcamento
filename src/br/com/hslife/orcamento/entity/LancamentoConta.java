@@ -69,8 +69,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -79,7 +77,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 
 
 @Entity
-@Table(name="lancamentoconta", schema="orcamento")
+@Table(name="lancamentoconta")
 public class LancamentoConta extends EntityPersistence {
 
 	/**

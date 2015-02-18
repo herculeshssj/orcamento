@@ -59,7 +59,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="regraimportacao", schema="orcamento")
+@Table(name="regraimportacao")
 public class RegraImportacao extends EntityPersistence {
 
 	/**

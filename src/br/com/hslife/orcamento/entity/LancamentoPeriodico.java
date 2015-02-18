@@ -78,7 +78,7 @@ import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
-@Table(name="lancamentoperiodico", schema="orcamento")
+@Table(name="lancamentoperiodico")
 public class LancamentoPeriodico extends EntityPersistence {
 
 	/**

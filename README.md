@@ -88,12 +88,12 @@ Após instalar o MySQL, acesse via console ou usando uma ferramenta gráfica de 
 ```sql
 -- Criação da base de dados
 create database orcamento;
-create database orcamentoTest;
+create database orcamentotest;
 
 -- Criação do usuário para acessar a base
 create user 'orcamento'@'localhost' identified by 'd1nh31r0';
 grant all privileges on orcamento.* to 'orcamento'@'localhost';
-grant all privileges on orcamento.* to 'orcamentoTest'@'localhost';
+grant all privileges on orcamentotest.* to 'orcamento'@'localhost';
 
 -- Criação da base de dados
 use orcamento;
