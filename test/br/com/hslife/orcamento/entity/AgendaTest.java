@@ -215,33 +215,21 @@ public class AgendaTest {
 		assertEquals(dataTest.getTime(), entity.comporData(dataTest.getTime(), 15, 30, 45));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testComporTextoAgendamentoPrevisao() throws BusinessException {
-		Calendar dataTest = Calendar.getInstance();
-		dataTest.set(Calendar.DAY_OF_MONTH, 1);
-		dataTest.set(Calendar.MONTH, 2);
-		dataTest.set(Calendar.YEAR, 2005);
-		dataTest.set(Calendar.HOUR, 15);
-		dataTest.set(Calendar.MINUTE, 30);
-		dataTest.set(Calendar.SECOND, 45);
-		dataTest.set(Calendar.MILLISECOND, 0);
+		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
 		// Testando o tipo PREVISAO
-		entity.setInicio(dataTest.getTime());
+		entity.setInicio(dataTest);
 		entity.setTipoAgendamento(TipoAgendamento.PREVISAO);
 		assertEquals("01/03/2005", entity.comporTextoAgendamento());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testComporTextoAgendamentoCompromisso() throws BusinessException {
-		Calendar dataTest = Calendar.getInstance();
-		dataTest.set(Calendar.DAY_OF_MONTH, 1);
-		dataTest.set(Calendar.MONTH, 2);
-		dataTest.set(Calendar.YEAR, 2005);
-		dataTest.set(Calendar.HOUR, 15);
-		dataTest.set(Calendar.MINUTE, 30);
-		dataTest.set(Calendar.SECOND, 45);
-		dataTest.set(Calendar.MILLISECOND, 0);
+		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
 		// Testando o tipo COMPROMISSO
 		entity.setFim(null);
@@ -255,31 +243,26 @@ public class AgendaTest {
 			}			
 		}
 		
-		entity.setInicio(dataTest.getTime());
+		entity.setInicio(dataTest);
 		entity.setDiaInteiro(true);
 		assertEquals("01/03/2005", entity.comporTextoAgendamento());
 		
-		dataTest.set(Calendar.DAY_OF_MONTH, 2);
-		entity.setFim(dataTest.getTime());
+		Date dataTestFim = (Date)dataTest.clone();
+		dataTestFim.setDate(2);
+		entity.setFim(dataTestFim);
 		assertEquals("01/03/2005\nà\n02/03/2005", entity.comporTextoAgendamento());
 				
 		entity.setDiaInteiro(false);
-		dataTest.set(Calendar.HOUR, 3);
-		dataTest.set(Calendar.MINUTE, 30);
-		entity.setFim(dataTest.getTime());
+		dataTestFim.setHours(15);
+		dataTestFim.setMinutes(30);
+		entity.setFim(dataTestFim);
 		assertEquals("01/03/2005 15:30\nà\n02/03/2005 15:30", entity.comporTextoAgendamento());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testComporTextoAgendamentoTarefa() throws BusinessException {
-		Calendar dataTest = Calendar.getInstance();
-		dataTest.set(Calendar.DAY_OF_MONTH, 1);
-		dataTest.set(Calendar.MONTH, 2);
-		dataTest.set(Calendar.YEAR, 2005);
-		dataTest.set(Calendar.HOUR, 15);
-		dataTest.set(Calendar.MINUTE, 30);
-		dataTest.set(Calendar.SECOND, 45);
-		dataTest.set(Calendar.MILLISECOND, 0);
+		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
 		// Testando o tipo COMPROMISSO
 		entity.setFim(null);
@@ -293,17 +276,18 @@ public class AgendaTest {
 			}			
 		}
 		
-		entity.setInicio(dataTest.getTime());
+		entity.setInicio(dataTest);
 		assertEquals("01/03/2005 15:30", entity.comporTextoAgendamento());
 		
-		dataTest.set(Calendar.DAY_OF_MONTH, 2);
-		entity.setFim(dataTest.getTime());
+		Date dataTestFim = (Date)dataTest.clone();
+		dataTestFim.setDate(2);
+		entity.setFim(dataTestFim);
 		assertEquals("01/03/2005 15:30\nà\n02/03/2005 15:30", entity.comporTextoAgendamento());
 				
 		entity.setDiaInteiro(false);
-		dataTest.set(Calendar.HOUR, 3);
-		dataTest.set(Calendar.MINUTE, 30);
-		entity.setFim(dataTest.getTime());
+		dataTestFim.setHours(15);
+		dataTestFim.setMinutes(30);
+		entity.setFim(dataTestFim);
 		assertEquals("01/03/2005 15:30\nà\n02/03/2005 15:30", entity.comporTextoAgendamento());
 	}
 }
