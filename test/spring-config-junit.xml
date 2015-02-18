@@ -47,11 +47,10 @@
   -->
   
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 						http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/context
@@ -59,11 +58,7 @@
 						http://www.springframework.org/schema/tx
 						http://www.springframework.org/schema/tx/spring-tx.xsd
 						http://www.springframework.org/schema/aop
-						http://www.springframework.org/schema/aop/spring-aop.xsd						
-						http://www.springframework.org/schema/security 
-						http://www.springframework.org/schema/security/spring-security.xsd
-						http://www.springframework.org/schema/task
-						http://www.springframework.org/schema/task/spring-task.xsd">
+						http://www.springframework.org/schema/aop/spring-aop.xsd">
 						
 	<!-- General -->
 	<context:component-scan base-package="br.com.hslife.orcamento" />
@@ -106,23 +101,4 @@
     
     <tx:annotation-driven transaction-manager="transactionManager"/>
     
-    <!-- Task Scheduler -->
-    <task:annotation-driven />
- 
- 	<!-- Spring Security -->
- 	<sec:http auto-config="true" access-denied-page="/acessoNegado.faces">
-	    <sec:form-login login-page="/login.faces" default-target-url="/pages/menu/inicio.faces" authentication-failure-url="/erroLogin.faces" />
-	    <sec:intercept-url pattern="/pages/**" access="ROLE_USER,ROLE_ADMIN" />
-	    <sec:logout delete-cookies="JSESSIONID" />
-	    <sec:remember-me key="uniqueAndSecret" token-validity-seconds="86400"/>	    
-	</sec:http>
-	
-	<sec:authentication-manager>
-	    <sec:authentication-provider>
-	    	<sec:password-encoder hash="sha-256"/>
-	        <sec:jdbc-user-service data-source-ref="dataSource"
-	            users-by-username-query="select login as username, senha as password, case ativo when 1 then 'true' else 'false' end as enable from orcamento.usuario where login=?"
-	            authorities-by-username-query="select login as username, tipoUsuario as authority from orcamento.usuario where login=?" />
-	    </sec:authentication-provider>
-	</sec:authentication-manager>
 </beans>

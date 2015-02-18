@@ -97,10 +97,10 @@ grant all privileges on orcamentotest.* to 'orcamento'@'localhost';
 
 -- Criação da base de dados
 use orcamento;
-source /caminho/para/o/workspace/eclipse/Orcamento/docs/script-create-db.sql;
+source /caminho/para/o/workspace/eclipse/Orcamento/docs/script-update-all-db.sql;
 
 use orcamentoTest;
-source /caminho/para/o/workspace/eclipse/Orcamento/docs/script-create-db.sql;
+source /caminho/para/o/workspace/eclipse/Orcamento/docs/script-update-all-db.sql;
 ```
 
 *Usuário:* admin

@@ -104,13 +104,17 @@
             	<include name="*.xml"/>
             	<include name="*.properties"/>
             </fileset>
+			<fileset dir="test">
+            	<include name="*.xml"/>
+            	<include name="*.properties"/>
+            </fileset>
         </copy>
 	</target>
 	
 	<target name="update_db_test" depends="compile">
 		<echo>Atualizando a base de dados de teste...</echo>
 		<!-- Executa o script de atualização -->
-		<exec executable="${mysql_command}" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
+		<exec executable="${mysql_command}" input="${docs.dir}/script-update-test-db.sql" failonerror="true">
 			<arg value="--user=${jdbc.username}"/>
 			<arg value="--password=${jdbc.password}"/>
 			<arg value="${jdbc.test.database}"/>
@@ -142,8 +146,6 @@
 	</target>
 	
 	<target name="update_db" depends="package">
-		<echo>Atualizando a base de dados...</echo>
-		
 		<!-- Exclui o backup existente -->
 		<delete>
 			<fileset dir="${mysql_backup_dir}">
@@ -152,7 +154,8 @@
 		</delete>
 		
 		<!-- Realiza o backup da base -->
-		<exec executable="${mysql_command}" output="${mysql_backup_dir}/orcamento.sql" failonerror="true">
+		<echo>Realizando backup da base de dados...</echo>
+		<exec executable="${mysq_dump_command}" output="${mysql_backup_dir}/orcamento.sql" failonerror="true">
 			<arg value="--add-drop-table"/>
 			<arg value="--hex-blob"/>
 			<arg value="--host=${jdbc.hostname}"/>
@@ -162,6 +165,7 @@
 		</exec>		
 		
 		<!-- Realiza as mudanças na base -->
+		<echo>Atualizando a base de dados...</echo>
 		<exec executable="${mysql_command}" input="${docs.dir}/script-update-production-db.sql" failonerror="true">
 			<arg value="--user=${jdbc.username}"/>
 			<arg value="--password=${jdbc.password}"/>

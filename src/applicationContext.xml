@@ -47,7 +47,8 @@
   -->
   
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:sec="http://www.springframework.org/schema/security"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
@@ -121,8 +122,8 @@
 	    <sec:authentication-provider>
 	    	<sec:password-encoder hash="sha-256"/>
 	        <sec:jdbc-user-service data-source-ref="dataSource"
-	            users-by-username-query="select login as username, senha as password, case ativo when 1 then 'true' else 'false' end as enable from orcamento.usuario where login=?"
-	            authorities-by-username-query="select login as username, tipoUsuario as authority from orcamento.usuario where login=?" />
+	            users-by-username-query="select login as username, senha as password, case ativo when 1 then 'true' else 'false' end as enable from usuario where login=?"
+	            authorities-by-username-query="select login as username, tipoUsuario as authority from usuario where login=?" />
 	    </sec:authentication-provider>
 	</sec:authentication-manager>
 </beans>

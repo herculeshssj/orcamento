@@ -70,15 +70,15 @@
 */
 
 -- Obtém o conteúdo da rotina de atualização já existente na base
-set @ultima_rotina = (select routine_definition from information_schema.routines where routine_name = 'atualiza_base_producao' and routine_schema = 'orcamento');
+set @ultima_rotina = (select routine_definition from information_schema.routines where routine_name = 'atualiza_base_producao' and routine_schema = 'orcamentotest');
 
 -- Excluir a rotina caso ela já exista
-drop procedure if exists orcamento.atualiza_base_producao;
+drop procedure if exists orcamentotest.atualiza_base_producao;
 
 -- Cria a rotina
 delimiter //
 
-create procedure orcamento.atualiza_base_producao()
+create procedure orcamentotest.atualiza_base_producao()
 begin
 
 	declare exit handler for sqlexception
@@ -124,18 +124,18 @@ delimiter ;
 */
 
 -- Excluir a rotina caso ela já exista
-drop procedure if exists orcamento.verifica_atualizacao_base;
+drop procedure if exists orcamentotest.verifica_atualizacao_base;
 
 -- Cria a rotina
 delimiter //
 
-create procedure orcamento.verifica_atualizacao_base(in ultimaRotina text)
+create procedure orcamentotest.verifica_atualizacao_base(in ultimaRotina text)
 begin
 	-- Declaração de variáveis
     declare rotinaAtual text;
     
 	-- Obtém o conteúdo da rotina de atualização atual
-    set rotinaAtual = (select routine_definition from information_schema.routines where routine_name = 'atualiza_base_producao' and routine_schema = 'orcamento');
+    set rotinaAtual = (select routine_definition from information_schema.routines where routine_name = 'atualiza_base_producao' and routine_schema = 'orcamentotest');
     
     -- Verifica se a rotina atual é igual a anterior
     if (rotinaAtual = ultimaRotina) then
@@ -144,7 +144,7 @@ begin
 		end;
 	else
 		begin
-			call orcamento.atualiza_base_producao();
+			call orcamentotest.atualiza_base_producao();
 			select 'DB atualizado.';
 		end;
     end if;
@@ -156,4 +156,4 @@ end
 delimiter ;
 
 /* * * Execução do script * * */
-call orcamento.verifica_atualizacao_base(@ultima_rotina);
+call orcamentotest.verifica_atualizacao_base(@ultima_rotina);
