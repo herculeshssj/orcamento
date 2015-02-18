@@ -134,9 +134,11 @@
      		
      		<ui:insert name="outras_opcoes"></ui:insert>
 
-			<h:commandLink title="Voltar" action="#{managedBean.goToModule}" immediate="true">
-				<p:graphicImage value="/resources/images/voltar.png" />
-			</h:commandLink>
+			<ui:insert name="voltar_opcao">
+				<h:commandLink title="Voltar" action="#{managedBean.goToModule}" immediate="true">
+					<p:graphicImage value="/resources/images/voltar.png" />
+				</h:commandLink>
+			</ui:insert>
 
 		</h:form>
      

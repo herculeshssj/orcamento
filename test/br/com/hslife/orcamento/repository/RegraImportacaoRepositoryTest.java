@@ -140,4 +140,32 @@ public class RegraImportacaoRepositoryTest extends AbstractTestRepositories {
 		// Testa o método em questão
 		assertNotNull(regra.getId());
 	}
+	
+	public void testFindEqualEntity() {
+		regraImportacaoRepository.save(regra);
+		
+		RegraImportacao regraTest = regraImportacaoRepository.findEqualEntity(regra);
+	
+		assertEquals(regra.getTexto(), regraTest.getTexto());
+		assertEquals(regra.getIdCategoria(), regraTest.getIdCategoria());
+		assertEquals(regra.getIdFavorecido(), regraTest.getIdFavorecido());
+		assertEquals(regra.getIdMeioPagamento(), regraTest.getIdMeioPagamento());
+		assertEquals(regra.getConta(), regraTest.getConta());
+		
+		regra.setTexto("texto a pesquisar");
+		regra.setIdCategoria(10l);
+		regra.setIdFavorecido(20l);
+		regra.setIdMeioPagamento(30l);
+		
+		// Testa o método em questão
+		regraImportacaoRepository.update(regra);
+		
+		regraTest = regraImportacaoRepository.findById(regra.getId());
+		
+		assertEquals(regra.getTexto(), regraTest.getTexto());
+		assertEquals(regra.getIdCategoria(), regraTest.getIdCategoria());
+		assertEquals(regra.getIdFavorecido(), regraTest.getIdFavorecido());
+		assertEquals(regra.getIdMeioPagamento(), regraTest.getIdMeioPagamento());
+		assertEquals(regra.getConta(), regraTest.getConta());
+	}
 }

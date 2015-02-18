@@ -70,6 +70,14 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	public void setRepository(RegraImportacaoRepository repository) {
 		this.repository = repository;
 	}
+	
+	 @Override
+	public void validar(RegraImportacao entity) throws BusinessException {
+		RegraImportacao regra = getRepository().findEqualEntity(entity);
+		if (regra != null && !regra.equals(entity)) {
+			throw new BusinessException("Existe uma regra com os mesmo parâmetros informados!");
+		}
+	}
 
 	@Override
 	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws BusinessException {

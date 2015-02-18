@@ -72,6 +72,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	
 	private RegraImportacao regra = new RegraImportacao();
 	private List<RegraImportacao> listaRegra = new ArrayList<RegraImportacao>();
+	private Conta conta = new Conta();
 	
 	@Autowired
 	private IRegraImportacao regraImportacaoService;
@@ -93,7 +94,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 		Moeda moeda = EntityInitializerFactory.initializeMoeda(usuario);
 		moedaService.cadastrar(moeda);
 		
-		Conta conta = EntityInitializerFactory.initializeConta(usuario, moeda);
+		conta = EntityInitializerFactory.initializeConta(usuario, moeda);
 		contaService.cadastrar(conta);
 		
 		regra = EntityInitializerFactory.initializeRegraImportacao(conta);
@@ -161,10 +162,16 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 		assertNotNull(regraTest);
 	}
 	
-	@Test
+	@Test(expected=BusinessException.class)
 	public void testValidar() throws BusinessException {
 		// Verifica se a entidade está consistente para ser persistida
 		regraImportacaoService.validar(regra);
+		
+		// Cadastra a regra
+		regraImportacaoService.cadastrar(regra);
+		
+		RegraImportacao regraTest = EntityInitializerFactory.initializeRegraImportacao(conta);
+		regraImportacaoService.validar(regraTest);
 	}
 	
 	@Test

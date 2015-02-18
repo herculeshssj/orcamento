@@ -48,6 +48,8 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
@@ -67,4 +69,26 @@ public class RegraImportacaoRepository extends AbstractCRUDRepository<RegraImpor
 				.list();
 	}
 	
+	public RegraImportacao findEqualEntity(RegraImportacao regra) {
+		Criteria criteria = getSession().createCriteria(RegraImportacao.class);
+		criteria.add(Restrictions.eq("conta.id", regra.getConta().getId()));
+		
+		if (regra.getTexto() != null || !regra.getTexto().isEmpty()) {
+			criteria.add(Restrictions.eq("texto", regra.getTexto()));
+		}
+		
+		if (regra.getIdCategoria() != null) {
+			criteria.add(Restrictions.eq("idCategoria", regra.getIdCategoria()));
+		}
+		
+		if (regra.getIdFavorecido() != null) {
+			criteria.add(Restrictions.eq("idFavorecido", regra.getIdFavorecido()));
+		}
+		
+		if (regra.getIdMeioPagamento() != null) {
+			criteria.add(Restrictions.eq("idMeioPagamento", regra.getIdMeioPagamento()));
+		}
+		
+		return (RegraImportacao)criteria.setMaxResults(1).uniqueResult();
+	}
 }
