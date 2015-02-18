@@ -289,31 +289,47 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public String mover() {
+		if (listEntity == null){
+			warnMessage("Nenhum lançamento selecionado!");
+			return "";
+		}
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
 		initializeEntity();
-		return movimentacaoLancamentoMB.moverView();
+		return movimentacaoLancamentoMB.moverView();		
 	}
 	
 	public String duplicar() {
+		if (listEntity == null){
+			warnMessage("Nenhum lançamento selecionado!");
+			return "";
+		}
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
 		initializeEntity();
 		return movimentacaoLancamentoMB.duplicarView();
 	}
 	
 	public String excluir() {
+		if (listEntity == null){
+			warnMessage("Nenhum lançamento selecionado!");
+			return "";
+		}
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
 		initializeEntity();
 		return movimentacaoLancamentoMB.excluirView();
 	}
 	
-	public String transferir() {	
-		return movimentacaoLancamentoMB.transferirView();
-	}
-	
 	public String alterarPropriedades() {
+		if (listEntity == null){
+			warnMessage("Nenhum lançamento selecionado!");
+			return "";
+		}
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
 		initializeEntity();
 		return movimentacaoLancamentoMB.alterarPropriedadesView();
+	}
+	
+	public String transferir() {	
+		return movimentacaoLancamentoMB.transferirView();
 	}
 	
 	public void quebrarVinculo() {		
