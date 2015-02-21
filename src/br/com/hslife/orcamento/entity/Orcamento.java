@@ -222,8 +222,9 @@ public class Orcamento extends EntityPersistence {
 		
 		// Ajusta a data de fim
 		Calendar tempFim = Calendar.getInstance();
-		tempFim.setTime(novoOrcamento.getInicio());
-		
+		tempFim.setTime(this.getPeriodoLancamento().getDataPeriodo(novoOrcamento.getInicio()));
+		tempFim.add(Calendar.DAY_OF_YEAR, -1);
+		/*
 		switch (this.periodoLancamento) {
 			case MENSAL : tempFim.add(Calendar.MONTH, 1); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
 			case BIMESTRAL : tempFim.add(Calendar.MONTH, 2); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
@@ -232,7 +233,7 @@ public class Orcamento extends EntityPersistence {
 			case SEMESTRAL : tempFim.add(Calendar.MONTH, 6); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
 			case ANUAL : tempFim.add(Calendar.YEAR, 1); tempFim.add(Calendar.DAY_OF_YEAR, -1); break;
 			default : throw new BusinessException("Não é possível gerar novos orçamentos a partir de um com período fixo!");
-		}
+		}*/
 		
 		novoOrcamento.setFim(tempFim.getTime());
 		
@@ -256,9 +257,9 @@ public class Orcamento extends EntityPersistence {
 			novoDetalhe.setPrevisao(detalhe.getPrevisao());
 			novoDetalhe.setPrevisaoCredito(detalhe.getPrevisaoCredito());
 			novoDetalhe.setPrevisaoDebito(detalhe.getPrevisaoDebito());
-			novoDetalhe.setRealizado(detalhe.getRealizado());
-			novoDetalhe.setRealizadoCredito(detalhe.getRealizadoCredito());
-			novoDetalhe.setRealizadoDebito(detalhe.getRealizadoDebito());
+			novoDetalhe.setRealizado(0);
+			novoDetalhe.setRealizadoCredito(0);
+			novoDetalhe.setRealizadoDebito(0);
 			novoDetalhe.setTipoCategoria(detalhe.getTipoCategoria());
 			
 			novoOrcamento.getDetalhes().add(novoDetalhe);

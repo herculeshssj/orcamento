@@ -46,6 +46,9 @@
 
 package br.com.hslife.orcamento.enumeration;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public enum PeriodoLancamento {
 	FIXO("Fixo"), MENSAL("Mensal"), BIMESTRAL("Bimestral"), TRIMESTRAL("Trimestral"), QUADRIMESTRAL("Quadrimestral"), SEMESTRAL("Semestral"), ANUAL("Anual");
 	
@@ -57,5 +60,22 @@ public enum PeriodoLancamento {
 
 	public String toString() {
 		return descricao;
+	}
+	
+	public Date getDataPeriodo(Date dataPeriodo) {
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(dataPeriodo);
+		
+		switch (this) {
+			case MENSAL : temp.add(Calendar.MONTH, 1); break;
+			case BIMESTRAL : temp.add(Calendar.MONTH, 2); break;
+			case TRIMESTRAL : temp.add(Calendar.MONTH, 3); break;
+			case QUADRIMESTRAL : temp.add(Calendar.MONTH, 4); break;
+			case SEMESTRAL : temp.add(Calendar.MONTH, 6); break;
+			case ANUAL : temp.add(Calendar.YEAR, 1); break;
+			default : throw new IllegalArgumentException("Valor incorreto para o método: 'FIXO'");
+		}
+		
+		return temp.getTime();
 	}
 }
