@@ -46,7 +46,6 @@
 
 package br.com.hslife.orcamento.entity;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -129,33 +128,14 @@ public class Arquivo extends EntityPersistence {
 	public void setOpcoesSistema(Map<String, Integer> opcoesSistema) {
 		this.opcoesSistema = opcoesSistema;
 	}
-	
+	// TODO diminuir complexidade
 	public boolean isPrazoExpirado() {
-		// Salva a data de criação do arquivo
-		Calendar temp = Calendar.getInstance();
-		temp.setTime(this.dataCriacao);
-		
-		switch (this.container) {
-			case ARQUIVO :
-				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_GERAL"));
-				if (temp.getTime().before(new Date())) return true;
-				break;
-			case DOCUMENTOS : 
-				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS"));
-				if (temp.getTime().before(new Date())) return true;
-				break;
-			case FATURACARTAO :
-				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_FATURACARTAO"));
-				if (temp.getTime().before(new Date())) return true;
-				break;
-			case LANCAMENTOCONTA :
-				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA"));
-				if (temp.getTime().before(new Date())) return true;
-				break;
-			case LANCAMENTOPERIODICO : 
-				temp.add(Calendar.YEAR, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO"));
-				if (temp.getTime().before(new Date())) return true;
-				break;
+		switch(this.container) {
+			case ARQUIVO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_GERAL"));
+			case DOCUMENTOS : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS"));
+			case FATURACARTAO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_FATURACARTAO"));
+			case LANCAMENTOCONTA : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA"));
+			case LANCAMENTOPERIODICO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO"));
 		}
 		return false;
 	}

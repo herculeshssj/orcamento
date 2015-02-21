@@ -59,6 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="moeda")
@@ -143,21 +144,10 @@ public class Moeda extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		if (this.nome == null || this.nome.trim().isEmpty()) {
-			throw new BusinessException("Informe o nome da moeda!");
-		}
-		
-		if (this.pais == null || this.pais.trim().isEmpty()) {
-			throw new BusinessException("Informe o nome do país!");
-		}
-		
-		if (this.siglaPais == null || this.siglaPais.trim().isEmpty()) {
-			throw new BusinessException("Informe a sigla do país!");
-		}
-		
-		if (this.simboloMonetario == null || this.simboloMonetario.trim().isEmpty()) {
-			throw new BusinessException("Informe o símbolo monetário!");
-		}
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome da moeda", this.nome, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("País", this.pais, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Sigla do País", this.siglaPais, 2);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Símbolo monetário", this.siglaPais, 5);
 		
 		if (!this.padrao && this.valorConversao == 0) {
 			throw new BusinessException("Informe um valor de conversão diferente de 0!");

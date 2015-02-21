@@ -46,9 +46,11 @@
 
 package br.com.hslife.orcamento.enumeration;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public enum Container {
-	ARQUIVO("Arquivo"), DOCUMENTOS("Documentos"), LANCAMENTOCONTA("LancamentoConta"), LANCAMENTOPERIODICO("LancamentoPeriodico"),
-	FATURACARTAO("FaturaCartao");
+	ARQUIVO("Arquivo"), DOCUMENTOS("Documentos"), LANCAMENTOCONTA("LancamentoConta"), LANCAMENTOPERIODICO("LancamentoPeriodico"), FATURACARTAO("FaturaCartao");
 	
 	private String descricao;
 	
@@ -58,5 +60,15 @@ public enum Container {
 
 	public String toString() {
 		return descricao;
+	}
+	
+	public boolean isPrazoExpirado(Date dataCriacao, int prazo) {
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(dataCriacao);
+		temp.add(Calendar.YEAR, prazo);
+		if (temp.getTime().before(new Date())) 
+			return true;
+		else
+			return false;
 	}
 }

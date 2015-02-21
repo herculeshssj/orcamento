@@ -520,6 +520,7 @@ public class ContaComponent {
 		return moedas;
 	}
 	
+	// TODO diminuir a complexidade ciclomática do método. Averiguar se a próxima mensalidade pode ser gerada por clonagem
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException {		
 		pagamentoPeriodo.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 		

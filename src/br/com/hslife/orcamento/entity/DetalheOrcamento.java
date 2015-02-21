@@ -180,14 +180,23 @@ public class DetalheOrcamento extends EntityPersistence {
 		if (this.tipoCategoria == null) return SituacaoOrcamento.BOM;
 		
 		if (this.tipoCategoria.equals(TipoCategoria.CREDITO)) {
-			if (Math.floor(getPorcentagem()) <= 70) return SituacaoOrcamento.RUIM;
-			if (Math.floor(getPorcentagem()) > 70 && Math.floor(getPorcentagem()) <= 100) return SituacaoOrcamento.REGULAR;
-			if (Math.floor(getPorcentagem()) > 100) return SituacaoOrcamento.BOM;
+			return this.getSituacaoCategoriaCredito();
 		} else {
-			if (Math.floor(getPorcentagem()) <= 70) return SituacaoOrcamento.BOM;
-			if (Math.floor(getPorcentagem()) > 70 && Math.floor(getPorcentagem()) <= 100) return SituacaoOrcamento.REGULAR;
-			if (Math.floor(getPorcentagem()) > 100) return SituacaoOrcamento.RUIM;			
+			return this.getSituacaoCategoriaDebito();
 		}
+	}
+	
+	private SituacaoOrcamento getSituacaoCategoriaCredito() {
+		if (Math.floor(getPorcentagem()) <= 70) return SituacaoOrcamento.RUIM;
+		if (Math.floor(getPorcentagem()) > 70 && Math.floor(getPorcentagem()) <= 100) return SituacaoOrcamento.REGULAR;
+		if (Math.floor(getPorcentagem()) > 100) return SituacaoOrcamento.BOM;
+		return SituacaoOrcamento.BOM;
+	}
+	
+	private SituacaoOrcamento getSituacaoCategoriaDebito() {
+		if (Math.floor(getPorcentagem()) <= 70) return SituacaoOrcamento.BOM;
+		if (Math.floor(getPorcentagem()) > 70 && Math.floor(getPorcentagem()) <= 100) return SituacaoOrcamento.REGULAR;
+		if (Math.floor(getPorcentagem()) > 100) return SituacaoOrcamento.RUIM;
 		return SituacaoOrcamento.BOM;
 	}
 	
