@@ -81,14 +81,14 @@
 				<f:selectItems value="#{managedBean.listaFavorecido}"/>			
 			</h:selectOneMenu>
 			
-			Meio de Pagamento:
-			<h:selectOneMenu value="#{managedBean.entity.idMeioPagamento}">
+			<h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+			<h:selectOneMenu value="#{managedBean.entity.idMeioPagamento}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 				<f:selectItem itemLabel="Meio de pagamento padrão" />
 				<f:selectItems value="#{managedBean.listaMeioPagamento}"/>			
 			</h:selectOneMenu>
 			
-			<h:outputText />
-			<h:outputText />
+			<h:outputText rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+			<h:outputText rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
 			
 		</h:panelGrid>
 	
