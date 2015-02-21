@@ -669,6 +669,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
 		}
 		
+		// Seta no resumo o início e fim do período buscado
+		resumoMensal.setInicio(criterioBusca.getDataInicio());
+		resumoMensal.setFim(criterioBusca.getDataFim());
+		
 		return resumoMensal;	
 	}
 	

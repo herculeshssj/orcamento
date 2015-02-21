@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Categoria;
@@ -62,6 +63,10 @@ public class ResumoMensalContas {
 	private List<Favorecido> favorecidos = new ArrayList<Favorecido>();
 	
 	private List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
+	
+	private Date inicio;
+	
+	private Date fim;
 	
 	public List<Categoria> getCategorias() {
 		return categorias;
@@ -154,5 +159,21 @@ public class ResumoMensalContas {
 		this.meiosPagamento.add(saldoAnteriorMeiosPagamento);
 		this.meiosPagamento.addAll(meiosPagamento);
 		this.meiosPagamento.add(saldoAtualMeiosPagamento);
+	}
+
+	public Date getInicio() {
+		return inicio;
+	}
+
+	public void setInicio(Date inicio) {
+		this.inicio = inicio;
+	}
+
+	public Date getFim() {
+		return fim;
+	}
+
+	public void setFim(Date fim) {
+		this.fim = fim;
 	}
 }

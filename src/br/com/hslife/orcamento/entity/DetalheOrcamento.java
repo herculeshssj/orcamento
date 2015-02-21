@@ -126,6 +126,16 @@ public class DetalheOrcamento extends EntityPersistence {
 		this.idChanged = true;
 	}
 	
+	public DetalheOrcamento(Long idEntity, String descricao, TipoCategoria tipoCategoria, double valorPrevisto) {
+		this.idEntity = idEntity;
+		this.descricao = descricao;
+		this.tipoCategoria = tipoCategoria;
+		this.previsao = valorPrevisto;
+		
+		this.id = idEntity;
+		this.idChanged = true;
+	}
+	
 	@Override
 	public String getLabel() {
 		return this.descricao;

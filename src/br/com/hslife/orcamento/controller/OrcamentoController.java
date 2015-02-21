@@ -212,6 +212,11 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		return super.save();
 	}
 	
+	public void salvarOrcamentoGerado(Orcamento orcamentoGerado) {
+		this.entity = orcamentoGerado;
+		super.save();
+	}
+	
 	public void atualizarValores() {
 		try {
 			getService().atualizarValores(orcamentoSelecionado);

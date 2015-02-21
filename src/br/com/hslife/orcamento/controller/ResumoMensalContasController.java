@@ -59,9 +59,12 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
+import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
@@ -88,6 +91,9 @@ public class ResumoMensalContasController extends AbstractController {
 	
 	@Autowired
 	private IFechamentoPeriodo fechamentoPeriodoService;
+	
+	@Autowired
+	private OrcamentoController orcamentoMB;
 	
 	private Conta contaSelecionada;
 	private FechamentoPeriodo fechamentoSelecionado;
@@ -189,6 +195,36 @@ public class ResumoMensalContasController extends AbstractController {
         	maxValueBarComparativo = new BigDecimal(Math.abs(despesas + (despesas * 0.10))).intValue();
         }
         
+	}
+	
+	public void registrarOrcamento() {
+		if (resumoMensal == null) {
+			warnMessage("Gere antes um novo resumo!");
+			return;
+		}
+		
+		// Instancia um novo objeto Orcamento
+		Orcamento orcamentoAGerar = new Orcamento();
+		
+		// Seta os atributos do orcamento
+		orcamentoAGerar.setTipoOrcamento(TipoOrcamento.CONTA);
+		orcamentoAGerar.setConta(contaSelecionada);
+		orcamentoAGerar.setDescricao(fechamentoSelecionado == null ? "Orçamento - Período atual" : "Orçamento - " + fechamentoSelecionado.getLabel());
+		orcamentoAGerar.setInicio(resumoMensal.getInicio());
+		orcamentoAGerar.setFim(resumoMensal.getFim());
+		orcamentoAGerar.setUsuario(getUsuarioLogado());
+		
+		// Seta os detalhes do orçamento
+		for (Categoria c : resumoMensal.getCategorias()) {
+			if (c.getDescricao().equals("Saldo anterior") || c.getDescricao().equals("Saldo atual")) {
+				// Faz nada
+			} else {
+				orcamentoAGerar.getDetalhes().add(new DetalheOrcamento(c.getId(), c.getDescricao(), c.getTipoCategoria(), Math.abs(c.getSaldoPago())));
+			}
+		}
+		
+		// Seta a entidade em orcamentoMB e manda salvar
+		orcamentoMB.salvarOrcamentoGerado(orcamentoAGerar);
 	}
 	
 	public List<Conta> getListaConta() {
