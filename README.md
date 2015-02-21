@@ -110,7 +110,7 @@ source /caminho/para/o/workspace/eclipse/Orcamento/docs/script-update-all-db.sql
 
 ### Configuração do projeto no Eclipse
 
-Efetue o clone do projeto usando o comando:
+Efetue o clone do projeto para um diretório de sua preferência usando o comando:
 
 git clone https://github.com/herculeshssj/orcamento
 
