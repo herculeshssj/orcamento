@@ -61,6 +61,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.caelum.stella.validation.CPFValidator;
+import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.Util;
@@ -208,10 +210,15 @@ public class Identidade extends EntityPersistence {
 
 	private void validCpf() throws BusinessException {
 		// Verifica se a identidade passada é um CPF válido
-		if (this.getNumero() != null && !this.getNumero().trim().isEmpty()) {
-			if (!Util.validaCPF(this.getNumero()))
-				throw new BusinessException("O CPF informado não é válido!");
-		}		
+		CPFValidator validator = new CPFValidator();
+		try {
+			if (this.getNumero() != null && !this.getNumero().trim().isEmpty()) {
+				validator.assertValid(this.getNumero());
+			}
+		} catch (InvalidStateException ise) {
+			throw new BusinessException(ise.getMessage());
+		}
+				
 	}
 
 	private void validCnh() throws BusinessException {
