@@ -74,6 +74,7 @@ import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 
 @Entity
@@ -217,6 +218,8 @@ public class LancamentoConta extends EntityPersistence {
 		if (this.conta == null) {
 			throw new BusinessException("Informe a conta!");
 		}
+		
+		EntityPersistenceUtil.validaCampoNulo("Data de pagamento", this.dataPagamento);
 	}
 
 	public Long getId() {

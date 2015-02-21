@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -76,7 +75,6 @@ import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBuscaSalva;
@@ -190,23 +188,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-	}
-	
-	@Override
-	public String save() {
-		// Salva a informação da moeda no lançamento da conta
-		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO))
-			entity.setMoeda(entity.getConta().getMoeda());
-		
-		if (!entity.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
-			if (entity.getDataPagamento().before(new Date())) {
-				entity.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-			} else {
-				entity.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
-			}
-		}
-		
-		return super.save();
 	}
 	
 	@Override

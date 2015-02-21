@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
@@ -130,9 +132,30 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	public void setMoedaRepository(MoedaRepository moedaRepository) {
 		this.moedaRepository = moedaRepository;
 	}
+	
+	@Override
+	public void cadastrar(LancamentoConta entity) throws BusinessException {
+		// Salva a informação da moeda no lançamento da conta
+		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO))
+			entity.setMoeda(entity.getConta().getMoeda());
+		
+		// Define o status do lançamento da conta
+		if (!entity.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
+			if (entity.getDataPagamento().before(new Date())) {
+				entity.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			} else {
+				entity.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			}
+		}
+		super.cadastrar(entity);
+	}
 
 	@Override
 	public void alterar(LancamentoConta entity) throws BusinessException {
+		// Salva a informação da moeda no lançamento da conta
+		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO))
+			entity.setMoeda(entity.getConta().getMoeda());
+		
 		if (entity.getLancamentoImportado() != null) {
 			// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
 			entity.setMoeda(moedaRepository.findCodigoMoedaByUsuario(entity.getLancamentoImportado().getMoeda(), entity.getConta().getUsuario()) == null 
@@ -159,6 +182,16 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 						
 			lancamentoImportadoRepository.delete(entity.getLancamentoImportado());
 		}
+		
+		// Define o status do lançamento da conta
+		if (!entity.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
+			if (entity.getDataPagamento().before(new Date())) {
+				entity.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			} else {
+				entity.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			}
+		}
+		
 		super.alterar(entity);
 	}
 
