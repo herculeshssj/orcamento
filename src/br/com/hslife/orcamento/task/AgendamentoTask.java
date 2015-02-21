@@ -122,7 +122,11 @@ public class AgendamentoTask {
 				mensagemEmail.append("Administrador do Sistema");
 				
 				try {
-					emailComponent.enviarEmail(a.getUsuario().getNome(), a.getUsuario().getEmail(), "Orçamento Doméstico - Lembrete de agendamento", mensagemEmail.toString());
+					emailComponent.setDestinatario(a.getUsuario().getNome());
+					emailComponent.setEmailDestinatario(a.getUsuario().getEmail());
+					emailComponent.setAssunto("Orçamento Doméstico - Lembrete de agendamento");
+					emailComponent.setMensagem(mensagemEmail.toString());
+					emailComponent.enviarEmail();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

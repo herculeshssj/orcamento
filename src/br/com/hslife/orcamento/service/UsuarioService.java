@@ -226,7 +226,11 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			mensagemEmail.append("Administrador do Sistema.\n");
 			
 			try {
-				emailComponent.enviarEmail(entity.getNome(), entity.getEmail(), "Orçamento Doméstico - Exclusão de conta de usuário", mensagemEmail.toString());
+				emailComponent.setDestinatario(entity.getNome());
+				emailComponent.setEmailDestinatario(entity.getEmail());
+				emailComponent.setAssunto("Orçamento Doméstico - Exclusão de conta de usuário");
+				emailComponent.setMensagem(mensagemEmail.toString());
+				emailComponent.enviarEmail();
 			} catch (Exception e) {
 				e.printStackTrace();				
 			}
@@ -291,7 +295,11 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		mensagemEmail.append("Administrador do Sistema");
 		
 		try {
-			emailComponent.enviarEmail(entity.getNome(), entity.getEmail(), "Orçamento Doméstico - Registro de Usuário", mensagemEmail.toString());
+			emailComponent.setDestinatario(entity.getNome());
+			emailComponent.setEmailDestinatario(entity.getEmail());
+			emailComponent.setAssunto("Orçamento Doméstico - Registro de Usuário");
+			emailComponent.setMensagem(mensagemEmail.toString());
+			emailComponent.enviarEmail();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e);
@@ -324,7 +332,11 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			mensagemEmail.append("Administrador do Sistema");
 			
 			try {
-				emailComponent.enviarEmail(u.getNome(), u.getEmail(), "Orçamento Doméstico - Recuperação de senha", mensagemEmail.toString());
+				emailComponent.setDestinatario(u.getNome());
+				emailComponent.setEmailDestinatario(u.getEmail());
+				emailComponent.setAssunto("Orçamento Doméstico - Recuperação de senha");
+				emailComponent.setMensagem(mensagemEmail.toString());
+				emailComponent.enviarEmail();
 			} catch (Exception e) {
 				throw new BusinessException(e);
 			}
@@ -336,7 +348,13 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws BusinessException {
 		try {
 			Usuario admin = getRepository().findByLogin("admin");
-			emailComponent.enviarEmail(getComponent().getUsuarioLogado().getNome(), getComponent().getUsuarioLogado().getEmail(), admin.getNome(), admin.getEmail(), assuntoMensagem, mensagem);
+			emailComponent.setRemetente(getComponent().getUsuarioLogado().getNome());
+			emailComponent.setEmailRemetente(getComponent().getUsuarioLogado().getEmail());
+			emailComponent.setDestinatario(admin.getNome());
+			emailComponent.setEmailDestinatario(admin.getEmail());
+			emailComponent.setAssunto(assuntoMensagem);
+			emailComponent.setMensagem(mensagem.toString());
+			emailComponent.enviarEmail();
 		} catch (Exception e) {
 			throw new BusinessException("Erro ao enviar e-mail:", e);
 		}

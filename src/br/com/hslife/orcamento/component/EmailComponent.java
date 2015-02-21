@@ -59,67 +59,71 @@ import com.sendgrid.SendGridException;
 @Component
 public class EmailComponent {
 	
+	private String servidor;
+	private Integer porta;
+	private String usuario;
+	private String senha;
+	private String remetente;
+	private String emailRemetente;
+	private String destinatario;
+	private String emailDestinatario;
+	private String assunto;
+	private String mensagem;
+	private boolean usarSSL;
+	private String charset;
+	private String metodoEnvio;
+	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;	
 
 	public void setOpcaoSistemaComponent(OpcaoSistemaComponent opcaoSistemaComponent) {
 		this.opcaoSistemaComponent = opcaoSistemaComponent;
 	}
-	
-	void enviarEmailSendGrid(Map<String, Object> parametros, String destinatario, String emailDestinatario, String assunto, String mensagem) throws SendGridException {
-		SendGrid sendGrid = new SendGrid((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
-		
-		SendGrid.Email email = new SendGrid.Email();
-		email.addTo(emailDestinatario, destinatario);
-		email.setFrom((String)parametros.get("EMAIL_EMAIL_REMETENTE")); // remetente
-		email.setFromName((String)parametros.get("EMAIL_REMETENTE"));
-		email.setSubject(assunto);
-		email.setText(mensagem);
-		
-		SendGrid.Response response = sendGrid.send(email);
-		System.out.println(response.getMessage());
+
+	public void setRemetente(String remetente) {
+		this.remetente = remetente;
 	}
-	
-	public void enviarEmail(String destinatario, String emailDestinatario, String assunto, String mensagem) throws EmailException, SendGridException {
-		// Carrega as configurações de envio de e-mail
+
+	public void setEmailRemetente(String emailRemetente) {
+		this.emailRemetente = emailRemetente;
+	}
+
+	public void setDestinatario(String destinatario) {
+		this.destinatario = destinatario;
+	}
+
+	public void setEmailDestinatario(String emailDestinatario) {
+		this.emailDestinatario = emailDestinatario;
+	}
+
+	public void setAssunto(String assunto) {
+		this.assunto = assunto;
+	}
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
+	}
+
+	private void populateParameters() {
 		Map<String, Object> parametros = opcaoSistemaComponent.buscarOpcoesGlobalAdminPorCDU("email");
-		
-		if (((String)parametros.get("EMAIL_METODO_ENVIO")).equals("SENDGRID")) {
-			this.enviarEmailSendGrid(parametros, destinatario, emailDestinatario, assunto, mensagem);
-			return;
-		}
-		
-		// Instancia o objeto de e-mail
-		SimpleEmail email = new SimpleEmail();
-		
-		// Atribui ao objeto os parâmetros passados ao método
-		email.addTo(emailDestinatario, destinatario, (String)parametros.get("EMAIL_CHARSET"));
-		email.setFrom((String)parametros.get("EMAIL_EMAIL_REMETENTE"), (String)parametros.get("EMAIL_REMETENTE"), (String)parametros.get("EMAIL_CHARSET")); // remetente
-		email.setSubject(assunto);
-		email.setMsg(mensagem);
-		
-		// Atribui os demais parâmetros vindos de opções do sistema
-		email.setHostName((String)parametros.get("EMAIL_SERVIDOR"));
-		email.setSmtpPort((Integer)parametros.get("EMAIL_PORTA"));
-		email.setAuthentication((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
-		if ((Boolean)parametros.get("EMAIL_USAR_SSL")) {
-			email.setSSLOnConnect(true);
-			email.setSslSmtpPort(String.valueOf((Integer)parametros.get("EMAIL_PORTA")));
-		} else {
-			email.setSSLOnConnect(false);
-		}
-		email.setCharset((String)parametros.get("EMAIL_CHARSET"));
-		email.setSSLCheckServerIdentity(false);
-		email.send();
+		servidor = (String)parametros.get("EMAIL_SERVIDOR");
+		porta = (Integer)parametros.get("EMAIL_PORTA");
+		usuario = (String)parametros.get("EMAIL_USUARIO");
+		senha = (String)parametros.get("EMAIL_SENHA");
+		usarSSL = (Boolean)parametros.get("EMAIL_USAR_SSL");
+		charset = (String)parametros.get("EMAIL_CHARSET");
+		metodoEnvio = (String)parametros.get("EMAIL_METODO_ENVIO");
+		remetente = (String)parametros.get("EMAIL_REMETENTE");
+		emailRemetente = (String)parametros.get("EMAIL_EMAIL_REMETENTE");
 	}
 	
-	void enviarEmailSendGrid(Map<String, Object> parametros, String rementente, String emailRemetente, String destinatario, String emailDestinatario, String assunto, String mensagem) throws SendGridException {
-		SendGrid sendGrid = new SendGrid((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
+	private void enviarEmailSendGrid() throws SendGridException {
+		SendGrid sendGrid = new SendGrid(usuario, senha);
 		
 		SendGrid.Email email = new SendGrid.Email();
 		email.addTo(emailDestinatario, destinatario);
 		email.setFrom(emailRemetente); // remetente
-		email.setFromName(rementente);
+		email.setFromName(remetente);
 		email.setSubject(assunto);
 		email.setText(mensagem);
 		
@@ -127,12 +131,12 @@ public class EmailComponent {
 		System.out.println(response.getMessage());
 	}
 	
-	public void enviarEmail(String remetente, String emailRemetente, String destinatario, String emailDestinatario, String assunto, String mensagem) throws EmailException, SendGridException {
+	public void enviarEmail() throws EmailException, SendGridException {
 		// Carrega as configurações de envio de e-mail
-		Map<String, Object> parametros = opcaoSistemaComponent.buscarOpcoesGlobalAdminPorCDU("email");
+		this.populateParameters();
 		
-		if (((String)parametros.get("EMAIL_METODO_ENVIO")).equals("SENDGRID")) {
-			this.enviarEmailSendGrid(parametros, remetente, emailRemetente, destinatario, emailDestinatario, assunto, mensagem);
+		if (metodoEnvio.equals("SENDGRID")) {
+			this.enviarEmailSendGrid();
 			return;
 		}
 		
@@ -140,22 +144,22 @@ public class EmailComponent {
 		SimpleEmail email = new SimpleEmail();
 		
 		// Atribui ao objeto os parâmetros passados ao método
-		email.addTo(emailDestinatario, destinatario, (String)parametros.get("EMAIL_CHARSET"));
-		email.setFrom(emailRemetente, remetente, (String)parametros.get("EMAIL_CHARSET")); // remetente
+		email.addTo(emailDestinatario, destinatario, charset);
+		email.setFrom(emailRemetente, remetente, charset); // remetente
 		email.setSubject(assunto);
 		email.setMsg(mensagem);
 		
 		// Atribui os demais parâmetros vindos de opções do sistema
-		email.setHostName((String)parametros.get("EMAIL_SERVIDOR"));
-		email.setSmtpPort((Integer)parametros.get("EMAIL_PORTA"));
-		email.setAuthentication((String)parametros.get("EMAIL_USUARIO"), (String)parametros.get("EMAIL_SENHA"));
-		if ((Boolean)parametros.get("EMAIL_USAR_SSL")) {
+		email.setHostName(servidor);
+		email.setSmtpPort(porta);
+		email.setAuthentication(usuario, senha);
+		if (usarSSL) {
 			email.setSSLOnConnect(true);
-			email.setSslSmtpPort(String.valueOf((Integer)parametros.get("EMAIL_PORTA")));
+			email.setSslSmtpPort(String.valueOf(porta));
 		} else {
 			email.setSSLOnConnect(false);
 		}
-		email.setCharset((String)parametros.get("EMAIL_CHARSET"));
+		email.setCharset(charset);
 		email.setSSLCheckServerIdentity(false);
 		email.send();
 	}
