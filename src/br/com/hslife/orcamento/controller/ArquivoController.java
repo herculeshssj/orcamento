@@ -128,12 +128,25 @@ public class ArquivoController extends AbstractController {
 			criterio.setUsuario(getUsuarioLogado());
 			listEntity = getService().buscarPorCriterioArquivo(criterio);
 			
+			// Variável que contabiliza quantos arquivos podem ser descartados
+			int quantDescartar = 0;
+			BigDecimal bytesALiberar = new BigDecimal(0);
+			
 			// Calcula o espaço ocupado e injeta as opções do sistema nas entidades
 			espacoOcupado = new BigDecimal(0);
 			Map<String, Integer> opcoesSistema = getOpcoesSistema().getOpcoesArquivosAnexados(getUsuarioLogado());
 			for (Arquivo a : listEntity) {
 				espacoOcupado = espacoOcupado.add(new BigDecimal(a.getTamanho()));
 				a.setOpcoesSistema(opcoesSistema);
+				if (a.isPrazoExpirado()) {
+					quantDescartar++;
+					bytesALiberar = bytesALiberar.add(new BigDecimal(a.getTamanho()));
+				}
+			}
+			
+			// Retorna uma mensagem informando quandos arquivos podem ser excluídos
+			if (quantDescartar != 0) {
+				warnMessage(quantDescartar + " arquivo(s) pode(m) ser descartado(s), liberando " + new DecimalFormat("#,##0.##").format(bytesALiberar) + " bytes no disco.");
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
