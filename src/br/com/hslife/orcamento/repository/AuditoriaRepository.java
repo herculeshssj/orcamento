@@ -52,6 +52,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -78,24 +79,8 @@ public class AuditoriaRepository extends AbstractRepository {
 	public List<Auditoria> findByCriteriosAuditoria(CriterioAuditoria criterio) {
 		Criteria criteria = getSession().createCriteria(Auditoria.class);
 		
-		if (criterio.getUsuario() != null && !criterio.getUsuario().isEmpty()) {
-			criteria.add(Restrictions.eq("usuario", criterio.getUsuario()));
-		}
-		
-		if (criterio.getClasse() != null && !criterio.getClasse().isEmpty()) {
-			criteria.add(Restrictions.eq("classe", criterio.getClasse()));
-		}
-		
-		if (criterio.getTransacao() != null && !criterio.getTransacao().isEmpty()) {
-			criteria.add(Restrictions.eq("transacao", criterio.getTransacao()));
-		}
-		
-		if (criterio.getInicio() != null) {
-			criteria.add(Restrictions.ge("data", criterio.getInicio()));
-		}
-		
-		if (criterio.getFim() != null) {
-			criteria.add(Restrictions.le("data", criterio.getFim()));
+		for (Criterion criterion : criterio.buildCriteria()) {
+			criteria.add(criterion);
 		}
 		
 		return criteria.addOrder(Order.asc("dataHora")).list();

@@ -46,18 +46,24 @@
 
 package br.com.hslife.orcamento.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 public class CriterioAuditoria {
+	
+	// Atributo que armazena os critérios selecionados
+	private Map<String, Criterion> hibernateCriterions = new TreeMap<String, Criterion>();
 
-	private String usuario;
-	
-	private String transacao;
-	
-	private String classe;
-	
-	private Date inicio;
-	
+	private String usuario;	
+	private String transacao;	
+	private String classe;	
+	private Date inicio;	
 	private Date fim;
 
 	public String getUsuario() {
@@ -66,6 +72,12 @@ public class CriterioAuditoria {
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
+		
+		hibernateCriterions.remove("usuario");
+		
+		if (usuario != null && !usuario.isEmpty()) {
+			hibernateCriterions.put("usuario", Restrictions.eq("usuario", usuario));
+		}
 	}
 
 	public Date getInicio() {
@@ -74,6 +86,12 @@ public class CriterioAuditoria {
 
 	public void setInicio(Date inicio) {
 		this.inicio = inicio;
+		
+		hibernateCriterions.remove("inicio");
+		
+		if (inicio != null) {
+			hibernateCriterions.put("inicio", Restrictions.ge("data", inicio));
+		}
 	}
 
 	public Date getFim() {
@@ -82,6 +100,12 @@ public class CriterioAuditoria {
 
 	public void setFim(Date fim) {
 		this.fim = fim;
+		
+		hibernateCriterions.remove("fim");
+		
+		if (fim != null) {
+			hibernateCriterions.put("fim", Restrictions.le("data", fim));
+		}
 	}
 
 	public String getClasse() {
@@ -90,6 +114,12 @@ public class CriterioAuditoria {
 
 	public void setClasse(String classe) {
 		this.classe = classe;
+		
+		hibernateCriterions.remove("classe");
+		
+		if (classe != null && !classe.isEmpty()) {
+			hibernateCriterions.put("classe", Restrictions.eq("classe", classe));
+		}
 	}
 
 	public String getTransacao() {
@@ -98,5 +128,15 @@ public class CriterioAuditoria {
 
 	public void setTransacao(String transacao) {
 		this.transacao = transacao;
+		
+		hibernateCriterions.remove("transacao");
+		
+		if (transacao != null && !transacao.isEmpty()) {
+			hibernateCriterions.put("transacao", Restrictions.eq("transacao", transacao));
+		}
 	}	
+	
+	public List<Criterion> buildCriteria() {
+		return new ArrayList<Criterion>(hibernateCriterions.values());
+	}
 }
