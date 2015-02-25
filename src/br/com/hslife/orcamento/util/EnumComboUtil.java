@@ -62,6 +62,7 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoPessoa;
 
 @Component("enumCombo")
 @Scope("application")
@@ -135,6 +136,14 @@ public class EnumComboUtil {
 	public List<SelectItem> getListaFormaPagamentoFatura() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (FormaPagamentoFatura enumeration : FormaPagamentoFatura.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaTipoPessoa() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (TipoPessoa enumeration : TipoPessoa.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

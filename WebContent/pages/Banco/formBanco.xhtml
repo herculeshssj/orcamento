@@ -53,33 +53,76 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/formulario_simples.xhtml">
 
 	<ui:param name="managedBean" value="#{bancoMB}" />
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="4">
 			
 			Banco:
-			<p:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
-			<p:message for="txtNome"/>
-			
+			<p:inputText id="txtNome" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo}"/>				
+						
 			Número:
 			<p:inputText id="txtNumero" value="#{managedBean.entity.numero}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>				
-			<p:message for="txtNumero"/>
-			
+						
 			Padrão:
 			<p:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-			<h:inputHidden/>
-			
+						
 			Ativo:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}"/>
-			<h:inputHidden/>
+			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}"/>			
 			
 		</h:panelGrid>
 		
 	</ui:define>
+	
+	<ui:define name="pesquisa">
+		Banco:
+	    <p:inputText value="#{managedBean.nomeBanco}" />
+	    &nbsp;
+	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    Somente ativos
+	</ui:define>
+	
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Número" />
+			</f:facet>
+			<h:outputText value="#{item.numero}" />
+		</p:column>
+
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Banco" />
+			</f:facet>
+			<h:outputText value="#{item.nome}" />
+		</p:column>
+
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ativo" />
+			</f:facet>
+			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
+		</p:column>
+
+	</ui:define>
+	
+	<ui:define name="acoes_tabela">
+     	<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações"/>
+			</f:facet>		
+			<h:commandButton value="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>								
+	  		&nbsp;&nbsp;&nbsp;			
+			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.padrao}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>
+	  	</p:column>
+     </ui:define>
 
 </ui:composition>
 </html>

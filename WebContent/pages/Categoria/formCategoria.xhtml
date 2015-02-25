@@ -53,35 +53,70 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/formulario_simples.xhtml">
 
 	<ui:param name="managedBean" value="#{categoriaMB}" />
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="3">
+		<h:panelGrid columns="4">
 				
 			Descrição:
-			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
-			<p:message for="txtDescricao"/>
+			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.ativo}"/>
 			
 			Tipo de Categoria:
 			<p:selectOneRadio value="#{managedBean.entity.tipoCategoria}" disabled="#{!managedBean.entity.ativo}">
-				<f:selectItems value="#{managedBean.listaTipoCategoria}"/>
+				<f:selectItems value="#{enumCombo.listaTipoCategoria}"/>
 			</p:selectOneRadio>
-			<h:inputHidden/>
 			
 			Padrão:
 			<p:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-			<h:inputHidden/>
 			
 			Ativo:
 			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" />
-			<h:inputHidden/>
 				
-			</h:panelGrid>
+		</h:panelGrid>
 		
 	</ui:define>
+	
+	<ui:define name="pesquisa">
+		Descrição:
+	    <p:inputText value="#{managedBean.descricaoCategoria}" />
+	    &nbsp;
+	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    Somente ativos
+	</ui:define>
+
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição"/>
+			</f:facet>
+			<h:outputText value="#{item.descricao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF' : 'color: #FF0000' }"/>
+		 </p:column>
+		 			
+		 <p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ativo"/>
+			</f:facet>
+			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
+		 </p:column>
+	</ui:define>
+	
+	<ui:define name="acoes">
+     	<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações"/>
+			</f:facet>		
+			<h:commandButton value="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>								
+	  		&nbsp;&nbsp;&nbsp;			
+			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.padrao}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>
+	  	</p:column>
+     </ui:define>
 
 </ui:composition>
 </html>

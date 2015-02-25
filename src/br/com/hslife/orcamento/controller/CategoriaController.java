@@ -47,22 +47,18 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Categoria;
-import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 
 @Component("categoriaMB")
 @Scope("session")
-public class CategoriaController extends AbstractCRUDController<Categoria> {
+public class CategoriaController extends AbstractSimpleCRUDController<Categoria> {
 	
 	/**
 	 * 
@@ -96,16 +92,9 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 	}
 	
 	@Override
-	public String save() {
+	public void save() {
 		entity.setUsuario(getUsuarioLogado());
-		return super.save();
-	}
-	
-	public List<SelectItem> getListaTipoCategoria() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		listaSelectItem.add(new SelectItem(TipoCategoria.CREDITO, "Crédito"));
-		listaSelectItem.add(new SelectItem(TipoCategoria.DEBITO, "Débito"));
-		return listaSelectItem;
+		super.save();
 	}
 
 	public ICategoria getService() {

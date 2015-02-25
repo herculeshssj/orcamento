@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.facade.IBanco;
 
 @Component("bancoMB")
 @Scope("session")
-public class BancoController extends AbstractCRUDController<Banco> {
+public class BancoController extends AbstractSimpleCRUDController<Banco> {
 	
 	/**
 	 * 
@@ -92,9 +92,9 @@ public class BancoController extends AbstractCRUDController<Banco> {
 	}
 	
 	@Override
-	public String save() {
+	public void save() {
 		entity.setUsuario(getUsuarioLogado());
-		return super.save();
+		super.save();
 	}
 	
 	public IBanco getService() {
