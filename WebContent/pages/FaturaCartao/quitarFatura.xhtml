@@ -86,19 +86,16 @@
 			</p:inputText>
 			
 			Forma de pagamento:
-			<h:selectOneMenu value="#{managedBean.formaPagamentoFatura}" required="true" requiredMessage="Informe uma forma de pagamento!">
-				<f:selectItem itemLabel="Selecione a forma de pagamento" />
-				<f:selectItem itemLabel="Débito em conta" itemValue="1"/>
-				<f:selectItem itemLabel="Parcelar fatura" itemValue="2"/>
-				<f:selectItem itemLabel="Usar um lançamento existente" itemValue="3"/>
+			<h:selectOneMenu id="txtBandeira" value="#{managedBean.formaPagamento}" required="true" requiredMessage="Informe uma forma de pagamento!">
+				<f:selectItem itemLabel="Selecione a forma de pagamento"></f:selectItem>
+				<f:selectItems value="#{enumCombo.listaFormaPagamentoFatura}"/>
 				<p:ajax event="change" update="pnlFormaPagamentoFatura" />
-			</h:selectOneMenu>
-			
+			</h:selectOneMenu>			
 		</h:panelGrid>
 		
 		<p:outputPanel id="pnlFormaPagamentoFatura">
 		
-			<h:panelGrid columns="2" rendered="#{managedBean.formaPagamentoFatura == 1}">
+			<h:panelGrid columns="2" rendered="#{managedBean.formaPagamento == 'DEBITO'}">
 			
 				<f:facet name="header">
 					<h:outputText value="Débito em conta corrente/poupança"/>
@@ -121,7 +118,7 @@
 			
 			</h:panelGrid>
 			
-			<h:panelGrid columns="2" rendered="#{managedBean.formaPagamentoFatura == 2}">
+			<h:panelGrid columns="2" rendered="#{managedBean.formaPagamento == 'PARCELAMENTO'}">
 				<f:facet name="header">
 					<h:outputText value="Parcelar valor da fatura"/>
 				</f:facet>		
@@ -135,7 +132,7 @@
 				</p:inputMask>
 			</h:panelGrid>
 			
-			<p:outputPanel rendered="#{managedBean.formaPagamentoFatura == 3}">
+			<p:outputPanel rendered="#{managedBean.formaPagamento == 'LANCAMENTO'}">
 				<h:panelGrid columns="3">
 				
 					Escolha a conta corrente/poupança:
@@ -188,8 +185,8 @@
 			<p:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
-    	<h:commandLink title="Quitar fatura" action="#{managedBean.quitarFatura}">
-    		<p:graphicImage value="/resources/images/ativar.png" />
+    	<h:commandLink title="Quitar fatura" action="#{managedBean.confirmarQuitacao}">
+    		<p:graphicImage value="/resources/images/baixa.png" />
     	</h:commandLink>
 	</ui:define>
 

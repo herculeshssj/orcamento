@@ -1,0 +1,166 @@
+<!--
+  
+  	Copyright (c) 2012 - 2015 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+		
+			Cartão:
+			<h:outputText value="#{managedBean.faturaSelecionada.conta.cartaoCredito.label}"/>
+			
+			Data de vencimento:
+			<h:outputText value="#{managedBean.faturaSelecionada.dataVencimento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Moeda da fatura:
+			<h:outputText value="#{managedBean.faturaSelecionada.moeda.label}"/>
+			
+			Valor total da fatura:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
+				<h:outputText value="#{managedBean.faturaSelecionada.valorFatura + managedBean.faturaSelecionada.saldoDevedor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>				
+			</h:panelGroup>
+			
+			Pagamento mínimo:
+			<h:outputText value="#{managedBean.faturaSelecionada.valorMinimo}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+			
+			Forma de pagamento:
+			<h:outputText value="#{managedBean.formaPagamento}" />						
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.formaPagamento == 'DEBITO'}">
+		
+			<f:facet name="header">
+				<h:outputText value="Débito em conta corrente/poupança"/>
+			</f:facet>
+			
+			Conta corrente/poupança:
+			<h:outputText value="#{managedBean.contaSelecionada.label}" />
+			
+			Valor a ser pago:
+			<h:outputText value="#{managedBean.valorAQuitar}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+			
+			Data de pagamento:
+			<h:outputText value="#{managedBean.dataPagamento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+		</h:panelGrid>
+			
+		<h:panelGrid columns="2" rendered="#{managedBean.formaPagamento == 'PARCELAMENTO'}">
+			<f:facet name="header">
+				<h:outputText value="Parcelar valor da fatura"/>
+			</f:facet>		
+			
+			Quantidade de parcelas:
+			<h:outputText value="#{managedBean.quantParcelas}"/>
+			
+			Data de parcelamento:
+			<h:outputText value="#{managedBean.dataParcelamento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>			
+		</h:panelGrid>
+			
+		<h:panelGroup rendered="#{managedBean.formaPagamento == 'LANCAMENTO'}">
+			<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
+				<p:column style="vertical-align: middle;">
+					<f:facet name="header">
+				    	<h:outputText value="Histórico"/>
+				    </f:facet>
+				    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+				    	<f:converter converterId="dateConverter"/>
+				    </h:outputText>
+				    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+				    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+				    <h:outputText value=" - AGENDADO" rendered="#{item.statusLancamentoConta == 'AGENDADO'}" style="text-align: left"/>
+				    <br/>
+				    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+				    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+				     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				    </h:outputText>
+				    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
+	     			<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
+	     			<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
+	     			<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
+	     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
+				</p:column>					
+			</p:dataTable>
+		</h:panelGroup>
+	
+	</ui:define>
+
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.quitarFaturaView}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+    	<h:commandLink title="Quitar fatura" action="#{managedBean.quitarFatura}">
+    		<p:graphicImage value="/resources/images/ativar.png" />
+    	</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>

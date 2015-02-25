@@ -74,6 +74,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.Container;
+import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -116,12 +117,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private boolean faturaFechada;
 	private double totalFatura;
 	private boolean exibirParcelarFatura;
-	private int formaPagamentoFatura; // 1 - débito em conta; -1 - parcelar fatura
 	private double valorAQuitar;
 	private Date dataPagamento;
 	private int quantParcelas;
-	private Date dataParcelamento;
-	
+	private Date dataParcelamento;	
 	private CartaoCredito cartaoSelecionado;
 	private FaturaCartao faturaSelecionada;
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
@@ -129,6 +128,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private Conta contaSelecionada;
 	private StatusFaturaCartao statusFatura;
 	private boolean selecionarTodosLancamentos;
+	private FormaPagamentoFatura formaPagamento;
+	private boolean prontoParaQuitar = false;
 	
 	private List<LancamentoConta> detalhesFaturaCartao = new ArrayList<>();
 	private List<Moeda> moedas = new ArrayList<Moeda>();
@@ -511,15 +512,17 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public String quitarFaturaView() {
 		try {
-			faturaSelecionada = getService().buscarPorID(idEntity);
-			criterioBusca = new CriterioBuscaLancamentoConta();
-			contaSelecionada = null;
-			valorAQuitar = 0;
-			dataPagamento = null;
-			quantParcelas = 0;
-			dataPagamento = null;
-			formaPagamentoFatura = 0;
-			lancamentosEncontrados = new ArrayList<LancamentoConta>();
+			if (!prontoParaQuitar) {
+				faturaSelecionada = getService().buscarPorID(idEntity);
+				criterioBusca = new CriterioBuscaLancamentoConta();
+				contaSelecionada = null;
+				valorAQuitar = 0;
+				dataPagamento = null;
+				quantParcelas = 0;
+				dataPagamento = null;
+				formaPagamento = null;
+				lancamentosEncontrados = new ArrayList<LancamentoConta>();
+			}
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
 		} catch (BusinessException be) {
@@ -542,40 +545,48 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 	}
 	
-	public String quitarFatura() {
+	public String confirmarQuitacao() {
+		if (formaPagamento.equals(FormaPagamentoFatura.LANCAMENTO)) {
+			// Verifica se um lançamento foi selecionado na listagem				
+			if(lancamento ==  null || lancamento.getConta() == null) {
+				warnMessage("Selecione um lançamento!");
+				return "";
+			}
+		}
+		
+		if (formaPagamento.equals(FormaPagamentoFatura.PARCELAMENTO)) {
+			// Verifica se a quantidade de parcelas é superior a 1
+			if (quantParcelas < 2) {
+				warnMessage("Informe uma quantidade de parcelas maior de 1!");
+				return "";
+			}
+			// Verifica se a data de parcelamento foi preenchida 
+			if (dataParcelamento == null) {
+				warnMessage("Informe a data de parcelamento!");
+				return "";
+			}
+		}
+		
+		actionTitle = " - Confirmar quitação";
+		prontoParaQuitar = true;
+		return "/pages/FaturaCartao/confirmarQuitacao";
+	}
+	
+	public String quitarFatura() {		
 		try {
-			if (formaPagamentoFatura == 3) {
-				// Verifica se um lançamento foi selecionado na listagem				
-				if(lancamento ==  null || lancamento.getConta() == null) {
-					warnMessage("Selecione um lançamento!");
-					return "";
-				}
-			}
-			
-			if (formaPagamentoFatura == 2) {
-				// Verifica se a quantidade de parcelas é superior a 1
-				if (quantParcelas < 2) {
-					warnMessage("Informe uma quantidade de parcelas maior de 1!");
-					return "";
-				}
-				// Verifica se a data de parcelamento foi preenchida 
-				if (dataParcelamento == null) {
-					warnMessage("Informe a data de parcelamento!");
-					return "";
-				}
-			}
-			
 			// Determina a forma de pagamento da fatura
-			switch(formaPagamentoFatura) {
-				case 1 : getService().quitarFaturaDebitoConta(faturaSelecionada, contaSelecionada, valorAQuitar, dataPagamento); break;
-				case 2 : getService().quitarFaturaParcelamento(faturaSelecionada, quantParcelas, dataParcelamento); break;
-				case 3 : getService().quitarFaturaLancamentoSelecionado(faturaSelecionada, lancamento); break;
+			switch(formaPagamento) {
+				case DEBITO : getService().quitarFaturaDebitoConta(faturaSelecionada, contaSelecionada, valorAQuitar, dataPagamento); break;
+				case PARCELAMENTO : getService().quitarFaturaParcelamento(faturaSelecionada, quantParcelas, dataParcelamento); break;
+				case LANCAMENTO : getService().quitarFaturaLancamentoSelecionado(faturaSelecionada, lancamento); break;
 				default : throw new BusinessException("Opção inválida!");
 			}			
 			infoMessage("Fatura quitada com sucesso!");
 
 			this.reprocessarBusca();
-						
+			
+			prontoParaQuitar = false;
+			
 			return "/pages/FaturaCartao/listFaturaCartao";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -623,19 +634,12 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			totalFatura += moeda.getTotalConvertido();
 		}
 	} 
-	
+	/*
+	@Deprecated
 	public void atualizaListaFatura() {
 		this.getListaFaturaCartao();
 	}
-	
-	public void exibirOpcaoFormaPagamento() {
-		if (formaPagamentoFatura == 1) {
-			exibirParcelarFatura = false;
-		} else {
-			exibirParcelarFatura = true;
-		}
-	}
-	
+	*/
 	public List<CartaoCredito> getListaCartaoSoCredito() {
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
@@ -652,7 +656,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<Moeda> getListaMoeda() {
 		try {
 			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
-			// Lógica para incluir o banco inativo da entidade na combo
+			// Lógica para incluir a moeda inativa na combo
 			if (resultado != null && entity.getMoeda() != null) {
 				if (!resultado.contains(entity.getMoeda())) {
 					entity.getMoeda().setAtivo(true);
@@ -684,7 +688,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 
 	}
-	
+	/*
 	@Deprecated
 	public List<FaturaCartao> getListaFaturaCartao() {
 		List<FaturaCartao> listaFaturas = new ArrayList<FaturaCartao>();
@@ -723,7 +727,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 		return listaFaturas;
 	}
-	
+	*/
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
@@ -780,14 +784,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public void setExibirParcelarFatura(boolean exibirParcelarFatura) {
 		this.exibirParcelarFatura = exibirParcelarFatura;
-	}
-
-	public int getFormaPagamentoFatura() {
-		return formaPagamentoFatura;
-	}
-
-	public void setFormaPagamentoFatura(int formaPagamentoFatura) {
-		this.formaPagamentoFatura = formaPagamentoFatura;
 	}
 
 	public double getValorAQuitar() {
@@ -918,5 +914,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public void setDataParcelamento(Date dataParcelamento) {
 		this.dataParcelamento = dataParcelamento;
+	}
+
+	public FormaPagamentoFatura getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	public void setFormaPagamento(FormaPagamentoFatura formaPagamento) {
+		this.formaPagamento = formaPagamento;
 	}
 }
