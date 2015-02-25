@@ -161,7 +161,7 @@ public class LancamentoConta extends EntityPersistence {
 	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idFaturaCartao", nullable=true)
 	private FaturaCartao faturaCartao;
 	
