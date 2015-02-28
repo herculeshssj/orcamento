@@ -53,7 +53,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/formulario_simples.xhtml">
 
 	<ui:param name="managedBean" value="#{categoriaDocumentoMB}" />
 	
@@ -68,6 +68,20 @@
 		</h:panelGrid>
 		
 	</ui:define>
+	
+	<ui:define name="pesquisa">
+		Descrição:
+	    <p:inputText value="#{managedBean.descricaoCategoria}" />
+	</ui:define>
 
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição"/>
+			</f:facet>
+			<h:outputText value="#{item.descricao}" />
+  		</p:column>  			
+	</ui:define>
+	
 </ui:composition>
 </html>

@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.facade.IMeioPagamento;
 
 @Component("meioPagamentoMB")
 @Scope("session")
-public class MeioPagamentoController extends AbstractCRUDController<MeioPagamento> {
+public class MeioPagamentoController extends AbstractSimpleCRUDController<MeioPagamento> {
 	
 	/**
 	 * 
@@ -74,6 +74,7 @@ public class MeioPagamentoController extends AbstractCRUDController<MeioPagament
 	public MeioPagamentoController() {
 		super(new MeioPagamento());
 		moduleTitle = "Meios de Pagamento";
+		goToModule = "/pages/menu/cadastros.faces";
 	}
 	
 	@Override
@@ -92,9 +93,9 @@ public class MeioPagamentoController extends AbstractCRUDController<MeioPagament
 	}
 	
 	@Override
-	public String save() {
+	public void save() {
 		entity.setUsuario(getUsuarioLogado());
-		return super.save();
+		super.save();
 	}
 
 	public IMeioPagamento getService() {

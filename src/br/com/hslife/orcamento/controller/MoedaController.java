@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("moedaMB")
 @Scope("session")
-public class MoedaController extends AbstractCRUDController<Moeda> {
+public class MoedaController extends AbstractSimpleCRUDController<Moeda> {
 	
 	/**
 	 * 
@@ -74,6 +74,7 @@ public class MoedaController extends AbstractCRUDController<Moeda> {
 	public MoedaController() {
 		super(new Moeda());
 		moduleTitle = "Moeda";
+		goToModule = "/pages/menu/cadastros.faces";
 	}
 	
 	@Override
@@ -92,9 +93,9 @@ public class MoedaController extends AbstractCRUDController<Moeda> {
 	}
 	
 	@Override
-	public String save() {
+	public void save() {
 		entity.setUsuario(getUsuarioLogado());
-		return super.save();
+		super.save();
 	}
 
 	public IMoeda getService() {

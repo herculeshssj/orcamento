@@ -74,6 +74,7 @@ public class BancoController extends AbstractSimpleCRUDController<Banco> {
 	public BancoController() {
 		super(new Banco());
 		moduleTitle = "Banco";
+		goToModule = "/pages/menu/cadastros.faces";
 	}
 	
 	@Override

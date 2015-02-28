@@ -53,19 +53,19 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/formulario_simples.xhtml">
 
 	<ui:param name="managedBean" value="#{moedaMB}" />
 	
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="2">
+		<h:panelGrid columns="4">
 				
 			Nome da moeda:
 			<p:inputText id="txtNomeMoeda" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo}"/>			
 			
 			País:
-			<p:inputText id="txtNomePais" value="#{managedBean.entity.pais}" size="50" maxlength="50" disabled="#{!managedBean.entity.ativo}"/>			
+			<p:inputText id="txtNomePais" value="#{managedBean.entity.pais}" maxlength="50" disabled="#{!managedBean.entity.ativo}"/>			
 			
 			Sigla do país:
 			<p:inputText id="txtSiglaPais" value="#{managedBean.entity.siglaPais}" size="3" maxlength="2" disabled="#{!managedBean.entity.ativo}"/>			
@@ -76,19 +76,71 @@
 			Código monetário:
 			<p:inputText id="txtCodigoMonetario" value="#{managedBean.entity.codigoMonetario}" size="3" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>
 			
-			<h:outputText value="Valor de conversão moeda local:" rendered="#{!managedBean.entity.padrao}" />			
-			<p:inputText value="#{managedBean.entity.valorConversao}" size="5" rendered="#{!managedBean.entity.padrao}">
-				<f:convertNumber maxFractionDigits="4"/>
-			</p:inputText>		
-			
 			<h:outputText value="Padrão:" rendered="#{!managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>			
 			<p:selectBooleanCheckbox value="#{managedBean.entity.padrao}" rendered="#{!managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
 			
 			<h:outputText value="Ativo:" rendered="#{!managedBean.entity.padrao}"/>			
-			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" rendered="#{!managedBean.entity.padrao}"/>			
+			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" rendered="#{!managedBean.entity.padrao}"/>
+			
+			<h:outputText value="Valor de conversão moeda local:" rendered="#{!managedBean.entity.padrao}" />			
+			<p:inputText value="#{managedBean.entity.valorConversao}" size="5" rendered="#{!managedBean.entity.padrao}">
+				<f:convertNumber maxFractionDigits="4"/>
+			</p:inputText>
+			
+			<h:outputText rendered="#{managedBean.entity.padrao}"/>
+			<h:outputText rendered="#{managedBean.entity.padrao}"/>			
 				
 		</h:panelGrid>
 		
+	</ui:define>
+	
+	<ui:define name="pesquisa">
+		Nome:
+	    <p:inputText value="#{managedBean.nomeMoeda}" />
+	    &nbsp;
+	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    Somente ativos
+	</ui:define>
+
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Nome" />
+			</f:facet>
+			<h:outputText value="#{item.simboloMonetario} - #{item.nome}" />
+		</p:column>
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="País" />
+			</f:facet>
+			<h:outputText value="#{item.pais} - #{item.siglaPais}" />
+		</p:column>
+			
+   		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ativo"/>
+			</f:facet>
+			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
+   		</p:column>		
+	</ui:define>
+
+	<ui:define name="acoes_tabela">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandButton value="Editar" image="/resources/images/alterar.png"
+				action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}"
+					target="#{managedBean.idEntity}" />
+			</h:commandButton>								
+	  					&nbsp;&nbsp;&nbsp;
+						<h:commandButton value="Excluir" rendered="#{!item.padrao}"
+				image="/resources/images/excluir.png" action="#{managedBean.view}">
+				<f:setPropertyActionListener value="#{item.id}"
+					target="#{managedBean.idEntity}" />
+			</h:commandButton>
+		</p:column>
 	</ui:define>
 
 </ui:composition>

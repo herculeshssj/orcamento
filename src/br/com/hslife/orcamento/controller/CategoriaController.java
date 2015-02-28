@@ -74,6 +74,7 @@ public class CategoriaController extends AbstractSimpleCRUDController<Categoria>
 	public CategoriaController() {
 		super(new Categoria());
 		moduleTitle = "Categoria";
+		goToModule = "/pages/menu/cadastros.faces";
 	}
 	
 	@Override
