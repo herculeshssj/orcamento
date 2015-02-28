@@ -77,6 +77,12 @@ public class RegraImportacaoComponent {
 	@Autowired
 	private MeioPagamentoRepository meioPagamentoRepository;
 	
+	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) {
+		List<LancamentoConta> lancamentos = new ArrayList<>();
+		lancamentos.add(lancamento);
+		return this.processarRegras(conta, lancamentos).get(0);
+	}
+	
 	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) {
 		Set<LancamentoConta> lancamentosProcessados = new HashSet<LancamentoConta>();
 		

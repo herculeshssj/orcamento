@@ -356,7 +356,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					: moedaRepository.findCodigoMoedaByUsuario(entity.getMoeda(), usuarioComponent.getUsuarioLogado()));
 			
 			// Salva o lançamento
-			lancamentoContaRepository.save(l);
+			lancamentoContaRepository.save(regraImportacaoComponent.processarRegras(entity.getConta(), l));
 			
 			// Exclui o lançamento importado
 			lancamentoImportadoRepository.delete(entity);
