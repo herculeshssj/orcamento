@@ -50,6 +50,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -78,6 +79,7 @@ import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IOrcamento;
+import br.com.hslife.orcamento.util.DetalheOrcamentoComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("orcamentoMB")
@@ -136,7 +138,8 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	public void find() {
 		if (orcamentoSelecionado != null) {
 			listaDetalheOrcamento.clear();
-			listaDetalheOrcamento.addAll(orcamentoSelecionado.getDetalhes());
+			listaDetalheOrcamento.addAll(orcamentoSelecionado.getDetalhes());			
+			Collections.sort(listaDetalheOrcamento, new DetalheOrcamentoComparator());
 			mostrarInformacao = true;
 		}
 	}
@@ -167,6 +170,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		super.edit();
 		listaItemDetalheOrcamento.clear();
 		listaItemDetalheOrcamento.addAll(entity.getDetalhes());
+		Collections.sort(listaItemDetalheOrcamento, new DetalheOrcamentoComparator());
 		return goToFormPage;
 	}
 	
@@ -179,6 +183,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		super.view();
 		listaItemDetalheOrcamento.clear();
 		listaItemDetalheOrcamento.addAll(entity.getDetalhes());
+		Collections.sort(listaItemDetalheOrcamento, new DetalheOrcamentoComparator());
 		return goToViewPage;
 	}
 	
@@ -268,6 +273,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 			detalheOrcamento.setPrevisaoCredito(previsaoCredito);
 			detalheOrcamento.setPrevisaoDebito(previsaoDebito);
 			listaItemDetalheOrcamento.add(detalheOrcamento);
+			Collections.sort(listaItemDetalheOrcamento, new DetalheOrcamentoComparator());
 		}
 	}
 	
@@ -277,6 +283,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 				i.remove();
 			}
 		}
+		Collections.sort(listaItemDetalheOrcamento, new DetalheOrcamentoComparator());
 	}
 	
 	public List<DetalheOrcamento> getListaItensDetalheOrcamento() {
@@ -329,7 +336,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 			}
 		}
 		
-		//resultado.removeAll(listaItemDetalheOrcamento);
+		Collections.sort(resultado, new DetalheOrcamentoComparator());
 		return resultado;
 	}
 	
