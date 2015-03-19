@@ -91,20 +91,12 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-    -- Regras de importação
-	create table regraimportacao (
-		id bigint not null auto_increment,
-		texto varchar(100) not null,
-		idCategoria bigint null,
-		idFavorecido bigint null,
-		idMeioPagamento bigint null,
-		idConta bigint not null,
-		versionEntity datetime not null default '2015-04-01 00:00:00',
-		primary key (id)
-	) Engine=InnoDB;
+    alter table fechamentoperiodo drop column usuario;
+    
+    -- Inclusão de constrainst entre lançamentoconta e FechamentoPeriodo
+alter table lancamentoconta add column idFechamentoPeriodo bigint null;
+alter table lancamentoconta add constraint fk_fechamentoperiodo_lancamentoconta foreign key (idFechamentoPeriodo) references fechamentoperiodo(id);
 	
-	alter table regraimportacao add constraint fk_regraimportacao_conta foreign key(idConta) references conta(id);
-
     /*** Fim do bloco de atualizações da base ***/
     
     commit;

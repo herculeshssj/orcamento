@@ -71,6 +71,14 @@
 	<ui:define name="colunas">
 		<p:column>
 			<f:facet name="header">
+				<h:outputText value="Período"/>				
+			</f:facet>
+			<h:outputText value="#{item.mes}" />
+			<h:outputText value=" / " />
+			<h:outputText value="#{item.ano}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
 				<h:outputText value="Fechamento"/>				
 			</f:facet>
 			<h:outputText value="#{item.data}">
@@ -88,17 +96,10 @@
 			<f:facet name="header">
 				<h:outputText value="Saldo"/>
 			</f:facet>
-			R$&nbsp;
+			<h:outputText value="#{item.conta.moeda.simboloMonetario} " />
 			<h:outputText value="#{item.saldo}">
 				<f:convertNumber type="currency" pattern="###.##"/>
 			</h:outputText>
-		</p:column>
-		<p:column>
-			<f:facet name="header">
-				<h:outputText value="Fechado por" rendered="#{!managedBean.exibirReabertura}"/>
-				<h:outputText value="Reaberto por" rendered="#{managedBean.exibirReabertura}"/>
-			</f:facet>
-			<h:outputText value="#{item.usuario}"/>
 		</p:column>
 	</ui:define>
 	

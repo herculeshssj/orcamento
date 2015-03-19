@@ -73,9 +73,6 @@ public class FechamentoPeriodo extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable=false)
-	private String usuario;
-	
 	@Column(nullable=false, precision=18, scale=2)
 	private double saldo;
 	
@@ -127,15 +124,7 @@ public class FechamentoPeriodo extends EntityPersistence {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-
+	
 	public double getSaldo() {
 		return saldo;
 	}

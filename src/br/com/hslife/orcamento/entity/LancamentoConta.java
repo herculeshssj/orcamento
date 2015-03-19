@@ -169,6 +169,10 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idLancamentoPeriodico", nullable=true)
 	private LancamentoPeriodico lancamentoPeriodico;
 	
+	@OneToOne
+	@JoinColumn(name="idFechamentoPeriodo", nullable=true)
+	private FechamentoPeriodo fechamentPeriodo;
+	
 	@Transient
 	private LancamentoImportado lancamentoImportado;
 	
@@ -440,5 +444,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setStatusLancamentoConta(StatusLancamentoConta statusLancamentoConta) {
 		this.statusLancamentoConta = statusLancamentoConta;
+	}
+
+	public FechamentoPeriodo getFechamentPeriodo() {
+		return fechamentPeriodo;
+	}
+
+	public void setFechamentPeriodo(FechamentoPeriodo fechamentPeriodo) {
+		this.fechamentPeriodo = fechamentPeriodo;
 	}
 }

@@ -416,7 +416,6 @@ public class ContaComponent {
 		novoFechamento.setData(dataFechamento);
 		novoFechamento.setOperacao(OperacaoConta.FECHAMENTO);
 		novoFechamento.setDataAlteracao(new Date());
-		novoFechamento.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
 		novoFechamento.setSaldo(saldoFechamentoAnterior + saldoFechamento);
 		
 		// Obtém o mês e ano da data de fechamento

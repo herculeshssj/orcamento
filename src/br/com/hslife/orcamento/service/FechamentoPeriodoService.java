@@ -135,7 +135,6 @@ public class FechamentoPeriodoService extends AbstractCRUDService<FechamentoPeri
 		for (FechamentoPeriodo fp : fechamentos) {
 			fp.setOperacao(OperacaoConta.REABERTURA);
 			fp.setDataAlteracao(new Date());
-			fp.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
 			getRepository().update(fp);
 		}
 		

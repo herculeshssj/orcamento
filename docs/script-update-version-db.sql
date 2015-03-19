@@ -187,3 +187,10 @@ create table regraimportacao (
 ) Engine=InnoDB;
 
 alter table regraimportacao add constraint fk_regraimportacao_conta foreign key(idConta) references conta(id);
+
+-- Remoção da coluna usuario (Fechado por) - Issue #57
+alter table fechamentoperiodo drop column usuario;
+
+-- Inclusão de constrainst entre lançamentoconta e FechamentoPeriodo
+alter table lancamentoconta add column idFechamentoPeriodo bigint null;
+alter table lancamentoconta add constraint fk_fechamentoperiodo_lancamentoconta foreign key (idFechamentoPeriodo) references fechamentoperiodo(id);
