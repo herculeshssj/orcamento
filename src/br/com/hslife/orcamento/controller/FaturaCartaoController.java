@@ -552,6 +552,9 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				warnMessage("Selecione um lançamento!");
 				return "";
 			}
+			
+			lancamentosEncontrados.clear();
+			lancamentosEncontrados.add(lancamento);
 		}
 		
 		if (formaPagamento.equals(FormaPagamentoFatura.PARCELAMENTO)) {
@@ -634,12 +637,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			totalFatura += moeda.getTotalConvertido();
 		}
 	} 
-	/*
-	@Deprecated
-	public void atualizaListaFatura() {
-		this.getListaFaturaCartao();
-	}
-	*/
+
 	public List<CartaoCredito> getListaCartaoSoCredito() {
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
@@ -688,46 +686,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 
 	}
-	/*
-	@Deprecated
-	public List<FaturaCartao> getListaFaturaCartao() {
-		List<FaturaCartao> listaFaturas = new ArrayList<FaturaCartao>();
-		try {
-			OpcaoSistema opcaoQuitado = getOpcoesSistema().buscarPorChaveEUsuario("FATURA_EXIBIR_QUITADAS", getUsuarioLogado());
-			OpcaoSistema opcaoVencida = getOpcoesSistema().buscarPorChaveEUsuario("FATURA_EXIBIR_VENCIDAS", getUsuarioLogado());
-			
-			boolean valorOpcaoQuitado = opcaoQuitado != null && Boolean.valueOf(opcaoQuitado.getValor());
-			boolean valorOpcaoVencida = opcaoVencida != null && Boolean.valueOf(opcaoVencida.getValor());
-			
-			if (cartaoSelecionado == null) {
-				listaFaturas = getService().buscarTodosPorUsuario(getUsuarioLogado());
-			} else {
-				listaFaturas = getService().buscarTodosPorCartaoCredito(cartaoSelecionado.getConta());
-			}
-			
-			// Se a opção for falsa (não exibir) as faturas com o status de QUITADA são removidas da listagem
-			if (!valorOpcaoQuitado)
-				for (Iterator<FaturaCartao> it = listaFaturas.iterator(); it.hasNext(); ) {
-					FaturaCartao fatura = it.next();
-					if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.QUITADA)) {
-						it.remove();
-					}
-				}
-			
-			// Se a opção for falsa (não exibir) as faturas com o status de VENCIDA são removidas da listagem
-			if (!valorOpcaoVencida)
-				for (Iterator<FaturaCartao> it = listaFaturas.iterator(); it.hasNext(); ) {
-					FaturaCartao fatura = it.next();
-					if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.VENCIDA)) {
-						it.remove();
-					}
-				}			
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return listaFaturas;
-	}
-	*/
+	
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());

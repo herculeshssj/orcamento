@@ -125,7 +125,7 @@
 		</h:panelGrid>
 			
 		<h:panelGroup rendered="#{managedBean.formaPagamento == 'LANCAMENTO'}">
-			<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
+			<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}">					
 				<p:column style="vertical-align: middle;">
 					<f:facet name="header">
 				    	<h:outputText value="Histórico"/>

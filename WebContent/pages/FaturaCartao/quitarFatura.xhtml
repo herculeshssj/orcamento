@@ -145,13 +145,15 @@
 					<p:inputMask value="#{managedBean.criterioBusca.dataInicio}" size="10" required="true" requiredMessage="Informe a data de pagamento da fatura!" mask="99/99/9999">
 						<f:converter converterId="dateConverter"/>
 					</p:inputMask>
-					<h:commandButton action="#{managedBean.pesquisarLancamentoQuitacao}" title="Pesquisar" image="/resources/images/pesquisar.png"/>
+					<p:commandLink actionListener="#{managedBean.pesquisarLancamentoQuitacao}" title="Pesquisar" update="tableLancamentoEncontrados">
+						<h:graphicImage value="/resources/images/pesquisar.png" />
+					</p:commandLink>
 					
 				</h:panelGrid>
 				
 				<i>Lançamentos encontrados:</i>
 		
-				<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
+				<p:dataTable id="tableLancamentoEncontrados" var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
 					<p:column style="vertical-align: middle;">
 						<f:facet name="header">
 					    	<h:outputText value="Histórico"/>
