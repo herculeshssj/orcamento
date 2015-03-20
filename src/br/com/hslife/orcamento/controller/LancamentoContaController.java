@@ -309,7 +309,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return movimentacaoLancamentoMB.alterarPropriedadesView();
 	}
 	
-	public String transferir() {	
+	public String transferir() {
+		initializeEntity();
 		return movimentacaoLancamentoMB.transferirView();
 	}
 	
