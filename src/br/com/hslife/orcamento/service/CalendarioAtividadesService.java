@@ -118,6 +118,6 @@ public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> imp
 		fim.setHours(23);
 		fim.setMinutes(59);
 		fim.setSeconds(59);
-		return getRepository().countAgendamentoByDataInicioAndDataFimAndAlerta(inicio, fim, true);
+		return getRepository().countAgendamentoByDataInicioOrDataFimAndAlerta(inicio, fim, true);
 	}
 }
