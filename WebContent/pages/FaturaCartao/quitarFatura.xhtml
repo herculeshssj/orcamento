@@ -145,13 +145,15 @@
 					<p:inputMask value="#{managedBean.criterioBusca.dataInicio}" size="10" required="true" requiredMessage="Informe a data de pagamento da fatura!" mask="99/99/9999">
 						<f:converter converterId="dateConverter"/>
 					</p:inputMask>
-					<h:commandButton action="#{managedBean.pesquisarLancamentoQuitacao}" title="Pesquisar" image="/resources/images/pesquisar.png"/>
+					<p:commandLink actionListener="#{managedBean.pesquisarLancamentoQuitacao}" title="Pesquisar" update="tableLancamentoEncontrados">
+						<h:graphicImage value="/resources/images/pesquisar.png" />
+					</p:commandLink>
 					
 				</h:panelGrid>
 				
 				<i>Lançamentos encontrados:</i>
 		
-				<p:dataTable var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
+				<p:dataTable id="tableLancamentoEncontrados" var="item" value="#{managedBean.lancamentosEncontrados}" selection="#{managedBean.lancamento}" selectionMode="single" rowKey="#{item.id}">					
 					<p:column style="vertical-align: middle;">
 						<f:facet name="header">
 					    	<h:outputText value="Histórico"/>
@@ -172,6 +174,12 @@
 		     			<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
 		     			<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 		     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
+		     			<h:graphicImage id="imgInfo" value="/resources/images/info.png"/>
+		     			<p:tooltip for="imgInfo">
+							<h:outputText value="Categoria: #{item.categoria.descricao}" rendered="#{item.categoria != null}"/><br/>
+							<h:outputText value="Favorecido: #{item.favorecido.nome}" rendered="#{item.favorecido != null}"/><br/>
+							<h:outputText value="Meio de Pagamento: #{item.meioPagamento.descricao}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento and item.meioPagamento != null}"/>
+						</p:tooltip>
 					</p:column>					
 				</p:dataTable>
 			</p:outputPanel>

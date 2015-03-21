@@ -200,10 +200,12 @@ public class AgendaTest {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testComporDataHoraMinuto() {		
-		Calendar dataTest = Calendar.getInstance();
-		dataTest.set(new Date().getYear() + 1900, new Date().getMonth(), new Date().getDate(), 15, 30, 0);
+		Date dataTest = new Date();
+		dataTest.setHours(15);
+		dataTest.setMinutes(30);
+		dataTest.setSeconds(0);
 		
-		assertEquals(dataTest.getTime(), entity.comporData(dataTest.getTime(), 15, 30));
+		assertEquals(dataTest, entity.comporData(dataTest, 15, 30));
 	}
 	
 	@SuppressWarnings("deprecation")

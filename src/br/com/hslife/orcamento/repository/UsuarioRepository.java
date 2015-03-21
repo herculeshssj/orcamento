@@ -85,60 +85,105 @@ public class UsuarioRepository extends AbstractCRUDRepository<Usuario> {
 	
 	public Map<String, Long> findUserActivity(Usuario usuario) {
 		Map<String, Long> usuarioAtividade = new HashMap<String, Long>();
-		Integer resultado = new Integer("0");
 		
 		// Traz a quantidade de bancos do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.banco where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("BANCO", resultado.longValue());
-		
+		usuarioAtividade.put("BANCO", 
+				(Long)getQuery("SELECT COUNT(*) FROM Banco banco WHERE banco.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
+
 		// Traz a quantidade de categorias do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.categoria where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("CATEGORIA", resultado.longValue());
-		
+		usuarioAtividade.put("CATEGORIA", 
+				(Long)getQuery("SELECT COUNT(*) FROM Categoria categoria WHERE categoria.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
+				
 		// Traz a quantidade de categorias de documento do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.categoriadocumento where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("CATEGORIA_DOCUMENTO", resultado.longValue());
+		usuarioAtividade.put("CATEGORIA_DOCUMENTO", 
+				(Long)getQuery("SELECT COUNT(*) FROM CategoriaDocumento categoriaDocumento WHERE categoriaDocumento.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
 		
 		// Traz a quantidade de contas do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.conta where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("CONTA", resultado.longValue());
-		
+		usuarioAtividade.put("CONTA", 
+				(Long)getQuery("SELECT COUNT(*) FROM Conta conta WHERE conta.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
+
 		// Traz a quantidade de despensas do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.despensa where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("DESPENSA", resultado.longValue());
+		usuarioAtividade.put("DESPENSA", 
+				(Long)getQuery("SELECT COUNT(*) FROM Despensa despensa WHERE despensa.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
 		
 		// Traz a quantidade de favorecidos do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.favorecido where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("FAVORECIDO", resultado.longValue());
+		usuarioAtividade.put("FAVORECIDO", 
+				(Long)getQuery("SELECT COUNT(*) FROM Favorecido favorecido WHERE favorecido.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
 		
 		// Traz a quantidade de lançamentos periódicos do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.lancamentoperiodico where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("LANCAMENTO_PERIODICO", resultado.longValue());
+		usuarioAtividade.put("LANCAMENTO_PERIODICO", 
+				(Long)getQuery("SELECT COUNT(*) FROM LancamentoPeriodico lancamentoPeriodico WHERE lancamentoPeriodico.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
 		
 		// Traz a quantidade de meios de pagemento do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.meiopagamento where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("MEIO_PAGAMENTO", resultado.longValue());
+		usuarioAtividade.put("MEIO_PAGAMENTO", 
+				(Long)getQuery("SELECT COUNT(*) FROM MeioPagamento meioPagamento WHERE meioPagamento.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
 		
 		// Traz a quantidade de moedas do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.moeda where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("MOEDA", resultado.longValue());
+		usuarioAtividade.put("MOEDA", 
+				(Long)getQuery("SELECT COUNT(*) FROM Moeda moeda WHERE moeda.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
 		
 		// Traz a quantidade de opções do sistema do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.opcaosistema where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("OPCAO_SISTEMA", resultado.longValue());
+		usuarioAtividade.put("OPCAO_SISTEMA", 
+				(Long)getQuery("SELECT COUNT(*) FROM OpcaoSistema opcao WHERE opcao.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
+		
+		// Traz a quantidade de orçamentos cadastrados pelo usuário
+		usuarioAtividade.put("ORCAMENTO", 
+				(Long)getQuery("SELECT COUNT(*) FROM Orcamento orcamento WHERE orcamento.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
 		
 		// Traz a quantidade de documentos de identidade do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.identidade where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("IDENTIDADE", resultado.longValue());
+		usuarioAtividade.put("IDENTIDADE", 
+				(Long)getQuery("SELECT COUNT(*) FROM Identidade identidade WHERE identidade.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);		
 		
 		// Traz a quantidade de registros de auditoria do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.auditoria where usuario = '" + usuario.getLogin() + "'").uniqueResult(); 
-		usuarioAtividade.put("AUDITORIA", resultado.longValue());
+		usuarioAtividade.put("AUDITORIA", 
+				(Long)getQuery("SELECT COUNT(*) FROM Auditoria auditoria WHERE auditoria.usuario = :idUsuario")
+				.setString("idUsuario", usuario.getLogin())
+				.uniqueResult()
+		);		
 		
 		// Traz a quantidade de unidades de medida do usuário
-		resultado = (Integer)getSession().createSQLQuery("select count(*) from orcamento.unidademedida where idUsuario = " + usuario.getId()).uniqueResult(); 
-		usuarioAtividade.put("UNIDADE_MEDIDA", resultado.longValue());
-		
+		usuarioAtividade.put("UNIDADE_MEDIDA", 
+				(Long)getQuery("SELECT COUNT(*) FROM UnidadeMedida unidadeMedida WHERE unidadeMedida.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.uniqueResult()
+		);
+				
 		return usuarioAtividade;
 	}
 }

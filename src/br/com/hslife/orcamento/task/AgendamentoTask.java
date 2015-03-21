@@ -101,7 +101,7 @@ public class AgendamentoTask {
 		fim.setHours(23);
 		fim.setMinutes(59);
 		fim.setSeconds(59);
-		List<Agenda> agendamentos =  agendaRepository.findAgendamentoByDataInicioAndDataFimAndAlerta(inicio, fim, true);
+		List<Agenda> agendamentos =  agendaRepository.findAgendamentoByOrDataInicioOrDataFimAndAlerta(inicio, fim, true);
 		
 		
 		// Itera a lista de agendamentos encontrados, e para cada uma envia um e-mail para o usuário
@@ -137,7 +137,6 @@ public class AgendamentoTask {
 	
 	@Scheduled(fixedDelay=3600000)
 	@SuppressWarnings("deprecation")
-	//@Scheduled(fixedDelay=120000)
 	public void executarTarefa() {
 		CriterioAgendamento criterioAgendamento = new CriterioAgendamento();
 		criterioAgendamento.setTipo(TipoAgendamento.PREVISAO);

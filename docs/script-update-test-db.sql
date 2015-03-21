@@ -91,11 +91,12 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
+	-- Remoção da coluna usuario (Fechado por) - Github Issue #57
 	alter table fechamentoperiodo drop column usuario;
 	
 	-- Inclusão de constrainst entre lançamentoconta e FechamentoPeriodo
-alter table lancamentoconta add column idFechamentoPeriodo bigint null;
-alter table lancamentoconta add constraint fk_fechamentoperiodo_lancamentoconta foreign key (idFechamentoPeriodo) references fechamentoperiodo(id);
+	alter table lancamentoconta add column idFechamentoPeriodo bigint null;
+	alter table lancamentoconta add constraint fk_fechamentoperiodo_lancamentoconta foreign key (idFechamentoPeriodo) references fechamentoperiodo(id);
     
     /*** Fim do bloco de atualizações da base ***/
     

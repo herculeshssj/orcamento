@@ -115,7 +115,6 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	private Categoria categoriaDestino;
 	
 	private Favorecido favorecidoSelecionado;
-	private Favorecido favorecidoDestino;
 	
 	private MeioPagamento meioPagamentoSelecionado;
 	
@@ -263,7 +262,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			parametros.put("CONTA_DESTINO", contaDestino);
 			parametros.put("CATEGORIA_ORIGEM", categoriaSelecionada);
 			parametros.put("CATEGORIA_DESTINO", categoriaDestino);
-			parametros.put("FAVORECIDO_DESTINO", favorecidoDestino);
+			parametros.put("FAVORECIDO_DESTINO", favorecidoSelecionado);
 			parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
 			getService().transferirLancamentos(lancamentoATransferir, parametros);
 			infoMessage("Valor transferido com sucesso!");
@@ -455,14 +454,6 @@ public class MovimentacaoLancamentoController extends AbstractController {
 
 	public void setCategoriaDestino(Categoria categoriaDestino) {
 		this.categoriaDestino = categoriaDestino;
-	}
-
-	public Favorecido getFavorecidoDestino() {
-		return favorecidoDestino;
-	}
-
-	public void setFavorecidoDestino(Favorecido favorecidoDestino) {
-		this.favorecidoDestino = favorecidoDestino;
 	}
 
 	public LancamentoConta getLancamentoATransferir() {

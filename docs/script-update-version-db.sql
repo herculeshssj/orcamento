@@ -188,7 +188,7 @@ create table regraimportacao (
 
 alter table regraimportacao add constraint fk_regraimportacao_conta foreign key(idConta) references conta(id);
 
--- Remoção da coluna usuario (Fechado por) - Issue #57
+-- Remoção da coluna usuario (Fechado por) - Github Issue #57
 alter table fechamentoperiodo drop column usuario;
 
 -- Inclusão de constrainst entre lançamentoconta e FechamentoPeriodo

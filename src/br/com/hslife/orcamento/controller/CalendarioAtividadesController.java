@@ -46,8 +46,6 @@
 
 package br.com.hslife.orcamento.controller;
 
-import java.util.Date;
-
 import org.primefaces.event.ScheduleEntrySelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -86,17 +84,11 @@ public class CalendarioAtividadesController extends AbstractController {
 		
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public String startUp() {		
 		// Carrega todos os eventos da data e hora atual em diante
 		calendario = new DefaultScheduleModel();
 		CriterioAgendamento criterioBusca = new CriterioAgendamento();
-		Date inicio = new Date();
-		inicio.setHours(0);
-		inicio.setMinutes(0);
-		inicio.setSeconds(0);
-		criterioBusca.setInicio(inicio);
 		try {
 			DefaultScheduleEvent evento = new DefaultScheduleEvent();
 			for (Agenda agenda : service.buscarPorCriterioAgendamento(criterioBusca)) {
