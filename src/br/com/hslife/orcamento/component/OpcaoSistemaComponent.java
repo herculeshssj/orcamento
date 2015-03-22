@@ -73,10 +73,9 @@ public class OpcaoSistemaComponent implements Serializable{
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
-
-	public void setOpcaoSistemaRepository(OpcaoSistemaRepository opcaoSistemaRepository) {
-		this.opcaoSistemaRepository = opcaoSistemaRepository;
-	}
+	
+	// Guarda em cache os valores das opções do sistema
+	private Map<String, Object> cacheOpcoesSistema = new HashMap<>();
 	
 	public OpcaoSistema buscarPorChaveEUsuario(String chave, Usuario usuario) throws BusinessException {
 		return opcaoSistemaRepository.findOpcaoUserByChave(chave, usuario);
@@ -228,13 +227,24 @@ public class OpcaoSistemaComponent implements Serializable{
 		this.salvarOpcoesUser(opcoesUsuario, entity);
 	}
 	
+	/* Atualização do cache de opções do sistema */
+	public void atualizarCacheOpcoesSistema() {
+		cacheOpcoesSistema.clear();
+		cacheOpcoesSistema.put("CONTA_EXIBIR_MEIO_PAGAMENTO", this.getExibirMeioPagamento());
+	}
+	
 	/*** Métodos Getters das opções do sistema existentes ***/
 	
 	public Boolean getExibirMeioPagamento() {
 		try {
-			OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_MEIO_PAGAMENTO", usuarioComponent.getUsuarioLogado());
-			if (opcao != null)
-				return Boolean.valueOf(opcao.getValor());
+			// Verifica se o valor existe no cache
+			if (cacheOpcoesSistema.containsKey("CONTA_EXIBIR_MEIO_PAGAMENTO") && cacheOpcoesSistema.get("CONTA_EXIBIR_MEIO_PAGAMENTO") != null) {
+				return Boolean.valueOf((Boolean)cacheOpcoesSistema.get("CONTA_EXIBIR_MEIO_PAGAMENTO"));
+			} else {
+				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_MEIO_PAGAMENTO", usuarioComponent.getUsuarioLogado());
+				if (opcao != null)
+					return Boolean.valueOf(opcao.getValor());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

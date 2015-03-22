@@ -62,5 +62,7 @@ public interface IOpcaoSistema {
 	public Map<String, Object> buscarOpcoesGlobalAdmin() throws BusinessException;
 	
 	public Map<String, Object> buscarOpcoesUser(Usuario usuario) throws BusinessException;
+	
+	public void atualizarCacheOpcoesSistema();
 
 }
