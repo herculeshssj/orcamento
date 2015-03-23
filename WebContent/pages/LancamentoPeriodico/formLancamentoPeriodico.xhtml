@@ -89,11 +89,6 @@
 						<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>								
 					</p:selectOneRadio>
 					
-					Moeda:
-					<h:selectOneMenu id="txtMoeda" value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.conta.tipoConta != 'CARTAO'}">
-						<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-					</h:selectOneMenu>
-					
 					Dia de vencimento:
 					<p:inputText value="#{managedBean.entity.diaVencimento}" size="5" disabled="#{managedBean.operation == 'edit'}"/>
 				
@@ -158,7 +153,7 @@
 					Conta de pagamento:
 					<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO' or (managedBean.operation != 'create' and managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO')}">
 						<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-						<p:ajax update="txtMoeda"/>
+						<p:ajax event="change" update="pnlMoeda"/>
 					</h:selectOneMenu>
 					
 					Categoria:
@@ -180,6 +175,19 @@
 					</h:selectOneMenu>
 								
 				</h:panelGrid>
+				
+				<p:outputPanel id="pnlMoeda">
+			
+					<h:panelGrid columns="2" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}">
+					
+						Moeda:
+						<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
+							<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+						</h:selectOneMenu>
+
+					</h:panelGrid>
+					
+				</p:outputPanel>
 				
 				<h:panelGrid columns="1">
 					Comprovante:
