@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,6 +94,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 		entity = new Agenda();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void find() {
 		try {
@@ -102,23 +102,15 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 			// seta o horário com o limite correspondente para
 			// cada um
 			if (criterioBusca.getInicio() != null) {
-				Calendar temp = Calendar.getInstance();
-				temp.setTime(criterioBusca.getInicio());
-				temp.set(Calendar.HOUR, 0);
-				temp.set(Calendar.MINUTE, 0);
-				temp.set(Calendar.SECOND, 0);
-				temp.set(Calendar.MILLISECOND, 0);
-				criterioBusca.setInicio(temp.getTime());
+				criterioBusca.getInicio().setHours(0);
+				criterioBusca.getInicio().setMinutes(0);
+				criterioBusca.getInicio().setSeconds(0);
 			}
 			
 			if (criterioBusca.getFim() != null) {
-				Calendar temp = Calendar.getInstance();
-				temp.setTime(criterioBusca.getFim());
-				temp.set(Calendar.HOUR, 23);
-				temp.set(Calendar.MINUTE, 59);
-				temp.set(Calendar.SECOND, 59);
-				temp.set(Calendar.MILLISECOND, 999);
-				criterioBusca.setFim(temp.getTime());
+				criterioBusca.getFim().setHours(23);
+				criterioBusca.getFim().setMinutes(59);
+				criterioBusca.getFim().setSeconds(59);
 			}
 			
 			listEntity = getService().buscarPorCriterioAgendamento(criterioBusca);
