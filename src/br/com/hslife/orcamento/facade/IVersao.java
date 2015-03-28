@@ -44,21 +44,18 @@
   
 ***/
 
-package br.com.hslife.orcamento.component;
+package br.com.hslife.orcamento.facade;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import java.util.List;
 
 import br.com.hslife.orcamento.entity.Versao;
-import br.com.hslife.orcamento.repository.VersaoRepository;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.service.ICRUDService;
 
-@Component
-public class VersaoComponent {
+public interface IVersao extends ICRUDService<Versao>{
 	
-	@Autowired
-	private VersaoRepository versaoRepository;
+	public Versao versaoAtual() throws BusinessException;
 	
-	public Versao versaoAtual() {
-		return versaoRepository.findActived();
-	}
+	public List<Versao> buscarTodos() throws BusinessException; 
+	
 }

@@ -46,19 +46,27 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
 @Table(name="versao")
-@SuppressWarnings("serial")
 public class Versao extends EntityPersistence {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5208400465753708824L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -66,6 +74,13 @@ public class Versao extends EntityPersistence {
 	
 	@Column(length=30, nullable=false)
 	private String versao;
+	
+	@Column(nullable=true)
+	@Temporal(TemporalType.DATE)
+	private Date dataLiberacao;
+	
+	@Column(columnDefinition="text", nullable=true)
+	private String changelog;
 	
 	@Column 
 	private boolean ativo;
@@ -106,5 +121,21 @@ public class Versao extends EntityPersistence {
 
 	public void setVersao(String versao) {
 		this.versao = versao;
+	}
+
+	public Date getDataLiberacao() {
+		return dataLiberacao;
+	}
+
+	public void setDataLiberacao(Date dataLiberacao) {
+		this.dataLiberacao = dataLiberacao;
+	}
+
+	public String getChangelog() {
+		return changelog;
+	}
+
+	public void setChangelog(String changelog) {
+		this.changelog = changelog;
 	}
 }

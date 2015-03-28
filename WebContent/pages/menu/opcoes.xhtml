@@ -63,14 +63,16 @@
 	
 		<h:form id="frmMenuOpcoes">
 		
-			<h:panelGrid columns="3" width="100%" style="text-align: center">
+			<h:panelGrid columns="4" width="100%" style="text-align: center">
 				
 				<h:commandButton action="#{auditoriaMB.startUp}" image="/resources/images/auditoria.png" title="Auditoria do Sistema"/>
 				<h:commandButton action="#{opcaoSistemaMB.startUp}" image="/resources/images/opcoes.png" title="Opções do Sistema"/>
+				<h:commandButton action="#{versaoMB.startUp}" image="/resources/images/versoes.png" title="Versões do Sistema"/>
 				<h:commandButton action="#{usuarioMB.startUp}" image="/resources/images/usuarios.png" title="Usuários"/>				
 				
 				<h:outputText value="Auditoria do Sistema"/>
 				<h:outputText value="Opções do Sistema"/>
+				<h:outputText value="Versões do Sistema"/>
 				<h:outputText value="Usuários"/>
 				
 			</h:panelGrid>

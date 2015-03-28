@@ -1,0 +1,134 @@
+<!--
+  
+  	Copyright (c) 2012 - 2015 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario_simples.xhtml">
+
+	<ui:param name="managedBean" value="#{versaoMB}" />
+	
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Versão:
+			<h:outputText value="#{managedBean.entity.versao}" />				
+						
+			Data de liberação:
+			<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.entity.dataLiberacao}">
+    			<f:converter converterId="dateConverter"/>
+    		</p:inputMask>
+						
+			Ativo:
+			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+			
+			Changelog:
+			<p:editor id="editor" value="#{managedBean.entity.changelog}" width="600" />			
+			
+		</h:panelGrid>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink title="Salvar registro" action="#{managedBean.save}">
+			<p:graphicImage value="/resources/images/gravar.png" />
+		</h:commandLink>
+	</ui:define>
+	
+	<ui:define name="pesquisa">
+	
+	</ui:define>
+	
+	<ui:define name="botao_pesquisa">
+		     		
+	</ui:define>
+	
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Versão" />
+			</f:facet>
+			<h:outputText value="#{item.versao}" />
+		</p:column>
+
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Data de liberação" />
+			</f:facet>
+			<h:outputText value="#{item.dataLiberacao}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+		</p:column>
+
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ativo" />
+			</f:facet>
+			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
+		</p:column>
+
+	</ui:define>
+	
+	<ui:define name="acoes_tabela">
+     	<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações"/>
+			</f:facet>		
+			<h:commandButton value="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>
+	  	</p:column>
+     </ui:define>
+
+</ui:composition>
+</html>
