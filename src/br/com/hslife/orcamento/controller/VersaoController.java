@@ -119,6 +119,11 @@ public class VersaoController extends AbstractSimpleCRUDController<Versao> {
 		}
 		return (Versao)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("versao");
 	}
+	
+	public String verChangelog() {
+		find();
+		return "/pages/menu/versao";
+	}
 
 	public IVersao getService() {
 		return service;
