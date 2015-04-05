@@ -91,9 +91,9 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Inclusão do cadastro do changelog pelo sistema - Github Issue #94
-	alter table versao add column dataLiberacao date null;
-	alter table versao add column changelog text null;
+	-- Atualização de versão
+	update versao set ativo = false;
+	insert into versao (versao, ativo) values ('SET2015', true);
 	
     /*** Fim do bloco de atualizações da base ***/
     

@@ -153,6 +153,9 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=false)
 	private Moeda moeda;
 	
+	@Column(precision=18, scale=4, nullable=false)
+	private double taxaConversao;
+	
 	@Column
 	private int parcela;
 		
@@ -180,6 +183,7 @@ public class LancamentoConta extends EntityPersistence {
 		conta = new Conta();
 		tipoLancamento = TipoLancamento.DESPESA;
 		statusLancamentoConta = StatusLancamentoConta.REGISTRADO;
+		taxaConversao = 1.0000;
 	}
 	
 	public LancamentoConta(LancamentoConta lancamento) {
@@ -193,6 +197,7 @@ public class LancamentoConta extends EntityPersistence {
 		favorecido = lancamento.getFavorecido();
 		tipoLancamento = lancamento.getTipoLancamento();
 		moeda = lancamento.getMoeda();
+		taxaConversao = lancamento.getTaxaConversao();
 		if (lancamento.getDataPagamento().before(new Date())) {
 			statusLancamentoConta = StatusLancamentoConta.REGISTRADO;
 		} else {
@@ -452,5 +457,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setFechamentPeriodo(FechamentoPeriodo fechamentPeriodo) {
 		this.fechamentPeriodo = fechamentPeriodo;
+	}
+
+	public double getTaxaConversao() {
+		return taxaConversao;
+	}
+
+	public void setTaxaConversao(double taxaConversao) {
+		this.taxaConversao = taxaConversao;
 	}
 }
