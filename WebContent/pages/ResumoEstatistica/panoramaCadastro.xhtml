@@ -1,4 +1,4 @@
-/***
+<!--
   
   	Copyright (c) 2012 - 2015 Hércules S. S. José
 
@@ -42,26 +42,39 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-***/
+  -->
 
-package br.com.hslife.orcamento.facade;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-import java.util.List;
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
+<ui:composition template="/templates/listagem.xhtml">
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
+	<ui:param name="managedBean" value="#{panoramaCadastroMB}" />
 	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	<ui:define name="botoes"></ui:define>
 	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
-
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	<ui:define name="pesquisa">
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
+		Cadastro:
+		<h:selectOneMenu value="#{managedBean.cadastroSelecionado}">
+			<f:selectItems value="#{managedBean.listaCadastro}"/>
+			<p:ajax update="txtRegistro" listener="#{panoramaCadastroMB.getListaRegistro}" />
+		</h:selectOneMenu>
+		&nbsp;
+		Registro:
+		<h:selectOneMenu id="txtRegistro" value="#{managedBean.idRegistro}">
+			<f:selectItems value="#{managedBean.listaRegistro}"/>
+		</h:selectOneMenu>
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException;
-}
+	</ui:define>
+	
+	<ui:define name="tabela"></ui:define>
+	
+</ui:composition>
+</html>

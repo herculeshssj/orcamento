@@ -57,6 +57,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoPessoa;
 
 @Repository
 public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
@@ -113,5 +114,36 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 			return resultado.get(0);
 		}
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Favorecido> findTipoPessoaAndNomeAndAtivoByUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM Favorecido favorecido WHERE ");
+		if (tipoPessoa != null) {
+			hql.append("favorecido.tipoPessoa = :tipo AND ");
+		}
+		if (nome != null && !nome.isEmpty()) {
+			hql.append("favorecido.nome LIKE '%");
+			hql.append(nome);
+			hql.append("%' AND ");
+		}
+		if (ativo != null) {
+			hql.append("favorecido.ativo = :ativo AND ");
+		}
+		
+		hql.append("favorecido.usuario.id = :idUsuario ORDER BY favorecido.nome ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (tipoPessoa != null) {
+			hqlQuery.setParameter("tipo", tipoPessoa);
+		}
+		if (ativo != null) {
+			hqlQuery.setParameter("ativo", ativo);
+		}
+		
+		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
 	}
 }
