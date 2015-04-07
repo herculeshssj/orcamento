@@ -44,31 +44,8 @@
   
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.enumeration;
 
-import java.util.List;
-
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.CadastroSistema;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.PanoramaFaturaCartao;
-import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
-import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
-
-
-public interface IResumoEstatistica {
-	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(Usuario usuario) throws BusinessException;
-	
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
-	
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws BusinessException;
-	
-	public List<PanoramaFaturaCartao> gerarRelatorioPanoramaFaturaCartao(Conta conta, int ano) throws BusinessException;
-	
-	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException;
+public enum CadastroSistema {
+	CATEGORIA, FAVORECIDO, MEIOPAGAMENTO, MOEDA;
 }

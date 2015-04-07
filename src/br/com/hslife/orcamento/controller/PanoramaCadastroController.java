@@ -56,12 +56,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Categoria;
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
+import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.facade.IResumoEstatistica;
 
 @Component("panoramaCadastroMB")
 @Scope("session")
@@ -72,10 +77,6 @@ public class PanoramaCadastroController extends AbstractController {
 	 */
 	private static final long serialVersionUID = 4894402409315374812L;
 	
-	public enum Cadastro {
-		CATEGORIA, FAVORECIDO, MEIOPAGAMENTO;
-	}
-	
 	@Autowired
 	private ICategoria categoriaService;
 	
@@ -85,13 +86,20 @@ public class PanoramaCadastroController extends AbstractController {
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
 	
-	public Cadastro cadastroSelecionado;
+	@Autowired
+	private IMoeda moedaService;
+	
+	@Autowired
+	private IResumoEstatistica resumoEstatisticaService;
+	
+	public CadastroSistema cadastroSelecionado;
 	public Long idRegistro;
+	public List<Conta> contas;
 
 	public PanoramaCadastroController() {
 		moduleTitle = "Panorama dos Cadastros";
 		
-		cadastroSelecionado = Cadastro.CATEGORIA;
+		cadastroSelecionado = CadastroSistema.CATEGORIA;
 	}
 	
 	@Override
@@ -105,7 +113,7 @@ public class PanoramaCadastroController extends AbstractController {
 	}
 	
 	public void find() {
-		if (cadastroSelecionado != null) {
+		if (cadastroSelecionado == null) {
 			warnMessage("Selecione o cadastro!");
 			return;
 		}
@@ -113,11 +121,17 @@ public class PanoramaCadastroController extends AbstractController {
 		if (idRegistro == null || idRegistro == 0) {
 			warnMessage("Selecione o registro!");
 		}
+		
+		try {
+			contas = resumoEstatisticaService.gerarRelatorioPanoramaCadastro(cadastroSelecionado, idRegistro);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public List<SelectItem> getListaCadastro() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (Cadastro enumeration : Cadastro.values()) {
+		for (CadastroSistema enumeration : CadastroSistema.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;
@@ -144,6 +158,11 @@ public class PanoramaCadastroController extends AbstractController {
 						listaSelectItem.add(new SelectItem(m.getId(), m.getDescricao()));
 					}
 					break;
+				case MOEDA : 
+					for (Moeda m : moedaService.buscarAtivosPorUsuario(getUsuarioLogado())) {
+						listaSelectItem.add(new SelectItem(m.getId(), m.getLabel()));
+					}
+					break;
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -152,11 +171,11 @@ public class PanoramaCadastroController extends AbstractController {
 		return listaSelectItem;
 	}
 
-	public Cadastro getCadastroSelecionado() {
+	public CadastroSistema getCadastroSelecionado() {
 		return cadastroSelecionado;
 	}
 
-	public void setCadastroSelecionado(Cadastro cadastroSelecionado) {
+	public void setCadastroSelecionado(CadastroSistema cadastroSelecionado) {
 		this.cadastroSelecionado = cadastroSelecionado;
 	}
 
@@ -166,5 +185,13 @@ public class PanoramaCadastroController extends AbstractController {
 
 	public void setIdRegistro(Long idRegistro) {
 		this.idRegistro = idRegistro;
+	}
+
+	public List<Conta> getContas() {
+		return contas;
+	}
+
+	public void setContas(List<Conta> contas) {
+		this.contas = contas;
 	}
 }

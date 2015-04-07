@@ -74,7 +74,52 @@
 	
 	</ui:define>
 	
-	<ui:define name="tabela"></ui:define>
+	<ui:define name="tabela">
+	
+		<p:dataTable width="100%" value="#{managedBean.contas}" var="conta" style="font-size: 16px;">
+			<p:columnGroup type="header">
+				<p:row rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
+					<p:column headerText="Ano"/>
+					<p:column headerText="Lançamentos"/>
+					<p:column headerText="Valor"/>
+				</p:row>
+				<p:row rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<p:column headerText="Ano"/>
+					<p:column headerText="Lançamentos (Crédito)"/>
+					<p:column headerText="Valor"/>
+					<p:column headerText="Lançamentos (Débito)"/>
+					<p:column headerText="Valor"/>
+				</p:row>
+			</p:columnGroup>
+			<p:subTable var="item" value="#{conta.panoramasCadastro}">
+				<f:facet name="header">
+					<h:outputText value="#{conta.label}" />
+				</f:facet>
+				<p:column style="text-align: center; vertical-align: middle;">
+					<h:outputText value="#{item.ano}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
+					<h:outputText value="#{item.quantidade}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
+					<h:outputText value="#{item.valor}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{item.quantidadeCredito}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{item.valorCredito}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{item.quantidadeDebito}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{item.valorDebito}" />
+				</p:column>
+			</p:subTable>
+		</p:dataTable>
+	
+	</ui:define>
 	
 </ui:composition>
 </html>

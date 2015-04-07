@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -59,6 +60,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.ContaComponent;
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
@@ -67,6 +69,7 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
@@ -77,6 +80,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
+import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.model.PanoramaFaturaCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
@@ -113,6 +117,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@Autowired
 	private ContaComponent contaComponent;	
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 	
 	/*** Declaração dos métodos Setters dos repositórios ***/
 		
@@ -674,6 +681,48 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		resumoMensal.setFim(criterioBusca.getDataFim());
 		
 		return resumoMensal;	
+	}
+	
+	@Override
+	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException {		
+		// Busca todas as contas existentes
+		List<Conta> contasExistentes = contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, null, usuarioComponent.getUsuarioLogado(), null);
+
+		// Declara a lista de contas que será retornada
+		List<Conta> contasProcessadas = new ArrayList<Conta>();
+		
+		// Para cada conta existente busca TODOS os lançamentos do cadastro e do registro selecionado
+		for (Conta conta : contasExistentes) {
+			
+			// Seta os parâmetros de busca
+			CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+			criterioBusca.setConta(conta);
+			criterioBusca.setIdAgrupamento(idRegistro);
+			criterioBusca.setAgrupamento(cadastro.toString());
+			
+			// Traz todos os lançamentos encontrados
+			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			
+			// Se a lista de lançamentos vier zerada, passa para a próxima conta
+			if (lancamentos == null || lancamentos.isEmpty()) continue;
+			
+			// Instancia o Map que irá armazenar as informações de ano, quantidade e valor
+			Map<Integer, PanoramaCadastro> panoramas = new HashMap<Integer, PanoramaCadastro>();
+			
+			// Itera a lista de lançamentos, faz os cálculos de valor e quantidade
+			for (LancamentoConta lancamento : lancamentos) {
+				// TODO implementar :)
+			}
+			
+			// Adiciona os panoramas na conta
+			conta.setPanoramasCadastro(new ArrayList<PanoramaCadastro>());
+			conta.getPanoramasCadastro().addAll(panoramas.values());
+			
+			// Adiciona a conta na lista de contas processadas
+			contasProcessadas.add(conta);
+		}
+		
+		return contasProcessadas;
 	}
 	
 	/*** Implementação dos métodos privados ***/

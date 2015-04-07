@@ -44,31 +44,81 @@
   
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.model;
 
-import java.util.List;
+public class PanoramaCadastro {
+	
+	private int ano;
+	
+	private long quantidade;
+	
+	private double valor;
+	
+	private long quantidadeCredito;
+	
+	private double valorCredito;
+	
+	private long quantidadeDebito;
+	
+	private double valorDebito;
+	
+	public PanoramaCadastro() {
+		
+	}
 
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.CadastroSistema;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.PanoramaFaturaCartao;
-import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
-import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+	public int getAno() {
+		return ano;
+	}
 
+	public void setAno(int ano) {
+		this.ano = ano;
+	}
 
-public interface IResumoEstatistica {
-	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(Usuario usuario) throws BusinessException;
-	
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
-	
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws BusinessException;
-	
-	public List<PanoramaFaturaCartao> gerarRelatorioPanoramaFaturaCartao(Conta conta, int ano) throws BusinessException;
-	
-	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException;
+	public long getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(long quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public double getValor() {
+		return valor;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
+	}
+
+	public long getQuantidadeCredito() {
+		return quantidadeCredito;
+	}
+
+	public void setQuantidadeCredito(long quantidadeCredito) {
+		this.quantidadeCredito = quantidadeCredito;
+	}
+
+	public double getValorCredito() {
+		return valorCredito;
+	}
+
+	public void setValorCredito(double valorCredito) {
+		this.valorCredito = valorCredito;
+	}
+
+	public long getQuantidadeDebito() {
+		return quantidadeDebito;
+	}
+
+	public void setQuantidadeDebito(long quantidadeDebito) {
+		this.quantidadeDebito = quantidadeDebito;
+	}
+
+	public double getValorDebito() {
+		return valorDebito;
+	}
+
+	public void setValorDebito(double valorDebito) {
+		this.valorDebito = valorDebito;
+	}
 }
