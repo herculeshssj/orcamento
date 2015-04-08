@@ -49,12 +49,12 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -683,6 +683,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return resumoMensal;	
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException {		
 		// Busca todas as contas existentes
@@ -698,7 +699,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 			criterioBusca.setConta(conta);
 			criterioBusca.setIdAgrupamento(idRegistro);
-			criterioBusca.setAgrupamento(cadastro.toString());
+			criterioBusca.setAgrupamento(cadastro);
 			
 			// Traz todos os lançamentos encontrados
 			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
@@ -707,11 +708,34 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			if (lancamentos == null || lancamentos.isEmpty()) continue;
 			
 			// Instancia o Map que irá armazenar as informações de ano, quantidade e valor
-			Map<Integer, PanoramaCadastro> panoramas = new HashMap<Integer, PanoramaCadastro>();
+			Map<Integer, PanoramaCadastro> panoramas = new TreeMap<Integer, PanoramaCadastro>();
 			
 			// Itera a lista de lançamentos, faz os cálculos de valor e quantidade
-			for (LancamentoConta lancamento : lancamentos) {
-				// TODO implementar :)
+			for (LancamentoConta lancamento : lancamentos) {				
+				// Determina o ano
+				Integer ano = Integer.valueOf(lancamento.getDataPagamento().getYear() + 1900);
+				
+				// Verifica se o ano já existe no Map, caso contrário cria uma nova instância
+				if (!panoramas.containsKey(ano)) {
+					panoramas.put(ano, new PanoramaCadastro(ano));
+				}
+				
+				// Verifica se o cadastro é CATEGORIA para poder setar os atributos de quantidade e valor corretamente
+				if (cadastro.equals(CadastroSistema.CATEGORIA)) {
+					panoramas.get(ano).setQuantidade(panoramas.get(ano).getQuantidade() + 1);
+					panoramas.get(ano).setValor(panoramas.get(ano).getValor() + lancamento.getValorPagoConvertido());
+				} else {
+					switch (lancamento.getTipoLancamento()) {
+						case RECEITA :
+							panoramas.get(ano).setQuantidadeCredito(panoramas.get(ano).getQuantidadeCredito() + 1);
+							panoramas.get(ano).setValorCredito(panoramas.get(ano).getValorCredito() + lancamento.getValorPagoConvertido());
+							break;
+						case DESPESA : 
+							panoramas.get(ano).setQuantidadeDebito(panoramas.get(ano).getQuantidadeDebito() + 1);
+							panoramas.get(ano).setValorDebito(panoramas.get(ano).getValorDebito() + lancamento.getValorPagoConvertido());
+							break;
+					}
+				}
 			}
 			
 			// Adiciona os panoramas na conta
@@ -726,6 +750,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	}
 	
 	/*** Implementação dos métodos privados ***/
+	
 	
 	
 }

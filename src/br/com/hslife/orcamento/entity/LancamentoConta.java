@@ -75,6 +75,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 
 @Entity
@@ -261,6 +262,13 @@ public class LancamentoConta extends EntityPersistence {
 			lancamentos.add(lancamentoDestino);
 		}
 		return lancamentos;
+	}
+	
+	public double getValorPagoConvertido() {
+		if (!this.moeda.equals(this.conta.getMoeda())) {
+			return Util.arredondar(this.valorPago * this.taxaConversao);
+		}
+		return this.valorPago;
 	}
 	
 	public void setValorPago(double valorPago) {

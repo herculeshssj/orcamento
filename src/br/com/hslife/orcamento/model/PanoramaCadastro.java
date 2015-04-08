@@ -63,7 +63,11 @@ public class PanoramaCadastro {
 	private double valorDebito;
 	
 	public PanoramaCadastro() {
-		
+	
+	}
+	
+	public PanoramaCadastro(Integer ano) {
+		this.ano = ano;
 	}
 
 	public int getAno() {

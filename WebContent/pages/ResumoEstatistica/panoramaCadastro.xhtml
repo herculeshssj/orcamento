@@ -102,19 +102,28 @@
 					<h:outputText value="#{item.quantidade}" />
 				</p:column>
 				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
-					<h:outputText value="#{item.valor}" />
+					<h:outputText value="#{conta.moeda.simboloMonetario} " />
+					<h:outputText value="#{item.valor}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
 				</p:column>
-				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
-					<h:outputText value="#{item.quantidadeCredito}" />
+				<p:column style="text-align: center; vertical-align: middle; color: #0000FF;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{item.quantidadeCredito}"/>
 				</p:column>
-				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
-					<h:outputText value="#{item.valorCredito}" />
+				<p:column style="text-align: center; vertical-align: middle; color: #0000FF;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{conta.moeda.simboloMonetario} " />
+					<h:outputText value="#{item.valorCredito}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
 				</p:column>
-				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+				<p:column style="text-align: center; vertical-align: middle; color: #FF0000;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
 					<h:outputText value="#{item.quantidadeDebito}" />
 				</p:column>
-				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
-					<h:outputText value="#{item.valorDebito}" />
+				<p:column style="text-align: center; vertical-align: middle; color: #FF0000;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{conta.moeda.simboloMonetario} " />
+					<h:outputText value="#{item.valorDebito}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
 				</p:column>
 			</p:subTable>
 		</p:dataTable>
