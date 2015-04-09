@@ -699,7 +699,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 			criterioBusca.setConta(conta);
 			criterioBusca.setIdAgrupamento(idRegistro);
-			criterioBusca.setAgrupamento(cadastro);
+			criterioBusca.setCadastro(cadastro);
 			
 			// Traz todos os lançamentos encontrados
 			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);

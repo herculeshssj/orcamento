@@ -150,7 +150,7 @@ public class PanoramaCadastroController extends AbstractController {
 					break;
 				case FAVORECIDO : 
 					for (Favorecido f : favorecidoService.buscarTipoPessoaENomeEAtivoPorUsuario(null, null, null, getUsuarioLogado())) {
-						listaSelectItem.add(new SelectItem(f.getId(), f.getNome()));
+						listaSelectItem.add(new SelectItem(f.getId(), f.getTipoPessoa() + " - " + f.getNome()));
 					}
 					break;
 				case MEIOPAGAMENTO : 

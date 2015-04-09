@@ -140,7 +140,6 @@ public class CriterioBuscaLancamentoConta {
 	}
 
 	public void setAgrupamento(String agrupamento) {
-		//TODO adaptar para trabalhar com o enumeration CadastroSistema
 		this.agrupamento = agrupamento;
 	
 		// Remove os agrupamentos anteriormente setados
@@ -160,10 +159,7 @@ public class CriterioBuscaLancamentoConta {
 		}
 	}
 	
-	public void setAgrupamento(CadastroSistema agrupamento) {
-		// TODO remover após concluir as adaptações no método original. 
-		// this.agrupamento = agrupamento;
-	
+	public void setCadastro(CadastroSistema agrupamento) {
 		// Remove os agrupamentos anteriormente setados
 		hibernateCriterions.remove("categoria");
 		hibernateCriterions.remove("favorecido");

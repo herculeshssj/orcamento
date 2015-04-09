@@ -47,7 +47,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoPessoa {	
-	FISICA("FISICA"), JURIDICA("JURIDICA");
+	FISICA("Física"), JURIDICA("Jurídica");
 	
 	private String descricao;
 	
