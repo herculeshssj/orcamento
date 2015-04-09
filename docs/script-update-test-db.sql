@@ -94,6 +94,10 @@ begin
 	-- Atualização de versão
 	update versao set ativo = false;
 	insert into versao (versao, ativo) values ('SET2015', true);
+	
+	-- Correção do valor de conversão das moedas
+	update moeda set valorConversao = 1.0000 where valorConversao = 0.0000;
+	alter table moeda change column `valorConversao` `valorConversao` decimal(18,4) not null default 1.0000;
     
     /*** Fim do bloco de atualizações da base ***/
     

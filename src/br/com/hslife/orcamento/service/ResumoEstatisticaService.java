@@ -723,16 +723,16 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				// Verifica se o cadastro é CATEGORIA para poder setar os atributos de quantidade e valor corretamente
 				if (cadastro.equals(CadastroSistema.CATEGORIA)) {
 					panoramas.get(ano).setQuantidade(panoramas.get(ano).getQuantidade() + 1);
-					panoramas.get(ano).setValor(panoramas.get(ano).getValor() + lancamento.getValorPagoConvertido());
+					panoramas.get(ano).setValor(panoramas.get(ano).getValor() + this.getValorPagoConvertido(lancamento));
 				} else {
 					switch (lancamento.getTipoLancamento()) {
 						case RECEITA :
 							panoramas.get(ano).setQuantidadeCredito(panoramas.get(ano).getQuantidadeCredito() + 1);
-							panoramas.get(ano).setValorCredito(panoramas.get(ano).getValorCredito() + lancamento.getValorPagoConvertido());
+							panoramas.get(ano).setValorCredito(panoramas.get(ano).getValorCredito() + this.getValorPagoConvertido(lancamento));
 							break;
 						case DESPESA : 
 							panoramas.get(ano).setQuantidadeDebito(panoramas.get(ano).getQuantidadeDebito() + 1);
-							panoramas.get(ano).setValorDebito(panoramas.get(ano).getValorDebito() + lancamento.getValorPagoConvertido());
+							panoramas.get(ano).setValorDebito(panoramas.get(ano).getValorDebito() + this.getValorPagoConvertido(lancamento));
 							break;
 					}
 				}
@@ -751,6 +751,23 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	/*** Implementação dos métodos privados ***/
 	
-	
+	private double getValorPagoConvertido(LancamentoConta lancamento) {
+		double taxaConversao = lancamento.getMoeda().getValorConversao();
+		if (lancamento.getMoeda().equals(lancamento.getConta().getMoeda())) {
+			return lancamento.getValorPago();
+		} else {
+			if (lancamento.getFaturaCartao() == null) {
+				return Util.arredondar(lancamento.getValorPago() * taxaConversao);
+			} else {
+				
+				for (ConversaoMoeda conversao : lancamento.getFaturaCartao().getConversoesMoeda()) {
+					if (conversao.getMoeda().equals(lancamento.getMoeda())) {
+						return Util.arredondar(lancamento.getValorPago() * conversao.getTaxaConversao());
+					}
+				}
+				return lancamento.getValorPago() * taxaConversao;
+			}
+		}
+	}
 	
 }
