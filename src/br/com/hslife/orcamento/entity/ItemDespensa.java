@@ -123,46 +123,6 @@ public class ItemDespensa extends EntityPersistence {
 	@JoinTable(name="itemdespensa_movimentoitemdespensa", schema="orcamento")
 	private List<MovimentoItemDespensa> movimentacao;
 	
-	/*** Aplicando o padrão Builder para eliminar o construtor com n parâmetros ***/
-	
-	public static class Builder {
-		private String descricao = "";
-		private String caracteristicas = "";
-		private Despensa despensa = new Despensa();
-		private UnidadeMedida unidadeMedida = new UnidadeMedida();
-		private int quantidade = 0;
-		private double valor = 0.0;
-		private boolean perecivel = false;
-		private String marca = "";
-
-		public Builder() {}
-		
-		public Builder descricao(String valor) {this.descricao = valor; return this;}
-		public Builder caracteristicas(String valor) {this.caracteristicas = valor; return this;}
-		public Builder despensa(Despensa valor) {this.despensa = valor; return this;}
-		public Builder unidadeMedida(UnidadeMedida valor) {this.unidadeMedida = valor; return this;}
-		public Builder quantidade(int valor) {this.valor = valor; return this;}
-		public Builder valor(double valor) {this.valor = valor; return this;}
-		public Builder perecivel(boolean valor) {this.perecivel = valor; return this;}
-		public Builder marca(String valor) {this.marca = valor; return this;}
-		
-		public ItemDespensa build() {
-			return new ItemDespensa(this);
-		}
-	}
-	
-	/*** Construtor privado para receber o Builder ***/
-	private ItemDespensa(Builder builder) {
-		this.descricao = builder.descricao;
-		this.caracteristicas = builder.caracteristicas;
-		this.despensa = builder.despensa;
-		this.unidadeMedida = builder.unidadeMedida;
-		this.quantidadeAtual = builder.quantidade;
-		this.valor = builder.valor;
-		this.perecivel = builder.perecivel;
-		this.marca = builder.marca;
-	}
-	
 	public ItemDespensa() {
 		movimentacao = new ArrayList<MovimentoItemDespensa>();
 	}	

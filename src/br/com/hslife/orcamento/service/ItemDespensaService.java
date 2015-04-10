@@ -136,52 +136,15 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	@Override
 	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws BusinessException {
 		List<ItemDespensa> listaDespensas = new ArrayList<ItemDespensa>();
-		for (ItemDespensa despensa : getRepository().findByUsuarioAndArquivado(usuario, false)) {
-			if (despensa.getQuantidadeAtual() <= despensa.getQuantidadeVermelho()) {
-				/* Usando o Builder de ItemDespensa *
-				listaDespensas.add(new ItemDespensa.Builder()
-					.descricao(despensa.getDescricao())
-					.caracteristicas(despensa.getCaracteristicas())
-					.despensa(despensa.getDespensa())
-					.unidadeMedida(despensa.getUnidadeMedida())
-					.quantidade(despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual())
-					.valor(despensa.getValor() * (despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual()))
-					.build()
-				);	*/			
-				
-				ItemDespensa item = new ItemDespensa();
-				item.setDescricao(despensa.getDescricao());
-				item.setMarca(despensa.getMarca());
-				item.setCaracteristicas(despensa.getCaracteristicas());
-				item.setDespensa(despensa.getDespensa());
-				item.setUnidadeMedida(despensa.getUnidadeMedida());
-				item.setQuantidadeAtual(despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual());
-				item.setValor(despensa.getValor() * (despensa.getQuantidadeVerde() - despensa.getQuantidadeAtual()));
-				
+		for (ItemDespensa item : getRepository().findByUsuarioAndArquivado(usuario, false)) {
+			if (item.getQuantidadeAtual() <= item.getQuantidadeVermelho()) {
+				item.setQuantidadeAtual(item.getQuantidadeVerde() - item.getQuantidadeAtual());
+				item.setValor(item.getValor() * (item.getQuantidadeVerde() - item.getQuantidadeAtual()));
 				listaDespensas.add(item);
-				
-			} else if (despensa.getValidade() != null && despensa.getValidade().before(new Date())) { /*
-				listaDespensas.add(new ItemDespensa.Builder()
-					.descricao(despensa.getDescricao())
-					.caracteristicas(despensa.getCaracteristicas())
-					.despensa(despensa.getDespensa())
-					.unidadeMedida(despensa.getUnidadeMedida())
-					.quantidade(despensa.getQuantidadeVerde())
-					.valor(despensa.getValor() * despensa.getQuantidadeVerde())
-					.build()
-				);*/
-				
-				ItemDespensa item = new ItemDespensa();
-				item.setDescricao(despensa.getDescricao());
-				item.setMarca(despensa.getMarca());
-				item.setCaracteristicas(despensa.getCaracteristicas());
-				item.setDespensa(despensa.getDespensa());
-				item.setUnidadeMedida(despensa.getUnidadeMedida());
-				item.setQuantidadeAtual(despensa.getQuantidadeVerde());
-				item.setValor(despensa.getValor() * despensa.getQuantidadeVerde());
-				
+			} else if (item.getValidade() != null && item.getValidade().before(new Date())) { 
+				item.setQuantidadeAtual(item.getQuantidadeVerde());
+				item.setValor(item.getValor() * item.getQuantidadeVerde());
 				listaDespensas.add(item);
-				
 			}
 		}
 		return listaDespensas;
