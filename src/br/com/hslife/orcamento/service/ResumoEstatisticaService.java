@@ -145,7 +145,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 
 	/*** Implementação dos métodos da interface ***/
 	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(Usuario usuario) throws BusinessException {
+	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) throws BusinessException {
 		// Declaração dos objetos
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
@@ -182,8 +182,13 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					saldoAtual.setSaldoPeriodo(ultimoFechamento.getSaldo());
 				}
 				
-				// Traz os lançamentos da data de fechamento em diante					
-				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});						
+				// Traz os lançamentos da data de fechamento em diante
+				// Se a opção de agendado estiver marcada, traz os lançamentos agendados
+				if (agendado)
+					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+				else 
+					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+				
 				criterio.setConta(conta);
 				if (ultimoFechamento == null) {
 					criterio.setDataInicio(conta.getDataAbertura());

@@ -62,7 +62,7 @@ import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 public interface IResumoEstatistica {
 	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(Usuario usuario) throws BusinessException;
+	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) throws BusinessException;
 	
 	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
 	
