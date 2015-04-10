@@ -181,7 +181,7 @@
 					<h:panelGrid columns="2" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}">
 					
 						Moeda:
-						<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
+						<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.operation == 'edit'}">
 							<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 						</h:selectOneMenu>
 
