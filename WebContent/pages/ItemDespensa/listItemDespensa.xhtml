@@ -100,17 +100,27 @@
 				<h:graphicImage name="redlight.png" library="images" rendered="#{item.quantidadeVermelho >= item.quantidadeAtual}" />
 			</h:panelGroup>
 		</p:column>
-		
-		<p:column style="text-align: center; vertical-align: middle;"  exportable="false">
+
+	</ui:define>
+	
+	<ui:define name="acoes">
+    	<p:column style="text-align: center; vertical-align: middle;" exportable="false">
 			<f:facet name="header">
-				<h:outputText value="Registrar"/>
+				<h:outputText value="Ações"/>
 			</f:facet>
 			<h:commandButton title="Registrar compra/consumo" rendered="#{!item.arquivado}" image="/resources/images/baixa.png" action="#{managedBean.registrarCompraConsumoView}">
 				<f:setPropertyActionListener value="#{item.id}"	target="#{managedBean.idEntity}" />
 			</h:commandButton>
-		</p:column>
-		
-	</ui:define>
+			&nbsp;&nbsp;&nbsp;		
+			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>								
+  			&nbsp;&nbsp;&nbsp;
+			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>
+  		</p:column>
+    </ui:define>
 	
 	<ui:define name="outras_opcoes">
 		<h:commandLink title="Exportar para MS-Excel">
