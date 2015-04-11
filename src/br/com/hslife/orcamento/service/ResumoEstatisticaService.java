@@ -199,7 +199,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					temp.add(Calendar.DAY_OF_YEAR, 1);
 					criterio.setDataInicio(temp.getTime());
 				}
-				criterio.setDataFim(new Date());
 			}
 			
 			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterio);
@@ -646,7 +645,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
 		
 		// Preenche os parâmetros de busca
-		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
 		criterioBusca.setConta(conta);
 		
 		// Determina a data de início do período
