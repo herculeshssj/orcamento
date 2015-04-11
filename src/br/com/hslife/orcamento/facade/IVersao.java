@@ -48,20 +48,14 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.entity.Versao;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
+public interface IVersao extends ICRUDService<Versao>{
 	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	public Versao versaoAtual() throws BusinessException;
 	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
-
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Versao> buscarTodos() throws BusinessException; 
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException;
 }

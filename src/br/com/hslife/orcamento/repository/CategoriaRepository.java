@@ -127,4 +127,35 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 				.setLong("idUsuario", usuario.getId())
 				.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Categoria> findTipoCategoriaAndDescricaoAndAtivoByUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, Usuario usuario) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM Categoria categoria WHERE ");
+		if (tipoCategoria != null) {
+			hql.append("categoria.tipoCategoria = :tipo AND ");
+		}
+		if (descricao != null && !descricao.isEmpty()) {
+			hql.append("categoria.descricao LIKE '%");
+			hql.append(descricao);
+			hql.append("%' AND ");
+		}
+		if (ativo != null) {
+			hql.append("categoria.ativo = :ativo AND ");
+		}
+		
+		hql.append("categoria.usuario.id = :idUsuario ORDER BY categoria.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (tipoCategoria != null) {
+			hqlQuery.setParameter("tipo", tipoCategoria);
+		}
+		if (ativo != null) {
+			hqlQuery.setParameter("ativo", ativo);
+		}
+		
+		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
 }

@@ -122,4 +122,8 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException {
 		return getRepository().findByDescricaoUsuarioAndAtivo(descricao, usuario, ativo);
 	}
+	
+	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException {
+		return getRepository().findDescricaoAndAtivoByUsuario(descricao, ativo, usuario);
+	}
 }

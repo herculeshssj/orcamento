@@ -293,13 +293,20 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	}
 	
 	public void adicionarItemListaCompra() {
-		if (itemDespensa == null || listaCompras.contains(itemDespensa)) {
-			warnMessage("Item selecionado já está na listagem!");
-		} else {
-			itemDespensa.setQuantidadeAtual(quantidadeItemDespensa);
-			itemDespensa.setValor(itemDespensa.getValor() * quantidadeItemDespensa);
-			listaCompras.add(itemDespensa);
+		if (itemDespensa == null) {
+			warnMessage("Selecione um item de despensa!");
+			return;
 		}
+		
+		if (listaCompras.contains(itemDespensa)) {
+			warnMessage("Item selecionado já está na listagem!");
+			return;
+		} 
+		
+		itemDespensa.setQuantidadeAtual(quantidadeItemDespensa);
+		itemDespensa.setValor(itemDespensa.getValor() * quantidadeItemDespensa);
+		listaCompras.add(itemDespensa);
+		
 		itemDespensa = new ItemDespensa();
 	}
 	

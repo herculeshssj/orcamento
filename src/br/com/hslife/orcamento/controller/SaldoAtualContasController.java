@@ -72,6 +72,8 @@ public class SaldoAtualContasController extends AbstractController {
 	@Autowired
 	private IResumoEstatistica service;
 	
+	private boolean lancamentoAgendado = false;
+	
 	public SaldoAtualContasController() {
 		moduleTitle = "Saldo Atual das Contas";
 	}
@@ -87,10 +89,14 @@ public class SaldoAtualContasController extends AbstractController {
 		return "/pages/ResumoEstatistica/saldoAtualContas";
 	}
 	
+	public void find() {
+		this.gerarSaldoAtualContas();
+	}
+	
 	private void gerarSaldoAtualContas() {
 		listEntity = new ArrayList<SaldoAtualConta>();
 		try {
-			listEntity = getService().gerarSaldoAtualContas(getUsuarioLogado());
+			listEntity = getService().gerarSaldoAtualContas(lancamentoAgendado, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -142,5 +148,13 @@ public class SaldoAtualContasController extends AbstractController {
 			}
 		}
 		return saldos;			
+	}
+
+	public boolean isLancamentoAgendado() {
+		return lancamentoAgendado;
+	}
+
+	public void setLancamentoAgendado(boolean lancamentoAgendado) {
+		this.lancamentoAgendado = lancamentoAgendado;
 	}
 }

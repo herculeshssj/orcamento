@@ -50,6 +50,7 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
@@ -62,4 +63,6 @@ public interface IFavorecido extends ICRUDService<Favorecido> {
 	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
 	
 	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException;
+	
+	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario) throws BusinessException;
 }

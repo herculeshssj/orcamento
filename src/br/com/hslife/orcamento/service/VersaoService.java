@@ -44,24 +44,40 @@
   
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.service;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import br.com.hslife.orcamento.entity.Versao;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
+import br.com.hslife.orcamento.facade.IVersao;
+import br.com.hslife.orcamento.repository.VersaoRepository;
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
+@Service("versaoService")
+public class VersaoService extends AbstractCRUDService<Versao> implements IVersao {
 	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws BusinessException;
-	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
+	@Autowired
+	private VersaoRepository repository;
 
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	public VersaoRepository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(VersaoRepository repository) {
+		this.repository = repository;
+	}
+
+	@Override
+	public Versao versaoAtual() throws BusinessException {
+		return getRepository().findActived();
+	}
+
+	@Override
+	public List<Versao> buscarTodos() throws BusinessException {
+		return getRepository().findAllOrderByDataLiberacao();
+	}
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException;
 }

@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,9 +62,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.model.PanoramaCadastro;
 
 @Entity
 @Table(name="conta")
@@ -127,7 +130,10 @@ public class Conta extends EntityPersistence {
 	@OneToOne
 	@JoinColumn(name="idCartao", nullable=true)
 	private CartaoCredito cartaoCredito;
-
+	
+	@Transient
+	private List<PanoramaCadastro> panoramasCadastro;
+	
 	public Conta() {
 		ativo = true;
 		dataFechamento = null;
@@ -291,5 +297,13 @@ public class Conta extends EntityPersistence {
 
 	public void setMoeda(Moeda moeda) {
 		this.moeda = moeda;
+	}
+
+	public List<PanoramaCadastro> getPanoramasCadastro() {
+		return panoramasCadastro;
+	}
+
+	public void setPanoramasCadastro(List<PanoramaCadastro> panoramasCadastro) {
+		this.panoramasCadastro = panoramasCadastro;
 	}
 }

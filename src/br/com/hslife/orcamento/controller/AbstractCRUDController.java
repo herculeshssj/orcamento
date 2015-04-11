@@ -124,11 +124,8 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 				// Inicializa os objetos
 				initializeEntity();
 				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
 				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
+				if (getOpcoesSistema().getExibirBuscasRealizadas()) {
 					find();
 				}
 			} else {

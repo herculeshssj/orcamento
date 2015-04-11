@@ -89,10 +89,10 @@
 					<h:outputText value="#{managedBean.event.data.prioridadeTarefa}" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>	
 				
 					<h:outputText value="Dia inteiro:" rendered="#{managedBean.event.data.tipoAgendamento == 'COMPROMISSO'}"/>
-					<h:selectBooleanCheckbox value="#{managedBean.event.data.diaInteiro}" disabled="true" rendered="#{managedBean.event.data.tipoAgendamento == 'COMPROMISSO'}"/>
+					<p:selectBooleanCheckbox value="#{managedBean.event.data.diaInteiro}" disabled="true" rendered="#{managedBean.event.data.tipoAgendamento == 'COMPROMISSO'}"/>
 				
 					<h:outputText value="Concluído:" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>
-					<h:selectBooleanCheckbox value="#{managedBean.event.data.concluido}"  disabled="true" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>
+					<p:selectBooleanCheckbox value="#{managedBean.event.data.concluido}"  disabled="true" rendered="#{managedBean.event.data.tipoAgendamento == 'TAREFA'}"/>
 				
 					Emitir alerta:
 					<p:selectBooleanCheckbox value="#{managedBean.event.data.emitirAlerta}" disabled="true"/>

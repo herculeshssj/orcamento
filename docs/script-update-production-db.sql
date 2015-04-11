@@ -91,12 +91,13 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-    -- Remoção da coluna usuario (Fechado por) - Github Issue #57
-	alter table fechamentoperiodo drop column usuario;
+	-- Atualização de versão
+	update versao set ativo = false;
+	insert into versao (versao, ativo) values ('SET2015', true);
 	
-	-- Inclusão de constrainst entre lançamentoconta e FechamentoPeriodo
-	alter table lancamentoconta add column idFechamentoPeriodo bigint null;
-	alter table lancamentoconta add constraint fk_fechamentoperiodo_lancamentoconta foreign key (idFechamentoPeriodo) references fechamentoperiodo(id);
+	-- Correção do valor de conversão das moedas
+	update moeda set valorConversao = 1.0000 where valorConversao = 0.0000;
+	alter table moeda change column `valorConversao` `valorConversao` decimal(18,4) not null default 1.0000;
 	
     /*** Fim do bloco de atualizações da base ***/
     

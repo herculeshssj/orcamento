@@ -89,4 +89,8 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 	public Map<String, Object> buscarOpcoesUser(Usuario usuario) throws BusinessException {
 		return getComponent().buscarOpcoesUser(usuario);
 	}
+	
+	public void atualizarCacheOpcoesSistema() {
+		getComponent().atualizarCacheOpcoesSistema();
+	}
 }

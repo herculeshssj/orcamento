@@ -1,0 +1,134 @@
+<!--
+  
+  	Copyright (c) 2012 - 2015 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{panoramaCadastroMB}" />
+	
+	<ui:define name="botoes"></ui:define>
+	
+	<ui:define name="pesquisa">
+	
+		Cadastro:
+		<h:selectOneMenu value="#{managedBean.cadastroSelecionado}">
+			<f:selectItems value="#{managedBean.listaCadastro}"/>
+			<p:ajax update="txtRegistro" listener="#{panoramaCadastroMB.getListaRegistro}" />
+		</h:selectOneMenu>
+		&nbsp;
+		Registro:
+		<h:selectOneMenu id="txtRegistro" value="#{managedBean.idRegistro}">
+			<f:selectItems value="#{managedBean.listaRegistro}"/>
+		</h:selectOneMenu>
+	
+	</ui:define>
+	
+	<ui:define name="tabela">
+	
+		<p:dataTable width="100%" value="#{managedBean.contas}" var="conta" style="font-size: 16px;">
+			<p:columnGroup type="header">
+				<p:row rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
+					<p:column headerText="Ano"/>
+					<p:column headerText="Lançamentos"/>
+					<p:column headerText="Valor"/>
+				</p:row>
+				<p:row rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<p:column headerText="Ano"/>
+					<p:column headerText="Lançamentos (Crédito)"/>
+					<p:column headerText="Valor"/>
+					<p:column headerText="Lançamentos (Débito)"/>
+					<p:column headerText="Valor"/>
+				</p:row>
+			</p:columnGroup>
+			<p:subTable var="item" value="#{conta.panoramasCadastro}">
+				<f:facet name="header">
+					<h:outputText value="#{conta.label}" />
+				</f:facet>
+				<p:column style="text-align: center; vertical-align: middle;">
+					<h:outputText value="#{item.ano}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
+					<h:outputText value="#{item.quantidade}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
+					<h:outputText value="#{conta.moeda.simboloMonetario} " />
+					<h:outputText value="#{item.valor}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle; color: #0000FF;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{item.quantidadeCredito}"/>
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle; color: #0000FF;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{conta.moeda.simboloMonetario} " />
+					<h:outputText value="#{item.valorCredito}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle; color: #FF0000;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{item.quantidadeDebito}" />
+				</p:column>
+				<p:column style="text-align: center; vertical-align: middle; color: #FF0000;" rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+					<h:outputText value="#{conta.moeda.simboloMonetario} " />
+					<h:outputText value="#{item.valorDebito}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</p:column>
+			</p:subTable>
+		</p:dataTable>
+	
+	</ui:define>
+	
+</ui:composition>
+</html>

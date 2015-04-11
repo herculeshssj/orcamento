@@ -54,6 +54,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.repository.FavorecidoRepository;
@@ -121,5 +122,9 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	@Override
 	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException {
 		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
+	}
+	
+	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario) throws BusinessException {
+		return getRepository().findTipoPessoaAndNomeAndAtivoByUsuario(tipoPessoa, nome, ativo, usuario);
 	}
 }

@@ -44,21 +44,8 @@
   
 ***/
 
-package br.com.hslife.orcamento.component;
+package br.com.hslife.orcamento.enumeration;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import br.com.hslife.orcamento.entity.Versao;
-import br.com.hslife.orcamento.repository.VersaoRepository;
-
-@Component
-public class VersaoComponent {
-	
-	@Autowired
-	private VersaoRepository versaoRepository;
-	
-	public Versao versaoAtual() {
-		return versaoRepository.findActived();
-	}
+public enum CadastroSistema {
+	CATEGORIA, FAVORECIDO, MEIOPAGAMENTO, MOEDA;
 }

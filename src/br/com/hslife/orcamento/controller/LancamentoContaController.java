@@ -166,6 +166,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				if (this.pesquisarTermoNoAgrupamento)
 					novoCriterioBusca.setAgrupamento(this.agrupamentoSelecionado);					
 				else
+					// TODO resolver a ambiguidade da chamada do método
 					novoCriterioBusca.setAgrupamento(null);
 				
 				// Seta o limite de resultado da pesquisa

@@ -114,4 +114,31 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
 		return query.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MeioPagamento> findDescricaoAndAtivoByUsuario(String descricao, Boolean ativo, Usuario usuario) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM MeioPagamento meioPagamento WHERE ");
+		
+		if (descricao != null && !descricao.isEmpty()) {
+			hql.append("meioPagamento.descricao LIKE '%");
+			hql.append(descricao);
+			hql.append("%' AND ");
+		}
+		if (ativo != null) {
+			hql.append("meioPagamento.ativo = :ativo AND ");
+		}
+		
+		hql.append("meioPagamento.usuario.id = :idUsuario ORDER BY meioPagamento.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		
+		if (ativo != null) {
+			hqlQuery.setParameter("ativo", ativo);
+		}
+		
+		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
 }

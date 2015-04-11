@@ -57,6 +57,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 
@@ -156,7 +157,24 @@ public class CriterioBuscaLancamentoConta {
 				default:
 			}
 		}
+	}
+	
+	public void setCadastro(CadastroSistema agrupamento) {
+		// Remove os agrupamentos anteriormente setados
+		hibernateCriterions.remove("categoria");
+		hibernateCriterions.remove("favorecido");
+		hibernateCriterions.remove("meiopagamento");
+		hibernateCriterions.remove("moeda");
 		
+		if (agrupamento != null) {			
+			switch(agrupamento) {
+				case CATEGORIA : hibernateCriterions.put("categoria", Restrictions.eq("lancamento.categoria.id", idAgrupamento)); break;
+				case FAVORECIDO : hibernateCriterions.put("favorecido", Restrictions.eq("lancamento.favorecido.id", idAgrupamento)); break;
+				case MEIOPAGAMENTO : hibernateCriterions.put("meiopagamento", Restrictions.eq("lancamento.meioPagamento.id", idAgrupamento)); break;
+				case MOEDA : hibernateCriterions.put("moeda", Restrictions.eq("lancamento.moeda.id", idAgrupamento)); break;
+				default:
+			}
+		}
 	}
 
 	public TipoConta[] getTipoConta() {

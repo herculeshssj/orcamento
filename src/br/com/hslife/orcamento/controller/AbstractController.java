@@ -56,9 +56,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
-import br.com.hslife.orcamento.component.VersaoComponent;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.entity.Versao;
 
 public abstract class AbstractController implements Serializable {	
 	
@@ -72,9 +70,6 @@ public abstract class AbstractController implements Serializable {
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
-	
-	@Autowired
-	private VersaoComponent versaoComponent;
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
@@ -106,19 +101,6 @@ public abstract class AbstractController implements Serializable {
 		return (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
 	}
 	
-	public Versao getVersaoAtual() {
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("versao") == null) {
-			Versao v = new Versao();
-			try {
-				v = versaoComponent.versaoAtual();				
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("versao", v);
-			} catch (Exception e) {
-				errorMessage(e.getMessage());
-			}
-		}
-		return (Versao)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("versao");
-	}
-	
 	public OpcaoSistemaComponent getOpcoesSistema() {
 		return opcaoSistemaComponent;
 	}
@@ -141,10 +123,6 @@ public abstract class AbstractController implements Serializable {
 
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
 		this.usuarioComponent = usuarioComponent;
-	}
-
-	public void setVersaoComponent(VersaoComponent versaoComponent) {
-		this.versaoComponent = versaoComponent;
 	}
 
 	public void setOpcaoSistemaComponent(OpcaoSistemaComponent opcaoSistemaComponent) {

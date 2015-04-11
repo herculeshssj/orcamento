@@ -44,24 +44,35 @@
   
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.security;
 
-import java.util.List;
+import java.io.IOException;
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
-	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws BusinessException;
-	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
+
+@Component("startupUserParametersHandler")
+public class StartupUserParametersHandler implements AuthenticationSuccessHandler {
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
+	@Autowired
+	private OpcaoSistemaComponent opcaoSistemaComponent;
+
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		
+		// Carrega as opções do sistema do usuário autenticado
+		opcaoSistemaComponent.atualizarCacheOpcoesSistema();
+		
+		response.sendRedirect(request.getContextPath() + "/pages/menu/inicio.faces");
+	}
+
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException;
 }

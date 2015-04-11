@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,12 +55,20 @@ import br.com.hslife.orcamento.entity.Versao;
 
 @Repository
 @Transactional
-public class VersaoRepository extends AbstractRepository {
+public class VersaoRepository extends AbstractCRUDRepository<Versao> {
 	
+	public VersaoRepository() {
+		super(new Versao());
+	}
+
 	public Versao findActived() {
 		return (Versao) getQuery("FROM Versao versao WHERE versao.ativo = true")
 				.setMaxResults(1)
 				.uniqueResult();
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public List<Versao> findAllOrderByDataLiberacao() {
+		return getQuery("FROM Versao versao ORDER BY versao.dataLiberacao DESC").list();
+	}
 }

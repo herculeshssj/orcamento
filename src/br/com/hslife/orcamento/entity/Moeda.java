@@ -130,7 +130,7 @@ public class Moeda extends EntityPersistence {
 		saldoPago = 0.0;
 		saldoCredito = 0.0;
 		saldoDebito = 0.0;
-		valorConversao = 1.0;
+		valorConversao = 1.0000;
 	}
 
 	public Long getId() {

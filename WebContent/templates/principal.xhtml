@@ -174,8 +174,10 @@
 				</div>
 
 				<div id="site-generator">
-					<a href="#">Versão <h:outputText value="#{usuarioMB.versaoAtual.label}"/></a><br /> <a
-						href="#{request.contextPath}/pages/menu/sitemap.faces">Mapa do site</a>
+				<h:form id="frmVersion">
+				<h:commandLink value="Versão #{versaoMB.versaoAtual.label}" action="#{versaoMB.verChangelog}" />
+					<br /> <a href="#{request.contextPath}/pages/menu/sitemap.faces">Mapa do site</a>
+				</h:form>
 				</div>
 				<!-- #site-generator -->
 

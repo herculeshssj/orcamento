@@ -54,11 +54,13 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.ContaComponent;
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
@@ -67,6 +69,7 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
@@ -77,6 +80,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
+import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.model.PanoramaFaturaCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
@@ -114,6 +118,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Autowired
 	private ContaComponent contaComponent;	
 	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
+	
 	/*** Declaração dos métodos Setters dos repositórios ***/
 		
 	public void setLancamentoContaRepository(
@@ -138,7 +145,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 
 	/*** Implementação dos métodos da interface ***/
 	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(Usuario usuario) throws BusinessException {
+	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) throws BusinessException {
 		// Declaração dos objetos
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
@@ -175,8 +182,13 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					saldoAtual.setSaldoPeriodo(ultimoFechamento.getSaldo());
 				}
 				
-				// Traz os lançamentos da data de fechamento em diante					
-				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});						
+				// Traz os lançamentos da data de fechamento em diante
+				// Se a opção de agendado estiver marcada, traz os lançamentos agendados
+				if (agendado)
+					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+				else 
+					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+				
 				criterio.setConta(conta);
 				if (ultimoFechamento == null) {
 					criterio.setDataInicio(conta.getDataAbertura());
@@ -676,7 +688,91 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return resumoMensal;	
 	}
 	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException {		
+		// Busca todas as contas existentes
+		List<Conta> contasExistentes = contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, null, usuarioComponent.getUsuarioLogado(), null);
+
+		// Declara a lista de contas que será retornada
+		List<Conta> contasProcessadas = new ArrayList<Conta>();
+		
+		// Para cada conta existente busca TODOS os lançamentos do cadastro e do registro selecionado
+		for (Conta conta : contasExistentes) {
+			
+			// Seta os parâmetros de busca
+			CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+			criterioBusca.setConta(conta);
+			criterioBusca.setIdAgrupamento(idRegistro);
+			criterioBusca.setCadastro(cadastro);
+			
+			// Traz todos os lançamentos encontrados
+			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			
+			// Se a lista de lançamentos vier zerada, passa para a próxima conta
+			if (lancamentos == null || lancamentos.isEmpty()) continue;
+			
+			// Instancia o Map que irá armazenar as informações de ano, quantidade e valor
+			Map<Integer, PanoramaCadastro> panoramas = new TreeMap<Integer, PanoramaCadastro>();
+			
+			// Itera a lista de lançamentos, faz os cálculos de valor e quantidade
+			for (LancamentoConta lancamento : lancamentos) {				
+				// Determina o ano
+				Integer ano = Integer.valueOf(lancamento.getDataPagamento().getYear() + 1900);
+				
+				// Verifica se o ano já existe no Map, caso contrário cria uma nova instância
+				if (!panoramas.containsKey(ano)) {
+					panoramas.put(ano, new PanoramaCadastro(ano));
+				}
+				
+				// Verifica se o cadastro é CATEGORIA para poder setar os atributos de quantidade e valor corretamente
+				if (cadastro.equals(CadastroSistema.CATEGORIA)) {
+					panoramas.get(ano).setQuantidade(panoramas.get(ano).getQuantidade() + 1);
+					panoramas.get(ano).setValor(panoramas.get(ano).getValor() + this.getValorPagoConvertido(lancamento));
+				} else {
+					switch (lancamento.getTipoLancamento()) {
+						case RECEITA :
+							panoramas.get(ano).setQuantidadeCredito(panoramas.get(ano).getQuantidadeCredito() + 1);
+							panoramas.get(ano).setValorCredito(panoramas.get(ano).getValorCredito() + this.getValorPagoConvertido(lancamento));
+							break;
+						case DESPESA : 
+							panoramas.get(ano).setQuantidadeDebito(panoramas.get(ano).getQuantidadeDebito() + 1);
+							panoramas.get(ano).setValorDebito(panoramas.get(ano).getValorDebito() + this.getValorPagoConvertido(lancamento));
+							break;
+					}
+				}
+			}
+			
+			// Adiciona os panoramas na conta
+			conta.setPanoramasCadastro(new ArrayList<PanoramaCadastro>());
+			conta.getPanoramasCadastro().addAll(panoramas.values());
+			
+			// Adiciona a conta na lista de contas processadas
+			contasProcessadas.add(conta);
+		}
+		
+		return contasProcessadas;
+	}
+	
 	/*** Implementação dos métodos privados ***/
 	
+	private double getValorPagoConvertido(LancamentoConta lancamento) {
+		double taxaConversao = lancamento.getMoeda().getValorConversao();
+		if (lancamento.getMoeda().equals(lancamento.getConta().getMoeda())) {
+			return lancamento.getValorPago();
+		} else {
+			if (lancamento.getFaturaCartao() == null) {
+				return Util.arredondar(lancamento.getValorPago() * taxaConversao);
+			} else {
+				
+				for (ConversaoMoeda conversao : lancamento.getFaturaCartao().getConversoesMoeda()) {
+					if (conversao.getMoeda().equals(lancamento.getMoeda())) {
+						return Util.arredondar(lancamento.getValorPago() * conversao.getTaxaConversao());
+					}
+				}
+				return lancamento.getValorPago() * taxaConversao;
+			}
+		}
+	}
 	
 }
