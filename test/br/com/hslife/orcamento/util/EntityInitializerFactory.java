@@ -53,6 +53,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.Telefone;
@@ -164,5 +165,13 @@ public class EntityInitializerFactory {
 		meioPagamento.setPadrao(padrao);
 		meioPagamento.setUsuario(usuario);
 		return meioPagamento;
+	}
+	
+	public static ModeloDocumento initializeModeloDocumento(Usuario usuario) {
+		ModeloDocumento modelo = new ModeloDocumento();
+		modelo.setDescricao("Modelo de documento de teste");
+		modelo.setConteudo("Conteúdo do modelo de documento de teste");
+		modelo.setUsuario(usuario);
+		return modelo;
 	}
 }

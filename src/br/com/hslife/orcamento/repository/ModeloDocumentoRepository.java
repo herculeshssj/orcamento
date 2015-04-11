@@ -44,27 +44,47 @@
   
 ***/
 
-/*** Script de atualização da base de dados ***/
+package br.com.hslife.orcamento.repository;
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO SET2015 ***/
+import java.util.List;
 
--- Atualização de versão
-update versao set ativo = false;
-insert into versao (versao, ativo) values ('SET2015', true);
+import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
 
--- Correção do valor de conversão das moedas
-update moeda set valorConversao = 1.0000 where valorConversao = 0.0000;
-alter table moeda change column `valorConversao` `valorConversao` decimal(18,4) not null default 1.0000;
+import br.com.hslife.orcamento.entity.ModeloDocumento;
+import br.com.hslife.orcamento.entity.Usuario;
 
--- Criação da tabela de modelos de documento
-create table modelodocumento (
-	id bigint not null auto_increment,
-    descricao varchar(50) not null,
-    conteudo text,
-    ativo boolean,
-    idUsuario bigint not null,
-    versionEntity datetime not null default '2015-06-01 00:00:00', 
-    primary key(id)
-) engine=InnoDB;
+@Repository
+public class ModeloDocumentoRepository extends AbstractCRUDRepository<ModeloDocumento>{
+	
+	public ModeloDocumentoRepository() {
+		super(new ModeloDocumento());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ModeloDocumento> findDescricaoOrAtivoByUsuario(String descricao, Boolean ativo, Usuario usuario) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM ModeloDocumento modelo WHERE ");
+		
+		if (descricao != null && !descricao.isEmpty()) {
+			hql.append("modelo.descricao LIKE '%");
+			hql.append(descricao);
+			hql.append("%' AND ");
+		}
+		if (ativo != null) {
+			hql.append("modelo.ativo = :ativo AND ");
+		}
+		
+		hql.append("modelo.usuario.id = :idUsuario ORDER BY modelo.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
 
-alter table modelodocumento add constraint fk_usuario_modelodocumento foreign key (idUsuario) references usuario (id);
+		if (ativo != null) {
+			hqlQuery.setParameter("ativo", ativo);
+		}
+		
+		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
+}
