@@ -63,19 +63,23 @@
 	
 		<h:form id="frmMenuOpcoes">
 		
-			<h:panelGrid columns="5" width="100%" style="text-align: center">
-				
-				<h:commandButton action="#{categoriaDocumentoMB.startUp}" image="/resources/images/categoriaDocumentos.png" title="Categoria de Documentos"/>
-				<h:commandButton action="#{documentoMB.startUp}" image="/resources/images/documentos.png" title="Documentos"/>
-				<h:commandButton action="#{arquivoMB.startUp}" image="/resources/images/arquivos.png" title="Arquivos Anexados"/>
+			<h:panelGrid columns="3" width="100%" style="text-align: center">
+			
+				<h:commandButton action="#{documentoMB.startUp}" image="/resources/images/documentos.png" title="Documentos"/>				
 				<h:commandButton action="#{identidadeMB.startUp}" image="/resources/images/identidade.png" title="Documentos de Identidade"/>
 				<h:commandButton action="#{pessoalMB.startUp}" image="/resources/images/detalhes.png" title="Informações pessoais"/>				
-				
-				<h:outputText value="Categoria de Documentos"/>
+								
 				<h:outputText value="Documentos"/>
-				<h:outputText value="Arquivos Anexados"/>
 				<h:outputText value="Documentos de Identidade"/>
 				<h:outputText value="Informações pessoais"/>
+				
+				<h:commandButton action="#{categoriaDocumentoMB.startUp}" image="/resources/images/categoriaDocumentos.png" title="Categoria de Documentos"/>
+				<h:commandButton action="#{modeloDocumentoMB.startUp}" image="/resources/images/modelos.png" title="Modelos de Documentos"/>
+				<h:commandButton action="#{arquivoMB.startUp}" image="/resources/images/arquivos.png" title="Arquivos Anexados"/>
+				
+				<h:outputText value="Categoria de Documentos"/>				
+				<h:outputText value="Modelos de Documentos"/>
+				<h:outputText value="Arquivos Anexados"/>
 				
 			</h:panelGrid>
 		

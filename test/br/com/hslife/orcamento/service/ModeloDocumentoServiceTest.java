@@ -44,7 +44,7 @@
   
 ***/
 
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -60,77 +60,101 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IModeloDocumento;
+import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.facade.IRegraImportacao;
+import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
-public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
+public class ModeloDocumentoServiceTest extends AbstractTestServices {
 	
-	private Usuario usuario = new Usuario();
 	private ModeloDocumento modelo = new ModeloDocumento();
+	private Usuario usuario = new Usuario();
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private IRegraImportacao regraImportacaoService;
 	
 	@Autowired
-	private ModeloDocumentoRepository modeloDocumentoRepository;
+	private IUsuario usuarioService;
+	
+	@Autowired
+	private IMoeda moedaService;
+	
+	@Autowired
+	private IConta contaService;
+	
+	@Autowired
+	private IModeloDocumento modeloDocumentoService;
 	
 	@Before
-	public void initializeEntities() {
+	public void initializeTestEnvironment() throws BusinessException {
 		usuario = EntityInitializerFactory.initializeUsuario();
-		usuarioRepository.save(usuario);
+		usuarioService.cadastrar(usuario);
 		
 		modelo = EntityInitializerFactory.initializeModeloDocumento(usuario);
 	}
 	
 	@Test
-	public void testFindById() {
-		modeloDocumentoRepository.save(modelo);
+	public void testCadastrar() throws BusinessException {
+		modeloDocumentoService.cadastrar(modelo);
 		
-		// Testa o método em questão
-		ModeloDocumento modeloTest = modeloDocumentoRepository.findById(modelo.getId());
-		assertEquals(modelo.getId(), modeloTest.getId());
+		assertNotNull(modelo.getId());
 	}
 	
 	@Test
-	public void testDelete() {
-		modeloDocumentoRepository.save(modelo);
-		
-		// Testa o método em questão
-		modeloDocumentoRepository.delete(modelo);
-		
-		ModeloDocumento modeloTest = modeloDocumentoRepository.findById(modelo.getId());
-		assertNull(modeloTest);
-	}
-	
-	@Test
-	public void testUpdate() {
-		modeloDocumentoRepository.save(modelo);
+	public void testAlterar() throws BusinessException {
+		modeloDocumentoService.cadastrar(modelo);
 		
 		modelo.setDescricao("nova descricao de teste");
 		modelo.setConteudo("novo conteúdo de teste");
 		
 		// Testa o método em questão
-		modeloDocumentoRepository.update(modelo);
+		modeloDocumentoService.alterar(modelo);
 		
-		ModeloDocumento modeloTest = modeloDocumentoRepository.findById(modelo.getId());
+		ModeloDocumento modeloTest = modeloDocumentoService.buscarPorID(modelo.getId());
 		
 		assertEquals(modelo.getDescricao(), modeloTest.getDescricao());
 		assertEquals(modelo.getConteudo(), modeloTest.getConteudo());
-
 	}
 	
 	@Test
-	public void testSave() {
-		modeloDocumentoRepository.save(modelo);
+	public void testExcluir() throws BusinessException {
+		modeloDocumentoService.cadastrar(modelo);
 		
 		// Testa o método em questão
-		assertNotNull(modelo.getId());
+		modeloDocumentoService.excluir(modelo);
+		
+		ModeloDocumento modeloTest = modeloDocumentoService.buscarPorID(modelo.getId());
+		assertNull(modeloTest);
 	}
 	
 	@Test
-	public void testFindDescricao() {
-		modeloDocumentoRepository.save(modelo);
+	public void testBuscarPorID() throws BusinessException {
+		modeloDocumentoService.cadastrar(modelo);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoRepository.findDescricaoOrAtivoByUsuario("teste", null, usuario);
+		// Testa o método em questão
+		ModeloDocumento modeloTest = modeloDocumentoService.buscarPorID(modelo.getId());
+		assertEquals(modelo.getId(), modeloTest.getId());
+	}
+	
+	@Test
+	public void testValidar() throws BusinessException {
+		// Verifica se a entidade está consistente para ser persistida
+		modeloDocumentoService.validar(modelo);
+		
+		modeloDocumentoService.cadastrar(modelo);
+		
+		ModeloDocumento modeloTest = EntityInitializerFactory.initializeModeloDocumento(usuario);
+		modeloDocumentoService.validar(modeloTest);
+	}
+	
+	@Test
+	public void testBuscarDescricao() throws BusinessException {
+		modeloDocumentoService.cadastrar(modelo);
+		
+		List<ModeloDocumento> listaModelos = modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario("teste", null, usuario);
 		
 		if (listaModelos == null || listaModelos.isEmpty()) {
 			fail("Lista vazia.");
@@ -142,10 +166,10 @@ public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
 	}
 	
 	@Test
-	public void testFindAtivo() {
-		modeloDocumentoRepository.save(modelo);
+	public void testBuscarAtivo() throws BusinessException {
+		modeloDocumentoService.cadastrar(modelo);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoRepository.findDescricaoOrAtivoByUsuario(null, true, usuario);
+		List<ModeloDocumento> listaModelos = modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario(null, true, usuario);
 		
 		if (listaModelos == null || listaModelos.isEmpty()) {
 			fail("Lista vazia.");
@@ -157,10 +181,10 @@ public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
 	}
 	
 	@Test
-	public void testFindByUsuario() {
-		modeloDocumentoRepository.save(modelo);
+	public void testBuscarPorUsuario() throws BusinessException {
+		modeloDocumentoService.cadastrar(modelo);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoRepository.findDescricaoOrAtivoByUsuario(null, null, usuario);
+		List<ModeloDocumento> listaModelos = modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario(null, null, usuario);
 		
 		if (listaModelos == null || listaModelos.isEmpty()) {
 			fail("Lista vazia.");
