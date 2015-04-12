@@ -107,4 +107,14 @@ public class ModeloDocumentoTest {
 		}
 		fail("Falha no teste!");
 	}
+	
+	@Test
+	public void testClonar() {
+		ModeloDocumento modeloTest = entity.clonar();
+		
+		assertEquals(entity.getConteudo(), modeloTest.getConteudo());
+		assertEquals(entity.getDescricao() + " [Cópia]", modeloTest.getDescricao());
+		assertEquals(entity.getUsuario(), modeloTest.getUsuario());
+		assertEquals(entity.isAtivo(), modeloTest.isAtivo());
+	}
 }

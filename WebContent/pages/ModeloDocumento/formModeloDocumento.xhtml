@@ -99,5 +99,24 @@
 		</p:column>  			
 	</ui:define>
 	
+	<ui:define name="acoes_tabela">
+    	<p:column style="text-align: center; vertical-align: middle;" exportable="false">
+			<f:facet name="header">
+				<h:outputText value="Ações"/>
+			</f:facet>
+			<h:commandButton title="Clonar" image="/resources/images/duplicar.png" action="#{managedBean.clonarModelo}">
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+			</h:commandButton>								
+	  		&nbsp;&nbsp;&nbsp;		
+			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>								
+	  		&nbsp;&nbsp;&nbsp;
+			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.delete}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>
+	  	</p:column>
+     </ui:define>
+	
 </ui:composition>
 </html>

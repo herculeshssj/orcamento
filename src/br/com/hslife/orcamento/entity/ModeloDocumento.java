@@ -99,6 +99,17 @@ public class ModeloDocumento extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 	}
+	
+	public ModeloDocumento clonar() {
+		ModeloDocumento modelo = new ModeloDocumento();
+		
+		modelo.setAtivo(this.ativo);
+		modelo.setConteudo(this.conteudo);
+		modelo.setDescricao(this.descricao + " [Cópia]");
+		modelo.setUsuario(this.usuario);
+		
+		return modelo;
+	}
 
 	public void setId(Long id) {
 		this.id = id;

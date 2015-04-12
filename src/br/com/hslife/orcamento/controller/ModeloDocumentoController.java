@@ -98,6 +98,17 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 		super.save();
 	}
 
+	public void clonarModelo() {
+		try {
+			ModeloDocumento modeloClonado = entity.clonar();
+			getService().cadastrar(modeloClonado);
+			infoMessage("Modelo clonado com sucesso!");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
 	public IModeloDocumento getService() {
 		return service;
 	}
