@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -55,6 +56,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IModeloDocumento;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("modeloDocumentoMB")
 @Scope("session")
@@ -68,8 +70,11 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 	@Autowired
 	private IModeloDocumento service;
 	
-	private String descricaoModelo;
+	private String descricaoModeloPesquisa;
 	private boolean somenteAtivos = true;
+	private String descricaoModelo;
+	private String conteudoModelo;
+	
 
 	public ModeloDocumentoController() {
 		super(new ModeloDocumento());		
@@ -81,12 +86,14 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 	protected void initializeEntity() {
 		entity = new ModeloDocumento();
 		listEntity = new ArrayList<ModeloDocumento>();
+		conteudoModelo = "";
+		descricaoModelo = "";
 	}
 	
 	@Override
 	public void find() {
 		try {			
-			listEntity = getService().buscarDescricaoOuAtivoPorUsuario(descricaoModelo, somenteAtivos, getUsuarioLogado());
+			listEntity = getService().buscarDescricaoOuAtivoPorUsuario(descricaoModeloPesquisa, somenteAtivos, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -94,10 +101,49 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 	
 	@Override
 	public void save() {
-		entity.setUsuario(getUsuarioLogado());
+		if (entity.getId() == null) {
+			entity.setUsuario(getUsuarioLogado());
+		} 
+		entity.setConteudo(conteudoModelo);
+		entity.setDescricao(descricaoModelo);
 		super.save();
 	}
-
+	
+	@Override
+	public void edit() {
+		super.edit();
+		conteudoModelo = entity.getConteudo();
+		descricaoModelo = entity.getDescricao();
+	}
+	
+	public void autoSave() {
+		try {
+			if (entity.getId() == null) {
+				
+				if (descricaoModelo ==  null || descricaoModelo.isEmpty()) {
+					descricaoModelo = "Modelo salvo automaticamente em " + Util.formataDataHora(new Date(), Util.DATAHORA);
+				}
+				
+				entity.setUsuario(getUsuarioLogado());
+				entity.setConteudo(conteudoModelo);
+				entity.setDescricao(descricaoModelo);
+				getService().cadastrar(entity);
+				
+				// Tentando contornar a exceção org.hibernate.StaleObjectStateException
+				entity = getService().buscarPorID(entity.getId());
+			} else {
+				ModeloDocumento modelo = getService().buscarPorID(entity.getId());
+				modelo.setConteudo(conteudoModelo);
+				modelo.setDescricao(descricaoModelo);
+				getService().alterar(modelo);
+			}
+			System.out.println("Modelo de documento salvo automaticamente em " + new Date().toString());
+		}
+		catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+ 
 	public void clonarModelo() {
 		try {
 			ModeloDocumento modeloClonado = entity.clonar();
@@ -131,5 +177,21 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 
 	public void setSomenteAtivos(boolean somenteAtivos) {
 		this.somenteAtivos = somenteAtivos;
+	}
+
+	public String getDescricaoModeloPesquisa() {
+		return descricaoModeloPesquisa;
+	}
+
+	public void setDescricaoModeloPesquisa(String descricaoModeloPesquisa) {
+		this.descricaoModeloPesquisa = descricaoModeloPesquisa;
+	}
+
+	public String getConteudoModelo() {
+		return conteudoModelo;
+	}
+
+	public void setConteudoModelo(String conteudoModelo) {
+		this.conteudoModelo = conteudoModelo;
 	}
 }

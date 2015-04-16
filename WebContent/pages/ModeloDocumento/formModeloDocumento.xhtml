@@ -58,11 +58,13 @@
 	<ui:param name="managedBean" value="#{modeloDocumentoMB}" />
 	
 	<ui:define name="campos">
+	
+		<p:poll interval="60" listener="#{managedBean.autoSave}" update="txtDescricao" />
 			
 		<h:panelGrid columns="2">
 				
 			Descrição:
-			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
+			<p:inputText id="txtDescricao" value="#{managedBean.descricaoModelo}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
 			
 			Ativo:
 			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" />			
@@ -70,14 +72,14 @@
 		</h:panelGrid>
 		
 		<h:panelGrid columns="1">
-			<p:editor id="editor" value="#{managedBean.entity.conteudo}" width="850" height="400" disabled="#{!managedBean.entity.ativo}"/>
+			<p:editor id="editor" value="#{managedBean.conteudoModelo}" width="850" height="400" disabled="#{!managedBean.entity.ativo}"/>
 		</h:panelGrid>
 		
 	</ui:define>
 	
 	<ui:define name="pesquisa">
 		Descrição:
-	    <p:inputText value="#{managedBean.descricaoModelo}" />
+	    <p:inputText value="#{managedBean.descricaoModeloPesquisa}" />
 	    &nbsp;
 	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
 	    Somente ativos
