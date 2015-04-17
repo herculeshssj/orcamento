@@ -68,3 +68,32 @@ create table modelodocumento (
 ) engine=InnoDB;
 
 alter table modelodocumento add constraint fk_usuario_modelodocumento foreign key (idUsuario) references usuario (id);
+
+-- Dívidas de terceiros - Github Issue #84
+create table dividaterceiro(
+	id bigint not null auto_increment,
+	valorDivida decimal(18,2) not null,
+	dataNegociacao date not null,
+	justificativa varchar(4000) not null,
+	termoDivida text,
+	termoQuitacao text,
+	statusDivida varchar(15) not null,
+	tipoCategoria varchar(10) not null,
+	idFavorecido bigint not null,
+	idUsuario bigint not null,
+	primary key(id)
+) Engine=InnoDB;
+
+alter table dividaterceiro add constraint fk_favorecido_dividaterceiro foreign key(idFavorecido) references favorecido (id);
+alter table dividaterceiro add constraint fk_usuario_dividaterceiro foreign key(idUsuario) references usuario (id);
+
+create table pagamentodividaterceiro(
+	id bigint not null auto_increment,
+	valorPago decimal(18,2) not null,
+	dataPagamento date not null,
+	comprovantePagamento text,
+	idDivida bigint not null,
+	primary key(id)
+) Engine=InnoDB;
+
+alter table pagamentodividaterceiro add constraint fk_dividaterceiro_pagamentodividaterceiro foreign key(idDivida) references dividaterceiro(id);
