@@ -49,22 +49,21 @@ package br.com.hslife.orcamento.repository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusDivida;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
@@ -103,129 +102,130 @@ public class DividaTerceiroRepositoryTest extends AbstractTestRepositories {
 	
 	@Test
 	public void testFindById() {
-		fail("Não implementado!");
-		/*
-		regraImportacaoRepository.save(regra);
+		dividaTerceiroRepository.save(dividaTerceiro);
 		
-		// Testa o método em questão
-		RegraImportacao regraTest = regraImportacaoRepository.findById(regra.getId());
-		assertEquals(regra.getId(), regraTest.getId());
-		*/
+		DividaTerceiro dividaTest = dividaTerceiroRepository.findById(dividaTerceiro.getId());
+		assertEquals(dividaTerceiro.getId(), dividaTest.getId());
+		
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getId(), dividaTest.getPagamentos().get(i).getId());
+		}
 	}
 	
 	@Test
 	public void testDelete() {
-		fail("Não implementado!");
-		/*
-		regraImportacaoRepository.save(regra);
+		dividaTerceiroRepository.save(dividaTerceiro);
 		
-		// Testa o método em questão
-		regraImportacaoRepository.delete(regra);
+		dividaTerceiroRepository.delete(dividaTerceiro);
 		
-		RegraImportacao regraTest = regraImportacaoRepository.findById(regra.getId());
-		assertNull(regraTest);
-		*/
+		DividaTerceiro dividaTest = dividaTerceiroRepository.findById(dividaTerceiro.getId());
+		assertNull(dividaTest);
 	}
 	
 	@Test
 	public void testUpdate() {
-		fail("Não implementado!");
-		/*
-		regraImportacaoRepository.save(regra);
+		dividaTerceiroRepository.save(dividaTerceiro);
 		
-		regra.setTexto("texto a pesquisar");
-		regra.setIdCategoria(10l);
-		regra.setIdFavorecido(20l);
-		regra.setIdMeioPagamento(30l);
+		dividaTerceiro.setDataNegociacao(Calendar.getInstance().getTime());
+		dividaTerceiro.setJustificativa("Justificativa da dívida de teste alterado");
+		dividaTerceiro.setTermoDivida("Termo da dívida de teste alterado");
+		dividaTerceiro.setTermoQuitacao("Termo de quitação da dívida de teste alterado");
+		dividaTerceiro.setTipoCategoria(TipoCategoria.DEBITO);
+		dividaTerceiro.setStatusDivida(StatusDivida.ENCERRADO);
+		dividaTerceiro.setValorDivida(2000);
 		
-		// Testa o método em questão
-		regraImportacaoRepository.update(regra);
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			dividaTerceiro.getPagamentos().get(i).setComprovantePagamento("Comprovante de pagamento da dívida de teste alterado " + i);
+			dividaTerceiro.getPagamentos().get(i).setDataPagamento(Calendar.getInstance().getTime());
+			dividaTerceiro.getPagamentos().get(i).setValorPago(200);
+		}
 		
-		RegraImportacao regraTest = regraImportacaoRepository.findById(regra.getId());
+		dividaTerceiroRepository.update(dividaTerceiro);
 		
-		assertEquals(regra.getTexto(), regraTest.getTexto());
-		assertEquals(regra.getIdCategoria(), regraTest.getIdCategoria());
-		assertEquals(regra.getIdFavorecido(), regraTest.getIdFavorecido());
-		assertEquals(regra.getIdMeioPagamento(), regraTest.getIdMeioPagamento());
-		assertEquals(regra.getConta(), regraTest.getConta());
-		*/
+		DividaTerceiro dividaTest = dividaTerceiroRepository.findById(dividaTerceiro.getId());
+		
+		assertEquals(dividaTerceiro.getDataNegociacao(), dividaTest.getDataNegociacao());
+		assertEquals(dividaTerceiro.getJustificativa(), dividaTest.getJustificativa());
+		assertEquals(dividaTerceiro.getTermoDivida(), dividaTest.getTermoDivida());
+		assertEquals(dividaTerceiro.getTermoQuitacao(), dividaTest.getTermoQuitacao());
+		assertEquals(dividaTerceiro.getTipoCategoria(), dividaTest.getTipoCategoria());
+		assertEquals(dividaTerceiro.getStatusDivida(), dividaTest.getStatusDivida());
+		
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getComprovantePagamento(), dividaTest.getPagamentos().get(i).getComprovantePagamento());
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getDataPagamento(), dividaTest.getPagamentos().get(i).getDataPagamento());
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getValorPago(), dividaTest.getPagamentos().get(i).getValorPago(), 0);
+		}
 	}
 	
 	@Test
 	public void testSave() {
-		fail("Não implementado!");
-		/*
-		regraImportacaoRepository.save(regra);
+		dividaTerceiroRepository.save(dividaTerceiro);
 		
-		// Testa o método em questão
-		assertNotNull(regra.getId());
-		*/
+		assertNotNull(dividaTerceiro.getId());
+		
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			assertNotNull(dividaTerceiro.getPagamentos().get(i).getId());
+		}
 	}
 	
 	@Test
 	public void testFindFavorecido() {
-		fail("Não implementado!");
-	}
-	
-	@Test
-	public void testFindTipoCategoria() {
-		fail("Não implementado!");
-	}
-	
-	@Test
-	public void testFindStatusDivida() {
-		fail("Não implementado!");
-	}
-	
-	@Test
-	public void testFindByUsuario() {
-		fail("Não implementado!");
-	}
-	
-	/*
-	@Test
-	public void testFindDescricao() {
-		modeloDocumentoRepository.save(modelo);
+		dividaTerceiroRepository.save(dividaTerceiro);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoRepository.findDescricaoOrAtivoByUsuario("teste", null, usuario);
+		List<DividaTerceiro> listaDividas = dividaTerceiroRepository.findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(favorecido, null, null, usuario);
 		
-		if (listaModelos == null || listaModelos.isEmpty()) {
+		if (listaDividas == null || listaDividas.isEmpty()) {
 			fail("Lista vazia.");
 		} else {
-			if (!listaModelos.contains(modelo)) {
+			if (!listaDividas.contains(dividaTerceiro)) {
 				fail("Objeto não encontrado.");
 			}
 		}
 	}
 	
 	@Test
-	public void testFindAtivo() {
-		modeloDocumentoRepository.save(modelo);
+	public void testFindTipoCategoria() {
+		dividaTerceiroRepository.save(dividaTerceiro);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoRepository.findDescricaoOrAtivoByUsuario(null, true, usuario);
+		List<DividaTerceiro> listaDividas = dividaTerceiroRepository.findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(null, dividaTerceiro.getTipoCategoria(), null, usuario);
 		
-		if (listaModelos == null || listaModelos.isEmpty()) {
+		if (listaDividas == null || listaDividas.isEmpty()) {
 			fail("Lista vazia.");
 		} else {
-			for (ModeloDocumento modeloTest : listaModelos) {
-				assertTrue(modeloTest.isAtivo());
+			if (!listaDividas.contains(dividaTerceiro)) {
+				fail("Objeto não encontrado.");
+			}
+		}
+	}
+	
+	@Test
+	public void testFindStatusDivida() {
+		dividaTerceiroRepository.save(dividaTerceiro);
+		
+		List<DividaTerceiro> listaDividas = dividaTerceiroRepository.findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(null, null, dividaTerceiro.getStatusDivida(), usuario);
+		
+		if (listaDividas == null || listaDividas.isEmpty()) {
+			fail("Lista vazia.");
+		} else {
+			if (!listaDividas.contains(dividaTerceiro)) {
+				fail("Objeto não encontrado.");
 			}
 		}
 	}
 	
 	@Test
 	public void testFindByUsuario() {
-		modeloDocumentoRepository.save(modelo);
+		dividaTerceiroRepository.save(dividaTerceiro);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoRepository.findDescricaoOrAtivoByUsuario(null, null, usuario);
+		List<DividaTerceiro> listaDividas = dividaTerceiroRepository.findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(null, null, null, usuario);
 		
-		if (listaModelos == null || listaModelos.isEmpty()) {
+		if (listaDividas == null || listaDividas.isEmpty()) {
 			fail("Lista vazia.");
 		} else {
-			for (ModeloDocumento modeloTest : listaModelos) {
-				assertEquals(usuario, modeloTest.getUsuario());
+			if (!listaDividas.contains(dividaTerceiro)) {
+				fail("Objeto não encontrado.");
 			}
 		}
 	}
-	 */
 }

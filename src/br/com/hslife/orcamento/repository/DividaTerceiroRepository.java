@@ -90,11 +90,11 @@ public class DividaTerceiroRepository extends AbstractCRUDRepository<DividaTerce
 		}
 		
 		if (tipoCategoria != null) {
-			hqlQuery.setParameter(":tipo", tipoCategoria);
+			hqlQuery.setParameter("tipo", tipoCategoria);
 		}
 		
 		if (statusDivida != null) {
-			hqlQuery.setParameter(":status", statusDivida);
+			hqlQuery.setParameter("status", statusDivida);
 		}
 		
 		hqlQuery.setLong("idUsuario", usuario.getId());

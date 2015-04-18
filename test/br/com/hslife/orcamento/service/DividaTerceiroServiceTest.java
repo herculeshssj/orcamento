@@ -49,30 +49,26 @@ package br.com.hslife.orcamento.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusDivida;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IDividaTerceiro;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.facade.IRegraImportacao;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
@@ -111,151 +107,135 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	
 	@Test
 	public void testCadastrar() throws BusinessException {
-		fail("Não implementado!");
-		/*
-		// Realiza o cadastro da regra
-		regraImportacaoService.cadastrar(regra);
+		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
-		// Verifica se a regra foi cadastrada com sucesso
-		assertNotNull(regra.getId());
-		*/
+		assertNotNull(dividaTerceiro.getId());
+		
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			assertNotNull(dividaTerceiro.getPagamentos().get(i).getId());
+		}
 	}
 	
 	@Test
 	public void testAlterar() throws BusinessException {
-		fail("Não implementado!");
-		/*
-		// Realiza o cadastro da regra
-		regraImportacaoService.cadastrar(regra);
+		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
-		// Altera as informações da regra
-		regra.setIdCategoria(10l);
-		regra.setIdFavorecido(20l);
-		regra.setIdMeioPagamento(30l);
-		regra.setTexto("texto a pesquisar");
+		dividaTerceiro.setDataNegociacao(Calendar.getInstance().getTime());
+		dividaTerceiro.setJustificativa("Justificativa da dívida de teste alterado");
+		dividaTerceiro.setTermoDivida("Termo da dívida de teste alterado");
+		dividaTerceiro.setTermoQuitacao("Termo de quitação da dívida de teste alterado");
+		dividaTerceiro.setTipoCategoria(TipoCategoria.DEBITO);
+		dividaTerceiro.setStatusDivida(StatusDivida.ENCERRADO);
+		dividaTerceiro.setValorDivida(2000);
 		
-		// Altera a regra
-		regraImportacaoService.alterar(regra);
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			dividaTerceiro.getPagamentos().get(i).setComprovantePagamento("Comprovante de pagamento da dívida de teste alterado " + i);
+			dividaTerceiro.getPagamentos().get(i).setDataPagamento(Calendar.getInstance().getTime());
+			dividaTerceiro.getPagamentos().get(i).setValorPago(200);
+		}
 		
-		// Verifica se a regra foi alterada com sucesso
-		RegraImportacao regraTest = regraImportacaoService.buscarPorID(regra.getId());
+		dividaTerceiroService.alterar(dividaTerceiro);
 		
-		assertEquals(regra.getTexto(), regraTest.getTexto());
-		assertEquals(regra.getIdCategoria(), regraTest.getIdCategoria());
-		assertEquals(regra.getIdFavorecido(), regraTest.getIdFavorecido());
-		assertEquals(regra.getIdMeioPagamento(), regraTest.getIdMeioPagamento());
-		*/
+		DividaTerceiro dividaTest = dividaTerceiroService.buscarPorID(dividaTerceiro.getId());
+		
+		assertEquals(dividaTerceiro.getDataNegociacao(), dividaTest.getDataNegociacao());
+		assertEquals(dividaTerceiro.getJustificativa(), dividaTest.getJustificativa());
+		assertEquals(dividaTerceiro.getTermoDivida(), dividaTest.getTermoDivida());
+		assertEquals(dividaTerceiro.getTermoQuitacao(), dividaTest.getTermoQuitacao());
+		assertEquals(dividaTerceiro.getTipoCategoria(), dividaTest.getTipoCategoria());
+		assertEquals(dividaTerceiro.getStatusDivida(), dividaTest.getStatusDivida());
+		
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getComprovantePagamento(), dividaTest.getPagamentos().get(i).getComprovantePagamento());
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getDataPagamento(), dividaTest.getPagamentos().get(i).getDataPagamento());
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getValorPago(), dividaTest.getPagamentos().get(i).getValorPago(), 0);
+		}
 	}
 	
 	@Test
 	public void testExcluir() throws BusinessException {
-		fail("Não implementado!");
-		/*
-		// Realiza o cadastro da regra
-		regraImportacaoService.cadastrar(regra);
+		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
-		// Exclui a regra
-		regraImportacaoService.excluir(regra);
+		dividaTerceiroService.excluir(dividaTerceiro);
 		
-		// Verifica se a regra foi excluída
-		RegraImportacao regraTest = regraImportacaoService.buscarPorID(regra.getId());
-		assertNull(regraTest);
-		*/
+		DividaTerceiro dividaTest = dividaTerceiroService.buscarPorID(dividaTerceiro.getId());
+		assertNull(dividaTest);
 	}
 	
 	@Test
 	public void testBuscarPorID() throws BusinessException {
-		fail("Não implementado!");
-		/*
-		// Realiza o cadastro da regra
-		regraImportacaoService.cadastrar(regra);
+		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
-		// Verifica se a regra existe na base
-		RegraImportacao regraTest = regraImportacaoService.buscarPorID(regra.getId());
+		DividaTerceiro dividaTest = dividaTerceiroService.buscarPorID(dividaTerceiro.getId());
+		assertEquals(dividaTerceiro.getId(), dividaTest.getId());
 		
-		assertNotNull(regraTest);
-		*/
+		for (int i = 0; i < dividaTerceiro.getPagamentos().size(); i++) {
+			assertEquals(dividaTerceiro.getPagamentos().get(i).getId(), dividaTest.getPagamentos().get(i).getId());
+		}
 	}
 	
 	@Test
 	public void testValidar() throws BusinessException {
-		fail("Não implementado!");
-		/*
-		// Verifica se a entidade está consistente para ser persistida
-		regraImportacaoService.validar(regra);
+		dividaTerceiroService.validar(dividaTerceiro);
+	}
+	
+	@Test
+	public void testBuscarFavorecido() throws BusinessException {
+		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
-		// Cadastra a regra
-		regraImportacaoService.cadastrar(regra);
+		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(favorecido, null, null, usuario);
 		
-		RegraImportacao regraTest = EntityInitializerFactory.initializeRegraImportacao(conta);
-		regraImportacaoService.validar(regraTest);
-		*/
-	}
-	
-	@Test
-	public void testBuscarFavorecido() {
-		fail("Não implementado!");
-	}
-	
-	@Test
-	public void testBuscarTipoCategoria() {
-		fail("Não implementado!");
-	}
-	
-	@Test
-	public void testBuscarStatusDivida() {
-		fail("Não implementado!");
-	}
-	
-	@Test
-	public void testBuscarPorUsuario() {
-		fail("Não implementado!");
-	}
-	
-	/*
-	@Test
-	public void testBuscarDescricao() throws BusinessException {
-		modeloDocumentoService.cadastrar(modelo);
-		
-		List<ModeloDocumento> listaModelos = modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario("teste", null, usuario);
-		
-		if (listaModelos == null || listaModelos.isEmpty()) {
+		if (listaDividas == null || listaDividas.isEmpty()) {
 			fail("Lista vazia.");
 		} else {
-			if (!listaModelos.contains(modelo)) {
+			if (!listaDividas.contains(dividaTerceiro)) {
 				fail("Objeto não encontrado.");
 			}
 		}
 	}
 	
 	@Test
-	public void testBuscarAtivo() throws BusinessException {
-		modeloDocumentoService.cadastrar(modelo);
+	public void testBuscarTipoCategoria() throws BusinessException {
+		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario(null, true, usuario);
+		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, dividaTerceiro.getTipoCategoria(), null, usuario);
 		
-		if (listaModelos == null || listaModelos.isEmpty()) {
+		if (listaDividas == null || listaDividas.isEmpty()) {
 			fail("Lista vazia.");
 		} else {
-			for (ModeloDocumento modeloTest : listaModelos) {
-				assertTrue(modeloTest.isAtivo());
+			if (!listaDividas.contains(dividaTerceiro)) {
+				fail("Objeto não encontrado.");
+			}
+		}
+	}
+	
+	@Test
+	public void testBuscarStatusDivida() throws BusinessException {
+		dividaTerceiroService.cadastrar(dividaTerceiro);
+		
+		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, null, dividaTerceiro.getStatusDivida(), usuario);
+		
+		if (listaDividas == null || listaDividas.isEmpty()) {
+			fail("Lista vazia.");
+		} else {
+			if (!listaDividas.contains(dividaTerceiro)) {
+				fail("Objeto não encontrado.");
 			}
 		}
 	}
 	
 	@Test
 	public void testBuscarPorUsuario() throws BusinessException {
-		modeloDocumentoService.cadastrar(modelo);
+		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
-		List<ModeloDocumento> listaModelos = modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario(null, null, usuario);
+		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, null, null, usuario);
 		
-		if (listaModelos == null || listaModelos.isEmpty()) {
+		if (listaDividas == null || listaDividas.isEmpty()) {
 			fail("Lista vazia.");
 		} else {
-			for (ModeloDocumento modeloTest : listaModelos) {
-				assertEquals(usuario, modeloTest.getUsuario());
+			if (!listaDividas.contains(dividaTerceiro)) {
+				fail("Objeto não encontrado.");
 			}
 		}
 	}
-	 */
 }

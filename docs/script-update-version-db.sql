@@ -81,11 +81,14 @@ create table dividaterceiro(
 	tipoCategoria varchar(10) not null,
 	idFavorecido bigint not null,
 	idUsuario bigint not null,
+    idMoeda bigint not null,
+	versionEntity datetime not null default '2015-06-01 00:00:00',
 	primary key(id)
 ) Engine=InnoDB;
 
 alter table dividaterceiro add constraint fk_favorecido_dividaterceiro foreign key(idFavorecido) references favorecido (id);
 alter table dividaterceiro add constraint fk_usuario_dividaterceiro foreign key(idUsuario) references usuario (id);
+alter table dividaterceiro add constraint fk_moeda_dividaterceiro foreign key(idMoeda) references moeda (id);
 
 create table pagamentodividaterceiro(
 	id bigint not null auto_increment,
@@ -94,6 +97,7 @@ create table pagamentodividaterceiro(
 	comprovantePagamento text,
 	taxaConversao decimal(18,4) not null default 1.0000,
 	idDivida bigint not null,
+	versionEntity datetime not null default '2015-06-01 00:00:00',
 	primary key(id)
 ) Engine=InnoDB;
 
