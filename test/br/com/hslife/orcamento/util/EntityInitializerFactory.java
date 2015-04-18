@@ -50,11 +50,13 @@ import java.util.Date;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -173,5 +175,30 @@ public class EntityInitializerFactory {
 		modelo.setConteudo("Conteúdo do modelo de documento de teste");
 		modelo.setUsuario(usuario);
 		return modelo;
+	}
+	
+	public static DividaTerceiro initializeDividaTerceiro(Usuario usuario, Favorecido favorecido, Moeda moeda) {
+		DividaTerceiro divida = new DividaTerceiro();		
+		divida.setDataNegociacao(new Date());
+		divida.setFavorecido(favorecido);
+		divida.setJustificativa("Justificativa da dívida de teste");
+		divida.setTermoDivida("Termo da dívida de teste");
+		divida.setTermoQuitacao("Termo de quitação da dívida de teste");
+		divida.setTipoCategoria(TipoCategoria.CREDITO);
+		divida.setUsuario(usuario);
+		divida.setValorDivida(1000);
+		divida.setMoeda(moeda);
+		
+		PagamentoDividaTerceiro pagamento;
+		for (int i = 0; i < 3; i++) {
+			pagamento = new PagamentoDividaTerceiro();
+			pagamento.setComprovantePagamento("Comprovante de pagamento da dívida de teste " + i);
+			pagamento.setDataPagamento(new Date());
+			pagamento.setDividaTerceiro(divida);
+			pagamento.setValorPago(100);
+			divida.getPagamentos().add(pagamento);
+		}
+		
+		return divida;
 	}
 }
