@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -69,6 +70,7 @@ import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="dividaterceiro")
@@ -116,7 +118,7 @@ public class DividaTerceiro extends EntityPersistence {
 	private Usuario usuario;
 	
 	@OneToMany(mappedBy="dividaTerceiro", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<PagamentoDividaTerceiro> pagamentos;
+	private List<PagamentoDividaTerceiro> pagamentos = new LinkedList<>();
 	
 	public DividaTerceiro() {		
 		this.statusDivida = StatusDivida.REGISTRADO;
@@ -124,7 +126,6 @@ public class DividaTerceiro extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		EntityPersistenceUtil.validaCampoNulo("Valor da dívida", this.valorDivida);
 		EntityPersistenceUtil.validaCampoNulo("Data da negociação", this.dataNegociacao);
 		EntityPersistenceUtil.validaCampoNulo("Justificativa", this.justificativa);
 		EntityPersistenceUtil.validaCampoNulo("Categoria da dívida", this.tipoCategoria);
@@ -137,15 +138,39 @@ public class DividaTerceiro extends EntityPersistence {
 
 	@Override
 	public String getLabel() {
-		return this.tipoCategoria + " com " + this.favorecido.getNome() + " no valor de " + this.valorDivida + " - " + this.statusDivida;
+		return this.tipoCategoria 
+				+ " com " 
+				+ this.favorecido.getNome() 
+				+ " no valor de " 
+				+ this.moeda.getSimboloMonetario() 
+				+ " " 
+				+ this.valorDivida 
+				+ " - " 
+				+ this.statusDivida;
 	}
 	
 	public double getTotalPago() {
-		return 0;
+		double total = 0;
+		
+		if (pagamentos != null) {
+			for (int i = 0; i < pagamentos.size(); i++) {
+				total += pagamentos.get(i).getValorPago() * pagamentos.get(i).getTaxaConversao();
+			}
+		}
+		
+		return Util.arredondar(total);
 	}
 	
 	public double getTotalAPagar() {
-		return 0;
+		double total = 0;
+		
+		if (pagamentos != null) {
+			for (int i = 0; i < pagamentos.size(); i++) {
+				total += pagamentos.get(i).getValorPago() * pagamentos.get(i).getTaxaConversao();
+			}
+		}
+		
+		return Util.arredondar(this.valorDivida - total);
 	}
 
 	public Long getId() {

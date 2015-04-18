@@ -92,6 +92,7 @@ create table pagamentodividaterceiro(
 	valorPago decimal(18,2) not null,
 	dataPagamento date not null,
 	comprovantePagamento text,
+	taxaConversao decimal(18,4) not null default 1.0000,
 	idDivida bigint not null,
 	primary key(id)
 ) Engine=InnoDB;

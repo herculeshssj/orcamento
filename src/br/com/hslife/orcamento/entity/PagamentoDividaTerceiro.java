@@ -95,7 +95,6 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		EntityPersistenceUtil.validaCampoNulo("Valor pago", this.valorPago);
 		EntityPersistenceUtil.validaCampoNulo("Data do pagamento", this.dataPagamento);
 	}
 
@@ -142,5 +141,13 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 
 	public void setDividaTerceiro(DividaTerceiro dividaTerceiro) {
 		this.dividaTerceiro = dividaTerceiro;
+	}
+
+	public double getTaxaConversao() {
+		return taxaConversao;
+	}
+
+	public void setTaxaConversao(double taxaConversao) {
+		this.taxaConversao = taxaConversao;
 	}
 }
