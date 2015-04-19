@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
+import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -144,6 +145,14 @@ public class EnumComboUtil {
 	public List<SelectItem> getListaTipoPessoa() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (TipoPessoa enumeration : TipoPessoa.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaStatusDivida() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (StatusDivida enumeration : StatusDivida.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

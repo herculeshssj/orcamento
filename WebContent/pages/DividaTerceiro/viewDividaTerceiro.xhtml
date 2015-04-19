@@ -52,38 +52,28 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+    xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/listagem.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{documentoMB}" />
 
-	<ui:define name="pesquisa">		
-     	Categoria:
-		<h:selectOneMenu id="txtCategorias" value="#{managedBean.findCategoria}" converter="entityConverter">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{managedBean.listaCategoriaDocumento}" />
-		</h:selectOneMenu>
-		&nbsp;&nbsp;
-		Descrição:
-		<p:inputText value="#{managedBean.nomeDocumento}" />
-	</ui:define>
-
-	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Nome" />
-			</f:facet>
-			<h:outputText value="#{item.nome}" />
-		</p:column>
-
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Categoria" />
-			</f:facet>
-			<h:outputText value="#{item.categoriaDocumento.descricao}" />
-		</p:column>
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Nome:
+			<h:outputText value="#{managedBean.entity.nome}"/>	
+			
+			Descrição:
+			<h:outputText value="#{managedBean.entity.descricao}"/>			
+			
+			Categoria:
+			<h:outputText value="#{managedBean.entity.categoriaDocumento.descricao}"/>
+				
+		</h:panelGrid>
 		
 	</ui:define>
+	
 </ui:composition>
 </html>

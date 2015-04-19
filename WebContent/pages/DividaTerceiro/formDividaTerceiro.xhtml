@@ -44,7 +44,6 @@
   
   -->
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -52,38 +51,45 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+    xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/listagem.xhtml">
+<ui:composition template="/templates/formulario.xhtml">
 
 	<ui:param name="managedBean" value="#{documentoMB}" />
-
-	<ui:define name="pesquisa">		
-     	Categoria:
-		<h:selectOneMenu id="txtCategorias" value="#{managedBean.findCategoria}" converter="entityConverter">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{managedBean.listaCategoriaDocumento}" />
-		</h:selectOneMenu>
-		&nbsp;&nbsp;
-		Descrição:
-		<p:inputText value="#{managedBean.nomeDocumento}" />
-	</ui:define>
-
-	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Nome" />
-			</f:facet>
-			<h:outputText value="#{item.nome}" />
-		</p:column>
-
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Categoria" />
-			</f:facet>
-			<h:outputText value="#{item.categoriaDocumento.descricao}" />
-		</p:column>
+	
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="3" style="font-size: 16px;">
+				
+				Categoria:
+				<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoriaDocumento}" converter="entityConverter">									
+					<f:selectItems value="#{managedBean.listaCategoriaDocumento}"/>
+				</h:selectOneMenu>			
+	     		<h:inputHidden/>
+	     		
+				Nome:
+				<p:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50" />
+				<p:message for="txtNome"/>
+				
+				Descrição:
+				<p:inputTextarea id="txtDescricao" value="#{managedBean.entity.descricao}" rows="3" cols="50"/>
+				<h:inputHidden/>
+												
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			Arquivo:
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>			
+			<h:panelGroup>
+				<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
+				&nbsp;&nbsp;&nbsp;
+				<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png"/>				
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<hr/>
 		
 	</ui:define>
+
 </ui:composition>
 </html>
