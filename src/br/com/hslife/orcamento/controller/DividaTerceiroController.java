@@ -47,17 +47,26 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.DividaTerceiro;
+import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.ModeloDocumento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IDividaTerceiro;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IModeloDocumento;
+import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("dividaTerceiroMB")
 @Scope("session")
@@ -77,8 +86,12 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	@Autowired
 	private IModeloDocumento modeloDocumentoService;
 	
+	@Autowired
+	private IMoeda moedaService;
+	
 	private TipoCategoria tipoCategoria;
 	private StatusDivida statusDivida;
+	private ModeloDocumento modeloSelecionado;
 	
 	public DividaTerceiroController() {
 		super(new DividaTerceiro());
@@ -93,7 +106,45 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 
 	@Override
 	public void find() {
+		try {
+			listEntity = getService().buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, tipoCategoria, statusDivida, getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	@Override
+	public String save() {
+		entity.setUsuario(getUsuarioLogado());
 		
+		return super.save();
+	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<ModeloDocumento> getListaModeloDocumento() {
+		try {
+			return modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario(null, true, getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 
 	public IDividaTerceiro getService() {
@@ -118,5 +169,13 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 
 	public void setStatusDivida(StatusDivida statusDivida) {
 		this.statusDivida = statusDivida;
+	}
+
+	public ModeloDocumento getModeloSelecionado() {
+		return modeloSelecionado;
+	}
+
+	public void setModeloSelecionado(ModeloDocumento modeloSelecionado) {
+		this.modeloSelecionado = modeloSelecionado;
 	}
 }

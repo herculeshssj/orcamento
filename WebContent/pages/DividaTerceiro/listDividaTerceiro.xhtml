@@ -77,54 +77,79 @@
 			<f:facet name="header">
 				<h:outputText value="Favorecido" />
 			</f:facet>
-			<h:outputText value="#{item.favorecido.nome}" />
+			<h:outputText value="#{item.favorecido.nome}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
 		</p:column>
 
 		<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Negociado em" />
 			</f:facet>
-			<h:outputText value="#{item.favorecido.nome}" />
+			<h:outputText value="#{item.dataNegociacao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
 		</p:column>
 		
 		<p:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
-				<h:outputText value="Valor" />
+				<h:outputText value="Valor"/>
 			</f:facet>
-			<h:outputText value="#{item.favorecido.nome}" />
+			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+			<h:outputText value="#{item.valorDivida}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:outputText>
+		</p:column>
+		
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Pago"/>
+			</f:facet>
+			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+			<h:outputText value="#{item.totalPago}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:outputText>
+		</p:column>
+		
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="À pagar"/>
+			</f:facet>
+			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+			<h:outputText value="#{item.totalAPagar}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:outputText>
 		</p:column>
 				
 	</ui:define>
 	
 	<ui:define name="acoes">
 		
-		<p:column style="text-align: center; vertical-align: middle; width: 300px;" exportable="false">
+		<p:column style="text-align: center; vertical-align: middle; width: 120px;" exportable="false">
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>		
 			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;
-	  		<h:commandButton title="Visualizar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;
-	  		<h:commandButton title="Gerar termo/contrato" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;
-	  		<h:commandButton title="Registrar pagamento" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;
-	  		<h:commandButton title="Gerar termo de quitação" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;
-			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+	  		<p:spacer width="20"/>
+	  		<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
+			<br/>
+	  		<h:commandButton title="Visualizar" image="/resources/images/pesquisar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>								
+	  		<p:spacer width="20"/>
+	  		<h:commandButton title="Registrar pagamento" image="/resources/images/baixa.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>								
+	  		<br/>
+	  		<h:commandButton title="Gerar termo/contrato" image="/resources/images/copiar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>
+			<p:spacer width="20"/>
+	  		<h:commandButton title="Gerar termo de quitação" image="/resources/images/habilitar.png" action="#{managedBean.edit}">
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandButton>								
 	  	</p:column>
 		
 	</ui:define>
