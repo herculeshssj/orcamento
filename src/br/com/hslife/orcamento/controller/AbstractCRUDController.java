@@ -49,7 +49,6 @@ package br.com.hslife.orcamento.controller;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
-import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
@@ -96,6 +95,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	}
 	
 	public String list() {
+		reprocessarBusca();
 		operation = "list";
 		actionTitle = "";
 		return goToListPage;
@@ -105,6 +105,21 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 		operation = "create";
 		actionTitle = " - Novo";
 		return goToFormPage;
+	}
+	
+	protected void reprocessarBusca() {
+		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
+		if (listEntity != null && !listEntity.isEmpty()) {
+			// Inicializa os objetos
+			initializeEntity();
+			
+			// Determina se a busca será executada novamente
+			if (getOpcoesSistema().getExibirBuscasRealizadas()) {
+				find();
+			}
+		} else {
+			initializeEntity();
+		}
 	}
 	
 	public String save() {
@@ -118,20 +133,6 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 				getService().alterar(entity);
 				infoMessage("Registro alterado com sucesso!");
 			}
-			
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Determina se a busca será executada novamente
-				if (getOpcoesSistema().getExibirBuscasRealizadas()) {
-					find();
-				}
-			} else {
-				initializeEntity();
-			}
-			
 			return list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -167,24 +168,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 		try {
 			validate(operation);
 			getService().excluir(entity);
-			infoMessage("Registro excluído com sucesso!");
-			
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-					find();
-				}
-			} else {
-				initializeEntity();
-			}
-						
+			infoMessage("Registro excluído com sucesso!");						
 			return list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -195,25 +179,6 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	public abstract void find();
 	
 	public String cancel() {
-		try {
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-					find();
-				}
-			} else {
-				initializeEntity();
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
 		return list();
 	}
 	

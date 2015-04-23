@@ -123,33 +123,49 @@
 	
 	<ui:define name="acoes">
 		
-		<p:column style="text-align: center; vertical-align: middle; width: 120px;" exportable="false">
+		<p:column style="text-align: center; vertical-align: middle;" exportable="false">
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>		
-			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}" rendered="#{item.statusDivida == 'REGISTRADO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>								
-	  		<p:spacer width="20"/>
-	  		<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+	  		<p:spacer width="20"  rendered="#{item.statusDivida == 'REGISTRADO'}"/>
+	  		
+	  		<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}"  rendered="#{item.statusDivida == 'REGISTRADO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
-			<br/>
-	  		<h:commandButton title="Visualizar" image="/resources/images/pesquisar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			<p:spacer width="20"  rendered="#{item.statusDivida == 'REGISTRADO'}"/>
+			
+	  		<h:commandButton title="Visualizar" image="/resources/images/pesquisar.png" action="#{managedBean.detalheDividaTerceiro}">
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
 			</h:commandButton>								
 	  		<p:spacer width="20"/>
-	  		<h:commandButton title="Registrar pagamento" image="/resources/images/baixa.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		<br/>
-	  		<h:commandButton title="Gerar termo/contrato" image="/resources/images/copiar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+	  		
+	  		<h:commandButton title="Registrar pagamento" image="/resources/images/baixa.png" action="#{managedBean.edit}" rendered="#{item.statusDivida == 'VIGENTE'}">
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
 			</h:commandButton>
-			<p:spacer width="20"/>
-	  		<h:commandButton title="Gerar termo de quitação" image="/resources/images/habilitar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
+			<p:spacer width="20" rendered="#{item.statusDivida == 'VIGENTE'}"/>
+									
+	  		<h:commandButton title="Renegociar dívida" image="/resources/images/substituir.png" action="#{managedBean.renegociarDividaView}" rendered="#{item.statusDivida == 'VIGENTE'}">
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+			</h:commandButton>
+			<p:spacer width="20"  rendered="#{item.statusDivida == 'VIGENTE'}"/>
+			
+			<h:commandButton title="Encerrar dívida" image="/resources/images/fechar.png" action="#{managedBean.edit}" rendered="#{item.statusDivida == 'VIGENTE'}">
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+			</h:commandButton>
+			<p:spacer width="20" rendered="#{item.statusDivida == 'VIGENTE'}"/>
+				
+			<h:commandLink title="Gerar termo/contrato" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{item.statusDivida != 'REGISTRADO'}">
+   				<p:graphicImage value="/resources/images/copiar.png" />
+   			</h:commandLink>	
+			<p:spacer width="20" rendered="#{item.statusDivida != 'REGISTRADO'}"/>
+			
+			<h:commandLink title="Gerar termo de quitação" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{item.statusDivida == 'ENCERRADO'}">
+   				<p:graphicImage value="/resources/images/habilitar.png" />
+   			</h:commandLink>	
+			<p:spacer width="20" rendered="#{item.statusDivida == 'ENCERRADO'}"/>								
 	  	</p:column>
 		
 	</ui:define>

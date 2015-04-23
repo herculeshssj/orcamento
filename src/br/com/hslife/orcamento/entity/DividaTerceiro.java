@@ -65,6 +65,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -119,6 +120,9 @@ public class DividaTerceiro extends EntityPersistence {
 	
 	@OneToMany(mappedBy="dividaTerceiro", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<PagamentoDividaTerceiro> pagamentos = new LinkedList<>();
+	
+	@Transient
+	private ModeloDocumento modeloDocumento;
 	
 	public DividaTerceiro() {		
 		this.statusDivida = StatusDivida.REGISTRADO;
@@ -267,5 +271,13 @@ public class DividaTerceiro extends EntityPersistence {
 
 	public void setMoeda(Moeda moeda) {
 		this.moeda = moeda;
+	}
+
+	public ModeloDocumento getModeloDocumento() {
+		return modeloDocumento;
+	}
+
+	public void setModeloDocumento(ModeloDocumento modeloDocumento) {
+		this.modeloDocumento = modeloDocumento;
 	}
 }

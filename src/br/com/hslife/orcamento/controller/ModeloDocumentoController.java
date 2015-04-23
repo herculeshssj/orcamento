@@ -147,6 +147,7 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 	public void clonarModelo() {
 		try {
 			ModeloDocumento modeloClonado = entity.clonar();
+			modeloClonado.validate();
 			getService().cadastrar(modeloClonado);
 			infoMessage("Modelo clonado com sucesso!");
 			initializeEntity();

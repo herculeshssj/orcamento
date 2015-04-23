@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -91,7 +92,14 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	
 	private TipoCategoria tipoCategoria;
 	private StatusDivida statusDivida;
-	private ModeloDocumento modeloSelecionado;
+	private PagamentoDividaTerceiro pagamentoSelecionado;
+	private VisualizacaoDocumento visualizacao;
+	private String conteudoDocumento;
+	private String novaJustificativa;
+	
+	private enum VisualizacaoDocumento {
+		MODELO_DOCUMENTO, TERMO_DIVIDA, TERMO_QUITACAO, COMPROVANTE_PAGAMENTO;
+	}
 	
 	public DividaTerceiroController() {
 		super(new DividaTerceiro());
@@ -101,7 +109,8 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	@Override
 	protected void initializeEntity() {
 		entity = new DividaTerceiro();
-		listEntity = new ArrayList<DividaTerceiro>();		
+		listEntity = new ArrayList<DividaTerceiro>();	
+		novaJustificativa = null;
 	}
 
 	@Override
@@ -115,9 +124,85 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	
 	@Override
 	public String save() {
-		entity.setUsuario(getUsuarioLogado());
-		
+		entity.setUsuario(getUsuarioLogado());		
 		return super.save();
+	}
+	
+	public String vigorarDividaTerceiro() {
+		try {
+			getService().vigorarDividaTerceiro(entity);
+			infoMessage("Registro salvo com sucesso. Termo/contrato da dívida entrou em vigor.");
+			initializeEntity();
+			return super.list();
+			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public String renegociarDividaView() {
+		actionTitle = " - Renegociar dívida";
+		return "/pages/DividaTerceiro/renegociarDivida";
+	}
+	
+	public String renegociarDivida() {
+		try {
+			getService().renegociarDividaTerceiro(entity, novaJustificativa);
+			infoMessage("Registro salvo com sucesso. Dívida renegociada.");
+			initializeEntity();
+			return super.list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";	
+	}
+	
+	public String detalheDividaTerceiro() {
+		actionTitle = " - Detalhes";
+		return "/pages/DividaTerceiro/detalheDividaTerceiro";
+	}
+	
+	public String visualizarModeloDocumento() {
+		if (entity.getModeloDocumento() == null) {
+			warnMessage("Selecione um modelo de documento");
+			return "";
+		}
+		visualizacao = VisualizacaoDocumento.MODELO_DOCUMENTO;
+		return this.visualizarDocumento();
+	}
+	
+	public String visualizarTermoDivida() {
+		visualizacao = VisualizacaoDocumento.TERMO_DIVIDA;
+		return this.visualizarDocumento();
+	}
+	
+	public String visualizarTermoQuitacao() {
+		visualizacao = VisualizacaoDocumento.TERMO_QUITACAO;
+		return this.visualizarDocumento();
+	}
+	
+	public String visualizarComprovante() {
+		visualizacao = VisualizacaoDocumento.COMPROVANTE_PAGAMENTO;
+		return this.visualizarDocumento();
+	}
+	
+	private String visualizarDocumento() {
+		switch (visualizacao) {
+			case COMPROVANTE_PAGAMENTO :
+				conteudoDocumento = pagamentoSelecionado.getComprovantePagamento();
+				break;
+			case MODELO_DOCUMENTO :
+				conteudoDocumento = entity.getModeloDocumento().getConteudo();
+				break;
+			case TERMO_DIVIDA :
+				conteudoDocumento = entity.getTermoDivida();
+				break;
+			case TERMO_QUITACAO :
+				conteudoDocumento = entity.getTermoQuitacao();
+				break;
+		}
+		return "/pages/DividaTerceiro/visualizarDocumento";
 	}
 	
 	public List<Favorecido> getListaFavorecido() {
@@ -171,11 +256,27 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		this.statusDivida = statusDivida;
 	}
 
-	public ModeloDocumento getModeloSelecionado() {
-		return modeloSelecionado;
+	public String getConteudoDocumento() {
+		return conteudoDocumento;
 	}
 
-	public void setModeloSelecionado(ModeloDocumento modeloSelecionado) {
-		this.modeloSelecionado = modeloSelecionado;
+	public void setConteudoDocumento(String conteudoDocumento) {
+		this.conteudoDocumento = conteudoDocumento;
+	}
+
+	public PagamentoDividaTerceiro getPagamentoSelecionado() {
+		return pagamentoSelecionado;
+	}
+
+	public void setPagamentoSelecionado(PagamentoDividaTerceiro pagamentoSelecionado) {
+		this.pagamentoSelecionado = pagamentoSelecionado;
+	}
+
+	public String getNovaJustificativa() {
+		return novaJustificativa;
+	}
+
+	public void setNovaJustificativa(String novaJustificativa) {
+		this.novaJustificativa = novaJustificativa;
 	}
 }

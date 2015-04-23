@@ -66,7 +66,10 @@
 			<h:outputText value="#{managedBean.entity.favorecido.label}" />		
 	     	
 	     	Tipo de dívida:
-	     	<h:outputText value="#{managedBean.entity.tipoCategoria}" />	
+	     	<h:outputText value="#{managedBean.entity.tipoCategoria}" />
+	     	
+	     	Status da dívida:
+	     	<h:outputText value="#{managedBean.entity.statusDivida}" />	
 	     	
 	     	Data da negociação:
 	     	<h:outputText value="#{managedBean.entity.dataNegociacao}">
@@ -74,18 +77,48 @@
 	     	</h:outputText>
 	     	
 	     	Valor da dívida:
-	     	<h:outputText value="#{managedBean.entity.valorDivida}">
-	     		<f:convertNumber type="currency" pattern="###.##"/>
-	     	</h:outputText>
+	     	<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.valorDivida}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
 			
 			Moeda:
-			<h:outputText value="#{managedBean.entity.moeda.label}" />	
+			<h:outputText value="#{managedBean.entity.moeda.label}" />
 			
+			Total pago:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalPago}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+			
+			Total a pagar:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalAPagar}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+				
 			Justificativa:
-			<h:outputText value="#{managedBean.entity.justificativa}" />
+			<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
 				
 		</h:panelGrid>
 		
+		<hr />
+		
+		<h:panelGroup rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
+		</h:panelGroup>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<p:graphicImage value="/resources/images/voltar.png" />
+		</h:commandLink>
 	</ui:define>
 	
 </ui:composition>

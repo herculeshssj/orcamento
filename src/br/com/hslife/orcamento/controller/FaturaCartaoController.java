@@ -72,7 +72,6 @@ import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
@@ -666,25 +665,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
-	}
-	
-	private void reprocessarBusca() throws BusinessException {
-		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-		if (listEntity != null && !listEntity.isEmpty()) {
-			// Inicializa os objetos
-			initializeEntity();
-			
-			// Obtém o valor da opção do sistema
-			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-						
-			// Determina se a busca será executada novamente
-			if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-				find();
-			}
-		} else {
-			initializeEntity();
-		}
-
 	}
 	
 	public List<Conta> getListaConta() {

@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,7 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IDividaTerceiro;
 import br.com.hslife.orcamento.repository.DividaTerceiroRepository;
+import br.com.hslife.orcamento.util.Util;
 
 @Service("dividaTerceiroService")
 public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> implements IDividaTerceiro {
@@ -78,5 +80,46 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	public List<DividaTerceiro> buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(Favorecido favorecido, 
 			TipoCategoria tipoCategoria, StatusDivida statusDivida, Usuario usuario) throws BusinessException {
 		return getRepository().findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(favorecido, tipoCategoria, statusDivida, usuario);
+	}
+	
+	@Override
+	public void vigorarDividaTerceiro(DividaTerceiro entity) throws BusinessException {
+		if (entity.getModeloDocumento() == null) {
+			throw new BusinessException("Selecione um modelo de contrato!");
+		}		
+		entity.validate();
+		entity.setTermoDivida(entity.getModeloDocumento().getConteudo());
+		entity.setStatusDivida(StatusDivida.VIGENTE);
+		getRepository().update(entity);
+	}
+	
+	@Override
+	public void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException {
+		if (justificativa == null || justificativa.isEmpty()) {
+			throw new BusinessException("Informe a justificativa para renegociar a dívida!");
+		}
+		
+		DividaTerceiro dividaAntiga = getRepository().findById(entity.getId());
+		dividaAntiga.setStatusDivida(StatusDivida.RENEGOCIADO);
+		getRepository().update(dividaAntiga);
+		
+		// Anexa a justificativa informada à existente
+		StringBuilder j = new StringBuilder();
+		j.append("Dívida renegociada em ");
+		j.append(Util.formataDataHora(new Date(), Util.DATAHORA));
+		j.append(".<br/>");
+		j.append(justificativa);
+		
+		DividaTerceiro novaDivida = new DividaTerceiro();
+		novaDivida.setDataNegociacao(entity.getDataNegociacao());
+		novaDivida.setFavorecido(entity.getFavorecido());
+		novaDivida.setJustificativa(j.toString());
+		novaDivida.setMoeda(entity.getMoeda());
+		novaDivida.setStatusDivida(StatusDivida.VIGENTE);
+		novaDivida.setTermoDivida(entity.getModeloDocumento().getConteudo());
+		novaDivida.setTipoCategoria(entity.getTipoCategoria());
+		novaDivida.setUsuario(entity.getUsuario());
+		novaDivida.setValorDivida(entity.getValorDivida());
+		getRepository().save(novaDivida);
 	}
 }
