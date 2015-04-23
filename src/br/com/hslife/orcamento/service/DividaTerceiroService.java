@@ -125,7 +125,7 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	}
 	
 	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) throws BusinessException {
-		if (entity.getModeloDocumento() == null) {
+		if (pagamento.getModeloDocumento() == null) {
 			throw new BusinessException("Selecione um modelo de comprovante de pagamento!");
 		}
 		
@@ -135,6 +135,7 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		
 		DividaTerceiro divida = getRepository().findById(entity.getId());
 		pagamento.setDividaTerceiro(divida);
+		pagamento.setComprovantePagamento(pagamento.getModeloDocumento().getConteudo());
 		divida.getPagamentos().add(pagamento);
 		
 		if (divida.getTotalPago() >= divida.getValorDivida()) {

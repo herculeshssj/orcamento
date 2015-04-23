@@ -92,13 +92,15 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	
 	private TipoCategoria tipoCategoria;
 	private StatusDivida statusDivida;
-	private PagamentoDividaTerceiro pagamentoSelecionado;
+	private PagamentoDividaTerceiro pagamentoDivida;
 	private VisualizacaoDocumento visualizacao;
 	private String conteudoDocumento;
 	private String novaJustificativa;
+	private Moeda moedaSelecionada;
+	private boolean dividaQuitada = false;
 	
 	private enum VisualizacaoDocumento {
-		MODELO_DOCUMENTO, TERMO_DIVIDA, TERMO_QUITACAO, COMPROVANTE_PAGAMENTO;
+		MODELO_DOCUMENTO, TERMO_DIVIDA, TERMO_QUITACAO, COMPROVANTE_PAGAMENTO, MODELO_COMPROVANTE;
 	}
 	
 	public DividaTerceiroController() {
@@ -111,6 +113,9 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		entity = new DividaTerceiro();
 		listEntity = new ArrayList<DividaTerceiro>();	
 		novaJustificativa = null;
+		dividaQuitada = false;
+		moedaSelecionada = null;
+		pagamentoDivida = null;
 	}
 
 	@Override
@@ -132,9 +137,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		try {
 			getService().vigorarDividaTerceiro(entity);
 			infoMessage("Registro salvo com sucesso. Termo/contrato da dívida entrou em vigor.");
-			initializeEntity();
-			return super.list();
-			
+			return super.list();			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -150,7 +153,6 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		try {
 			getService().renegociarDividaTerceiro(entity, novaJustificativa);
 			infoMessage("Registro salvo com sucesso. Dívida renegociada.");
-			initializeEntity();
 			return super.list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -167,7 +169,35 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		try {
 			getService().encerrarDividaTerceiro(entity, novaJustificativa);
 			infoMessage("Registro salvo com sucesso. Dívida encerrada.");
-			initializeEntity();
+			return super.list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";	
+	}
+	
+	public String registrarPagamentoView() {
+		actionTitle = " - Registrar pagamento";
+		moedaSelecionada = entity.getMoeda();
+		pagamentoDivida = new PagamentoDividaTerceiro();
+		dividaQuitada = false;
+		return "/pages/DividaTerceiro/registrarPagamento";
+	}
+	
+	public String registrarPagamento() {
+		if (entity.getTotalPago() + pagamentoDivida.getValorPagoConvertido() >= entity.getValorDivida() && entity.getModeloDocumento() == null) {
+			warnMessage("Dívida prestes a ser quitada. Selecione um termo de quitação.");
+			dividaQuitada = true;
+			return "";
+		}
+		
+		try {
+			getService().registrarPagamentoDivida(entity, pagamentoDivida);
+			if (dividaQuitada) {
+				infoMessage("Pagamento registrado com sucesso. Dívida quitada.");
+			} else {
+				infoMessage("Pagamento registrado com sucesso.");
+			}
 			return super.list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -189,6 +219,15 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		return this.visualizarDocumento();
 	}
 	
+	public String visualizarModeloComprovante() {
+		if (pagamentoDivida.getModeloDocumento() == null) {
+			warnMessage("Selecione um modelo de documento");
+			return "";
+		}
+		visualizacao = VisualizacaoDocumento.MODELO_COMPROVANTE;
+		return this.visualizarDocumento();
+	}
+	
 	public String visualizarTermoDivida() {
 		visualizacao = VisualizacaoDocumento.TERMO_DIVIDA;
 		return this.visualizarDocumento();
@@ -207,7 +246,10 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	private String visualizarDocumento() {
 		switch (visualizacao) {
 			case COMPROVANTE_PAGAMENTO :
-				conteudoDocumento = pagamentoSelecionado.getComprovantePagamento();
+				conteudoDocumento = pagamentoDivida.getComprovantePagamento();
+				break;
+			case MODELO_COMPROVANTE:
+				conteudoDocumento = pagamentoDivida.getModeloDocumento().getConteudo();
 				break;
 			case MODELO_DOCUMENTO :
 				conteudoDocumento = entity.getModeloDocumento().getConteudo();
@@ -281,19 +323,35 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		this.conteudoDocumento = conteudoDocumento;
 	}
 
-	public PagamentoDividaTerceiro getPagamentoSelecionado() {
-		return pagamentoSelecionado;
-	}
-
-	public void setPagamentoSelecionado(PagamentoDividaTerceiro pagamentoSelecionado) {
-		this.pagamentoSelecionado = pagamentoSelecionado;
-	}
-
 	public String getNovaJustificativa() {
 		return novaJustificativa;
 	}
 
 	public void setNovaJustificativa(String novaJustificativa) {
 		this.novaJustificativa = novaJustificativa;
+	}
+
+	public PagamentoDividaTerceiro getPagamentoDivida() {
+		return pagamentoDivida;
+	}
+
+	public void setPagamentoDivida(PagamentoDividaTerceiro pagamentoDivida) {
+		this.pagamentoDivida = pagamentoDivida;
+	}
+
+	public Moeda getMoedaSelecionada() {
+		return moedaSelecionada;
+	}
+
+	public void setMoedaSelecionada(Moeda moedaSelecionada) {
+		this.moedaSelecionada = moedaSelecionada;
+	}
+
+	public boolean isDividaQuitada() {
+		return dividaQuitada;
+	}
+
+	public void setDividaQuitada(boolean dividaQuitada) {
+		this.dividaQuitada = dividaQuitada;
 	}
 }

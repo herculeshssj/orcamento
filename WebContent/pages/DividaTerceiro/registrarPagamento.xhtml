@@ -110,24 +110,59 @@
 		
 		<hr />
 		
-		<h:panelGroup rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
-			<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Descrição" />
-					</f:facet>
-					<h:outputText value="#{item.label}"/>
-				</p:column>
-				<p:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Ação" />
-					</f:facet>
-					<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovante}" target="_blank">
-						<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
-					</h:commandLink>
-				</p:column>
-			</p:dataTable>
-		</h:panelGroup>
+		<p:outputPanel id="pnlRegistrarPagamento">
+		
+			<h:panelGrid columns="2">
+				<f:facet name="header">
+					<h:outputText value="Registrar pagamento" />
+				</f:facet>
+				
+				Data de pagamento:
+		     	<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.pagamentoDivida.dataPagamento}">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>
+		     	
+		     	Valor pago:
+		     	<p:inputText value="#{managedBean.pagamentoDivida.valorPago}" size="10">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</p:inputText>
+				
+				Moeda:
+				<h:selectOneMenu value="#{managedBean.moedaSelecionada}" converter="entityConverter">
+					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					<p:ajax event="change" update="pnlRegistrarPagamento" />			
+				</h:selectOneMenu>
+						
+				<h:outputText value="Taxa de conversão" rendered="#{managedBean.entity.moeda != managedBean.moedaSelecionada}"/>
+				<p:inputText size="5" value="#{managedBean.pagamentoDivida.taxaConversao}" rendered="#{managedBean.entity.moeda != managedBean.moedaSelecionada}">
+					<f:convertNumber maxFractionDigits="4"/>
+				</p:inputText>
+			
+				Selecione um modelo de comprovante:
+				<h:panelGroup>
+					<h:selectOneMenu value="#{managedBean.pagamentoDivida.modeloDocumento}" converter="entityConverter">
+						<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+					</h:selectOneMenu>
+					&nbsp;&nbsp;&nbsp;
+					<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloComprovante}" target="_blank"/>
+				</h:panelGroup>
+				
+			</h:panelGrid>
+		
+		</p:outputPanel>
+		
+		<h:panelGrid columns="3" rendered="#{managedBean.dividaQuitada}">
+			<f:facet name="header">
+				<h:outputText value="Quitação da dívida" />
+			</f:facet>
+		
+			Selecione um modelo de quitação:
+			<h:selectOneMenu value="#{managedBean.entity.modeloDocumento}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>
+			<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloDocumento}" target="_blank"/>
+			
+		</h:panelGrid>
 		
 	</ui:define>
 	
@@ -136,13 +171,9 @@
 			<p:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
-		<h:commandLink title="Visualizar termo/contrato gerado" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
-			<p:graphicImage value="/resources/images/copiar.png" />
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-		<h:commandLink title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO'}">
-			<p:graphicImage value="/resources/images/habilitar.png" />
-		</h:commandLink>
+   		<h:commandLink title="Registrar pagamento" action="#{managedBean.registrarPagamento}">
+   			<p:graphicImage value="/resources/images/baixa.png" />
+   		</h:commandLink>
 	</ui:define>
 	
 </ui:composition>
