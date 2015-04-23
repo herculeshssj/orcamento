@@ -54,6 +54,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -85,7 +86,7 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	@Override
 	public void vigorarDividaTerceiro(DividaTerceiro entity) throws BusinessException {
 		if (entity.getModeloDocumento() == null) {
-			throw new BusinessException("Selecione um modelo de contrato!");
+			throw new BusinessException("Selecione um modelo de termo/contrato!");
 		}		
 		entity.validate();
 		entity.setTermoDivida(entity.getModeloDocumento().getConteudo());
@@ -121,5 +122,48 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		novaDivida.setUsuario(entity.getUsuario());
 		novaDivida.setValorDivida(entity.getValorDivida());
 		getRepository().save(novaDivida);
+	}
+	
+	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) throws BusinessException {
+		if (entity.getModeloDocumento() == null) {
+			throw new BusinessException("Selecione um modelo de comprovante de pagamento!");
+		}
+		
+		if (entity.getTotalPago() + pagamento.getValorPagoConvertido() >= entity.getValorDivida() && entity.getModeloDocumento() == null) {
+			throw new BusinessException("Selecione um modelo de termo de quitação!");
+		}
+		
+		DividaTerceiro divida = getRepository().findById(entity.getId());
+		pagamento.setDividaTerceiro(divida);
+		divida.getPagamentos().add(pagamento);
+		
+		if (divida.getTotalPago() >= divida.getValorDivida()) {
+			divida.setStatusDivida(StatusDivida.QUITADO);
+			divida.setTermoQuitacao(entity.getModeloDocumento().getConteudo());
+		}
+		
+		getRepository().update(divida);
+	}
+	
+	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException {
+		if (justificativa == null || justificativa.isEmpty()) {
+			throw new BusinessException("Informe a justificativa para encerrar a dívida!");
+		}
+		
+		if (justificativa.length() < 100) {
+			throw new BusinessException("Justificativa deve ter no mínimo 100 caracteres!");
+		}
+		
+		// Anexa a justificativa informada à existente
+		StringBuilder j = new StringBuilder(entity.getJustificativa());
+		j.append("<br/>");
+		j.append("Dívida encerrada em ");
+		j.append(Util.formataDataHora(new Date(), Util.DATAHORA));
+		j.append(".<br/>");
+		j.append(justificativa);
+		
+		entity.setJustificativa(j.toString());
+		entity.setStatusDivida(StatusDivida.ENCERRADO);
+		getRepository().update(entity);
 	}
 }

@@ -47,7 +47,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum StatusDivida {
-	REGISTRADO("Registrado"), VIGENTE("Vigente"), RENEGOCIADO("Renegociado"), ENCERRADO("Encerrado");
+	REGISTRADO("Registrado"), VIGENTE("Vigente"), RENEGOCIADO("Renegociado"), ENCERRADO("Encerrado"), QUITADO("Quitado");
 	
 	private String descricao;
 	

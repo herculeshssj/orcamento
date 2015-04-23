@@ -152,17 +152,17 @@
 			</h:commandButton>
 			<p:spacer width="20"  rendered="#{item.statusDivida == 'VIGENTE'}"/>
 			
-			<h:commandButton title="Encerrar dívida" image="/resources/images/fechar.png" action="#{managedBean.edit}" rendered="#{item.statusDivida == 'VIGENTE'}">
+			<h:commandButton title="Encerrar dívida" image="/resources/images/fechar.png" action="#{managedBean.encerrarDividaView}" rendered="#{item.statusDivida == 'VIGENTE'}">
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
 			</h:commandButton>
 			<p:spacer width="20" rendered="#{item.statusDivida == 'VIGENTE'}"/>
 				
-			<h:commandLink title="Gerar termo/contrato" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{item.statusDivida != 'REGISTRADO'}">
+			<h:commandLink title="Gerar termo/contrato" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{item.statusDivida == 'VIGENTE'}">
    				<p:graphicImage value="/resources/images/copiar.png" />
    			</h:commandLink>	
 			<p:spacer width="20" rendered="#{item.statusDivida != 'REGISTRADO'}"/>
 			
-			<h:commandLink title="Gerar termo de quitação" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{item.statusDivida == 'ENCERRADO'}">
+			<h:commandLink title="Gerar termo de quitação" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{item.statusDivida == 'QUITADO'}">
    				<p:graphicImage value="/resources/images/habilitar.png" />
    			</h:commandLink>	
 			<p:spacer width="20" rendered="#{item.statusDivida == 'ENCERRADO'}"/>								

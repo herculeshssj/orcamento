@@ -50,6 +50,7 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -64,4 +65,8 @@ public interface IDividaTerceiro extends ICRUDService<DividaTerceiro>{
 	public void vigorarDividaTerceiro(DividaTerceiro entity) throws BusinessException;
 	
 	public void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException;
+	
+	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) throws BusinessException;
+	
+	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException;
 }

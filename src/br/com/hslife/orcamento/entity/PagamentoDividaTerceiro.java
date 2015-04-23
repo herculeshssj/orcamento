@@ -58,6 +58,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -89,6 +90,9 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 	@JoinColumn(name="idDivida", nullable=false)
 	private DividaTerceiro dividaTerceiro;
 	
+	@Transient
+	private ModeloDocumento modeloDocumento;
+	
 	public PagamentoDividaTerceiro() {		
 		taxaConversao = 1.0000;
 	}
@@ -100,7 +104,16 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 
 	@Override
 	public String getLabel() {
-		return "Pagamento no valor de " + this.valorPago + " pago em " + Util.formataDataHora(this.dataPagamento, Util.DATA);
+		return "Pagamento no valor de "
+				+ this.dividaTerceiro.getMoeda().getSimboloMonetario()
+				+ " "
+				+ Util.arredondar(this.valorPago * this.taxaConversao) 
+				+ " pago em " 
+				+ Util.formataDataHora(this.dataPagamento, Util.DATA);
+	}
+	
+	public double getValorPagoConvertido() {
+		return Util.arredondar(this.valorPago * this.taxaConversao);
 	}
 
 	public Long getId() {
@@ -149,5 +162,13 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 
 	public void setTaxaConversao(double taxaConversao) {
 		this.taxaConversao = taxaConversao;
+	}
+
+	public ModeloDocumento getModeloDocumento() {
+		return modeloDocumento;
+	}
+
+	public void setModeloDocumento(ModeloDocumento modeloDocumento) {
+		this.modeloDocumento = modeloDocumento;
 	}
 }

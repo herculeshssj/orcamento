@@ -158,6 +158,23 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		return "";	
 	}
 	
+	public String encerrarDividaView() {
+		actionTitle = " - Encerrar dívida";
+		return "/pages/DividaTerceiro/encerrarDivida";
+	}
+	
+	public String encerrarDivida() {
+		try {
+			getService().encerrarDividaTerceiro(entity, novaJustificativa);
+			infoMessage("Registro salvo com sucesso. Dívida encerrada.");
+			initializeEntity();
+			return super.list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";	
+	}
+	
 	public String detalheDividaTerceiro() {
 		actionTitle = " - Detalhes";
 		return "/pages/DividaTerceiro/detalheDividaTerceiro";

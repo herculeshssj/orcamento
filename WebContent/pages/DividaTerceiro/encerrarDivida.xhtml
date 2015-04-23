@@ -104,14 +104,12 @@
 	     	</h:panelGroup>
 				
 			Justificativa:
-			<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
+			<h:outputText value="#{managedBean.entity.justificativa}" />
+			
+			Justificativa para renegociar:
+			<p:inputTextarea value="#{managedBean.novaJustificativa}" cols="70" rows="3" />
 				
 		</h:panelGrid>
-		
-		<hr />
-		
-		<h:panelGroup rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
-		</h:panelGroup>
 		
 	</ui:define>
 	
@@ -120,9 +118,9 @@
 			<p:graphicImage value="/resources/images/voltar.png" />
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
-		<h:commandLink value="Termo/Contrato" action="#{managedBean.visualizarTermoDivida}" target="_blank"/>
-		&nbsp;&nbsp;&nbsp;
-		<h:commandLink value="Termo de Quitação" action="#{managedBean.visualizarTermoQuitacao}" target="_blank"/>
+   		<h:commandLink title="Encerrar dívida" action="#{managedBean.encerrarDivida}">
+   			<p:graphicImage value="/resources/images/fechar.png" />
+   		</h:commandLink>
 	</ui:define>
 	
 </ui:composition>
