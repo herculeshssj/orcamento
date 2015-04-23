@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -745,6 +746,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Adiciona os panoramas na conta
 			conta.setPanoramasCadastro(new ArrayList<PanoramaCadastro>());
 			conta.getPanoramasCadastro().addAll(panoramas.values());
+			
+			// Inverte a ordem dos anos
+			Collections.reverse(conta.getPanoramasCadastro());
+			
 			
 			// Adiciona a conta na lista de contas processadas
 			contasProcessadas.add(conta);

@@ -159,7 +159,7 @@
      		
      	</p:dataTable>
      		
-		<p:accordionPanel activeIndex="1">
+		<p:accordionPanel activeIndex="1" rendered="#{managedBean.opcoesSistema.exibirContasInativas}">
 			<p:tab title="Contas inativas">
 	
 				<p:dataTable id="tableListEntityContaInativas" width="100%" value="#{managedBean.contasInativas}" var="item">
