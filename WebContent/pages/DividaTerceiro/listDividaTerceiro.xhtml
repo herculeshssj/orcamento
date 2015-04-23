@@ -171,5 +171,27 @@
 	  	</p:column>
 		
 	</ui:define>
+	
+	<ui:define name="outras_opcoes">
+		<h:panelGrid columns="6">
+			<f:facet name="header">
+				<h:outputText value="Dívidas vigentes"/>
+			</f:facet>
+			
+			Crédito a receber:
+			<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="color: #0000FF;"/>
+			<h:outputText value="#{managedBean.creditoAReceber}" style="color: #0000FF;">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:outputText>
+			
+			Débito a pagar:
+			<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="color: #FF0000;"/>
+			<h:outputText value="#{managedBean.debitoAPagar}" style="color: #FF0000;">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:outputText>
+			
+		</h:panelGrid>
+	</ui:define>
+	
 </ui:composition>
 </html>

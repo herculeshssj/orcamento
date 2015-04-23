@@ -264,6 +264,34 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		return "/pages/DividaTerceiro/visualizarDocumento";
 	}
 	
+	public double getCreditoAReceber() {
+		try {
+			List<DividaTerceiro> dividas = getService().buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, TipoCategoria.CREDITO, StatusDivida.VIGENTE, getUsuarioLogado());
+			double valor = 0.0;
+			for (DividaTerceiro divida : dividas) {
+				valor += divida.getTotalAPagar();
+			}
+			return valor;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return 0.0;
+	}
+	
+	public double getDebitoAPagar() {
+		try {
+			List<DividaTerceiro> dividas = getService().buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, TipoCategoria.DEBITO, StatusDivida.VIGENTE, getUsuarioLogado());
+			double valor = 0.0;
+			for (DividaTerceiro divida : dividas) {
+				valor += divida.getTotalAPagar();
+			}
+			return valor;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return 0.0;
+	}
+	
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
@@ -289,6 +317,15 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
+	}
+	
+	public Moeda getMoedaPadrao() {
+		try {
+			return moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return null;
 	}
 
 	public IDividaTerceiro getService() {
