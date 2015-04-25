@@ -1,0 +1,240 @@
+<!--
+  
+  	Copyright (c) 2012 - 2015 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@gmail.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/TR/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Orçamento Doméstico</title>
+	
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/favicon.ico" />
+	<h:outputScript name="wp-emoji-settings.js" library="js"/>
+	<h:outputScript name="wp-emoji-release.js" library="js"/>
+	<h:outputStylesheet name="wp-smiley.css" library="css" />
+	<h:outputStylesheet name="css.css" library="css" />
+	<h:outputStylesheet name="genericons.css" library="css" />
+	<h:outputStylesheet name="normalize.css" library="css" />
+	<h:outputStylesheet name="foundation.css" library="css" />
+	<h:outputStylesheet name="style.css" library="css" />
+	<h:outputScript name="jquery.js" library="js"/>
+	<h:outputScript name="jquery-migrate.js" library="js"/>
+	<h:outputScript name="modernizr.js" library="js"/>
+	<h:outputStylesheet name="wpforge-customizer.css" library="css" />
+	<meta class="foundation-data-attribute-namespace"/>
+	<meta class="foundation-mq-xxlarge"/>
+	<meta class="foundation-mq-xlarge-only"/>
+	<meta class="foundation-mq-xlarge"/>
+	<meta class="foundation-mq-large-only"/>
+	<meta class="foundation-mq-large"/>
+	<meta class="foundation-mq-medium-only"/>
+	<meta class="foundation-mq-medium"/>
+	<meta class="foundation-mq-small-only"/>
+	<meta class="foundation-mq-small"/>
+	<meta class="foundation-mq-topbar"/>
+</h:head>
+
+<h:body class="home blog custom-background-white single-author">
+
+<div class="header_container">
+
+        <header id="header" class="header_wrap row" role="banner">
+
+            <div class="site-header medium-12 large-12 columns">
+
+				<div class="header-logo">
+					<a href="http://themeawesome.com/">
+						<h:graphicImage styleClass="header-image" alt="Logo" name="wordpress-foundation-themes.png" library="images" />
+					</a>
+				</div>
+
+             </div><!-- .site-header -->
+
+        </header><!-- #header -->
+
+        </div><!-- end .header_container -->
+
+<div class="nav_container">
+
+<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+    <div class="nav_wrap row">
+        <nav class="top-bar" data-topbar="" data-options="scrolltop:false;mobile_show_parent_link:true;">
+            <ul class="title-area">
+                <li class="name">
+                    <a href="#{request.contextPath}/pages/menu/inicio.faces" title="Página inicial" rel="home">Início</a>                    
+                </li>
+                
+                    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+            </ul>
+            
+        <section class="top-bar-section">
+        
+        <ul class="left">
+        	<li class="divider"></li>
+			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-about">
+				<a href="#{request.contextPath}/pages/CalendarioAtividades/listCalendarioAtividades">Agenda</a>
+			</li>        	
+			<li class="divider"></li>
+			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-about">
+				<a href="#{request.contextPath}/pages/menu/cadastros.faces">Cadastros</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11435" class="menu-item menu-item-main-menu menu-item-about">
+				<a href="#{request.contextPath}/pages/menu/lancamentos.faces">Lançamentos</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11436" class="menu-item menu-item-main-menu menu-item-resumos">
+				<a href="#{request.contextPath}/pages/menu/resumo.faces">Resumos</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11437" class="menu-item menu-item-main-menu menu-item-despensa">
+				<a href="#{request.contextPath}/pages/menu/despensa.faces">Despensa</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11438" class="menu-item menu-item-main-menu menu-item-documentos">
+				<a href="#{request.contextPath}/pages/menu/documentos.faces">Documentos</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11438" class="menu-item menu-item-main-menu menu-item-documentos">
+				<a href="#{request.contextPath}/pages/menu/opcoes.faces">Opções</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11440" class="menu-item menu-item-main-menu menu-item-ajuda">
+				<a href="#{request.contextPath}/pages/menu/ajuda.faces">Ajuda</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11441" class="menu-item menu-item-main-menu menu-item-sair">
+				<a href="#{request.contextPath}/j_spring_security_logout">Sair</a>
+			</li>
+		</ul>
+		
+        </section></nav>   
+    </div><!-- .row -->
+
+</div><!-- end .nav_container -->
+
+        <div class="content_container">
+    
+        <section class="content_wrap row" role="document">
+	<div id="content" class="medium-12 large-12 columns" role="main">
+	
+	<ui:insert name="breadcrumb">
+		<p class="breadcrumbs">
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+				<span typeof="v:Breadcrumb">
+				<a property="v:title" rel="v:url" href="http://themeawesome.com">Home</a>
+				/
+				<span class="breadcrumb_last">Contact Me</span>
+				</span>
+			</span>
+		</p>
+	</ui:insert>
+    										
+	<article id="post-19" class="post-19 post type-post status-publish format-standard hentry category-uncategorized tag-boat tag-lake">
+		<header class="entry-header">							
+			<h4 class="entry-title">
+				<ui:insert name="titulo">
+					Início
+				</ui:insert>					
+			</h4>
+		</header><!-- .entry-header -->
+
+		<div class="entry-content">
+        
+			<ui:insert name="conteudo">
+				<p>Seja bem vindo</p>
+			</ui:insert>   
+					     
+        </div><!-- .entry-content -->
+
+	</article><!-- #post -->							
+	
+			</div><!-- #content -->
+
+		</section><!-- end .content-wrap -->
+
+    </div><!-- end .content_container -->
+
+	
+    <div class="footer_container">
+
+    	<footer id="footer" class="footer_wrap row" role="contentinfo">
+
+        <div id="ftxt" class="site-info medium-12 large-12 columns cntr">
+            
+              <p>Powered by <a href="http://themeawesome.com/responsive-wordpress-theme/" rel="follow" target="_blank" title="A Responsive WordPress Theme">WP-Forge</a> &amp; <a href="http://wordpress.org/" target="_blank" title="WordPress">WordPress</a></p>
+                            
+        </div><!-- .site-info -->
+
+    	</footer><!-- .row -->
+
+    </div><!-- end #footer_container -->
+
+
+    <div style="display: none;" id="backtotop" class="hvr-fade">
+
+        <span class="genericon genericon-collapse"></span>
+
+    </div><!-- #backtotop -->
+
+<script type="text/javascript">
+/* <![CDATA[ */
+var foundation_strings = {"nav_back":"Back"};
+/* ]]> */
+</script>
+<h:outputScript name="foundation.js" library="js"/>
+<h:outputScript name="wpforge-functions.js" library="js"/>
+<h:outputScript name="load-foundation.js" library="js"/>
+
+
+</h:body>
+
+</html>
