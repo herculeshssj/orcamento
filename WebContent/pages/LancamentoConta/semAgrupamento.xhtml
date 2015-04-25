@@ -84,14 +84,15 @@
 		     			</h:outputText>
 		     			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
 		     			<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
-		     			<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
 		     			<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
-		     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
-		     			<h:graphicImage id="imgInfo" value="/resources/images/info.png"/>
+		     			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="16" width="16"/>
 		     			<p:tooltip for="imgInfo">
 							<h:outputText value="Categoria: #{item.categoria.descricao}" rendered="#{item.categoria != null}"/><br/>
 							<h:outputText value="Favorecido: #{item.favorecido.nome}" rendered="#{item.favorecido != null}"/><br/>
 							<h:outputText value="Meio de Pagamento: #{item.meioPagamento.descricao}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento and item.meioPagamento != null}"/>
+							<br/>
+							<h:graphicImage id="imgCalendar" value="/resources/images/svg/planner.svg" height="16" width="16" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
+							<h:graphicImage id="imgLink" value="/resources/images/svg/link.svg" height="16" width="16" rendered="#{not empty item.hashImportacao}"/>
 						</p:tooltip>
 		     		</p:column>	     		
 		     		<p:column style="text-align: center; vertical-align: middle; width: 100px;">
