@@ -57,15 +57,15 @@
 <ui:composition template="/templates/acesso.xhtml">
 
 	<ui:define name="titulo">
-		<h3>Erro!</h3>
+		Erro!
 	</ui:define>
 
 	<ui:define name="conteudo">
-		
+	
 		<center>
-			<h3>Desculpe, ocorreu um erro interno no sistema.</h3>
+			<h5>Desculpe, ocorreu um erro interno no sistema.</h5>
 			<br/>
-			<h:graphicImage library="images" name="acessoNegado.png"/>
+			<h:graphicImage id="imgError" value="/resources/images/svg/factory_breakdown.svg" height="256" width="256"/>
 			<br/>
 			<br/>
 			<p:accordionPanel activeIndex="1">
@@ -73,9 +73,8 @@
 					#{requestScope["exceptionMessage"]}
 				</p:tab>
 			</p:accordionPanel>
-			<!-- <center><a href="#{request.contextPath}/login.faces" title="Login no sistema"><h:graphicImage value="/resources/images/voltar.png"/></a></center> -->
-		</center>	
-     	
+		</center>
+		
 	</ui:define>
 	
 </ui:composition>

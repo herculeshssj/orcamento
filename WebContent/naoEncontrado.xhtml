@@ -55,20 +55,22 @@
 <ui:composition template="/templates/acesso.xhtml">
 
 	<ui:define name="titulo">
-		<h3>Página não encontrada</h3>
+		Página não encontrada
 	</ui:define>
 
 	<ui:define name="conteudo">
-		
+	
 		<center>
-			<h3>A página que você solicitou não foi encontrada.</h3>
+			<h5>A página que você solicitou não foi encontrada.</h5>
 			<br/>
-			<h:graphicImage library="images" name="acessoNegado.png"/>
+			<h:graphicImage id="imgDenied" value="/resources/images/svg/disclaimer.svg" height="256" width="256"/>
 			<br/>
 			<br/>
-			<center><a href="#{request.contextPath}/pages/menu/inicio.faces" title="Menu inicial"><h:graphicImage value="/resources/images/home.png"/></a></center>
-		</center>	
-     	
+			<center><a href="#{request.contextPath}/pages/menu/dashboard.faces" title="Menu principal">
+				<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/home.svg"/>
+			</a></center>
+		</center>
+		
 	</ui:define>
 	
 </ui:composition>

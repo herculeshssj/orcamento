@@ -56,36 +56,44 @@
 <ui:composition template="/templates/acesso.xhtml">
 
 	<ui:define name="titulo">
-		<h3>Autenticação</h3>
+		Autenticação
 	</ui:define>
 
 	<ui:define name="conteudo">
  
             <form action="j_spring_security_check" method="post">
             
-                <h:panelGrid columns="4" cellpadding="5" style="text-align: left">
-                    <h:outputLabel value="Login:" />
-                    <input id="j_username" name="j_username" type="text" />
-                    
-                    <h:outputLabel value="Senha:" />
-                    <input id="j_password" name="j_password" type="password"/>
-                    
-                    <h:outputText />
-                    <input id="j_remember" name="_spring_security_remember_me" type="checkbox"/> Lembre-se de mim
-                                        
-                    <h:outputText />
-                    <input type="image" src="#{request.contextPath}/resources/images/entrar.png" title="Entrar no sistema" />
-                    
-                </h:panelGrid>
-            </form>
+            	<p>
+            	
+            		<h:panelGrid columns="2">
+            			<h:panelGroup>
+	            			<label for="j_username">Login:</label>
+		            		<input id="j_username" name="j_username" type="text" />
+	            		</h:panelGroup>
+	            		
+	            		<h:panelGroup>
+		            		<label for="j_password">Senha:</label>
+		            		<input id="j_password" name="j_password" type="password" />
+	            		</h:panelGroup>
+            		</h:panelGrid>
+            		
+            		<input id="btnEntrar" class="button radius" type="submit" value="Entrar" />            		
+            		<input id="j_remember" name="_spring_security_remember_me" type="checkbox"/> Lembre-se de mim            		             		           		
+            	</p>
+            	
+            </form>	
+            
             <h:form>
-            	<h:panelGrid columns="6" cellpadding="5" style="text-align: center">
+            	<h:panelGrid columns="7" cellpadding="5" style="text-align: right">
                     
-                    <h:inputHidden />
-                    <h:commandLink value="Efetuar registro" action="efetuarRegistro" />
+                    <h:outputText />
+                    <h:outputText />
+                    <h:outputText />
+                    <h:commandLink id="lnkEfetuarRegistro" value="Efetuar registro" action="efetuarRegistro" />
                     
-                    <h:inputHidden />
-                    <h:commandLink value="Recuperar senha" action="recuperarSenha"/>
+                    <h:outputText />
+                    <h:outputText />
+                    <h:commandLink id="lnkRecuperarSenha" value="Recuperar senha" action="recuperarSenha"/>
                     
                 </h:panelGrid>            
             </h:form>

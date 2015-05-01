@@ -172,7 +172,9 @@
 				<f:selectItems value="#{managedBean.listaLancamentoImportado}" />
 			</h:selectOneMenu>
 			<h:panelGroup rendered="#{managedBean.entity.conta.ativo and managedBean.operation == 'edit'}">
-				<h:commandButton title="Quebrar vínculo" action="#{managedBean.quebrarVinculo}" image="/resources/images/quebrar.png"/>
+				<h:commandLink title="Quebrar vínculo" action="#{managedBean.quebrarVinculo}">
+					<h:graphicImage id="imgBrokenLink" value="/resources/images/svg/broken_link.svg" height="32" width="32"/>
+				</h:commandLink>
 			</h:panelGroup>	
 			
 			<h:outputText value="Despesa fixa/parcelada:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
@@ -199,7 +201,9 @@
 			Comprovante:
 			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" rendered="#{managedBean.entity.conta.ativo}"/>			
 			<h:panelGroup>
-				<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
+				<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+					<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="32" width="32"/>
+				</h:commandLink>
 				&nbsp;&nbsp;&nbsp;
 				<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png" rendered="#{managedBean.entity.conta.ativo}"/>				
 			</h:panelGroup>

@@ -71,7 +71,8 @@ public class StartupUserParametersHandler implements AuthenticationSuccessHandle
 		// Carrega as opções do sistema do usuário autenticado
 		opcaoSistemaComponent.atualizarCacheOpcoesSistema();
 		
-		response.sendRedirect(request.getContextPath() + "/pages/menu/inicio.faces");
+		// Vai para o dashboard do sistema
+		response.sendRedirect(request.getContextPath() + "/pages/menu/dashboard.faces");
 	}
 
 	
