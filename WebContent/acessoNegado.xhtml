@@ -55,16 +55,20 @@
 <ui:composition template="/templates/acesso.xhtml">
 
 	<ui:define name="titulo">
-		<h3>Acesso negado</h3>
+		Acesso negado
 	</ui:define>
 
 	<ui:define name="conteudo">
 	
 		<center>
-			<h:graphicImage library="images" name="acessoNegado.png"/>
+			<h5>Você não tem permissão para acessar este recurso!</h5>
+			<br/>
+			<h:graphicImage id="imgDenied" value="/resources/images/svg/disclaimer.svg" height="256" width="256"/>
 			<br/>
 			<br/>
-			<center><a href="#{request.contextPath}/login.faces" title="Login no sistema"><h:graphicImage value="/resources/images/voltar.png"/></a></center>
+			<center><a href="#{request.contextPath}/login.faces" title="Login no sistema">
+				<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+			</a></center>
 		</center>		
      
 	</ui:define>
