@@ -64,11 +64,18 @@
             <form action="j_spring_security_check" method="post">
             
             	<p>
-            		<label for="j_username">Login:</label>
-            		<input id="j_username" name="j_username" type="text" />
-            		
-            		<label for="j_password">Senha:</label>
-            		<input id="j_password" name="j_password" type="password" />
+            	
+            		<h:panelGrid columns="2">
+            			<h:panelGroup>
+	            			<label for="j_username">Login:</label>
+		            		<input id="j_username" name="j_username" type="text" />
+	            		</h:panelGroup>
+	            		
+	            		<h:panelGroup>
+		            		<label for="j_password">Senha:</label>
+		            		<input id="j_password" name="j_password" type="password" />
+	            		</h:panelGroup>
+            		</h:panelGrid>
             		
             		<input id="btnEntrar" class="button radius" type="submit" value="Entrar" />            		
             		<input id="j_remember" name="_spring_security_remember_me" type="checkbox"/> Lembre-se de mim            		             		           		

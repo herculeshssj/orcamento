@@ -110,7 +110,6 @@ public class CalendarioAtividadesController extends AbstractController {
     }
 	    
 	public ScheduleModel getCalendario() {
-		this.startUp();
 		return calendario;
 	}
 

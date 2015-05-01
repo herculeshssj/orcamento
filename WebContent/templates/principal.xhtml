@@ -120,7 +120,7 @@
         <ul class="left">
         	<li class="divider"></li>
 			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-agenda">
-				<a href="#{request.contextPath}/pages/CalendarioAtividades/listCalendarioAtividades.faces"><h:outputText value="#{agendaMB.agendaDoDia}" /></a>
+				<a href="#{request.contextPath}/pages/Agenda/listAgenda.faces"><h:outputText value="#{agendaMB.agendaDoDia}" /></a>
 			</li>        	
 			<li class="divider"></li>
 			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-cadastros has-dropdown not-click">
@@ -155,6 +155,9 @@
 				<ul class="dropdown">
 					<li id="menu-item-4184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/LancamentoPeriodico/listLancamentoPeriodico.faces">Despesas Fixas e Parceladas</a>
+					</li>
+					<li id="menu-item-4188" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/DividaTerceiro/listDividaTerceiro.faces">Dívida de Favorecidos</a>
 					</li>
 					<li id="menu-item-4190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/FaturaCartao/listFaturaCartao.faces">Fatura do Cartão</a>
@@ -320,7 +323,7 @@
 
         <div id="ftxt" class="site-info medium-12 large-12 columns cntr">
         
-            <p>Copyright © 2012-2016 - Todos os direitos reservados a <a href="mailto:herculeshssj@gmail.com">Hércules S. S. José</a>. Versão 2016 (DEZ2015)</p>
+            <p>Copyright © 2012-2016 - Todos os direitos reservados a <a href="mailto:herculeshssj@gmail.com">Hércules S. S. José</a>. Versão <h:outputText value="#{versaoMB.versaoAtual.label}"/></p>
                             
         </div><!-- .site-info -->
 
