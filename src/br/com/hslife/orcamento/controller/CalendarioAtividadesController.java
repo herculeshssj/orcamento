@@ -46,7 +46,7 @@
 
 package br.com.hslife.orcamento.controller;
 
-import org.primefaces.event.ScheduleEntrySelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
@@ -105,8 +105,8 @@ public class CalendarioAtividadesController extends AbstractController {
 		return "/pages/CalendarioAtividades/listCalendarioAtividades";
 	}
 	
-	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {  
-        event = selectEvent.getScheduleEvent();
+	public void onEventSelect(SelectEvent selectEvent) {  
+        event = (ScheduleEvent) selectEvent.getObject();
     }
 	    
 	public ScheduleModel getCalendario() {
