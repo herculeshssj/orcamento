@@ -75,7 +75,7 @@ public class OpcaoSistemaComponent implements Serializable{
 	private UsuarioComponent usuarioComponent;
 	
 	// Guarda em cache os valores das opções do sistema
-	private Map<String, Object> cacheOpcoesSistema = new HashMap<>();
+	private Map<Usuario, Map<String, Object>> cacheUsuarioOpcoesSistema = new HashMap<>();
 	
 	public OpcaoSistema buscarPorChaveEUsuario(String chave, Usuario usuario) throws BusinessException {
 		return opcaoSistemaRepository.findOpcaoUserByChave(chave, usuario);
@@ -147,17 +147,19 @@ public class OpcaoSistemaComponent implements Serializable{
 		for (String chave : opcoesSistema.keySet()) {
 			opcao = opcaoSistemaRepository.findOpcaoGlobalAdminByChave(chave);
 			validarValorOpcaoSistema(opcao, opcoesSistema.get(opcao.getChave()));
-			/*
-			if (opcao.getTipoValor().equals("STRING")) {
+			if (opcoesSistema.get(chave) instanceof String) {
+				opcao.setTipoValor("STRING");
 				opcao.setValor((String)opcoesSistema.get(chave));
 			}
-			if (opcao.getTipoValor().equals("BOOLEAN")) {
+			if (opcoesSistema.get(chave) instanceof Boolean) {
+				opcao.setTipoValor("BOOLEAN");
 				opcao.setValor(Boolean.toString((Boolean)opcoesSistema.get(chave)));
 			}
-			if (opcao.getTipoValor().equals("INTEGER")) {
+			if (opcoesSistema.get(chave) instanceof Integer) {
+				opcao.setTipoValor("INTEGER");
 				opcao.setValor(Integer.toString((Integer)opcoesSistema.get(chave)));
-			}*/
-			opcao.setValor((String)opcoesSistema.get(chave));
+			}
+			//opcao.setValor((String)opcoesSistema.get(chave)); -- Mudança decorrente de usar o JSF 2.2.10 e PrimeFaces 5.2
 			opcaoSistemaRepository.update(opcao);
 		}
 	}
@@ -168,7 +170,19 @@ public class OpcaoSistemaComponent implements Serializable{
 			opcao = opcaoSistemaRepository.findOpcaoUserByChave(chave, usuario);
 			if (opcao != null) {
 				validarValorOpcaoSistema(opcao, opcoesSistema.get(opcao.getChave()));			
-				opcao.setValor((String)opcoesSistema.get(chave));
+				//opcao.setValor((String)opcoesSistema.get(chave)); -- Mudança decorrente de usar o JSF 2.2.10 e PrimeFaces 5.2
+				if (opcoesSistema.get(chave) instanceof String) {
+					opcao.setTipoValor("STRING");
+					opcao.setValor((String)opcoesSistema.get(chave));
+				}
+				if (opcoesSistema.get(chave) instanceof Boolean) {
+					opcao.setTipoValor("BOOLEAN");
+					opcao.setValor(Boolean.toString((Boolean)opcoesSistema.get(chave)));
+				}
+				if (opcoesSistema.get(chave) instanceof Integer) {
+					opcao.setTipoValor("INTEGER");
+					opcao.setValor(Integer.toString((Integer)opcoesSistema.get(chave)));
+				}
 				opcaoSistemaRepository.update(opcao);
 			} else {
 				opcao = new OpcaoSistema();
@@ -202,7 +216,8 @@ public class OpcaoSistemaComponent implements Serializable{
 	
 	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) throws BusinessException {
 		if (opcao.isRequired()) {
-			if (valor == null || ((String)valor).isEmpty()) {
+			//if (valor == null || ((String)valor).isEmpty()) { -- Mudança feita em virtude da atualização para JSF 2.2.10 e PrimeFaces 5.2
+			if (valor == null) {
 				throw new BusinessException("Campo " + opcao.getChave() + " não pode ser vazio!");
 			}
 		}
@@ -228,23 +243,73 @@ public class OpcaoSistemaComponent implements Serializable{
 	}
 	
 	/* Atualização do cache de opções do sistema */
-	public void atualizarCacheOpcoesSistema() {
-		cacheOpcoesSistema.clear();
-		cacheOpcoesSistema.put("CONTA_EXIBIR_MEIO_PAGAMENTO", this.getExibirMeioPagamento());
-		cacheOpcoesSistema.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", this.getExibirBuscasRealizadas());
+	public void atualizarCacheOpcoesSistema() {		
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		// Verifica se existe entrada no cache para o usuário atual
+		if (cacheUsuarioOpcoesSistema.get(usuarioLogado) == null) {
+			// Cria um novo Map de parâmetros para o usuário
+			cacheUsuarioOpcoesSistema.put(usuarioLogado, new HashMap<>());
+		}
+		
+		// Limpa o cache de parâmetros do usuários e carrega novamente os parâmetros
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).clear();
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTA_EXIBIR_MEIO_PAGAMENTO", this.getExibirMeioPagamento());
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("GERAL_EXIBIR_BUSCAS_REALIZADAS", this.getExibirBuscasRealizadas());
+		
+	}
+	
+	/**
+	 * Retorna o valor do parâmetro informado do cache de usuários.
+	 * Caso o parâmetro não seja encontrado ou o usuário informa não
+	 * exista o valor retornado é null. 
+	 * 
+	 * @param usuarioLogado Usuário atualmente logado
+	 * @param parametro Parâmetro cujo valor deseja recuperar
+	 * @return valor do parâmetro no cache
+	 */
+	private Object recuperaParametroCacheUsuario(Usuario usuarioLogado, String parametro) {
+		Object valueParameter = null;
+		if (cacheUsuarioOpcoesSistema.containsKey(usuarioLogado)) {
+			if (cacheUsuarioOpcoesSistema.get(usuarioLogado).containsKey(parametro)) {
+				valueParameter = cacheUsuarioOpcoesSistema.get(usuarioLogado).get(parametro);
+			}
+		}
+		
+		return valueParameter;
+	}
+	
+	/**
+	 * Armazena o valor informado do parâmetro no cache de usuários.
+	 * Caso o valor ainda não existe, ou o usuário ainda não foi 
+	 * setado no cache, o mesmo será feito.
+	 * 
+	 * @param usuarioLogado Usuário atualmente logado
+	 * @param parametro Parâmetro cujo valor deseja armazenar
+	 * @param valor valor a ser armazenado
+	 */
+	private void setarParametroCacheUsuario(Usuario usuarioLogado, String parametro, Object valor) {
+		if (!cacheUsuarioOpcoesSistema.containsKey(usuarioLogado)) {
+			cacheUsuarioOpcoesSistema.put(usuarioLogado, new HashMap<>());
+			cacheUsuarioOpcoesSistema.get(usuarioLogado).put(parametro, valor);
+		} else {
+			cacheUsuarioOpcoesSistema.get(usuarioLogado).put(parametro, valor);
+		}
 	}
 	
 	/*** Métodos Getters das opções do sistema existentes ***/
 	
 	public Boolean getExibirMeioPagamento() {
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		try {
 			// Verifica se o valor existe no cache
-			if (cacheOpcoesSistema.containsKey("CONTA_EXIBIR_MEIO_PAGAMENTO") && cacheOpcoesSistema.get("CONTA_EXIBIR_MEIO_PAGAMENTO") != null) {
-				return Boolean.valueOf((Boolean)cacheOpcoesSistema.get("CONTA_EXIBIR_MEIO_PAGAMENTO"));
+			if (recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO") != null) {
+				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO"));
 			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_MEIO_PAGAMENTO", usuarioComponent.getUsuarioLogado());
-				if (opcao != null)
-					return Boolean.valueOf(opcao.getValor());
+				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_MEIO_PAGAMENTO", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.valueOf(opcao.getValor()));
+					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO"));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -253,14 +318,17 @@ public class OpcaoSistemaComponent implements Serializable{
 	}
 	
 	public Boolean getExibirBuscasRealizadas() {
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		try {
 			// Verifica se o valor existe no cache
-			if (cacheOpcoesSistema.containsKey("GERAL_EXIBIR_BUSCAS_REALIZADAS") && cacheOpcoesSistema.get("GERAL_EXIBIR_BUSCAS_REALIZADAS") != null) {
-				return Boolean.valueOf((Boolean)cacheOpcoesSistema.get("GERAL_EXIBIR_BUSCAS_REALIZADAS"));
+			if (recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS") != null) {
+				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS"));
 			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", usuarioComponent.getUsuarioLogado());
-				if (opcao != null)
-					return Boolean.valueOf(opcao.getValor());
+				OpcaoSistema opcao = buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.valueOf(opcao.getValor()));
+					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS"));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

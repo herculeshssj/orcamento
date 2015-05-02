@@ -51,32 +51,18 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
 
 @Repository
-@Transactional
-public class OpcaoSistemaRepository extends AbstractRepository implements IRepository<OpcaoSistema>{
+public class OpcaoSistemaRepository extends AbstractCRUDRepository<OpcaoSistema> {
 	
-	public void save(OpcaoSistema entity) {
-		getSession().persist(entity);
+	public OpcaoSistemaRepository() {
+		super(new OpcaoSistema());
 	}
 	
-	public void update(OpcaoSistema entity) {
-		getSession().merge(entity);
-	}
-	
-	public void delete(OpcaoSistema entity) {
-		getSession().delete(entity);
-	}
-	
-	public OpcaoSistema findById(Long id) {
-		return (OpcaoSistema)getSession().get(OpcaoSistema.class, id);
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<OpcaoSistema> findOpcoesGlobalAdminByCDU(String cdu) {
 		Criteria criteria = getSession().createCriteria(OpcaoSistema.class);

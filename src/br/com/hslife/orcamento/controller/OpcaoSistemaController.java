@@ -49,6 +49,8 @@ package br.com.hslife.orcamento.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -82,6 +84,7 @@ public class OpcaoSistemaController extends AbstractController {
 	}
 
 	@Override
+	@PostConstruct
 	public String startUp() {
 		moduleTitle = "Opções do Sistema";
 		carregarOpcoesSistema();
