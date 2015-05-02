@@ -108,7 +108,7 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 				+ this.dividaTerceiro.getMoeda().getSimboloMonetario()
 				+ " "
 				+ Util.arredondar(this.valorPago * this.taxaConversao) 
-				+ " pago em " 
+				+ " efetuado em " 
 				+ Util.formataDataHora(this.dataPagamento, Util.DATA);
 	}
 	
