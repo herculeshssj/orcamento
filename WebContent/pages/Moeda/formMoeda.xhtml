@@ -135,8 +135,7 @@
 					target="#{managedBean.idEntity}" />
 			</h:commandButton>								
 	  					&nbsp;&nbsp;&nbsp;
-						<h:commandButton value="Excluir" rendered="#{!item.padrao}"
-				image="/resources/images/excluir.png" action="#{managedBean.view}">
+						<h:commandButton value="Excluir" rendered="#{!item.padrao}"	image="/resources/images/excluir.png" action="#{managedBean.delete}">
 				<f:setPropertyActionListener value="#{item.id}"
 					target="#{managedBean.idEntity}" />
 			</h:commandButton>
