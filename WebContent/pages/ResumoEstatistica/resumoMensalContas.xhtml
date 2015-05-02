@@ -163,16 +163,19 @@
 				</p:dataTable>
 			</p:tab>
 			<p:tab title="Receitas">
-				<p:pieChart id="pieCategoriaCredito" value="#{managedBean.pieCategoriaCredito}" legendPosition="s" title="Receitas do período" showDataLabels="true" diameter="450" style="#{managedBean.styleCorrectionCredito}"
-					extender="ext1" />								
+				<center>
+			 		<p:chart type="pie" responsive="true" id="pieCategoriaCredito" model="#{managedBean.pieCategoriaCredito}" style="#{managedBean.styleCorrectionCredito}"/>
+			 	</center>								
 			</p:tab>
 			<p:tab title="Despesas">
-				<p:pieChart id="pieCategoriaDebito" value="#{managedBean.pieCategoriaDebito}" legendPosition="s" title="Despesas do período" showDataLabels="true" diameter="450" style="#{managedBean.styleCorrectionDebito}"
-					extender="ext1" />
+				<center>
+					<p:chart type="pie" responsive="true" id="pieCategoriaDebito" model="#{managedBean.pieCategoriaDebito}" style="#{managedBean.styleCorrectionDebito}" />
+				</center>
 			</p:tab>
 			<p:tab title="Comparativo">
-				<p:barChart id="barComparativo" value="#{managedBean.barComparativo}" legendPosition="s" title="Comparativo Receitas X Despesas" min="0" max="#{managedBean.maxValueBarComparativo}" style="height:600px" 
-					extender="ext1" showDataTip="false"/> 
+				<center>
+					<p:chart type="bar" responsive="true" id="barComparativo" model="#{managedBean.barComparativo}" style="height:600px"/>
+				</center> 
 			</p:tab>
 		</p:tabView>
 	

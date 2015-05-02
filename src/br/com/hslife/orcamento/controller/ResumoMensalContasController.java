@@ -50,7 +50,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +102,7 @@ public class ResumoMensalContasController extends AbstractController {
 	private PieChartModel pieCategoriaCredito;
 	private PieChartModel pieCategoriaDebito;
 	
-	private CartesianChartModel barComparativo = new CartesianChartModel();  
+	private BarChartModel barComparativo = new BarChartModel();  
 	
 	private Integer maxValueBarComparativo = 100;
 	
@@ -145,6 +145,16 @@ public class ResumoMensalContasController extends AbstractController {
 		int pieSizeC = 1; // POG para realizar a correção no style do Pie Chart >:(
 		int pieSizeD = 1; // POG para realizar a correção no style do Pie Chart >:(
 		
+		pieCategoriaCredito.setTitle("Receitas do período");
+		pieCategoriaCredito.setLegendPosition("s");
+		pieCategoriaCredito.setShowDataLabels(true);
+		pieCategoriaCredito.setExtender("ext1");
+		
+		pieCategoriaDebito.setTitle("Despesas do período");
+		pieCategoriaDebito.setLegendPosition("s");
+		pieCategoriaDebito.setShowDataLabels(true);
+		pieCategoriaDebito.setExtender("ext1");
+		
 		for (Categoria categoria : resumoMensal.getCategorias()) {
 			if (!categoria.getDescricao().equals("Saldo atual")) {
 				if (categoria.getTipoCategoria().equals(TipoCategoria.CREDITO)) {
@@ -158,12 +168,15 @@ public class ResumoMensalContasController extends AbstractController {
 		}
 		
 		// POG para realizar a correção no style do Pie Chart >:(
-		styleCorrectionCredito = "width:820px;height:" + (600 + (30 * pieSizeC)) + "px";
-		styleCorrectionDebito = "width:820px;height:" + (600 + (30 * pieSizeD)) + "px";
+		styleCorrectionCredito = "height:" + (600 + (30 * pieSizeC)) + "px";
+		styleCorrectionDebito = "height:" + (600 + (30 * pieSizeD)) + "px";
 	}
 	
 	private void gerarGraficoComparativo() {
-		barComparativo = new CartesianChartModel();  
+		barComparativo = new BarChartModel();
+		barComparativo.setLegendPosition("s");
+		barComparativo.setTitle("Comparativo Receitas X Despesas");
+		barComparativo.setExtender("ext1");
 		double receitas = 0;
 		double despesas = 0;
 		
@@ -355,19 +368,19 @@ public class ResumoMensalContasController extends AbstractController {
 		this.styleCorrectionDebito = styleCorrectionDebito;
 	}
 
-	public CartesianChartModel getBarComparativo() {
-		return barComparativo;
-	}
-
-	public void setBarComparativo(CartesianChartModel barComparativo) {
-		this.barComparativo = barComparativo;
-	}
-
 	public Integer getMaxValueBarComparativo() {
 		return maxValueBarComparativo;
 	}
 
 	public void setMaxValueBarComparativo(Integer maxValueBarComparativo) {
 		this.maxValueBarComparativo = maxValueBarComparativo;
+	}
+
+	public BarChartModel getBarComparativo() {
+		return barComparativo;
+	}
+
+	public void setBarComparativo(BarChartModel barComparativo) {
+		this.barComparativo = barComparativo;
 	}
 }

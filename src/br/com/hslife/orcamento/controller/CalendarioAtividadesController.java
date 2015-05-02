@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.controller;
 
+import javax.annotation.PostConstruct;
+
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -85,6 +87,7 @@ public class CalendarioAtividadesController extends AbstractController {
 	}
 	
 	@Override
+	@PostConstruct
 	public String startUp() {		
 		// Carrega todos os eventos da data e hora atual em diante
 		calendario = new DefaultScheduleModel();
