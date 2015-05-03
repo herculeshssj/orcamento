@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,6 +165,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		}
 	}
 	
+	@PostConstruct
 	public String startUpUser() {
 		try {
 			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());

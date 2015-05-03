@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,7 @@ public class VersaoController extends AbstractSimpleCRUDController<Versao> {
 	}
 	
 	@Override
+	@PostConstruct
 	public String startUp() {
 		find();
 		return super.startUp();
