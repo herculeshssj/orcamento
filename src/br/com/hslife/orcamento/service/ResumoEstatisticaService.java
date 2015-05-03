@@ -153,6 +153,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			// Define a descrição da conta
 			saldoAtual.setDescricaoConta(conta.getDescricao());
+			saldoAtual.setMoedaConta(conta.getMoeda());
 			saldoAtual.setTipoConta(conta.getTipoConta());
 			
 			// Define a situação da conta
@@ -164,7 +165,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Verifica se a conta é do tipo CARTAO
 			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
 				// Seta o saldo do período com o limite do cartão
-				saldoAtual.setSaldoPeriodo(conta.getCartaoCredito().getLimiteCartao());
+				saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao() 
+						? conta.getCartaoCredito().getLimiteCartao() 
+								: Util.arredondar(conta.getCartaoCredito().getLimiteCartao() * conta.getMoeda().getValorConversao()));
 				
 				// Traz todos os lançamentos do cartão que ainda não foram quitados
 				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
@@ -175,9 +178,13 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				// Traz o último período de fechamento da conta
 				FechamentoPeriodo ultimoFechamento = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta); 
 				if (ultimoFechamento == null) {
-					saldoAtual.setSaldoPeriodo(conta.getSaldoInicial());
+					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
+							? conta.getSaldoInicial()
+									: Util.arredondar(conta.getSaldoInicial() * conta.getMoeda().getValorConversao()));
 				} else {
-					saldoAtual.setSaldoPeriodo(ultimoFechamento.getSaldo());
+					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
+							? ultimoFechamento.getSaldo()
+									: Util.arredondar(ultimoFechamento.getSaldo() * conta.getMoeda().getValorConversao()));
 				}
 				
 				// Traz os lançamentos da data de fechamento em diante

@@ -49,12 +49,16 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
 
@@ -72,6 +76,9 @@ public class SaldoAtualContasController extends AbstractController {
 	@Autowired
 	private IResumoEstatistica service;
 	
+	@Autowired
+	private IMoeda moedaService;
+	
 	private boolean lancamentoAgendado = false;
 	
 	public SaldoAtualContasController() {
@@ -84,6 +91,7 @@ public class SaldoAtualContasController extends AbstractController {
 	}
 	
 	@Override
+	@PostConstruct
 	public String startUp() {
 		this.gerarSaldoAtualContas();
 		return "/pages/ResumoEstatistica/saldoAtualContas";
@@ -148,6 +156,15 @@ public class SaldoAtualContasController extends AbstractController {
 			}
 		}
 		return saldos;			
+	}
+	
+	public Moeda getMoedaPadrao() {
+		try {
+			return moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new Moeda();
 	}
 
 	public boolean isLancamentoAgendado() {
