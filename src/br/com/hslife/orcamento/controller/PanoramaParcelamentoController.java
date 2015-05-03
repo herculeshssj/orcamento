@@ -56,9 +56,10 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
 
-import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -77,6 +78,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("panoramaParcelamentoMB")
 @Scope("session")
@@ -109,8 +111,8 @@ public class PanoramaParcelamentoController extends AbstractController {
 	private Double maxValueBarPagamentosDespesa = 1.0;
 	private Double maxValueBarPagamentosReceita = 1.0;
 	
-	private CartesianChartModel ultimosPagamentosDespesaModel;
-	private CartesianChartModel ultimosPagamentosReceitaModel;
+	private BarChartModel ultimosPagamentosDespesaModel;
+	private BarChartModel ultimosPagamentosReceitaModel;
 	
 	private double saldoCredor;
 	private double saldoDevedor;
@@ -124,6 +126,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 	}
 
 	@Override
+	@PostConstruct
 	public String startUp() {
 		exibirGraficoDespesa = false;
 		exibirGraficoReceita = false;
@@ -247,14 +250,20 @@ public class PanoramaParcelamentoController extends AbstractController {
 					}
 				} else {
 					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
-						saldoDevedor += pagamento.getLancamentoPeriodico().getValorParcela();
+						saldoDevedor += pagamento.getLancamentoPeriodico().getMoeda().isPadrao() 
+								? pagamento.getLancamentoPeriodico().getValorParcela()
+										: Util.arredondar(pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
 					}
 				}
 			}
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
-		ultimosPagamentosDespesaModel = new CartesianChartModel();
+		ultimosPagamentosDespesaModel = new BarChartModel();
+		ultimosPagamentosDespesaModel.setLegendPosition("s");
+		ultimosPagamentosDespesaModel.setTitle("Panorama dos Parcelamentos - Despesa");
+		ultimosPagamentosDespesaModel.setStacked(true);		
+		ultimosPagamentosDespesaModel.setExtender("ext1");
 		
 		ChartSeries pagamentosSerie = new ChartSeries();		
 		ChartSeries aPagarSerie = new ChartSeries();
@@ -337,14 +346,20 @@ public class PanoramaParcelamentoController extends AbstractController {
 					}
 				} else {
 					if (periodoAConsiderar.equals("ANTERIOR") && pagamento.getDataVencimento().before(new Date())) {
-						saldoCredor += pagamento.getLancamentoPeriodico().getValorParcela();
+						saldoCredor += pagamento.getLancamentoPeriodico().getMoeda().isPadrao() 
+								? pagamento.getLancamentoPeriodico().getValorParcela()
+										: Util.arredondar(pagamento.getLancamentoPeriodico().getValorParcela() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
 					}
 				}
 			}
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
-		ultimosPagamentosReceitaModel = new CartesianChartModel();
+		ultimosPagamentosReceitaModel = new BarChartModel();
+		ultimosPagamentosReceitaModel.setLegendPosition("s");
+		ultimosPagamentosReceitaModel.setTitle("Panorama dos Parcelamentos - Receita");
+		ultimosPagamentosReceitaModel.setStacked(true);		
+		ultimosPagamentosReceitaModel.setExtender("ext1");
 		
 		ChartSeries pagamentosSerie = new ChartSeries();		
 		ChartSeries aPagarSerie = new ChartSeries();
@@ -441,24 +456,6 @@ public class PanoramaParcelamentoController extends AbstractController {
 		this.exibirGraficoDespesa = exibirGraficoDespesa;
 	}
 
-	public CartesianChartModel getUltimosPagamentosDespesaModel() {
-		return ultimosPagamentosDespesaModel;
-	}
-
-	public void setUltimosPagamentosDespesaModel(
-			CartesianChartModel ultimosPagamentosDespesaModel) {
-		this.ultimosPagamentosDespesaModel = ultimosPagamentosDespesaModel;
-	}
-
-	public CartesianChartModel getUltimosPagamentosReceitaModel() {
-		return ultimosPagamentosReceitaModel;
-	}
-
-	public void setUltimosPagamentosReceitaModel(
-			CartesianChartModel ultimosPagamentosReceitaModel) {
-		this.ultimosPagamentosReceitaModel = ultimosPagamentosReceitaModel;
-	}
-
 	public Double getMaxValueBarPagamentosDespesa() {
 		return maxValueBarPagamentosDespesa;
 	}
@@ -513,5 +510,23 @@ public class PanoramaParcelamentoController extends AbstractController {
 
 	public void setTipoContaSelecionada(TipoConta tipoContaSelecionada) {
 		this.tipoContaSelecionada = tipoContaSelecionada;
+	}
+
+	public BarChartModel getUltimosPagamentosDespesaModel() {
+		return ultimosPagamentosDespesaModel;
+	}
+
+	public void setUltimosPagamentosDespesaModel(
+			BarChartModel ultimosPagamentosDespesaModel) {
+		this.ultimosPagamentosDespesaModel = ultimosPagamentosDespesaModel;
+	}
+
+	public BarChartModel getUltimosPagamentosReceitaModel() {
+		return ultimosPagamentosReceitaModel;
+	}
+
+	public void setUltimosPagamentosReceitaModel(
+			BarChartModel ultimosPagamentosReceitaModel) {
+		this.ultimosPagamentosReceitaModel = ultimosPagamentosReceitaModel;
 	}
 }
