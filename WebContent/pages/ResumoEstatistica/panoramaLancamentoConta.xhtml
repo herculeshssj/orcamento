@@ -57,22 +57,32 @@
 
 	<ui:param name="managedBean" value="#{panoramaLancamentoContaMB}" />
 	
-	<ui:define name="botoes">	
-	
-	</ui:define>
-	
 	<ui:define name="pesquisa">
-		Conta:
-		<h:selectOneMenu id="txtConta" value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-		</h:selectOneMenu>
-		&nbsp;
-		Ano:
-		<p:inputText size="5" value="#{managedBean.ano}"/>
-	</ui:define>
+		<h:panelGrid columns="3">
+		
+			<h:panelGroup>
+				Conta:
+				<h:selectOneMenu id="txtConta" value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
+					<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+				</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				Ano:
+				<h:selectOneMenu id="txtAno" value="#{managedBean.ano}">
+					<f:selectItems value="#{managedBean.listaAno}" />			
+				</h:selectOneMenu>	
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+		     		<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		     	</h:commandLink>
+		     	<h:commandLink title="Visualizar relatório completo" action="#{managedBean.verRelatorioCompleto}" target="_blank">
+		     		<h:graphicImage id="imgRegister" height="48" width="48" value="/resources/images/svg/data_sheet.svg"/>
+		     	</h:commandLink>
+			</h:panelGroup>
+		
+		</h:panelGrid>
 	
-	<ui:define name="pesquisa_avancada">
-		<h:commandLink value="Visualizar relatório completo" action="#{managedBean.verRelatorioCompleto}" target="_blank"/>
 	</ui:define>
 	
 	<ui:define name="tabela">
@@ -87,7 +97,7 @@
 	    }
 		</script>
 		
-		<p:lineChart id="linePanoramaLancamentoConta" value="#{managedBean.saldoTotalModel}" legendPosition="s" title="Panorama dos Lançamentos da Conta" style="height:600px" extender="ext1" rendered="#{managedBean.exibirGrafico}"/>
+		<p:chart type="line" id="linePanoramaLancamentoConta" responsive="true" model="#{managedBean.saldoTotalModel}" style="height:600px;" rendered="#{managedBean.exibirGrafico}"/>
 	
 	</ui:define>
 	

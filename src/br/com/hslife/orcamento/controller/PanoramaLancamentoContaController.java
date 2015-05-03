@@ -47,11 +47,12 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.LineChartSeries;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LineChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -80,12 +81,12 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	private IConta contaService;
 	
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
-	private int ano;
+	private int ano = Calendar.getInstance().get(Calendar.YEAR);
 	
 	private PanoramaLancamentoConta entity;
 	private List<PanoramaLancamentoConta> listEntity;
 	
-	private CartesianChartModel saldoTotalModel;
+	private LineChartModel saldoTotalModel;
 	private boolean exibirGrafico = false;
 	
 	public PanoramaLancamentoContaController() {
@@ -128,8 +129,11 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	}
 	
 	private void gerarGrafico(){
-		saldoTotalModel = new CartesianChartModel();
-		LineChartSeries serie = new LineChartSeries();
+		saldoTotalModel = new LineChartModel();
+		saldoTotalModel.setLegendPosition("s");
+		saldoTotalModel.setTitle("Panorama dos Lançamento da Conta");
+		saldoTotalModel.setExtender("ext1");
+		ChartSeries serie = new ChartSeries();
 		serie.setLabel("Saldo total");
 		
 		for (PanoramaLancamentoConta panorama : listEntity) {
@@ -170,6 +174,14 @@ public class PanoramaLancamentoContaController extends AbstractController {
 		}
 		return new ArrayList<Conta>();
 	}
+	
+	public List<Integer> getListaAno() {
+		List<Integer> anos = new ArrayList<>();
+		for (int i = Calendar.getInstance().get(Calendar.YEAR) + 5; i > Calendar.getInstance().get(Calendar.YEAR) - 6; i--) {
+			anos.add(i);
+		}
+		return anos;
+	}
 
 	public void setContaService(IConta contaService) {
 		this.contaService = contaService;
@@ -207,14 +219,6 @@ public class PanoramaLancamentoContaController extends AbstractController {
 		this.service = service;
 	}
 
-	public CartesianChartModel getSaldoTotalModel() {
-		return saldoTotalModel;
-	}
-
-	public void setSaldoTotalModel(CartesianChartModel saldoTotalModel) {
-		this.saldoTotalModel = saldoTotalModel;
-	}
-
 	public boolean isExibirGrafico() {
 		return exibirGrafico;
 	}
@@ -229,5 +233,13 @@ public class PanoramaLancamentoContaController extends AbstractController {
 
 	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
 		this.criterioBusca = criterioBusca;
+	}
+
+	public LineChartModel getSaldoTotalModel() {
+		return saldoTotalModel;
+	}
+
+	public void setSaldoTotalModel(LineChartModel saldoTotalModel) {
+		this.saldoTotalModel = saldoTotalModel;
 	}
 }
