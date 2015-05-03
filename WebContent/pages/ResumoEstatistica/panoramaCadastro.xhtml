@@ -57,20 +57,29 @@
 
 	<ui:param name="managedBean" value="#{panoramaCadastroMB}" />
 	
-	<ui:define name="botoes"></ui:define>
-	
 	<ui:define name="pesquisa">
-	
-		Cadastro:
-		<h:selectOneMenu value="#{managedBean.cadastroSelecionado}">
-			<f:selectItems value="#{managedBean.listaCadastro}"/>
-			<p:ajax update="txtRegistro" listener="#{panoramaCadastroMB.getListaRegistro}" />
-		</h:selectOneMenu>
-		&nbsp;
-		Registro:
-		<h:selectOneMenu id="txtRegistro" value="#{managedBean.idRegistro}">
-			<f:selectItems value="#{managedBean.listaRegistro}"/>
-		</h:selectOneMenu>
+		<h:panelGrid columns="3">
+		
+			<h:panelGroup>
+				Cadastro:
+				<h:selectOneMenu value="#{managedBean.cadastroSelecionado}">
+					<f:selectItems value="#{managedBean.listaCadastro}"/>
+					<p:ajax update="txtRegistro" listener="#{panoramaCadastroMB.getListaRegistro}" />
+				</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				Registro:
+				<h:selectOneMenu id="txtRegistro" value="#{managedBean.idRegistro}">
+					<f:selectItems value="#{managedBean.listaRegistro}"/>
+				</h:selectOneMenu>	
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+		     		<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		     	</h:commandLink>
+			</h:panelGroup>
+		
+		</h:panelGrid>
 	
 	</ui:define>
 	
