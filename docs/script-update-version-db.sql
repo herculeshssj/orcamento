@@ -46,7 +46,7 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO SET2015 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUN2015 ***/
 
 -- Atualização de versão
 update versao set ativo = false;
@@ -102,3 +102,6 @@ create table pagamentodividaterceiro(
 ) Engine=InnoDB;
 
 alter table pagamentodividaterceiro add constraint fk_dividaterceiro_pagamentodividaterceiro foreign key(idDivida) references dividaterceiro(id);
+
+-- Corrige a versão
+update versao set versao = 'JUN2015', dataLiberacao = '2015-06-28' where versao = 'SET2015';
