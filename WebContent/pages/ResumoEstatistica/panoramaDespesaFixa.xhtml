@@ -57,36 +57,46 @@
 
 	<ui:param name="managedBean" value="#{panoramaDespesaFixaMB}" />
 	
-	<ui:define name="botoes">
-	
-	</ui:define>
-	
 	<ui:define name="pesquisa">
+		<h:panelGrid columns="4">
+		
+			<h:panelGroup>
+				<h:outputText value="Lançamento:" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'INDIVIDUAL'}"/>
+				<h:selectOneMenu value="#{managedBean.lancamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'INDIVIDUAL'}">
+					<f:selectItem itemLabel="Todos os lançamentos" />
+					<f:selectItems value="#{managedBean.listaLancamentoPeriodico}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+				<h:outputText value="Conta:" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'CONTA'}"/>
+				<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'CONTA'}">
+					<f:selectItem itemLabel="Todas as contas" />
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+				<h:outputText value="Tipo de conta:" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'TIPO_CONTA'}"/>
+				<h:selectOneMenu value="#{managedBean.tipoContaSelecionada}" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'TIPO_CONTA'}">
+					<f:selectItem itemLabel="Todos os tipos de conta" />
+					<f:selectItems value="#{managedBean.listaTipoConta}" />
+				</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				Períodos:
+				<h:selectOneMenu value="#{managedBean.periodo}">
+					<f:selectItems value="#{managedBean.periodos}" />
+				</h:selectOneMenu>				
+			</h:panelGroup>
+			<h:panelGroup>
+				Considerar:
+				<h:selectOneMenu value="#{managedBean.periodoAConsiderar}">
+					<f:selectItem itemLabel="Anterior a data atual" itemValue="ANTERIOR"/>
+					<f:selectItem itemLabel="Posterior a data atual" itemValue="POSTERIOR"/>
+				</h:selectOneMenu>		
+			</h:panelGroup>
+			<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+		    	<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		    </h:commandLink>	
+		
+		</h:panelGrid>
 	
-		<h:selectOneMenu value="#{managedBean.lancamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'INDIVIDUAL'}">
-			<f:selectItem itemLabel="Todos os lançamentos" />
-			<f:selectItems value="#{managedBean.listaLancamentoPeriodico}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		</h:selectOneMenu>
-		<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'CONTA'}">
-			<f:selectItem itemLabel="Todos os lançamentos" />
-			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		</h:selectOneMenu>
-		<h:selectOneMenu value="#{managedBean.tipoContaSelecionada}" rendered="#{managedBean.opcoesSistema.formaAgrupamentoPagamento == 'TIPO_CONTA'}">
-			<f:selectItem itemLabel="Todos os lançamentos" />
-			<f:selectItems value="#{managedBean.listaTipoConta}" />
-		</h:selectOneMenu>
-		&nbsp;
-		Períodos:
-		<h:selectOneMenu value="#{managedBean.periodo}">
-			<f:selectItems value="#{managedBean.periodos}" />
-		</h:selectOneMenu>
-		&nbsp;
-		Considerar:
-		<h:selectOneMenu value="#{managedBean.periodoAConsiderar}">
-			<f:selectItem itemLabel="Anterior a data atual" itemValue="ANTERIOR"/>
-			<f:selectItem itemLabel="Posterior a data atual" itemValue="POSTERIOR"/>
-		</h:selectOneMenu>
-	</ui:define>
+	</ui:define>	
 	
 	<ui:define name="tabela">
 	
@@ -103,15 +113,11 @@
 		<p:tabView>
 		
 			<p:tab title="Despesa">
-				<p:barChart id="barPagamentosDespesa" value="#{managedBean.ultimosPagamentosDespesaModel}" legendPosition="s" title="Panorama das Despesas Fixas" min="0" max="#{managedBean.maxValueBarPagamentosDespesa}" 
-					style="height:600px" stacked="true" extender="ext1" showDataTip="false" rendered="#{managedBean.exibirGraficoDespesa}"/>
-						
+				<p:chart type="bar" responsive="true" id="barPagamentosDespesa" model="#{managedBean.ultimosPagamentosDespesaModel}" style="height:600px" rendered="#{managedBean.exibirGraficoDespesa}"/>						
 			</p:tab>
 			
 			<p:tab title="Receita">
-				<p:barChart id="barPagamentosReceita" value="#{managedBean.ultimosPagamentosReceitaModel}" legendPosition="s" title="Panorama das Receitas Fixas" min="0" max="#{managedBean.maxValueBarPagamentosReceita}" 
-					style="height:600px" stacked="true" extender="ext1" showDataTip="false" rendered="#{managedBean.exibirGraficoReceita}"/>
-						
+				<p:chart type="bar" responsive="true" id="barPagamentosReceita" model="#{managedBean.ultimosPagamentosReceitaModel}" style="height:600px" rendered="#{managedBean.exibirGraficoReceita}"/>						
 			</p:tab>		
 					
 		</p:tabView>

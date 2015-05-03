@@ -58,7 +58,7 @@ import java.util.TreeSet;
 
 import javax.faces.model.SelectItem;
 
-import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -109,8 +109,8 @@ public class PanoramaDespesaFixaController extends AbstractController {
 	private Double maxValueBarPagamentosDespesa = 1.0;
 	private Double maxValueBarPagamentosReceita = 1.0;
 	
-	private CartesianChartModel ultimosPagamentosDespesaModel;
-	private CartesianChartModel ultimosPagamentosReceitaModel;
+	private BarChartModel ultimosPagamentosDespesaModel;
+	private BarChartModel ultimosPagamentosReceitaModel;
 	
 	private double saldoCredor;
 	private double saldoDevedor;
@@ -284,7 +284,11 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
-		ultimosPagamentosDespesaModel = new CartesianChartModel();
+		ultimosPagamentosDespesaModel = new BarChartModel();
+		ultimosPagamentosDespesaModel.setLegendPosition("s");
+		ultimosPagamentosDespesaModel.setTitle("Panorama das Despesas Fixas - Despesa");
+		ultimosPagamentosDespesaModel.setStacked(true);		
+		ultimosPagamentosDespesaModel.setExtender("ext1");
 		
 		ChartSeries pagamentosSerie = new ChartSeries();		
 		ChartSeries aPagarSerie = new ChartSeries();
@@ -369,7 +373,11 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		}
 		
 		// Popula o gráfico com os dados obtido e habilita a exibição
-		ultimosPagamentosReceitaModel = new CartesianChartModel();
+		ultimosPagamentosReceitaModel = new BarChartModel();
+		ultimosPagamentosReceitaModel.setLegendPosition("s");
+		ultimosPagamentosReceitaModel.setTitle("Panorama dos Parcelamentos - Receita");
+		ultimosPagamentosReceitaModel.setStacked(true);		
+		ultimosPagamentosReceitaModel.setExtender("ext1");
 		
 		ChartSeries pagamentosSerie = new ChartSeries();		
 		ChartSeries aPagarSerie = new ChartSeries();
@@ -493,24 +501,6 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		this.exibirGraficoDespesa = exibirGraficoDespesa;
 	}
 
-	public CartesianChartModel getUltimosPagamentosDespesaModel() {
-		return ultimosPagamentosDespesaModel;
-	}
-
-	public void setUltimosPagamentosDespesaModel(
-			CartesianChartModel ultimosPagamentosDespesaModel) {
-		this.ultimosPagamentosDespesaModel = ultimosPagamentosDespesaModel;
-	}
-
-	public CartesianChartModel getUltimosPagamentosReceitaModel() {
-		return ultimosPagamentosReceitaModel;
-	}
-
-	public void setUltimosPagamentosReceitaModel(
-			CartesianChartModel ultimosPagamentosReceitaModel) {
-		this.ultimosPagamentosReceitaModel = ultimosPagamentosReceitaModel;
-	}
-
 	public Double getMaxValueBarPagamentosDespesa() {
 		return maxValueBarPagamentosDespesa;
 	}
@@ -566,361 +556,22 @@ public class PanoramaDespesaFixaController extends AbstractController {
 	public void setTipoContaSelecionada(TipoConta tipoContaSelecionada) {
 		this.tipoContaSelecionada = tipoContaSelecionada;
 	}
-	
-	/**
-	 * 
-	 *
-	private static final long serialVersionUID = -330108799008412944L;
 
-	@Autowired
-	private ILancamentoPeriodico lancamentoPeriodicoService;
-	
-	@Autowired
-	private IMoeda moedaService;
-	
-	private LancamentoPeriodico lancamentoSelecionado;
-	private Moeda moedaPadrao;
-	private String dataAConsiderar;
-	private boolean agrupar;
-	private Integer periodo;
-	private boolean exibirGraficoReceita;
-	private boolean exibirGraficoDespesa;
-	
-	private Double maxValueBarPagamentosDespesa = 1.0;
-	private Double maxValueBarPagamentosReceita = 1.0;
-	
-	private CartesianChartModel ultimosPagamentosDespesaModel;
-	private CartesianChartModel ultimosPagamentosReceitaModel;
-	
-	public PanoramaDespesaFixaController() {
-		moduleTitle = "Últimos Pagamentos Realizados";
-	}
-
-	@Override
-	protected void initializeEntity() {
-	}
-
-	@Override
-	public String startUp() {
-		exibirGraficoDespesa = false;
-		exibirGraficoReceita = false;
-		this.carregarMoedaPadrao();
-		return "/pages/ResumoEstatistica/ultimoPagamentoRealizado";
-	}
-
-	public void find() {
-		try {			
-			// Traz os pagamentos quitados do lançamento fixo selecionado, ou todos se nenhum for selecionado
-			List<PagamentoPeriodo> pagamentos = new ArrayList<>();
-			List<PagamentoPeriodo> pagamentosReceita = new ArrayList<>();
-			List<PagamentoPeriodo> pagamentosDespesa = new ArrayList<>();
-			if (lancamentoSelecionado == null) {
-				if (!agrupar) {
-					warnMessage("Opção de visualização não disponível. Marque a opção 'Agrupar' para visualizar.");
-					return;
-				}					
-				pagamentos = lancamentoPeriodicoService.buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico.FIXO, getUsuarioLogado());
-			} else {
-				pagamentos = lancamentoPeriodicoService.buscarPagamentosPagosPorLancamentoPeriodico(lancamentoSelecionado);
-			}
-			if (pagamentos == null || pagamentos.size() == 0) {
-				warnMessage("O lançamento selecionado não contém pagamentos registrados!");
-				return;
-			}
-			
-			// Separa os pagamento de lançamentos fixos de receita dos de despesa
-			for (PagamentoPeriodo pagamento : pagamentos) {
-				if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
-					pagamentosDespesa.add(pagamento);
-				} else {
-					pagamentosReceita.add(pagamento);
-				}
-			}
-			
-			// Envia a lista de pagamento para os respectivos métodos para gerar o gráfico
-			gerarGraficoDespesa(pagamentosDespesa);
-			gerarGraficoReceita(pagamentosReceita);
-			
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	private void carregarMoedaPadrao() {
-		try {
-			if (moedaPadrao == null) {
-				moedaPadrao = moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
-	private void gerarGraficoDespesa(List<PagamentoPeriodo> pagamentos) {
-		// Verifica se deve continuar com a geração do gráfico a partir da quantidade de lançamentos
-		if (pagamentos == null || pagamentos.size() == 0) {
-			exibirGraficoDespesa = false;
-			return;
-		}
-		
-		// Instancia o Map que irá gravar os dados que irão gerar o gráfico
-		Map<String, Double> dadosPagamento = new HashMap<String, Double>();
-		String dataKey = "";
-		int quantIteracoes = 0;
-		maxValueBarPagamentosDespesa = 1.0;
-		
-		// Converte o valor do pagamento para a moeda padrão
-		for (PagamentoPeriodo pagamento : pagamentos) {
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-		}
-						
-		if (agrupar) {
-			// Gera as entradas de acordo com a quantidade de períodos
-			Calendar dataAtual = Calendar.getInstance();
-			for (Integer i = 1; i <= periodo; i++) {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(dataAtual.getTime());
-				dadosPagamento.put(dataKey, 0.0);
-				dataAtual.add(Calendar.MONTH, -1);
-			}
-			
-			// Itera a lista de pagamentos para somar no mês/ano correspondente
-			for (PagamentoPeriodo pagamento : pagamentos) {
-				// Determina qual data será usada
-				if (dataAConsiderar.equals("VENCIMENTO")) {
-					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
-				} else {
-					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
-				}	
-				// Busca a entrada no Map e soma o valor do pagamento do período
-				if (dadosPagamento.get(dataKey) != null) {
-					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
-					
-					// Determina o valor máximo do eixo Y
-					if (dadosPagamento.get(dataKey) > maxValueBarPagamentosDespesa)
-						maxValueBarPagamentosDespesa = dadosPagamento.get(dataKey) + 100;
-				}	
-			}
-		} else {
-			for (PagamentoPeriodo pagamento : pagamentos) {
-				if (dataAConsiderar.equals("VENCIMENTO")) {
-					dataKey = new SimpleDateFormat("dd/MM/yyyy").format(pagamento.getDataVencimento());
-				} else {
-					dataKey = new SimpleDateFormat("dd/MM/yyyy").format(pagamento.getDataPagamento());
-				}	
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
-				dadosPagamento.put(dataKey, pagamento.getValorPago());
-				
-				// Determina o valor máximo do eixo Y
-				if (pagamento.getValorPago() > maxValueBarPagamentosDespesa)
-					maxValueBarPagamentosDespesa = dadosPagamento.get(dataKey) + 100;
-				
-				quantIteracoes++;
-				if (quantIteracoes == periodo) break;
-			}
-		}
-		
-		// Popula o gráfico com os dados obtido e habilita a exibição
-		ultimosPagamentosDespesaModel = new CartesianChartModel();
-		
-		ChartSeries pagamentosSerie = new ChartSeries();
-		pagamentosSerie.setLabel("Pagamento efetuado");
-		for (String key : dadosPagamento.keySet()) {
-			pagamentosSerie.set(key, dadosPagamento.get(key));
-		}
-		
-		ultimosPagamentosDespesaModel.addSeries(pagamentosSerie);
-		
-		exibirGraficoDespesa = true;
-	}
-	
-	private void gerarGraficoReceita(List<PagamentoPeriodo> pagamentos) {
-		// Verifica se deve continuar com a geração do gráfico a partir da quantidade de lançamentos
-		if (pagamentos == null || pagamentos.size() == 0) {
-			exibirGraficoReceita = false;
-			return;
-		}
-		
-		// Instancia o Map que irá gravar os dados que irão gerar o gráfico
-		Map<String, Double> dadosPagamento = new HashMap<String, Double>();
-		String dataKey = "";
-		int quantIteracoes = 0;
-		maxValueBarPagamentosReceita = 1.0;
-		
-		// Converte o valor do pagamento para a moeda padrão
-		for (PagamentoPeriodo pagamento : pagamentos) {
-			if (!pagamento.getLancamentoPeriodico().getMoeda().equals(moedaPadrao)) {
-				pagamento.setValorPago(pagamento.getValorPago() * pagamento.getLancamentoPeriodico().getMoeda().getValorConversao());
-			}
-		}
-						
-		if (agrupar) {
-			// Gera as entradas de acordo com a quantidade de períodos
-			Calendar dataAtual = Calendar.getInstance();
-			for (Integer i = 1; i <= periodo; i++) {
-				dataKey = new SimpleDateFormat("MM/yyyy").format(dataAtual.getTime());
-				dadosPagamento.put(dataKey, 0.0);
-				dataAtual.add(Calendar.MONTH, -1);
-			}
-			
-			// Itera a lista de pagamentos para somar no mês/ano correspondente
-			for (PagamentoPeriodo pagamento : pagamentos) {
-				// Determina qual data será usada
-				if (dataAConsiderar.equals("VENCIMENTO")) {
-					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataVencimento());
-				} else {
-					dataKey = new SimpleDateFormat("MM/yyyy").format(pagamento.getDataPagamento());
-				}	
-				// Busca a entrada no Map e soma o valor do pagamento do período
-				if (dadosPagamento.get(dataKey) != null) {
-					dadosPagamento.put(dataKey, dadosPagamento.get(dataKey) + pagamento.getValorPago());
-					
-					// Determina o valor máximo do eixo Y
-					if (dadosPagamento.get(dataKey) > maxValueBarPagamentosReceita)
-						maxValueBarPagamentosReceita = dadosPagamento.get(dataKey) + 100;
-				}	
-			}
-		} else {
-			for (PagamentoPeriodo pagamento : pagamentos) {
-				if (dataAConsiderar.equals("VENCIMENTO")) {
-					dataKey = new SimpleDateFormat("dd/MM/yyyy").format(pagamento.getDataVencimento());
-				} else {
-					dataKey = new SimpleDateFormat("dd/MM/yyyy").format(pagamento.getDataPagamento());
-				}	
-				
-				// Busca a entrada no Map e soma o valor do pagamento do período
-				dadosPagamento.put(dataKey, pagamento.getValorPago());
-				
-				// Determina o valor máximo do eixo Y
-				if (pagamento.getValorPago() > maxValueBarPagamentosReceita)
-					maxValueBarPagamentosReceita = dadosPagamento.get(dataKey) + 100;
-				
-				quantIteracoes++;
-				if (quantIteracoes == periodo) break;
-			}
-		}
-		
-		// Popula o gráfico com os dados obtido e habilita a exibição
-		ultimosPagamentosReceitaModel = new CartesianChartModel();
-		
-		ChartSeries pagamentosSerie = new ChartSeries();
-		pagamentosSerie.setLabel("Pagamento efetuado");
-		for (String key : dadosPagamento.keySet()) {
-			pagamentosSerie.set(key, dadosPagamento.get(key));
-		}
-		
-		ultimosPagamentosReceitaModel.addSeries(pagamentosSerie);
-		
-		exibirGraficoReceita = true;
-	}
-	
-	public List<LancamentoPeriodico> getListaLancamentoPeriodico() {
-		try {
-			return lancamentoPeriodicoService.buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico.FIXO, StatusLancamento.ATIVO, getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
-	}
-	
-	public List<SelectItem> getPeriodos() {
-		List<SelectItem> periodos = new ArrayList<>();
-		for (int i = 1; i <= 12; i++) {
-			periodos.add(new SelectItem(Integer.valueOf(i), Integer.toString(i)));
-		}
-		return periodos;
-	}
-
-	public LancamentoPeriodico getLancamentoSelecionado() {
-		return lancamentoSelecionado;
-	}
-
-	public void setLancamentoSelecionado(LancamentoPeriodico lancamentoSelecionado) {
-		this.lancamentoSelecionado = lancamentoSelecionado;
-	}
-
-	public String getDataAConsiderar() {
-		return dataAConsiderar;
-	}
-
-	public void setDataAConsiderar(String dataAConsiderar) {
-		this.dataAConsiderar = dataAConsiderar;
-	}
-
-	public boolean isAgrupar() {
-		return agrupar;
-	}
-
-	public void setAgrupar(boolean agrupar) {
-		this.agrupar = agrupar;
-	}
-
-	public Integer getPeriodo() {
-		return periodo;
-	}
-
-	public void setPeriodo(Integer periodo) {
-		this.periodo = periodo;
-	}
-
-	public Moeda getMoedaPadrao() {
-		return moedaPadrao;
-	}
-
-	public void setMoedaPadrao(Moeda moedaPadrao) {
-		this.moedaPadrao = moedaPadrao;
-	}
-
-	public boolean isExibirGraficoReceita() {
-		return exibirGraficoReceita;
-	}
-
-	public void setExibirGraficoReceita(boolean exibirGraficoReceita) {
-		this.exibirGraficoReceita = exibirGraficoReceita;
-	}
-
-	public boolean isExibirGraficoDespesa() {
-		return exibirGraficoDespesa;
-	}
-
-	public void setExibirGraficoDespesa(boolean exibirGraficoDespesa) {
-		this.exibirGraficoDespesa = exibirGraficoDespesa;
-	}
-
-	public CartesianChartModel getUltimosPagamentosDespesaModel() {
+	public BarChartModel getUltimosPagamentosDespesaModel() {
 		return ultimosPagamentosDespesaModel;
 	}
 
 	public void setUltimosPagamentosDespesaModel(
-			CartesianChartModel ultimosPagamentosDespesaModel) {
+			BarChartModel ultimosPagamentosDespesaModel) {
 		this.ultimosPagamentosDespesaModel = ultimosPagamentosDespesaModel;
 	}
 
-	public CartesianChartModel getUltimosPagamentosReceitaModel() {
+	public BarChartModel getUltimosPagamentosReceitaModel() {
 		return ultimosPagamentosReceitaModel;
 	}
 
 	public void setUltimosPagamentosReceitaModel(
-			CartesianChartModel ultimosPagamentosReceitaModel) {
+			BarChartModel ultimosPagamentosReceitaModel) {
 		this.ultimosPagamentosReceitaModel = ultimosPagamentosReceitaModel;
 	}
-
-	public Double getMaxValueBarPagamentosDespesa() {
-		return maxValueBarPagamentosDespesa;
-	}
-
-	public void setMaxValueBarPagamentosDespesa(Double maxValueBarPagamentosDespesa) {
-		this.maxValueBarPagamentosDespesa = maxValueBarPagamentosDespesa;
-	}
-
-	public Double getMaxValueBarPagamentosReceita() {
-		return maxValueBarPagamentosReceita;
-	}
-
-	public void setMaxValueBarPagamentosReceita(Double maxValueBarPagamentosReceita) {
-		this.maxValueBarPagamentosReceita = maxValueBarPagamentosReceita;
-	}
-	*/
 }
