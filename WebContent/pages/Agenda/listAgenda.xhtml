@@ -57,27 +57,35 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{agendaMB}" />
+	<ui:param name="colunaPesquisa" value="6" />
 	
-	<ui:define name="pesquisa">
-		Descrição:
-	    <p:inputText value="#{managedBean.criterioBusca.descricao}" size="15"/>
-	    &nbsp;
-	    Tipo:
-	    <h:selectOneMenu value="#{managedBean.criterioBusca.tipo}">
-	    	<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
-		</h:selectOneMenu>
-	    &nbsp;
-	    Início:
-	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.inicio}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>
-	    &nbsp;
-	    Fim:
-	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.fim}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>	    
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			Descrição:
+		    <p:inputText value="#{managedBean.criterioBusca.descricao}" size="15"/>
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    Tipo:
+		    <h:selectOneMenu value="#{managedBean.criterioBusca.tipo}">
+		    	<f:selectItem itemLabel="Todos" />
+				<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
+			</h:selectOneMenu>
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    Início:
+		    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.inicio}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    Fim:
+		    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.fim}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>	    	    
 	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
 
 	<ui:define name="colunas">
 		<p:column style="text-align: center; vertical-align: middle;">
@@ -101,22 +109,23 @@
 	</ui:define>
 	
 	<ui:define name="acoes">
-  		<p:column style="text-align: center; vertical-align: middle;">
+  		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>		
-			<h:commandButton value="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+			<h:commandLink title="Editar" action="#{managedBean.edit}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
+			</h:commandLink>								
 	  		&nbsp;&nbsp;&nbsp;			
-			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.tipoAgendamento != 'PREVISAO'}">
+			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.tipoAgendamento != 'PREVISAO'}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>
-  		</p:column>
+			</h:commandLink>
+  		</h:column>
      </ui:define>
 
-	<ui:define name="outras_opcoes">
-		<h:commandLink value="Ir para o calendário >>>>" action="#{calendarioAtividadesMB.startUp}"/>
-	</ui:define>
+	<ui:define name="outras_opcoes"/>
+	
 </ui:composition>
 </html>

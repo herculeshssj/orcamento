@@ -65,53 +65,67 @@
      	<h:form id="frmListEntity">
      	
      		<p:messages />
-     	
-     		<ui:insert name="botoes">
-	     		<h:commandLink action="#{managedBean.create}" title="Novo registro">
-	     			<p:graphicImage value="/resources/images/novo.png"/>
-	     		</h:commandLink>
-     		</ui:insert>     		
-     		&nbsp;
-     		<ui:insert name="pesquisa">
-     			PESQUISA SIMPLES
-     		</ui:insert>     		
-     		&nbsp;
-     		<ui:insert name="botao_pesquisa">
-	     		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
-	     			<p:graphicImage value="/resources/images/pesquisar.png"/>
-	     		</h:commandLink>
-     		</ui:insert>
-     		&nbsp;
-     		<ui:insert name="pesquisa_avancada">
-     			
-     		</ui:insert>     		
-     		<br/><br/>
      		
+     		<ui:insert name="pesquisa">
+     			
+     			<h:panelGrid columns="#{colunaPesquisa}">
+     			
+     				<ui:insert name="botoes">
+	     				<h:commandLink action="#{managedBean.create}" title="Novo">
+	     					<h:graphicImage id="imgNew" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+	     				</h:commandLink>
+     				</ui:insert>
+     				
+     				<ui:insert name="parametro_pesquisa">
+     					<h:panelGroup>
+		     				Parâmetro:
+		     				<h:selectOneMenu>
+		     					<f:selectItem itemLabel="Selecione uma opção"/>
+		     				</h:selectOneMenu>
+	     				</h:panelGroup>
+     				</ui:insert>
+     				
+     				<ui:insert name="botao_pesquisa">
+	     				<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+			     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+			     		</h:commandLink>
+		     		</ui:insert>
+		     		
+		     		<ui:insert name="pesquisa_avancada">
+     					<h:commandLink value="Pesquisa avançada" action="#{managedBean.advancedSearch}"/>
+     				</ui:insert> 
+     			
+     			</h:panelGrid>     			
+     			
+     		</ui:insert>
+     			
      		<ui:insert name="tabela">
      		
-     		<p:dataTable id="tableListEntity" width="100%" rows="15" value="#{managedBean.listEntity}" var="item" paginator="true">
+     		<h:dataTable id="tableListEntity" width="100%" value="#{managedBean.listEntity}" var="item">
      			
      			<ui:insert name="colunas">
-     				<p:column style="text-align: center; vertical-align: middle;">
+     				<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="### NÃO DISPONÍVEL ###"/>
 						</f:facet>						
-	  				</p:column>	  						
+	  				</h:column>	  						
      			</ui:insert>
      			
      			<ui:insert name="acoes">
-     				<p:column style="text-align: center; vertical-align: middle;" exportable="false">
+     				<h:column style="text-align: center; vertical-align: middle;" exportable="false">
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>		
-						<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+						<h:commandLink title="Editar" action="#{managedBean.edit}">
+							<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 							<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-						</h:commandButton>								
+						</h:commandLink>								
 	  					&nbsp;&nbsp;&nbsp;
-						<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
+						<h:commandLink title="Excluir" action="#{managedBean.view}">
+							<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 							<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-						</h:commandButton>
-	  				</p:column>
+						</h:commandLink>
+	  				</h:column>
      			</ui:insert>
      			
      			<ui:insert name="tabela_rodape">
@@ -119,7 +133,7 @@
 	        			<h:outputText value="#{managedBean.quantRegistros} item(ns) encontrado(s)"></h:outputText>
 	    			</f:facet>
     			</ui:insert>
-     		</p:dataTable>
+     		</h:dataTable>
      		
      		</ui:insert>
      		

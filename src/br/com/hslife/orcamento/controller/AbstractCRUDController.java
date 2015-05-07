@@ -67,6 +67,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	protected String goToListPage;
 	protected String goToFormPage;
 	protected String goToViewPage;
+	protected String goToSearchPage;
 	
 	protected String operation = "list";
 	
@@ -75,6 +76,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 		goToListPage = "/pages/" + entity.getClass().getSimpleName() + "/list" + entity.getClass().getSimpleName();
 		goToFormPage = "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
 		goToViewPage = "/pages/" + entity.getClass().getSimpleName() + "/view" + entity.getClass().getSimpleName();
+		goToSearchPage = "/pages/" + entity.getClass().getSimpleName() + "/search" + entity.getClass().getSimpleName();
 	}
 	
 	protected abstract ICRUDService getService();
@@ -177,6 +179,16 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	}
 	
 	public abstract void find();
+	
+	public String advancedSearch() {
+		operation = "search";
+		actionTitle = " - Busca avançada";
+		return goToSearchPage;
+	}
+	
+	public String search() {
+		return goToListPage;
+	}
 	
 	public String cancel() {
 		return list();
