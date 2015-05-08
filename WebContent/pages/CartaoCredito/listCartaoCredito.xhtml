@@ -57,17 +57,23 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{cartaoCreditoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="pesquisa">
-		Descrição:
-		<p:inputText value="#{managedBean.descricaoCartao}"/> 
-		&nbsp;
-	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
-	    Somente ativos
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			Descrição:
+		    <p:inputText value="#{managedBean.descricaoCartao}"/>
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    <h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    	Somente ativos
+	    </h:panelGroup>	    	    
 	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
 
 	<ui:define name="colunas">
-		<p:column style="vertical-align: middle;">
+		<h:column style="vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Descrição"/>
 			</f:facet>
@@ -111,22 +117,24 @@
 					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 			</h:panelGroup>
-		</p:column>		
+		</h:column>		
 	</ui:define>
 	
 	<ui:define name="acoes">
-     	<p:column style="text-align: center; vertical-align: middle;" exportable="false">
+     	<h:column style="text-align: center; vertical-align: middle;" exportable="false">
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
-			</f:facet>		
-			<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+			</f:facet>
+			<h:commandLink title="Editar" action="#{managedBean.edit}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		&nbsp;
-			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.cartaoSubstituto == null}">
+			</h:commandLink>										
+	  		<p:spacer width="10"/>
+	  		<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.cartaoSubstituto == null}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>
-			&nbsp;
+			</h:commandLink>
+			<p:spacer width="10"/>
 			<h:panelGroup>
 				<h:commandButton title="Ativar cartão" image="/resources/images/habilitar.png" action="#{managedBean.ativarCartaoView}" rendered="#{!item.ativo and item.cartaoSubstituto == null}">
 					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
@@ -135,11 +143,11 @@
 					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
 				</h:commandButton>
 			</h:panelGroup>
-			&nbsp;
+			<p:spacer width="10"/>
 			<h:commandButton title="Substituir cartão" image="/resources/images/substituir.png" action="#{managedBean.substituirCartaoView}" rendered="#{item.cartaoSubstituto == null}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
-	  	</p:column>
+	  	</h:column>
      </ui:define>
 
 </ui:composition>
