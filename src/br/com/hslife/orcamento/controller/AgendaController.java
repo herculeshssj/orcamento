@@ -174,6 +174,16 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 		return "Agenda (" + quantCompromissos.toString() + ")";
 	}
 	
+	public List<Agenda> getAgendamentosDoDia() {
+		List<Agenda> agendas = new ArrayList<Agenda>();
+		try {
+			return getService().buscarAgendamentosDoDia();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return agendas;
+	}
+	
 	public List<Integer> getListaHoras() {
 		List<Integer> horas = new LinkedList<>();
 		for (int i = 0; i < 24; i++) {

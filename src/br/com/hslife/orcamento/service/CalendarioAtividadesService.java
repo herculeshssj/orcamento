@@ -120,4 +120,21 @@ public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> imp
 		fim.setSeconds(59);
 		return getRepository().countAgendamentoByDataInicioOrDataFimAndAlerta(inicio, fim, true);
 	}
+	
+	@SuppressWarnings("deprecation")
+	public List<Agenda> buscarAgendamentosDoDia() throws BusinessException {
+		CriterioAgendamento criterioBusca = new CriterioAgendamento();
+		Date inicio = new Date();
+		inicio.setHours(0);
+		inicio.setMinutes(0);
+		inicio.setSeconds(0);
+
+		Date fim = new Date(inicio.getTime());
+		fim.setHours(23);
+		fim.setMinutes(59);
+		fim.setSeconds(59);
+		criterioBusca.setInicio(inicio);
+		criterioBusca.setFim(fim);
+		return getRepository().findByCriterioAgendamento(criterioBusca);
+	}
 }

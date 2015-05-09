@@ -192,6 +192,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	@Override
+	public String create() {
+		entity.setTipoLancamento(TipoLancamento.DESPESA);
+		return super.create();
+	}
+	
+	@Override
 	public String edit() {
 		String goToPage = super.edit();
 		if (goToPage.equals(goToFormPage)) {

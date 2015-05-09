@@ -64,7 +64,7 @@
 			<label for="frmFormEntity:txtTipoAgendamento"><h:outputText value="Tipo de agendamento:" rendered="#{managedBean.entity.tipoAgendamento != 'PREVISAO'}"/></label>
 			<h:selectOneRadio id="txtTipoAgendamento" value="#{managedBean.entity.tipoAgendamento}" rendered="#{managedBean.entity.tipoAgendamento != 'PREVISAO'}" disabled="#{managedBean.entity.concluido}">
 				<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
-				<p:ajax update="pnlLocal,pnlDiaInteiro,pnlConcluido" />
+				<p:ajax update="pnlLocal,pnlDiaInteiro,pnlConcluido,pnlPrioridade" />
 			</h:selectOneRadio>
 				
 			<label for="frmFormEntity:txtDescricao">Descrição:</label>
@@ -105,28 +105,30 @@
 	    		</h:selectOneMenu>
 			</h:panelGrid>
 			
-			<label for="frmFormEntity:txtPrioridade"><h:outputText value="Prioridade:" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}" /></label>
-			<h:selectOneMenu id="txtPrioridade" value="#{managedBean.entity.prioridadeTarefa}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}" disabled="#{managedBean.entity.concluido}">
-				<f:selectItems value="#{managedBean.listaPrioridadeTarefa}" />
-			</h:selectOneMenu>
+			<h:panelGroup id="pnlPrioridade">
+				<label for="frmFormEntity:txtPrioridade"><h:outputText value="Prioridade:" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}" /></label>
+				<h:selectOneMenu id="txtPrioridade" value="#{managedBean.entity.prioridadeTarefa}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}" disabled="#{managedBean.entity.concluido}">
+					<f:selectItems value="#{managedBean.listaPrioridadeTarefa}" />
+				</h:selectOneMenu>
+			</h:panelGroup>
 			
-			<h:panelGroup id="pnlDiaInteiro">
-				<label for="frmFormEntity:txtDiaInteiro"><h:outputText value="Dia inteiro:" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/></label>
+			<h:panelGroup id="pnlDiaInteiro">				
 				<h:selectBooleanCheckbox id="txtDiaInteiro" value="#{managedBean.entity.diaInteiro}" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/>
+				<label for="frmFormEntity:txtDiaInteiro"><h:outputText value="Dia inteiro:" rendered="#{managedBean.entity.tipoAgendamento == 'COMPROMISSO'}"/></label>
 			</h:panelGroup>
 			
-			<h:panelGroup id="pnlConcluido">
-				<label for="frmFormEntity:txtConcluido"><h:outputText value="Concluído:" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/></label>
+			<h:panelGroup id="pnlConcluido">				
 				<h:selectBooleanCheckbox id="txtConcluido" value="#{managedBean.entity.concluido}" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/>
+				<label for="frmFormEntity:txtConcluido"><h:outputText value="Concluído:" rendered="#{managedBean.entity.tipoAgendamento == 'TAREFA'}"/></label>
 			</h:panelGroup>
 			
-			<label for="frmFormEntity:txtEmitirAlerta">Emitir alerta:</label>
 			<h:selectBooleanCheckbox id="txtEmitirAlerta" value="#{managedBean.entity.emitirAlerta}" disabled="#{managedBean.entity.concluido}"/>
+			<label for="frmFormEntity:txtEmitirAlerta">Emitir alerta:</label>
 			
 			<br/>
 			
 			<label for="frmFormEntity:txtNotas">Notas:</label>
-			<h:inputTextarea id="txtNotas" value="#{managedBean.entity.notas}" size="70" rows="3" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO' or managedBean.entity.concluido}" />
+			<h:inputTextarea id="txtNotas" value="#{managedBean.entity.notas}" disabled="#{managedBean.entity.tipoAgendamento == 'PREVISAO' or managedBean.entity.concluido}" />
 		
 		</h:panelGroup>
 		

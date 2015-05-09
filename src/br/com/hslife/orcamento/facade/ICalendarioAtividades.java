@@ -62,4 +62,6 @@ public interface ICalendarioAtividades extends ICRUDService<Agenda> {
 	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) throws BusinessException;
 	
 	public Long contarAgendamentosDeHojeComAlerta() throws BusinessException;
+	
+	public List<Agenda> buscarAgendamentosDoDia() throws BusinessException;
 }

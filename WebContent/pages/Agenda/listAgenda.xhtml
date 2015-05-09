@@ -88,24 +88,24 @@
 	<ui:define name="pesquisa_avancada"></ui:define>
 
 	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
+		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Descrição"/>
 			</f:facet>
 			<h:outputText value="#{item.descricao}" />
-  		</p:column>
-  		<p:column style="text-align: center; vertical-align: middle;">
+  		</h:column>
+  		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Tipo"/>
 			</f:facet>
 			<h:outputText value="#{item.tipoAgendamento}" />
-  		</p:column>  			
-  		<p:column style="text-align: center; vertical-align: middle;">
+  		</h:column>  			
+  		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Data"/>
 			</f:facet>
 			<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
-  		</p:column>
+  		</h:column>
 	</ui:define>
 	
 	<ui:define name="acoes">

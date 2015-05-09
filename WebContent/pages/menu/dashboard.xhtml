@@ -61,7 +61,28 @@
 
 	<ui:define name="conteudo">
 		
-		<center>Aqui entrará o dashboard do sistema.</center>
+		<h5>Agenda do dia</h5>
+		
+		<h:dataTable value="#{agendaMB.agendamentosDoDia}" var="item">
+			<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Descrição"/>
+				</f:facet>
+				<h:outputText value="#{item.descricao}" />
+	  		</h:column>
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Tipo"/>
+				</f:facet>
+				<h:outputText value="#{item.tipoAgendamento}" />
+	  		</h:column>  			
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Data"/>
+				</f:facet>
+				<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
+	  		</h:column>
+  		</h:dataTable>
      
 	</ui:define>
 	
