@@ -136,17 +136,20 @@
 			</h:commandLink>
 			<p:spacer width="10"/>
 			<h:panelGroup>
-				<h:commandButton title="Ativar cartão" image="/resources/images/habilitar.png" action="#{managedBean.ativarCartaoView}" rendered="#{!item.ativo and item.cartaoSubstituto == null}">
+				<h:commandLink title="Ativar cartão" action="#{managedBean.ativarCartaoView}" rendered="#{!item.ativo and item.cartaoSubstituto == null}">
+					<h:graphicImage id="imgEnable" height="48" width="48" value="/resources/images/svg/checkmark.svg"/>
 					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
-				</h:commandButton>					
-				<h:commandButton title="Desativar cartão" image="/resources/images/fechar.png" action="#{managedBean.desativarCartaoView}" rendered="#{item.ativo}">
+				</h:commandLink>					
+				<h:commandLink title="Desativar cartão" action="#{managedBean.desativarCartaoView}" rendered="#{item.ativo}">
+					<h:graphicImage id="imgDisable" height="48" width="48" value="/resources/images/svg/cancel.svg"/>
 					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
-				</h:commandButton>
+				</h:commandLink>
 			</h:panelGroup>
 			<p:spacer width="10"/>
-			<h:commandButton title="Substituir cartão" image="/resources/images/substituir.png" action="#{managedBean.substituirCartaoView}" rendered="#{item.cartaoSubstituto == null}">
+			<h:commandLink title="Substituir cartão" action="#{managedBean.substituirCartaoView}" rendered="#{item.cartaoSubstituto == null}">
+				<h:graphicImage id="imgRefresh" height="48" width="48" value="/resources/images/svg/refresh.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>
+			</h:commandLink>
 	  	</h:column>
      </ui:define>
 

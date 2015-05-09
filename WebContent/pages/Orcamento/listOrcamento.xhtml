@@ -77,7 +77,9 @@
 			<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
 		</h:commandButton>
 		&nbsp;
-		<h:commandButton title="Atualizar" image="/resources/images/circular.png" action="#{managedBean.atualizarValores}"/>
+		<h:commandLink title="Atualizar" image="/resources/images/circular.png" action="#{managedBean.atualizarValores}">
+			<h:graphicImage id="imgUpdate" height="48" width="48" value="/resources/images/svg/synchronize.svg"/>
+		</h:commandLink>
 		
 		<br/><br/>
 		
