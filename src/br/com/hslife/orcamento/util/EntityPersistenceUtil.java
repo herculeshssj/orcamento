@@ -100,5 +100,13 @@ public class EntityPersistenceUtil {
 			throw new BusinessException("Campo " + nomeCampo + " não pode ser nulo.");
 		}
 	}
+	
+	public static void validaCampoInteiroZerado(String nomeCampo, Integer campo) throws BusinessException {
+		if (campo == null) {
+			throw new BusinessException("Campo " + nomeCampo + " não pode ser nulo.");
+		} else if (campo.intValue() == 0) {
+			throw new BusinessException("Campo " + nomeCampo + " não pode ser zero.");
+		}
+	}
 }
 

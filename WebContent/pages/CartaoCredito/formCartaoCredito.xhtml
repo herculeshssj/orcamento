@@ -58,90 +58,108 @@
 	<ui:param name="managedBean" value="#{cartaoCreditoMB}" />
 	
 	<ui:define name="campos">
-			
-		<h:panelGrid columns="2">
-		
-			Banco:	     		
-			<h:selectOneMenu value="#{managedBean.entity.banco}" converter="entityConverter" disabled="#{!managedBean.entity.ativo}">
-				<f:selectItem itemLabel="Nenhum banco"/>
-				<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
-			</h:selectOneMenu>
-					
-			Descrição:				
-			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" maxlength="50" size="50" required="true" requiredMessage="Informe a descrição!" disabled="#{!managedBean.entity.ativo}"/>			
-			
-			Tipo de cartão:
-			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.entity.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!" disabled="#{!managedBean.entity.ativo}" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}">
-				<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
-			</p:selectOneRadio>
-			<h:outputText value="#{managedBean.entity.tipoCartao}" rendered="#{managedBean.entity.tipoCartao == 'CREDITO' and managedBean.operation != 'create'}" />			
-			
-			Bandeira:
-			<h:selectOneMenu id="txtBandeira" value="#{managedBean.entity.bandeira}" required="true" requiredMessage="Informe o bandeira do cartão!" disabled="#{!managedBean.entity.ativo}">
-				<f:selectItems value="#{enumCombo.listaBandeira}"/>
-			</h:selectOneMenu>			
-			
-			Abrangência:
-			<p:selectOneRadio id="txtAbrangencia" value="#{managedBean.entity.abrangencia}" required="true" requiredMessage="Informe o abrangência do cartão!" disabled="#{!managedBean.entity.ativo}">
-				<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
-			</p:selectOneRadio>			
-			
-			Limite do cartão:
-			<p:inputText id="txtLimiteCartao" value="#{managedBean.entity.limiteCartao}" size="10" required="true" requiredMessage="Informe o limite do cartão!" disabled="#{!managedBean.entity.ativo}">
-				<f:convertNumber type="currency" pattern="###.##"/>
-			</p:inputText>			
-			
-			Limite para saque:
-			<p:inputText value="#{managedBean.entity.limiteSaque}" size="10" disabled="#{!managedBean.entity.ativo}">
-				<f:convertNumber type="currency" pattern="###.##"/>
-			</p:inputText>			
-			
-			Juros (%):
-			<p:inputText value="#{managedBean.entity.juros}" size="10" disabled="#{!managedBean.entity.ativo}">
-				<f:convertNumber type="percent" pattern="###.##"/>
-			</p:inputText>			
-			
-			Multa (%):
-			<p:inputText value="#{managedBean.entity.multa}" size="10" disabled="#{!managedBean.entity.ativo}">
-				<f:convertNumber type="percent" pattern="###.##"/>
-			</p:inputText>			
-			
-			Dia de vencimento da fatura:
-			<p:inputText id="txtDiaVencimentoFatura" value="#{managedBean.entity.diaVencimentoFatura}" size="5" required="true" requiredMessage="Informe o dia de vencimento da fatura!" disabled="#{!managedBean.entity.ativo}"/>			
-			
-			Dia de fechamento da fatura:
-			<p:inputText id="txtDiaFechamentoFatura" value="#{managedBean.entity.diaFechamentoFatura}" size="5" required="true" requiredMessage="Informe o dia de fechamento da fatura!" disabled="#{!managedBean.entity.ativo}"/>			
-			
-			Validade:
-			<h:panelGroup>
-				<p:inputText value="#{managedBean.entity.mesValidade}" size="2" required="true" requiredMessage="Informe o mês de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
-				<h:outputText value=" / " />
-				<p:inputText value="#{managedBean.entity.anoValidade}" size="4" required="true" requiredMessage="Informe o ano de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
-			</h:panelGroup>
-			
-			Número do cartão:
-			<h:panelGroup>
-				<h:inputText id="txtNumeroCartao" value="#{managedBean.numeroCartao}" />
-				<p:tooltip for="txtNumeroCartao">
-					<h:outputText value="Informe o nº do cartão para usar a importação de lançamentos. O número ficará registrado no sistema de forma criptografada."/>
-				</p:tooltip>
-			</h:panelGroup>
-			
-			<h:outputText value="Cartão substituto:" rendered="#{managedBean.operation == 'edit'}"/>			
-			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}" rendered="#{managedBean.operation == 'edit'}"/>
-						
-		</h:panelGrid>
 	
+		<p:outputPanel id="pnlCartaoCredito">
+	
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" maxlength="50" size="50" required="true" requiredMessage="Informe a descrição!" disabled="#{!managedBean.entity.ativo}"/>			
+				
+		Banco:
+		<h:selectOneMenu value="#{managedBean.entity.banco}" converter="entityConverter" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItem itemLabel="Nenhum banco"/>
+			<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+		</h:selectOneMenu>
+			
+		Bandeira:
+		<h:selectOneMenu id="txtBandeira" value="#{managedBean.entity.bandeira}" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItem itemLabel="Nenhuma"/>
+			<f:selectItems value="#{enumCombo.listaBandeira}"/>
+		</h:selectOneMenu>
+		
+		Tipo de cartão:
+		<h:selectOneRadio id="txtTipoCartao" value="#{managedBean.entity.tipoCartao}" disabled="#{!managedBean.entity.ativo or (managedBean.entity.tipoCartao == 'CREDITO' and managedBean.operation != 'create')}">
+			<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
+			<f:ajax update="pnlCartaoCredito" event="change" listener="#{managedBean.atualizaPainel}"/>
+		</h:selectOneRadio>
+		
+		Abrangência:
+		<h:selectOneRadio id="txtAbrangencia" value="#{managedBean.entity.abrangencia}" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
+		</h:selectOneRadio>	
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+			<h:panelGroup>
+				<label for="frmFormEntity:txtLimiteCartao">Limite do cartão:</label>
+				<h:inputText id="txtLimiteCartao" value="#{managedBean.entity.limiteCartao}" size="10" disabled="#{!managedBean.entity.ativo}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:inputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtLimiteSaque">Limite para saque:</label>
+				<h:inputText id="txtLimiteSaque" value="#{managedBean.entity.limiteSaque}" size="10" disabled="#{!managedBean.entity.ativo}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:inputText>
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+			<h:panelGroup>
+				<label for="frmFormEntity:txtJuros">Juros:</label>
+				<h:inputText id="txtJuros" value="#{managedBean.entity.juros}" size="10" disabled="#{!managedBean.entity.ativo}">
+					<f:convertNumber type="percent" pattern="###.##"/>
+				</h:inputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtMulta">Multa:</label>
+				<h:inputText id="txtMulta" value="#{managedBean.entity.multa}" size="10" disabled="#{!managedBean.entity.ativo}">
+					<f:convertNumber type="percent" pattern="###.##"/>
+				</h:inputText>
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">			
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDiaFechamentoFatura">Dia de fechamento da fatura:</label>
+				<h:inputText id="txtDiaFechamentoFatura" value="#{managedBean.entity.diaFechamentoFatura}" size="5" disabled="#{!managedBean.entity.ativo}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDiaVencimentoFatura">Dia de vencimento da fatura:</label>
+				<h:inputText id="txtDiaVencimentoFatura" value="#{managedBean.entity.diaVencimentoFatura}" size="5" disabled="#{!managedBean.entity.ativo}"/>
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="4" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+			<label for="frmFormEntity:txtMes">Validade:</label>
+			<h:inputText id="txtMes" value="#{managedBean.entity.mesValidade}" size="2" disabled="#{!managedBean.entity.ativo}"/>
+			<h:outputText value=" / " />
+			<h:inputText value="#{managedBean.entity.anoValidade}" size="4" disabled="#{!managedBean.entity.ativo}"/>
+		</h:panelGrid>			
+
+		<label for="frmFormEntity:txtNumeroCartao">
+			<h:outputText value="Número do cartão:" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}"/>
+			<h:outputText value="Número do cartão de débito:" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}"/>
+		</label>
+		<h:inputText id="txtNumeroCartao" value="#{managedBean.numeroCartao}" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}"/>
+		<h:inputText id="txtNumeroCartaoDebito" value="#{managedBean.entity.numeroCartaoDebito}" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}"/>
+		<p:tooltip for="txtNumeroCartao" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+			<h:outputText value="Informe o nº do cartão para usar a importação de lançamentos. O número ficará registrado no sistema de forma criptografada."/>
+		</p:tooltip>
+			
+		</p:outputPanel>	
+		
+		<h:outputText value="Cartão substituto:" rendered="#{managedBean.operation == 'edit'}"/>			
+		<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}" rendered="#{managedBean.operation == 'edit'}"/>
+		
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-		<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
-			<p:graphicImage value="/resources/images/gravar.png" />
-		</h:commandLink>
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
 	</ui:define>
 
 </ui:composition>

@@ -53,7 +53,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
@@ -83,9 +82,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
-	
-	@Autowired
-	private UsuarioComponent usuarioComponent;
 	
 	@Autowired
 	private FaturaCartaoRepository faturaCartaoRepository;
@@ -122,32 +118,14 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		conta.setSaldoInicial(0);
 		conta.setTipoConta(TipoConta.CARTAO);
 		conta.setUsuario(entity.getUsuario());
-		conta.setMoeda(moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado()));
+		conta.setMoeda(moedaRepository.findDefaultByUsuario(entity.getUsuario()));
 	
 		// Salva o cartão, e logo em seguida a conta
 		super.cadastrar(entity);
 		contaRepository.save(conta);	
 		
 		if (entity.getTipoCartao().equals(TipoCartao.CREDITO)) {
-			// Cria uma nova fatura para o cartão criado
-			FaturaCartao novaFatura = new FaturaCartao();
-			novaFatura.setConta(conta);
-			novaFatura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
-			novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
-			// Data de vencimento da fatura
-			Calendar vencimento = Calendar.getInstance();
-			vencimento.setTime(new Date());
-			// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
-			if (novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura() < novaFatura.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
-				vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
-			} else {
-				vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
-				vencimento.add(Calendar.MONTH, -1);
-			}			
-			novaFatura.setDataVencimento(vencimento.getTime());
-					
-			// Salva a nova fatura
-			faturaCartaoRepository.save(novaFatura);
+			this.criarFaturaCartao(conta);
 		}
 	}
 	
@@ -155,9 +133,39 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	public void alterar(CartaoCredito entity) throws BusinessException {
 		Conta conta = contaRepository.findByCartaoCredito(entity);
 		
-		// Salva o cartão, e logo em seguida a conta
+		// Verifica se o tipo do cartão foi alterado para poder realizar a criação da fatura
+		if (!conta.getCartaoCredito().getTipoCartao().equals(entity.getTipoCartao())) {
+			// Verifica se a conta já possui faturas registradas
+			if (!faturaCartaoRepository.existsFaturaCartao(conta)) {
+				this.criarFaturaCartao(conta);
+			}
+		}
+		
 		super.alterar(entity);
-		contaRepository.update(conta);
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void criarFaturaCartao(Conta conta) {
+		// Cria uma nova fatura para o cartão
+		FaturaCartao novaFatura = new FaturaCartao();
+		novaFatura.setConta(conta);
+		novaFatura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
+		novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
+		// Data de vencimento da fatura
+		Calendar vencimento = Calendar.getInstance();
+		vencimento.setTime(new Date());
+		// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
+		if (novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura() < novaFatura.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
+			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
+		} else {
+			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
+			vencimento.add(Calendar.MONTH, -1);
+		}			
+		novaFatura.setDataVencimento(vencimento.getTime());
+		novaFatura.setMes(novaFatura.getDataVencimento().getMonth() + 1);
+		novaFatura.setAno(novaFatura.getDataVencimento().getYear() + 1900);
+		
+		faturaCartaoRepository.save(novaFatura);
 	}
 	
 	@Override

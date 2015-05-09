@@ -105,3 +105,12 @@ alter table pagamentodividaterceiro add constraint fk_dividaterceiro_pagamentodi
 
 -- Corrige a versão
 update versao set versao = 'JUN2015', dataLiberacao = '2015-06-28' where versao = 'SET2015';
+
+-- Correções na estrutura da tabela de cartões de crédito
+update cartaocredito set bandeira = null where bandeira = 'NENHUMA';
+
+alter table cartaocredito change column `abrangencia` `abrangencia` varchar(15) not null;
+alter table cartaocredito change column `tipoCartao` `tipoCartao` varchar(10) not null;
+
+-- Inclusão da coluna numeroCartaoDebito - Github Issue #71
+alter table cartaocredito add column numeroCartaoDebito varchar(40) null;

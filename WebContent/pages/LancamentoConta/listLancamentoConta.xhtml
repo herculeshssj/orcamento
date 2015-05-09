@@ -58,7 +58,7 @@
 
 	<ui:param name="managedBean" value="#{lancamentoContaMB}" />
 	
-	<ui:define name="botoes">
+	<ui:define name="pesquisa">
 	   	<h:commandLink action="#{managedBean.create}" title="Novo registro">
 			<p:graphicImage value="/resources/images/novo.png"/>			
 		</h:commandLink>
@@ -82,9 +82,9 @@
   		<h:commandLink action="#{managedBean.transferir}" title="Transferir lançamentos">
   			<p:graphicImage value="/resources/images/transferir.png" />
   		</h:commandLink>
-    </ui:define>
+    
 	
-	<ui:define name="pesquisa">
+	
     	<p:inputText value="#{managedBean.novoCriterioBusca.descricao}" size="20"/>
     	&nbsp;
 	    De:
@@ -95,9 +95,11 @@
 		<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.novoCriterioBusca.dataFim}">
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>
-	</ui:define>
 	
-	<ui:define name="pesquisa_avancada">
+		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		</h:commandLink>	
+	
 		<p:commandLink id="linkBuscaAvancada" value="Mais opções >>>"/>
 		
 		<p:overlayPanel for="linkBuscaAvancada">

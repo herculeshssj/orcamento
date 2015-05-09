@@ -67,6 +67,7 @@ import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="cartaocredito")
@@ -102,11 +103,11 @@ public class CartaoCredito extends EntityPersistence {
 	@Temporal(TemporalType.DATE)
 	private Date validade;
 	
-	@Column(length=10)
+	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoCartao tipoCartao;
 	
-	@Column(length=15)
+	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private Abrangencia abrangencia;
 	
@@ -135,6 +136,9 @@ public class CartaoCredito extends EntityPersistence {
 	@Column(length=40, nullable=true)
 	private String numeroCartao;
 	
+	@Column(length=40, nullable=true)
+	private String numeroCartaoDebito;
+	
 	@Transient
 	private int mesValidade;
 	
@@ -147,12 +151,18 @@ public class CartaoCredito extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {		
-		return descricao + " - " + tipoCartao.toString() + " - " + bandeira.toString();
+		return descricao + " - " + tipoCartao.toString() + " - " + (this.bandeira == null ? "Nenhuma" : this.bandeira.toString());
 	}
 	
 	@Override
 	public void validate() throws BusinessException {
+		EntityPersistenceUtil.validaCampoNulo("Tipo de Cartão", this.tipoCartao);
+		EntityPersistenceUtil.validaCampoNulo("Abrangência", this.abrangencia);
+		
 		if (this.tipoCartao.equals(TipoCartao.CREDITO)) {
+			EntityPersistenceUtil.validaCampoInteiroZerado("Dia de vencimento da fatura", this.diaVencimentoFatura);
+			EntityPersistenceUtil.validaCampoInteiroZerado("Dia de fechamento da fatura", this.diaFechamentoFatura);
+			
 			if (diaVencimentoFatura < 1 || diaVencimentoFatura > 31) throw new BusinessException("Dia de vencimento deve estar entre 1 e 31!");
 			if (diaFechamentoFatura < 1 || diaFechamentoFatura > 31) throw new BusinessException("Dia de fechamento deve estar entre 1 e 31!");
 		}
@@ -316,5 +326,13 @@ public class CartaoCredito extends EntityPersistence {
 
 	public void setNumeroCartao(String numeroCartao) {
 		this.numeroCartao = numeroCartao;
+	}
+
+	public String getNumeroCartaoDebito() {
+		return numeroCartaoDebito;
+	}
+
+	public void setNumeroCartaoDebito(String numeroCartaoDebito) {
+		this.numeroCartaoDebito = numeroCartaoDebito;
 	}
 }

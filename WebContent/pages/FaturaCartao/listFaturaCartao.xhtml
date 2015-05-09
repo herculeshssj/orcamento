@@ -57,18 +57,24 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="pesquisa">
-		<strong>Cartão:</strong>		
-		<h:selectOneMenu value="#{managedBean.cartaoSelecionado}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaCartaoSoCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-		</h:selectOneMenu>
-		&nbsp;
-		<strong>Status:</strong>
-		<h:selectOneMenu value="#{managedBean.statusFatura}">
-			<f:selectItems value="#{managedBean.listaStatusFaturaCartao}"/>
-		</h:selectOneMenu>		
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			Cartão:
+		    <h:selectOneMenu value="#{managedBean.cartaoSelecionado}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaCartaoSoCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    Status:
+		    <h:selectOneMenu value="#{managedBean.statusFatura}">
+				<f:selectItems value="#{managedBean.listaStatusFaturaCartao}"/>
+			</h:selectOneMenu>
+	    </h:panelGroup>	    	    
 	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
 	
 	<ui:define name="tabela">
 		

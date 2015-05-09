@@ -80,7 +80,7 @@
 			<h:panelGroup rendered="#{item.ativo}">
 				<h:outputText value="#{item.banco == null ? 'Nenhum banco' : item.banco.nome}" />
 				<h:outputText value=" - "/>
-				<h:outputText value="#{item.bandeira} - #{item.abrangencia}" />
+				<h:outputText value="#{item.bandeira == null ? 'Nenhuma bandeira' : item.bandeira} - #{item.abrangencia}" />
 				<br/>
 				<h:outputText value="#{item.descricao}"/>
 				<br/>

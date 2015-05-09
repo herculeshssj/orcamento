@@ -56,6 +56,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
@@ -101,6 +102,12 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		}
 	}
 	
+	@Override
+	public String create() {
+		entity.setTipoCartao(TipoCartao.DEBITO);
+		return super.create();
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public String save() {
@@ -121,6 +128,12 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		entity.setMesValidade(entity.getValidade().getMonth() + 1);
 		entity.setAnoValidade(entity.getValidade().getYear() + 1900);
 		return retorno;
+	}
+	
+	public void atualizaPainel() {
+		// Atualização do painel
+		System.out.println("Chamou o método");
+		System.out.println(entity.getTipoCartao());
 	}
 	
 	public String ativarCartaoView() {

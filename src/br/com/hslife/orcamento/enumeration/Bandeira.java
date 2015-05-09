@@ -55,8 +55,7 @@ public enum Bandeira {
 	BNDES("BNDES"),
 	DINERS_CLUB("Diners Club"),
 	VISA("Visa"), 
-	MASTERCARD("Mastercard"), 
-	NENHUMA("Nenhuma");
+	MASTERCARD("Mastercard");
 	
 	private String descricao;
 	
