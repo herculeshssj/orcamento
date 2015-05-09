@@ -57,42 +57,49 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{lancamentoPeriodicoMB}" />
+	<ui:param name="colunaPesquisa" value="5" />
 	
-	<ui:define name="pesquisa">
-		Tipo:
-		<h:selectOneMenu value="#{managedBean.tipoLancamentoPeriodico}">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{managedBean.listaTipoLancamentoPeriodico}" />
-		</h:selectOneMenu>
-		&nbsp;
-		Conta:
-		<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		</h:selectOneMenu>
-		&nbsp;
-		Situação:
-		<h:selectOneMenu value="#{managedBean.statusLancamento}">
-			<f:selectItems value="#{managedBean.listaStatusLancamento}" />
-		</h:selectOneMenu>
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			Tipo:
+		    <h:selectOneMenu value="#{managedBean.tipoLancamentoPeriodico}">
+				<f:selectItem itemLabel="Todos" />
+				<f:selectItems value="#{managedBean.listaTipoLancamentoPeriodico}" />
+			</h:selectOneMenu>
+	    </h:panelGroup>
+	    <h:panelGroup>
+			Conta:
+		    <h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
+				<f:selectItem itemLabel="Todos" />
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+	    </h:panelGroup>
+	    <h:panelGroup>
+			Situação:
+		    <h:selectOneMenu value="#{managedBean.statusLancamento}">
+				<f:selectItems value="#{managedBean.listaStatusLancamento}" />
+			</h:selectOneMenu>
+	    </h:panelGroup>    	    
 	</ui:define>
 	
+	<ui:define name="pesquisa_avancada"></ui:define>
+	
 	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
+		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Descrição"/>
 			</f:facet>
 			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
 			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>						
-	  	</p:column>
-	  	<p:column style="text-align: center; vertical-align: middle;">
+	  	</h:column>
+	  	<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Vencimento"/>
 			</f:facet>
 			<h:outputText value="Dia " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
 			<h:outputText value="#{item.diaVencimento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>						
-	  	</p:column>
-	  	<p:column style="text-align: center; vertical-align: middle;">
+	  	</h:column>
+	  	<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Valor"/>
 			</f:facet>
@@ -100,17 +107,17 @@
 			<h:outputText value="#{item.valorParcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>						
-	  	</p:column>
-	  	<p:column style="text-align: center; vertical-align: middle;">
+	  	</h:column>
+	  	<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Situação"/>
 			</f:facet>
 			<h:outputText value="#{item.statusLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>						
-	  	</p:column>
+	  	</h:column>
 	</ui:define>
 	
 	<ui:define name="acoes">
-    	<p:column style="text-align: center; vertical-align: middle; width: 150px;" exportable="false">
+    	<h:column style="text-align: center; vertical-align: middle; width: 150px;" exportable="false">
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>		
@@ -125,7 +132,7 @@
 			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.statusLancamento != 'ENCERRADO'}">
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandButton>
-	  	</p:column>
+	  	</h:column>
     </ui:define>
 	
 </ui:composition>

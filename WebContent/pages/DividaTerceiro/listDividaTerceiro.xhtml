@@ -57,20 +57,26 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{dividaTerceiroMB}" />
-
-	<ui:define name="pesquisa">		
-     	Categoria:
-		<h:selectOneMenu value="#{managedBean.tipoCategoria}">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{enumCombo.listaTipoCategoria}" />
-		</h:selectOneMenu>
-		&nbsp;
-		Status:
-		<h:selectOneMenu value="#{managedBean.statusDivida}">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{enumCombo.listaStatusDivida}" />
-		</h:selectOneMenu>
+	<ui:param name="colunaPesquisa" value="4" />
+	
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			Categoria:
+		    <h:selectOneMenu value="#{managedBean.tipoCategoria}">
+				<f:selectItem itemLabel="Todos" />
+				<f:selectItems value="#{enumCombo.listaTipoCategoria}" />
+			</h:selectOneMenu>
+	    </h:panelGroup>
+	    <h:panelGroup>
+			Status:
+		    <h:selectOneMenu value="#{managedBean.statusDivida}">
+				<f:selectItem itemLabel="Todos" />
+				<f:selectItems value="#{enumCombo.listaStatusDivida}" />
+			</h:selectOneMenu>
+	    </h:panelGroup>  	    
 	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
 
 	<ui:define name="colunas">
 		<p:column style="text-align: center; vertical-align: middle;">

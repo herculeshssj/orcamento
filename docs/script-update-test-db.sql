@@ -91,55 +91,14 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Criação da tabela de modelos de documento
-	create table modelodocumento (
-		id bigint not null auto_increment,
-	    descricao varchar(50) not null,
-	    conteudo text,
-	    ativo boolean,
-	    idUsuario bigint not null,
-	    versionEntity datetime not null default '2015-06-01 00:00:00', 
-	    primary key(id)
-	) engine=InnoDB;
+	-- Correções na estrutura da tabela de cartões de crédito
+	update cartaocredito set bandeira = null where bandeira = 'NENHUMA';
 	
-	alter table modelodocumento add constraint fk_usuario_modelodocumento foreign key (idUsuario) references usuario (id);
+	alter table cartaocredito change column `abrangencia` `abrangencia` varchar(15) not null;
+	alter table cartaocredito change column `tipoCartao` `tipoCartao` varchar(10) not null;
 	
-	-- Dívidas de terceiros - Github Issue #84
-	create table dividaterceiro(
-		id bigint not null auto_increment,
-		valorDivida decimal(18,2) not null,
-		dataNegociacao date not null,
-		justificativa varchar(4000) not null,
-		termoDivida text,
-		termoQuitacao text,
-		statusDivida varchar(15) not null,
-		tipoCategoria varchar(10) not null,
-		idFavorecido bigint not null,
-		idUsuario bigint not null,
-	    idMoeda bigint not null,
-		versionEntity datetime not null default '2015-06-01 00:00:00',
-		primary key(id)
-	) Engine=InnoDB;
-	
-	alter table dividaterceiro add constraint fk_favorecido_dividaterceiro foreign key(idFavorecido) references favorecido (id);
-	alter table dividaterceiro add constraint fk_usuario_dividaterceiro foreign key(idUsuario) references usuario (id);
-	alter table dividaterceiro add constraint fk_moeda_dividaterceiro foreign key(idMoeda) references moeda (id);
-	
-	create table pagamentodividaterceiro(
-		id bigint not null auto_increment,
-		valorPago decimal(18,2) not null,
-		dataPagamento date not null,
-		comprovantePagamento text,
-		taxaConversao decimal(18,4) not null default 1.0000,
-		idDivida bigint not null,
-		versionEntity datetime not null default '2015-06-01 00:00:00',
-		primary key(id)
-	) Engine=InnoDB;
-	
-	alter table pagamentodividaterceiro add constraint fk_dividaterceiro_pagamentodividaterceiro foreign key(idDivida) references dividaterceiro(id);
-	
-	-- Corrige a versão
-	update versao set versao = 'JUN2015', dataLiberacao = '2015-06-28' where versao = 'SET2015';
+	-- Inclusão da coluna numeroCartaoDebito - Github Issue #71
+	alter table cartaocredito add column numeroCartaoDebito varchar(40) null;
     
     /*** Fim do bloco de atualizações da base ***/
     

@@ -65,9 +65,6 @@
 			<f:selectItems value="#{managedBean.listEntity}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>
 	
-	</ui:define>
-
-	<ui:define name="pesquisa_avancada">
 	
 		<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
 			<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
@@ -76,6 +73,10 @@
 		<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
 			<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
 		</h:commandButton>
+		&nbsp;
+		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		</h:commandLink>
 		&nbsp;
 		<h:commandLink title="Atualizar" image="/resources/images/circular.png" action="#{managedBean.atualizarValores}">
 			<h:graphicImage id="imgUpdate" height="48" width="48" value="/resources/images/svg/synchronize.svg"/>

@@ -57,15 +57,15 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{importacaoLancamentoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="pesquisa">
-	
-		Conta:
-		&nbsp;
-		<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-		</h:selectOneMenu>		
-	
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			Conta:
+			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>
+	    </h:panelGroup> 	    
 	</ui:define>
 	
 	<ui:define name="pesquisa_avancada">
