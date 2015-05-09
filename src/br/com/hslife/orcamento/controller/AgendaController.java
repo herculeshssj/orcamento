@@ -61,7 +61,7 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.ICalendarioAtividades;
+import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 
 @Component("agendaMB")
@@ -81,7 +81,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	private Integer horaInicio, horaFim, minutoInicio, minutoFim;
 	
 	@Autowired
-	private ICalendarioAtividades service;
+	private IAgenda service;
 	
 	public AgendaController() {
 		super(new Agenda());
@@ -218,14 +218,6 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	}
 
 	/* Métodos Getters e Setters */
-	
-	public ICalendarioAtividades getService() {
-		return service;
-	}
-
-	public void setService(ICalendarioAtividades service) {
-		this.service = service;
-	}
 
 	public String getDescricaoAgendamento() {
 		return descricaoAgendamento;
@@ -297,5 +289,13 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 
 	public void setMinutoFim(Integer minutoFim) {
 		this.minutoFim = minutoFim;
+	}
+
+	public IAgenda getService() {
+		return service;
+	}
+
+	public void setService(IAgenda service) {
+		this.service = service;
 	}
 }

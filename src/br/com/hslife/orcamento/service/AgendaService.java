@@ -58,14 +58,14 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.ICalendarioAtividades;
+import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
-@Service("calendarioAtividadesService")
-public class CalendarioAtividadesService extends AbstractCRUDService<Agenda> implements ICalendarioAtividades {
+@Service("agendaService")
+public class AgendaService extends AbstractCRUDService<Agenda> implements IAgenda {
 
 	@Autowired
 	private AgendaRepository repository;
