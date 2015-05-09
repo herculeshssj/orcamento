@@ -63,7 +63,7 @@
 		<h:panelGrid columns="2">
 		
 			Banco:
-			<h:outputText value="#{managedBean.entity.banco.nome}"></h:outputText>	     		
+			<h:outputText value="#{managedBean.entity.banco.nome}"/>	     		
 					
 			Descrição:				
 			<h:outputText value="#{managedBean.entity.descricao}"/>			
@@ -76,6 +76,19 @@
 			
 			Abrangência:
 			<h:outputText value="#{managedBean.entity.abrangencia}"/>
+			
+			Validade:
+			<h:outputText value="#{managedBean.entity.validade}" >
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Cartão substituto:			
+			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}"/>
+			
+		</h:panelGrid>
+		
+			
+		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
 			
 			Limite do cartão:
 			<h:outputText value="#{managedBean.entity.limiteCartao}">
@@ -102,14 +115,6 @@
 			
 			Dia de fechamento da fatura:
 			<h:outputText value="#{managedBean.entity.diaFechamentoFatura}" />			
-			
-			Validade:
-			<h:outputText value="#{managedBean.entity.validade}" >
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
-			Cartão substituto:			
-			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}"/>
 			
 		</h:panelGrid>
 	

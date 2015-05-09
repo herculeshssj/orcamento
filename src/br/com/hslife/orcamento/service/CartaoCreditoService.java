@@ -144,7 +144,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		super.alterar(entity);
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void criarFaturaCartao(Conta conta) {
 		// Cria uma nova fatura para o cartão
 		FaturaCartao novaFatura = new FaturaCartao();
@@ -153,17 +152,17 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
 		// Data de vencimento da fatura
 		Calendar vencimento = Calendar.getInstance();
-		vencimento.setTime(new Date());
 		// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
 		if (novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura() < novaFatura.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
-			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
+			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaVencimentoFatura());
 		} else {
-			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaFechamentoFatura());
-			vencimento.add(Calendar.MONTH, -1);
-		}			
+			vencimento.set(Calendar.DAY_OF_MONTH, novaFatura.getConta().getCartaoCredito().getDiaVencimentoFatura());
+			vencimento.add(Calendar.MONTH, 1);
+		}
+		
 		novaFatura.setDataVencimento(vencimento.getTime());
-		novaFatura.setMes(novaFatura.getDataVencimento().getMonth() + 1);
-		novaFatura.setAno(novaFatura.getDataVencimento().getYear() + 1900);
+		novaFatura.setMes(vencimento.get(Calendar.MONTH) + 1);
+		novaFatura.setAno(vencimento.get(Calendar.YEAR));
 		
 		faturaCartaoRepository.save(novaFatura);
 	}
@@ -215,8 +214,8 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public List<CartaoCredito> buscarDescricaoOuAtivoPorUsuario(String descricao, Usuario usuario, Boolean ativo) throws BusinessException {
-		return getRepository().findDescricaoOrAtivoByUsuario(descricao, usuario, ativo);
+	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo) throws BusinessException {
+		return getRepository().findDescricaoOrTipoCartaoOrAtivoByUsuario(descricao, tipoCartao, usuario, ativo);
 	}
 	
 	@Override

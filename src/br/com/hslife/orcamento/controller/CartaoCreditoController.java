@@ -77,10 +77,11 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	@Autowired
 	private IBanco bancoService;
 	
-	private String descricaoCartao;
 	private boolean somenteAtivos = true;
 	private CartaoCredito novoCartao;
 	private String numeroCartao = "";
+	private boolean exibir;
+	private TipoCartao tipoCartao;
 	
 	public CartaoCreditoController() {
 		super(new CartaoCredito());
@@ -96,7 +97,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	
 	public void find() {
 		try {			
-			listEntity = getService().buscarDescricaoOuAtivoPorUsuario(descricaoCartao, getUsuarioLogado(), somenteAtivos);
+			listEntity = getService().buscarDescricaoOuTipoCartaoOuAtivoPorUsuario("", tipoCartao, getUsuarioLogado(), somenteAtivos);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -128,12 +129,6 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		entity.setMesValidade(entity.getValidade().getMonth() + 1);
 		entity.setAnoValidade(entity.getValidade().getYear() + 1900);
 		return retorno;
-	}
-	
-	public void atualizaPainel() {
-		// Atualização do painel
-		System.out.println("Chamou o método");
-		System.out.println(entity.getTipoCartao());
 	}
 	
 	public String ativarCartaoView() {
@@ -242,14 +237,6 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		this.service = service;
 	}
 
-	public String getDescricaoCartao() {
-		return descricaoCartao;
-	}
-
-	public void setDescricaoCartao(String descricaoCartao) {
-		this.descricaoCartao = descricaoCartao;
-	}
-
 	public void setBancoService(IBanco bancoService) {
 		this.bancoService = bancoService;
 	}
@@ -276,5 +263,21 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 
 	public void setNumeroCartao(String numeroCartao) {
 		this.numeroCartao = numeroCartao;
+	}
+
+	public boolean isExibir() {
+		return exibir;
+	}
+
+	public void setExibir(boolean exibir) {
+		this.exibir = exibir;
+	}
+
+	public TipoCartao getTipoCartao() {
+		return tipoCartao;
+	}
+
+	public void setTipoCartao(TipoCartao tipoCartao) {
+		this.tipoCartao = tipoCartao;
 	}
 }

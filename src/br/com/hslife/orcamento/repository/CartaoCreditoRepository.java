@@ -138,13 +138,16 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<CartaoCredito> findDescricaoOrAtivoByUsuario(String descricao, Usuario usuario, Boolean ativo) {
+	public List<CartaoCredito> findDescricaoOrTipoCartaoOrAtivoByUsuario(String descricao, TipoCartao tipo, Usuario usuario, Boolean ativo) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM CartaoCredito cartao WHERE ");
 		if (descricao != null) {
 			hql.append("cartao.descricao LIKE '%");
 			hql.append(descricao);
 			hql.append("%' AND ");
+		}
+		if (tipo != null) {
+			hql.append("cartao.tipoCartao = :tipo AND ");
 		}
 		if (ativo != null) {
 			hql.append("cartao.ativo = :ativo AND ");
@@ -153,6 +156,10 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 		hql.append("cartao.usuario.id = :idUsuario ORDER BY cartao.descricao ASC");
 		
 		Query hqlQuery = getQuery(hql.toString());
+		
+		if (tipo != null) {
+			hqlQuery.setParameter("tipo", tipo);
+		}
 		
 		if (ativo != null) {
 			hqlQuery.setBoolean("ativo", ativo);

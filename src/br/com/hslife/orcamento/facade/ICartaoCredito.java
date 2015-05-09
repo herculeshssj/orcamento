@@ -50,6 +50,7 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ICRUDService;
 
@@ -71,5 +72,5 @@ public interface ICartaoCredito extends ICRUDService<CartaoCredito> {
 	
 	public void desativarCartao(CartaoCredito entity) throws BusinessException;
 	
-	public List<CartaoCredito> buscarDescricaoOuAtivoPorUsuario(String descricao, Usuario usuario, Boolean ativo) throws BusinessException;
+	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo) throws BusinessException;
 }

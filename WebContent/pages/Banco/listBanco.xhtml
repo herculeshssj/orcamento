@@ -61,8 +61,8 @@
 	
 	<ui:define name="parametro_pesquisa">		
 		<h:panelGroup>
-			Nome:
-		    <p:inputText value="#{managedBean.nomeBanco}"/>
+			<label for="frmListEntity:txtNomeBanco">Nome:</label>
+		    <h:inputText id="txtNomeBanco" value="#{managedBean.nomeBanco}"/>
 	    </h:panelGroup>
 	    <h:panelGroup>
 	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />

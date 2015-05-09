@@ -57,14 +57,20 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{contaMB}" />
-
-	<ui:define name="pesquisa">
-		Descrição:
-	    <p:inputText value="#{managedBean.descricaoConta}" />
-	    &nbsp;
-	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
-	    Somente ativos
+	<ui:param name="colunaPesquisa" value="4" />
+	
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label for="frmListEntity:txtDescricaoConta">Descrição:</label>
+		    <h:inputText id="txtDescricaoConta" value="#{managedBean.descricaoConta}"/>
+	    </h:panelGroup>
+	    <h:panelGroup>
+	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    	Somente ativos
+	    </h:panelGroup>	    	    
 	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
 	
 	<ui:define name="colunas">
 		<p:column style="text-align: center; vertical-align: middle;">

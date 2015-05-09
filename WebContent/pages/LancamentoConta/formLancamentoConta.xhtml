@@ -185,7 +185,7 @@
 		
 		<p:outputPanel id="pnlLancamentoCartao">
 			
-			<h:panelGrid columns="2" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}">
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO' and managedBean.entity.conta.cartaoCredito.tipoCartao == 'CREDITO'}">
 			
 				Moeda:
 				<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">

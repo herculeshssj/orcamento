@@ -59,8 +59,6 @@
 	
 	<ui:define name="campos">
 	
-		<p:outputPanel id="pnlCartaoCredito">
-	
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" maxlength="50" size="50" required="true" requiredMessage="Informe a descrição!" disabled="#{!managedBean.entity.ativo}"/>			
 				
@@ -79,13 +77,15 @@
 		Tipo de cartão:
 		<h:selectOneRadio id="txtTipoCartao" value="#{managedBean.entity.tipoCartao}" disabled="#{!managedBean.entity.ativo or (managedBean.entity.tipoCartao == 'CREDITO' and managedBean.operation != 'create')}">
 			<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
-			<f:ajax update="pnlCartaoCredito" event="change" listener="#{managedBean.atualizaPainel}"/>
+			<p:ajax update="pnlCartaoCredito,pnlNumeroCartao" event="change" />
 		</h:selectOneRadio>
 		
 		Abrangência:
 		<h:selectOneRadio id="txtAbrangencia" value="#{managedBean.entity.abrangencia}" disabled="#{!managedBean.entity.ativo}">
 			<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
 		</h:selectOneRadio>	
+		
+		<p:outputPanel id="pnlCartaoCredito">
 		
 		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
 			<h:panelGroup>
@@ -133,21 +133,25 @@
 			<h:inputText id="txtMes" value="#{managedBean.entity.mesValidade}" size="2" disabled="#{!managedBean.entity.ativo}"/>
 			<h:outputText value=" / " />
 			<h:inputText value="#{managedBean.entity.anoValidade}" size="4" disabled="#{!managedBean.entity.ativo}"/>
-		</h:panelGrid>			
+		</h:panelGrid>	
+		
+		</p:outputPanel>		
 
+		<p:outputPanel id="pnlNumeroCartao">
+	
 		<label for="frmFormEntity:txtNumeroCartao">
 			<h:outputText value="Número do cartão:" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}"/>
 			<h:outputText value="Número do cartão de débito:" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}"/>
 		</label>
-		<h:inputText id="txtNumeroCartao" value="#{managedBean.numeroCartao}" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}"/>
-		<h:inputText id="txtNumeroCartaoDebito" value="#{managedBean.entity.numeroCartaoDebito}" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}"/>
+		<h:inputText id="txtNumeroCartao" value="#{managedBean.numeroCartao}" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}" disabled="#{!managedBean.entity.ativo}"/>
+		<h:inputText id="txtNumeroCartaoDebito" value="#{managedBean.entity.numeroCartaoDebito}" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}" disabled="#{!managedBean.entity.ativo}"/>
 		<p:tooltip for="txtNumeroCartao" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
 			<h:outputText value="Informe o nº do cartão para usar a importação de lançamentos. O número ficará registrado no sistema de forma criptografada."/>
 		</p:tooltip>
 			
 		</p:outputPanel>	
 		
-		<h:outputText value="Cartão substituto:" rendered="#{managedBean.operation == 'edit'}"/>			
+		<h:outputText value="Cartão substituto: " rendered="#{managedBean.operation == 'edit'}"/>			
 		<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}" rendered="#{managedBean.operation == 'edit'}"/>
 		
 	</ui:define>
