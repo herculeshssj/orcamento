@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.facade.IBanco;
 
 @Component("bancoMB")
 @Scope("session")
-public class BancoController extends AbstractSimpleCRUDController<Banco> {
+public class BancoController extends AbstractCRUDController<Banco> {
 	
 	/**
 	 * 
@@ -74,7 +74,6 @@ public class BancoController extends AbstractSimpleCRUDController<Banco> {
 	public BancoController() {
 		super(new Banco());
 		moduleTitle = "Banco";
-		goToModule = "/pages/menu/cadastros.faces";
 	}
 	
 	@Override
@@ -93,9 +92,9 @@ public class BancoController extends AbstractSimpleCRUDController<Banco> {
 	}
 	
 	@Override
-	public void save() {
+	public String save() {
 		entity.setUsuario(getUsuarioLogado());
-		super.save();
+		return super.save();
 	}
 	
 	public IBanco getService() {

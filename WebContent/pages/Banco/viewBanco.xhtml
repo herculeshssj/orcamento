@@ -44,6 +44,7 @@
   
   -->
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -53,26 +54,32 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{bancoMB}" />
-	
+
 	<ui:define name="campos">
-				
-		<label for="frmFormEntity:txtNome">Banco:</label>
-		<h:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
-		
-		<label for="frmFormEntity:txtNumero">Número:</label>
-		<p:inputText id="txtNumero" value="#{managedBean.entity.numero}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>				
-		
-		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-		Padrão:
-		
-		<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
-		Ativo:
-				
+			
+		<h:panelGrid columns="2">
+			
+			Banco:
+			<h:outputText id="txtNome" value="#{managedBean.entity.nome}" />				
+			
+			Número:
+			<h:outputText id="txtNumero" value="#{managedBean.entity.numero}" />				
+			
+			Usuário:
+			<h:outputText id="txtUsuario" value="#{managedBean.entity.usuario.nome}" />
+			
+			Padrão:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
+			
+			Ativo:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+			
+		</h:panelGrid>
 		
 	</ui:define>
-
+	
 </ui:composition>
 </html>
