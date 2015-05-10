@@ -63,7 +63,7 @@
 		<h:panelGrid columns="2">
 		
 			Banco:
-			<h:outputText value="#{managedBean.entity.banco.nome}"></h:outputText>	     		
+			<h:outputText value="#{managedBean.entity.banco.nome}"/>	     		
 					
 			Descrição:				
 			<h:outputText value="#{managedBean.entity.descricao}"/>			
@@ -76,6 +76,19 @@
 			
 			Abrangência:
 			<h:outputText value="#{managedBean.entity.abrangencia}"/>
+			
+			Validade:
+			<h:outputText value="#{managedBean.entity.validade}" >
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Cartão substituto:			
+			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}"/>
+			
+		</h:panelGrid>
+		
+			
+		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
 			
 			Limite do cartão:
 			<h:outputText value="#{managedBean.entity.limiteCartao}">
@@ -103,25 +116,21 @@
 			Dia de fechamento da fatura:
 			<h:outputText value="#{managedBean.entity.diaFechamentoFatura}" />			
 			
-			Validade:
-			<h:outputText value="#{managedBean.entity.validade}" >
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
-			Cartão substituto:			
-			<h:outputText value="#{managedBean.entity.cartaoSubstituto.label}"/>
-			
 		</h:panelGrid>
 	
 	</ui:define>
 	
 	<ui:define name="acoes">
- 		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp; 		
- 		<h:commandButton title="Ativar cartão de crédito" image="/resources/images/habilitar.png" action="#{managedBean.ativarCartao}" rendered="#{!managedBean.entity.ativo}"/>			
-		<h:commandButton title="Desativar cartão de crédito" image="/resources/images/fechar.png" action="#{managedBean.desativarCartao}" rendered="#{managedBean.entity.ativo}"/>
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOkEnable" title="Ativar cartão" action="#{managedBean.ativarCartao}" rendered="#{!managedBean.entity.ativo}">
+     		<h:graphicImage id="imgOkEnable" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+     	<h:commandLink id="lnkOkDisable" title="Desativar cartão" action="#{managedBean.desativarCartao}" rendered="#{managedBean.entity.ativo}">
+     		<h:graphicImage id="imgOkDisable" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
  	</ui:define>
 	
 </ui:composition>
