@@ -62,6 +62,7 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 
@@ -83,7 +84,7 @@ public class Categoria extends EntityPersistence {
 	@Column
 	private boolean ativo;
 	
-	@Column(length=10)
+	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoCategoria tipoCategoria;
 	
@@ -117,13 +118,8 @@ public class Categoria extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
-		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
-		}
-		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
-		}
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de categoria", this.tipoCategoria);
 	}
 
 	public void setId(Long id) {

@@ -56,24 +56,24 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{bancoMB}" />
+	<ui:param name="managedBean" value="#{categoriaMB}" />
 
 	<ui:define name="campos">
 			
 		<h:panelGrid columns="2">
 			
-			Banco:
-			<h:outputText id="txtNome" value="#{managedBean.entity.nome}" />				
+			Descrição:
+			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 			
-			Número:
-			<h:outputText id="txtNumero" value="#{managedBean.entity.numero}" />				
+			Tipo de Categoria:
+			<h:outputText value="#{managedBean.entity.tipoCategoria}"/>
 			
 			Padrão:
 			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
-			
+						
 			Ativo:
 			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
-			
+						
 		</h:panelGrid>
 		
 	</ui:define>

@@ -53,12 +53,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Categoria;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 
 @Component("categoriaMB")
 @Scope("session")
-public class CategoriaController extends AbstractSimpleCRUDController<Categoria> {
+public class CategoriaController extends AbstractCRUDController<Categoria> {
 	
 	/**
 	 * 
@@ -68,13 +69,12 @@ public class CategoriaController extends AbstractSimpleCRUDController<Categoria>
 	@Autowired
 	private ICategoria service; 
 	
-	private String descricaoCategoria;
+	private TipoCategoria tipoCategoria;
 	private boolean somenteAtivos = true;
 	
 	public CategoriaController() {
 		super(new Categoria());
-		moduleTitle = "Categoria";
-		goToModule = "/pages/menu/cadastros.faces";
+		moduleTitle = "Categorias";
 	}
 	
 	@Override
@@ -86,16 +86,16 @@ public class CategoriaController extends AbstractSimpleCRUDController<Categoria>
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorDescricaoUsuarioEAtivo(descricaoCategoria, getUsuarioLogado(), somenteAtivos);
+			listEntity = getService().buscarTipoCategoriaEDescricaoEAtivoPorUsuario(tipoCategoria, null, somenteAtivos, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
 	
 	@Override
-	public void save() {
+	public String save() {
 		entity.setUsuario(getUsuarioLogado());
-		super.save();
+		return super.save();
 	}
 
 	public ICategoria getService() {
@@ -106,19 +106,19 @@ public class CategoriaController extends AbstractSimpleCRUDController<Categoria>
 		this.service = service;
 	}
 
-	public String getDescricaoCategoria() {
-		return descricaoCategoria;
-	}
-
-	public void setDescricaoCategoria(String descricaoCategoria) {
-		this.descricaoCategoria = descricaoCategoria;
-	}
-
 	public boolean isSomenteAtivos() {
 		return somenteAtivos;
 	}
 
 	public void setSomenteAtivos(boolean somenteAtivos) {
 		this.somenteAtivos = somenteAtivos;
+	}
+
+	public TipoCategoria getTipoCategoria() {
+		return tipoCategoria;
+	}
+
+	public void setTipoCategoria(TipoCategoria tipoCategoria) {
+		this.tipoCategoria = tipoCategoria;
 	}
 }

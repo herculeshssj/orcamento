@@ -134,7 +134,7 @@
     </filter-mapping> 
 
 	<welcome-file-list>
-		<welcome-file>pages/menu/inicio.faces</welcome-file>		
+		<welcome-file>pages/menu/dashboard.faces</welcome-file>		
 	</welcome-file-list>
 	
 	<error-page>

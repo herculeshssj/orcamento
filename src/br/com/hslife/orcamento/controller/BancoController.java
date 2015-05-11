@@ -73,7 +73,7 @@ public class BancoController extends AbstractCRUDController<Banco> {
 	
 	public BancoController() {
 		super(new Banco());
-		moduleTitle = "Banco";
+		moduleTitle = "Bancos";
 	}
 	
 	@Override
