@@ -61,13 +61,13 @@
 		<h:panelGrid columns="3">
 		
 			<h:panelGroup>
-				Conta:
+				<label>Conta:</label>
 				<h:selectOneMenu id="txtConta" value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
 					<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 				</h:selectOneMenu>
 			</h:panelGroup>
 			<h:panelGroup>
-				Ano:
+				<label>Ano:</label>
 				<h:selectOneMenu id="txtAno" value="#{managedBean.ano}">
 					<f:selectItems value="#{managedBean.listaAno}" />			
 				</h:selectOneMenu>	

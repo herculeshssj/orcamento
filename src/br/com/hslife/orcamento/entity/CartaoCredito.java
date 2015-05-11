@@ -156,6 +156,7 @@ public class CartaoCredito extends EntityPersistence {
 	
 	@Override
 	public void validate() throws BusinessException {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de Cartão", this.tipoCartao);
 		EntityPersistenceUtil.validaCampoNulo("Abrangência", this.abrangencia);
 		

@@ -78,13 +78,13 @@
 				</h:selectOneMenu>
 			</h:panelGroup>
 			<h:panelGroup>
-				Períodos:
+				<label>Períodos:</label>
 				<h:selectOneMenu value="#{managedBean.periodo}">
 					<f:selectItems value="#{managedBean.periodos}" />
 				</h:selectOneMenu>				
 			</h:panelGroup>
 			<h:panelGroup>
-				Considerar:
+				<label>Considerar:</label>
 				<h:selectOneMenu value="#{managedBean.periodoAConsiderar}">
 					<f:selectItem itemLabel="Anterior a data atual" itemValue="ANTERIOR"/>
 					<f:selectItem itemLabel="Posterior a data atual" itemValue="POSTERIOR"/>

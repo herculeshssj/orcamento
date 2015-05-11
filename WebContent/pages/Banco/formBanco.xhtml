@@ -66,10 +66,10 @@
 		<h:inputText id="txtNumero" value="#{managedBean.entity.numero}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>				
 		
 		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-		Padrão:
+		<label>Padrão:</label>
 		
 		<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
-		Ativo:
+		<label>Ativo:</label>
 				
 		
 	</ui:define>

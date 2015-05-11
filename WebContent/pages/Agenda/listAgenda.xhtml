@@ -61,24 +61,24 @@
 	
 	<ui:define name="parametro_pesquisa">		
 		<h:panelGroup>
-			Descrição:
+			<label>Descrição:</label>
 		    <p:inputText value="#{managedBean.criterioBusca.descricao}" size="15"/>
 	    </h:panelGroup>
 	    <h:panelGroup>
-		    Tipo:
+		    <label>Tipo:</label>
 		    <h:selectOneMenu value="#{managedBean.criterioBusca.tipo}">
 		    	<f:selectItem itemLabel="Todos" />
 				<f:selectItems value="#{managedBean.listaTipoAgendamento}"/>
 			</h:selectOneMenu>
 	    </h:panelGroup>
 	    <h:panelGroup>
-		    Início:
+		    <label>Início:</label>
 		    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.inicio}">
 		    	<f:converter converterId="dateConverter"/>
 		    </p:inputMask>
 	    </h:panelGroup>
 	    <h:panelGroup>
-		    Fim:
+		    <label>Fim:</label>
 		    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.fim}">
 		    	<f:converter converterId="dateConverter"/>
 		    </p:inputMask>

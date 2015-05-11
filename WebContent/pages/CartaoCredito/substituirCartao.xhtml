@@ -59,46 +59,52 @@
 	
 	<ui:define name="campos">
 	
-		<strong>Cartão de crédito:&nbsp;</strong>
+		<label>Cartão de crédito:</label>
 		<h:outputText value="#{managedBean.entity.label}"/>
-		<br/><br/>
-		<h:panelGrid columns="2">
-			<f:facet name="header">
-				<h:outputText value="Dados do novo cartão" />
-			</f:facet>		
-								
-			Descrição:				
-			<p:inputText id="txtDescricao" value="#{managedBean.novoCartao.descricao}" maxlength="50" size="50" required="true" requiredMessage="Informe a descrição!"/>			
-			
-			Tipo de cartão:
-			<p:selectOneRadio id="txtTipoCartao" value="#{managedBean.novoCartao.tipoCartao}" required="true" requiredMessage="Informe o tipo de cartão!">
-				<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
-			</p:selectOneRadio>			
-			
-			Bandeira:
-			<h:selectOneMenu id="txtBandeira" value="#{managedBean.novoCartao.bandeira}" required="true" requiredMessage="Informe o bandeira do cartão!">
-				<f:selectItems value="#{enumCombo.listaBandeira}"/>
-			</h:selectOneMenu>			
-			
-			Abrangência:
-			<p:selectOneRadio id="txtAbrangencia" value="#{managedBean.novoCartao.abrangencia}" required="true" requiredMessage="Informe o abrangência do cartão!">
-				<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
-			</p:selectOneRadio>		
-			
-			Dia de vencimento da fatura:
-			<p:inputText id="txtDiaVencimentoFatura" value="#{managedBean.novoCartao.diaVencimentoFatura}" size="5" required="true" requiredMessage="Informe o dia de vencimento da fatura!"/>			
-			
-			Dia de fechamento da fatura:
-			<p:inputText id="txtDiaFechamentoFatura" value="#{managedBean.novoCartao.diaFechamentoFatura}" size="5" required="true" requiredMessage="Informe o dia de fechamento da fatura!"/>			
-			
-			Validade:
+		
+		<hr/>
+		
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.novoCartao.descricao}" />
+		
+		<label>Bandeira:</label>
+		<h:selectOneMenu id="txtBandeira" value="#{managedBean.novoCartao.bandeira}">
+			<f:selectItem itemLabel="Nenhuma"/>
+			<f:selectItems value="#{enumCombo.listaBandeira}"/>
+		</h:selectOneMenu>
+		
+		<label>Tipo de cartão:</label>
+		<h:selectOneRadio id="txtTipoCartao" value="#{managedBean.novoCartao.tipoCartao}">
+			<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
+			<p:ajax update="pnlCredito" event="change" />
+		</h:selectOneRadio>
+		
+		<label>Abrangência:</label>
+		<h:selectOneRadio id="txtAbrangencia" value="#{managedBean.novoCartao.abrangencia}">
+			<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
+		</h:selectOneRadio>
+		
+		<p:outputPanel id="pnlCredito">
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.novoCartao.tipoCartao == 'CREDITO'}">			
 			<h:panelGroup>
-				<p:inputText value="#{managedBean.novoCartao.mesValidade}" size="2" required="true" requiredMessage="Informe o mês de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
-				<h:outputText value=" / " />
-				<p:inputText value="#{managedBean.novoCartao.anoValidade}" size="4" required="true" requiredMessage="Informe o ano de validade do cartão!" disabled="#{!managedBean.entity.ativo}"/>
-			</h:panelGroup>			
-						
+				<label for="frmFormEntity:txtDiaFechamentoFatura">Dia de fechamento da fatura:</label>
+				<h:inputText id="txtDiaFechamentoFatura" value="#{managedBean.novoCartao.diaFechamentoFatura}" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDiaVencimentoFatura">Dia de vencimento da fatura:</label>
+				<h:inputText id="txtDiaVencimentoFatura" value="#{managedBean.novoCartao.diaVencimentoFatura}" />
+			</h:panelGroup>
 		</h:panelGrid>
+		
+		<h:panelGrid columns="4" rendered="#{managedBean.novoCartao.tipoCartao == 'CREDITO'}">
+			<label for="frmFormEntity:txtMes">Validade:</label>
+			<h:inputText id="txtMes" value="#{managedBean.novoCartao.mesValidade}" />
+			<h:outputText value=" / " />
+			<h:inputText value="#{managedBean.novoCartao.anoValidade}" />
+		</h:panelGrid>	
+		
+		</p:outputPanel>
 	
 	</ui:define>
 	

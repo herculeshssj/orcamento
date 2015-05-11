@@ -193,6 +193,14 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	@SuppressWarnings("deprecation")
 	public String substituirCartao() {
 		try {
+			if (!entity.getTipoCartao().equals(novoCartao.getTipoCartao())) {
+				if (entity.getTipoCartao().equals(TipoCartao.CREDITO) && novoCartao.getTipoCartao().equals(TipoCartao.DEBITO)) {
+					warnMessage("Informe detalhes sobre fatura e validade do cartão");
+					novoCartao.setTipoCartao(TipoCartao.CREDITO);
+					return "";
+				}
+			}
+			novoCartao.validate();
 			novoCartao.setBanco(entity.getBanco());
 			novoCartao.setLimiteSaque(entity.getLimiteSaque());
 			novoCartao.setLimiteCartao(entity.getLimiteCartao());
@@ -204,7 +212,6 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			entity.setCartaoSubstituto(novoCartao);			
 			getService().substituirCartao(entity);
 			infoMessage("Substituição efetuada com sucesso!");
-			initializeEntity();
 			return list();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());

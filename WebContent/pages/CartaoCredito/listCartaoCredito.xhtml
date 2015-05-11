@@ -61,7 +61,7 @@
 	
 	<ui:define name="parametro_pesquisa">		
 		<h:panelGroup>
-			Tipo do Cartão:
+			<label>Tipo do Cartão:</label>
 		    <h:selectOneMenu id="txtTipoCartao" value="#{managedBean.tipoCartao}">
 		    	<f:selectItem itemLabel="Todos"/>
 				<f:selectItems value="#{enumCombo.listaTipoCartao}"/>				
@@ -69,7 +69,7 @@
 	    </h:panelGroup>
 	    <h:panelGroup>
 		    <h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
-	    	Somente ativos
+	    	<label>Somente ativos</label>
 	    </h:panelGroup>	    	    
 	</ui:define>
 	

@@ -29,7 +29,7 @@ public class AccessLoginPageListener implements PhaseListener{
 				// Se o usuário estiver setado, redireciona para o menu principal
 				if (contexto.getExternalContext().getSessionMap().get("usuarioLogado") != null) {
 					NavigationHandler nh = contexto.getApplication().getNavigationHandler();
-					nh.handleNavigation(contexto, null, "/pages/menu/inicio?faces-redirect=true");
+					nh.handleNavigation(contexto, null, "/pages/menu/dashboard?faces-redirect=true");
 				}
 			}
 			
