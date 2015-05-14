@@ -57,53 +57,54 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{favorecidoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="pesquisa">
-		Nome:
-	    <p:inputText value="#{managedBean.nomeFavorecido}" />
-	    &nbsp;
-	    <p:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
-	    Somente ativos
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label for="frmListEntity:txtNome">Nome:</label>
+		    <h:inputText id="txtNome" value="#{managedBean.nomeFavorecido}"/>
+	    </h:panelGroup>
+	    <h:panelGroup>
+	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    	<label>Somente ativos</label>
+	    </h:panelGroup>	    	    
 	</ui:define>
-
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
+	
 	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
+		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Nome"/>
 			</f:facet>
 			<h:outputText value="#{item.nome}"/>
-	  			</p:column>
+	  	</h:column>
 	  			
-	  			<p:column style="text-align: center; vertical-align: middle;">
+	  	<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Tipo de pessoa"/>
 			</f:facet>
 			<h:outputText value="#{item.tipoPessoa}"/>
-	  			</p:column>
+	  	</h:column>
 	  			
-	  			<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Ativo"/>
-			</f:facet>
-			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true"/>
-	 	</p:column>
-	 	
 	</ui:define>
 	
 	<ui:define name="acoes">
-     	<p:column style="text-align: center; vertical-align: middle;">
+		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
-				<h:outputText value="Ações"/>
-			</f:facet>		
-			<h:commandButton value="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandLink title="Editar" action="#{managedBean.edit}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>								
-	  		&nbsp;&nbsp;&nbsp;			
-			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{!item.padrao}">
+			</h:commandLink>								
+	  		<p:spacer width="10"/>			
+			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{!item.padrao}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>
-	  	</p:column>
-     </ui:define>
+			</h:commandLink>
+		</h:column>
+	</ui:define>
 
 </ui:composition>
 </html>

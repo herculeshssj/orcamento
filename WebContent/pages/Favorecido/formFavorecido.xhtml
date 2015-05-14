@@ -58,31 +58,27 @@
 	<ui:param name="managedBean" value="#{favorecidoMB}" />
 	
 	<ui:define name="campos">
-			
-		<h:panelGrid columns="2">
-				
-			Nome:
-			<p:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
-			
-			Tipo de Pessoa:
-			<p:selectOneRadio id="txtTipoPessoa" value="#{managedBean.entity.tipoPessoa}" disabled="#{!managedBean.entity.ativo}" required="true" requiredMessage="Informe o tipo de pessoa!">
-				<f:selectItems value="#{managedBean.listaTipoPessoa}"/>
-			</p:selectOneRadio>
-			
-			CPF/CNPJ:
-			<p:inputText value="#{managedBean.entity.cpfCnpj}" size="20" disabled="#{!managedBean.entity.ativo}"/>
-			
-			Contato:
-			<p:inputTextarea id="txtContato" value="#{managedBean.entity.contato}" disabled="#{!managedBean.entity.ativo}"/>						
-			
-			Padrão:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-			
-			Ativo:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.ativo}" />
-				
-			</h:panelGrid>
+	
+		<label for="frmFormEntity:txtNome">Nome:</label>
+		<h:inputText id="txtNome" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo}"/>
 		
+		<label>Tipo de Pessoa:</label>
+		<h:selectOneRadio value="#{managedBean.entity.tipoPessoa}" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItems value="#{enumCombo.listaTipoPessoa}"/>
+		</h:selectOneRadio>				
+		
+		<label for="frmFormEntity:txtCpf">CPF/CNPJ:</label>
+		<h:inputText id="txtCpf" value="#{managedBean.entity.cpfCnpj}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>				
+		
+		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
+		<label>Padrão:</label>
+		
+		<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
+		<label>Ativo:</label>
+		
+		<label for="frmFormEntity:txtContato">Contato:</label>
+		<h:inputTextarea id="txtContato" value="#{managedBean.entity.contato}" disabled="#{!managedBean.entity.ativo}"/>
+			
 	</ui:define>
 
 </ui:composition>
