@@ -54,21 +54,25 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{meioPagamentoMB}" />
-	
-	<ui:define name="campos">		
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Descrição:
+			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>				
+			
+			Padrão:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
+			
+			Ativo:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+			
+		</h:panelGrid>
 		
-		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.ativo}"/>				
-				
-		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-		<label>Padrão:</label>
-		
-		<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
-		<label>Ativo:</label>
-						
 	</ui:define>
 	
 </ui:composition>

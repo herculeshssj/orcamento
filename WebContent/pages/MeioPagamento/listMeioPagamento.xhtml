@@ -54,21 +54,48 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{meioPagamentoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="campos">		
-		
-		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.ativo}"/>				
-				
-		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-		<label>Padrão:</label>
-		
-		<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
-		<label>Ativo:</label>
-						
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label for="frmListEntity:txtDescricao">Descrição:</label>
+		    <h:inputText id="txtDescricao" value="#{managedBean.descricaoMeioPagamento}"/>
+	    </h:panelGroup>
+	    <h:panelGroup>
+	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    	<label>Somente ativos</label>
+	    </h:panelGroup>	    	    
+	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
+
+	<ui:define name="colunas">
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição"/>
+			</f:facet>
+			<h:outputText value="#{item.descricao}"/>
+   		</h:column>	   		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandLink title="Editar" action="#{managedBean.edit}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>								
+	  		<p:spacer width="10"/>			
+			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{!item.padrao}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
+		</h:column>
 	</ui:define>
 	
 </ui:composition>
