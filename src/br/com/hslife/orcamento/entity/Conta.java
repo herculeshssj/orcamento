@@ -67,6 +67,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="conta")
@@ -169,6 +170,9 @@ public class Conta extends EntityPersistence {
 		if (this.moeda == null) {
 			throw new BusinessException("Informe a moeda!");
 		}
+		
+		EntityPersistenceUtil.validaCampoNulo("Tipo de conta", this.tipoConta);
+		EntityPersistenceUtil.validaCampoNulo("Data de abertura", this.dataAbertura);
 	}
 
 	public Banco getBanco() {

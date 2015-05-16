@@ -60,7 +60,6 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
@@ -215,8 +214,8 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 				lancamentoImportadoRepository.delete(importado);
 			}
 			
-			// Exclui os fechamentos de períodos com status REABERTURA
-			for (FechamentoPeriodo fechamento : fechamentoPeriodoRepository.findByContaAndOperacaoConta(entity, OperacaoConta.REABERTURA)) {
+			// Exclui todos os fechamentos de períodos
+			for (FechamentoPeriodo fechamento : fechamentoPeriodoRepository.findAllByConta(entity)) {
 				fechamentoPeriodoRepository.delete(fechamento);
 			}
 			

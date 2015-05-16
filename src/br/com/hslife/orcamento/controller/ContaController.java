@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.IConta;
@@ -81,7 +82,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	@Autowired
 	private IMoeda moedaService;
 	
-	private String descricaoConta;
+	private TipoConta tipoSelecionado;
 	private boolean somenteAtivos = true;
 	
 	private String opcaoLancamentos;
@@ -101,7 +102,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(descricaoConta, null, getUsuarioLogado(), somenteAtivos);			
+			listEntity = getService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, tipoSelecionado, getUsuarioLogado(), somenteAtivos);			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -116,9 +117,8 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	public String ativarContaView() {
 		try {
 			actionTitle = " - Ativar";
-			//operation = "";
 			entity = getService().buscarPorID(idEntity);
-			return goToViewPage;
+			return "/pages/Conta/ativarDesativarConta";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -156,10 +156,9 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	public String desativarContaView() {
 		try {
 			actionTitle = " - Desativar";
-			//operation = "";
 			entity = getService().buscarPorID(idEntity);
 			entity.setDataFechamento(new Date());
-			return goToViewPage;
+			return "/pages/Conta/ativarDesativarConta";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -243,19 +242,19 @@ public class ContaController extends AbstractCRUDController<Conta> {
 		this.opcaoLancamentos = opcaoLancamentos;
 	}
 
-	public String getDescricaoConta() {
-		return descricaoConta;
-	}
-
-	public void setDescricaoConta(String descricaoConta) {
-		this.descricaoConta = descricaoConta;
-	}
-
 	public boolean isSomenteAtivos() {
 		return somenteAtivos;
 	}
 
 	public void setSomenteAtivos(boolean somenteAtivos) {
 		this.somenteAtivos = somenteAtivos;
+	}
+
+	public TipoConta getTipoSelecionado() {
+		return tipoSelecionado;
+	}
+
+	public void setTipoSelecionado(TipoConta tipoSelecionado) {
+		this.tipoSelecionado = tipoSelecionado;
 	}
 }

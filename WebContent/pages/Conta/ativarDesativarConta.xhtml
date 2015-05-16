@@ -91,11 +91,6 @@
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			
-			Data de fechamento:
-			<h:outputText value="#{managedBean.entity.dataFechamento}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
 			Saldo de abertura:
 			<h:panelGroup>
 				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
@@ -103,18 +98,47 @@
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 			</h:panelGroup>
+						
+			<h:outputText value="Data de fechamento:" rendered="#{!managedBean.entity.ativo}"/>
+			<h:outputText value="#{managedBean.entity.dataFechamento}" rendered="#{!managedBean.entity.ativo}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
 			
-			Saldo de fechamento:
-			<h:panelGroup>
+			<h:outputText value="Saldo de fechamento:" rendered="#{!managedBean.entity.ativo}"/>
+			<h:panelGroup rendered="#{!managedBean.entity.ativo}">
 				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
 				<h:outputText value="#{managedBean.entity.saldoFinal}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
-			</h:panelGroup>
+			</h:panelGroup>			
+			
+			<h:outputText value="Data de fechamento:" rendered="#{managedBean.entity.ativo}"/>
+			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataFechamento}" rendered="#{managedBean.entity.ativo}" required="true" requiredMessage="Informe a data de fechamento!">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>
+	    	
+	    	<h:outputText value="Lançamentos após data de fechamento:" rendered="#{managedBean.entity.ativo}"/>
+	    	<h:selectOneRadio value="#{managedBean.opcaoLancamentos}" rendered="#{managedBean.entity.ativo}" layout="lineDirection" required="true" requiredMessage="Informe a situação dos lançamentos agendados!">
+	    		<f:selectItem itemLabel="Quitar" itemValue="QUITAR"/>
+	    		<f:selectItem itemLabel="Excluir" itemValue="EXCLUIR"/>
+	    	</h:selectOneRadio>
 	    							
 		</h:panelGrid>
 		
 	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOkEnable" title="Ativar conta" action="#{managedBean.ativarConta}" rendered="#{!managedBean.entity.ativo}">
+     		<h:graphicImage id="imgOkEnable" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+     	<h:commandLink id="lnkOkDisable" title="Desativar conta" action="#{managedBean.desativarConta}" rendered="#{managedBean.entity.ativo}">
+     		<h:graphicImage id="imgOkDisable" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+ 	</ui:define>
 	
 </ui:composition>
 </html>

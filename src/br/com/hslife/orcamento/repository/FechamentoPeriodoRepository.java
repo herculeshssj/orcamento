@@ -66,6 +66,14 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<FechamentoPeriodo> findAllByConta(Conta conta) {
+		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
+		criteria.add(Restrictions.eq("conta.id", conta.getId()));
+		criteria.addOrder(Order.asc("data"));
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<FechamentoPeriodo> findByContaAndOperacaoConta(Conta conta, OperacaoConta operacaoConta) {
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
