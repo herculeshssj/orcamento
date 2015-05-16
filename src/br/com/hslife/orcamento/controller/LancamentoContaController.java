@@ -122,6 +122,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private IBuscaSalva buscaSalvaService;
 	
 	private CriterioBuscaLancamentoConta novoCriterioBusca = new CriterioBuscaLancamentoConta();
+	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private String agrupamentoSelecionado;
 	private TipoCategoria tipoCategoriaSelecionada;
@@ -160,6 +161,20 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Override
 	public void find() {
 		try {
+			/* Rotina de migração de novoCriterioBusca para criterioBusca /*
+			 * 
+			 */
+			// Seta o início
+			novoCriterioBusca.setDataInicio(criterioBusca.getDataInicio());
+			
+			// Seta o fim
+			novoCriterioBusca.setDataFim(criterioBusca.getDataFim());
+			
+			// Seta a descrição
+			novoCriterioBusca.setDescricao(criterioBusca.getDescricao());
+			
+			/* Fim da rotina */
+			
 			if (novoCriterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
 			} else {
@@ -173,6 +188,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				novoCriterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 				
 				listEntity = getService().buscarPorCriterioBusca(novoCriterioBusca);
+				
 				
 				if (agrupamentoSelecionado.equals("CAT"))
 					agrupamentoLancamentoPorCategoria = getService().organizarLancamentosPorCategoria(listEntity);
@@ -316,6 +332,21 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return movimentacaoLancamentoMB.alterarPropriedadesView();
 	}
 	
+	public String mesclar() {
+		errorMessage("Funcionalidade não implementada");
+		return "";
+	}
+	
+	public String dividir() {
+		errorMessage("Funcionalidade não implementada");
+		return "";
+	}
+	
+	public String detalhar() {
+		errorMessage("Funcionalidade não implementada");
+		return "";
+	}
+	
 	public String transferir() {
 		initializeEntity();
 		return movimentacaoLancamentoMB.transferirView();
@@ -343,6 +374,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				case MOEDA : agrupamentoSelecionado = "MOE"; break;
 				default : agrupamentoSelecionado = "";
 			}
+			
+			/* Migração para criterioBusca */
+			criterioBusca.setDataInicio(novoCriterioBusca.getDataInicio());
+			criterioBusca.setDataFim(novoCriterioBusca.getDataFim());
+			criterioBusca.setDescricao(novoCriterioBusca.getDescricao());
 			this.find();
 		} else {
 			warnMessage("Nenhuma busca selecionada!");
@@ -771,5 +807,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setMoedaService(IMoeda moedaService) {
 		this.moedaService = moedaService;
+	}
+
+	public CriterioBuscaLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
 	}
 }

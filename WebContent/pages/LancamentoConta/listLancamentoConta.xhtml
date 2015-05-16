@@ -57,50 +57,30 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{lancamentoContaMB}" />
+	<ui:param name="colunaPesquisa" value="7" />
 	
-	<ui:define name="pesquisa">
-	   	<h:commandLink action="#{managedBean.create}" title="Novo registro">
-			<p:graphicImage value="/resources/images/novo.png"/>			
-		</h:commandLink>
-		&nbsp;
-   		<h:commandLink action="#{managedBean.mover}" title="Mover lançamentos">
-  			<p:graphicImage value="/resources/images/mover.png" />
-  		</h:commandLink>
-  		&nbsp;
-  		<h:commandLink action="#{managedBean.duplicar}" title="Duplicar lançamentos">
-  			<p:graphicImage value="/resources/images/copiar.png" />
-  		</h:commandLink>
-  		&nbsp;  		
-  		<h:commandLink action="#{managedBean.alterarPropriedades}" title="Altera propriedades dos lançamentos">
-  			<p:graphicImage value="/resources/images/propriedades.png" />
-  		</h:commandLink>
-  		&nbsp;
-  		<h:commandLink action="#{managedBean.excluir}" title="Excluir lançamentos">
-  			<p:graphicImage value="/resources/images/excluir.png" />
-  		</h:commandLink>
-  		&nbsp;
-  		<h:commandLink action="#{managedBean.transferir}" title="Transferir lançamentos">
-  			<p:graphicImage value="/resources/images/transferir.png" />
-  		</h:commandLink>
-    
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label for="frmListEntity:txtDescricao">Descrição:</label>
+		    <h:inputText id="txtDescricao" value="#{managedBean.criterioBusca.descricao}" />
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    <label for="frmListEntity:txtDataInicio">De:</label>
+		    <p:inputMask id="txtDataInicio" size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.dataInicio}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    <label for="frmListEntity:txtDataFim">À:</label>
+		    <p:inputMask id="txtDataFim" size="9" mask="99/99/9999" value="#{managedBean.criterioBusca.dataFim}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>	    	    
+	</ui:define>
 	
+	<ui:define name="pesquisa_avancada">
 	
-    	<p:inputText value="#{managedBean.novoCriterioBusca.descricao}" size="20"/>
-    	&nbsp;
-	    De:
-	    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.novoCriterioBusca.dataInicio}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>	         		     					
-		À
-		<p:inputMask size="9" mask="99/99/9999" value="#{managedBean.novoCriterioBusca.dataFim}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>
-	
-		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
-			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
-		</h:commandLink>	
-	
-		<p:commandLink id="linkBuscaAvancada" value="Mais opções >>>"/>
+		<p:commandLink id="linkBuscaAvancada" value="Mais opções >>>"/>		
 		
 		<p:overlayPanel for="linkBuscaAvancada">
 			<h:panelGrid columns="2">
@@ -140,11 +120,12 @@
 				</h:panelGroup>				
 			</h:panelGrid>			   				   				   				
   		</p:overlayPanel>
+  		
 	</ui:define>
 	
 	<ui:define name="tabela">
 		<h:panelGroup rendered="#{empty managedBean.agrupamentoSelecionado}">
-			<ui:include src="semAgrupamento.xhtml"/>     	
+			<ui:include src="semAgrupamento.xhtml"/> 	
 	    </h:panelGroup>
 	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'CAT'}">
 		     	<ui:include src="categoriaAgrupamento.xhtml"/>
