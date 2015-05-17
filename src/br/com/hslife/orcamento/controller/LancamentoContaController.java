@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -66,12 +67,14 @@ import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.Container;
+import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -81,6 +84,7 @@ import br.com.hslife.orcamento.facade.IBuscaSalva;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -116,6 +120,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private IMoeda moedaService;
 	
 	@Autowired
+	private IFechamentoPeriodo fechamentoPeriodoService;
+	
+	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
 	
 	@Autowired
@@ -129,6 +136,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private boolean pesquisarTermoNoAgrupamento;	
 	private boolean selecionarTodosLancamentos;
 	private String vincularFatura;
+	private FechamentoPeriodo fechamentoSelecionado;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
@@ -141,7 +149,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
-		moduleTitle = "Lançamentos da Conta/Cartão";
+		moduleTitle = "Lançamentos da Conta";
 	}
 
 	@Override
@@ -155,6 +163,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
 		agrupamentoLancamentoPorMoeda = new ArrayList<>();
 		
+		selecionarTodosLancamentos = false;
+		
 		buscasSalvas.clear();
 	}
 	
@@ -164,6 +174,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			/* Rotina de migração de novoCriterioBusca para criterioBusca /*
 			 * 
 			 */
+			// Seta a conta
+			novoCriterioBusca.setConta(criterioBusca.getConta());
+			
 			// Seta o início
 			novoCriterioBusca.setDataInicio(criterioBusca.getDataInicio());
 			
@@ -379,6 +392,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			criterioBusca.setDataInicio(novoCriterioBusca.getDataInicio());
 			criterioBusca.setDataFim(novoCriterioBusca.getDataFim());
 			criterioBusca.setDescricao(novoCriterioBusca.getDescricao());
+			criterioBusca.setConta(novoCriterioBusca.getConta());
 			this.find();
 		} else {
 			warnMessage("Nenhuma busca selecionada!");
@@ -494,12 +508,42 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return buscasSalvas;
 	}
 	
-	public String getSaldoTotalFormatado() {
-		if (listEntity == null || listEntity.isEmpty()) {
-			return Util.moedaBrasil(0.0);
-		} else {
-			return Util.moedaBrasil(getService().calcularSaldoLancamentos(listEntity));
+	public String getTotalCreditos() {
+		double total = 0;
+		if (listEntity != null) {
+			for (LancamentoConta lancamento : listEntity) {
+				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
+					total += lancamento.getValorPago();
+			}
 		}
+		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(total));
+	}
+	
+	public String getTotalDebitos() {
+		double total = 0;
+		if (listEntity != null) {
+			for (LancamentoConta lancamento : listEntity) {
+				if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA))
+					total += lancamento.getValorPago();
+			}
+		}
+		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(total));
+	}
+	
+	public String getSaldoTotal() {
+		double total = getService().calcularSaldoLancamentos(listEntity);		
+		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(total));
+	}
+	
+	private String retornaSimboloMonetario() {
+		// Verifica se a conta já foi selecionada. Se não, usa a moeda padrão.
+		String simboloMonetario = "";
+		if (novoCriterioBusca.getConta() == null) {
+			simboloMonetario = this.getMoedaPadrao().getSimboloMonetario();
+		} else {
+			simboloMonetario = this.novoCriterioBusca.getConta().getMoeda().getSimboloMonetario();
+		}
+		return simboloMonetario;
 	}
 	
 	public List<SelectItem> getListaTipoLancamento() {
@@ -511,6 +555,31 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public void atualizarListaPesquisaAgrupamento() {
 		this.getListaPesquisaAgrupamento();
+	}
+	
+	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
+		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
+		try {			
+			if (criterioBusca.getConta() != null) {
+				List<FechamentoPeriodo> resultado = fechamentoPeriodoService.buscarPorContaEOperacaoConta(criterioBusca.getConta(), OperacaoConta.FECHAMENTO);
+				if (resultado != null) {
+					if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
+						for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
+							fechamentos.add(resultado.get(i));
+						}
+					} else {
+						fechamentos.addAll(resultado);
+					}
+				}
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return fechamentos;
+	}
+	
+	public void atualizaListaFechamentoPeriodo() {
+		this.getListaFechamentoPeriodo();
 	}
 	
 	public List<SelectItem> getListaPesquisaAgrupamento() {
@@ -815,5 +884,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
 		this.criterioBusca = criterioBusca;
+	}
+
+	public FechamentoPeriodo getFechamentoSelecionado() {
+		return fechamentoSelecionado;
+	}
+
+	public void setFechamentoSelecionado(FechamentoPeriodo fechamentoSelecionado) {
+		this.fechamentoSelecionado = fechamentoSelecionado;
 	}
 }

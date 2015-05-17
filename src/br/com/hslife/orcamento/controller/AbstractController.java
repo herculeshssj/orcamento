@@ -54,8 +54,10 @@ import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
 
 public abstract class AbstractController implements Serializable {	
@@ -73,6 +75,9 @@ public abstract class AbstractController implements Serializable {
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
+	
+	@Autowired
+	private ContaComponent contaComponent;
 	
 	protected abstract void initializeEntity();
 	
@@ -103,6 +108,10 @@ public abstract class AbstractController implements Serializable {
 	
 	public OpcaoSistemaComponent getOpcoesSistema() {
 		return opcaoSistemaComponent;
+	}
+	
+	public Moeda getMoedaPadrao() {
+		return contaComponent.getMoedaPadrao();
 	}
 	
 	public void infoMessage(String mensage) {

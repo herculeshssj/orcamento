@@ -57,7 +57,7 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{lancamentoContaMB}" />
-	<ui:param name="colunaPesquisa" value="7" />
+	<ui:param name="colunaPesquisa" value="6" />
 	
 	<ui:define name="parametro_pesquisa">		
 		<h:panelGroup>
@@ -80,7 +80,7 @@
 	
 	<ui:define name="pesquisa_avancada">
 	
-		<p:commandLink id="linkBuscaAvancada" value="Mais opções >>>"/>		
+		<p:commandLink id="linkBuscaAvancada" value="Mais opções de pesquisa >>>"/>		
 		
 		<p:overlayPanel for="linkBuscaAvancada">
 			<h:panelGrid columns="2">
@@ -125,7 +125,7 @@
 	
 	<ui:define name="tabela">
 		<h:panelGroup rendered="#{empty managedBean.agrupamentoSelecionado}">
-			<ui:include src="semAgrupamento.xhtml"/> 	
+			<ui:include src="listagemLancamento.xhtml"/> 	
 	    </h:panelGroup>
 	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'CAT'}">
 		     	<ui:include src="categoriaAgrupamento.xhtml"/>
@@ -145,31 +145,43 @@
 	</ui:define>
 	
 	<ui:define name="outras_opcoes">
-		<strong>Conta/Cartão:</strong>
-		&nbsp;
-		<h:selectOneMenu id="txtConta" value="#{managedBean.novoCriterioBusca.conta}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-			<p:ajax update="txtBuscaSalva" listener="#{managedBean.atualizaComboBuscasSalvas}"/>			
-		</h:selectOneMenu>
-		&nbsp;
-		&nbsp;
-		<strong>Buscas salvas:</strong>
-		&nbsp;		
-		<h:selectOneMenu id="txtBuscaSalva" value="#{managedBean.buscaSalva}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.buscasSalvas}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-		</h:selectOneMenu>
-		&nbsp;
-		<h:commandLink title="Efetuar busca" action="#{managedBean.processarBuscaSalva}">
-     		<p:graphicImage value="/resources/images/pesquisar.png"/>
-     	</h:commandLink>
-     	&nbsp;
-     	<h:commandLink title="Salvar busca" action="#{managedBean.salvarBuscaView}">
-     		<p:graphicImage value="/resources/images/gravar.png" />
-     	</h:commandLink>
-     	&nbsp;
-		<h:commandLink title="Excluir busca" action="#{managedBean.excluirBuscaView}">
-  			<p:graphicImage value="/resources/images/excluir.png" />
-  		</h:commandLink>
+		<h:panelGrid columns="3">
+			
+			<h:panelGroup>
+				<label>Conta:</label>
+				<h:selectOneMenu value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					<p:ajax update="txtPeriodo" listener="#{managedBean.atualizaComboBuscasSalvas}"/>
+				</h:selectOneMenu>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<label>Período:</label>
+				<h:selectOneMenu id="txtPeriodo" value="#{managedBean.fechamentoSelecionado}" converter="entityConverter">
+					<f:selectItem itemLabel="Período atual" />
+					<f:selectItems value="#{managedBean.listaFechamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:commandLink title="Selecionar" action="#{managedBean.find}">
+					<h:graphicImage id="imgSelect" height="48" width="48" value="/resources/images/svg/frame.svg"/>
+				</h:commandLink>
+				<h:commandLink title="Importar lançamentos" action="#{managedBean.importarLancamentos}">
+					<h:graphicImage id="imgImport" height="48" width="48" value="/resources/images/svg/import.svg"/>
+				</h:commandLink>
+				<h:commandLink title="Exportar lançamentos" action="#{managedBean.exportarLancamentos}">
+					<h:graphicImage id="imgExport" height="48" width="48" value="/resources/images/svg/export.svg"/>
+				</h:commandLink>
+				<h:commandLink title="Fechar período" action="#{managedBean.fecharPeriodo}">
+					<h:graphicImage id="imgClose" height="48" width="48" value="/resources/images/svg/frame.svg"/>
+				</h:commandLink>
+				<h:commandLink title="Reabrir período" action="#{managedBean.reabrirPeriodo}">
+					<h:graphicImage id="imgReopen" height="48" width="48" value="/resources/images/svg/frame.svg"/>
+				</h:commandLink>
+			</h:panelGroup>
+		</h:panelGrid>
+		
 	</ui:define>
 	
 </ui:composition>

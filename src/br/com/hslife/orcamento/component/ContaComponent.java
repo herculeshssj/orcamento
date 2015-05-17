@@ -74,6 +74,7 @@ import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
+import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.EntityLabelComparator;
 import br.com.hslife.orcamento.util.Util;
@@ -92,6 +93,9 @@ public class ContaComponent {
 	
 	@Autowired
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
+	
+	@Autowired
+	private MoedaRepository moedaRepository;
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
@@ -118,13 +122,19 @@ public class ContaComponent {
 		return fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
 	}
 	
+	public Moeda getMoedaPadrao() {
+		return moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+	}
+	
 	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos) {		
 		double total = 0.0;
-		for (LancamentoConta l : lancamentos) {
-			if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
-				total += l.getValorPago();
-			} else {
-				total -= l.getValorPago();
+		if (lancamentos != null) {
+			for (LancamentoConta l : lancamentos) {
+				if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+					total += l.getValorPago();
+				} else {
+					total -= l.getValorPago();
+				}
 			}
 		}
 		return Util.arredondar(total);
