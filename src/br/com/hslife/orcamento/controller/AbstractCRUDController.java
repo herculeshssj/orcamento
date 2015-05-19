@@ -187,6 +187,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	}
 	
 	public String search() {
+		actionTitle = "";
 		return goToListPage;
 	}
 	

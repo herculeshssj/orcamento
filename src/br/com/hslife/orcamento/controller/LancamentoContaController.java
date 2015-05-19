@@ -202,7 +202,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				
 				listEntity = getService().buscarPorCriterioBusca(novoCriterioBusca);
 				
-				
+				/*
 				if (agrupamentoSelecionado.equals("CAT"))
 					agrupamentoLancamentoPorCategoria = getService().organizarLancamentosPorCategoria(listEntity);
 				if (agrupamentoSelecionado.equals("FAV"))
@@ -213,11 +213,17 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 					agrupamentoLancamentoPorDebitoCredito = getService().organizarLancamentosPorDebitoCredito(listEntity);
 				if (agrupamentoSelecionado.equals("MOE"))
 					agrupamentoLancamentoPorMoeda = getService().organizarLancamentosPorMoeda(listEntity);
-				
+				*/
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+	}
+	
+	@Override
+	public String search() {
+		find();
+		return super.search();
 	}
 	
 	@Override
@@ -516,7 +522,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 					total += lancamento.getValorPago();
 			}
 		}
-		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(total));
+		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.00").format(Util.arredondar(total));
 	}
 	
 	public String getTotalDebitos() {
@@ -527,12 +533,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 					total += lancamento.getValorPago();
 			}
 		}
-		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(total));
+		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.00").format(Util.arredondar(total));
 	}
 	
 	public String getSaldoTotal() {
 		double total = getService().calcularSaldoLancamentos(listEntity);		
-		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(total));
+		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.00").format(Util.arredondar(total));
 	}
 	
 	private String retornaSimboloMonetario() {

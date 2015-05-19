@@ -78,70 +78,8 @@
 	    </h:panelGroup>	    	    
 	</ui:define>
 	
-	<ui:define name="pesquisa_avancada">
-	
-		<p:commandLink id="linkBuscaAvancada" value="Mais opções de pesquisa >>>"/>		
-		
-		<p:overlayPanel for="linkBuscaAvancada">
-			<h:panelGrid columns="2">
-				<h:panelGroup>
-		  			Agrupar por:
-		  			<!-- selectOneRadio exibido quando a exibição de meio de pagamento está ativada -->     			
-		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
-		  				<f:selectItem itemLabel="Nenhum"/>
-		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
-						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
-						<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
-						<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
-						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
-					</p:selectOneRadio>
-					<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->     			
-		  			<p:selectOneRadio layout="pageDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
-		  				<f:selectItem itemLabel="Nenhum"/>
-		  				<f:selectItem itemLabel="Crédito/Débito" itemValue="CD"/>
-						<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-						<f:selectItem itemLabel="Favorecido / Sacado" itemValue="FAV"/>
-						<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
-						<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
-					</p:selectOneRadio>
-					<p:selectBooleanCheckbox value="#{managedBean.pesquisarTermoNoAgrupamento}"/>
-					Pesquisar termo no agrupamento
-					<br/>
-					<h:selectOneMenu id="txtPesquisaAgrupamento" value="#{managedBean.novoCriterioBusca.idAgrupamento}">
-						<f:selectItems value="#{managedBean.listaPesquisaAgrupamento}"/>
-					</h:selectOneMenu>
-				</h:panelGroup>				
-				<h:panelGroup>   				
-					Exibir:
-					<p:selectManyCheckbox value="#{managedBean.novoCriterioBusca.statusLancamentoConta}" converter="statusLancamentoContaConverter" layout="pageDirection">
-						<f:selectItems value="#{managedBean.listaStatusLancamentoConta}"/>
-					</p:selectManyCheckbox>					
-				</h:panelGroup>				
-			</h:panelGrid>			   				   				   				
-  		</p:overlayPanel>
-  		
-	</ui:define>
-	
 	<ui:define name="tabela">
-		<h:panelGroup rendered="#{empty managedBean.agrupamentoSelecionado}">
-			<ui:include src="listagemLancamento.xhtml"/> 	
-	    </h:panelGroup>
-	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'CAT'}">
-		     	<ui:include src="categoriaAgrupamento.xhtml"/>
-	     	</h:panelGroup>
-	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'FAV'}">
-		     	<ui:include src="favorecidoAgrupamento.xhtml"/>
-	     	</h:panelGroup>
-	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'CD'}">
-		     	<ui:include src="creditoDebitoAgrupamento.xhtml"/>
-	     	</h:panelGroup>
-	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'PAG'}">
-		     	<ui:include src="meioPagamentoAgrupamento.xhtml"/>
-	     	</h:panelGroup>
-	     	<h:panelGroup rendered="#{managedBean.agrupamentoSelecionado == 'MOE'}">
-		     	<ui:include src="moedaAgrupamento.xhtml"/>
-	     	</h:panelGroup>
+		<ui:include src="listagemLancamento.xhtml"/>
 	</ui:define>
 	
 	<ui:define name="outras_opcoes">
