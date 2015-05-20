@@ -95,14 +95,14 @@
 			
 			<h:panelGroup>
 				<label>Período:</label>
-				<h:selectOneMenu id="txtPeriodo" value="#{managedBean.fechamentoSelecionado}" converter="entityConverter">
+				<h:selectOneMenu id="txtPeriodo" value="#{managedBean.fechamentoPeriodo}" converter="entityConverter">
 					<f:selectItem itemLabel="Período atual" />
 					<f:selectItems value="#{managedBean.listaFechamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 				</h:selectOneMenu>
 			</h:panelGroup>
 			
 			<h:panelGroup>
-				<h:commandLink title="Selecionar" action="#{managedBean.find}">
+				<h:commandLink title="Selecionar" action="#{managedBean.findByPeriodo}">
 					<h:graphicImage id="imgSelect" height="48" width="48" value="/resources/images/svg/advance.svg"/>
 				</h:commandLink>
 				<h:commandLink title="Importar lançamentos" action="#{managedBean.importarLancamentos}">

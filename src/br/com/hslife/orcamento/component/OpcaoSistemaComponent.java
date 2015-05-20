@@ -255,7 +255,7 @@ public class OpcaoSistemaComponent implements Serializable{
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).clear();
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTA_EXIBIR_MEIO_PAGAMENTO", this.getExibirMeioPagamento());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("GERAL_EXIBIR_BUSCAS_REALIZADAS", this.getExibirBuscasRealizadas());
-		
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", this.getLimiteQuantidadeRegistros());
 	}
 	
 	/**
@@ -336,6 +336,25 @@ public class OpcaoSistemaComponent implements Serializable{
 		return false;
 	}
 	
+	public Integer getLimiteQuantidadeRegistros() {
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		try {
+			// Verifica se o valor existe no cache
+			if (recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS") != null) {
+				return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS"));
+			} else {
+				OpcaoSistema opcao = buscarPorChaveEUsuario("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", Integer.valueOf(opcao.getValor()));
+					return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS"));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 100; // valor padrão.
+	}
+	
 	public String getFormaAgrupamentoPagamento() {
 		try {
 			OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", usuarioComponent.getUsuarioLogado());
@@ -356,17 +375,6 @@ public class OpcaoSistemaComponent implements Serializable{
 			e.printStackTrace();
 		}
 		return false;
-	}
-	
-	public Integer getLimiteQuantidadeRegistros() {
-		try {
-			OpcaoSistema opcao = buscarPorChaveEUsuario("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", usuarioComponent.getUsuarioLogado());
-			if (opcao != null)
-				return Integer.valueOf(opcao.getValor());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 100; // valor padrão.
 	}
 	
 	public Integer getLimiteQuantidadeFechamentos() {

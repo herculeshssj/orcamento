@@ -73,9 +73,17 @@ public class CriterioBuscaLancamentoConta {
 	private String agrupamento;
 	private Long idAgrupamento;
 	private TipoConta[] tipoConta;
-	private StatusLancamentoConta[] statusLancamentoConta;
+	private StatusLancamentoConta[] statusLancamentoConta;	
 	
 	private Integer limiteResultado = 0;
+	
+	public void limparCriterios() {
+		this.setDescricao(null);
+		this.setAgrupamento(null);
+		this.setCadastro(null);
+		this.setTipoConta(null);
+		this.setStatusLancamentoConta(null);
+	}
 	
 	public String getDescricao() {
 		return descricao;

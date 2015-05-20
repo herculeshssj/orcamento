@@ -62,4 +62,8 @@ public interface IFechamentoPeriodo extends ICRUDService<FechamentoPeriodo> {
 	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException;
 	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException;
+	
+	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
+	
+	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws BusinessException;
 }

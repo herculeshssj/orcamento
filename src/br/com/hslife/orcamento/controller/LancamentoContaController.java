@@ -48,6 +48,8 @@ package br.com.hslife.orcamento.controller;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -136,7 +138,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private boolean pesquisarTermoNoAgrupamento;	
 	private boolean selecionarTodosLancamentos;
 	private String vincularFatura;
-	private FechamentoPeriodo fechamentoSelecionado;
+	private FechamentoPeriodo fechamentoPeriodo;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
 	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
@@ -215,6 +217,50 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 					agrupamentoLancamentoPorMoeda = getService().organizarLancamentosPorMoeda(listEntity);
 				*/
 			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void findByPeriodo() {
+		try {
+			if (criterioBusca.getConta() == null) {
+				warnMessage("Informe a conta!");
+				return;
+			}
+			
+			criterioBusca.limparCriterios();
+			
+			// Busca o fechamento do período anterior
+			FechamentoPeriodo fechamentoAnterior;
+			if (fechamentoPeriodo != null) 
+				fechamentoAnterior = fechamentoPeriodoService.buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
+			else
+				fechamentoAnterior = fechamentoPeriodoService.buscarUltimoFechamentoConta(criterioBusca.getConta());
+			
+			// Determina a data de início do período
+			if (fechamentoAnterior == null) {
+				criterioBusca.setDataInicio(criterioBusca.getConta().getDataAbertura());
+				criterioBusca.setDataFim(new Date());
+			} else {
+				Calendar temp = Calendar.getInstance();
+				temp.setTime(fechamentoAnterior.getData());
+				temp.add(Calendar.DAY_OF_YEAR, 1);
+				criterioBusca.setDataInicio(temp.getTime());
+			}
+			
+			// Determina a data de fim do período
+			if (fechamentoPeriodo == null) {
+				criterioBusca.setDataFim(new Date());
+			} else {
+				criterioBusca.setDataFim(fechamentoPeriodo.getData());
+			}
+			
+			// Seta o limite de resultado da pesquisa
+			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+			
+			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -892,11 +938,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.criterioBusca = criterioBusca;
 	}
 
-	public FechamentoPeriodo getFechamentoSelecionado() {
-		return fechamentoSelecionado;
+	public FechamentoPeriodo getFechamentoPeriodo() {
+		return fechamentoPeriodo;
 	}
 
-	public void setFechamentoSelecionado(FechamentoPeriodo fechamentoSelecionado) {
-		this.fechamentoSelecionado = fechamentoSelecionado;
+	public void setFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
+		this.fechamentoPeriodo = fechamentoPeriodo;
 	}
 }

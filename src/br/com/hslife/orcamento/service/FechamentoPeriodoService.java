@@ -115,6 +115,16 @@ public class FechamentoPeriodoService extends AbstractCRUDService<FechamentoPeri
 		getComponent().fecharPeriodo(dataFechamento, conta);
 	}
 	
+	@Override
+	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
+		return getRepository().findFechamentoPeriodoAnterior(fechamentoPeriodo);
+	}
+	
+	@Override
+	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) {
+		return getRepository().findUltimoFechamentoByConta(conta);
+	}
+	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException {
 		// Obtém-se o último fechamento realizado
 		FechamentoPeriodo fechamentoAnterior = getRepository().findUltimoFechamentoByConta(entity.getConta());
