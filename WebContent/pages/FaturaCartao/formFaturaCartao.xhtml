@@ -99,12 +99,16 @@
 		
 		<h:panelGrid columns="1">
 			Anexar fatura:
-			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" />			
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" />
 			<h:panelGroup>
-				<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
+				<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+					<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+				</h:commandLink>
 				&nbsp;&nbsp;&nbsp;
-				<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png" />				
-			</h:panelGroup>
+				<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}">
+					<h:graphicImage id="imgDeleteFile" value="/resources/images/svg/delete_row.svg" height="48" width="48"/>
+				</h:commandLink>								
+			</h:panelGroup>			
 		</h:panelGrid>
 		
 		<hr/>
@@ -112,146 +116,16 @@
 		<p:tabView>
 			<p:ajax event="tabChange" update="tableLancamentosAdicionados, tableLancamentosEncontrados, tableSaldoCompraSaqueParcelados"/>
 			<p:tab title="Adicionados à fatura">
-				<p:dataTable id="tableLancamentosAdicionados" var="item" value="#{managedBean.lancamentosAdicionados}">
-					<p:column style="text-align: center; vertical-align: middle;">
-		     			<f:facet name="header">
-		     				<h:outputText value="" />
-		     			</f:facet>
-		     			<p:selectBooleanCheckbox value="#{item.selecionado}"/>
-		     		</p:column>
-					<p:column style="vertical-align: middle;">
-						<f:facet name="header">
-					    	<h:outputText value="Histórico"/>
-					    </f:facet>
-					    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-					    	<f:converter converterId="dateConverter"/>
-					    </h:outputText>
-					    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-					    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-					    <h:outputText value=" - AGENDADO" rendered="#{item.statusLancamentoConta == 'AGENDADO'}" style="text-align: left"/>
-					    <br/>
-					    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
-					    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					    </h:outputText>
-					    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-				     	<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
-				     	<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
-				     	<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
-				     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
-				     	<h:graphicImage id="imgInfo" value="/resources/images/info.png"/>
-		     			<p:tooltip for="imgInfo">
-							<h:outputText value="Categoria: #{item.categoria.descricao}" rendered="#{item.categoria != null}"/><br/>
-							<h:outputText value="Favorecido: #{item.favorecido.nome}" rendered="#{item.favorecido != null}"/><br/>
-							<h:outputText value="Meio de Pagamento: #{item.meioPagamento.descricao}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento and item.meioPagamento != null}"/>
-						</p:tooltip>
-					</p:column>					
-				</p:dataTable>
-				
-				<p:commandLink value="Remover da fatura" actionListener="#{managedBean.excluirLancamento}" update="tableLancamentosAdicionados, tableSaldoCompraSaqueParcelados"/>
-				
-				<br/><br/>
-				
-				<h:dataTable id="tableSaldoCompraSaqueParcelados" var="moeda" value="#{managedBean.moedas}">
-					<h:column>
-						<strong>Compras/Saques:</strong>
-					</h:column>
-					<h:column>
-						<h:panelGroup>
-							<h:outputText value="#{moeda.simboloMonetario} "/>
-							<h:outputText value="#{moeda.compraSaque}">
-								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-							</h:outputText>
-						</h:panelGroup>
-					</h:column>
-					<h:column>	
-						<strong>Parcelados:</strong>
-					</h:column>
-					<h:column>
-						<h:panelGroup>
-							<h:outputText value="#{moeda.simboloMonetario} "/>
-							<h:outputText value="#{moeda.parcelado}">
-								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-							</h:outputText>
-						</h:panelGroup>
-					</h:column>
-					<h:column>	
-						<strong>Total:</strong>
-					</h:column>
-					<h:column>
-						<h:panelGroup>
-							<h:outputText value="#{moeda.simboloMonetario} "/>
-							<h:outputText value="#{moeda.total}">
-								<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-							</h:outputText>
-						</h:panelGroup>
-					</h:column>			
-				</h:dataTable>
+				<ui:include src="lancamentosAdicionados.xhtml" />
 			</p:tab>
 			<p:tab title="Pesquisa">
-				<h:panelGrid columns="4">
-					<h:panelGroup>
-						Descrição:
-						<p:inputText value="#{managedBean.criterioBusca.descricao}" size="30"/>
-					</h:panelGroup>
-					
-					<h:panelGroup>
-						De:
-						<p:inputMask value="#{managedBean.criterioBusca.dataInicio}" size="10" mask="99/99/9999">
-							<f:converter converterId="dateConverter"/>
-						</p:inputMask>
-					</h:panelGroup>
-					
-					<h:panelGroup>
-						À:
-						<p:inputMask value="#{managedBean.criterioBusca.dataFim}" size="10" mask="99/99/9999">
-							<f:converter converterId="dateConverter"/>
-						</p:inputMask>
-					</h:panelGroup>
-					
-					<p:commandLink actionListener="#{managedBean.pesquisarLancamento}" title="Pesquisar" update="tableLancamentosEncontrados">
-						<h:graphicImage value="/resources/images/pesquisar.png" />
-					</p:commandLink>
-				</h:panelGrid>
-				
-				<p:dataTable id="tableLancamentosEncontrados" var="item" value="#{managedBean.lancamentosEncontrados}">
-					<p:column style="text-align: center; vertical-align: middle;">
-		     			<f:facet name="header">
-		     				<p:selectBooleanCheckbox value="#{managedBean.selecionarTodosLancamentos}">
-		     					<p:ajax update="tableLancamentosEncontrados" listener="#{managedBean.selecionarTodos}" />
-		     				</p:selectBooleanCheckbox>
-		     			</f:facet>
-		     			<p:selectBooleanCheckbox value="#{item.selecionado}"/>
-		     		</p:column>
-					<p:column style="vertical-align: middle;">
-						<f:facet name="header">
-					    	<h:outputText value="Histórico"/>
-					    </f:facet>
-					    <h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-					    	<f:converter converterId="dateConverter"/>
-					    </h:outputText>
-					    <h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-					    <h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-					    <h:outputText value=" - AGENDADO" rendered="#{item.statusLancamentoConta == 'AGENDADO'}" style="text-align: left"/>
-					    <br/>
-					    <h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
-					    <h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					    </h:outputText>
-					    <h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-				     	<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
-				     	<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
-				     	<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
-				     	<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
-				     	<h:graphicImage id="imgInfo" value="/resources/images/info.png"/>
-		     			<p:tooltip for="imgInfo">
-							<h:outputText value="Categoria: #{item.categoria.descricao}" rendered="#{item.categoria != null}"/><br/>
-							<h:outputText value="Favorecido: #{item.favorecido.nome}" rendered="#{item.favorecido != null}"/><br/>
-							<h:outputText value="Meio de Pagamento: #{item.meioPagamento.descricao}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento and item.meioPagamento != null}"/>
-						</p:tooltip>
-					</p:column>					
-				</p:dataTable>
-				<p:commandLink value="Adicionar à fatura" actionListener="#{managedBean.adicionarLancamento}" update="tableLancamentosEncontrados"/>								
+				<ui:include src="pesquisarLancamentos.xhtml" />
+			</p:tab>
+			<p:tab title="Adicionar lançamento">			
+				<ui:include src="adicionarLancamentos.xhtml" />			
+			</p:tab>
+			<p:tab title="Importar lançamentos">			
+				<ui:include src="importarLancamentos.xhtml" />			
 			</p:tab>
 		</p:tabView>
 		<br/>

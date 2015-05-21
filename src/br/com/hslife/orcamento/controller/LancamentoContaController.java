@@ -130,7 +130,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Autowired
 	private IBuscaSalva buscaSalvaService;
 	
-	private CriterioBuscaLancamentoConta novoCriterioBusca = new CriterioBuscaLancamentoConta();
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private String agrupamentoSelecionado;
@@ -172,50 +171,21 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	@Override
 	public void find() {
-		try {
-			/* Rotina de migração de novoCriterioBusca para criterioBusca /*
-			 * 
-			 */
-			// Seta a conta
-			novoCriterioBusca.setConta(criterioBusca.getConta());
-			
-			// Seta o início
-			novoCriterioBusca.setDataInicio(criterioBusca.getDataInicio());
-			
-			// Seta o fim
-			novoCriterioBusca.setDataFim(criterioBusca.getDataFim());
-			
-			// Seta a descrição
-			novoCriterioBusca.setDescricao(criterioBusca.getDescricao());
-			
-			/* Fim da rotina */
-			
-			if (novoCriterioBusca.getConta() == null) {
+		try {			
+			if (criterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
 			} else {
 				if (this.pesquisarTermoNoAgrupamento)
-					novoCriterioBusca.setAgrupamento(this.agrupamentoSelecionado);					
+					criterioBusca.setAgrupamento(this.agrupamentoSelecionado);					
 				else
 					// TODO resolver a ambiguidade da chamada do método
-					novoCriterioBusca.setAgrupamento(null);
+					criterioBusca.setAgrupamento(null);
 				
 				// Seta o limite de resultado da pesquisa
-				novoCriterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 				
-				listEntity = getService().buscarPorCriterioBusca(novoCriterioBusca);
+				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
 				
-				/*
-				if (agrupamentoSelecionado.equals("CAT"))
-					agrupamentoLancamentoPorCategoria = getService().organizarLancamentosPorCategoria(listEntity);
-				if (agrupamentoSelecionado.equals("FAV"))
-					agrupamentoLancamentoPorFavorecido = getService().organizarLancamentosPorFavorecido(listEntity);
-				if (agrupamentoSelecionado.equals("PAG"))
-					agrupamentoLancamentoPorMeioPagamento = getService().organizarLancamentosPorMeioPagamento(listEntity);
-				if (agrupamentoSelecionado.equals("CD"))
-					agrupamentoLancamentoPorDebitoCredito = getService().organizarLancamentosPorDebitoCredito(listEntity);
-				if (agrupamentoSelecionado.equals("MOE"))
-					agrupamentoLancamentoPorMoeda = getService().organizarLancamentosPorMoeda(listEntity);
-				*/
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -332,7 +302,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public void atualizaComboBuscasSalvas() {
 		try {
-			buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), null, null, getUsuarioLogado());
+			buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, null, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -424,13 +394,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public void processarBuscaSalva() {
 		if (buscaSalva != null) {
-			novoCriterioBusca = new CriterioBuscaLancamentoConta();
-			novoCriterioBusca.setConta(buscaSalva.getConta());
-			novoCriterioBusca.setDescricao(buscaSalva.getTextoBusca());
-			novoCriterioBusca.setDataInicio(buscaSalva.getDataInicio());
-			novoCriterioBusca.setDataFim(buscaSalva.getDataFim());
+			criterioBusca = new CriterioBuscaLancamentoConta();
+			criterioBusca.setConta(buscaSalva.getConta());
+			criterioBusca.setDescricao(buscaSalva.getTextoBusca());
+			criterioBusca.setDataInicio(buscaSalva.getDataInicio());
+			criterioBusca.setDataFim(buscaSalva.getDataFim());
 			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
-			novoCriterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
+			criterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
 			switch (buscaSalva.getTipoAgrupamentoBusca()) {
 				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
 				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
@@ -441,10 +411,10 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			}
 			
 			/* Migração para criterioBusca */
-			criterioBusca.setDataInicio(novoCriterioBusca.getDataInicio());
-			criterioBusca.setDataFim(novoCriterioBusca.getDataFim());
-			criterioBusca.setDescricao(novoCriterioBusca.getDescricao());
-			criterioBusca.setConta(novoCriterioBusca.getConta());
+			criterioBusca.setDataInicio(criterioBusca.getDataInicio());
+			criterioBusca.setDataFim(criterioBusca.getDataFim());
+			criterioBusca.setDescricao(criterioBusca.getDescricao());
+			criterioBusca.setConta(criterioBusca.getConta());
 			this.find();
 		} else {
 			warnMessage("Nenhuma busca selecionada!");
@@ -454,12 +424,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public String salvarBuscaView() {
 		buscaSalva = new BuscaSalva();
 		
-		buscaSalva.setConta(novoCriterioBusca.getConta());
-		buscaSalva.setTextoBusca(novoCriterioBusca.getDescricao());
-		buscaSalva.setDataInicio(novoCriterioBusca.getDataInicio());
-		buscaSalva.setDataFim(novoCriterioBusca.getDataFim());
+		buscaSalva.setConta(criterioBusca.getConta());
+		buscaSalva.setTextoBusca(criterioBusca.getDescricao());
+		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
+		buscaSalva.setDataFim(criterioBusca.getDataFim());
 		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
-		buscaSalva.setIdAgrupamento(novoCriterioBusca.getIdAgrupamento());
+		buscaSalva.setIdAgrupamento(criterioBusca.getIdAgrupamento());
 		
 		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);
 		if (agrupamentoSelecionado.equals("CAT")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.CATEGORIA);
@@ -550,9 +520,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		try {
 			if (buscasSalvas.isEmpty()) {
 				if (getOpcoesSistema().getExibirContasInativas())
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), null, null, getUsuarioLogado());
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, null, getUsuarioLogado());
 				else
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(novoCriterioBusca.getConta(), null, true, getUsuarioLogado());
+					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, true, getUsuarioLogado());
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -590,10 +560,10 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private String retornaSimboloMonetario() {
 		// Verifica se a conta já foi selecionada. Se não, usa a moeda padrão.
 		String simboloMonetario = "";
-		if (novoCriterioBusca.getConta() == null) {
+		if (criterioBusca.getConta() == null) {
 			simboloMonetario = this.getMoedaPadrao().getSimboloMonetario();
 		} else {
-			simboloMonetario = this.novoCriterioBusca.getConta().getMoeda().getSimboloMonetario();
+			simboloMonetario = this.criterioBusca.getConta().getMoeda().getSimboloMonetario();
 		}
 		return simboloMonetario;
 	}
@@ -815,14 +785,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setBuscaSalvaService(IBuscaSalva buscaSalvaService) {
 		this.buscaSalvaService = buscaSalvaService;
-	}
-
-	public CriterioBuscaLancamentoConta getNovoCriterioBusca() {
-		return novoCriterioBusca;
-	}
-
-	public void setNovoCriterioBusca(CriterioBuscaLancamentoConta novoCriterioBusca) {
-		this.novoCriterioBusca = novoCriterioBusca;
 	}
 
 	public String getAgrupamentoSelecionado() {

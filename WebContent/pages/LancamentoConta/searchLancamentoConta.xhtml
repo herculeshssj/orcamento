@@ -95,12 +95,12 @@
 			<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 		</h:selectOneRadio>
 		
-		<h:selectOneMenu id="txtPesquisaAgrupamento" value="#{managedBean.novoCriterioBusca.idAgrupamento}">
+		<h:selectOneMenu id="txtPesquisaAgrupamento" value="#{managedBean.criterioBusca.idAgrupamento}">
 			<f:selectItems value="#{managedBean.listaPesquisaAgrupamento}"/>
 		</h:selectOneMenu>
 		
 		<label>Exibir:</label>
-		<h:selectManyCheckbox value="#{managedBean.novoCriterioBusca.statusLancamentoConta}" converter="statusLancamentoContaConverter" layout="lineDirection">
+		<h:selectManyCheckbox value="#{managedBean.criterioBusca.statusLancamentoConta}" converter="statusLancamentoContaConverter" layout="lineDirection">
 			<f:selectItems value="#{managedBean.listaStatusLancamentoConta}"/>
 		</h:selectManyCheckbox>
 		

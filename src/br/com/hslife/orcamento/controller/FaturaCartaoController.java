@@ -127,6 +127,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private Conta contaSelecionada;
 	private StatusFaturaCartao statusFatura;
 	private boolean selecionarTodosLancamentos;
+	private boolean selecionarTodosLancamentosEncontrados;
+	private boolean selecionarTodosLancamentosAdicionados;
 	private FormaPagamentoFatura formaPagamento;
 	private boolean prontoParaQuitar = false;
 	
@@ -411,15 +413,26 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 	}
 	
-	public void selecionarTodos() {
+	public void selecionarTodosEncontrados() {
 		if (lancamentosEncontrados != null && lancamentosEncontrados.size() > 0)
-		for (LancamentoConta l : lancamentosEncontrados) {
-			if (selecionarTodosLancamentos) {
-				l.setSelecionado(true);
-			} else {
-				l.setSelecionado(false);
+			for (LancamentoConta l : lancamentosEncontrados) {
+				if (selecionarTodosLancamentosEncontrados) {
+					l.setSelecionado(true);
+				} else {
+					l.setSelecionado(false);
+				}
 			}
-		}
+	}
+	
+	public void selecionarTodosAdicionados() {
+		if (lancamentosAdicionados != null && lancamentosAdicionados.size() > 0)
+			for (LancamentoConta l : lancamentosAdicionados) {
+				if (selecionarTodosLancamentosAdicionados) {
+					l.setSelecionado(true);
+				} else {
+					l.setSelecionado(false);
+				}
+			}
 	}
 	
 	public double getSaldoDevedor() {
@@ -861,5 +874,23 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	public void setFormaPagamento(FormaPagamentoFatura formaPagamento) {
 		this.formaPagamento = formaPagamento;
+	}
+
+	public boolean isSelecionarTodosLancamentosEncontrados() {
+		return selecionarTodosLancamentosEncontrados;
+	}
+
+	public void setSelecionarTodosLancamentosEncontrados(
+			boolean selecionarTodosLancamentosEncontrados) {
+		this.selecionarTodosLancamentosEncontrados = selecionarTodosLancamentosEncontrados;
+	}
+
+	public boolean isSelecionarTodosLancamentosAdicionados() {
+		return selecionarTodosLancamentosAdicionados;
+	}
+
+	public void setSelecionarTodosLancamentosAdicionados(
+			boolean selecionarTodosLancamentosAdicionados) {
+		this.selecionarTodosLancamentosAdicionados = selecionarTodosLancamentosAdicionados;
 	}
 }
