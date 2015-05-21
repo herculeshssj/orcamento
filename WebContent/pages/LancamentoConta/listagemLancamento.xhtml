@@ -65,52 +65,58 @@
      			</h:selectBooleanCheckbox>
      			<p:spacer width="15"/>
 	   			<h:commandLink title="Mover lançamentos" action="#{managedBean.mover}">
-					<h:graphicImage id="imgMove" height="48" width="48" value="/resources/images/svg/in_transit.svg"/>
+					<h:graphicImage id="imgMove" height="40" width="40" value="/resources/images/svg/in_transit.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Mover" />
 	  			<p:spacer width="10"/>
 	  			<h:commandLink title="Duplicar lançamentos" action="#{managedBean.duplicar}">
-					<h:graphicImage id="imgDuplicate" height="48" width="48" value="/resources/images/svg/gallery.svg"/>
+					<h:graphicImage id="imgDuplicate" height="40" width="40" value="/resources/images/svg/gallery.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Duplicar" />
 	  			<p:spacer width="10"/>
 	  			<h:commandLink title="Alterar propriedades dos lançamentos" action="#{managedBean.alterarPropriedades}">
-					<h:graphicImage id="imgProperties" height="48" width="48" value="/resources/images/svg/view_details.svg"/>
+					<h:graphicImage id="imgProperties" height="40" width="40" value="/resources/images/svg/view_details.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Detalhes" />
 	  			<p:spacer width="10"/>
 	  			<h:commandLink title="Excluir lançamentos" action="#{managedBean.excluir}">
-					<h:graphicImage id="imgDelete" height="48" width="48" value="/resources/images/svg/delete_database.svg"/>
+					<h:graphicImage id="imgDelete" height="40" width="40" value="/resources/images/svg/delete_database.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Excluir" />
 	  			<p:spacer width="10"/>
 	  			<h:commandLink title="Mesclar lançamentos" action="#{managedBean.mesclar}">
-					<h:graphicImage id="imgMerge" height="48" width="48" value="/resources/images/svg/multiple_inputs.svg"/>
+					<h:graphicImage id="imgMerge" height="40" width="40" value="/resources/images/svg/multiple_inputs.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Mesclar" />
 	  			<p:spacer width="10"/>
 	  			<h:commandLink title="Dividir lançamento" action="#{managedBean.dividir}">
-					<h:graphicImage id="imgDivide" height="48" width="48" value="/resources/images/svg/flow_chart.svg"/>
+					<h:graphicImage id="imgDivide" height="40" width="40" value="/resources/images/svg/flow_chart.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Dividir" />
 	  			<p:spacer width="10"/>
 	  			<h:commandLink title="Detalhar lançamento" action="#{managedBean.detalhar}">
-					<h:graphicImage id="imgDetails" height="48" width="48" value="/resources/images/svg/genealogy.svg"/>
+					<h:graphicImage id="imgDetails" height="40" width="40" value="/resources/images/svg/genealogy.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Detalhar" />
 	  			<p:spacer width="10"/>
 	  			<h:commandLink title="Transferir lançamentos" action="#{managedBean.transferir}">
-					<h:graphicImage id="imgTransfer" height="48" width="48" value="/resources/images/svg/money_transfer.svg"/>
+					<h:graphicImage id="imgTransfer" height="40" width="40" value="/resources/images/svg/money_transfer.svg"/>
 				</h:commandLink>										
 	  			<p:spacer width="5"/>
 	  			<h:outputText value="Transferir" />
+	  			<p:spacer width="10"/>
+	  			<h:commandLink title="Vínculos" action="#{managedBean.vinculos}">
+					<h:graphicImage id="imgBrokenLink" height="40" width="40" value="/resources/images/svg/broken_link.svg" />
+				</h:commandLink>
+				<p:spacer width="5"/>
+	  			<h:outputText value="Vínculos" />
 	   		</f:facet>
      		<h:column style="text-align: center; vertical-align: middle;">
      			<h:selectBooleanCheckbox value="#{item.selecionado}"/>
