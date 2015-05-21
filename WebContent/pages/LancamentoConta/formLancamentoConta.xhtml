@@ -57,67 +57,45 @@
 
 	<ui:param name="managedBean" value="#{lancamentoContaMB}" />
 	
-	<ui:define name="conteudo">
+	<ui:define name="campos">
 	
-	<h:form id="frmFormEntity">
-     	
-     	<p:messages />
+		<label>Conta:</label>
+		<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+			<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			<p:ajax event="change" update="txtLancamentoImportado,pnlLancamentoCartao" listener="#{managedBean.atualizaComboLancamentosImportado}"/>			
+		</h:selectOneMenu>
+		
+		<label>Tipo de lançamento:</label>
+		<h:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+			<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
+			<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>				
+		</h:selectOneRadio>
+		
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.conta.ativo}"/>
+		<p:tooltip for="txtDescricao">
+			<h:outputText value="Histórico: #{managedBean.entity.historico}"/>
+		</p:tooltip>
+	
+		<label for="frmFormEntity:txtNumeroDocumento">Número do documento:</label>
+		<h:inputText id="txtNumeroDocumento" value="#{managedBean.entity.numeroDocumento}" disabled="#{!managedBean.entity.conta.ativo}"/>
+		
+		<label for="frmFormEntity:txtPeriodo"><h:outputText value="Período / Ano:" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/></label>
+		<h:panelGrid columns="3" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
+			<h:inputText value="#{managedBean.entity.periodo}" size="5"/>
+			<h:outputText value=" / " />
+			<h:inputText value="#{managedBean.entity.ano}" size="5"/>
+		</h:panelGrid>
+		
+		<label><h:outputText value="Parcela" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/></label>
+		<h:outputText value="#{managedBean.entity.parcela}" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" />
+		
+		<label for="frmFormEntity:txtDataVencimento"><h:outputText value="Data de vencimento:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" /></label>
+		<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null}">
+    		<f:converter converterId="dateConverter"/>
+    	</p:inputMask>
 	
 		<h:panelGrid columns="3" style="font-size: 16px;">
-		
-			Conta:			
-			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
-				<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-				<p:ajax event="change" update="txtLancamentoImportado,pnlLancamentoCartao" listener="#{managedBean.atualizaComboLancamentosImportado}"/>			
-			</h:selectOneMenu>
-			<h:outputText value="#{managedBean.entity.conta.descricao}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}"/>
-			<h:inputHidden/>
-						
-			Tipo de Lançamento:
-			<p:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
-				<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
-				<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>				
-			</p:selectOneRadio>
-			<h:outputText value="#{managedBean.entity.tipoLancamento}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}"/>
-			<h:inputHidden/>
-			
-			Descrição:
-			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" rendered="#{managedBean.entity.conta.ativo}"/>
-			<h:outputText value="#{managedBean.entity.descricao} - Histórico: #{managedBean.entity.historico}" rendered="#{!managedBean.entity.conta.ativo}"/>			
-			<p:tooltip for="txtDescricao">
-				<h:outputText value="Histórico: #{managedBean.entity.historico}"/>
-			</p:tooltip>
-			
-			Número do documento:
-			<p:inputText id="txtNumeroDocumento" value="#{managedBean.entity.numeroDocumento}" rendered="#{managedBean.entity.conta.ativo}"/>
-			<h:outputText value="#{managedBean.entity.numeroDocumento}" rendered="#{!managedBean.entity.conta.ativo}"/>
-			<h:inputHidden/>
-			
-			<h:outputText value="Período / Ano:" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
-			<h:panelGroup rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
-				<h:inputText value="#{managedBean.entity.periodo}" size="5"/>
-				<h:outputText value=" / " />
-				<h:inputText value="#{managedBean.entity.ano}" size="5"/>
-			</h:panelGroup>
-			<h:panelGroup rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO' and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
-				<h:outputText value="#{managedBean.entity.periodo}" />
-				<h:outputText value=" / " />
-				<h:outputText value="#{managedBean.entity.ano}" />
-			</h:panelGroup>
-			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
-			
-			<h:outputText value="Parcela" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>			
-			<h:outputText value="#{managedBean.entity.parcela}" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" />
-			<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
-			
-			<h:outputText value="Data de vencimento:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
-			<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null}">
-	    		<f:converter converterId="dateConverter"/>
-	    	</p:inputMask>
-	    	<h:outputText value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.statusLancamentoConta == 'QUITADO' and managedBean.entity.lancamentoPeriodico != null}">
-	    		<f:converter converterId="dateConverter"/>
-	    	</h:outputText>
-	    	<h:outputText value="" rendered="#{managedBean.entity.lancamentoPeriodico != null}" />
 			
 			Data de pagamento:
 			<p:inputMask id="txtDataPagamento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataPagamento}" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO'}">
@@ -218,8 +196,6 @@
      	<h:commandLink title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.conta.ativo}">
      		<p:graphicImage value="/resources/images/gravar.png" />
      	</h:commandLink>
-	
-	</h:form>
 	
 	</ui:define>
 
