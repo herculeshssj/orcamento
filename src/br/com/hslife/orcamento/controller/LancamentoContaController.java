@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,6 +60,10 @@ import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -305,6 +310,55 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				i.remove();
 		}
 		return lancamentos;
+	}
+	
+	@SuppressWarnings("resource")
+	public void exportarLancamentos() {	
+		if (listEntity == null || listEntity.isEmpty()) {
+			warnMessage("Listagem vazio. Nada a exportar.");
+		}
+		
+		try {
+		
+		HSSFWorkbook excel = new HSSFWorkbook(); 
+		HSSFSheet planilha = excel.createSheet("lancamentoConta");
+		
+		HSSFRow linha = planilha.createRow(0);
+		
+		HSSFCell celula = linha.createCell(0);
+		celula.setCellValue("Data");
+		celula = linha.createCell(1);
+		celula.setCellValue("Histórico");
+		celula = linha.createCell(2);
+		celula.setCellValue("Valor");
+		
+		int linhaIndex = 1;
+		for (LancamentoConta l : listEntity) {
+			linha = planilha.createRow(linhaIndex);
+			
+			celula = linha.createCell(0);
+			celula.setCellValue(Util.formataDataHora(l.getDataPagamento(), Util.DATA));
+			
+			celula = linha.createCell(1);
+			celula.setCellValue(l.getDescricao());
+			
+			celula = linha.createCell(2);
+			celula.setCellValue(l.getValorPago());
+			
+			linhaIndex++;
+		}
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("application/vnd.ms-excel");
+		response.setHeader("Content-Disposition","attachment; filename=lancamentoConta.xls");
+		response.setContentLength(excel.getBytes().length);
+		ServletOutputStream output = response.getOutputStream();
+		output.write(excel.getBytes(), 0, excel.getBytes().length);
+		FacesContext.getCurrentInstance().responseComplete();
+		
+		} catch (IOException e) {
+			errorMessage(e.getMessage());
+		}
 	}
 	
 	public String mover() {
