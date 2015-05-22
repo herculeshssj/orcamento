@@ -65,7 +65,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Arquivo;
-import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
@@ -78,11 +77,9 @@ import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoAgrupamentoBusca;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.IBuscaSalva;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -127,16 +124,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
 	
-	@Autowired
-	private IBuscaSalva buscaSalvaService;
-	
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private String agrupamentoSelecionado;
 	private TipoCategoria tipoCategoriaSelecionada;
 	private boolean pesquisarTermoNoAgrupamento;	
 	private boolean selecionarTodosLancamentos;
-	private String vincularFatura;
 	private FechamentoPeriodo fechamentoPeriodo;
 	
 	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
@@ -144,9 +137,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private List<MeioPagamento> agrupamentoLancamentoPorMeioPagamento = new ArrayList<MeioPagamento>();
 	private List<AgrupamentoLancamento> agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
 	private List<Moeda> agrupamentoLancamentoPorMoeda = new ArrayList<>();
-	
-	private BuscaSalva buscaSalva = new BuscaSalva();
-	private List<BuscaSalva> buscasSalvas = new ArrayList<BuscaSalva>();
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
@@ -165,8 +155,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		agrupamentoLancamentoPorMoeda = new ArrayList<>();
 		
 		selecionarTodosLancamentos = false;
-		
-		buscasSalvas.clear();
 	}
 	
 	@Override
@@ -300,14 +288,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.getListaLancamentoImportado();
 	}
 	
-	public void atualizaComboBuscasSalvas() {
-		try {
-			buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, null, getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
 	public void selecionarTodos() {
 		if (listEntity != null && listEntity.size() > 0)
 		for (LancamentoConta l : listEntity) {
@@ -392,88 +372,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		warnMessage("Vínculo quebrado. Salve para efetivar as alterações.");
 	}
 	
-	public void processarBuscaSalva() {
-		if (buscaSalva != null) {
-			criterioBusca = new CriterioBuscaLancamentoConta();
-			criterioBusca.setConta(buscaSalva.getConta());
-			criterioBusca.setDescricao(buscaSalva.getTextoBusca());
-			criterioBusca.setDataInicio(buscaSalva.getDataInicio());
-			criterioBusca.setDataFim(buscaSalva.getDataFim());
-			pesquisarTermoNoAgrupamento = buscaSalva.isPesquisarTermo();
-			criterioBusca.setIdAgrupamento(buscaSalva.getIdAgrupamento());
-			switch (buscaSalva.getTipoAgrupamentoBusca()) {
-				case DEBITO_CREDITO : agrupamentoSelecionado = "CD"; break;
-				case CATEGORIA : agrupamentoSelecionado = "CAT"; break;
-				case FAVORECIDO : agrupamentoSelecionado = "FAV"; break;
-				case MEIOPAGAMENTO : agrupamentoSelecionado = "PAG"; break;
-				case MOEDA : agrupamentoSelecionado = "MOE"; break;
-				default : agrupamentoSelecionado = "";
-			}
-			
-			/* Migração para criterioBusca */
-			criterioBusca.setDataInicio(criterioBusca.getDataInicio());
-			criterioBusca.setDataFim(criterioBusca.getDataFim());
-			criterioBusca.setDescricao(criterioBusca.getDescricao());
-			criterioBusca.setConta(criterioBusca.getConta());
-			this.find();
-		} else {
-			warnMessage("Nenhuma busca selecionada!");
-		}
-	}
-	
-	public String salvarBuscaView() {
-		buscaSalva = new BuscaSalva();
-		
-		buscaSalva.setConta(criterioBusca.getConta());
-		buscaSalva.setTextoBusca(criterioBusca.getDescricao());
-		buscaSalva.setDataInicio(criterioBusca.getDataInicio());
-		buscaSalva.setDataFim(criterioBusca.getDataFim());
-		buscaSalva.setPesquisarTermo(pesquisarTermoNoAgrupamento);
-		buscaSalva.setIdAgrupamento(criterioBusca.getIdAgrupamento());
-		
-		if (agrupamentoSelecionado.equals("CD")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.DEBITO_CREDITO);
-		if (agrupamentoSelecionado.equals("CAT")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.CATEGORIA);
-		if (agrupamentoSelecionado.equals("PAG")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.MEIOPAGAMENTO);
-		if (agrupamentoSelecionado.equals("FAV")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.FAVORECIDO);
-		if (agrupamentoSelecionado.equals("MOE")) buscaSalva.setTipoAgrupamentoBusca(TipoAgrupamentoBusca.MOEDA);
-		
-		actionTitle = " - Salvar busca";
-		return "/pages/LancamentoConta/salvarBusca";
-	}
-	
-	public String salvarBusca() {
-		try {
-			buscaSalvaService.cadastrar(buscaSalva);
-			infoMessage("Busca cadastrada com sucesso!");
-			buscasSalvas.clear();
-			return list();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}		
-		return "";
-	}
-	
-	public String excluirBuscaView() {
-		if (buscaSalva == null) {
-			warnMessage("Nenhuma busca selecionada!");
-			return "";
-		}
-		actionTitle = " - Excluir busca";
-		return "/pages/LancamentoConta/excluirBusca";
-	}
-	
-	public String excluirBusca() {
-		try {
-			buscaSalvaService.excluir(buscaSalva);
-			infoMessage("Busca excluída com sucesso!");
-			buscasSalvas.clear();
-			return list();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}		
-		return "";
-	}
-	
 	public List<Conta> getListaConta() {
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
@@ -514,20 +412,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			errorMessage(be.getMessage());
 		}
 		return listagem;
-	}
-	
-	public List<BuscaSalva> getBuscasSalvas() {
-		try {
-			if (buscasSalvas.isEmpty()) {
-				if (getOpcoesSistema().getExibirContasInativas())
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, null, getUsuarioLogado());
-				else
-					buscasSalvas = buscaSalvaService.buscarContaETipoContaEContaAtivaPorUsuario(criterioBusca.getConta(), null, true, getUsuarioLogado());
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return buscasSalvas;
 	}
 	
 	public String getTotalCreditos() {
@@ -779,14 +663,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.movimentacaoLancamentoMB = movimentacaoLancamentoMB;
 	}
 
-	public IBuscaSalva getBuscaSalvaService() {
-		return buscaSalvaService;
-	}
-
-	public void setBuscaSalvaService(IBuscaSalva buscaSalvaService) {
-		this.buscaSalvaService = buscaSalvaService;
-	}
-
 	public String getAgrupamentoSelecionado() {
 		return agrupamentoSelecionado;
 	}
@@ -862,26 +738,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public void setAgrupamentoLancamentoPorMoeda(
 			List<Moeda> agrupamentoLancamentoPorMoeda) {
 		this.agrupamentoLancamentoPorMoeda = agrupamentoLancamentoPorMoeda;
-	}
-
-	public BuscaSalva getBuscaSalva() {
-		return buscaSalva;
-	}
-
-	public void setBuscaSalva(BuscaSalva buscaSalva) {
-		this.buscaSalva = buscaSalva;
-	}
-
-	public void setBuscasSalvas(List<BuscaSalva> buscasSalvas) {
-		this.buscasSalvas = buscasSalvas;
-	}
-
-	public String getVincularFatura() {
-		return vincularFatura;
-	}
-
-	public void setVincularFatura(String vincularFatura) {
-		this.vincularFatura = vincularFatura;
 	}
 
 	public IMoeda getMoedaService() {

@@ -114,3 +114,14 @@ alter table cartaocredito change column `tipoCartao` `tipoCartao` varchar(10) no
 
 -- Inclusão da coluna numeroCartaoDebito - Github Issue #71
 alter table cartaocredito add column numeroCartaoDebito varchar(40) null;
+
+
+
+
+
+
+
+
+/* Executar ao fechar a versão */
+-- Exclusão do módulo Buscas Salvas - Github Issue #110
+drop table buscasalva;

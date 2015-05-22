@@ -53,7 +53,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.ContaComponent;
-import br.com.hslife.orcamento.entity.BuscaSalva;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
@@ -63,7 +62,6 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.repository.BuscaSalvaRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
@@ -87,9 +85,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
-	
-	@Autowired
-	private BuscaSalvaRepository buscaSalvaRepository;
 	
 	public ContaComponent getComponent() {
 		return component;
@@ -120,10 +115,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	public void setFechamentoPeriodoRepository(
 			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
 		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-
-	public void setBuscaSalvaRepository(BuscaSalvaRepository buscaSalvaRepository) {
-		this.buscaSalvaRepository = buscaSalvaRepository;
 	}
 
 	@Override
@@ -203,11 +194,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 		if (getRepository().existsLinkages(entity)) {
 			throw new BusinessException("Não é possível excluir! Existem registros relacionamentos com a conta!");
 		} else {
-			
-			// Exclui as buscas salvas
-			for (BuscaSalva busca : buscaSalvaRepository.findContaAndTipoContaAndContaAtivaByUsuario(entity, null, null, entity.getUsuario())) {
-				buscaSalvaRepository.delete(busca);
-			}
 			
 			// Exclui os lançamentos importados
 			for (LancamentoImportado importado : lancamentoImportadoRepository.findByConta(entity)) {
