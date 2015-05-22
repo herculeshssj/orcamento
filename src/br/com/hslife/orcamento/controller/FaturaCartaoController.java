@@ -112,6 +112,9 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	@Autowired
 	private IConta contaService;
 	
+	@Autowired
+	private ImportacaoLancamentoController importacaoLancamentoMB;
+	
 	private Moeda moedaPadrao;
 	private boolean faturaFechada;
 	private double totalFatura;
@@ -282,6 +285,12 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		entity.setAno(entity.getDataVencimento().getYear() + 1900);
 		
 		return super.save();
+	}
+	
+	public String importarLancamentos() {
+		importacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
+		importacaoLancamentoMB.setGoToListPage(goToListPage);
+		return importacaoLancamentoMB.create();
 	}
 	
 	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws BusinessException {

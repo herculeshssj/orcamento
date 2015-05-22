@@ -62,7 +62,7 @@
 		<h:panelGrid columns="2">
 			
 			Selecione a conta:
-			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter">
+			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter" disabled="true">
 				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 			</h:selectOneMenu>					
 			

@@ -99,6 +99,8 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private List<LancamentoImportado> listEntity;
 	private Long idEntity;
 
+	private String goToListPage = "";
+	
 	public ImportacaoLancamentoController() {
 		moduleTitle = "Importação de Lançamentos";
 	}
@@ -125,6 +127,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+		goToListPage = "/pages/ImportacaoLancamento/listImportacaoLancamento";
 		return null;
 	}
 	
@@ -133,27 +136,8 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public String cancel() {
-		try {
-			exibirInfoArquivo = false;
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-					find();
-				}
-			} else {
-				initializeEntity();
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "/pages/ImportacaoLancamento/listImportacaoLancamento";
+		initializeEntity();
+		return goToListPage;
 	}
 	
 	public String goToStep1() {
@@ -194,7 +178,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public String goToListPage() {
-		return "/pages/ImportacaoLancamento/listImportacaoLancamento";
+		return this.goToListPage;
 	}
 	
 	public void carregarArquivo(FileUploadEvent event) {
@@ -426,5 +410,13 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setTipoImportacao(String tipoImportacao) {
 		this.tipoImportacao = tipoImportacao;
+	}
+
+	public String getGoToListPage() {
+		return goToListPage;
+	}
+
+	public void setGoToListPage(String goToListPage) {
+		this.goToListPage = goToListPage;
 	}
 }

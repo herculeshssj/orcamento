@@ -129,6 +129,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
 	
+	@Autowired
+	private ImportacaoLancamentoController importacaoLancamentoMB;
+	
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private String agrupamentoSelecionado;
@@ -320,45 +323,51 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		
 		try {
 		
-		HSSFWorkbook excel = new HSSFWorkbook(); 
-		HSSFSheet planilha = excel.createSheet("lancamentoConta");
-		
-		HSSFRow linha = planilha.createRow(0);
-		
-		HSSFCell celula = linha.createCell(0);
-		celula.setCellValue("Data");
-		celula = linha.createCell(1);
-		celula.setCellValue("Histórico");
-		celula = linha.createCell(2);
-		celula.setCellValue("Valor");
-		
-		int linhaIndex = 1;
-		for (LancamentoConta l : listEntity) {
-			linha = planilha.createRow(linhaIndex);
+			HSSFWorkbook excel = new HSSFWorkbook(); 
+			HSSFSheet planilha = excel.createSheet("lancamentoConta");
 			
-			celula = linha.createCell(0);
-			celula.setCellValue(Util.formataDataHora(l.getDataPagamento(), Util.DATA));
+			HSSFRow linha = planilha.createRow(0);
 			
+			HSSFCell celula = linha.createCell(0);
+			celula.setCellValue("Data");
 			celula = linha.createCell(1);
-			celula.setCellValue(l.getDescricao());
-			
+			celula.setCellValue("Histórico");
 			celula = linha.createCell(2);
-			celula.setCellValue(l.getValorPago());
+			celula.setCellValue("Valor");
 			
-			linhaIndex++;
-		}
-		
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-Disposition","attachment; filename=lancamentoConta.xls");
-		response.setContentLength(excel.getBytes().length);
-		ServletOutputStream output = response.getOutputStream();
-		output.write(excel.getBytes(), 0, excel.getBytes().length);
-		FacesContext.getCurrentInstance().responseComplete();
+			int linhaIndex = 1;
+			for (LancamentoConta l : listEntity) {
+				linha = planilha.createRow(linhaIndex);
+				
+				celula = linha.createCell(0);
+				celula.setCellValue(Util.formataDataHora(l.getDataPagamento(), Util.DATA));
+				
+				celula = linha.createCell(1);
+				celula.setCellValue(l.getDescricao());
+				
+				celula = linha.createCell(2);
+				celula.setCellValue(l.getValorPago());
+				
+				linhaIndex++;
+			}
+			
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-Disposition","attachment; filename=lancamentoConta.xls");
+			response.setContentLength(excel.getBytes().length);
+			ServletOutputStream output = response.getOutputStream();
+			output.write(excel.getBytes(), 0, excel.getBytes().length);
+			FacesContext.getCurrentInstance().responseComplete();
 		
 		} catch (IOException e) {
 			errorMessage(e.getMessage());
 		}
+	}
+	
+	public String importarLancamentos() {
+		importacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
+		importacaoLancamentoMB.setGoToListPage(goToListPage);
+		return importacaoLancamentoMB.create();
 	}
 	
 	public String mover() {

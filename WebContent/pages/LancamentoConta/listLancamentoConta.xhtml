@@ -89,7 +89,7 @@
 				<label>Conta:</label>
 				<h:selectOneMenu value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
 					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					<p:ajax update="txtPeriodo" listener="#{managedBean.atualizaComboBuscasSalvas}"/>
+					<p:ajax update="txtPeriodo" />
 				</h:selectOneMenu>
 			</h:panelGroup>
 			

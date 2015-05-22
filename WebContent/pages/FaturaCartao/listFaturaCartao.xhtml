@@ -107,7 +107,12 @@
 						<h:commandButton title="Reabrir fatura" image="/resources/images/voltar.png" action="#{managedBean.reabrirFatura}" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}">
 							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
 						</h:commandButton>
-						<h:outputText value="Reabrir fatura" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>						
+						<h:outputText value="Reabrir fatura" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>
+						<h:commandLink title="Importar lançamentos" action="#{managedBean.importarLancamentos}" rendered="#{fatura.statusFaturaCartao == 'ABERTA'>
+							<h:graphicImage id="imgImport" height="40" width="40" value="/resources/images/svg/import.svg"/>
+						</h:commandLink>
+						<p:spacer width="5" rendered="#{fatura.statusFaturaCartao == 'ABERTA'/>
+			  			<h:outputText value="Importar" rendered="#{fatura.statusFaturaCartao == 'ABERTA'/>												
 					</f:facet>										
 					<p:column style="vertical-align: middle;">
 						<f:facet name="header">
