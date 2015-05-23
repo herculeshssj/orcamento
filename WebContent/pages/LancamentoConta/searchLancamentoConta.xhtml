@@ -80,18 +80,13 @@
 	    <label>Pesquisar termo no agrupamento:</label>
 	    <h:selectOneRadio layout="lineDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 	    	<f:selectItem itemLabel="Nenhum"/>
-			<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-			<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
-			<f:selectItem itemLabel="Meio de Pagamento" itemValue="PAG"/>
-			<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
+	    	<f:selectItems value="#{enumCombo.listaCadastroSistema}" />
 			<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 		</h:selectOneRadio>
 		<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->     			
  		<h:selectOneRadio layout="lineDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
  			<f:selectItem itemLabel="Nenhum"/>
-			<f:selectItem itemLabel="Categoria" itemValue="CAT"/>
-			<f:selectItem itemLabel="Favorecido/Sacado" itemValue="FAV"/>
-			<f:selectItem itemLabel="Moeda" itemValue="MOE"/>
+	    	<f:selectItems value="#{enumCombo.listaCadastroSistemaSemMeioPagamento}" />
 			<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 		</h:selectOneRadio>
 		
@@ -101,7 +96,7 @@
 		
 		<label>Exibir:</label>
 		<h:selectManyCheckbox value="#{managedBean.criterioBusca.statusLancamentoConta}" converter="statusLancamentoContaConverter" layout="lineDirection">
-			<f:selectItems value="#{managedBean.listaStatusLancamentoConta}"/>
+			<f:selectItems value="#{enumCombo.listaStatusLancamentoConta}"/>
 		</h:selectManyCheckbox>
 		
 	</ui:define>

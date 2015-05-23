@@ -58,8 +58,6 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.entity.OpcaoSistema;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
@@ -89,7 +87,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private boolean gerarNovosLancamentos;
 	private boolean exibirInfoArquivo;
 	private InfoOFX infoArquivo;
-	private String tipoImportacao = "CONTA";
 	
 	private List<LancamentoConta> lancamentoContaAInserir;
 	private List<LancamentoConta> lancamentoContaAAtualizar;
@@ -117,11 +114,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	private void find() {
 		try {
-			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
-				tipoImportacao = "CARTAO";
-			} else {
-				tipoImportacao = "CONTA";
-			}
 			listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -137,20 +129,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 	public String cancel() {
 		initializeEntity();
 		return goToListPage;
-	}
-	
-	public String goToStep2() {
-		try {
-			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
-				tipoImportacao = "CARTAO";
-			} else {
-				tipoImportacao = "CONTA";
-			}
-			listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "/pages/ImportacaoLancamento/formImportacaoLancamentoPasso2";
 	}
 	
 	public String confirmarImportacao() {
@@ -213,21 +191,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			entity = getService().buscarPorID(idEntity);
 			getService().excluirLancamentoImportado(entity);
 			infoMessage("Lançamento excluído com sucesso!");
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-					find();
-				}
-			} else {
-				initializeEntity();
-			}
+			find();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -238,22 +202,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			entity = getService().buscarPorID(idEntity);
 			getService().importarLancamento(entity);
 			infoMessage("Lançamento importado com sucesso!");
-			
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-					find();
-				}
-			} else {
-				initializeEntity();
-			}
+			find();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -385,14 +334,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setInfoArquivo(InfoOFX infoArquivo) {
 		this.infoArquivo = infoArquivo;
-	}
-
-	public String getTipoImportacao() {
-		return tipoImportacao;
-	}
-
-	public void setTipoImportacao(String tipoImportacao) {
-		this.tipoImportacao = tipoImportacao;
 	}
 
 	public String getGoToListPage() {

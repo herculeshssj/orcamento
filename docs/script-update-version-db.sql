@@ -123,5 +123,9 @@ alter table cartaocredito add column numeroCartaoDebito varchar(40) null;
 
 
 /* Executar ao fechar a versão */
+
 -- Exclusão do módulo Buscas Salvas - Github Issue #110
 drop table buscasalva;
+
+-- Exclusão da opção do sistema GERAL_SUPRIMIR_TEXTO_MEIO
+delete from opcaosistema where chave = 'GERAL_SUPRIMIR_TEXTO_MEIO';

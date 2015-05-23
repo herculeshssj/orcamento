@@ -56,9 +56,11 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -154,6 +156,31 @@ public class EnumComboUtil {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (StatusDivida enumeration : StatusDivida.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaCadastroSistema() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (CadastroSistema enumeration : CadastroSistema.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaCadastroSistemaSemMeioPagamento() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (CadastroSistema enumeration : CadastroSistema.values()) {
+			if (enumeration.equals(CadastroSistema.MEIOPAGAMENTO)) continue;
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}		
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaStatusLancamentoConta() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
+			listaSelectItem.add(new SelectItem(status, status.toString()));
 		}
 		return listaSelectItem;
 	}

@@ -226,7 +226,6 @@ public class OpcaoSistemaComponent implements Serializable{
 	public void setarOpcoesPadraoUsuario(Usuario entity) throws BusinessException {
 		// Seta as opções do sistema que são individuais para cada usuário
 		Map<String, Object> opcoesUsuario = new HashMap<String, Object>();
-		opcoesUsuario.put("GERAL_SUPRIMIR_TEXTO_MEIO", Boolean.FALSE);
 		opcoesUsuario.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.FALSE);
 		opcoesUsuario.put("CONTA_EXIBIR_INATIVAS", Boolean.TRUE);
 		opcoesUsuario.put("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", Integer.valueOf(100));

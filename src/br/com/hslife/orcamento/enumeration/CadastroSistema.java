@@ -47,5 +47,15 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum CadastroSistema {
-	CATEGORIA, FAVORECIDO, MEIOPAGAMENTO, MOEDA;
+	CATEGORIA("Categoria"), FAVORECIDO("Favorecido"), MEIOPAGAMENTO("Meio de pagamento"), MOEDA("Moeda");
+	
+	private String descricao;
+	
+	private CadastroSistema(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String toString() {
+		return descricao;
+	}
 }

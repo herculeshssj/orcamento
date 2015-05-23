@@ -67,7 +67,7 @@
 		
 		<label>Tipo de lançamento:</label>
 		<h:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
-			<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
+			<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>
 			<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>				
 		</h:selectOneRadio>
 		

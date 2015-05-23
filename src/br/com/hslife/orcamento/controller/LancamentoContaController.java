@@ -78,10 +78,9 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.entity.OpcaoSistema;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
-import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -92,7 +91,6 @@ import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.Util;
 
@@ -134,17 +132,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	
-	private String agrupamentoSelecionado;
+	private CadastroSistema agrupamentoSelecionado;
 	private TipoCategoria tipoCategoriaSelecionada;
 	private boolean pesquisarTermoNoAgrupamento;	
 	private boolean selecionarTodosLancamentos;
 	private FechamentoPeriodo fechamentoPeriodo;
-	
-	private List<Categoria> agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
-	private List<Favorecido> agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
-	private List<MeioPagamento> agrupamentoLancamentoPorMeioPagamento = new ArrayList<MeioPagamento>();
-	private List<AgrupamentoLancamento> agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
-	private List<Moeda> agrupamentoLancamentoPorMoeda = new ArrayList<>();
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
@@ -156,12 +148,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		entity = new LancamentoConta();
 		listEntity = new ArrayList<LancamentoConta>();
 		
-		agrupamentoLancamentoPorCategoria = new ArrayList<Categoria>();
-		agrupamentoLancamentoPorFavorecido = new ArrayList<Favorecido>();
-		agrupamentoLancamentoPorMeioPagamento = new ArrayList<MeioPagamento>();
-		agrupamentoLancamentoPorDebitoCredito = new ArrayList<AgrupamentoLancamento>();
-		agrupamentoLancamentoPorMoeda = new ArrayList<>();
-		
 		selecionarTodosLancamentos = false;
 	}
 	
@@ -172,10 +158,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				warnMessage("Informe a conta!");
 			} else {
 				if (this.pesquisarTermoNoAgrupamento)
-					criterioBusca.setAgrupamento(this.agrupamentoSelecionado);					
-				else
-					// TODO resolver a ambiguidade da chamada do método
-					criterioBusca.setAgrupamento(null);
+					criterioBusca.setCadastro(this.agrupamentoSelecionado);					
 				
 				// Seta o limite de resultado da pesquisa
 				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
@@ -459,17 +442,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
-		try {
-			// Traz a opção do sistema para suprimir texto
-			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_SUPRIMIR_TEXTO_MEIO", getUsuarioLogado());
-			
-			// Carrega os lançamentos importados
+		try {			
 			for (LancamentoImportado importado : getService().buscarLancamentoImportadoPorConta(entity.getConta())) {
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {
-					listagem.add(new SelectItem(importado, Util.suprimirTextoMeio(Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " "+ importado.getValor() + " - " + importado.getHistorico(), 55)));
-				} else {
-					listagem.add(new SelectItem(importado, Util.suprimirTextoFim(Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " " + importado.getValor() + " - " + importado.getHistorico(), 55)));
-				}
+				listagem.add(new SelectItem(importado, Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " "+ importado.getValor() + " - " + importado.getHistorico()));
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -515,14 +490,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return simboloMonetario;
 	}
 	
-	public List<SelectItem> getListaTipoLancamento() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		listaSelectItem.add(new SelectItem(TipoLancamento.RECEITA, "Receita"));
-		listaSelectItem.add(new SelectItem(TipoLancamento.DESPESA, "Despesa"));
-		return listaSelectItem;
-	}
-	
 	public void atualizarListaPesquisaAgrupamento() {
+		if (agrupamentoSelecionado == null) {
+			pesquisarTermoNoAgrupamento = false;
+		} else {
+			pesquisarTermoNoAgrupamento = true;
+		}
 		this.getListaPesquisaAgrupamento();
 	}
 	
@@ -553,30 +526,32 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public List<SelectItem> getListaPesquisaAgrupamento() {
 		List<SelectItem> resultado = new ArrayList<SelectItem>();
-		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("CAT")) {
-			for (Categoria c : this.getListaCategoriaSemTipoCategoria()) {
-				resultado.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
-			}
-		}
-		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("FAV")) {
-			for (Favorecido f : this.getListaFavorecido()) {
-				resultado.add(new SelectItem(f.getId(), f.getNome()));
-			}
-		}
-		if (agrupamentoSelecionado != null && agrupamentoSelecionado.equals("PAG")) {
-			for (MeioPagamento m : this.getListaMeioPagamento()) {
-				resultado.add(new SelectItem(m.getId(), m.getDescricao()));
+		if (agrupamentoSelecionado != null) {
+			switch (agrupamentoSelecionado) {
+				case CATEGORIA :
+					for (Categoria c : this.getListaCategoriaSemTipoCategoria()) {
+						resultado.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
+					}
+					break;
+				case FAVORECIDO :
+					for (Favorecido f : this.getListaFavorecido()) {
+						resultado.add(new SelectItem(f.getId(), f.getNome()));
+					}
+					break;
+				case MEIOPAGAMENTO : 
+					for (MeioPagamento m : this.getListaMeioPagamento()) {
+						resultado.add(new SelectItem(m.getId(), m.getDescricao()));
+					}
+					break;
+				case MOEDA :
+					for (Moeda m : this.getListaMoeda()) {
+						resultado.add(new SelectItem(m.getId(), m.getLabel()));
+					}
+					break;
+				default :
 			}
 		}
 		return resultado;
-	}
-	
-	public List<SelectItem> getListaStatusLancamentoConta() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
-			listaSelectItem.add(new SelectItem(status, status.toString()));
-		}
-		return listaSelectItem;
 	}
 	
 	public void atualizaComboCategorias() {
@@ -726,14 +701,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.movimentacaoLancamentoMB = movimentacaoLancamentoMB;
 	}
 
-	public String getAgrupamentoSelecionado() {
-		return agrupamentoSelecionado;
-	}
-
-	public void setAgrupamentoSelecionado(String agrupamentoSelecionado) {
-		this.agrupamentoSelecionado = agrupamentoSelecionado;
-	}
-
 	public TipoCategoria getTipoCategoriaSelecionada() {
 		return tipoCategoriaSelecionada;
 	}
@@ -758,51 +725,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 
-	public List<Categoria> getAgrupamentoLancamentoPorCategoria() {
-		return agrupamentoLancamentoPorCategoria;
-	}
-
-	public void setAgrupamentoLancamentoPorCategoria(
-			List<Categoria> agrupamentoLancamentoPorCategoria) {
-		this.agrupamentoLancamentoPorCategoria = agrupamentoLancamentoPorCategoria;
-	}
-
-	public List<Favorecido> getAgrupamentoLancamentoPorFavorecido() {
-		return agrupamentoLancamentoPorFavorecido;
-	}
-
-	public void setAgrupamentoLancamentoPorFavorecido(
-			List<Favorecido> agrupamentoLancamentoPorFavorecido) {
-		this.agrupamentoLancamentoPorFavorecido = agrupamentoLancamentoPorFavorecido;
-	}
-
-	public List<MeioPagamento> getAgrupamentoLancamentoPorMeioPagamento() {
-		return agrupamentoLancamentoPorMeioPagamento;
-	}
-
-	public void setAgrupamentoLancamentoPorMeioPagamento(
-			List<MeioPagamento> agrupamentoLancamentoPorMeioPagamento) {
-		this.agrupamentoLancamentoPorMeioPagamento = agrupamentoLancamentoPorMeioPagamento;
-	}
-
-	public List<AgrupamentoLancamento> getAgrupamentoLancamentoPorDebitoCredito() {
-		return agrupamentoLancamentoPorDebitoCredito;
-	}
-
-	public void setAgrupamentoLancamentoPorDebitoCredito(
-			List<AgrupamentoLancamento> agrupamentoLancamentoPorDebitoCredito) {
-		this.agrupamentoLancamentoPorDebitoCredito = agrupamentoLancamentoPorDebitoCredito;
-	}
-
-	public List<Moeda> getAgrupamentoLancamentoPorMoeda() {
-		return agrupamentoLancamentoPorMoeda;
-	}
-
-	public void setAgrupamentoLancamentoPorMoeda(
-			List<Moeda> agrupamentoLancamentoPorMoeda) {
-		this.agrupamentoLancamentoPorMoeda = agrupamentoLancamentoPorMoeda;
-	}
-
 	public IMoeda getMoedaService() {
 		return moedaService;
 	}
@@ -825,5 +747,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
 		this.fechamentoPeriodo = fechamentoPeriodo;
+	}
+
+	public CadastroSistema getAgrupamentoSelecionado() {
+		return agrupamentoSelecionado;
+	}
+
+	public void setAgrupamentoSelecionado(CadastroSistema agrupamentoSelecionado) {
+		this.agrupamentoSelecionado = agrupamentoSelecionado;
 	}
 }

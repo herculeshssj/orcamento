@@ -79,7 +79,6 @@ public class CriterioBuscaLancamentoConta {
 	
 	public void limparCriterios() {
 		this.setDescricao(null);
-		this.setAgrupamento(null);
 		this.setCadastro(null);
 		this.setTipoConta(null);
 		this.setStatusLancamentoConta(null);
@@ -145,26 +144,6 @@ public class CriterioBuscaLancamentoConta {
 
 	public String getAgrupamento() {
 		return agrupamento;
-	}
-
-	public void setAgrupamento(String agrupamento) {
-		this.agrupamento = agrupamento;
-	
-		// Remove os agrupamentos anteriormente setados
-		hibernateCriterions.remove("categoria");
-		hibernateCriterions.remove("favorecido");
-		hibernateCriterions.remove("meiopagamento");
-		hibernateCriterions.remove("moeda");
-		
-		if (agrupamento != null && !agrupamento.isEmpty()) {			
-			switch(agrupamento) {
-				case "CAT" : hibernateCriterions.put("categoria", Restrictions.eq("lancamento.categoria.id", idAgrupamento)); break;
-				case "FAV" : hibernateCriterions.put("favorecido", Restrictions.eq("lancamento.favorecido.id", idAgrupamento)); break;
-				case "PAG" : hibernateCriterions.put("meiopagamento", Restrictions.eq("lancamento.meioPagamento.id", idAgrupamento)); break;
-				case "MOE" : hibernateCriterions.put("moeda", Restrictions.eq("lancamento.moeda.id", idAgrupamento)); break;
-				default:
-			}
-		}
 	}
 	
 	public void setCadastro(CadastroSistema agrupamento) {
