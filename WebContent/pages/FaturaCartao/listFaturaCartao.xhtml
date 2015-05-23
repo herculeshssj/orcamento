@@ -108,12 +108,14 @@
 							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
 						</h:commandButton>
 						<h:outputText value="Reabrir fatura" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>
-						<h:commandLink title="Importar lançamentos" action="#{managedBean.importarLancamentos}" rendered="#{fatura.statusFaturaCartao == 'ABERTA'>
-							<h:graphicImage id="imgImport" height="40" width="40" value="/resources/images/svg/import.svg"/>
-						</h:commandLink>
-						<p:spacer width="5" rendered="#{fatura.statusFaturaCartao == 'ABERTA'/>
-			  			<h:outputText value="Importar" rendered="#{fatura.statusFaturaCartao == 'ABERTA'/>												
-					</f:facet>										
+						<h:panelGroup rendered="#{fatura.statusFaturaCartao == 'ABERTA'}">
+							<h:commandLink title="Importar lançamentos" action="#{managedBean.importarLancamentos}" >
+								<h:graphicImage id="imgImport" height="40" width="40" value="/resources/images/svg/import.svg"/>
+							</h:commandLink>
+							<p:spacer width="5"/>
+							<h:outputText value="Importar" />
+						</h:panelGroup>
+					</f:facet>
 					<p:column style="vertical-align: middle;">
 						<f:facet name="header">
 					    	<h:outputText value="Histórico"/>

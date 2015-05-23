@@ -61,7 +61,7 @@
 	
 		<h:panelGrid columns="2">
 			
-			Selecione a conta:
+			Conta:
 			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter" disabled="true">
 				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 			</h:selectOneMenu>					
@@ -71,7 +71,9 @@
 			
 			<h:outputText value=""/>
 			<h:panelGroup>
-				<p:commandButton value="Processar Arquivo" action="#{managedBean.processarArquivo}" ajax="false"/>				
+				<h:commandLink title="Processar Arquivo" action="#{managedBean.processarArquivo}">
+					<h:graphicImage id="imgProcess" height="48" width="48" value="/resources/images/svg/services.svg"/>					
+				</h:commandLink>				
 			</h:panelGroup>						
 			
 		</h:panelGrid>
@@ -136,18 +138,74 @@
 			</h:panelGroup>			
 		</h:panelGrid>
 		
+		<h5>Lançamentos válidos para importação</h5>
+		
+		<h:dataTable value="#{managedBean.listEntity}" var="item">
+			<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Data"/>
+				</f:facet>						
+				<h:outputText value="#{item.data}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+		  	</h:column>	  	
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Histórico"/>
+				</f:facet>
+				<h:outputText value="#{item.historico}"/>						
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;"  rendered="#{managedBean.tipoImportacao == 'CONTA'}">
+				<f:facet name="header">
+					<h:outputText value="Documento"/>
+				</f:facet>						
+				<h:outputText value="#{item.documento}"/>
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Moeda"/>
+				</f:facet>	
+				<h:selectOneMenu value="#{item.moeda}" rendered="#{item.conta.tipoConta == 'CARTAO'}">
+					<f:selectItems value="#{managedBean.listaCodigoMonetario}" />
+				</h:selectOneMenu>
+				<h:outputText value="#{item.conta.moeda.codigoMonetario}" rendered="#{item.conta.tipoConta != 'CARTAO'}"/>
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Valor"/>
+				</f:facet>						
+				<h:outputText value="#{item.valor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Ações"/>
+				</f:facet>
+				<h:commandLink title="Importar lançamento" action="#{managedBean.importarLancamento}">
+					<h:graphicImage id="imgImport" height="48" width="48" value="/resources/images/svg/import.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+				</h:commandLink>							
+				<p:spacer width="15"/>
+				<h:commandLink title="Excluir" action="#{managedBean.excluirLancamentoImportado}">
+					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+				</h:commandLink>
+		  	</h:column>
+		  	<f:facet name="footer">
+       			<h:outputText value="#{managedBean.quantRegistros} item(ns) encontrado(s)"></h:outputText>
+   			</f:facet>
+		</h:dataTable>
+		
 	</ui:define>
 	
 	<ui:define name="acoes">
-	
-		<h:commandLink title="Voltar ao início" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
 		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-     	<h:commandLink title="Continuar" action="#{managedBean.goToStep2}">
-     		<p:graphicImage value="/resources/images/avancar.png" />
-     	</h:commandLink>
-	
+		<h:commandLink id="lnkAvancar" title="Avançar" action="#{managedBean.confirmarImportacao}" immediate="true">
+			<h:graphicImage id="imgForward" height="48" width="48" value="/resources/images/svg/redo.svg"/>
+		</h:commandLink>
 	</ui:define>
 		
 </ui:composition>

@@ -91,7 +91,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private InfoOFX infoArquivo;
 	private String tipoImportacao = "CONTA";
 	
-	private List<LancamentoImportado> lancamentosImportadosValidos;
 	private List<LancamentoConta> lancamentoContaAInserir;
 	private List<LancamentoConta> lancamentoContaAAtualizar;
 	
@@ -116,7 +115,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		return goToListPage();
 	}
 	
-	public String find() {
+	private void find() {
 		try {
 			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 				tipoImportacao = "CARTAO";
@@ -127,22 +126,17 @@ public class ImportacaoLancamentoController extends AbstractController {
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		goToListPage = "/pages/ImportacaoLancamento/listImportacaoLancamento";
-		return null;
 	}
 	
 	public String create() {
-		return this.goToStep1();
+		exibirInfoArquivo = false;
+		find();
+		return "/pages/ImportacaoLancamento/formImportacaoLancamento";
 	}
 	
 	public String cancel() {
 		initializeEntity();
 		return goToListPage;
-	}
-	
-	public String goToStep1() {
-		exibirInfoArquivo = false;
-		return "/pages/ImportacaoLancamento/formImportacaoLancamentoPasso1";
 	}
 	
 	public String goToStep2() {
@@ -152,20 +146,20 @@ public class ImportacaoLancamentoController extends AbstractController {
 			} else {
 				tipoImportacao = "CONTA";
 			}
-			lancamentosImportadosValidos = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
+			listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "/pages/ImportacaoLancamento/formImportacaoLancamentoPasso2";
 	}
 	
-	public String goToStep3() {
+	public String confirmarImportacao() {
 		try {
 			// Altera a moeda dos lançamentos importados que foram alterados
 			for (LancamentoImportado li : getService().buscarLancamentoImportadoPorConta(contaSelecionada)) {
-				if (!li.getMoeda().equals(lancamentosImportadosValidos.get(lancamentosImportadosValidos.indexOf(li)).getMoeda())) {
+				if (!li.getMoeda().equals(listEntity.get(listEntity.indexOf(li)).getMoeda())) {
 					// Salva o lançamento importado
-					getService().atualizarLancamentoImportado(lancamentosImportadosValidos.get(lancamentosImportadosValidos.indexOf(li)));
+					getService().atualizarLancamentoImportado(listEntity.get(listEntity.indexOf(li)));
 				}
 			}
 			
@@ -174,7 +168,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return "/pages/ImportacaoLancamento/formImportacaoLancamentoPasso3";
+		return "/pages/ImportacaoLancamento/confirmarImportacao";
 	}
 	
 	public String goToListPage() {
@@ -207,6 +201,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 				infoArquivo = getService().obterInformacaoArquivoImportado(arquivoAnexado, contaSelecionada);
 				exibirInfoArquivo = true;
 				infoMessage("Arquivo processado com sucesso!");
+				find();
 			} catch (Exception e) {
 				errorMessage(e.getMessage());
 			}
@@ -276,12 +271,9 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public List<Conta> getListaConta() {
-		try {
-			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
+		List<Conta> lista = new ArrayList<>();
+		lista.add(contaSelecionada);
+		return lista;
 	}
 	
 	public int getQuantRegistros() {
@@ -327,15 +319,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setArquivoAnexado(Arquivo arquivoAnexado) {
 		this.arquivoAnexado = arquivoAnexado;
-	}
-
-	public List<LancamentoImportado> getLancamentosImportadosValidos() {
-		return lancamentosImportadosValidos;
-	}
-
-	public void setLancamentosImportadosValidos(
-			List<LancamentoImportado> lancamentosImportadosValidos) {
-		this.lancamentosImportadosValidos = lancamentosImportadosValidos;
 	}
 
 	public List<LancamentoConta> getLancamentoContaAInserir() {

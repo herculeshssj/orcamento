@@ -288,7 +288,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	public String importarLancamentos() {
-		importacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
+		importacaoLancamentoMB.setContaSelecionada(cartaoSelecionado.getConta());
 		importacaoLancamentoMB.setGoToListPage(goToListPage);
 		return importacaoLancamentoMB.create();
 	}

@@ -59,7 +59,7 @@
 	
 	<ui:define name="campos">
 	
-		<h3>Lançamentos da conta a serem atualizados</h3>
+		<h5>Lançamentos da conta a serem atualizados</h5>
 	
 		<p:dataTable id="tableLancamentoAAtualizar" width="100%" value="#{managedBean.lancamentoContaAAtualizar}" var="item" style="font-size: 16px;">     		
      		<p:column style="vertical-align: middle;">
@@ -91,7 +91,7 @@
 			</p:column>	     		  			
   		</p:dataTable>
   		
-  		<h3>Lançamentos da conta a serem criados</h3>
+  		<h5>Lançamentos da conta a serem criados</h5>
 	
 		<p:dataTable id="tableLancamentoAInserir" width="100%" value="#{managedBean.lancamentoContaAInserir}" var="item" style="font-size: 16px;">     		
      		<p:column style="vertical-align: middle;">
@@ -131,15 +131,12 @@
 	</ui:define>
 	
 	<ui:define name="acoes">
-	
-		<h:commandLink title="Voltar" action="#{managedBean.goToStep2}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.create}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
 		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-     	<h:commandLink title="Concluir importação" action="#{managedBean.processarLancamentos}">
-     		<p:graphicImage value="/resources/images/avancar.png" />
-     	</h:commandLink>
-	
+		<h:commandLink id="lnkOk" title="Confirmar importação" action="#{managedBean.processarLancamentos}">
+   			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+   		</h:commandLink>
 	</ui:define>
 		
 </ui:composition>
