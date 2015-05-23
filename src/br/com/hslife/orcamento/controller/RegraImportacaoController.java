@@ -69,7 +69,7 @@ import br.com.hslife.orcamento.facade.IRegraImportacao;
 
 @Component("regraImportacaoMB")
 @Scope("session")
-public class RegraImportacaoController extends AbstractSimpleCRUDController<RegraImportacao> {
+public class RegraImportacaoController extends AbstractCRUDController<RegraImportacao> {
 	
 	/**
 	 * 
@@ -95,10 +95,8 @@ public class RegraImportacaoController extends AbstractSimpleCRUDController<Regr
 	
 	public RegraImportacaoController() {
 		super(new RegraImportacao());
-		
+	
 		moduleTitle = "Regras de Importação";
-		
-		goToModule = "/pages/ImportacaoLancamento/listImportacaoLancamento";
 	}
 
 	@Override
