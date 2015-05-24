@@ -57,76 +57,93 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{orcamentoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="pesquisa">
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label>Orçamento:</label>
+		    <h:selectOneMenu value="#{managedBean.orcamentoSelecionado}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listEntity}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+	    </h:panelGroup>	    	    
+	</ui:define>
 	
-		Orçamento:
-		<h:selectOneMenu value="#{managedBean.orcamentoSelecionado}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listEntity}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		</h:selectOneMenu>
+	<ui:define name="botao_pesquisa" />
 	
+	<ui:define name="pesquisa_avancada">
 	
-		<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-			<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
-		</h:commandButton>
-		&nbsp;	 
-		<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}">
-			<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
-		</h:commandButton>
-		&nbsp;
-		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
-			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
-		</h:commandLink>
-		&nbsp;
-		<h:commandLink title="Atualizar" image="/resources/images/circular.png" action="#{managedBean.atualizarValores}">
-			<h:graphicImage id="imgUpdate" height="48" width="48" value="/resources/images/svg/synchronize.svg"/>
-		</h:commandLink>
-		
-		<br/><br/>
-		
+		<h:panelGroup>
+			<h:commandLink title="Editar" action="#{managedBean.edit}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+				<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>								
+			&nbsp;&nbsp;&nbsp;
+			<h:commandLink title="Excluir" action="#{managedBean.view}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<f:setPropertyActionListener value="#{managedBean.orcamentoSelecinado.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
+			&nbsp;&nbsp;&nbsp;
+			<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+				<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+			</h:commandLink>
+			&nbsp;&nbsp;&nbsp;
+			<h:commandLink title="Atualizar" image="/resources/images/circular.png" action="#{managedBean.atualizarValores}">
+				<h:graphicImage id="imgUpdate" height="48" width="48" value="/resources/images/svg/synchronize.svg"/>
+			</h:commandLink>
+		</h:panelGroup>
+			
+	</ui:define>
+	
+	<ui:define name="tabela">
 		<h:panelGroup rendered="#{managedBean.mostrarInformacao}">
 			<h:outputText value="#{managedBean.orcamentoSelecionado.alternativeLabel}" />
 			<br/>
-			<strong><h:outputText value="Conta / Tipo de conta: " rendered="#{managedBean.orcamentoSelecionado != null}"/></strong>
+			<b><h:outputText value="Conta / Tipo de conta: " rendered="#{managedBean.orcamentoSelecionado != null}"/></b>
 			<h:panelGroup>			
 				<h:outputText value="Sem distinção de conta ou Tipo de Conta" rendered="#{managedBean.orcamentoSelecionado.tipoOrcamento == 'SEMDISTINCAO'}"/>
 				<h:outputText value="#{managedBean.orcamentoSelecionado.conta.label}" rendered="#{managedBean.orcamentoSelecionado.tipoOrcamento == 'CONTA'}"/>
 				<h:outputText value="#{managedBean.orcamentoSelecionado.tipoConta}" rendered="#{managedBean.orcamentoSelecionado.tipoOrcamento == 'TIPOCONTA'}"/>
 			</h:panelGroup>
 			&nbsp;
-			<strong><h:outputText value="Abrangência: " rendered="#{managedBean.orcamentoSelecionado != null}"/></strong>
+			<b><h:outputText value="Abrangência: " rendered="#{managedBean.orcamentoSelecionado != null}"/></b>
 			<h:outputText value="#{managedBean.orcamentoSelecionado.abrangenciaOrcamento}" />
 		</h:panelGroup>
 	
-	</ui:define>
-	
-	<ui:define name="tabela">
-		<p:dataTable id="tableAbrangenciaCategoria" width="100%" value="#{managedBean.listaDetalheOrcamento}" var="item" rendered="#{managedBean.orcamentoSelecionado.abrangenciaOrcamento == 'CATEGORIA'}">
-			<p:column style="text-align: center; vertical-align: middle;">
+		<h:dataTable id="tableAbrangenciaCategoria" width="100%" value="#{managedBean.listaDetalheOrcamento}" var="item" rendered="#{managedBean.orcamentoSelecionado.abrangenciaOrcamento == 'CATEGORIA'}">
+			<h:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Descrição"/>
 				</f:facet>
-				<h:outputText value="#{item.descricao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>					
-			</p:column>
-			<p:column style="text-align: center; vertical-align: middle;">
+				<h:outputText value="#{item.descricao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+				<f:facet name="footer">
+					<h:outputText value="Saldo"/>
+				</f:facet>					
+			</h:column>
+			<h:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Previsto"/>
 				</f:facet>
 				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
 			    <h:outputText value="#{item.previsao}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-			    </h:outputText>				
-			</p:column>
-			<p:column style="text-align: center; vertical-align: middle;">
+			    </h:outputText>
+			    <f:facet name="footer">
+			    	<h:outputText value="#{managedBean.saldoPrevistoDetalheOrcamento}"/>
+			    </f:facet>				
+			</h:column>
+			<h:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Realizado"/>
 				</f:facet>
 				<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
 			    <h:outputText value="#{item.realizado}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-			    </h:outputText>				
-			</p:column>					
-			<p:column style="text-align: center; vertical-align: middle; font-weight: bold;">
+			    </h:outputText>	
+			    <f:facet name="footer">
+			    	<h:outputText value="#{managedBean.saldoRealizadoDetalheOrcamento}"/>
+			    </f:facet>			
+			</h:column>					
+			<h:column style="text-align: center; vertical-align: middle; font-weight: bold;">
 				<f:facet name="header">
 					<h:outputText value="%"/>
 				</f:facet>				
@@ -144,47 +161,48 @@
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>										
 				<h:outputText value=" %" rendered="#{item.situacao == 'BOM'}" style="color: #339900;" />
-			</p:column>
-			<p:columnGroup type="footer">
-				<p:row>
-					<p:column footerText="Saldo:"/>
-					<p:column footerText="#{managedBean.saldoPrevistoDetalheOrcamento}"/>
-					<p:column footerText="#{managedBean.saldoRealizadoDetalheOrcamento}"/>
-					<p:column footerText=""/>
-				</p:row>
-			</p:columnGroup>
-		</p:dataTable>
+			</h:column>
+		</h:dataTable>
 		
 		<p:tabView rendered="#{managedBean.orcamentoSelecionado.abrangenciaOrcamento == 'FAVORECIDO' or managedBean.orcamentoSelecionado.abrangenciaOrcamento == 'MEIOPAGAMENTO'}">
 		
 			<p:tab title="Crédito">
 			
-				<p:dataTable id="tableFavorecidoMeioPagamentoCredito" width="100%" value="#{managedBean.listaDetalheOrcamento}" var="item">
-					<p:column style="text-align: center; vertical-align: middle;">
+				<h:dataTable id="tableFavorecidoMeioPagamentoCredito" width="100%" value="#{managedBean.listaDetalheOrcamento}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Descrição"/>
 						</f:facet>
-						<h:outputText value="#{item.descricao}" />					
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+						<h:outputText value="#{item.descricao}" />	
+						<f:facet name="footer">
+							<h:outputText value="Saldo:" />
+						</f:facet>				
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Previsto - Crédito"/>
 						</f:facet>
 						<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
 					    <h:outputText value="#{item.previsaoCredito}">
 					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					    </h:outputText>				
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					    </h:outputText>
+					    <f:facet name="footer">
+					    	<h:outputText value="#{managedBean.saldoCreditoPrevistoDetalheOrcamento}"/>
+					    </f:facet>				
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Realizado - Crédito"/>
 						</f:facet>
 						<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
 					    <h:outputText value="#{item.realizadoCredito}">
 					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					    </h:outputText>				
-					</p:column>					
-					<p:column style="text-align: center; vertical-align: middle; font-weight: bold;">
+					    </h:outputText>
+					    <f:facet name="footer">
+					    	<h:outputText value="#{managedBean.saldoCreditoRealizadoDetalheOrcamento}"/>
+					    </f:facet>				
+					</h:column>					
+					<h:column style="text-align: center; vertical-align: middle; font-weight: bold;">
 						<f:facet name="header">
 							<h:outputText value="%"/>
 						</f:facet>				
@@ -202,47 +220,48 @@
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>										
 						<h:outputText value=" %" rendered="#{item.situacaoCredito == 'BOM'}" style="color: #339900;" />
-					</p:column>
-					<p:columnGroup type="footer">
-						<p:row>
-							<p:column footerText="Saldo:"/>
-							<p:column footerText="#{managedBean.saldoCreditoPrevistoDetalheOrcamento}"/>
-							<p:column footerText="#{managedBean.saldoCreditoRealizadoDetalheOrcamento}"/>
-							<p:column footerText=""/>
-						</p:row>
-					</p:columnGroup>					
-				</p:dataTable>
+					</h:column>					
+				</h:dataTable>
 			
 			</p:tab>
 		
 			<p:tab title="Débito">
 			
-				<p:dataTable id="tableFavorecidoMeioPagamentoDebito" width="100%" value="#{managedBean.listaDetalheOrcamento}" var="item">
-					<p:column style="text-align: center; vertical-align: middle;">
+				<h:dataTable id="tableFavorecidoMeioPagamentoDebito" width="100%" value="#{managedBean.listaDetalheOrcamento}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Descrição"/>
 						</f:facet>
-						<h:outputText value="#{item.descricao}" />					
-					</p:column>					
-					<p:column style="text-align: center; vertical-align: middle;">
+						<h:outputText value="#{item.descricao}" />			
+						<f:facet name="footer">
+							<h:outputText value="Saldo:"/>
+						</f:facet>		
+					</h:column>					
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Previsto - Débito"/>
 						</f:facet>
 						<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
 					    <h:outputText value="#{item.previsaoDebito}">
 					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					    </h:outputText>				
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					    </h:outputText>	
+					    <f:facet name="footer">
+					    	<h:outputText value="#{managedBean.saldoDebitoPrevistoDetalheOrcamento}" />
+					    </f:facet>			
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Realizado - Débito"/>
 						</f:facet>
 						<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
 					    <h:outputText value="#{item.realizadoDebito}">
 					     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					    </h:outputText>				
-					</p:column>					
-					<p:column style="text-align: center; vertical-align: middle; font-weight: bold;">
+					    </h:outputText>
+					    <f:facet name="footer">
+					    	<h:outputText value="#{managedBean.saldoDebitoRealizadoDetalheOrcamento}"/>
+					    </f:facet>				
+					</h:column>					
+					<h:column style="text-align: center; vertical-align: middle; font-weight: bold;">
 						<f:facet name="header">
 							<h:outputText value="%"/>
 						</f:facet>				
@@ -260,16 +279,8 @@
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>										
 						<h:outputText value=" %" rendered="#{item.situacaoDebito == 'BOM'}" style="color: #339900;" />
-					</p:column>
-					<p:columnGroup type="footer">
-						<p:row>
-							<p:column footerText="Saldo:"/>
-							<p:column footerText="#{managedBean.saldoDebitoPrevistoDetalheOrcamento}"/>
-							<p:column footerText="#{managedBean.saldoDebitoRealizadoDetalheOrcamento}"/>
-							<p:column footerText=""/>
-						</p:row>
-					</p:columnGroup>
-				</p:dataTable>	
+					</h:column>
+				</h:dataTable>	
 			
 			</p:tab>
 		
