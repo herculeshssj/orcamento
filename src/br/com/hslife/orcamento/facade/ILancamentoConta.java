@@ -46,15 +46,18 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.service.ICRUDService;
@@ -81,4 +84,14 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
 	
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException;
+	
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException;
+	
+	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException;
+	
+	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException;
+	
+	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
+	
+	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws BusinessException;
 }

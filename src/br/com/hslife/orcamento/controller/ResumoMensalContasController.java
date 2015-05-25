@@ -67,7 +67,7 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 
@@ -90,7 +90,7 @@ public class ResumoMensalContasController extends AbstractController {
 	private IConta contaService;
 	
 	@Autowired
-	private IFechamentoPeriodo fechamentoPeriodoService;
+	private ILancamentoConta lancamentoContaService;
 	
 	@Autowired
 	private OrcamentoController orcamentoMB;
@@ -262,7 +262,7 @@ public class ResumoMensalContasController extends AbstractController {
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
 			
-			List<FechamentoPeriodo> resultado = fechamentoPeriodoService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
+			List<FechamentoPeriodo> resultado = lancamentoContaService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
 			if (resultado != null) {
 				if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
 					for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
@@ -314,10 +314,6 @@ public class ResumoMensalContasController extends AbstractController {
 	}
 	public void setContaService(IConta contaService) {
 		this.contaService = contaService;
-	}
-	public void setFechamentoPeriodoService(
-			IFechamentoPeriodo fechamentoPeriodoService) {
-		this.fechamentoPeriodoService = fechamentoPeriodoService;
 	}
 
 	public ResumoMensalContas getResumoMensal() {

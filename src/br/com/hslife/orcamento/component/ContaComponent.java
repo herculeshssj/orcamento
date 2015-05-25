@@ -388,6 +388,10 @@ public class ContaComponent {
 		return meiosPagamento;
 	}
 
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException {
+		return fechamentoPeriodoRepository.findByContaAndOperacaoConta(conta, operacaoConta);
+	}
+	
 	@SuppressWarnings("deprecation")
 	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
 		// Obtém-se o último fechamento realizado
@@ -447,6 +451,60 @@ public class ContaComponent {
 		
 		// Salva o fechamento
 		fechamentoPeriodoRepository.save(novoFechamento);
+	}
+	
+	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException {
+		// Obtém-se o último fechamento realizado
+		FechamentoPeriodo fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(entity.getConta());
+				
+		// Guarda a data do último fechamento como data final do intervalo
+		Date dataFim;
+		
+		if (fechamentoAnterior == null) {			
+			dataFim = entity.getConta().getDataAbertura();
+		} else {			
+			dataFim = fechamentoAnterior.getData(); 
+		}
+		
+		// Busca os fechamentos para setar como reabertos
+		List<FechamentoPeriodo> fechamentos = fechamentoPeriodoRepository.findFechamentosPosteriores(entity);
+		
+		// Seta os fechamentos encontrados para reabertos e salva
+		for (FechamentoPeriodo fp : fechamentos) {
+			fp.setOperacao(OperacaoConta.REABERTURA);
+			fp.setDataAlteracao(new Date());
+			fechamentoPeriodoRepository.update(fp);
+		}
+		
+		// Obtém-se o atual último fechamento
+		fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(entity.getConta());
+		
+		// Guarda a data do fechamento como data inicial do intervalo
+		Date dataInicio;
+		
+		if (fechamentoAnterior == null) {			
+			dataInicio = entity.getConta().getDataAbertura();
+		} else {			
+			dataInicio = fechamentoAnterior.getData(); 
+		}
+		
+		// Incrementa a data de início do intervalo
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(dataInicio);
+		temp.add(Calendar.DAY_OF_YEAR, 1);
+		
+		// Busca os lançamentos do intervalo e seta como não quitados
+		CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
+		criterio.setConta(entity.getConta());
+		criterio.setDescricao("");
+		criterio.setDataInicio(temp.getTime());
+		criterio.setDataFim(dataFim);
+		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
+			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
+			lancamento.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			lancamentoContaRepository.update(lancamento);
+		}
 	}
 
 	public List<Moeda> organizarLancamentosPorMoeda(List<LancamentoConta> lancamentos) {

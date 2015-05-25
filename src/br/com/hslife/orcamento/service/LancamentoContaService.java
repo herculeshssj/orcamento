@@ -62,6 +62,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -303,5 +304,29 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException {
 		return getRepository().existsLinkageFaturaCartao(lancamento);
+	}
+	
+	@Override
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException {
+		return getComponent().buscarPorContaEOperacaoConta(conta, operacaoConta);
+	}
+	
+	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
+		getComponent().fecharPeriodo(dataFechamento, conta);
+	}
+	
+	@Override
+	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
+		return fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoPeriodo);
+	}
+	
+	@Override
+	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) {
+		return fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
+	}
+
+	@Override
+	public void reabrirPeriodo(FechamentoPeriodo entity)throws BusinessException {
+		getComponent().reabrirPeriodo(entity);		
 	}
 }

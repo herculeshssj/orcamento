@@ -87,7 +87,6 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
-import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -120,9 +119,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	@Autowired
 	private IMoeda moedaService;
-	
-	@Autowired
-	private IFechamentoPeriodo fechamentoPeriodoService;
 	
 	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
@@ -183,9 +179,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			// Busca o fechamento do período anterior
 			FechamentoPeriodo fechamentoAnterior;
 			if (fechamentoPeriodo != null) 
-				fechamentoAnterior = fechamentoPeriodoService.buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
+				fechamentoAnterior = getService().buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
 			else
-				fechamentoAnterior = fechamentoPeriodoService.buscarUltimoFechamentoConta(criterioBusca.getConta());
+				fechamentoAnterior = getService().buscarUltimoFechamentoConta(criterioBusca.getConta());
 			
 			// Determina a data de início do período
 			if (fechamentoAnterior == null) {
@@ -503,7 +499,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
 			if (criterioBusca.getConta() != null) {
-				List<FechamentoPeriodo> resultado = fechamentoPeriodoService.buscarPorContaEOperacaoConta(criterioBusca.getConta(), OperacaoConta.FECHAMENTO);
+				List<FechamentoPeriodo> resultado = getService().buscarPorContaEOperacaoConta(criterioBusca.getConta(), OperacaoConta.FECHAMENTO);
 				if (resultado != null) {
 					if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
 						for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
