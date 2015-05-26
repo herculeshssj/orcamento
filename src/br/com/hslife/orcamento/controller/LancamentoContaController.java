@@ -349,6 +349,24 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return importacaoLancamentoMB.create();
 	}
 	
+	public String fecharPeriodoView() {
+		actionTitle = " - Fechar período";
+		return "/pages/LancamentoConta/fecharPeriodo";
+	}
+	
+	public String fecharPeriodo() {
+		return goToListPage;
+	}
+	
+	public String reabrirPeriodoView() {
+		actionTitle = " - Reabrir período";
+		return "/pages/LancamentoConta/reabrirPeriodo";
+	}
+	
+	public String reabrirPeriodo() {
+		return goToListPage;
+	}
+	
 	public String mover() {
 		if (listEntity == null){
 			warnMessage("Nenhum lançamento selecionado!");
