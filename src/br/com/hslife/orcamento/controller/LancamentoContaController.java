@@ -76,6 +76,7 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
@@ -83,6 +84,7 @@ import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -133,6 +135,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private boolean pesquisarTermoNoAgrupamento;	
 	private boolean selecionarTodosLancamentos;
 	private FechamentoPeriodo fechamentoPeriodo;
+	private Date dataFechamento;
+	
+	private List<LancamentoPeriodico> lancamentosPeriodicos = new ArrayList<>();
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
@@ -145,6 +150,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		listEntity = new ArrayList<LancamentoConta>();
 		
 		selecionarTodosLancamentos = false;
+		dataFechamento = null;
 	}
 	
 	@Override
@@ -351,11 +357,37 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public String fecharPeriodoView() {
 		actionTitle = " - Fechar período";
+		lancamentosPeriodicos = new ArrayList<>();
+		findByPeriodo();
+		for (LancamentoConta l : listEntity) {
+			if (l.getLancamentoPeriodico() != null && l.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
+				lancamentosPeriodicos.add(l.getLancamentoPeriodico());
+			}
+		}
 		return "/pages/LancamentoConta/fecharPeriodo";
 	}
 	
 	public String fecharPeriodo() {
-		return goToListPage;
+		try {
+			if (dataFechamento == null) {
+				warnMessage("Informe a data de fechamento!");
+				return "";
+			}
+			
+			// Remove da lista os lançamentos periódicos desmarcados
+			for (Iterator<LancamentoPeriodico> i = lancamentosPeriodicos.iterator(); i.hasNext(); ) {
+				if (!i.next().isSelecionado()) {
+					i.remove();
+				}
+			}
+						
+			getService().fecharPeriodo(dataFechamento, criterioBusca.getConta(), lancamentosPeriodicos);
+			infoMessage("Período fechado com sucesso.");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return list();
 	}
 	
 	public String reabrirPeriodoView() {
@@ -769,5 +801,22 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setAgrupamentoSelecionado(CadastroSistema agrupamentoSelecionado) {
 		this.agrupamentoSelecionado = agrupamentoSelecionado;
+	}
+
+	public Date getDataFechamento() {
+		return dataFechamento;
+	}
+
+	public void setDataFechamento(Date dataFechamento) {
+		this.dataFechamento = dataFechamento;
+	}
+
+	public List<LancamentoPeriodico> getLancamentosPeriodicos() {
+		return lancamentosPeriodicos;
+	}
+
+	public void setLancamentosPeriodicos(
+			List<LancamentoPeriodico> lancamentosPeriodicos) {
+		this.lancamentosPeriodicos = lancamentosPeriodicos;
 	}
 }

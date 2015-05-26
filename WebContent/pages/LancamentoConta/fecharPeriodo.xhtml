@@ -59,8 +59,67 @@
 	
 	<ui:define name="campos">
 		
+		<label>Conta:</label>
+		<h:selectOneMenu value="#{managedBean.criterioBusca.conta}" converter="entityConverter" disabled="true">
+			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		</h:selectOneMenu>
 		
+		<label for="frmListEntity:txtDataFechamento">Data de fechamento:</label>
+		<p:inputMask id="txtDataFechamento" size="9" mask="99/99/9999" value="#{managedBean.dataFechamento}">
+	    	<f:converter converterId="dateConverter"/>
+	    </p:inputMask>
+	    
+	    <hr/>
+	    
+	    <h5>Selecione os lançamentos periódicos que serão criados</h5>
+	    <h:dataTable id="tableLancamentosPeriodicos" value="#{managedBean.lancamentosPeriodicos}" var="item">
+	    	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value=""/>
+				</f:facet>
+				<h:selectBooleanCheckbox value="#{item.selecionado}"/>						
+		  	</h:column>
+	    	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Descrição"/>
+				</f:facet>
+				<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+				<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>						
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Vencimento"/>
+				</f:facet>
+				<h:outputText value="Dia " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+				<h:outputText value="#{item.diaVencimento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>						
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Valor"/>
+				</f:facet>
+				<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+				<h:outputText value="#{item.valorParcela}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Situação"/>
+				</f:facet>
+				<h:outputText value="#{item.statusLancamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>						
+		  	</h:column>
+	    </h:dataTable>
 				
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+		</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Fechar período" action="#{managedBean.fecharPeriodo}">
+			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		</h:commandLink>     			
 	</ui:define>
 	
 </ui:composition>
