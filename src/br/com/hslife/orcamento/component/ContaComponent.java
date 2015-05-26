@@ -397,7 +397,7 @@ public class ContaComponent {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
 		// Obtém-se o último fechamento realizado
 		FechamentoPeriodo fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
 		
@@ -414,10 +414,8 @@ public class ContaComponent {
 		if (fechamentoAnterior != null) {
 			temp.setTime(fechamentoAnterior.getData());
 			temp.add(Calendar.DAY_OF_YEAR, 1);
-		}
-		else
-			temp.setTime(conta.getDataAbertura());
-		
+		} else
+			temp.setTime(conta.getDataAbertura());		
 		
 		// Calcula o saldo do período
 		CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
@@ -444,16 +442,15 @@ public class ContaComponent {
 		// Quita os lançamentos do período
 		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
 			l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
-			lancamentoContaRepository.update(l);
+			if (lancamentosPeriodicos.contains(l)) {
+				this.registrarPagamento(l);
+			} else {
+				lancamentoContaRepository.update(l);
+			}
 		}
 		
 		// Salva o fechamento
 		fechamentoPeriodoRepository.save(novoFechamento);
-		
-		// Cria as mensalidades dos lançamentos selecionados
-		for (LancamentoPeriodico l : lancamentosPeriodicos) {
-			this.registrarPagamento(l);
-		}
 	}
 	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException {
@@ -591,19 +588,24 @@ public class ContaComponent {
 	}
 	
 	// TODO diminuir a complexidade ciclomática do método. Averiguar se a próxima mensalidade pode ser gerada por clonagem
-	public void registrarPagamento(LancamentoPeriodico pagamentoPeriodo) throws BusinessException {		
+	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException {		
+		pagamentoPeriodo.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
+		
+		// Atualiza o pagamento
+		lancamentoContaRepository.update(pagamentoPeriodo);
+		
 		// Gera o próximo pagamento para os lançamentos fixos
-		if (pagamentoPeriodo.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)
-				&& pagamentoPeriodo.getStatusLancamento().equals(StatusLancamento.ATIVO)) {
+		if (pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)
+				&& pagamentoPeriodo.getLancamentoPeriodico().getStatusLancamento().equals(StatusLancamento.ATIVO)) {
 			
 			// Busca o pagamento mais recente
-			LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(pagamentoPeriodo);
+			LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(pagamentoPeriodo.getLancamentoPeriodico());
 			
 			Calendar dataVencimento = Calendar.getInstance();
 			dataVencimento.setTime(ultimaMensalidade.getDataVencimento());
 			
-			if (dataVencimento.get(Calendar.DAY_OF_MONTH) >= pagamentoPeriodo.getDiaVencimento()) {
-				switch (pagamentoPeriodo.getPeriodoLancamento()) {
+			if (dataVencimento.get(Calendar.DAY_OF_MONTH) >= pagamentoPeriodo.getLancamentoPeriodico().getDiaVencimento()) {
+				switch (pagamentoPeriodo.getLancamentoPeriodico().getPeriodoLancamento()) {
 					case MENSAL : dataVencimento.add(Calendar.MONTH, 1); break;
 					case BIMESTRAL : dataVencimento.add(Calendar.MONTH, 2); break;
 					case TRIMESTRAL : dataVencimento.add(Calendar.MONTH, 3); break;
@@ -615,15 +617,15 @@ public class ContaComponent {
 			}
 			
 			LancamentoConta proximaMensalidade = new LancamentoConta();
-			proximaMensalidade.setLancamentoPeriodico(pagamentoPeriodo);
-			dataVencimento.set(Calendar.DAY_OF_MONTH, pagamentoPeriodo.getDiaVencimento());
+			proximaMensalidade.setLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico());
+			dataVencimento.set(Calendar.DAY_OF_MONTH, pagamentoPeriodo.getLancamentoPeriodico().getDiaVencimento());
 			
 			proximaMensalidade.setAno(dataVencimento.get(Calendar.YEAR));
 			proximaMensalidade.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
 			proximaMensalidade.setDataVencimento(dataVencimento.getTime());
 			
 			// Setando os demais atributos
-			proximaMensalidade.setConta(pagamentoPeriodo.getConta());
+			proximaMensalidade.setConta(pagamentoPeriodo.getLancamentoPeriodico().getConta());
 			proximaMensalidade.setTipoLancamento(pagamentoPeriodo.getTipoLancamento());
 			proximaMensalidade.setValorPago(proximaMensalidade.getLancamentoPeriodico().getValorParcela());
 			proximaMensalidade.setDataPagamento(proximaMensalidade.getDataVencimento());
@@ -634,15 +636,15 @@ public class ContaComponent {
 			proximaMensalidade.setStatusLancamentoConta(proximaMensalidade.getDataPagamento().after(new Date()) ? StatusLancamentoConta.AGENDADO : StatusLancamentoConta.REGISTRADO);
 			
 			// Define a descrição definitiva do lançamento a ser criado
-			proximaMensalidade.setDescricao(pagamentoPeriodo.getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
+			proximaMensalidade.setDescricao(pagamentoPeriodo.getLancamentoPeriodico().getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
 			
 			lancamentoContaRepository.save(proximaMensalidade);
 			
 		} else {
 			// Verifica se o lançamento periódico vinculado já pode ser encerrado.
-			if (pagamentoPeriodo.podeEncerrar()) {
-				pagamentoPeriodo.setStatusLancamento(StatusLancamento.ENCERRADO);
-				lancamentoPeriodicoRepository.update(pagamentoPeriodo);
+			if (pagamentoPeriodo.getLancamentoPeriodico().podeEncerrar()) {
+				pagamentoPeriodo.getLancamentoPeriodico().setStatusLancamento(StatusLancamento.ENCERRADO);
+				lancamentoPeriodicoRepository.update(pagamentoPeriodo.getLancamentoPeriodico());
 			}
 		}
 	}

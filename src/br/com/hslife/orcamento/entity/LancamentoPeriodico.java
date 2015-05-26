@@ -164,9 +164,6 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@Transient
 	private Date dataPrimeiraParcela;
 	
-	@Transient
-	private boolean selecionado = true;
-	
 	public LancamentoPeriodico() {
 		statusLancamento = StatusLancamento.ATIVO;
 	}
@@ -361,13 +358,5 @@ public class LancamentoPeriodico extends EntityPersistence {
 
 	public void setPagamentos(List<LancamentoConta> pagamentos) {
 		this.pagamentos = pagamentos;
-	}
-
-	public boolean isSelecionado() {
-		return selecionado;
-	}
-
-	public void setSelecionado(boolean selecionado) {
-		this.selecionado = selecionado;
 	}
 }

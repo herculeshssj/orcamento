@@ -90,7 +90,7 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
 	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException;
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException;
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException;
 	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException;
 	

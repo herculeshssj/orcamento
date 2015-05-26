@@ -76,7 +76,6 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
@@ -137,7 +136,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private FechamentoPeriodo fechamentoPeriodo;
 	private Date dataFechamento;
 	
-	private List<LancamentoPeriodico> lancamentosPeriodicos = new ArrayList<>();
+	private List<LancamentoConta> lancamentosPeriodicos = new ArrayList<>();
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
@@ -205,6 +204,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				criterioBusca.setDataFim(new Date());
 			} else {
 				criterioBusca.setDataFim(fechamentoPeriodo.getData());
+			}
+
+			// Correção do problema da dataInício ser maior que dataFim
+			if (criterioBusca.getDataInicio().after(criterioBusca.getDataFim())) {
+				criterioBusca.setDataFim(null);
 			}
 			
 			// Seta o limite de resultado da pesquisa
@@ -361,7 +365,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		findByPeriodo();
 		for (LancamentoConta l : listEntity) {
 			if (l.getLancamentoPeriodico() != null && l.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
-				lancamentosPeriodicos.add(l.getLancamentoPeriodico());
+				l.setSelecionado(true);
+				lancamentosPeriodicos.add(l);
 			}
 		}
 		return "/pages/LancamentoConta/fecharPeriodo";
@@ -374,8 +379,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				return "";
 			}
 			
-			// Remove da lista os lançamentos periódicos desmarcados
-			for (Iterator<LancamentoPeriodico> i = lancamentosPeriodicos.iterator(); i.hasNext(); ) {
+			// Remove os lançamentos não selecionados
+			for (Iterator<LancamentoConta> i = lancamentosPeriodicos.iterator(); i.hasNext(); ) {
 				if (!i.next().isSelecionado()) {
 					i.remove();
 				}
@@ -811,12 +816,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.dataFechamento = dataFechamento;
 	}
 
-	public List<LancamentoPeriodico> getLancamentosPeriodicos() {
+	public List<LancamentoConta> getLancamentosPeriodicos() {
 		return lancamentosPeriodicos;
 	}
 
-	public void setLancamentosPeriodicos(
-			List<LancamentoPeriodico> lancamentosPeriodicos) {
+	public void setLancamentosPeriodicos(List<LancamentoConta> lancamentosPeriodicos) {
 		this.lancamentosPeriodicos = lancamentosPeriodicos;
 	}
 }
