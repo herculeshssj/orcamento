@@ -44,19 +44,26 @@
   
 ***/
 
-package br.com.hslife.orcamento.enumeration;
+package br.com.hslife.orcamento.util;
 
-public enum OperacaoConta {
-	ABERTURA("Aberto"), FECHAMENTO("Fechado"), REABERTURA("Reaberto");
-	
-	private String descricao;
-	
-	private OperacaoConta(String descricao) {
-		this.descricao = descricao;
-	}
-	
+import java.util.Comparator;
+
+import br.com.hslife.orcamento.entity.LancamentoConta;
+
+public class LancamentoContaComparator implements Comparator<LancamentoConta>{
+
 	@Override
-	public String toString() {		
-		return this.descricao;
+	public int compare(LancamentoConta oneEntity, LancamentoConta otherEntity) {
+		try {
+			
+			if (oneEntity != null && otherEntity != null) {
+				if (oneEntity.getDataPagamento() != null && otherEntity.getDataPagamento() != null) {
+					return oneEntity.getDataPagamento().compareTo(otherEntity.getDataPagamento());
+				}
+			}			
+		} catch (NullPointerException npe) {
+			System.out.println(npe.getMessage());
+		}
+		return 0;
 	}
 }

@@ -320,6 +320,11 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	}
 	
 	@Override
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+		getComponent().fecharPeriodo(fechamentoPeriodo, lancamentosPeriodicos);		
+	}
+	
+	@Override
 	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
 		return fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoPeriodo);
 	}
@@ -332,5 +337,10 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public void reabrirPeriodo(FechamentoPeriodo entity)throws BusinessException {
 		getComponent().reabrirPeriodo(entity);		
+	}
+	
+	@Override
+	public List<FechamentoPeriodo> buscarTodosPorConta(Conta conta) throws BusinessException {
+		return fechamentoPeriodoRepository.findAllByConta(conta);
 	}
 }

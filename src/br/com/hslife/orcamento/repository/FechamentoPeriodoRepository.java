@@ -69,8 +69,8 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	public List<FechamentoPeriodo> findAllByConta(Conta conta) {
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
-		criteria.addOrder(Order.asc("data"));
-		return criteria.list();
+		criteria.addOrder(Order.desc("data"));
+		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -114,7 +114,7 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	public FechamentoPeriodo findFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.lt("id", fechamentoPeriodo.getId()));
-		criteria.add(Restrictions.eq("operacao", fechamentoPeriodo.getOperacao()));
+		//criteria.add(Restrictions.eq("operacao", fechamentoPeriodo.getOperacao()));
 		criteria.add(Restrictions.eq("conta.id", fechamentoPeriodo.getConta().getId()));		
 		List<FechamentoPeriodo> resultado = criteria.addOrder(Order.desc("id")).setMaxResults(1).list(); 
 		if (resultado == null || resultado.size() != 1) {

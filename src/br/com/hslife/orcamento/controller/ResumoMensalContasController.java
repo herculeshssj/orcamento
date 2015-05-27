@@ -62,7 +62,6 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.Orcamento;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -262,7 +261,7 @@ public class ResumoMensalContasController extends AbstractController {
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
 			
-			List<FechamentoPeriodo> resultado = lancamentoContaService.buscarPorContaEOperacaoConta(contaSelecionada, OperacaoConta.FECHAMENTO);
+			List<FechamentoPeriodo> resultado = lancamentoContaService.buscarTodosPorConta(contaSelecionada);
 			if (resultado != null) {
 				if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
 					for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {

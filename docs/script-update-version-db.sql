@@ -115,7 +115,8 @@ alter table cartaocredito change column `tipoCartao` `tipoCartao` varchar(10) no
 -- Inclusão da coluna numeroCartaoDebito - Github Issue #71
 alter table cartaocredito add column numeroCartaoDebito varchar(40) null;
 
-
+-- Exclusão do histórico de reaberturas de períodos
+delete from fechamentoperiodo where operacao = 'REABERTURA';
 
 
 

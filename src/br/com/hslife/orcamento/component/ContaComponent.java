@@ -393,13 +393,25 @@ public class ContaComponent {
 	}
 	
 	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
-		this.fecharPeriodo(dataFechamento, conta, null);
+		this.fecharPeriodo(dataFechamento, conta, null, null);
+	}
+	
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+		this.fecharPeriodo(dataFechamento, conta, null, lancamentosPeriodicos);
+	}
+	
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+		this.fecharPeriodo(fechamentoPeriodo.getData(), fechamentoPeriodo.getConta(), fechamentoPeriodo, lancamentosPeriodicos);
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
 		// Obtém-se o último fechamento realizado
-		FechamentoPeriodo fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
+		FechamentoPeriodo fechamentoAnterior;
+		if (fechamentoReaberto == null)
+			fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
+		else 
+			fechamentoAnterior = fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoReaberto);
 		
 		double saldoFechamentoAnterior = 0;
 		
@@ -428,20 +440,38 @@ public class ContaComponent {
 		
 		// Cria o novo fechamento para a conta
 		FechamentoPeriodo novoFechamento = new FechamentoPeriodo();
-		novoFechamento.setConta(conta);
-		novoFechamento.setData(dataFechamento);
-		novoFechamento.setOperacao(OperacaoConta.FECHAMENTO);
-		novoFechamento.setDataAlteracao(new Date());
-		novoFechamento.setSaldo(saldoFechamentoAnterior + saldoFechamento);
-		
-		// Obtém o mês e ano da data de fechamento
-		temp.setTime(dataFechamento);
-		novoFechamento.setMes(temp.getTime().getMonth() + 1);
-		novoFechamento.setAno(temp.get(Calendar.YEAR));
+		if (fechamentoReaberto == null) {
+			novoFechamento.setConta(conta);
+			novoFechamento.setData(dataFechamento);
+			novoFechamento.setOperacao(OperacaoConta.FECHAMENTO);
+			novoFechamento.setDataAlteracao(new Date());
+			novoFechamento.setSaldo(saldoFechamentoAnterior + saldoFechamento);
+			
+			// Obtém o mês e ano da data de fechamento
+			temp.setTime(dataFechamento);
+			novoFechamento.setMes(temp.getTime().getMonth() + 1);
+			novoFechamento.setAno(temp.get(Calendar.YEAR));
+			
+			// Salva o fechamento
+			fechamentoPeriodoRepository.save(novoFechamento);
+		} else {
+			// Altera os dados do fechamento já existente
+			fechamentoReaberto.setOperacao(OperacaoConta.FECHAMENTO);
+			fechamentoReaberto.setDataAlteracao(new Date());
+			fechamentoReaberto.setSaldo(saldoFechamentoAnterior + saldoFechamento);
+			
+			// Salva o fechamento
+			fechamentoPeriodoRepository.update(fechamentoReaberto);
+		}
 		
 		// Quita os lançamentos do período
 		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
 			l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
+			if (fechamentoReaberto == null)
+				l.setFechamentoPeriodo(novoFechamento);
+			else
+				l.setFechamentoPeriodo(fechamentoReaberto);
+
 			if (lancamentosPeriodicos.contains(l)) {
 				this.registrarPagamento(l);
 			} else {
@@ -449,61 +479,21 @@ public class ContaComponent {
 			}
 		}
 		
-		// Salva o fechamento
-		fechamentoPeriodoRepository.save(novoFechamento);
+		
 	}
 	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException {
-		// Obtém-se o último fechamento realizado
-		FechamentoPeriodo fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(entity.getConta());
-				
-		// Guarda a data do último fechamento como data final do intervalo
-		Date dataFim;
+		// Seta o status do fechamento do período
+		entity.setOperacao(OperacaoConta.REABERTURA);
+		entity.setDataAlteracao(new Date());
 		
-		if (fechamentoAnterior == null) {			
-			dataFim = entity.getConta().getDataAbertura();
-		} else {			
-			dataFim = fechamentoAnterior.getData(); 
-		}
+		// Salva o fechamento
+		fechamentoPeriodoRepository.update(entity);
 		
-		// Busca os fechamentos para setar como reabertos
-		List<FechamentoPeriodo> fechamentos = fechamentoPeriodoRepository.findFechamentosPosteriores(entity);
-		
-		// Seta os fechamentos encontrados para reabertos e salva
-		for (FechamentoPeriodo fp : fechamentos) {
-			fp.setOperacao(OperacaoConta.REABERTURA);
-			fp.setDataAlteracao(new Date());
-			fechamentoPeriodoRepository.update(fp);
-		}
-		
-		// Obtém-se o atual último fechamento
-		fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(entity.getConta());
-		
-		// Guarda a data do fechamento como data inicial do intervalo
-		Date dataInicio;
-		
-		if (fechamentoAnterior == null) {			
-			dataInicio = entity.getConta().getDataAbertura();
-		} else {			
-			dataInicio = fechamentoAnterior.getData(); 
-		}
-		
-		// Incrementa a data de início do intervalo
-		Calendar temp = Calendar.getInstance();
-		temp.setTime(dataInicio);
-		temp.add(Calendar.DAY_OF_YEAR, 1);
-		
-		// Busca os lançamentos do intervalo e seta como não quitados
-		CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
-		criterio.setConta(entity.getConta());
-		criterio.setDescricao("");
-		criterio.setDataInicio(temp.getTime());
-		criterio.setDataFim(dataFim);
-		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
-			LancamentoConta lancamento = lancamentoContaRepository.findById(l.getId());
-			lancamento.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-			lancamentoContaRepository.update(lancamento);
+		// Seta o status dos lançamentos vinculados ao fechamento para REGISTRADO
+		for (LancamentoConta l : entity.getLancamentos()) {
+			l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			lancamentoContaRepository.update(l);
 		}
 	}
 

@@ -47,16 +47,19 @@
 package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -98,6 +101,9 @@ public class FechamentoPeriodo extends EntityPersistence {
 	@JoinColumn(name="idContaBancaria", nullable=false)
 	private Conta conta;
 	
+	@OneToMany(mappedBy="fechamentoPeriodo", fetch=FetchType.EAGER)
+	private List<LancamentoConta> lancamentos;
+	
 	public FechamentoPeriodo() {
 		dataAlteracao = new Date();
 	}
@@ -108,12 +114,7 @@ public class FechamentoPeriodo extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		switch (this.operacao) {
-			case ABERTURA : return "Perído aberto em " + Util.formataDataHora(this.data, Util.DATA);
-			case FECHAMENTO : return "Período fechado em " + Util.formataDataHora(this.data, Util.DATA);
-			case REABERTURA : return "Período reaberto em " + Util.formataDataHora(this.dataAlteracao, Util.DATA);
-			default : return this.toString();
-		}
+		return "Período " + this.mes + "/" + this.ano + " - " + Util.formataDataHora(this.data, Util.DATA) + " [" + this.operacao.toString() + "]";
 	}
 	
 	@Override
@@ -179,5 +180,13 @@ public class FechamentoPeriodo extends EntityPersistence {
 
 	public void setAno(int ano) {
 		this.ano = ano;
+	}
+
+	public List<LancamentoConta> getLancamentos() {
+		return lancamentos;
+	}
+
+	public void setLancamentos(List<LancamentoConta> lancamentos) {
+		this.lancamentos = lancamentos;
 	}
 }
