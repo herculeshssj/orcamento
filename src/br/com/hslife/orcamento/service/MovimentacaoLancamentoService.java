@@ -85,6 +85,15 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		}		
 	}
 	
+	@Override
+	public void removerVinculos(List<LancamentoConta> lancamentos) throws BusinessException {
+		for (LancamentoConta l : lancamentos) {
+			l.setHashImportacao(null);
+			lancamentoContaRepository.update(l);
+		}
+		
+	}
+	
 	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento) throws BusinessException {
 		for (LancamentoConta lancamentoOrigem : lancamentos) {
 			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(quantidade, incremento)) {

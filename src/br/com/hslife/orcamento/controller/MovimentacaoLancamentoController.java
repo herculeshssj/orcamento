@@ -244,6 +244,31 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		return ""; 
 	}
 	
+	public String removerVinculosView() {
+		try {
+			if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {				
+				actionTitle = " - Vínculos";
+				return "/pages/MovimentacaoLancamento/vinculosLancamentos";				
+			} else {
+				warnMessage("Nenhum lançamento selecionado!");
+			}
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}
+		return "";
+	}
+	
+	public String removerVinculos() {
+		try {
+			getService().removerVinculos(lancamentosSelecionados);
+			infoMessage("Vínculos removidos com sucesso!");
+			return cancel();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public String transferirView() {
 		try {
 			actionTitle = " - Transferir";

@@ -67,4 +67,6 @@ public interface IMovimentacaoLancamento {
 	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros) throws BusinessException;
 	
 	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
+	
+	public void removerVinculos(List<LancamentoConta> lancamentos) throws BusinessException;
 }

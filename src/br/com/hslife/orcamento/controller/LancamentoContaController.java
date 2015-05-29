@@ -491,9 +491,15 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return movimentacaoLancamentoMB.transferirView();
 	}
 	
-	public void quebrarVinculo() {		
-		entity.setHashImportacao(null);
-		warnMessage("Vínculo quebrado. Salve para efetivar as alterações.");
+	public String vinculos() {		
+		if (listEntity == null){
+			warnMessage("Nenhum lançamento selecionado!");
+			return "";
+		}
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
+		initializeEntity();
+		return movimentacaoLancamentoMB.removerVinculosView();
 	}
 	
 	public List<Conta> getListaConta() {
