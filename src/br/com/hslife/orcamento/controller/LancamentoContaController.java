@@ -589,14 +589,10 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
 			if (criterioBusca.getConta() != null) {
-				List<FechamentoPeriodo> resultado = getService().buscarTodosPorConta(criterioBusca.getConta());
-				if (resultado != null) {
-					if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
-						for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
-							fechamentos.add(resultado.get(i));
-						}
-					} else {
-						fechamentos.addAll(resultado);
+				for (FechamentoPeriodo fechamento : getService().buscarTodosFechamentoPorConta(criterioBusca.getConta())) {
+					fechamentos.add(fechamento);
+					if (fechamentos.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
+						break;
 					}
 				}
 			}

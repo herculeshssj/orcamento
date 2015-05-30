@@ -340,7 +340,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	}
 	
 	@Override
-	public List<FechamentoPeriodo> buscarTodosPorConta(Conta conta) throws BusinessException {
+	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws BusinessException {
 		return fechamentoPeriodoRepository.findAllByConta(conta);
 	}
 }

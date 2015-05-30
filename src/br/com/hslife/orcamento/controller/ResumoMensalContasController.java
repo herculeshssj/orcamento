@@ -261,7 +261,7 @@ public class ResumoMensalContasController extends AbstractController {
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
 			
-			List<FechamentoPeriodo> resultado = lancamentoContaService.buscarTodosPorConta(contaSelecionada);
+			List<FechamentoPeriodo> resultado = lancamentoContaService.buscarTodosFechamentoPorConta(contaSelecionada);
 			if (resultado != null) {
 				if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
 					for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
