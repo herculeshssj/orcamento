@@ -142,7 +142,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
-		moduleTitle = "Lançamentos da Conta";
+		moduleTitle = "Lançamentos da Conta/Cartão";
 	}
 
 	@Override
