@@ -254,7 +254,10 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				conta = lc.getConta();
 			}
 		}
-		return regraImportacaoComponent.processarRegras(conta, lancamentos);
+		if (lancamentos.isEmpty())
+			return lancamentos;
+		else
+			return regraImportacaoComponent.processarRegras(conta, lancamentos);
 	}
 
 	@Override

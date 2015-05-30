@@ -468,6 +468,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			return "";
 		}
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.alterarPropriedadesView();
 	}
