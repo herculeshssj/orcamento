@@ -118,13 +118,6 @@ alter table cartaocredito add column numeroCartaoDebito varchar(40) null;
 -- Exclusão do histórico de reaberturas de períodos
 delete from fechamentoperiodo where operacao = 'REABERTURA';
 
-
-
-
-
-
-/* Executar ao fechar a versão */
-
 -- Exclusão do módulo Buscas Salvas - Github Issue #110
 drop table buscasalva;
 

@@ -91,8 +91,11 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Exclusão do histórico de reaberturas de períodos
-	delete from fechamentoperiodo where operacao = 'REABERTURA';
+	-- Exclusão do módulo Buscas Salvas - Github Issue #110
+	drop table buscasalva;
+
+	-- Exclusão da opção do sistema GERAL_SUPRIMIR_TEXTO_MEIO
+	delete from opcaosistema where chave = 'GERAL_SUPRIMIR_TEXTO_MEIO';
 	
     /*** Fim do bloco de atualizações da base ***/
     

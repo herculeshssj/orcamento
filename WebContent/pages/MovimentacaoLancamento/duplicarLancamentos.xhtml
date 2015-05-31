@@ -58,74 +58,70 @@
 	<ui:param name="managedBean" value="#{movimentacaoLancamentoMB}" />
 	
 	<ui:define name="campos">
-			
-		<h:panelGrid columns="2">
-			
-			Conta:
-			<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Informe a conta!">
-				<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
-			</h:selectOneMenu>
-							
-			Instâncias a criar:
-			<p:inputText value="#{managedBean.quantADuplicar}"/>
-			
-			Incrementar data de pagamento:
-			<h:selectOneMenu value="#{managedBean.incremento}">
-				<f:selectItems value="#{enumCombo.listaIncrementoClonagemLancamento}"/>				
-			</h:selectOneMenu>			
-			
-		</h:panelGrid>
 		
-		<p:dataTable id="tableListEntity" width="100%" value="#{managedBean.lancamentosSelecionados}" var="item" style="font-size: 16px;">     		
-     		<p:column style="vertical-align: middle;">
-     			<f:facet name="header">
-     				<h:outputText value="Histórico"/>
-     			</f:facet>
+		<label>Conta:</label>
+		<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" required="true" requiredMessage="Informe a conta!">
+			<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+		</h:selectOneMenu>
+						
+		<label for="frmFormEntity:txtInstancia">Instâncias a criar:</label>
+		<h:inputText id="txtInstancia" value="#{managedBean.quantADuplicar}"/>
+		
+		<label>Incrementar data de pagamento:</label>
+		<h:selectOneMenu value="#{managedBean.incremento}">
+			<f:selectItems value="#{enumCombo.listaIncrementoClonagemLancamento}"/>				
+		</h:selectOneMenu>			
+			
+		<h:dataTable id="tableListEntity" width="100%" value="#{managedBean.lancamentosSelecionados}" var="item" style="font-size: 16px;">     		
+     		<h:column style="vertical-align: middle;">
      			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
      				<f:converter converterId="dateConverter"/>
-     			</h:outputText>
-     			<h:outputText value=" - " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+     			</h:outputText>     			
+     		</h:column>	
+     		<h:column style="vertical-align: middle;">
      			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
      			<h:outputText value=" - AGENDADO" rendered="#{item.statusLancamentoConta == 'AGENDADO'}" style="text-align: left"/>
      			<br/>
-     			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{item.conta.tipoConta == 'CARTAO'}"/>
-     			<h:outputText value="#{item.conta.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{item.conta.tipoConta != 'CARTAO'}"/>
-     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-     				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-     			</h:outputText>
-     			<h:graphicImage value="/resources/images/anexo.png" rendered="#{item.arquivo != null}"/>
-     			<h:graphicImage value="/resources/images/fatura.png" rendered="#{item.faturaCartao != null}"/>
-     			<h:graphicImage value="/resources/images/calendario.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
-     			<h:graphicImage value="/resources/images/porcentagem.png" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
-     			<h:graphicImage value="/resources/images/vinculo.png" rendered="#{not empty item.hashImportacao}"/>
-     			<h:graphicImage id="imgInfo" value="/resources/images/info.png"/>
+     			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20"/>
+     			<p:spacer width="5"/>
+     			<h:graphicImage id="imgCalendar" title="#{item.lancamentoPeriodico.descricao}" value="/resources/images/svg/planner.svg" height="20" width="20" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/>
+     			<p:spacer width="5"/>
+     			<h:graphicImage id="imgParcel" title="#{item.lancamentoPeriodico.descricao}" value="/resources/images/svg/doughnut_chart.svg" height="20" width="20" rendered="#{item.lancamentoPeriodico != null and item.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/>
+     			<p:spacer width="5"/>
+     			<h:graphicImage id="imgLink" title="#{item.historico == null ? 'Lançamento importado' : item.historico}" value="/resources/images/svg/link.svg" height="20" width="20" rendered="#{item.hashImportacao != null}"/>
+     			<p:spacer width="5"/>
+     			<h:graphicImage id="imgAttachment" title="#{item.arquivo.nomeArquivo}" value="/resources/images/svg/image_file.svg" height="20" width="20" rendered="#{item.arquivo != null}"/>
      			<p:tooltip for="imgInfo">
 					<h:outputText value="Categoria: #{item.categoria.descricao}" rendered="#{item.categoria != null}"/><br/>
 					<h:outputText value="Favorecido: #{item.favorecido.nome}" rendered="#{item.favorecido != null}"/><br/>
 					<h:outputText value="Meio de Pagamento: #{item.meioPagamento.descricao}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento and item.meioPagamento != null}"/>
 				</p:tooltip>
-     		</p:column>	     		
-     		<p:column style="text-align: center; vertical-align: middle;">
-				<f:facet name="header">
-					<h:outputText value="Ações"/>
-				</f:facet>				
-				<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirLancamentoListaSelecionados}">
+     		</h:column>
+     		<h:column style="vertical-align: middle;">
+     			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+     				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+     			</h:outputText>
+     		</h:column>
+     		<h:column style="vertical-align: middle;">
+     			<h:commandLink title="Excluir" action="#{managedBean.excluirLancamentoListSelecionados}">
+					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.lancamentoSelecionado}"/>
-				</h:commandButton>							
-  			</p:column>  			
-  		</p:dataTable>
+				</h:commandLink>
+     		</h:column>  			
+  		</h:dataTable>
 		
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;    	
-    	<h:commandLink title="Confirmar" action="#{managedBean.duplicarLancamentos}">
-    		<p:graphicImage value="/resources/images/ativar.png" />
-    	</h:commandLink>    	
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+     		<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Confirmar" action="#{managedBean.duplicarLancamentos}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>    	
 	</ui:define>
-
+	
 </ui:composition>
 </html>
