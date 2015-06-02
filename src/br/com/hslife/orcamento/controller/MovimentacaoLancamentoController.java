@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -66,6 +67,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -102,6 +104,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	private IncrementoClonagemLancamento incremento;
 	private String descricao;
 	private String observacao;
+	private Date dataPagamento;
 	private TipoCategoria tipoCategoriaSelecionada;
 	
 	private List<LancamentoConta> lancamentosSelecionados;
@@ -333,6 +336,57 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		}
 	}
 	
+	public String mesclarView() {
+		try {
+			if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {
+				for (Iterator<LancamentoConta> i = lancamentosSelecionados.iterator(); i.hasNext(); ) {
+					LancamentoConta l = i.next();
+					if (l.getHashImportacao() != null || l.getLancamentoPeriodico() != null) {
+						i.remove();
+					}
+				}
+				if (lancamentosSelecionados.isEmpty()) {
+					warnMessage("Nenhum lançamento a mesclar!");
+				} else {
+					actionTitle = " - Mesclar";
+					return "/pages/MovimentacaoLancamento/mesclarLancamentos";
+				}
+			} else {
+				warnMessage("Nenhum lançamento selecionado!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			errorMessage(e.getMessage());
+		}
+		return "";
+	}
+	
+	public String mesclar() {
+		if (descricao == null || descricao.isEmpty()) { warnMessage("Informe a descrição!"); return ""; }
+		if (dataPagamento == null) { warnMessage("Informe a data de pagamento!"); return ""; }
+		if (tipoCategoriaSelecionada == null) { warnMessage("Informe um tipo de categoria!"); return ""; }
+		try {
+			Map<String, Object> parametros = new HashMap<String, Object>();
+			parametros.put("CONTA_DESTINO", contaSelecionada);
+			parametros.put("DESCRICAO_DESTINO", descricao);
+			parametros.put("OBSERVACAO_DESTINO", observacao);
+			parametros.put("DATAPAGAMENTO", dataPagamento);
+			parametros.put("CATEGORIA_DESTINO", categoriaSelecionada);
+			parametros.put("FAVORECIDO_DESTINO", favorecidoSelecionado);
+			parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
+			if (tipoCategoriaSelecionada.equals(TipoCategoria.CREDITO))
+				parametros.put("TIPO_LANCAMENTO", TipoLancamento.RECEITA);
+			else
+				parametros.put("TIPO_LANCAMENTO", TipoLancamento.DESPESA);						
+			getService().mesclarLancamento(lancamentosSelecionados, parametros);
+			infoMessage("Lançamentos mesclados com sucesso!");
+			return cancel();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public void atualizaComboCategorias() {
 		this.getListaCategoria();
 	}
@@ -519,5 +573,13 @@ public class MovimentacaoLancamentoController extends AbstractController {
 
 	public void setTipoCategoriaSelecionada(TipoCategoria tipoCategoriaSelecionada) {
 		this.tipoCategoriaSelecionada = tipoCategoriaSelecionada;
+	}
+
+	public Date getDataPagamento() {
+		return dataPagamento;
+	}
+
+	public void setDataPagamento(Date dataPagamento) {
+		this.dataPagamento = dataPagamento;
 	}
 }

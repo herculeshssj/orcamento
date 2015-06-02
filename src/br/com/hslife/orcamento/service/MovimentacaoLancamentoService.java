@@ -46,18 +46,21 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -69,6 +72,9 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
+	
+	@Autowired
+	private ContaComponent contaComponent;
 	
 	@Override
 	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta) throws BusinessException {
@@ -128,6 +134,37 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 			lancamentoContaRepository.update(lancamento);
 		}
 		
+	}
+	
+	@Override
+	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException {
+		LancamentoConta lancamentoMesclado = new LancamentoConta();
+		lancamentoMesclado.setConta((Conta)parametros.get("CONTA_DESTINO"));
+		lancamentoMesclado.setTipoLancamento((TipoLancamento)parametros.get("TIPO_LANCAMENTO"));
+		lancamentoMesclado.setMoeda(lancamentoMesclado.getConta().getMoeda());
+		lancamentoMesclado.setDescricao((String)parametros.get("DESCRICAO_DESTINO"));
+		lancamentoMesclado.setDataPagamento((Date)parametros.get("DATAPAGAMENTO"));
+		
+		lancamentoMesclado.setCategoria(parametros.get("CATEGORIA_DESTINO") == null ? null : (Categoria)parametros.get("CATEGORIA_DESTINO"));
+		lancamentoMesclado.setFavorecido(parametros.get("FAVORECIDO_DESTINO") == null ? null : (Favorecido)parametros.get("FAVORECIDO_DESTINO"));
+		lancamentoMesclado.setMeioPagamento(parametros.get("MEIOPAGAMENTO_DESTINO") == null ? null : (MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
+		lancamentoMesclado.setObservacao(parametros.get("OBSERVACAO_DESTINO") == null ? null : (String)parametros.get("OBSERVACAO_DESTINO"));
+		
+		if (lancamentoMesclado.getDataPagamento().after(new Date())) {
+			lancamentoMesclado.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+		} else {
+			lancamentoMesclado.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+		}
+		
+		double valorPago = contaComponent.calcularSaldoLancamentos(lancamentos);
+		
+		lancamentoMesclado.setValorPago(valorPago);
+		
+		lancamentoContaRepository.save(lancamentoMesclado);
+		
+		for (LancamentoConta l : lancamentos) {
+			lancamentoContaRepository.delete(l);
+		}
 	}
 	
 	@Override
