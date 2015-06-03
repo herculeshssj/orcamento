@@ -105,20 +105,14 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	private String descricao;
 	private String observacao;
 	private Date dataPagamento;
-	private TipoCategoria tipoCategoriaSelecionada;
-	
-	private List<LancamentoConta> lancamentosSelecionados;
-	
-	private LancamentoConta lancamentoSelecionado;
-	
+	private TipoCategoria tipoCategoriaSelecionada;	
+	private List<LancamentoConta> lancamentosSelecionados;	
+	private LancamentoConta lancamentoSelecionado;	
 	private Conta contaSelecionada;
-	private Conta contaDestino;
-	
+	private Conta contaDestino;	
 	private Categoria categoriaSelecionada;
-	private Categoria categoriaDestino;
-	
-	private Favorecido favorecidoSelecionado;
-	
+	private Categoria categoriaDestino;	
+	private Favorecido favorecidoSelecionado;	
 	private MeioPagamento meioPagamentoSelecionado;
 	
 	private String goToListContaPage = "/pages/LancamentoConta/listLancamentoConta";
@@ -384,6 +378,31 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+		return "";
+	}
+	
+	public String dividirView() {
+		if (lancamentosSelecionados != null && !lancamentosSelecionados.isEmpty()) {
+			for (Iterator<LancamentoConta> i = lancamentosSelecionados.iterator(); i.hasNext(); ) {
+				LancamentoConta l = i.next();
+				if (l.getHashImportacao() != null || l.getLancamentoPeriodico() != null) {
+					i.remove();
+				}
+			}
+			if (lancamentosSelecionados.isEmpty()) {
+				warnMessage("Nenhum lançamento a dividir!");
+			} else {
+				actionTitle = " - Dividir";
+				lancamentoSelecionado = lancamentosSelecionados.get(0);
+				return "/pages/MovimentacaoLancamento/dividirLancamento";
+			}
+		} else {
+			warnMessage("Nenhum lançamento selecionado!");
+		}
+		return "";
+	}
+	
+	public String dividirLancamento() {
 		return "";
 	}
 	

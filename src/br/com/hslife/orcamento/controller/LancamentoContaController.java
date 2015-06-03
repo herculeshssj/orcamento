@@ -485,8 +485,14 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public String dividir() {
-		errorMessage("Funcionalidade não implementada");
-		return "";
+		if (listEntity == null){
+			warnMessage("Nenhum lançamento selecionado!");
+			return "";
+		}
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
+		initializeEntity();
+		return movimentacaoLancamentoMB.dividirView();
 	}
 	
 	public String detalhar() {
