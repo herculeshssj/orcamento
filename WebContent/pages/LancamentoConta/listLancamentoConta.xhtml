@@ -89,11 +89,11 @@
 				<label>Conta:</label>
 				<h:selectOneMenu value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
 					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					<p:ajax update="txtPeriodo" />
+					<p:ajax update="pnlPeriodo" />
 				</h:selectOneMenu>
 			</h:panelGroup>
 			
-			<h:panelGroup>
+			<h:panelGroup id="pnlPeriodo">
 				<label>Período:</label>
 				<h:selectOneMenu id="txtPeriodo" value="#{managedBean.fechamentoPeriodo}" converter="entityConverter">
 					<f:selectItem itemLabel="Período atual" />

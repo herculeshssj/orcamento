@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.RegraImportacao;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -117,9 +118,9 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 	public List<Conta> getListaConta() {
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), null);
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{}, getUsuarioLogado(), null); // resolvendo a ambiguidade do método
 			} else {
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{}, getUsuarioLogado(), true); // resolvendo a ambiguidade do método
 			}			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());

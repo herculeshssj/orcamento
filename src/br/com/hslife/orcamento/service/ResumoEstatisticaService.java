@@ -149,7 +149,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
 		
 		// Itera todas as contas do usuário
-		for (Conta conta : contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, null, usuario, null)) {
+		for (Conta conta : contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, new TipoConta[]{}, usuario, null)) { // resolvendo a ambiguidade do método
 			
 			// Define a descrição da conta
 			saldoAtual.setDescricaoConta(conta.getDescricao());
@@ -507,7 +507,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Override
 	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException {		
 		// Busca todas as contas existentes
-		List<Conta> contasExistentes = contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, null, usuarioComponent.getUsuarioLogado(), null);
+		List<Conta> contasExistentes = contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, new TipoConta[]{}, usuarioComponent.getUsuarioLogado(), null); // resolvendo a ambiguidade do método
 
 		// Declara a lista de contas que será retornada
 		List<Conta> contasProcessadas = new ArrayList<Conta>();

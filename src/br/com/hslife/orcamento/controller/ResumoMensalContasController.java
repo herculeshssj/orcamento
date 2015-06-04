@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
@@ -155,7 +156,7 @@ public class ResumoMensalContasController extends AbstractController {
 		pieCategoriaDebito.setExtender("ext1");
 		
 		for (Categoria categoria : resumoMensal.getCategorias()) {
-			if (!categoria.getDescricao().equals("Saldo atual")) {
+			if (!categoria.getDescricao().equals("Saldo atual") & !categoria.getDescricao().equals("Sem categoria")) {
 				if (categoria.getTipoCategoria().equals(TipoCategoria.CREDITO)) {
 					pieCategoriaCredito.set(categoria.getDescricao(), categoria.getSaldoPago());
 					pieSizeC++;
@@ -180,7 +181,7 @@ public class ResumoMensalContasController extends AbstractController {
 		double despesas = 0;
 		
 		for (Categoria categoria : resumoMensal.getCategorias()) {
-			if (!categoria.getDescricao().equals("Saldo atual")) {
+			if (!categoria.getDescricao().equals("Saldo atual") & !categoria.getDescricao().equals("Sem categoria")) {
 				if (categoria.getTipoCategoria().equals(TipoCategoria.CREDITO)) {
 					receitas += categoria.getSaldoPago();
 				} else {
@@ -240,21 +241,21 @@ public class ResumoMensalContasController extends AbstractController {
 	}
 	
 	public List<Conta> getListaConta() {
+		List<Conta> contas = new ArrayList<>();
 		try {
-			if (contaSelecionada == null) {
-				List<Conta> contas;
-				contas = contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-				if (contas != null && contas.size() != 0) {
-					contaSelecionada = contas.get(0);
-				}
-				return contas;
+			if (getOpcoesSistema().getExibirContasInativas()) {
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null);
 			} else {
-				return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
 			}
+			if (contas != null && !contas.isEmpty()) {
+				contaSelecionada = contas.get(0);
+			}
+			return contas;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<>();
+		return new ArrayList<Conta>();
 	}
 	
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {

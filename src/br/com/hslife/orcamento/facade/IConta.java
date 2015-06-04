@@ -85,4 +85,6 @@ public interface IConta extends ICRUDService<Conta> {
 	
 	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) throws BusinessException;
 	
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) throws BusinessException;
+	
 }

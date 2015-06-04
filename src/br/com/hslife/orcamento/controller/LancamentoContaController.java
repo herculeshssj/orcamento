@@ -83,6 +83,7 @@ import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -142,7 +143,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
-		moduleTitle = "Lançamentos da Conta/Cartão";
+		moduleTitle = "Lançamentos da Conta";
 	}
 
 	@Override
@@ -517,12 +518,17 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public List<Conta> getListaConta() {
+		List<Conta> contas = new ArrayList<>();
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), null);
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null);
 			} else {
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
-			}			
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
+			}
+			if (contas != null && !contas.isEmpty()) {
+				criterioBusca.setConta(contas.get(0));
+			}
+			return contas;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -531,7 +537,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public List<Conta> getListaContaAtivo() {
 		try {
-			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
