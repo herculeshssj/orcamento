@@ -176,6 +176,9 @@ public class LancamentoConta extends EntityPersistence {
 	@Transient
 	private LancamentoImportado lancamentoImportado;
 	
+	@Transient
+	private List<DetalheLancamento> detalhes;
+	
 	public LancamentoConta() {
 		conta = new Conta();
 		tipoLancamento = TipoLancamento.DESPESA;
@@ -452,5 +455,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
 		this.fechamentoPeriodo = fechamentoPeriodo;
+	}
+
+	public List<DetalheLancamento> getDetalhes() {
+		return detalhes;
+	}
+
+	public void setDetalhes(List<DetalheLancamento> detalhes) {
+		this.detalhes = detalhes;
 	}
 }
