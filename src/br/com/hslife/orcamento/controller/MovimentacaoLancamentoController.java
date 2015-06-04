@@ -403,6 +403,13 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	}
 	
 	public String dividirLancamento() {
+		try {
+			getService().dividirLancamento(lancamentoSelecionado, quantADuplicar);
+			infoMessage("Lançamento dividido com sucesso!");
+			return cancel();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 		return "";
 	}
 	

@@ -66,6 +66,7 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IMovimentacaoLancamento;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.util.Util;
 
 @Service("movimentacaoLancamentoService")
 public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
@@ -107,6 +108,16 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 				lancamentoContaRepository.save(lancamentoCopiado);
 			}
 		}
+	}
+	
+	public void dividirLancamento(LancamentoConta lancamento, int quantidade) throws BusinessException {
+		double valorDividido = Util.arredondar(lancamento.getValorPago() / quantidade);
+		List<LancamentoConta> lancamentosDivididos = lancamento.clonarLancamentos(quantidade, IncrementoClonagemLancamento.NENHUM);
+		for (LancamentoConta l : lancamentosDivididos) {
+			l.setValorPago(valorDividido);
+			lancamentoContaRepository.save(l);
+		}
+		lancamentoContaRepository.delete(lancamento);
 	}
 	
 	@Override

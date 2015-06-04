@@ -71,4 +71,6 @@ public interface IMovimentacaoLancamento {
 	public void removerVinculos(List<LancamentoConta> lancamentos) throws BusinessException;
 	
 	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
+	
+	public void dividirLancamento(LancamentoConta lancamento, int quantidade) throws BusinessException;
 }
