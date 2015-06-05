@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -64,7 +65,7 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="detalhelancamento")
-public class DetalheLancamento extends EntityPersistence {
+public class DetalheLancamento extends EntityPersistence implements Comparator<DetalheLancamento>{
 
 	/**
 	 * 
@@ -107,6 +108,21 @@ public class DetalheLancamento extends EntityPersistence {
 			return this.descricao.equals(other.getDescricao()) && this.data.equals(other.getData()) && this.valor == other.valor;
 		} 
 		return super.equals(obj);
+	}
+	
+	@Override
+	public int compare(DetalheLancamento oneEntity, DetalheLancamento otherEntity) {
+		try {
+			
+			if (oneEntity != null && otherEntity != null) {
+				if (oneEntity.getDescricao() != null && otherEntity.getDescricao() != null) {
+					return oneEntity.getDescricao().compareTo(otherEntity.getDescricao());
+				}
+			}			
+		} catch (NullPointerException npe) {
+			System.out.println(npe.getMessage());
+		}
+		return 0;
 	}
 	
 	@SuppressWarnings("deprecation")

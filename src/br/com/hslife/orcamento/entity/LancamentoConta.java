@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -71,6 +71,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -180,7 +182,8 @@ public class LancamentoConta extends EntityPersistence {
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true)
 	@Cascade(CascadeType.ALL)
-	private Set<DetalheLancamento> detalhes;
+	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamento.class)
+	private SortedSet<DetalheLancamento> detalhes;
 	
 	public LancamentoConta() {
 		conta = new Conta();
@@ -480,11 +483,11 @@ public class LancamentoConta extends EntityPersistence {
 		this.fechamentoPeriodo = fechamentoPeriodo;
 	}
 
-	public Set<DetalheLancamento> getDetalhes() {
+	public SortedSet<DetalheLancamento> getDetalhes() {
 		return detalhes;
 	}
 
-	public void setDetalhes(Set<DetalheLancamento> detalhes) {
+	public void setDetalhes(SortedSet<DetalheLancamento> detalhes) {
 		this.detalhes = detalhes;
 	}
 }
