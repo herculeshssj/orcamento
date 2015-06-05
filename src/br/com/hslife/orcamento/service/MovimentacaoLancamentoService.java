@@ -208,5 +208,10 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		
 		lancamentoContaRepository.save(lancamentoOrigem);
 		lancamentoContaRepository.save(lancamentoDestino);
-	}	
+	}
+	
+	@Override
+	public void salvarDetalhamentoLancamento(LancamentoConta lancamento) throws BusinessException {
+		lancamentoContaRepository.update(lancamento);		
+	}
 }

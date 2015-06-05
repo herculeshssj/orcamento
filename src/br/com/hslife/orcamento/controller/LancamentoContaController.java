@@ -497,8 +497,14 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public String detalhar() {
-		errorMessage("Funcionalidade não implementada");
-		return "";
+		if (listEntity == null){
+			warnMessage("Nenhum lançamento selecionado!");
+			return "";
+		}
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
+		initializeEntity();
+		return movimentacaoLancamentoMB.detalharView();
 	}
 	
 	public String transferir() {

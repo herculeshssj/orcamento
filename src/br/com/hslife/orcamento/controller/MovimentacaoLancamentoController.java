@@ -62,6 +62,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.DetalheLancamento;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
@@ -109,6 +110,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	private TipoCategoria tipoCategoriaSelecionada;	
 	private List<LancamentoConta> lancamentosSelecionados;	
 	private LancamentoConta lancamentoSelecionado;	
+	private DetalheLancamento detalheLancamento;
 	private Conta contaSelecionada;
 	private Conta contaDestino;	
 	private Categoria categoriaSelecionada;
@@ -414,6 +416,53 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		return "";
 	}
 	
+	public String detalharView() {
+		if (lancamentosSelecionados == null || lancamentosSelecionados.isEmpty()) {
+			warnMessage("Nenhum lançamento a detalhar!");
+		} else {
+			actionTitle = " - Detalhar";
+			lancamentoSelecionado = lancamentosSelecionados.get(0);
+			detalheLancamento = new DetalheLancamento();
+			return "/pages/MovimentacaoLancamento/detalharLancamento";
+		}
+		return "";
+	}
+	
+	public String salvarDetalhamento() {
+		try {
+			// Antes de salvar valida cada entrada e atribui o lançamento aos detalhes
+			for (DetalheLancamento detalhe : lancamentoSelecionado.getDetalhes()) {
+				detalhe.validate();
+				detalhe.setLancamentoConta(lancamentoSelecionado);
+			}
+			getService().salvarDetalhamentoLancamento(lancamentoSelecionado);
+			infoMessage("Detalhamento salvo com sucesso.");
+			return cancel();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public void adicionarDetalheLancamento(){
+		if (detalheLancamento.getValor() > lancamentoSelecionado.getValorPago()) {
+			warnMessage("Valor informado supera o valor do lançamento!");
+			return;
+		}
+		if (detalheLancamento.getValor() > lancamentoSelecionado.getTotalADetalhar()) {
+			warnMessage("Valor informado supera o total a detalhar!");
+			return;
+		}
+		
+		lancamentoSelecionado.getDetalhes().add(detalheLancamento);
+		detalheLancamento = new DetalheLancamento();
+	}
+	
+	public void removerDetalheLancamento() {
+		lancamentoSelecionado.getDetalhes().remove(detalheLancamento);
+		detalheLancamento = new DetalheLancamento();
+	}
+	
 	public void atualizaComboCategorias() {
 		this.getListaCategoria();
 	}
@@ -608,5 +657,13 @@ public class MovimentacaoLancamentoController extends AbstractController {
 
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
+	}
+
+	public DetalheLancamento getDetalheLancamento() {
+		return detalheLancamento;
+	}
+
+	public void setDetalheLancamento(DetalheLancamento detalheLancamento) {
+		this.detalheLancamento = detalheLancamento;
 	}
 }

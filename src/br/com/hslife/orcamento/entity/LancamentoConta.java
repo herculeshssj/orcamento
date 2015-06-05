@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,6 +62,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -176,8 +178,9 @@ public class LancamentoConta extends EntityPersistence {
 	@Transient
 	private LancamentoImportado lancamentoImportado;
 	
-	@Transient
-	private List<DetalheLancamento> detalhes;
+	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true)
+	@Cascade(CascadeType.ALL)
+	private Set<DetalheLancamento> detalhes;
 	
 	public LancamentoConta() {
 		conta = new Conta();
@@ -263,6 +266,26 @@ public class LancamentoConta extends EntityPersistence {
 	
 	public void setValorPago(double valorPago) {
 		this.valorPago = Math.abs(valorPago);
+	}
+	
+	public double getTotalDetalhado() {
+		double resultado = 0.0;
+		if (detalhes != null && !detalhes.isEmpty()) {
+			for (DetalheLancamento detalhe : detalhes) {
+				resultado += detalhe.getValor();
+			}
+		}		
+		return resultado;
+	}
+	
+	public double getTotalADetalhar() {
+		double resultado = 0.0;
+		if (detalhes != null && !detalhes.isEmpty()) {
+			for (DetalheLancamento detalhe : detalhes) {
+				resultado += detalhe.getValor();
+			}
+		}		
+		return this.valorPago - resultado;
 	}
 
 	public void setId(Long id) {
@@ -457,11 +480,11 @@ public class LancamentoConta extends EntityPersistence {
 		this.fechamentoPeriodo = fechamentoPeriodo;
 	}
 
-	public List<DetalheLancamento> getDetalhes() {
+	public Set<DetalheLancamento> getDetalhes() {
 		return detalhes;
 	}
 
-	public void setDetalhes(List<DetalheLancamento> detalhes) {
+	public void setDetalhes(Set<DetalheLancamento> detalhes) {
 		this.detalhes = detalhes;
 	}
 }

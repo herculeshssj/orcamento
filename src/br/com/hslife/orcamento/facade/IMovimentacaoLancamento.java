@@ -54,8 +54,6 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 
-
-
 public interface IMovimentacaoLancamento {
 	
 	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta) throws BusinessException;
@@ -73,4 +71,6 @@ public interface IMovimentacaoLancamento {
 	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
 	
 	public void dividirLancamento(LancamentoConta lancamento, int quantidade) throws BusinessException;
+	
+	public void salvarDetalhamentoLancamento(LancamentoConta lancamento) throws BusinessException;
 }

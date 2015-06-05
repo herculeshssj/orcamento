@@ -91,11 +91,17 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Exclusão do módulo Buscas Salvas - Github Issue #110
-	drop table buscasalva;
-
-	-- Exclusão da opção do sistema GERAL_SUPRIMIR_TEXTO_MEIO
-	delete from opcaosistema where chave = 'GERAL_SUPRIMIR_TEXTO_MEIO';
+	-- Detalhamento de lançamentos da conta
+	create table detalhelancamento(
+		id bigint not null auto_increment,
+	    descricao varchar(50) not null,
+	    data date not null,
+	    valor decimal(18,2) default 0.00,
+	    idLancamentoConta bigint not null,
+	    primary key(id)
+	) Engine=InnoDB;
+	
+	alter table detalhelancamento add constraint fk_detalhelancamento_lancamentoconta foreign key(idLancamentoConta) references lancamentoconta(id);
     
     /*** Fim do bloco de atualizações da base ***/
     
