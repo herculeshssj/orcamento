@@ -60,6 +60,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+
 @Entity
 @Table(name="documento")
 @SuppressWarnings("serial")
@@ -75,7 +78,7 @@ public class Documento extends EntityPersistence {
 	@Column
 	private String descricao;
 	
-	@OneToOne(fetch=FetchType.LAZY, orphanRemoval=true)
+	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=false)
 	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;
@@ -98,8 +101,9 @@ public class Documento extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() {
-				
+	public void validate() throws BusinessException {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome do documento", this.nome, 50);
+		EntityPersistenceUtil.validaCampoNulo("Categoria de documento", this.categoriaDocumento);
 	}
 
 	public void setId(Long id) {

@@ -57,17 +57,24 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{documentoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 
-	<ui:define name="pesquisa">		
-     	Categoria:
-		<h:selectOneMenu id="txtCategorias" value="#{managedBean.findCategoria}" converter="entityConverter">
-			<f:selectItem itemLabel="Todos" />
-			<f:selectItems value="#{managedBean.listaCategoriaDocumento}" />
-		</h:selectOneMenu>
-		&nbsp;&nbsp;
-		Descrição:
-		<p:inputText value="#{managedBean.nomeDocumento}" />
+	<ui:define name="parametro_pesquisa">
+		<h:panelGroup>		
+	     	<label>Categoria:</label>
+			<h:selectOneMenu id="txtCategorias" value="#{managedBean.categoriaSelecionada}" converter="entityConverter">
+				<f:selectItem itemLabel="Todos"/>
+				<f:selectItems value="#{managedBean.listaCategoriaDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>	
+			</h:selectOneMenu>
+		</h:panelGroup>
+		
+		<h:panelGroup>
+			<label for="frmListEntity:txtDescricao">Descrição:</label>
+			<h:inputText id="txtDescricao" value="#{managedBean.nomeDocumento}" />
+		</h:panelGroup>
 	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
 
 	<ui:define name="colunas">
 		<p:column style="text-align: center; vertical-align: middle;">

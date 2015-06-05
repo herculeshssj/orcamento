@@ -49,6 +49,8 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -93,8 +95,14 @@ public class IdentidadeController extends AbstractController {
 	}
 
 	@Override
+	@PostConstruct
 	public String startUp() {
 		try {
+			//TODO pode-se otimizar fazendo uma única chamada ao Service e usando uma cláusula if
+			/*
+			 * Exemplo: cpf = getService.buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
+			 * if (cpf == null) cpf = new Identidade(getUsuarioLogado(), TipoIdentidade.CPF);
+			 */
 			// Carrega o CPF
 			cpf = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF) == null 
 					? new Identidade(getUsuarioLogado(), TipoIdentidade.CPF) 

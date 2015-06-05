@@ -50,7 +50,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -62,9 +61,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Documento;
-import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.Container;
-import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.IDocumento;
@@ -83,11 +80,8 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 	
 	@Autowired
 	private ICategoriaDocumento categoriaDocumentoService;
-	
-	private List<SelectItem> listaCategoriaDocumento;
 		
-	private CategoriaDocumento findCategoria;
-	private Usuario findUsuario;
+	private CategoriaDocumento categoriaSelecionada;
 	private String nomeDocumento;
 
 	public DocumentoController() {
@@ -101,38 +95,11 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 		entity = new Documento();
 		listEntity = new ArrayList<Documento>();
 	}
-	
-	@Override
-	public String startUp() {
-		loadCombos();
-		return super.startUp();
-	}
 
-	private void loadCombos() {
-		listaCategoriaDocumento = new ArrayList<SelectItem>();
-		try {
-			if (operation.equals("edit")) {
-				for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(getUsuarioLogado())) {
-					listaCategoriaDocumento.add(new SelectItem(cd, cd.getDescricao()));
-				}
-			} else {
-				for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(getUsuarioLogado())) {
-					listaCategoriaDocumento.add(new SelectItem(cd, cd.getDescricao()));
-				}
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-	}
-	
 	@Override
 	public void find() {		
 		try {
-			if (findCategoria == null) {
-				listEntity = getService().buscarPorNomeEUsuario(nomeDocumento, getUsuarioLogado());
-			} else {
-				listEntity = getService().buscarPorNomeECategoriaDocumentoPorUsuario(nomeDocumento, findCategoria, getUsuarioLogado());
-			}
+			listEntity = getService().buscarPorNomeECategoriaDocumentoPorUsuario(nomeDocumento, categoriaSelecionada, getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -145,29 +112,6 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 			return "";
 		}
 		return super.save();
-	}
-	
-	public void atualizaListaCategorias() {
-		listaCategoriaDocumento = new ArrayList<SelectItem>();
-		try {
-			if (getUsuarioLogado().getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
-				if (operation.equals("edit") || operation.equals("create")) {
-					for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(getUsuarioLogado())) {
-						listaCategoriaDocumento.add(new SelectItem(cd, cd.getDescricao()));
-					}
-				} else {
-					for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(findUsuario)) {
-						listaCategoriaDocumento.add(new SelectItem(cd, cd.getDescricao()));
-					}
-				}
-			} else {
-				for (CategoriaDocumento cd : categoriaDocumentoService.buscarPorUsuario(getUsuarioLogado())) {
-					listaCategoriaDocumento.add(new SelectItem(cd, cd.getDescricao()));
-				}				
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
 	}
 	
 	public void carregarArquivo(FileUploadEvent event) {
@@ -200,39 +144,13 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 		}
 	}
 	
-	public void excluirArquivo() {
-		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
-			warnMessage("Nenhum arquivo adicionado!");
-		} else {
-			entity.setArquivo(new Arquivo());
-			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
+	public List<CategoriaDocumento> getListaCategoriaDocumento() {
+		try {
+			return categoriaDocumentoService.buscarPorDescricaoEUsuario("", getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
-	}
-	
-	/* Métodos Getters e Setters */
-	
-	public List<SelectItem> getListaCategoriaDocumento() {
-		return listaCategoriaDocumento;
-	}
-
-	public void setListaCategoriaDocumento(List<SelectItem> listaCategoriaDocumento) {
-		this.listaCategoriaDocumento = listaCategoriaDocumento;
-	}
-
-	public CategoriaDocumento getFindCategoria() {
-		return findCategoria;
-	}
-
-	public void setFindCategoria(CategoriaDocumento findCategoria) {
-		this.findCategoria = findCategoria;
-	}
-
-	public Usuario getFindUsuario() {
-		return findUsuario;
-	}
-
-	public void setFindUsuario(Usuario findUsuario) {
-		this.findUsuario = findUsuario;
+		return new ArrayList<CategoriaDocumento>();
 	}
 
 	public IDocumento getService() {
@@ -254,5 +172,13 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 
 	public void setNomeDocumento(String nomeDocumento) {
 		this.nomeDocumento = nomeDocumento;
+	}
+
+	public CategoriaDocumento getCategoriaSelecionada() {
+		return categoriaSelecionada;
+	}
+
+	public void setCategoriaSelecionada(CategoriaDocumento categoriaSelecionada) {
+		this.categoriaSelecionada = categoriaSelecionada;
 	}
 }

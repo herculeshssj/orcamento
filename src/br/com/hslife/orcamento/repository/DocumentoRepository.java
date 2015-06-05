@@ -49,7 +49,7 @@ package br.com.hslife.orcamento.repository;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
+import org.hibernate.Query;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -68,29 +68,12 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 		super(new Documento());
 	}
 	
-	@Override
-	public Documento findById(Long id) {
-		 Criteria criteria = getSession().createCriteria(Documento.class).setFetchMode("arquivo", FetchMode.JOIN);
-		 criteria.add(Restrictions.eq("id", id));
-		 return (Documento)criteria.uniqueResult();
-	}
-	
 	@SuppressWarnings("unchecked")
 	public List<Documento> findByNomeAndUsuario(String nome, Usuario usuario) throws BusinessException {
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.ilike("documento.nome", nome, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));				
-		return criteria.addOrder(Order.asc("documento.nome")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Documento> findByNomeAndCategoriaDocumentoByUsuario(String nome, CategoriaDocumento categoriaDocumento, Usuario usuario) {
-		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
-				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
-		criteria.add(Restrictions.ilike("documento.nome", nome, MatchMode.ANYWHERE));
-		criteria.add(Restrictions.eq("documento.categoriaDocumento.id", categoriaDocumento.getId()));
-		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("documento.nome")).list();
 	}
 	
@@ -116,5 +99,30 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 		criteria.add(Restrictions.eq("documento.categoriaDocumento.id", categoriaDocumento.getId()));
 		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("documento.nome")).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Documento> findByNomeAndCategoriaDocumentoByUsuario(String nome, CategoriaDocumento categoriaDocumento, Usuario usuario) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM Documento documento WHERE ");
+		if (categoriaDocumento != null) {
+			hql.append("documento.categoriaDocumento = :tipo AND ");
+		}
+		if (nome != null && !nome.isEmpty()) {
+			hql.append("documento.nome LIKE '%");
+			hql.append(nome);
+			hql.append("%' AND ");
+		}
+		
+		hql.append("documento.categoriaDocumento.usuario.id = :idUsuario ORDER BY documento.nome ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (categoriaDocumento != null) {
+			hqlQuery.setParameter("tipo", categoriaDocumento);
+		}
+		
+		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
 	}
 }
