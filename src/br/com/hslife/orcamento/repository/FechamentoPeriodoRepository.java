@@ -111,6 +111,15 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<FechamentoPeriodo> findFechamentosAnterioresReabertos(FechamentoPeriodo fechamento) {
+		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
+		criteria.add(Restrictions.eq("conta.id", fechamento.getConta().getId()));
+		criteria.add(Restrictions.eq("operacao", OperacaoConta.REABERTURA));
+		criteria.add(Restrictions.lt("data", fechamento.getData()));
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public FechamentoPeriodo findFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);
 		criteria.add(Restrictions.lt("id", fechamentoPeriodo.getId()));

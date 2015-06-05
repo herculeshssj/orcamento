@@ -441,6 +441,12 @@ public class ContaComponent {
 		// Cria o novo fechamento para a conta
 		FechamentoPeriodo novoFechamento = new FechamentoPeriodo();
 		if (fechamentoReaberto == null) {
+			// Antes de prosseguir, verifica se não existem períodos reabertos
+			List<FechamentoPeriodo> fechamentosReabertos = fechamentoPeriodoRepository.findByContaAndOperacaoConta(conta, OperacaoConta.REABERTURA);
+			if (fechamentosReabertos != null && !fechamentosReabertos.isEmpty()) {
+				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
+			}
+			
 			novoFechamento.setConta(conta);
 			novoFechamento.setData(dataFechamento);
 			novoFechamento.setOperacao(OperacaoConta.FECHAMENTO);
@@ -455,6 +461,13 @@ public class ContaComponent {
 			// Salva o fechamento
 			fechamentoPeriodoRepository.save(novoFechamento);
 		} else {
+			// Antes de prosseguir, verifica se o período selecionado não contém
+			// períodos reabertos anteriores
+			List<FechamentoPeriodo> fechamentosAnterioresReabertos = fechamentoPeriodoRepository.findFechamentosAnterioresReabertos(fechamentoReaberto);
+			if (fechamentosAnterioresReabertos != null && !fechamentosAnterioresReabertos.isEmpty()) {
+				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
+			}
+			
 			// Altera os dados do fechamento já existente
 			fechamentoReaberto.setOperacao(OperacaoConta.FECHAMENTO);
 			fechamentoReaberto.setDataAlteracao(new Date());
@@ -483,17 +496,19 @@ public class ContaComponent {
 	}
 	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException {
-		// Seta o status do fechamento do período
-		entity.setOperacao(OperacaoConta.REABERTURA);
-		entity.setDataAlteracao(new Date());
+		// Busca os fechamentos posteriores ao fechamento selecionado
+		List<FechamentoPeriodo> fechamentosPosteriores = fechamentoPeriodoRepository.findFechamentosPosteriores(entity);
 		
-		// Salva o fechamento
-		fechamentoPeriodoRepository.update(entity);
-		
-		// Seta o status dos lançamentos vinculados ao fechamento para REGISTRADO
-		for (LancamentoConta l : entity.getLancamentos()) {
-			l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-			lancamentoContaRepository.update(l);
+		// Itera a lista de fechamentos realizando a reabertura dos mesmos e dos lançamentos vinculados
+		for (FechamentoPeriodo fechamento : fechamentosPosteriores) {
+			fechamento.setOperacao(OperacaoConta.REABERTURA);
+			fechamento.setDataAlteracao(new Date());
+			fechamentoPeriodoRepository.update(fechamento);
+			
+			for (LancamentoConta l : fechamento.getLancamentos()) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+				lancamentoContaRepository.update(l);
+			}
 		}
 	}
 

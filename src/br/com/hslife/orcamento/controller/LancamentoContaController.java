@@ -378,6 +378,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		}
 		if (fechamentoPeriodo != null && fechamentoPeriodo.getOperacao().equals(OperacaoConta.REABERTURA)) {
 			dataFechamento = fechamentoPeriodo.getData();
+			for (LancamentoConta lc : lancamentosPeriodicos) {
+				lc.setSelecionado(false);
+			}
 		}
 		return "/pages/LancamentoConta/fecharPeriodo";
 	}
