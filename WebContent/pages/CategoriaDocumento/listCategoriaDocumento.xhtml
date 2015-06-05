@@ -44,6 +44,7 @@
   
   -->
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -51,17 +52,27 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{categoriaDocumentoMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="campos">
+	<ui:define name="parametro_pesquisa">
+		<label for="frmListEntity:txtDescricao">Descrição:</label>
+	    <h:inputText id="txtDescricao" value="#{managedBean.descricaoCategoria}" />
+	</ui:define>
+
+	<ui:define name="pesquisa_avancada"></ui:define>
 	
-		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" />
-			
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição"/>
+			</f:facet>
+			<h:outputText value="#{item.descricao}" />
+  		</p:column>  			
 	</ui:define>
 
 </ui:composition>

@@ -44,6 +44,7 @@
   
   -->
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -53,16 +54,20 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{categoriaDocumentoMB}" />
-	
-	<ui:define name="campos">
-	
-		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" />
-			
-	</ui:define>
 
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+				
+			Descrição:
+			<h:outputText value="#{managedBean.entity.descricao}"/>	
+				
+		</h:panelGrid>
+		
+	</ui:define>
+	
 </ui:composition>
 </html>

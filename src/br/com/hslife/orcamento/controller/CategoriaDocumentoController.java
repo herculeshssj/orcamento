@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 
 @Component("categoriaDocumentoMB")
 @Scope("session")
-public class CategoriaDocumentoController extends AbstractSimpleCRUDController<CategoriaDocumento>{
+public class CategoriaDocumentoController extends AbstractCRUDController<CategoriaDocumento>{
 
 	/**
 	 * 
@@ -71,9 +71,9 @@ public class CategoriaDocumentoController extends AbstractSimpleCRUDController<C
 	private String descricaoCategoria;
 
 	public CategoriaDocumentoController() {
-		super(new CategoriaDocumento());		
+		super(new CategoriaDocumento());
+		
 		moduleTitle = "Categoria de Documentos";
-		goToModule = "/pages/menu/documentos.faces";
 	}
 
 	@Override
@@ -92,9 +92,9 @@ public class CategoriaDocumentoController extends AbstractSimpleCRUDController<C
 	}
 	
 	@Override
-	public void save() {
+	public String save() {
 		entity.setUsuario(getUsuarioLogado());
-		super.save();
+		return super.save();
 	}
 
 	/* Métodos Getters e Setters */
