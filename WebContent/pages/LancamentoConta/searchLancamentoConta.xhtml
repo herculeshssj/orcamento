@@ -78,13 +78,13 @@
 	    </p:inputMask>
 	    
 	    <label>Pesquisar termo no agrupamento:</label>
-	    <h:selectOneRadio layout="lineDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+	    <h:selectOneRadio layout="lineDirection" value="#{managedBean.criterioBusca.cadastro}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
 	    	<f:selectItem itemLabel="Nenhum"/>
 	    	<f:selectItems value="#{enumCombo.listaCadastroSistema}" />
 			<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />
 		</h:selectOneRadio>
 		<!-- selectOneRadio exibido quando a exibição de meio de pagamento está desativada -->     			
- 		<h:selectOneRadio layout="lineDirection" value="#{managedBean.agrupamentoSelecionado}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
+ 		<h:selectOneRadio layout="lineDirection" value="#{managedBean.criterioBusca.cadastro}" rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}">
  			<f:selectItem itemLabel="Nenhum"/>
 	    	<f:selectItems value="#{enumCombo.listaCadastroSistemaSemMeioPagamento}" />
 			<p:ajax update="txtPesquisaAgrupamento" listener="#{lancamentoContaMB.atualizarListaPesquisaAgrupamento}" />

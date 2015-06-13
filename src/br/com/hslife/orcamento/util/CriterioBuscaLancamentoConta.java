@@ -70,8 +70,8 @@ public class CriterioBuscaLancamentoConta {
 	private String descricao;
 	private Date dataInicio;
 	private Date dataFim;
-	private String agrupamento;
 	private Long idAgrupamento;
+	private CadastroSistema cadastro;
 	private TipoConta[] tipoConta;
 	private StatusLancamentoConta[] statusLancamentoConta;	
 	
@@ -82,6 +82,7 @@ public class CriterioBuscaLancamentoConta {
 		this.setCadastro(null);
 		this.setTipoConta(null);
 		this.setStatusLancamentoConta(null);
+		this.setCadastro(null);
 	}
 	
 	public String getDescricao() {
@@ -142,19 +143,24 @@ public class CriterioBuscaLancamentoConta {
 		}
 	}
 
-	public String getAgrupamento() {
-		return agrupamento;
+	public CadastroSistema getCadastro() {
+		return cadastro;
 	}
 	
-	public void setCadastro(CadastroSistema agrupamento) {
+	public void setCadastro(CadastroSistema cadastro) {
+		this.cadastro = cadastro;
+		this.atribuirParametrosAgrupamento();
+	}
+	
+	private void atribuirParametrosAgrupamento() {
 		// Remove os agrupamentos anteriormente setados
 		hibernateCriterions.remove("categoria");
 		hibernateCriterions.remove("favorecido");
 		hibernateCriterions.remove("meiopagamento");
 		hibernateCriterions.remove("moeda");
 		
-		if (agrupamento != null) {			
-			switch(agrupamento) {
+		if (cadastro != null) {			
+			switch(cadastro) {
 				case CATEGORIA : hibernateCriterions.put("categoria", Restrictions.eq("lancamento.categoria.id", idAgrupamento)); break;
 				case FAVORECIDO : hibernateCriterions.put("favorecido", Restrictions.eq("lancamento.favorecido.id", idAgrupamento)); break;
 				case MEIOPAGAMENTO : hibernateCriterions.put("meiopagamento", Restrictions.eq("lancamento.meioPagamento.id", idAgrupamento)); break;
@@ -212,6 +218,7 @@ public class CriterioBuscaLancamentoConta {
 
 	public void setIdAgrupamento(Long idAgrupamento) {
 		this.idAgrupamento = idAgrupamento;
+		this.atribuirParametrosAgrupamento();
 	}
 
 	public Integer getLimiteResultado() {

@@ -79,7 +79,6 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -132,9 +131,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	
-	private CadastroSistema agrupamentoSelecionado;
-	private TipoCategoria tipoCategoriaSelecionada;
-	private boolean pesquisarTermoNoAgrupamento;	
+	private TipoCategoria tipoCategoriaSelecionada;	
 	private boolean selecionarTodosLancamentos;
 	private FechamentoPeriodo fechamentoPeriodo;
 	private Date dataFechamento;
@@ -160,15 +157,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		try {			
 			if (criterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
-			} else {
-				if (this.pesquisarTermoNoAgrupamento)
-					criterioBusca.setCadastro(this.agrupamentoSelecionado);					
-				
+			} else {				
 				// Seta o limite de resultado da pesquisa
 				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 				
 				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
-				
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -610,11 +603,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public void atualizarListaPesquisaAgrupamento() {
-		if (agrupamentoSelecionado == null) {
-			pesquisarTermoNoAgrupamento = false;
-		} else {
-			pesquisarTermoNoAgrupamento = true;
-		}
 		this.getListaPesquisaAgrupamento();
 	}
 	
@@ -641,8 +629,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public List<SelectItem> getListaPesquisaAgrupamento() {
 		List<SelectItem> resultado = new ArrayList<SelectItem>();
-		if (agrupamentoSelecionado != null) {
-			switch (agrupamentoSelecionado) {
+		if (criterioBusca.getCadastro() != null) {
+			switch (criterioBusca.getCadastro()) {
 				case CATEGORIA :
 					for (Categoria c : this.getListaCategoriaSemTipoCategoria()) {
 						resultado.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
@@ -824,14 +812,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.tipoCategoriaSelecionada = tipoCategoriaSelecionada;
 	}
 
-	public boolean isPesquisarTermoNoAgrupamento() {
-		return pesquisarTermoNoAgrupamento;
-	}
-
-	public void setPesquisarTermoNoAgrupamento(boolean pesquisarTermoNoAgrupamento) {
-		this.pesquisarTermoNoAgrupamento = pesquisarTermoNoAgrupamento;
-	}
-
 	public boolean isSelecionarTodosLancamentos() {
 		return selecionarTodosLancamentos;
 	}
@@ -862,14 +842,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
 		this.fechamentoPeriodo = fechamentoPeriodo;
-	}
-
-	public CadastroSistema getAgrupamentoSelecionado() {
-		return agrupamentoSelecionado;
-	}
-
-	public void setAgrupamentoSelecionado(CadastroSistema agrupamentoSelecionado) {
-		this.agrupamentoSelecionado = agrupamentoSelecionado;
 	}
 
 	public Date getDataFechamento() {
