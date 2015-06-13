@@ -101,7 +101,7 @@ public class FechamentoPeriodo extends EntityPersistence {
 	@JoinColumn(name="idContaBancaria", nullable=false)
 	private Conta conta;
 	
-	@OneToMany(mappedBy="fechamentoPeriodo", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="fechamentoPeriodo", fetch=FetchType.LAZY)
 	private List<LancamentoConta> lancamentos;
 	
 	public FechamentoPeriodo() {

@@ -343,4 +343,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws BusinessException {
 		return fechamentoPeriodoRepository.findAllByConta(conta);
 	}
+	
+	@Override
+	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws BusinessException {
+		return fechamentoPeriodoRepository.findById(id);
+	}
 }

@@ -420,9 +420,15 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("O período selecionado já foi reaberto.");
 			return "";
 		}
-		Collections.sort(fechamentoPeriodo.getLancamentos(), new LancamentoContaComparator());
-		actionTitle = " - Reabrir período";
-		return "/pages/LancamentoConta/reabrirPeriodo";
+		try {
+			fechamentoPeriodo = getService().buscarFechamentoPorID(fechamentoPeriodo.getId());
+			Collections.sort(fechamentoPeriodo.getLancamentos(), new LancamentoContaComparator());
+			actionTitle = " - Reabrir período";
+			return "/pages/LancamentoConta/reabrirPeriodo";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String reabrirPeriodo() {

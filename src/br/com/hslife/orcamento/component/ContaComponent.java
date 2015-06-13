@@ -500,7 +500,8 @@ public class ContaComponent {
 		List<FechamentoPeriodo> fechamentosPosteriores = fechamentoPeriodoRepository.findFechamentosPosteriores(entity);
 		
 		// Itera a lista de fechamentos realizando a reabertura dos mesmos e dos lançamentos vinculados
-		for (FechamentoPeriodo fechamento : fechamentosPosteriores) {
+		for (FechamentoPeriodo fechamentoPeriodo : fechamentosPosteriores) {
+			FechamentoPeriodo fechamento = fechamentoPeriodoRepository.findById(fechamentoPeriodo.getId());
 			fechamento.setOperacao(OperacaoConta.REABERTURA);
 			fechamento.setDataAlteracao(new Date());
 			fechamentoPeriodoRepository.update(fechamento);

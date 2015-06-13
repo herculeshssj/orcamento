@@ -100,4 +100,6 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws BusinessException;
 	
 	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws BusinessException;
+	
+	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws BusinessException;
 }

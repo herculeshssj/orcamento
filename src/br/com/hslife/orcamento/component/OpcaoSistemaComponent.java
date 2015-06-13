@@ -255,6 +255,8 @@ public class OpcaoSistemaComponent implements Serializable{
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTA_EXIBIR_MEIO_PAGAMENTO", this.getExibirMeioPagamento());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("GERAL_EXIBIR_BUSCAS_REALIZADAS", this.getExibirBuscasRealizadas());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", this.getLimiteQuantidadeRegistros());
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTA_EXIBIR_INATIVAS", this.getExibirContasInativas());
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", this.getLimiteQuantidadeFechamentos());
 	}
 	
 	/**
@@ -366,10 +368,18 @@ public class OpcaoSistemaComponent implements Serializable{
 	}
 	
 	public Boolean getExibirContasInativas() {
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		try {
-			OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", usuarioComponent.getUsuarioLogado());
-			if (opcao != null)
-				return Boolean.valueOf(opcao.getValor());
+			// Verifica se o valor existe no cache
+			if (recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS") != null) {
+				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS"));
+			} else {
+				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS", Boolean.valueOf(opcao.getValor()));
+					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS"));
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -377,10 +387,18 @@ public class OpcaoSistemaComponent implements Serializable{
 	}
 	
 	public Integer getLimiteQuantidadeFechamentos() {
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		try {
-			OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", usuarioComponent.getUsuarioLogado());
-			if (opcao != null)
-				return Integer.valueOf(opcao.getValor());
+			// Verifica se o valor existe no cache
+			if (recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS") != null) {
+				return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS"));
+			} else {
+				OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(opcao.getValor()));
+					return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS"));
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
