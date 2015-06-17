@@ -125,7 +125,7 @@
 			<h:commandLink title="Registrar pagamento" action="#{managedBean.registrarPagamentoView}" rendered="#{item.statusLancamento == 'ATIVO'}">
 				<h:graphicImage id="imgPay" height="48" width="48" value="/resources/images/svg/donate.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandLink>
+			</h:commandLink>			
 			<p:spacer width="10"/>		
 			<h:commandLink title="Editar" action="#{managedBean.edit}">
 				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
