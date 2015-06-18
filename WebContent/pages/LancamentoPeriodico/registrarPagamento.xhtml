@@ -162,18 +162,16 @@
 			
 		</p:outputPanel>
 		
-		<br/>
-		
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-		<h:commandLink title="Registrar pagamento" action="#{managedBean.registrarPagamento}">
-			<p:graphicImage value="/resources/images/baixa.png" />
-		</h:commandLink>
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Registrar pagamento" action="#{managedBean.registrarPagamento}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
 	</ui:define>
 	
 </ui:composition>

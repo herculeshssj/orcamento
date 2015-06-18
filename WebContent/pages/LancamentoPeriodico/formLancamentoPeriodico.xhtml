@@ -59,143 +59,127 @@
 	
 	<ui:define name="campos">
 	
-		<p:tabView>
+		<p:tabView id="tabDadosLancamento">
 		
 			<p:tab title="Dados do lançamento">
 	
-				<h:panelGrid columns="2">
-					
-					Selecione o tipo de despesa:
-					<p:selectOneRadio value="#{managedBean.entity.tipoLancamentoPeriodico}" layout="lineDirection" disabled="#{managedBean.operation == 'edit'}">
-						<f:selectItems value="#{managedBean.listaTipoLancamentoPeriodico}"/>
-						<p:ajax event="change" update="pnlLancamentoPeriodico" listener="#{managedBean.atualizaPainelCadastro}" />							
-					</p:selectOneRadio>
-					
-				</h:panelGrid>
+				<label>Selecione o tipo de despesa:</label>
+				<h:selectOneRadio value="#{managedBean.entity.tipoLancamentoPeriodico}" layout="lineDirection" disabled="#{managedBean.operation == 'edit'}">
+					<f:selectItems value="#{managedBean.listaTipoLancamentoPeriodico}"/>
+					<p:ajax event="change" update="pnlLancamentoPeriodico" listener="#{managedBean.atualizaPainelCadastro}" />							
+				</h:selectOneRadio>
 				
-				<hr />
+				<label for="frmFormEntity:tabDadosLancamento:txtDescricao">Descrição:</label>
+				<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}"/>
 				
-				<h:panelGrid columns="2">
+				<label for="frmFormEntity:tabDadosLancamento:txtObservacao">Observação:</label>
+				<h:inputTextarea id="txtObservacao" value="#{managedBean.entity.observacao}" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}"/>
 				
-					Descrição:
-					<p:inputText value="#{managedBean.entity.descricao}" size="50" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}"/>
-					
-					Observação:
-					<p:inputTextarea cols="30" rows="3" value="#{managedBean.entity.observacao}" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}"/>
-					
-					Tipo de lançamento a gerar:
-					<p:selectOneRadio value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" disabled="#{managedBean.operation == 'edit'}">
-						<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
-						<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>								
-					</p:selectOneRadio>
-					
-					Dia de vencimento:
-					<p:inputText value="#{managedBean.entity.diaVencimento}" size="5" disabled="#{managedBean.operation == 'edit'}"/>
+				<label>Tipo de lançamento a gerar:</label>
+				<p:selectOneRadio value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" disabled="#{managedBean.operation == 'edit'}">
+					<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
+					<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>								
+				</p:selectOneRadio>
 				
-				</h:panelGrid>
-			
-				<hr />
+				<label for="frmFormEntity:tabDadosLancamento:txtDiaVencimento">Dia de vencimento:</label>
+				<h:inputText id="txtDiaVencimento" value="#{managedBean.entity.diaVencimento}" size="5" disabled="#{managedBean.operation == 'edit'}"/>
 			
 				<p:outputPanel id="pnlLancamentoPeriodico">
 				
-					<h:panelGrid columns="2" rendered="#{!managedBean.parcelamento}">
+					<h:panelGroup rendered="#{!managedBean.parcelamento}">
 					
-						Data de aquisição:			
-						<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataAquisicao}" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
+						<label for="frmFormEntity:tabDadosLancamento:txtDataAquisicao1">Data de aquisição:</label>			
+						<p:inputMask id="txtDataAquisicao1" size="10" mask="99/99/9999" value="#{managedBean.entity.dataAquisicao}" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
 			    			<f:converter converterId="dateConverter"/>
 			    		</p:inputMask>
 			    		
-			    		Valor por período:
-			    		<p:inputText value="#{managedBean.entity.valorParcela}" size="10" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
+			    		<label for="frmFormEntity:tabDadosLancamento:txtValorPeriodo">Valor por período:</label>
+			    		<h:inputText id="txtValorPeriodo" value="#{managedBean.entity.valorParcela}" size="10" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
 							<f:convertNumber type="currency" pattern="###.##"/>
-						</p:inputText>
+						</h:inputText>
 						
-						Periodicidade:
+						<label>Periodicidade:</label>
 						<h:selectOneMenu value="#{managedBean.entity.periodoLancamento}" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">			
 							<f:selectItems value="#{managedBean.listaPeriodoLancamento}" />
 						</h:selectOneMenu>
 						
-					</h:panelGrid>
+					</h:panelGroup>
 					
-					<h:panelGrid columns="2" rendered="#{managedBean.parcelamento}">
+					<h:panelGroup rendered="#{managedBean.parcelamento}">
 					
-						Data de compra:			
-						<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataAquisicao}" disabled="#{managedBean.operation == 'edit'}">
+						<label for="frmFormEntity:tabDadosLancamento:txtDataAquisicao2">Data de compra:</label>
+						<p:inputMask id="txtDataAquisicao2" size="10" mask="99/99/9999" value="#{managedBean.entity.dataAquisicao}" disabled="#{managedBean.operation == 'edit'}">
 			    			<f:converter converterId="dateConverter"/>
 			    		</p:inputMask>
 			    		
-			    		Valor da compra:
-			    		<p:inputText value="#{managedBean.entity.valorCompra}" size="10" disabled="#{managedBean.operation == 'edit'}">
+			    		<label for="frmFormEntity:tabDadosLancamento:txtValorCompra">Valor da compra:</label>
+			    		<h:inputText id="txtValorCompra" value="#{managedBean.entity.valorCompra}" size="10" disabled="#{managedBean.operation == 'edit'}">
 							<f:convertNumber type="currency" pattern="###.##"/>
-						</p:inputText>
+						</h:inputText>
 						
-						<h:outputText value="Data de vencimento 1ª parcela:" rendered="#{managedBean.operation == 'create'}"/>
-						<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataPrimeiraParcela}" rendered="#{managedBean.operation == 'create'}">
+						<label for="frmFormEntity:tabDadosLancamento:txtDataPrimeiraParcela"><h:outputText value="Data de vencimento 1ª parcela:" rendered="#{managedBean.operation == 'create'}"/></label>
+						<p:inputMask id="txtDataPrimeiraParcela" size="10" mask="99/99/9999" value="#{managedBean.entity.dataPrimeiraParcela}" rendered="#{managedBean.operation == 'create'}">
 			    			<f:converter converterId="dateConverter"/>
 			    		</p:inputMask>
 			    		
-			    		Valor da parcela:
-			    		<p:inputText value="#{managedBean.entity.valorParcela}" size="10" disabled="#{managedBean.operation == 'edit'}">
+			    		<label for="frmFormEntity:tabDadosLancamento:txtValorParcela">Valor da parcela:</label>
+			    		<h:inputText id="txtValorParcela" value="#{managedBean.entity.valorParcela}" size="10" disabled="#{managedBean.operation == 'edit'}">
 							<f:convertNumber type="currency" pattern="###.##"/>
-						</p:inputText>
+						</h:inputText>
 						
-						Quantidade de parcelas:
-						<p:inputText value="#{managedBean.entity.totalParcela}" size="5" disabled="#{managedBean.operation == 'edit'}"/>
+						<label for="frmFormEntity:tabDadosLancamento:txtTotalParcela">Quantidade de parcelas:</label>
+						<h:inputText id="txtTotalParcela" value="#{managedBean.entity.totalParcela}" size="5" disabled="#{managedBean.operation == 'edit'}"/>
 						
-					</h:panelGrid>
+					</h:panelGroup>
 				
 				</p:outputPanel>
+						
+				<label>Conta de pagamento:</label>
+				<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO' or (managedBean.operation != 'create' and managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO')}">
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					<p:ajax event="change" update="pnlMoeda"/>
+				</h:selectOneMenu>
 				
-				<hr />
+				<label>Categoria:</label>
+				<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoria}"  converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
+					<f:selectItem itemLabel="Nenhuma categoria"/>
+					<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
 				
-				<h:panelGrid columns="2">
+				<label>Favorecido/Sacado:</label>
+				<h:selectOneMenu value="#{managedBean.entity.favorecido}" converter="entityConverter"  disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
+					<f:selectItem itemLabel="Nenhum favorecido"/>
+					<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>			
 				
-					Conta de pagamento:
-					<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO' or (managedBean.operation != 'create' and managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO')}">
-						<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-						<p:ajax event="change" update="pnlMoeda"/>
-					</h:selectOneMenu>
-					
-					Categoria:
-					<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoria}"  converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
-						<f:selectItem itemLabel="Nenhuma categoria"/>
-						<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					</h:selectOneMenu>
-					
-					Favorecido/Sacado:
-					<h:selectOneMenu value="#{managedBean.entity.favorecido}" converter="entityConverter"  disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}">
-						<f:selectItem itemLabel="Nenhum favorecido"/>
-						<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					</h:selectOneMenu>			
-					
-					<h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
-					<h:selectOneMenu value="#{managedBean.entity.meioPagamento}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
-						<f:selectItem itemLabel="Nenhum meio de pagamento"/>
-						<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					</h:selectOneMenu>
-								
-				</h:panelGrid>
+				<label><h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/></label>
+				<h:selectOneMenu value="#{managedBean.entity.meioPagamento}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+					<f:selectItem itemLabel="Nenhum meio de pagamento"/>
+					<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
 				
 				<p:outputPanel id="pnlMoeda">
-			
-					<h:panelGrid columns="2" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}">
 					
-						Moeda:
+					<h:panelGroup rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}">
+						<label>Moeda:</label>
 						<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.operation == 'edit'}">
 							<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 						</h:selectOneMenu>
-
-					</h:panelGrid>
-					
+					</h:panelGroup>
+								
 				</p:outputPanel>
 				
 				<h:panelGrid columns="1">
 					Comprovante:
-					<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}"/>			
+					<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}"/>
 					<h:panelGroup>
-						<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
+						<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+							<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+						</h:commandLink>
 						&nbsp;&nbsp;&nbsp;
-						<h:commandButton title="Excluir arquivo" action="#{managedBean.excluirArquivo}" image="/resources/images/excluir.png" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}"/>				
+						<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}">
+							<h:graphicImage id="imgDeleteFile" value="/resources/images/svg/delete_row.svg" height="48" width="48"/>
+						</h:commandLink>								
 					</h:panelGroup>
 				</h:panelGrid>
 	
@@ -203,44 +187,44 @@
 			
 			<p:tab title="Histórico de pagamento" rendered="#{managedBean.operation == 'edit'}">
 				
-				<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">
-					<p:column style="text-align: center; vertical-align: middle;">
+				<h:dataTable value="#{managedBean.entity.pagamentos}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value=""/>
 						</f:facet>
-						<p:selectBooleanCheckbox value="#{item.statusLancamentoConta == 'QUITADO'}" disabled="true"/>
-					</p:column>									
-					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
+						<h:selectBooleanCheckbox value="#{item.statusLancamentoConta == 'QUITADO'}" disabled="true"/>
+					</h:column>									
+					<h:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
 						<f:facet name="header">
 							<h:outputText value="Período"/>
 						</f:facet>
 						<h:outputText value="#{item.periodo}"/>
 						<h:outputText value=" / "/>
 						<h:outputText value="#{item.ano}"/>
-					</p:column>					
-					<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
+					</h:column>					
+					<h:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
 						<f:facet name="header">
 							<h:outputText value="Parcela"/>
 						</f:facet>
 						<h:outputText value="#{item.parcela}"/>
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Vencimento"/>
 						</f:facet>
 						<h:outputText value="#{item.dataVencimento}">
 							<f:converter converterId="dateConverter"/>
 						</h:outputText>
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Pagamento"/>
 						</f:facet>
 						<h:outputText value="#{item.dataPagamento}">
 							<f:converter converterId="dateConverter"/>
 						</h:outputText>						
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Valor"/>
 						</f:facet>
@@ -248,20 +232,17 @@
 						<h:outputText value="#{item.valorPago}">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle; width: 100px;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle; width: 100px;">
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>
-						<h:commandButton title="Editar lançamento da conta vinculado" image="/resources/images/alterar.png" action="#{lancamentoContaMB.edit}">
-							<f:setPropertyActionListener value="#{item.id}" target="#{lancamentoContaMB.idEntity}"/>
-						</h:commandButton>						
-						&nbsp;
-						<h:commandButton title="Mesclar com lançamento existente" image="/resources/images/mesclar.png" action="#{managedBean.vincularLancamentoView}" rendered="#{managedBean.entity.statusLancamento != 'ENCERRADO'}">
+						<h:commandLink title="Mesclar lançamentos" action="#{managedBean.vincularLancamentoView}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}">
+							<h:graphicImage id="imgMerge" height="40" width="40" value="/resources/images/svg/multiple_inputs.svg"/>
 							<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoPeriodo}"/>
-						</h:commandButton>
-					</p:column>
-				</p:dataTable>
+						</h:commandLink>
+					</h:column>
+				</h:dataTable>
 				
 				<h:panelGrid columns="6" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
     	
