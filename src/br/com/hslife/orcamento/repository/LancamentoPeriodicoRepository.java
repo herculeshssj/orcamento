@@ -65,6 +65,13 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 		super(new LancamentoPeriodico());
 	}
 	
+	@Override
+	public LancamentoPeriodico findById(Long id) {
+		return (LancamentoPeriodico) getQuery("FROM LancamentoPeriodico as entity LEFT JOIN FETCH entity.pagamentos WHERE entity.id = :idEntity")
+				.setLong("idEntity", id)
+				.uniqueResult();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoPeriodico> findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento) {
 		StringBuilder hql = new StringBuilder();

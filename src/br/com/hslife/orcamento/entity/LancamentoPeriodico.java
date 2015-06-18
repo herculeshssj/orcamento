@@ -157,7 +157,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.LAZY)
 	@OrderBy(clause="dataVencimento")
 	private List<LancamentoConta> pagamentos;
 	

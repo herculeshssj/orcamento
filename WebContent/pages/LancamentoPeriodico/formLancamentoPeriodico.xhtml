@@ -76,10 +76,10 @@
 				<h:inputTextarea id="txtObservacao" value="#{managedBean.entity.observacao}" disabled="#{managedBean.entity.statusLancamento != 'ATIVO'}"/>
 				
 				<label>Tipo de lançamento a gerar:</label>
-				<p:selectOneRadio value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" disabled="#{managedBean.operation == 'edit'}">
+				<h:selectOneRadio value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" disabled="#{managedBean.operation == 'edit'}">
 					<f:selectItems value="#{managedBean.listaTipoLancamento}"/>
 					<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>								
-				</p:selectOneRadio>
+				</h:selectOneRadio>
 				
 				<label for="frmFormEntity:tabDadosLancamento:txtDiaVencimento">Dia de vencimento:</label>
 				<h:inputText id="txtDiaVencimento" value="#{managedBean.entity.diaVencimento}" size="5" disabled="#{managedBean.operation == 'edit'}"/>

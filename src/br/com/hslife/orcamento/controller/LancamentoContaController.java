@@ -226,6 +226,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Override
 	public String create() {
 		entity.setTipoLancamento(TipoLancamento.DESPESA);
+		entity.setConta(criterioBusca.getConta());
 		return super.create();
 	}
 	
@@ -533,7 +534,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			} else {
 				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
 			}
-			if (contas != null && !contas.isEmpty()) {
+			if (contas != null && !contas.isEmpty() && criterioBusca.getConta() == null) {
 				criterioBusca.setConta(contas.get(0));
 			}
 			return contas;
