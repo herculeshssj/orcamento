@@ -168,6 +168,14 @@
 					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Total"/>
+				</f:facet>						
+				<h:outputText value="#{item.total}" style="#{item.total > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
      		
     	</p:dataTable>
 		<br/>	

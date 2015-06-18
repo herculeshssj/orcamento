@@ -313,4 +313,10 @@ public class PanoramaLancamentoConta {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	public double getTotal() {
+		return this.janeiro + this.fevereiro + this.marco + this.abril
+				+ this.maio + this.junho + this.julho + this.agosto
+				+ this.setembro + this.outubro + this.novembro + this.dezembro;
+	}
 }
