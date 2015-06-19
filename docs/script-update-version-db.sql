@@ -46,102 +46,10 @@
 
 /*** Script de atualização da base de dados ***/
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUN2015 ***/
 
--- Atualização de versão
-update versao set ativo = false;
-insert into versao (versao, ativo) values ('SET2015', true);
+/***** Atualização sob demanda da base de dados *****/
 
--- Correção do valor de conversão das moedas
-update moeda set valorConversao = 1.0000 where valorConversao = 0.0000;
-alter table moeda change column `valorConversao` `valorConversao` decimal(18,4) not null default 1.0000;
+/* A partir desse ponto, a atualização da base é dinâmica, não sendo mais presa a milestones */
 
--- Criação da tabela de modelos de documento
-create table modelodocumento (
-	id bigint not null auto_increment,
-    descricao varchar(50) not null,
-    conteudo text,
-    ativo boolean,
-    idUsuario bigint not null,
-    versionEntity datetime not null default '2015-06-01 00:00:00', 
-    primary key(id)
-) engine=InnoDB;
-
-alter table modelodocumento add constraint fk_usuario_modelodocumento foreign key (idUsuario) references usuario (id);
-
--- Dívidas de terceiros - Github Issue #84
-create table dividaterceiro(
-	id bigint not null auto_increment,
-	valorDivida decimal(18,2) not null,
-	dataNegociacao date not null,
-	justificativa varchar(4000) not null,
-	termoDivida text,
-	termoQuitacao text,
-	statusDivida varchar(15) not null,
-	tipoCategoria varchar(10) not null,
-	idFavorecido bigint not null,
-	idUsuario bigint not null,
-    idMoeda bigint not null,
-	versionEntity datetime not null default '2015-06-01 00:00:00',
-	primary key(id)
-) Engine=InnoDB;
-
-alter table dividaterceiro add constraint fk_favorecido_dividaterceiro foreign key(idFavorecido) references favorecido (id);
-alter table dividaterceiro add constraint fk_usuario_dividaterceiro foreign key(idUsuario) references usuario (id);
-alter table dividaterceiro add constraint fk_moeda_dividaterceiro foreign key(idMoeda) references moeda (id);
-
-create table pagamentodividaterceiro(
-	id bigint not null auto_increment,
-	valorPago decimal(18,2) not null,
-	dataPagamento date not null,
-	comprovantePagamento text,
-	taxaConversao decimal(18,4) not null default 1.0000,
-	idDivida bigint not null,
-	versionEntity datetime not null default '2015-06-01 00:00:00',
-	primary key(id)
-) Engine=InnoDB;
-
-alter table pagamentodividaterceiro add constraint fk_dividaterceiro_pagamentodividaterceiro foreign key(idDivida) references dividaterceiro(id);
-
--- Corrige a versão
-update versao set versao = 'JUN2015', dataLiberacao = '2015-06-28' where versao = 'SET2015';
-
--- Correções na estrutura da tabela de cartões de crédito
-update cartaocredito set bandeira = null where bandeira = 'NENHUMA';
-
-alter table cartaocredito change column `abrangencia` `abrangencia` varchar(15) not null;
-alter table cartaocredito change column `tipoCartao` `tipoCartao` varchar(10) not null;
-
--- Inclusão da coluna numeroCartaoDebito - Github Issue #71
-alter table cartaocredito add column numeroCartaoDebito varchar(40) null;
-
--- Exclusão do histórico de reaberturas de períodos
-delete from fechamentoperiodo where operacao = 'REABERTURA';
-
--- Exclusão do módulo Buscas Salvas - Github Issue #110
-drop table buscasalva;
-
--- Exclusão da opção do sistema GERAL_SUPRIMIR_TEXTO_MEIO
-delete from opcaosistema where chave = 'GERAL_SUPRIMIR_TEXTO_MEIO';
-
--- Detalhamento de lançamentos da conta
-create table detalhelancamento(
-	id bigint not null auto_increment,
-    descricao varchar(50) not null,
-    data date not null,
-    valor decimal(18,2) default 0.00,
-    idLancamentoConta bigint not null,
-    versionEntity datetime not null default '2015-06-01 00:00:00',
-    primary key(id)
-) Engine=InnoDB;
-
-alter table detalhelancamento add constraint fk_detalhelancamento_lancamentoconta foreign key(idLancamentoConta) references lancamentoconta(id);
-
-create table lancamentoconta_detalhelancamento (
-	lancamentoconta_id bigint not null,
-	detalhes_id bigint not null,
-	unique(detalhes_id)
-) engine=InnoDB;
-
-alter table lancamentoconta_detalhelancamento add constraint fk_lancamentoconta foreign key (lancamentoconta_id) references lancamentoconta(id);
-alter table lancamentoconta_detalhelancamento add constraint fk_detalhelancamento foreign key (detalhes_id) references detalhelancamento(id);
+-- Exclusão da tabela de versão - Github Issue #113
+drop table versao; 

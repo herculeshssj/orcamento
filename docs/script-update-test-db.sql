@@ -91,27 +91,12 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Detalhamento de lançamentos da conta
-	create table detalhelancamento(
-		id bigint not null auto_increment,
-	    descricao varchar(50) not null,
-	    data date not null,
-	    valor decimal(18,2) default 0.00,
-	    idLancamentoConta bigint not null,
-	    versionEntity datetime not null default '2015-06-01 00:00:00',
-	    primary key(id)
-	) Engine=InnoDB;
-	
-	alter table detalhelancamento add constraint fk_detalhelancamento_lancamentoconta foreign key(idLancamentoConta) references lancamentoconta(id);
-	
-	create table lancamentoconta_detalhelancamento (
-		lancamentoconta_id bigint not null,
-		detalhes_id bigint not null,
-		unique(detalhes_id)
-	) engine=InnoDB;
-	
-	alter table lancamentoconta_detalhelancamento add constraint fk_lancamentoconta foreign key (lancamentoconta_id) references lancamentoconta(id);
-	alter table lancamentoconta_detalhelancamento add constraint fk_detalhelancamento foreign key (detalhes_id) references detalhelancamento(id);
+	/***** Atualização sob demanda da base de dados *****/
+
+	/* A partir desse ponto, a atualização da base é dinâmica, não sendo mais presa a milestones */
+
+	-- Exclusão da tabela de versão - Github Issue #113
+	drop table versao;
     
     /*** Fim do bloco de atualizações da base ***/
     

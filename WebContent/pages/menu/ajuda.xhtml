@@ -70,28 +70,25 @@
 		
 		<p>Entre em contato para dúvidas, críticas e sugestões.</p>
 			
-			<h:form id="frmMenuCadastros">
+			<h:form id="frmAjuda">
 			
 			<p:messages />
 			
-			<h:panelGrid columns="2" width="100%" style="text-align: left">
-			
-				Nome:
-				<h:outputText value="#{ajudaMB.usuarioLogado.nome}"/>
+			<label>Nome:</label>
+			<h:outputText value="#{ajudaMB.usuarioLogado.nome}"/>
 				
-				E-Mail:
-				<h:outputText value="#{ajudaMB.usuarioLogado.email}"/>
+			<label>E-Mail:</label>
+			<h:outputText value="#{ajudaMB.usuarioLogado.email}"/>
 				
-				Assunto:
-				<p:inputText value="#{ajudaMB.assuntoMensagem}" size="50"/>
+			<label for="frmAjuda:txtAssunto">Assunto:</label>
+			<h:inputText id="txtAssunto" value="#{ajudaMB.assuntoMensagem}" size="50"/>
 				
-				Mensagem:
-				<p:inputTextarea value="#{ajudaMB.mensagem}" rows="5" cols="50"/>
+			<label for="frmAjuda:txtMensagem">Mensagem:</label>
+			<h:inputTextarea id="txtMensagem" value="#{ajudaMB.mensagem}" rows="5" cols="50"/>
 				
-				<h:outputText />
-				<h:commandButton title="Enviar" image="/resources/images/enviar.png" action="#{ajudaMB.enviarMensagem}" />
-										
-			</h:panelGrid>
+			<h:commandLink id="lnkSend" title="Enviar" action="#{ajudaMB.enviarMensagem}">
+				<h:graphicImage id="imgSend" height="48" width="48" value="/resources/images/svg/feedback.svg"/>
+			</h:commandLink>
 		
 		</h:form>
      
