@@ -65,6 +65,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -599,7 +600,7 @@ public class ContaComponent implements Serializable {
 		return moedas;
 	}
 	
-	// TODO diminuir a complexidade ciclomática do método. Averiguar se a próxima mensalidade pode ser gerada por clonagem
+	@SuppressWarnings("deprecation")
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException {		
 		pagamentoPeriodo.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 		
@@ -613,47 +614,33 @@ public class ContaComponent implements Serializable {
 			// Busca o pagamento mais recente
 			LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(pagamentoPeriodo.getLancamentoPeriodico());
 			
-			Calendar dataVencimento = Calendar.getInstance();
-			dataVencimento.setTime(ultimaMensalidade.getDataVencimento());
+			LancamentoConta proximaMensalidade;
 			
-			if (dataVencimento.get(Calendar.DAY_OF_MONTH) >= pagamentoPeriodo.getLancamentoPeriodico().getDiaVencimento()) {
-				switch (pagamentoPeriodo.getLancamentoPeriodico().getPeriodoLancamento()) {
-					case MENSAL : dataVencimento.add(Calendar.MONTH, 1); break;
-					case BIMESTRAL : dataVencimento.add(Calendar.MONTH, 2); break;
-					case TRIMESTRAL : dataVencimento.add(Calendar.MONTH, 3); break;
-					case QUADRIMESTRAL : dataVencimento.add(Calendar.MONTH, 4); break;
-					case SEMESTRAL : dataVencimento.add(Calendar.MONTH, 6); break;
-					case ANUAL : dataVencimento.add(Calendar.YEAR, 1); break;
-					default : throw new BusinessException("Período informado é inválido!");
-				}
+			if (ultimaMensalidade == null) {
+				proximaMensalidade = new LancamentoConta();
+				proximaMensalidade.setDataVencimento(new Date());
+			} else {
+				proximaMensalidade = ultimaMensalidade.clonarLancamentos(1, IncrementoClonagemLancamento.NENHUM).get(0);
 			}
 			
-			LancamentoConta proximaMensalidade = new LancamentoConta();
 			proximaMensalidade.setLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico());
-			dataVencimento.set(Calendar.DAY_OF_MONTH, pagamentoPeriodo.getLancamentoPeriodico().getDiaVencimento());
 			
-			proximaMensalidade.setAno(dataVencimento.get(Calendar.YEAR));
-			proximaMensalidade.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
-			proximaMensalidade.setDataVencimento(dataVencimento.getTime());
+			if (proximaMensalidade.getDataVencimento().getDay() >= proximaMensalidade.getLancamentoPeriodico().getDiaVencimento()) {
+				proximaMensalidade.setDataVencimento(proximaMensalidade.getLancamentoPeriodico().getPeriodoLancamento().getDataPeriodo(proximaMensalidade.getDataVencimento()));
+			}
 			
-			// Setando os demais atributos
-			proximaMensalidade.setConta(pagamentoPeriodo.getLancamentoPeriodico().getConta());
-			proximaMensalidade.setTipoLancamento(pagamentoPeriodo.getTipoLancamento());
-			proximaMensalidade.setValorPago(proximaMensalidade.getLancamentoPeriodico().getValorParcela());
+			proximaMensalidade.setAno(proximaMensalidade.getDataVencimento().getYear() + 1900);
+			proximaMensalidade.setPeriodo(proximaMensalidade.getDataVencimento().getMonth() + 1);
 			proximaMensalidade.setDataPagamento(proximaMensalidade.getDataVencimento());
-			proximaMensalidade.setCategoria(pagamentoPeriodo.getCategoria());
-			proximaMensalidade.setFavorecido(pagamentoPeriodo.getFavorecido());
-			proximaMensalidade.setMeioPagamento(pagamentoPeriodo.getMeioPagamento());
-			proximaMensalidade.setMoeda(pagamentoPeriodo.getMoeda());
-			proximaMensalidade.setStatusLancamentoConta(proximaMensalidade.getDataPagamento().after(new Date()) ? StatusLancamentoConta.AGENDADO : StatusLancamentoConta.REGISTRADO);
 			
 			// Define a descrição definitiva do lançamento a ser criado
-			proximaMensalidade.setDescricao(pagamentoPeriodo.getLancamentoPeriodico().getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
+			proximaMensalidade.setDescricao(proximaMensalidade.getLancamentoPeriodico().getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
 			
 			lancamentoContaRepository.save(proximaMensalidade);
 			
 		} else {
 			// Verifica se o lançamento periódico vinculado já pode ser encerrado.
+			pagamentoPeriodo.getLancamentoPeriodico().setPagamentos(lancamentoContaRepository.findByLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico()));
 			if (pagamentoPeriodo.getLancamentoPeriodico().podeEncerrar()) {
 				pagamentoPeriodo.getLancamentoPeriodico().setStatusLancamento(StatusLancamento.ENCERRADO);
 				lancamentoPeriodicoRepository.update(pagamentoPeriodo.getLancamentoPeriodico());

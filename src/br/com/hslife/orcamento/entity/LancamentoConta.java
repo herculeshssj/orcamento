@@ -195,6 +195,7 @@ public class LancamentoConta extends EntityPersistence {
 		descricao = lancamento.getDescricao();
 		valorPago = lancamento.getValorPago();
 		dataPagamento = lancamento.getDataPagamento();
+		dataVencimento = lancamento.getDataVencimento();
 		observacao = lancamento.getObservacao();
 		conta = lancamento.getConta();
 		categoria = lancamento.getCategoria();
