@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.component;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -80,7 +81,12 @@ import br.com.hslife.orcamento.util.EntityLabelComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Component
-public class ContaComponent {
+public class ContaComponent implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4282979732617114700L;
 
 	@Autowired
 	private ContaRepository contaRepository;
@@ -396,16 +402,16 @@ public class ContaComponent {
 		this.fecharPeriodo(dataFechamento, conta, null, null);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
 		this.fecharPeriodo(dataFechamento, conta, null, lancamentosPeriodicos);
 	}
 	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
 		this.fecharPeriodo(fechamentoPeriodo.getData(), fechamentoPeriodo.getConta(), fechamentoPeriodo, lancamentosPeriodicos);
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
 		// Obtém-se o último fechamento realizado
 		FechamentoPeriodo fechamentoAnterior;
 		if (fechamentoReaberto == null)
@@ -485,7 +491,7 @@ public class ContaComponent {
 			else
 				l.setFechamentoPeriodo(fechamentoReaberto);
 
-			if (lancamentosPeriodicos.contains(l)) {
+			if (lancamentosPeriodicos.contains(l.getLancamentoPeriodico())) {
 				this.registrarPagamento(l);
 			} else {
 				lancamentoContaRepository.update(l);
