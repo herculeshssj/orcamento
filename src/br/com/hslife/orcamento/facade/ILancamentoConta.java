@@ -55,6 +55,7 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
@@ -89,9 +90,9 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
 	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException;
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException;
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException;
 	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException;
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException;
 	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException;
 	

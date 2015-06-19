@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.model.chart.BarChartModel;
@@ -124,6 +125,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 	}
 
 	@Override
+	@PostConstruct
 	public String startUp() {
 		exibirGraficoDespesa = false;
 		exibirGraficoReceita = false;
@@ -135,83 +137,150 @@ public class PanoramaDespesaFixaController extends AbstractController {
 
 	public void find() {
 		try {
-			List<LancamentoConta> pagamentos = new ArrayList<>();
-			List<LancamentoPeriodico> lancamentos = new ArrayList<>();
-			List<LancamentoConta> pagamentosReceita = new ArrayList<>();
-			List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
-			
-			if (periodoAConsiderar.equals("ANTERIOR")) {
-				// Traz os pagamentos quitados do lançamento fixo selecionado, ou todos se nenhum for selecionado				
-				switch (getOpcoesSistema().getFormaAgrupamentoPagamento()) {
-					case "INDIVIDUAL" : 
-						if (lancamentoSelecionado != null) {
-							pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
-							break;
-						}						
-					case "CONTA": 
-						if (contaSelecionada != null) {
-							pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
-							break;
-						}
-					case "TIPO_CONTA": 
-						if (tipoContaSelecionada != null) {
-							pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
-							break;
-						}
-					default: pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);
-				}
-			} else {
-				switch (getOpcoesSistema().getFormaAgrupamentoPagamento()) {
+			// Verifica se uma opção foi selecionada de acordo com a opção do sistema
+			switch (getOpcoesSistema().getFormaAgrupamentoPagamento()) {
 				case "INDIVIDUAL" : 
-					if (lancamentoSelecionado != null) {
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
-						pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamentoSelecionado, periodo));
-						break;
-					}						
-				case "CONTA": 
-					if (contaSelecionada != null) {
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
-						lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, contaSelecionada, StatusLancamento.ATIVO);
-						for (LancamentoPeriodico lancamento : lancamentos) {
-							pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
-						}
-						break;
-					}
-				case "TIPO_CONTA": 
-					if (tipoContaSelecionada != null) {
-						lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, StatusLancamento.ATIVO);
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
-						for (LancamentoPeriodico lancamento : lancamentos) {
-							pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
-						}
-						break;
-					}
-				default: 
-					lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico.FIXO, StatusLancamento.ATIVO, getUsuarioLogado());
-					pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);
-					for (LancamentoPeriodico lancamento : lancamentos) {
-						pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
-					}
-				}
+					if (lancamentoSelecionado != null) 
+						this.gerarGraficoLancamentoIndividual();
+					else
+						this.gerarGraficoTodosLancamentos();
+					break;
+				case "CONTA" : 
+					if (contaSelecionada != null) 
+						this.gerarGraficoConta();
+					else
+						this.gerarGraficoTodosLancamentos();
+					break;
+				case "TIPO_CONTA" : 
+					if (tipoContaSelecionada != null) 
+						this.gerarGraficoTipoConta(); 
+					else
+						this.gerarGraficoTodosLancamentos();
+					break;
+				default : 
+					this.gerarGraficoTodosLancamentos();
 			}
-				
-			// Separa os pagamento de lançamentos fixos de receita dos de despesa
-			for (LancamentoConta pagamento : pagamentos) {
-				if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
-					pagamentosDespesa.add(pagamento);
-				} else {
-					pagamentosReceita.add(pagamento);
-				}
-			}
-			
-			// Envia a lista de pagamento para os respectivos métodos para gerar o gráfico
-			gerarGraficoDespesa(pagamentosDespesa);
-			gerarGraficoReceita(pagamentosReceita);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
 	
+	private void gerarGraficoTodosLancamentos() throws BusinessException {
+		List<LancamentoConta> pagamentos = new ArrayList<>();
+		List<LancamentoPeriodico> lancamentos = new ArrayList<>();
+		List<LancamentoConta> pagamentosReceita = new ArrayList<>();
+		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
+		
+		if (periodoAConsiderar.equals("ANTERIOR")) {
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);			
+		} else {
+			lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico.FIXO, StatusLancamento.ATIVO, getUsuarioLogado());
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);
+			for (LancamentoPeriodico lancamento : lancamentos) {
+				pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
+			}
+		}
+			
+		// Separa os pagamento de lançamentos fixos de receita dos de despesa
+		for (LancamentoConta pagamento : pagamentos) {
+			if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				pagamentosDespesa.add(pagamento);
+			} else {
+				pagamentosReceita.add(pagamento);
+			}
+		}
+		
+		// Envia a lista de pagamento para os respectivos métodos para gerar o gráfico
+		gerarGraficoDespesa(pagamentosDespesa);
+		gerarGraficoReceita(pagamentosReceita);		
+	}
+
+	private void gerarGraficoTipoConta() throws BusinessException {
+		List<LancamentoConta> pagamentos = new ArrayList<>();
+		List<LancamentoPeriodico> lancamentos = new ArrayList<>();
+		List<LancamentoConta> pagamentosReceita = new ArrayList<>();
+		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
+		
+		if (periodoAConsiderar.equals("ANTERIOR")) {
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
+		} else {
+			lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, StatusLancamento.ATIVO);
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
+			for (LancamentoPeriodico lancamento : lancamentos) {
+				pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
+			}
+		}
+			
+		// Separa os pagamento de lançamentos fixos de receita dos de despesa
+		for (LancamentoConta pagamento : pagamentos) {
+			if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				pagamentosDespesa.add(pagamento);
+			} else {
+				pagamentosReceita.add(pagamento);
+			}
+		}
+		
+		// Envia a lista de pagamento para os respectivos métodos para gerar o gráfico
+		gerarGraficoDespesa(pagamentosDespesa);
+		gerarGraficoReceita(pagamentosReceita);		
+	}
+
+	private void gerarGraficoConta() throws BusinessException {
+		List<LancamentoConta> pagamentos = new ArrayList<>();
+		List<LancamentoPeriodico> lancamentos = new ArrayList<>();
+		List<LancamentoConta> pagamentosReceita = new ArrayList<>();
+		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
+		
+		if (periodoAConsiderar.equals("ANTERIOR")) {
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
+		} else {
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
+			lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, contaSelecionada, StatusLancamento.ATIVO);
+			for (LancamentoPeriodico lancamento : lancamentos) {
+				pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
+			}
+		}
+			
+		// Separa os pagamento de lançamentos fixos de receita dos de despesa
+		for (LancamentoConta pagamento : pagamentos) {
+			if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				pagamentosDespesa.add(pagamento);
+			} else {
+				pagamentosReceita.add(pagamento);
+			}
+		}
+		
+		// Envia a lista de pagamento para os respectivos métodos para gerar o gráfico
+		gerarGraficoDespesa(pagamentosDespesa);
+		gerarGraficoReceita(pagamentosReceita);		
+	}
+
+	private void gerarGraficoLancamentoIndividual() throws BusinessException {
+		List<LancamentoConta> pagamentos = new ArrayList<>();
+		List<LancamentoConta> pagamentosReceita = new ArrayList<>();
+		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
+		
+		if (periodoAConsiderar.equals("ANTERIOR")) {
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
+		} else {
+			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
+			pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamentoSelecionado, periodo));
+		}
+			
+		// Separa os pagamento de lançamentos fixos de receita dos de despesa
+		for (LancamentoConta pagamento : pagamentos) {
+			if (pagamento.getLancamentoPeriodico().getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				pagamentosDespesa.add(pagamento);
+			} else {
+				pagamentosReceita.add(pagamento);
+			}
+		}
+		
+		// Envia a lista de pagamento para os respectivos métodos para gerar o gráfico
+		gerarGraficoDespesa(pagamentosDespesa);
+		gerarGraficoReceita(pagamentosReceita);
+	}
+
 	private void carregarMoedaPadrao() {
 		try {
 			if (moedaPadrao == null) {
@@ -375,7 +444,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		// Popula o gráfico com os dados obtido e habilita a exibição
 		ultimosPagamentosReceitaModel = new BarChartModel();
 		ultimosPagamentosReceitaModel.setLegendPosition("s");
-		ultimosPagamentosReceitaModel.setTitle("Panorama dos Parcelamentos - Receita");
+		ultimosPagamentosReceitaModel.setTitle("Panorama das Despesas Fixas - Receita");
 		ultimosPagamentosReceitaModel.setStacked(true);		
 		ultimosPagamentosReceitaModel.setExtender("ext1");
 		

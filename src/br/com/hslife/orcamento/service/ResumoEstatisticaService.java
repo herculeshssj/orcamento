@@ -261,7 +261,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			// Itera os lançamentos parcelados a adiciona suas parcelas caso esteja no mesmo ano que o relatório
 			for (LancamentoPeriodico parcelamento : parcelamentos) {
-				for (LancamentoConta parcela : parcelamento.getPagamentos()) {
+				List<LancamentoConta> parcelasLancamento = lancamentoContaRepository.findByLancamentoPeriodico(parcelamento);
+				
+				for (LancamentoConta parcela : parcelasLancamento) {
 					int anoParcela = parcela.getDataPagamento().getYear() + 1900;
 					if (anoParcela == ano) {
 						parcelas.add(parcela);

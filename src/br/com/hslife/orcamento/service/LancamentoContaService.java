@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
@@ -315,12 +316,12 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		getComponent().fecharPeriodo(dataFechamento, conta);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
 		getComponent().fecharPeriodo(dataFechamento, conta, lancamentosPeriodicos);
 	}
 	
 	@Override
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoConta> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
 		getComponent().fecharPeriodo(fechamentoPeriodo, lancamentosPeriodicos);		
 	}
 	
