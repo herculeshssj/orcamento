@@ -41,10 +41,6 @@ sudo apt-get install oracle-java8-installer
 
 A instalação do Eclipse Luna não tem mistério. Após realizar a instalação do Java, baixe o arquivo compactado do Eclipse Luna JavaEE de acordo com o SO e descompacte em uma pasta de sua preferência.
 
-### Instalação do SVN/GIT
-
-Atualmente o projeto utiliza o Git para versionamento do código. A instalação do mesmo difere um pouco no Windows, Linux e Mac. 
-
 ### Instalação do GIT
 
 Para realizar a instalação do Git no Windows utiliza-se geralmente a ferramenta disponibiliza pelo Github.
@@ -54,10 +50,6 @@ Para realizar a instalação do Git no Linux, execute o seguinte comando:
 sudo apt-get install git
 
 Para realizar a instalação do Git no Mac, pode-se instalar a ferramenta disponibilizada pelo Github, ou utilizar o Xcode.
-
-### Instalação do SVN
-
-O uso do SVN é para ter acesso ao repositório antigo do projeto. Usava-se o plugin do Eclipse Subversive SVN, que já habilitava o acesso ao repositório sem precisar instalar outras ferramentas.
 
 ### Instalação do Tomcat
 
@@ -117,3 +109,5 @@ git clone https://github.com/herculeshssj/orcamento
 No Eclipse, abra a perspectiva Git. Clique em Add an existing Git repository. Selecione o diretório onde foi realizado o clone do repositório, e clique em Finnish.
 
 Após isso clique no repositório e selecione Import Projects from Git Repository. Clique em Next, e na próxima tela em Finnish.
+
+Para executar o projeto, clique com botão direito em cima do projeto, escolha Run As -> Run on Server. Na tela que se abre, selecione o Tomcat configurado e clique em Finnish.
