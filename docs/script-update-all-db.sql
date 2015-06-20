@@ -1440,8 +1440,8 @@ create table telefone(
 alter table telefone add constraint fk_telefone_usuario foreign key(idUsuario) references usuario(id);
 
 -- Documentos
-ALTER TABLE `orcamento`.`documento` DROP FOREIGN KEY `FK383D52B47083BD82` ;
-ALTER TABLE `orcamento`.`documento` DROP COLUMN `idUsuario`, DROP INDEX `FK383D52B47083BD82`;
+ALTER TABLE documento DROP FOREIGN KEY `FK383D52B47083BD82` ;
+ALTER TABLE documento DROP COLUMN `idUsuario`, DROP INDEX `FK383D52B47083BD82`;
 
 -- Controle de versão das entidades
 alter table versao add column versionEntity datetime not null default '2014-01-01 00:00:00';
@@ -2201,75 +2201,6 @@ alter table lancamentoconta add constraint fk_fechamentoperiodo_lancamentoconta 
 -- Inclusão do cadastro do changelog pelo sistema - Github Issue #94
 alter table versao add column dataLiberacao date null;
 alter table versao add column changelog text null;
-
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUN2015 ***/
-
--- Atualização de versão
-update versao set ativo = false;
-insert into versao (versao, ativo) values ('SET2015', true);
-
--- Correção do valor de conversão das moedas
-update moeda set valorConversao = 1.0000 where valorConversao = 0.0000;
-alter table moeda change column `valorConversao` `valorConversao` decimal(18,4) not null default 1.0000;
-
--- Criação da tabela de modelos de documento
-create table modelodocumento (
-	id bigint not null auto_increment,
-    descricao varchar(50) not null,
-    conteudo text,
-    ativo boolean,
-    idUsuario bigint not null,
-    versionEntity datetime not null default '2015-06-01 00:00:00', 
-    primary key(id)
-) engine=InnoDB;
-
-alter table modelodocumento add constraint fk_usuario_modelodocumento foreign key (idUsuario) references usuario (id);
-
--- Dívidas de terceiros - Github Issue #84
-create table dividaterceiro(
-	id bigint not null auto_increment,
-	valorDivida decimal(18,2) not null,
-	dataNegociacao date not null,
-	justificativa varchar(4000) not null,
-	termoDivida text,
-	termoQuitacao text,
-	statusDivida varchar(15) not null,
-	tipoCategoria varchar(10) not null,
-	idFavorecido bigint not null,
-	idUsuario bigint not null,
-    idMoeda bigint not null,
-	versionEntity datetime not null default '2015-06-01 00:00:00',
-	primary key(id)
-) Engine=InnoDB;
-
-alter table dividaterceiro add constraint fk_favorecido_dividaterceiro foreign key(idFavorecido) references favorecido (id);
-alter table dividaterceiro add constraint fk_usuario_dividaterceiro foreign key(idUsuario) references usuario (id);
-alter table dividaterceiro add constraint fk_moeda_dividaterceiro foreign key(idMoeda) references moeda (id);
-
-create table pagamentodividaterceiro(
-	id bigint not null auto_increment,
-	valorPago decimal(18,2) not null,
-	dataPagamento date not null,
-	comprovantePagamento text,
-	taxaConversao decimal(18,4) not null default 1.0000,
-	idDivida bigint not null,
-	versionEntity datetime not null default '2015-06-01 00:00:00',
-	primary key(id)
-) Engine=InnoDB;
-
-alter table pagamentodividaterceiro add constraint fk_dividaterceiro_pagamentodividaterceiro foreign key(idDivida) references dividaterceiro(id);
-
--- Corrige a versão
-update versao set versao = 'JUN2015', dataLiberacao = '2015-06-28' where versao = 'SET2015';
-
--- Correções na estrutura da tabela de cartões de crédito
-update cartaocredito set bandeira = null where bandeira = 'NENHUMA';
-
-alter table cartaocredito change column `abrangencia` `abrangencia` varchar(15) not null;
-alter table cartaocredito change column `tipoCartao` `tipoCartao` varchar(10) not null;
-
--- Inclusão da coluna numeroCartaoDebito - Github Issue #71
-alter table cartaocredito add column numeroCartaoDebito varchar(40) null;
 
 /*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUN2015 ***/
 
