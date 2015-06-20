@@ -96,14 +96,14 @@
 			
 		</h:panelGrid>
 				
-		<p:dataTable id="tableItens" value="#{managedBean.listaItemDetalheOrcamento}" var="item">
-			<p:column style="text-align: center; vertical-align: middle;" >
+		<h:dataTable id="tableItens" value="#{managedBean.listaItemDetalheOrcamento}" var="item">
+			<h:column style="text-align: center; vertical-align: middle;" >
 				<f:facet name="header">
 					<h:outputText value="Descrição"/>
 				</f:facet>
 				<h:outputText value="#{item.descricao}" />					
-			</p:column>
-			<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.abrangenciaOrcamento == 'CATEGORIA'}">
+			</h:column>
+			<h:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.abrangenciaOrcamento == 'CATEGORIA'}">
 				<f:facet name="header">
 					<h:outputText value="Valor"/>
 				</f:facet>
@@ -111,8 +111,8 @@
 			    <h:outputText value="#{item.previsao}">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			    </h:outputText>					
-			</p:column>
-			<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.abrangenciaOrcamento == 'FAVORECIDO' or managedBean.entity.abrangenciaOrcamento == 'MEIOPAGAMENTO'}">
+			</h:column>
+			<h:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.abrangenciaOrcamento == 'FAVORECIDO' or managedBean.entity.abrangenciaOrcamento == 'MEIOPAGAMENTO'}">
 				<f:facet name="header">
 					<h:outputText value="Crédito"/>
 				</f:facet>
@@ -120,8 +120,8 @@
 			    <h:outputText value="#{item.previsaoCredito}">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			    </h:outputText>					
-			</p:column>
-			<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.abrangenciaOrcamento == 'FAVORECIDO' or managedBean.entity.abrangenciaOrcamento == 'MEIOPAGAMENTO'}">
+			</h:column>
+			<h:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.entity.abrangenciaOrcamento == 'FAVORECIDO' or managedBean.entity.abrangenciaOrcamento == 'MEIOPAGAMENTO'}">
 				<f:facet name="header">
 					<h:outputText value="Débito"/>
 				</f:facet>
@@ -129,8 +129,8 @@
 			    <h:outputText value="#{item.previsaoDebito}">
 			     	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			    </h:outputText>					
-			</p:column>
-		</p:dataTable>
+			</h:column>
+		</h:dataTable>
 	</ui:define>
 	
 </ui:composition>
