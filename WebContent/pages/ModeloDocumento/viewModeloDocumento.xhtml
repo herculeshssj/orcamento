@@ -44,6 +44,7 @@
   
   -->
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -53,25 +54,21 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{modeloDocumentoMB}" />
-	
+
 	<ui:define name="campos">
-	
-		<p:poll interval="60" listener="#{managedBean.autoSave}" update="txtDescricao,txtStatusSalvamento" />
 			
-		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.descricaoModelo}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
+		<h:panelGrid columns="2">
 			
-		<label>Ativo:</label>
-		<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" />	
-		
-		<br/>
+			Descrição:
+			<h:outputText value="#{managedBean.entity.descricao}"/>
 			
-		<label><h:outputText id="txtStatusSalvamento" value="#{managedBean.statusSalvamento}" /></label>		
-		
-		<p:editor id="editor" value="#{managedBean.conteudoModelo}" disabled="#{!managedBean.entity.ativo}"/>
+			Ativo:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}"/>			
+				
+		</h:panelGrid>
 		
 	</ui:define>
 	

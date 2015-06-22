@@ -60,12 +60,12 @@ import br.com.hslife.orcamento.util.Util;
 
 @Component("modeloDocumentoMB")
 @Scope("session")
-public class ModeloDocumentoController extends AbstractSimpleCRUDController<ModeloDocumento>{
+public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocumento>{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1236132161590555846L;
+	private static final long serialVersionUID = -372533275028178301L;
 
 	@Autowired
 	private IModeloDocumento service;
@@ -74,12 +74,12 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 	private boolean somenteAtivos = true;
 	private String descricaoModelo;
 	private String conteudoModelo;
-	
+	private String statusSalvamento;
 
 	public ModeloDocumentoController() {
-		super(new ModeloDocumento());		
+		super(new ModeloDocumento());
+		
 		moduleTitle = "Modelos de Documentos";
-		goToModule = "/pages/menu/documentos.faces";
 	}
 
 	@Override
@@ -88,8 +88,9 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 		listEntity = new ArrayList<ModeloDocumento>();
 		conteudoModelo = "";
 		descricaoModelo = "";
+		statusSalvamento = "";
 	}
-	
+
 	@Override
 	public void find() {
 		try {			
@@ -100,20 +101,25 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 	}
 	
 	@Override
-	public void save() {
+	public String save() {
+		/*
 		if (entity.getId() == null) {
 			entity.setUsuario(getUsuarioLogado());
 		} 
 		entity.setConteudo(conteudoModelo);
 		entity.setDescricao(descricaoModelo);
-		super.save();
+		return super.save();*/
+		this.autoSave();
+		infoMessage("Registro salvo com sucesso.");
+		return list();
 	}
 	
 	@Override
-	public void edit() {
-		super.edit();
+	public String edit() {
+		String retorno = super.edit();
 		conteudoModelo = entity.getConteudo();
 		descricaoModelo = entity.getDescricao();
+		return retorno;
 	}
 	
 	public void autoSave() {
@@ -137,13 +143,13 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 				modelo.setDescricao(descricaoModelo);
 				getService().alterar(modelo);
 			}
-			System.out.println("Modelo de documento salvo automaticamente em " + new Date().toString());
+			statusSalvamento = "Modelo de documento salvo automaticamente em " + new Date().toString();
 		}
 		catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
- 
+	
 	public void clonarModelo() {
 		try {
 			ModeloDocumento modeloClonado = entity.clonar();
@@ -155,29 +161,13 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 			errorMessage(be.getMessage());
 		}
 	}
-	
+
 	public IModeloDocumento getService() {
 		return service;
 	}
 
 	public void setService(IModeloDocumento service) {
 		this.service = service;
-	}
-
-	public String getDescricaoModelo() {
-		return descricaoModelo;
-	}
-
-	public void setDescricaoModelo(String descricaoModelo) {
-		this.descricaoModelo = descricaoModelo;
-	}
-
-	public boolean isSomenteAtivos() {
-		return somenteAtivos;
-	}
-
-	public void setSomenteAtivos(boolean somenteAtivos) {
-		this.somenteAtivos = somenteAtivos;
 	}
 
 	public String getDescricaoModeloPesquisa() {
@@ -188,11 +178,35 @@ public class ModeloDocumentoController extends AbstractSimpleCRUDController<Mode
 		this.descricaoModeloPesquisa = descricaoModeloPesquisa;
 	}
 
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
+	}
+
+	public String getDescricaoModelo() {
+		return descricaoModelo;
+	}
+
+	public void setDescricaoModelo(String descricaoModelo) {
+		this.descricaoModelo = descricaoModelo;
+	}
+
 	public String getConteudoModelo() {
 		return conteudoModelo;
 	}
 
 	public void setConteudoModelo(String conteudoModelo) {
 		this.conteudoModelo = conteudoModelo;
+	}
+
+	public String getStatusSalvamento() {
+		return statusSalvamento;
+	}
+
+	public void setStatusSalvamento(String statusSalvamento) {
+		this.statusSalvamento = statusSalvamento;
 	}
 }
