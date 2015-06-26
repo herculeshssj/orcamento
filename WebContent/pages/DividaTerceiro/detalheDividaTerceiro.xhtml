@@ -102,43 +102,43 @@
 		     		<f:convertNumber type="currency" pattern="###.##"/>
 		     	</h:outputText>
 	     	</h:panelGroup>
-				
-			Justificativa:
-			<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
-				
+			
 		</h:panelGrid>
+				
+		<label>Justificativa:</label>
+		<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
 		
 		<hr />
 		
 		<h:panelGroup rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
-			<p:dataTable value="#{managedBean.entity.pagamentos}" var="item">
-				<p:column>
+			<h:dataTable value="#{managedBean.entity.pagamentos}" var="item">
+				<h:column>
 					<f:facet name="header">
 						<h:outputText value="Descrição" />
 					</f:facet>
 					<h:outputText value="#{item.label}"/>
-				</p:column>
-				<p:column style="text-align: center; vertical-align: middle;">
+				</h:column>
+				<h:column style="text-align: center; vertical-align: middle;">
 					<f:facet name="header">
 						<h:outputText value="Ação" />
 					</f:facet>
 					<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovante}" target="_blank">
 						<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
 					</h:commandLink>
-				</p:column>
-			</p:dataTable>
+				</h:column>
+			</h:dataTable>
 		</h:panelGroup>
 		
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-		<h:commandLink title="Visualizar termo/contrato gerado" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
-			<p:graphicImage value="/resources/images/copiar.png" />
-		</h:commandLink>
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+   			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+   		</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkContract" title="Visualizar termo/contrato gerado" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
+   			<h:graphicImage id="imgContract" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
+   		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
 		<h:commandLink title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO'}">
 			<p:graphicImage value="/resources/images/habilitar.png" />

@@ -70,17 +70,7 @@
 	     	
 	     	Status da dívida:
 	     	<h:outputText value="#{managedBean.entity.statusDivida}" />	
-	     	
-	     	Data da renegociação:
-	     	<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.entity.dataNegociacao}">
-				<f:converter converterId="dateConverter"/>
-			</p:inputMask>
-	     	
-	     	Valor da dívida renegociada:
-	     	<p:inputText value="#{managedBean.entity.valorDivida}" size="10">
-				<f:convertNumber type="currency" pattern="###.##"/>
-			</p:inputText>
-			
+	     
 			Moeda:
 			<h:outputText value="#{managedBean.entity.moeda.label}" />
 			
@@ -99,33 +89,42 @@
 		     		<f:convertNumber type="currency" pattern="###.##"/>
 		     	</h:outputText>
 	     	</h:panelGroup>
+	     	
+	   </h:panelGrid>  
 				
-			Justificativa:
-			<h:outputText value="#{managedBean.entity.justificativa}" />
+		<label>Justificativa:</label>
+		<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
+		
+		<br/><br/>
 			
-			Justificativa para renegociar:
-			<p:inputTextarea value="#{managedBean.novaJustificativa}" cols="70" rows="3" />
+		<label for="frmFormEntity:txtDataNegociacao">Data da renegociação:</label>
+	    <p:inputMask id="txtDataNegociacao" size="10" mask="99/99/9999" value="#{managedBean.entity.dataNegociacao}">
+			<f:converter converterId="dateConverter"/>
+		</p:inputMask>
+	     	
+	    <label for="frmFormEntity:txtValorDivida">Valor da dívida renegociada:</label>
+	    <h:inputText id="txtValorDivida" value="#{managedBean.entity.valorDivida}" size="10">
+			<f:convertNumber type="currency" pattern="###.##"/>
+		</h:inputText>
 			
-			Selecione um modelo:
-			<h:panelGroup>
-				<h:selectOneMenu value="#{managedBean.entity.modeloDocumento}" converter="entityConverter">
-					<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-				</h:selectOneMenu>
-				&nbsp;&nbsp;&nbsp;
-				<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloDocumento}" target="_blank"/>
-			</h:panelGroup>
-				
-		</h:panelGrid>
+		<label for="frmFormEntity:txtJustificativa">Justificativa para renegociar:</label>
+		<h:inputTextarea id="txtJustificativa" value="#{managedBean.novaJustificativa}" />
+			
+		<label>Selecione um modelo:</label>		
+		<h:selectOneMenu value="#{managedBean.entity.modeloDocumento}" converter="entityConverter">
+			<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+		</h:selectOneMenu>
+		<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloDocumento}" target="_blank"/>
 		
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-   		<h:commandLink title="Renegociar dívida" action="#{managedBean.renegociarDivida}">
-   			<p:graphicImage value="/resources/images/substituir.png" />
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+   			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+   		</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Renegociar dívida" action="#{managedBean.renegociarDivida}">
+   			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
    		</h:commandLink>
 	</ui:define>
 	

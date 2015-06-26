@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -146,6 +147,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	
 	public String renegociarDividaView() {
 		actionTitle = " - Renegociar dívida";
+		entity.setDataNegociacao(new Date());
 		return "/pages/DividaTerceiro/renegociarDivida";
 	}
 	
@@ -269,7 +271,10 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			List<DividaTerceiro> dividas = getService().buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, TipoCategoria.CREDITO, StatusDivida.VIGENTE, getUsuarioLogado());
 			double valor = 0.0;
 			for (DividaTerceiro divida : dividas) {
-				valor += divida.getTotalAPagar();
+				if (divida.getMoeda().isPadrao())
+					valor += divida.getTotalAPagar();
+				else
+					valor += divida.getTotalAPagar() * divida.getMoeda().getValorConversao();
 			}
 			return valor;
 		} catch (BusinessException be) {
@@ -283,7 +288,10 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			List<DividaTerceiro> dividas = getService().buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, TipoCategoria.DEBITO, StatusDivida.VIGENTE, getUsuarioLogado());
 			double valor = 0.0;
 			for (DividaTerceiro divida : dividas) {
-				valor += divida.getTotalAPagar();
+				if (divida.getMoeda().isPadrao())
+					valor += divida.getTotalAPagar();
+				else
+					valor += divida.getTotalAPagar() * divida.getMoeda().getValorConversao();
 			}
 			return valor;
 		} catch (BusinessException be) {
