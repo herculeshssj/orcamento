@@ -2301,3 +2301,10 @@ create table lancamentoconta_detalhelancamento (
 
 alter table lancamentoconta_detalhelancamento add constraint fk_lancamentoconta foreign key (lancamentoconta_id) references lancamentoconta(id);
 alter table lancamentoconta_detalhelancamento add constraint fk_detalhelancamento foreign key (detalhes_id) references detalhelancamento(id);
+
+-- Exclusão da tabela de versão - Github Issue #113
+drop table versao; 
+
+/* Exclusão da coluna idLancamentoConta da tabela detalhelancamento */
+ALTER TABLE `orcamento`.`detalhelancamento` DROP FOREIGN KEY `fk_detalhelancamento_lancamentoconta`;
+ALTER TABLE `orcamento`.`detalhelancamento` DROP COLUMN `idLancamentoConta`, DROP INDEX `fk_detalhelancamento_lancamentoconta` ;

@@ -101,9 +101,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	public LancamentoConta findByHash(String hash) {
-		Criteria criteria = getSession().createCriteria(LancamentoConta.class);
-		criteria.add(Restrictions.eq("hashImportacao", hash));
-		return (LancamentoConta)criteria.setMaxResults(1).uniqueResult();
+		return (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.hashImportacao = :hash").setString("hash", hash).setMaxResults(1).uniqueResult();
 	}
 	
 	public void deleteAllLancamentoContaAfterDateByConta(Date dataPagamento, Conta conta) {

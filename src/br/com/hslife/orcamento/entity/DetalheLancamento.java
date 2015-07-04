@@ -54,8 +54,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -85,10 +83,6 @@ public class DetalheLancamento extends EntityPersistence implements Comparator<D
 	
 	@Column(precision=18, scale=2)
 	private double valor;
-	
-	@ManyToOne
-	@JoinColumn(name="idLancamentoConta", nullable=false)
-	private LancamentoConta lancamentoConta;
 
 	@Override
 	public String getLabel() {
@@ -161,13 +155,5 @@ public class DetalheLancamento extends EntityPersistence implements Comparator<D
 
 	public void setValor(double valor) {
 		this.valor = valor;
-	}
-
-	public LancamentoConta getLancamentoConta() {
-		return lancamentoConta;
-	}
-
-	public void setLancamentoConta(LancamentoConta lancamentoConta) {
-		this.lancamentoConta = lancamentoConta;
 	}
 }

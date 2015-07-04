@@ -433,7 +433,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			// Antes de salvar valida cada entrada e atribui o lançamento aos detalhes
 			for (DetalheLancamento detalhe : lancamentoSelecionado.getDetalhes()) {
 				detalhe.validate();
-				detalhe.setLancamentoConta(lancamentoSelecionado);
+				//detalhe.setLancamentoConta(lancamentoSelecionado);
 			}
 			getService().salvarDetalhamentoLancamento(lancamentoSelecionado);
 			infoMessage("Detalhamento salvo com sucesso.");

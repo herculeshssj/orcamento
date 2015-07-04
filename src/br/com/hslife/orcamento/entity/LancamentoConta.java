@@ -52,6 +52,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -69,8 +70,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+
+
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 
@@ -160,9 +161,8 @@ public class LancamentoConta extends EntityPersistence {
 	@Column
 	private int parcela;
 		
-	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=true)
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL , orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=true)
-	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -180,8 +180,7 @@ public class LancamentoConta extends EntityPersistence {
 	@Transient
 	private LancamentoImportado lancamentoImportado;
 	
-	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true)
-	@Cascade(CascadeType.ALL)
+	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamento.class)
 	private SortedSet<DetalheLancamento> detalhes;
 	

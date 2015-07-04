@@ -91,12 +91,9 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	/***** Atualização sob demanda da base de dados *****/
-
-	/* A partir desse ponto, a atualização da base é dinâmica, não sendo mais presa a milestones */
-
-	-- Exclusão da tabela de versão - Github Issue #113
-	drop table versao;
+		/* Exclusão da coluna idLancamentoConta da tabela detalhelancamento */
+	ALTER TABLE `orcamento`.`detalhelancamento` DROP FOREIGN KEY `fk_detalhelancamento_lancamentoconta`;
+	ALTER TABLE `orcamento`.`detalhelancamento` DROP COLUMN `idLancamentoConta`, DROP INDEX `fk_detalhelancamento_lancamentoconta` ;
     
     /*** Fim do bloco de atualizações da base ***/
     
