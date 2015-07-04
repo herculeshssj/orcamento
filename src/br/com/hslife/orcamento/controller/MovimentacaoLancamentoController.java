@@ -445,6 +445,11 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	}
 	
 	public void adicionarDetalheLancamento(){
+		if (detalheLancamento.getDescricao() == null || detalheLancamento.getDescricao().isEmpty() || detalheLancamento.getData() == null) {
+			warnMessage("Informe a descrição e a data do lançamento!");
+			return;
+		}
+		
 		if (detalheLancamento.getValor() > lancamentoSelecionado.getValorPago()) {
 			warnMessage("Valor informado supera o valor do lançamento!");
 			return;
