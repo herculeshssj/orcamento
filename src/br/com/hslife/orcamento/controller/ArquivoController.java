@@ -62,7 +62,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Arquivo;
-import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IArquivo;
@@ -85,6 +84,7 @@ public class ArquivoController extends AbstractController {
 	private Arquivo entity;
 	private List<Arquivo> listEntity;
 	private Long idEntity;
+	private String operation = "delete";
 	
 	private BigDecimal espacoOcupado = new BigDecimal(0);
 
@@ -165,19 +165,13 @@ public class ArquivoController extends AbstractController {
 			infoMessage("Registro excluído com sucesso!");
 		
 			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
+			if (listEntity != null && !listEntity.isEmpty()) {
+				if (getOpcoesSistema().getExibirBuscasRealizadas())
 					find();
-				} else {
+				else
 					initializeEntity();
-				}
-			} else {
+			} else 
 				initializeEntity();
-			}
 			return "/pages/Arquivo/listArquivo"; 
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -261,5 +255,13 @@ public class ArquivoController extends AbstractController {
 
 	public void setCriterio(CriterioArquivo criterio) {
 		this.criterio = criterio;
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(String operation) {
+		this.operation = operation;
 	}
 }

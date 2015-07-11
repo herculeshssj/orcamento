@@ -57,33 +57,37 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{arquivoMB}" />
+	<ui:param name="colunaPesquisa" value="6" />
 	
-	<ui:define name="botoes"></ui:define>
-	
-	<ui:define name="pesquisa">
-		Nome:
-		<p:inputText value="#{managedBean.criterio.nome}"/>
-		&nbsp;
-		De:
-		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.inicio}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>
-		&nbsp;
-		Fim:
-		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.fim}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>
-		&nbsp;		
-		Container:
-		<h:selectOneMenu value="#{managedBean.criterio.container}">
-			<f:selectItem itemLabel="Todos"/>
-			<f:selectItems value="#{managedBean.listaContainer}"/>
-		</h:selectOneMenu>
-		&nbsp;
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label>Nome:</label>
+		    <p:inputText value="#{managedBean.criterio.nome}"/>
+	    </h:panelGroup>	    
+	    <h:panelGroup>
+		    <label>Início:</label>
+		    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterio.inicio}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>
+	    <h:panelGroup>
+		    <label>Fim:</label>
+		    <p:inputMask size="9" mask="99/99/9999" value="#{managedBean.criterio.fim}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>	
+	    <h:panelGroup>
+		    <label>Container:</label>
+		    <h:selectOneMenu value="#{managedBean.criterio.container}">
+				<f:selectItems value="#{managedBean.listaContainer}"/>
+			</h:selectOneMenu>
+	    </h:panelGroup>    	    
 	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
 
 	<ui:define name="colunas">
-		<p:column style="text-align: left; vertical-align: middle;">
+		<h:column style="text-align: left; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Descrição" />
 			</f:facet>
@@ -95,31 +99,31 @@
 			<h:outputText value="#{item.dataCriacao}">
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
-		</p:column>
-		<p:column style="text-align: center; vertical-align: middle; width: 180px;">
+		</h:column>
+		<h:column style="text-align: center; vertical-align: middle; width: 180px;">
 			<f:facet name="header">
-				<h:outputText value="Container" />
+				<h:outputText value="Prazo" />
 			</f:facet>
-			<h:outputText value="#{item.container}" />
-			<br/>
 			<h:graphicImage name="greenlight.png" library="images" rendered="#{!item.prazoExpirado}"/>
 			<h:graphicImage name="redlight.png" library="images"  rendered="#{item.prazoExpirado}"/>
-		</p:column>
+		</h:column>
 	</ui:define>
 
 	<ui:define name="acoes">
-		<p:column style="text-align: center; vertical-align: middle; width: 100px;">
+		<h:column style="text-align: center; vertical-align: middle; width: 100px;">
 			<f:facet name="header">
 				<h:outputText value="Ações" />
 			</f:facet>
-			<h:commandButton title="Baixar" image="/resources/images/baixa.png" action="#{managedBean.baixarArquivo}">
-				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}" />
-			</h:commandButton>
-			<p:spacer width="10"/>			
-			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{item.prazoExpirado}">
-				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}" />
-			</h:commandButton>
-		</p:column>
+			<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+				<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>								
+	  		<p:spacer width="10"/>			
+			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.prazoExpirado}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+			</h:commandLink>
+		</h:column>
 	</ui:define>
 	
 	<ui:define name="outras_opcoes">
