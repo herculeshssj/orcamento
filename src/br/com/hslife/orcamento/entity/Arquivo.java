@@ -108,7 +108,6 @@ public class Arquivo extends EntityPersistence {
 	
 	public Arquivo() {
 		dataCriacao = new Date();
-		container = Container.ARQUIVO;
 	}
 
 	public Long getId() {
@@ -131,7 +130,6 @@ public class Arquivo extends EntityPersistence {
 	// TODO diminuir complexidade
 	public boolean isPrazoExpirado() {
 		switch(this.container) {
-			case ARQUIVO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_GERAL"));
 			case DOCUMENTOS : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS"));
 			case FATURACARTAO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_FATURACARTAO"));
 			case LANCAMENTOCONTA : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA"));

@@ -2308,3 +2308,6 @@ drop table versao;
 /* Exclusão da coluna idLancamentoConta da tabela detalhelancamento */
 ALTER TABLE `orcamento`.`detalhelancamento` DROP FOREIGN KEY `fk_detalhelancamento_lancamentoconta`;
 ALTER TABLE `orcamento`.`detalhelancamento` DROP COLUMN `idLancamentoConta`, DROP INDEX `fk_detalhelancamento_lancamentoconta` ;
+
+-- Exclusão de opção do sistema para prazo de arquivo em geral - Github Issue #120
+delete from opcaosistema where chave = 'ARQUIVO_TEMPO_GUARDA_GERAL';

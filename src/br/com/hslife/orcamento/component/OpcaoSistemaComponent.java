@@ -233,7 +233,6 @@ public class OpcaoSistemaComponent implements Serializable{
 		opcoesUsuario.put("CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.FALSE);
 		opcoesUsuario.put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(12));
 		opcoesUsuario.put("NOTIFICAR_AGENDAMENTO_EMAIL", Boolean.FALSE);
-		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_GERAL", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_FATURACARTAO", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO", Integer.valueOf(1));
