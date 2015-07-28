@@ -59,7 +59,6 @@ import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.repository.CartaoCreditoRepository;
@@ -109,23 +108,12 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	
 	@Override
 	public void cadastrar(CartaoCredito entity) throws BusinessException {
-		// Cria uma nova conta para o cartão de crédito
-		Conta conta = new Conta();
-		conta.setBanco(entity.getBanco());
-		conta.setCartaoCredito(entity);
-		conta.setDataAbertura(new Date());
-		conta.setDescricao(entity.getDescricao());
-		conta.setSaldoInicial(0);
-		conta.setTipoConta(TipoConta.CARTAO);
-		conta.setUsuario(entity.getUsuario());
-		conta.setMoeda(moedaRepository.findDefaultByUsuario(entity.getUsuario()));
-	
 		// Salva o cartão, e logo em seguida a conta
 		super.cadastrar(entity);
-		contaRepository.save(conta);	
+		contaRepository.save(entity.createConta());	
 		
 		if (entity.getTipoCartao().equals(TipoCartao.CREDITO)) {
-			this.criarFaturaCartao(conta);
+			this.criarFaturaCartao(entity.getConta());
 		}
 	}
 	

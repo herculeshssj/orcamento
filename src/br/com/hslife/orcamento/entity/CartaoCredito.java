@@ -66,6 +66,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
@@ -145,6 +146,9 @@ public class CartaoCredito extends EntityPersistence {
 	@Transient
 	private int anoValidade;
 	
+	@Transient
+	private Moeda moeda;
+	
 	public CartaoCredito() {
 		ativo = true;
 	}
@@ -167,6 +171,21 @@ public class CartaoCredito extends EntityPersistence {
 			if (diaVencimentoFatura < 1 || diaVencimentoFatura > 31) throw new BusinessException("Dia de vencimento deve estar entre 1 e 31!");
 			if (diaFechamentoFatura < 1 || diaFechamentoFatura > 31) throw new BusinessException("Dia de fechamento deve estar entre 1 e 31!");
 		}
+	}
+	
+	public Conta createConta() {
+		// Cria uma nova conta para o cartão de crédito
+		Conta conta = new Conta();
+		conta.setBanco(this.getBanco());
+		conta.setCartaoCredito(this);
+		conta.setDataAbertura(new Date());
+		conta.setDescricao(this.getDescricao());
+		conta.setSaldoInicial(0);
+		conta.setTipoConta(TipoConta.CARTAO);
+		conta.setUsuario(this.getUsuario());
+		conta.setMoeda(this.getMoeda());
+		this.setConta(conta);
+		return this.getConta();
 	}
 
 	public Long getId() {
@@ -335,5 +354,13 @@ public class CartaoCredito extends EntityPersistence {
 
 	public void setNumeroCartaoDebito(String numeroCartaoDebito) {
 		this.numeroCartaoDebito = numeroCartaoDebito;
+	}
+
+	public Moeda getMoeda() {
+		return moeda;
+	}
+
+	public void setMoeda(Moeda moeda) {
+		this.moeda = moeda;
 	}
 }

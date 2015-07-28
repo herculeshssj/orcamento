@@ -85,6 +85,11 @@
 			<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
 		</h:selectOneRadio>	
 		
+		<label>Moeda padrão do cartão:</label>
+		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.operation == 'edit'}">
+			<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+		</h:selectOneMenu>
+		
 		<p:outputPanel id="pnlCartaoCredito">
 		
 		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">

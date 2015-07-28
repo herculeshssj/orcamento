@@ -56,10 +56,12 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("cartaoCreditoMB")
@@ -76,6 +78,9 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	
 	@Autowired
 	private IBanco bancoService;
+	
+	@Autowired
+	private IMoeda moedaService;
 	
 	private boolean somenteAtivos = true;
 	private CartaoCredito novoCartao;
@@ -128,6 +133,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		String retorno = super.edit();
 		entity.setMesValidade(entity.getValidade().getMonth() + 1);
 		entity.setAnoValidade(entity.getValidade().getYear() + 1900);
+		entity.setMoeda(entity.getConta().getMoeda());
 		return retorno;
 	}
 	
@@ -227,6 +233,23 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 				if (!resultado.contains(entity.getBanco())) {
 					entity.getBanco().setAtivo(true);
 					resultado.add(entity.getBanco());
+				}
+			}
+			return resultado;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o banco inativo da entidade na combo
+			if (resultado != null && entity.getMoeda() != null) {
+				if (!resultado.contains(entity.getMoeda())) {
+					entity.getMoeda().setAtivo(true);
+					resultado.add(entity.getMoeda());
 				}
 			}
 			return resultado;
