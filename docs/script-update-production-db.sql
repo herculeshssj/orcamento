@@ -91,8 +91,9 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Exclusão de opção do sistema para prazo de arquivo em geral - Github Issue #120
-	delete from opcaosistema where chave = 'ARQUIVO_TEMPO_GUARDA_GERAL';
+	-- Remoção do registro de moeda nas faturas
+	alter table faturacartao drop foreign key fk_moeda_faturacartao;
+	alter table faturacartao drop column idMoeda;
 	
     /*** Fim do bloco de atualizações da base ***/
     

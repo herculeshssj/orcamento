@@ -136,7 +136,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		// Cria uma nova fatura para o cartão
 		FaturaCartao novaFatura = new FaturaCartao();
 		novaFatura.setConta(conta);
-		novaFatura.setMoeda(moedaRepository.findDefaultByUsuario(conta.getUsuario()));
 		novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
 		// Data de vencimento da fatura
 		Calendar vencimento = Calendar.getInstance();

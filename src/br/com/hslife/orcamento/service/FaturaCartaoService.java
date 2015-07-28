@@ -170,7 +170,6 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		double totalFatura = 0.0;
 		for (Moeda moeda : conversoes) {
 			if (moeda.isPadrao()) { 
-				faturaCartao.setMoeda(moeda);
 				moeda.setTotalConvertido(Util.arredondar(moeda.getTotal()));
 			} else {
 				moeda.setTotalConvertido(Util.arredondar(moeda.getTotal() * moeda.getTaxaConversao()));
@@ -245,7 +244,6 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		double totalFatura = 0.0;
 		for (Moeda moeda : conversoes) {
 			if (moeda.isPadrao()) { 
-				faturaCartao.setMoeda(moeda);
 				moeda.setTotalConvertido(Util.arredondar(moeda.getTotal()));
 			} else {
 				moeda.setTotalConvertido(Util.arredondar(moeda.getTotal() * moeda.getTaxaConversao()));
@@ -298,7 +296,6 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 			// Cria a próxima fatura ABERTA
 			FaturaCartao novaFatura = new FaturaCartao();
 			novaFatura.setConta(entity.getConta());
-			novaFatura.setMoeda(moedaRepository.findDefaultByUsuario(entity.getConta().getUsuario()));
 			novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
 			// Data de vencimento da próxima fatura
 			Calendar vencimento = Calendar.getInstance();
@@ -433,7 +430,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		parcelamentoFatura.setDataPrimeiraParcela(temp.getTime());
 		parcelamentoFatura.setDescricao("Parcelamento Fatura " + faturaCartao.getMes() + "/" + faturaCartao.getAno());
 		parcelamentoFatura.setDiaVencimento(faturaCartao.getConta().getCartaoCredito().getDiaFechamentoFatura());
-		parcelamentoFatura.setMoeda(faturaCartao.getMoeda());
+		parcelamentoFatura.setMoeda(faturaCartao.getConta().getMoeda());
 		parcelamentoFatura.setPeriodoLancamento(PeriodoLancamento.MENSAL);
 		parcelamentoFatura.setStatusLancamento(StatusLancamento.ATIVO);
 		parcelamentoFatura.setTipoLancamento(TipoLancamento.DESPESA);

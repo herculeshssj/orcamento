@@ -124,9 +124,7 @@ public class FaturaCartao extends EntityPersistence {
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
 	
-	@ManyToOne
-	@JoinColumn(name="idMoeda", nullable=false)
-	private Moeda moeda;
+	
 	
 	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=false)
 	@JoinColumn(name="idLancamento", nullable=true)
@@ -253,14 +251,6 @@ public class FaturaCartao extends EntityPersistence {
 
 	public void setStatusFaturaCartao(StatusFaturaCartao statusFaturaCartao) {
 		this.statusFaturaCartao = statusFaturaCartao;
-	}
-
-	public Moeda getMoeda() {
-		return moeda;
-	}
-
-	public void setMoeda(Moeda moeda) {
-		this.moeda = moeda;
 	}
 
 	public LancamentoConta getLancamentoPagamento() {

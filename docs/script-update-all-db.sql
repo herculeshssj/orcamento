@@ -2311,3 +2311,7 @@ ALTER TABLE `orcamento`.`detalhelancamento` DROP COLUMN `idLancamentoConta`, DRO
 
 -- Exclusão de opção do sistema para prazo de arquivo em geral - Github Issue #120
 delete from opcaosistema where chave = 'ARQUIVO_TEMPO_GUARDA_GERAL';
+
+-- Remoção do registro de moeda nas faturas
+alter table faturacartao drop foreign key fk_moeda_faturacartao;
+alter table faturacartao drop column idMoeda;

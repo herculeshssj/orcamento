@@ -244,7 +244,7 @@
 					<f:facet name="header">
 				    	<h:outputText value="Valor"/>
 				    </f:facet>
-				    <h:outputText value="#{item.moeda.simboloMonetario} " />
+				    <h:outputText value="#{item.conta.moeda.simboloMonetario} " />
 				    <h:outputText value="#{item.valorFatura + item.saldoDevedor}">
 				    	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				    </h:outputText>
@@ -261,7 +261,7 @@
 					<f:facet name="header">
 				    	<h:outputText value="Valor Pago"/>
 				    </f:facet>
-				    <h:outputText value="#{item.moeda.simboloMonetario} " />
+				    <h:outputText value="#{item.conta.moeda.simboloMonetario} " />
 				    <h:outputText value="#{item.valorPago}">
 				    	<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				    </h:outputText>

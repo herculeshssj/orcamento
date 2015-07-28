@@ -672,23 +672,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return new ArrayList<>();
 	}
 	
-	public List<Moeda> getListaMoeda() {
-		try {
-			List<Moeda> resultado = moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
-			// Lógica para incluir a moeda inativa na combo
-			if (resultado != null && entity.getMoeda() != null) {
-				if (!resultado.contains(entity.getMoeda())) {
-					entity.getMoeda().setAtivo(true);
-					resultado.add(entity.getMoeda());
-				}
-			}
-			return resultado;
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
-	}
-	
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
