@@ -72,7 +72,7 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 	public List<FaturaCartao> findAllByCartaoCredito(Conta conta) {
 		Criteria criteria = getSession().createCriteria(FaturaCartao.class);
 		criteria.add(Restrictions.eq("conta.id", conta.getId()));
-		return criteria.addOrder(Order.asc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		return criteria.addOrder(Order.desc("dataVencimento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
 	
 	@SuppressWarnings("unchecked")

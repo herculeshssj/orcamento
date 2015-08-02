@@ -75,6 +75,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
@@ -84,6 +85,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -91,11 +93,13 @@ import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.util.DetalheFaturaComparator;
 import br.com.hslife.orcamento.util.LancamentoContaComparator;
 import br.com.hslife.orcamento.util.Util;
 
@@ -127,6 +131,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private IMoeda moedaService;
 	
 	@Autowired
+	private IFaturaCartao faturaCartaoService;
+	
+	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
 	
 	@Autowired
@@ -137,13 +144,14 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private TipoCategoria tipoCategoriaSelecionada;	
 	private boolean selecionarTodosLancamentos;
 	private FechamentoPeriodo fechamentoPeriodo;
+	private FaturaCartao faturaCartao;
 	private Date dataFechamento;
 	
 	private Set<LancamentoPeriodico> lancamentosPeriodicos = new HashSet<>();
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
-		moduleTitle = "Lançamentos da Conta";
+		moduleTitle = "Lançamentos da Conta / Cartão";
 	}
 
 	@Override
@@ -214,6 +222,38 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 			
 			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void findByFatura() {
+		try {
+			if (criterioBusca.getConta() == null) {
+				warnMessage("Informe a conta!");
+				return;
+			}
+			
+			criterioBusca.limparCriterios();
+			criterioBusca.setDataInicio(null);
+			criterioBusca.setDataFim(null);
+			
+			if (faturaCartao != null) {
+				// Mostra os lançamentos que atualmente estão vinculados na fatura selecionada
+				listEntity = new ArrayList<>();
+				FaturaCartao fatura = faturaCartaoService.buscarPorID(faturaCartao.getId());
+				listEntity.addAll(fatura.getDetalheFatura());
+				listEntity.sort(new DetalheFaturaComparator());
+			} else {
+				// Mostra todos os lançamentos que não estão vinculados a uma fatura
+				criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO});
+				
+				// Seta o limite de resultado da pesquisa
+				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+				
+				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+			}
 			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -533,9 +573,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		List<Conta> contas = new ArrayList<>();
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null);
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), null);
 			} else {
-				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
 			}
 			if (contas != null && !contas.isEmpty() && criterioBusca.getConta() == null) {
 				criterioBusca.setConta(contas.get(0));
@@ -549,7 +589,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public List<Conta> getListaContaAtivo() {
 		try {
-			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -625,6 +665,25 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			errorMessage(be.getMessage());
 		}
 		return fechamentos;
+	}
+	
+	public List<FaturaCartao> getListaFaturaCartao() {
+		List<FaturaCartao> faturas = new ArrayList<>();
+		
+		try {
+			if (criterioBusca.getConta() != null) {
+				for (FaturaCartao fatura : faturaCartaoService.buscarTodosPorCartaoCredito(criterioBusca.getConta())) {
+					faturas.add(fatura);
+					if (faturas.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
+						break;
+					}
+				}
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
+		return faturas;
 	}
 	
 	public void atualizaListaFechamentoPeriodo() {
@@ -863,5 +922,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public void setLancamentosPeriodicos(
 			Set<LancamentoPeriodico> lancamentosPeriodicos) {
 		this.lancamentosPeriodicos = lancamentosPeriodicos;
+	}
+
+	public FaturaCartao getFaturaCartao() {
+		return faturaCartao;
+	}
+
+	public void setFaturaCartao(FaturaCartao faturaCartao) {
+		this.faturaCartao = faturaCartao;
 	}
 }

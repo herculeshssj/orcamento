@@ -203,6 +203,8 @@ public class CriterioBuscaLancamentoConta {
 			StatusLancamentoConta[] statusLancamentoConta) {
 		this.statusLancamentoConta = statusLancamentoConta;
 		
+		hibernateCriterions.remove("statusLancamentoConta");
+		
 		if (statusLancamentoConta != null && statusLancamentoConta.length > 0 && this.containsValidObjects(statusLancamentoConta)) {
 			hibernateCriterions.put("statusLancamentoConta", Restrictions.in("lancamento.statusLancamentoConta", statusLancamentoConta));
 		}
