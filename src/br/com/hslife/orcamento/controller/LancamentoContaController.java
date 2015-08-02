@@ -245,6 +245,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				FaturaCartao fatura = faturaCartaoService.buscarPorID(faturaCartao.getId());
 				listEntity.addAll(fatura.getDetalheFatura());
 				listEntity.sort(new DetalheFaturaComparator());
+				
+				if (listEntity.size() > 0) {
+					criterioBusca.setDataInicio(listEntity.get(0).getDataPagamento());
+					criterioBusca.setDataFim(listEntity.get(listEntity.size()-1).getDataPagamento());
+				}
+				
 			} else {
 				// Mostra todos os lançamentos que não estão vinculados a uma fatura
 				criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO});
@@ -253,6 +259,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 				
 				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+				
+				if (listEntity != null && listEntity.size() > 0) {
+					criterioBusca.setDataInicio(listEntity.get(0).getDataPagamento());
+					criterioBusca.setDataFim(listEntity.get(listEntity.size()-1).getDataPagamento());
+				}
 			}
 			
 		} catch (BusinessException be) {
