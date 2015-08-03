@@ -65,6 +65,7 @@ import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
+import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
@@ -448,6 +449,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		List<PanoramaLancamentoConta> resultado = new LinkedList<>(mapPanoramaLancamentos.values());
 
 		return resultado;
+	}
+	
+	@Override
+	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FaturaCartao faturaCartao) throws BusinessException {
+		return null;
 	}
 	
 	@Override
