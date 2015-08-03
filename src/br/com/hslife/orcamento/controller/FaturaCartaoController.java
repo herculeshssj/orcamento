@@ -112,9 +112,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	@Autowired
 	private IConta contaService;
 	
-	@Autowired
-	private ImportacaoLancamentoController importacaoLancamentoMB;
-	
 	private Moeda moedaPadrao;
 	private boolean faturaFechada;
 	private double totalFatura;
@@ -182,7 +179,8 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				mapFaturasEncontradas.clear();
 				
 				for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
-					if (contFaturas <= 5) {
+					// TODO criar uma opção de sistema que controla a quantidade de faturas a exibir
+					if (contFaturas <= 5) { 
 						listEntity.add(fatura);
 						
 						// Adiciona os detalhes da fatura no Map						
@@ -285,12 +283,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		entity.setAno(entity.getDataVencimento().getYear() + 1900);
 		
 		return super.save();
-	}
-	
-	public String importarLancamentos() {
-		importacaoLancamentoMB.setContaSelecionada(cartaoSelecionado.getConta());
-		importacaoLancamentoMB.setGoToListPage(goToListPage);
-		return importacaoLancamentoMB.create();
 	}
 	
 	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws BusinessException {
