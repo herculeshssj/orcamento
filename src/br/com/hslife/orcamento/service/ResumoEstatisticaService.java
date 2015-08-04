@@ -65,7 +65,6 @@ import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
-import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
@@ -85,7 +84,6 @@ import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
-import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
@@ -108,9 +106,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@Autowired
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
-	
-	@Autowired
-	private FaturaCartaoRepository faturaCartaoRepository;
 
 	/*** Declaração dos componentes ***/
 	
@@ -449,11 +444,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		List<PanoramaLancamentoConta> resultado = new LinkedList<>(mapPanoramaLancamentos.values());
 
 		return resultado;
-	}
-	
-	@Override
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FaturaCartao faturaCartao) throws BusinessException {
-		return null;
 	}
 	
 	@Override

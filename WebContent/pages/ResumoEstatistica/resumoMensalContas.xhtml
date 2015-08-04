@@ -67,23 +67,15 @@
 					<p:ajax update="pnlPeriodoFatura" />
 				</h:selectOneMenu>
 			</h:panelGroup>
-			<p:outputPanel id="pnlPeriodoFatura">
-				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta != 'CARTAO'}">
-					<label>Período:</label>
-					<h:selectOneMenu id="txtPeriodo" value="#{managedBean.fechamentoSelecionado}" converter="entityConverter">
-						<f:selectItem itemLabel="Período atual" />
-						<f:selectItems value="#{managedBean.listaFechamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					</h:selectOneMenu>
-				</h:panelGroup>
+			
+			<h:panelGroup>
+				<label>Período:</label>
+				<h:selectOneMenu id="txtPeriodo" value="#{managedBean.fechamentoSelecionado}" converter="entityConverter">
+					<f:selectItem itemLabel="Período atual" />
+					<f:selectItems value="#{managedBean.listaFechamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+			</h:panelGroup>
 				
-				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO'}">
-					<label>Fatura:</label>
-					<h:selectOneMenu id="txtFatura" value="#{managedBean.faturaSelecionada}" converter="entityConverter">
-						<f:selectItem itemLabel="Próximas faturas / Lançamento registrados" />
-						<f:selectItems value="#{managedBean.listaFaturaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					</h:selectOneMenu>
-				</h:panelGroup>
-			</p:outputPanel>
 			<h:panelGroup>
 				<h:commandLink title="Pesquisar" action="#{managedBean.find}">
 		     		<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>

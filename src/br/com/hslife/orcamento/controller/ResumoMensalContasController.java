@@ -60,7 +60,6 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.DetalheOrcamento;
-import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -68,7 +67,6 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
-import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
@@ -97,12 +95,8 @@ public class ResumoMensalContasController extends AbstractController {
 	@Autowired
 	private OrcamentoController orcamentoMB;
 	
-	@Autowired
-	private IFaturaCartao faturaCartaoService;
-	
 	private Conta contaSelecionada;
 	private FechamentoPeriodo fechamentoSelecionado;
-	private FaturaCartao faturaSelecionada;
 	private ResumoMensalContas resumoMensal;
 	
 	private PieChartModel pieCategoriaCredito;
@@ -136,10 +130,7 @@ public class ResumoMensalContasController extends AbstractController {
 	
 	public String find() {
 		try {
-			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO))
-				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaSelecionada);
-			else
-				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
+			resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
 			this.gerarGraficoCreditoDebito();
 			this.gerarGraficoComparativo();
 		} catch (BusinessException be) {
@@ -287,25 +278,6 @@ public class ResumoMensalContasController extends AbstractController {
 		return fechamentos;
 	}
 	
-	public List<FaturaCartao> getListaFaturaCartao() {
-		List<FaturaCartao> faturas = new ArrayList<>();
-		
-		try {
-			if (contaSelecionada != null) {
-				for (FaturaCartao fatura : faturaCartaoService.buscarTodosPorCartaoCredito(contaSelecionada)) {
-					faturas.add(fatura);
-					if (faturas.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
-						break;
-					}
-				}
-			}
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		
-		return faturas;
-	}
-	
 	public void atualizaListaFechamentoPeriodo() {
 		this.getListaFechamentoPeriodo();
 	}
@@ -406,13 +378,5 @@ public class ResumoMensalContasController extends AbstractController {
 
 	public void setBarComparativo(BarChartModel barComparativo) {
 		this.barComparativo = barComparativo;
-	}
-
-	public FaturaCartao getFaturaSelecionada() {
-		return faturaSelecionada;
-	}
-
-	public void setFaturaSelecionada(FaturaCartao faturaSelecionada) {
-		this.faturaSelecionada = faturaSelecionada;
 	}
 }
