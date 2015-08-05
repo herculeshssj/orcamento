@@ -80,11 +80,11 @@
 		
 		<h:panelGroup rendered="#{managedBean.statusFatura == null}">
 		
-		<p:tabView  value="#{managedBean.listEntity}" var="fatura" rendered="#{not empty managedBean.listEntity}">						
-			<p:tab title="#{fatura.label}">								
-				<h:dataTable var="item" value="#{managedBean.mapFaturasEncontradas[fatura.label]}">
+		<p:tabView id="tabFaturas" value="#{managedBean.listEntity}" var="fatura" rendered="#{not empty managedBean.listEntity}">						
+			<p:tab id="#{fatura}tab" title="#{fatura.label}">								
+				<h:dataTable id="#{fatura}table" var="item" value="#{managedBean.mapFaturasEncontradas[fatura.label]}">
 					<f:facet name="header">
-						<h:commandLink title="Visualizar detalhes" action="#{managedBean.detalheFatura}">
+						<h:commandLink id="#{fatura}btnSearch" title="Visualizar detalhes" action="#{managedBean.detalheFatura}">
 							<h:graphicImage id="imgSearch" height="40" width="40" value="/resources/images/svg/search.svg"/>
 							<f:setPropertyActionListener value="#{fatura.id}" target="#{managedBean.idEntity}" />
 						</h:commandLink>										
