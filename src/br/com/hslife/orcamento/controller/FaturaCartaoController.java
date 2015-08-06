@@ -61,6 +61,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -217,6 +218,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 						contFaturas++;
 					} 
 				}
+				
+				// Seta o idEntity com o ID da fatura do final do list
+				if (listEntity != null && listEntity.size() > 0)
+					idEntity = listEntity.get(0).getId();
 			
 			} else {
 				
@@ -608,6 +613,15 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	public void atualizaFaturaID(TabChangeEvent event) {
+		for (FaturaCartao fatura : listEntity) {
+			if (fatura.getLabel().equals(event.getTab().getTitle())) {
+				idEntity = fatura.getId();
+				break;
+			}
+		}
 	}
 	
 	public String detalheFatura() {		
