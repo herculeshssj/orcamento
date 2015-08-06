@@ -55,6 +55,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
@@ -158,6 +159,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 
 	
 	@Override
+	@PostConstruct
 	public String startUp() {
 		// Pega a moeda padrão do usuário
 		try {

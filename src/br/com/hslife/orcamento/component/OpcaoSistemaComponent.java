@@ -54,10 +54,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.OpcaoSistemaRepository;
 
 @Component
@@ -73,6 +75,9 @@ public class OpcaoSistemaComponent implements Serializable{
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
+	
+	@Autowired
+	private MoedaRepository moedaRepository;
 	
 	// Guarda em cache os valores das opções do sistema
 	private Map<Usuario, Map<String, Object>> cacheUsuarioOpcoesSistema = new HashMap<>();
@@ -243,6 +248,7 @@ public class OpcaoSistemaComponent implements Serializable{
 	/* Atualização do cache de opções do sistema */
 	public void atualizarCacheOpcoesSistema() {		
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioLogado);
 		// Verifica se existe entrada no cache para o usuário atual
 		if (cacheUsuarioOpcoesSistema.get(usuarioLogado) == null) {
 			// Cria um novo Map de parâmetros para o usuário
@@ -257,6 +263,7 @@ public class OpcaoSistemaComponent implements Serializable{
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTA_EXIBIR_INATIVAS", this.getExibirContasInativas());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", this.getLimiteQuantidadeFechamentos());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", this.getFormaAgrupamentoPagamento());
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("MOEDA_PADRAO", moedaPadrao);
 	}
 	
 	/**
@@ -435,6 +442,23 @@ public class OpcaoSistemaComponent implements Serializable{
 			e.printStackTrace();
 		}
 		return opcoes; 
+	}
+	
+	public Moeda getMoedaPadrao() {
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		try {
+			// Verifica se o valor existe no cache
+			if (recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO") != null) {
+				return (Moeda)recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO");
+			} else {
+				Moeda moeda = moedaRepository.findDefaultByUsuario(usuarioLogado);
+				setarParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO", moeda);
+				return (Moeda)recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null; // Este return nunca deve ser invocado.
 	}
 	
 	/*** Métodos Setters das opções do sistema existentes ***/
