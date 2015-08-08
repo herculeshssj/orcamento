@@ -62,57 +62,61 @@
 		<h:panelGrid columns="4">
 		
 			Descrição:
-			<p:inputText value="#{managedBean.endereco.descricao}"/>
+			<h:inputText value="#{managedBean.endereco.descricao}"/>
 			
 			Tipo de logradouro:
-			<p:inputText value="#{managedBean.endereco.tipoLogradouro}"/>
+			<h:inputText value="#{managedBean.endereco.tipoLogradouro}"/>
 			
 			Logradouro:
-			<p:inputText value="#{managedBean.endereco.logradouro}"/>
+			<h:inputText value="#{managedBean.endereco.logradouro}"/>
 			
 			Número:
-			<p:inputText value="#{managedBean.endereco.numero}" size="5"/>
+			<h:inputText value="#{managedBean.endereco.numero}" size="5"/>
 			
 			Complemento:
-			<p:inputText value="#{managedBean.endereco.complemento}"/>
+			<h:inputText value="#{managedBean.endereco.complemento}"/>
 			
 			Bairro:
-			<p:inputText value="#{managedBean.endereco.bairro}"/>
+			<h:inputText value="#{managedBean.endereco.bairro}"/>
 			
 			Cidade:
-			<p:inputText value="#{managedBean.endereco.cidade}"/>
+			<h:inputText value="#{managedBean.endereco.cidade}"/>
 			
 			Estado:
-			<p:inputText value="#{managedBean.endereco.estado}" size="2" maxlength="2"/>
+			<h:inputText value="#{managedBean.endereco.estado}" size="2" maxlength="2"/>
 			
 			CEP:
-			<p:inputText value="#{managedBean.endereco.cep}" size="8" maxlength="8"/>
+			<h:inputText value="#{managedBean.endereco.cep}" size="8" maxlength="8"/>
 			
 			<h:outputText />
-			<h:commandButton title="Salvar Endereço" image="/resources/images/gravar.png" action="#{managedBean.salvarEndereco}"/>
+			<h:commandLink id="lnkOkEndereco" title="Salvar endereço" action="#{managedBean.salvarEndereco}">
+   				<h:graphicImage id="imgOkEndereco" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+   			</h:commandLink> 
 				
 		</h:panelGrid>
 		
-		<p:dataTable value="#{managedBean.listaEndereco}" var="item">
-			<p:column>
+		<h:dataTable value="#{managedBean.listaEndereco}" var="item">
+			<h:column>
 				<f:facet name="header">
 					<h:outputText value="Endereço"/>
 				</f:facet>
-				<h:outputText value="#{item.label}"/>
-			</p:column>
-			<p:column>
+				<h:outputText value="#{item.label}" escape="false"/>
+			</h:column>
+			<h:column>
 				<f:facet name="header">
 					<h:outputText value="Ações"/>
 				</f:facet>
-				<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.editarEndereco}">
+				<h:commandLink title="Editar" action="#{managedBean.editarEndereco}">
+					<h:graphicImage id="imgEditEndereco" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.endereco}"/>
-				</h:commandButton>													
-	  			<p:spacer width="10"/>
-				<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirEndereco}">
+				</h:commandLink>								
+ 					&nbsp;&nbsp;&nbsp;
+				<h:commandLink title="Excluir" action="#{managedBean.excluirEndereco}">
+					<h:graphicImage id="imgRemoveEndereco" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.endereco}"/>
-				</h:commandButton>					
-			</p:column>
-		</p:dataTable>	
+				</h:commandLink>					
+			</h:column>
+		</h:dataTable>	
 	</p:tab>
 
 </ui:composition>

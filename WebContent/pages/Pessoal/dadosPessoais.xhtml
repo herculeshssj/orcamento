@@ -68,10 +68,10 @@
 			</h:selectOneMenu>
 			
 			Etnia:
-			<p:inputText value="#{managedBean.pessoal.etnia}"/>
+			<h:inputText value="#{managedBean.pessoal.etnia}"/>
 			
 			Tipo sanguíneo:
-			<p:inputText value="#{managedBean.pessoal.tipoSanguineo}"/>
+			<h:inputText value="#{managedBean.pessoal.tipoSanguineo}"/>
 			
 			Data de nascimento:
 			<p:inputMask value="#{managedBean.pessoal.dataNascimento}" size="10" mask="99/99/9999">
@@ -79,28 +79,28 @@
 	    	</p:inputMask>
 	    	
 	    	Nacionalidade:
-	    	<p:inputText value="#{managedBean.pessoal.nacionalidade}" size="35"/>
+	    	<h:inputText value="#{managedBean.pessoal.nacionalidade}" size="35"/>
 	    	
 	    	Naturalidade:
-	    	<p:inputText value="#{managedBean.pessoal.naturalidade}" size="35"/>
+	    	<h:inputText value="#{managedBean.pessoal.naturalidade}" size="35"/>
 	    	
 	    	Filiação (pai):
-	    	<p:inputText value="#{managedBean.pessoal.filiacaoPai}" size="70"/>
+	    	<h:inputText value="#{managedBean.pessoal.filiacaoPai}" size="70"/>
 	    	
 	    	Filiação (mãe):
-	    	<p:inputText value="#{managedBean.pessoal.filiacaoMae}" size="70"/>
+	    	<h:inputText value="#{managedBean.pessoal.filiacaoMae}" size="70"/>
 	    	
 	    	Escolaridade:
-	    	<p:inputText value="#{managedBean.pessoal.escolaridade}" />
+	    	<h:inputText value="#{managedBean.pessoal.escolaridade}" />
 	    	
 	    	Estado civil:
-	    	<p:inputText value="#{managedBean.pessoal.estadoCivil}" />
+	    	<h:inputText value="#{managedBean.pessoal.estadoCivil}" />
 		
 		</h:panelGrid>
 		
-		<h:commandLink title="Salvar informações" action="#{managedBean.salvarInformacaoPessoal}">
-			<p:graphicImage value="/resources/images/gravar.png" />
-		</h:commandLink>
+		<h:commandLink id="lnkOkPessoal" title="Salvar informações" action="#{managedBean.salvarInformacaoPessoal}">
+			<h:graphicImage id="imgOkPessoal" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		</h:commandLink> 
 		
 	</p:tab>
 

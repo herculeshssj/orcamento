@@ -62,45 +62,49 @@
 		<h:panelGrid columns="4">
 		
 			Descrição:
-			<p:inputText value="#{managedBean.telefone.descricao}"/>
+			<h:inputText value="#{managedBean.telefone.descricao}"/>
 						
 			DDD:
-			<p:inputText value="#{managedBean.telefone.ddd}"/>
+			<h:inputText value="#{managedBean.telefone.ddd}"/>
 			
 			Número:
-			<p:inputText value="#{managedBean.telefone.numero}"/>
+			<h:inputText value="#{managedBean.telefone.numero}"/>
 			
 			Ramal:
-			<p:inputText value="#{managedBean.telefone.ramal}"/>
+			<h:inputText value="#{managedBean.telefone.ramal}"/>
 			
 			<h:outputText />
-			<h:commandButton title="Salvar telefone" image="/resources/images/gravar.png" action="#{managedBean.salvarTelefone}"/>
+			<h:commandLink id="lnkOkTelefone" title="Salvar telefone" action="#{managedBean.salvarTelefone}">
+   				<h:graphicImage id="imgOkTelefone" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+   			</h:commandLink>
 			
 			<h:outputText />
 			<h:outputText />
 									
 		</h:panelGrid>
 	
-		<p:dataTable value="#{managedBean.listaTelefone}" var="item">
-			<p:column>
+		<h:dataTable value="#{managedBean.listaTelefone}" var="item">
+			<h:column>
 				<f:facet name="header">
 					<h:outputText value="Telefone"/>
 				</f:facet>
 				<h:outputText value="#{item.label}"/>
-			</p:column>
-			<p:column>
+			</h:column>
+			<h:column>
 				<f:facet name="header">
 					<h:outputText value="Ações"/>
 				</f:facet>
-				<h:commandButton title="Editar" image="/resources/images/alterar.png" action="#{managedBean.editarTelefone}">
+				<h:commandLink title="Editar" action="#{managedBean.editarTelefone}">
+					<h:graphicImage id="imgEditTelefone" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.telefone}"/>
-				</h:commandButton>													
-	  			<p:spacer width="10"/>
-				<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.excluirTelefone}">
+				</h:commandLink>								
+ 					&nbsp;&nbsp;&nbsp;
+				<h:commandLink title="Excluir" action="#{managedBean.excluirTelefone}">
+					<h:graphicImage id="imgRemoveTelefone" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.telefone}"/>
-				</h:commandButton>					
-			</p:column>
-		</p:dataTable>	
+				</h:commandLink>					
+			</h:column>
+		</h:dataTable>	
 	</p:tab>
 	
 </ui:composition>
