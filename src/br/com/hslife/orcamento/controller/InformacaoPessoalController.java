@@ -49,6 +49,8 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -83,6 +85,7 @@ public class InformacaoPessoalController extends AbstractController {
 	}
 	
 	@Override
+	@PostConstruct
 	public String startUp() {
 		try {
 			// Busca os dados pessoais do usuário

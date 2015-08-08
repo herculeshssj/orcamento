@@ -65,7 +65,7 @@
 			</f:facet>
 			
 			CPF:
-			<p:inputText value="#{managedBean.cpf.numero}" size="11" maxlength="11"/>
+			<h:inputText value="#{managedBean.cpf.numero}" size="11" maxlength="11"/>
 			
 		</h:panelGrid>
 		
@@ -75,10 +75,10 @@
 			</f:facet>
 			
 			Número:
-			<p:inputText value="#{managedBean.rg.numero}" size="20" maxlength="20"></p:inputText>
+			<h:inputText value="#{managedBean.rg.numero}" size="20" maxlength="20"/>
 			
 			Órgão Expedidor:
-			<p:inputText value="#{managedBean.rg.orgaoExpedidor}" maxlength="50"></p:inputText>
+			<h:inputText value="#{managedBean.rg.orgaoExpedidor}" maxlength="50"/>
 			
 			Data de expedição:
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.rg.dataExpedicao}">
@@ -86,7 +86,7 @@
 	    	</p:inputMask>
 			
 			UF de expedição:
-			<p:inputText value="#{managedBean.rg.uf}" size="2" maxlength="2"></p:inputText>
+			<h:inputText value="#{managedBean.rg.uf}" size="2" maxlength="2"/>
 			
 		</h:panelGrid>
 		
@@ -96,7 +96,7 @@
 			</f:facet>
 			
 			PIS/PASEP:
-			<p:inputText value="#{managedBean.pisPasep.numero}" size="20" maxlength="20"/>
+			<h:inputText value="#{managedBean.pisPasep.numero}" size="20" maxlength="20"/>
 			
 		</h:panelGrid>
 		
@@ -106,13 +106,13 @@
 			</f:facet>
 			
 			Número:
-			<p:inputText value="#{managedBean.carteiraTrabalho.numero}" size="20" maxlength="20"></p:inputText>
+			<h:inputText value="#{managedBean.carteiraTrabalho.numero}" size="20" maxlength="20"/>
 			
 			Série:
-			<p:inputText value="#{managedBean.carteiraTrabalho.serie}" size="5" maxlength="5"></p:inputText>
+			<h:inputText value="#{managedBean.carteiraTrabalho.serie}" size="5" maxlength="5"/>
 			
 			Órgão Expedidor:
-			<p:inputText value="#{managedBean.carteiraTrabalho.orgaoExpedidor}" maxlength="50"></p:inputText>
+			<h:inputText value="#{managedBean.carteiraTrabalho.orgaoExpedidor}" maxlength="50"/>
 			
 			Data de expedição:
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.carteiraTrabalho.dataExpedicao}">
@@ -120,7 +120,7 @@
 	    	</p:inputMask>
 			
 			UF de expedição:
-			<p:inputText value="#{managedBean.carteiraTrabalho.uf}" size="2" maxlength="2"></p:inputText>
+			<h:inputText value="#{managedBean.carteiraTrabalho.uf}" size="2" maxlength="2"/>
 			
 			<h:outputText />
 			<h:outputText />
@@ -133,13 +133,13 @@
 			</f:facet>
 			
 			Número:
-			<p:inputText value="#{managedBean.tituloEleitor.numero}" size="20" maxlength="20"></p:inputText>
+			<h:inputText value="#{managedBean.tituloEleitor.numero}" size="20" maxlength="20"/>
 			
 			Município de expedição:
-			<p:inputText value="#{managedBean.tituloEleitor.municipio}" size="25" maxlength="100"></p:inputText>
+			<h:inputText value="#{managedBean.tituloEleitor.municipio}" size="25" maxlength="100"/>
 			
 			UF de expedição:
-			<p:inputText value="#{managedBean.tituloEleitor.uf}" size="2" maxlength="2"></p:inputText>
+			<h:inputText value="#{managedBean.tituloEleitor.uf}" size="2" maxlength="2"/>
 			
 			Data de expedição:
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.tituloEleitor.dataExpedicao}">
@@ -147,29 +147,29 @@
 	    	</p:inputMask>
 			
 			Zona:
-			<p:inputText value="#{managedBean.tituloEleitor.zona}" size="3" maxlength="3"></p:inputText>
+			<h:inputText value="#{managedBean.tituloEleitor.zona}" size="3" maxlength="3"/>
 			
 			Seção:
-			<p:inputText value="#{managedBean.tituloEleitor.secao}" size="4" maxlength="4"></p:inputText>
+			<h:inputText value="#{managedBean.tituloEleitor.secao}" size="4" maxlength="4"/>
 						
 		</h:panelGrid>
 		
 		<h:panelGrid columns="4">
 			<f:facet name="header">
-				<h:outputText value="Certidão de Nascimento"/>
+				<h:outputText value="Certidão de Nascimento / Casamento"/>
 			</f:facet>
 			
 			Número:
-			<p:inputText value="#{managedBean.certidaoNascimento.numero}" size="20" maxlength="20"></p:inputText>
+			<h:inputText value="#{managedBean.certidaoNascimento.numero}" size="20" maxlength="20"/>
 			
 			Cartório:
-			<p:inputText value="#{managedBean.certidaoNascimento.orgaoExpedidor}" maxlength="50"></p:inputText>
+			<h:inputText value="#{managedBean.certidaoNascimento.orgaoExpedidor}" maxlength="50"/>
 			
 			Livro:
-			<p:inputText value="#{managedBean.certidaoNascimento.livro}" size="5" maxlength="5"></p:inputText>
+			<h:inputText value="#{managedBean.certidaoNascimento.livro}" size="5" maxlength="5"/>
 			
 			Folha:
-			<p:inputText value="#{managedBean.certidaoNascimento.folha}" size="5" maxlength="5"></p:inputText>
+			<h:inputText value="#{managedBean.certidaoNascimento.folha}" size="5" maxlength="5"/>
 			
 			Data de expedição:
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.certidaoNascimento.dataExpedicao}">
@@ -187,10 +187,10 @@
 			</f:facet>
 			
 			Número:
-			<p:inputText value="#{managedBean.cnh.numero}" size="20" maxlength="20"></p:inputText>
+			<h:inputText value="#{managedBean.cnh.numero}" size="20" maxlength="20"/>
 			
 			Categoria:
-			<p:inputText value="#{managedBean.cnh.categoria}" size="5" maxlength="5"></p:inputText>
+			<h:inputText value="#{managedBean.cnh.categoria}" size="5" maxlength="5"/>
 			
 			Data de expedição:
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.cnh.dataExpedicao}">
@@ -208,10 +208,10 @@
 	    	</p:inputMask>
 	    	
 	    	Município de expedição:
-			<p:inputText value="#{managedBean.cnh.municipio}" maxlength="100"></p:inputText>
+			<h:inputText value="#{managedBean.cnh.municipio}" maxlength="100"/>
 			
 			UF de expedição:
-			<p:inputText value="#{managedBean.cnh.uf}" size="2" maxlength="2"></p:inputText>
+			<h:inputText value="#{managedBean.cnh.uf}" size="2" maxlength="2"/>
 			
 			<h:outputText/>
 	    	<h:outputText/>
@@ -224,19 +224,19 @@
 			</f:facet>
 			
 			Número:
-			<p:inputText value="#{managedBean.docMilitar.numero}" size="20" maxlength="20"></p:inputText>
+			<h:inputText value="#{managedBean.docMilitar.numero}" size="20" maxlength="20"/>
 			
 			Série:
-			<p:inputText value="#{managedBean.docMilitar.serie}" size="5" maxlength="5"></p:inputText>
+			<h:inputText value="#{managedBean.docMilitar.serie}" size="5" maxlength="5"/>
 			
 			Órgão/Região Militar:
-			<p:inputText value="#{managedBean.docMilitar.orgaoExpedidor}" maxlength="50"></p:inputText>
+			<h:inputText value="#{managedBean.docMilitar.orgaoExpedidor}" maxlength="50"/>
 				    	
 	    	Município de expedição:
-			<p:inputText value="#{managedBean.docMilitar.municipio}" maxlength="100"></p:inputText>
+			<h:inputText value="#{managedBean.docMilitar.municipio}" maxlength="100"/>
 			
 			UF de expedição:
-			<p:inputText value="#{managedBean.docMilitar.uf}" size="2" maxlength="2"></p:inputText>
+			<h:inputText value="#{managedBean.docMilitar.uf}" size="2" maxlength="2"/>
 			
 			<h:outputText/>
 	    	<h:outputText/>
@@ -249,13 +249,13 @@
 			</f:facet>
 			
 			Número:
-			<p:inputText value="#{managedBean.passaporte.numero}" size="20" maxlength="20"></p:inputText>
+			<h:inputText value="#{managedBean.passaporte.numero}" size="20" maxlength="20"/>
 			
 			País:
-			<p:inputText value="#{managedBean.passaporte.pais}" size="30" maxlength="30"></p:inputText>
+			<h:inputText value="#{managedBean.passaporte.pais}" size="30" maxlength="30"/>
 			
 			Autoridade:
-			<p:inputText value="#{managedBean.passaporte.orgaoExpedidor}" maxlength="50"></p:inputText>
+			<h:inputText value="#{managedBean.passaporte.orgaoExpedidor}" maxlength="50"/>
 			
 			Data de expedição:
 			<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.passaporte.dataExpedicao}">
@@ -275,8 +275,8 @@
 	</ui:define>
 
 	<ui:define name="acoes">
-    	<h:commandLink title="Salvar documentos" action="#{managedBean.salvarDocumentos}">
-			<p:graphicImage value="/resources/images/gravar.png" />
+		<h:commandLink id="lnkOk" title="Salvar documentos" action="#{managedBean.salvarDocumentos}">
+			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
 		</h:commandLink>
 	</ui:define>
 	
