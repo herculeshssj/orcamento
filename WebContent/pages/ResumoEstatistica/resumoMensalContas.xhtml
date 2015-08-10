@@ -63,8 +63,7 @@
 			<h:panelGroup>
 				<label>Conta:</label>
 				<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
-				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-					<p:ajax update="pnlPeriodoFatura" />
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 				</h:selectOneMenu>
 			</h:panelGroup>
 			
