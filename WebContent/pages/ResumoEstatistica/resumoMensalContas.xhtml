@@ -64,6 +64,7 @@
 				<label>Conta:</label>
 				<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
 					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					<p:ajax update="txtPeriodo" />
 				</h:selectOneMenu>
 			</h:panelGroup>
 			
@@ -112,7 +113,7 @@
 						<f:facet name="header">
 							<h:outputText value="Valor"/>
 						</f:facet>
-						<h:outputText value="#{managedBean.contaSelecionada.moeda.simboloMonetario} " style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>
 						<h:outputText value="#{item.saldoPago}" style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
@@ -125,13 +126,13 @@
 						<f:facet name="header">
 							<h:outputText value="Descrição"/>
 						</f:facet>
-						<h:outputText value="#{item.nome}" style="#{item.nome == 'Saldo anterior' || item.nome == 'Saldo atual' ? 'font-weight: bold; font-style: italic;' : 'font-weight: normal'}"/>						
+						<h:outputText value="#{item.nome}"/>						
 					</h:column>
 					<h:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Créditos"/>
 						</f:facet>
-						<h:outputText value="#{managedBean.contaSelecionada.moeda.simboloMonetario} " style="color: #0000FF;"/>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #0000FF;"/>
 						<h:outputText value="#{item.saldoCredito}" style="color: #0000FF;">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
@@ -140,7 +141,7 @@
 						<f:facet name="header">
 							<h:outputText value="Débitos"/>
 						</f:facet>
-						<h:outputText value="#{managedBean.contaSelecionada.moeda.simboloMonetario} " style="color: #FF0000;"/>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #FF0000;"/>
 						<h:outputText value="#{item.saldoDebito}" style="color: #FF0000;">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
@@ -153,13 +154,13 @@
 						<f:facet name="header">
 							<h:outputText value="Descrição"/>
 						</f:facet>
-						<h:outputText value="#{item.descricao}" style="#{item.descricao == 'Saldo anterior' || item.descricao == 'Saldo atual' ? 'font-weight: bold; font-style: italic;' : 'font-weight: normal'}"/>						
+						<h:outputText value="#{item.descricao}" />						
 					</h:column>
 					<h:column style="text-align: right; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Créditos"/>
 						</f:facet>
-						<h:outputText value="#{managedBean.contaSelecionada.moeda.simboloMonetario} " style="color: #0000FF;"/>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #0000FF;"/>
 						<h:outputText value="#{item.saldoCredito}" style="color: #0000FF;">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						
@@ -168,7 +169,7 @@
 						<f:facet name="header">
 							<h:outputText value="Débitos"/>
 						</f:facet>
-						<h:outputText value="#{managedBean.contaSelecionada.moeda.simboloMonetario} " style="color: #FF0000;"/>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #FF0000;"/>
 						<h:outputText value="#{item.saldoDebito}" style="color: #FF0000;">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>						

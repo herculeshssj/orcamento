@@ -461,6 +461,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		// Preenche os parâmetros de busca
 		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
 		criterioBusca.setConta(conta);
+		resumoMensal.setConta(conta);
 		
 		// Determina a data de início do período
 		if (fechamentoAnterior == null) {
@@ -486,13 +487,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		// Processa as categorias
 		if (fechamentoAnterior == null) {
 			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + contaComponent.calcularSaldoLancamentos(lancamentos));
-			resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + contaComponent.calcularSaldoLancamentos(lancamentos));
-			resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + contaComponent.calcularSaldoLancamentos(lancamentos));
 		} else {
 			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
-			resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
-			resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
 		}
+		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
 		
 		// Seta no resumo o início e fim do período buscado
 		resumoMensal.setInicio(criterioBusca.getDataInicio());

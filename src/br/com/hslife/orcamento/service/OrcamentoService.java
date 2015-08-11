@@ -160,7 +160,7 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 				
 				break;
 			case FAVORECIDO : 
-				resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos), 0, contaComponent.calcularSaldoLancamentos(lancamentos));
+				resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
 				
 				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 					detalhe.setRealizadoCredito(0); // Apaga o valor registrado anteriormente
@@ -176,7 +176,7 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 				
 				break;
 			case MEIOPAGAMENTO : 
-				resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos), 0, contaComponent.calcularSaldoLancamentos(lancamentos));
+				resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
 				
 				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 					detalhe.setRealizadoCredito(0); // Apaga o valor registrado anteriormente

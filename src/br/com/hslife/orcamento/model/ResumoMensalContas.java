@@ -51,6 +51,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Categoria;
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -63,6 +64,8 @@ public class ResumoMensalContas {
 	private List<Favorecido> favorecidos = new ArrayList<Favorecido>();
 	
 	private List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
+	
+	private Conta conta;
 	
 	private Date inicio;
 	
@@ -107,58 +110,12 @@ public class ResumoMensalContas {
 		this.categorias.add(saldoAtualCategorias);
 	}
 
-	public void setFavorecidos(List<Favorecido> favorecidos, double saldoAnterior, double saldoAtual) {
-		Favorecido saldoAnteriorFavorecidos = new Favorecido();
-		Favorecido saldoAtualFavorecidos = new Favorecido();
-		
-		saldoAnteriorFavorecidos.setNome("Saldo anterior");
-		saldoAtualFavorecidos.setNome("Saldo atual");
-		
-		saldoAnteriorFavorecidos.setSaldoPago(Util.arredondar(saldoAnterior));
-		saldoAtualFavorecidos.setSaldoPago(Util.arredondar(saldoAtual));
-		
-		if (saldoAnterior > 0) {
-			saldoAnteriorFavorecidos.setSaldoCredito(saldoAnterior);
-		} else {
-			saldoAnteriorFavorecidos.setSaldoDebito(saldoAnterior);
-		}
-		
-		if (saldoAtual > 0) {
-			saldoAtualFavorecidos.setSaldoCredito(saldoAtual);
-		} else {
-			saldoAtualFavorecidos.setSaldoDebito(saldoAtual);
-		}
-		
-		this.favorecidos.add(saldoAnteriorFavorecidos);
-		this.favorecidos.addAll(favorecidos);
-		this.favorecidos.add(saldoAtualFavorecidos);
+	public void setFavorecidos(List<Favorecido> favorecidos) {
+		this.favorecidos = favorecidos;
 	}
 
-	public void setMeiosPagamento(List<MeioPagamento> meiosPagamento, double saldoAnterior, double saldoAtual) {
-		MeioPagamento saldoAnteriorMeiosPagamento = new MeioPagamento();
-		MeioPagamento saldoAtualMeiosPagamento = new MeioPagamento();
-		
-		saldoAnteriorMeiosPagamento.setDescricao("Saldo anterior");
-		saldoAtualMeiosPagamento.setDescricao("Saldo atual");
-		
-		saldoAnteriorMeiosPagamento.setSaldoPago(Util.arredondar(saldoAnterior));
-		saldoAtualMeiosPagamento.setSaldoPago(Util.arredondar(saldoAtual));
-		
-		if (saldoAnterior > 0) {
-			saldoAnteriorMeiosPagamento.setSaldoCredito(saldoAnterior);
-		} else {
-			saldoAnteriorMeiosPagamento.setSaldoDebito(saldoAnterior);
-		}
-		
-		if (saldoAtual > 0) {
-			saldoAtualMeiosPagamento.setSaldoCredito(saldoAtual);
-		} else {
-			saldoAtualMeiosPagamento.setSaldoDebito(saldoAtual);
-		}
-		
-		this.meiosPagamento.add(saldoAnteriorMeiosPagamento);
-		this.meiosPagamento.addAll(meiosPagamento);
-		this.meiosPagamento.add(saldoAtualMeiosPagamento);
+	public void setMeiosPagamento(List<MeioPagamento> meiosPagamento) {
+		this.meiosPagamento = meiosPagamento; 
 	}
 
 	public Date getInicio() {
@@ -175,5 +132,13 @@ public class ResumoMensalContas {
 
 	public void setFim(Date fim) {
 		this.fim = fim;
+	}
+
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 }
