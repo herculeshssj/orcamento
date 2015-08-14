@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.facade.IUnidadeMedida;
 
 @Component("unidadeMedidaMB")
 @Scope("session")
-public class UnidadeMedidaController extends AbstractSimpleCRUDController<UnidadeMedida> {
+public class UnidadeMedidaController extends AbstractCRUDController<UnidadeMedida> {
 	
 	/**
 	 * 
@@ -73,7 +73,6 @@ public class UnidadeMedidaController extends AbstractSimpleCRUDController<Unidad
 	public UnidadeMedidaController() {
 		super(new UnidadeMedida());
 		moduleTitle = "Unidades de Medida";
-		goToModule = "/pages/menu/despensa.faces";
 	}
 	
 	@Override
@@ -92,9 +91,9 @@ public class UnidadeMedidaController extends AbstractSimpleCRUDController<Unidad
 	}
 	
 	@Override
-	public void save() {
+	public String save() {
 		entity.setUsuario(getUsuarioLogado());
-		super.save();
+		return super.save();
 	}
 
 	public IUnidadeMedida getService() {

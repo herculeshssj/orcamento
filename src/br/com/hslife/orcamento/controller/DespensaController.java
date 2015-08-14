@@ -59,7 +59,7 @@ import br.com.hslife.orcamento.facade.IDespensa;
 
 @Component("despensaMB")
 @Scope("session")
-public class DespensaController extends AbstractSimpleCRUDController<Despensa> {
+public class DespensaController extends AbstractCRUDController<Despensa> {
 	
 	/**
 	 * 
@@ -74,7 +74,6 @@ public class DespensaController extends AbstractSimpleCRUDController<Despensa> {
 	public DespensaController() {
 		super(new Despensa());
 		moduleTitle = "Despensa";
-		goToModule = "/pages/menu/despensa.faces";
 	}
 	
 	@Override
@@ -93,9 +92,9 @@ public class DespensaController extends AbstractSimpleCRUDController<Despensa> {
 	}
 	
 	@Override
-	public void save() {
+	public String save() {
 		entity.setUsuario(getUsuarioLogado());
-		super.save();
+		return super.save();
 	}
 
 	public IDespensa getService() {
