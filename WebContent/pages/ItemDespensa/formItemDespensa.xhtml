@@ -58,118 +58,136 @@
 	<ui:param name="managedBean" value="#{itemDespensaMB}" />
 	
 	<ui:define name="campos">
-			
-		<h:panelGrid columns="2">
-			
-			Descrição:
-			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{managedBean.entity.arquivado}"/>				
-			
-			Despensa:
-			<h:selectOneMenu id="txtDespensa" value="#{managedBean.entity.despensa}" converter="entityConverter" disabled="#{managedBean.entity.arquivado}">
-	    		<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-	    	</h:selectOneMenu>
-			
-			Características:
-			<p:inputTextarea id="txtCaracteristicas" value="#{managedBean.entity.caracteristicas}" rows="3" cols="50" disabled="#{managedBean.entity.arquivado}"/>				
-			
-			Unidade de Medida:
-			<h:selectOneMenu id="txtUnidadeMedida" value="#{managedBean.entity.unidadeMedida}" converter="entityConverter" rendered="#{empty managedBean.entity.movimentacao}">
+	
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{managedBean.entity.arquivado}"/>
+		
+		<label>Despensa:</label>
+		<h:selectOneMenu id="txtDespensa" value="#{managedBean.entity.despensa}" converter="entityConverter" disabled="#{managedBean.entity.arquivado}">
+    		<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+    	</h:selectOneMenu>
+    	    	
+    	<h:panelGroup rendered="#{empty managedBean.entity.movimentacao}">
+    		<label>Unidade de Medida:</label>
+	    	<h:selectOneMenu id="txtUnidadeMedida" value="#{managedBean.entity.unidadeMedida}" converter="entityConverter">
 	    		<f:selectItems value="#{managedBean.listaUnidadeMedida}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 	    	</h:selectOneMenu>
-	    	<h:panelGroup rendered="#{not empty managedBean.entity.movimentacao}">
-	    		<h:outputText value="#{managedBean.entity.unidadeMedida.descricao}" />&nbsp;(<h:outputText value="#{managedBean.entity.unidadeMedida.sigla}" />)
-	    	</h:panelGroup>
-	    	
-	    	Marca favorita:
-	    	<p:inputText value="#{managedBean.entity.marca}"/>
-			
-			<h:outputText value="Quantidade atual:" rendered="#{managedBean.operation == 'edit'}"/>
-			<h:outputText id="txtQuantidadeAtual" value="#{managedBean.entity.quantidadeAtual}" rendered="#{managedBean.operation == 'edit'}"/>				
-			
-			Estoque (VERDE):
-			<p:inputText id="txtQuantidadeVerde" value="#{managedBean.entity.quantidadeVerde}" size="10" disabled="#{managedBean.entity.arquivado}"/>				
-			
-			Estoque (AMARELO):
-			<p:inputText id="txtQuantidadeAmarelo" value="#{managedBean.entity.quantidadeAmarelo}" size="10" disabled="#{managedBean.entity.arquivado}"/>				
-			
-			Estoque (VERMELHO):
-			<p:inputText id="txtQuantidadeVermelho" value="#{managedBean.entity.quantidadeVermelho}" size="10" disabled="#{managedBean.entity.arquivado}"/>				
-			
-			Perecível:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="#{managedBean.entity.arquivado}"/>	
-			
-			<h:outputText value="Validade do estoque atual:" rendered="#{managedBean.operation == 'edit'}"/>			
-			<h:outputText value="#{managedBean.entity.validade}" rendered="#{managedBean.operation == 'edit'}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
-			<h:outputText value="Valor unitário do estoque:" rendered="#{managedBean.operation == 'edit'}"/>
-			<h:outputText value="#{managedBean.entity.valor}" rendered="#{managedBean.operation == 'edit'}">
-				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-			</h:outputText>				
-			
-		</h:panelGrid>
+    	</h:panelGroup>    	
+    	<h:panelGroup rendered="#{not empty managedBean.entity.movimentacao}">
+    		<label>
+    			Unidade de Medida: 
+    			<h:outputText value="#{managedBean.entity.unidadeMedida.descricao}" />&nbsp;(<h:outputText value="#{managedBean.entity.unidadeMedida.sigla}" />)
+    		</label>
+    		<p:spacer height="1"/>
+    	</h:panelGroup>
+    	
+    	<label for="frmFormEntity:txtMarca">Marca:</label>
+    	<h:inputText id="txtMarca" value="#{managedBean.entity.marca}" disabled="#{managedBean.entity.arquivado}"/>
+    	
+    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+    		<label>
+    			<h:outputText value="Quantidade atual: " />
+				<h:outputText id="txtQuantidadeAtual" value="#{managedBean.entity.quantidadeAtual}"/>
+			</label>
+			<p:spacer height="1"/>
+		</h:panelGroup>
+    	
+    	<label for="frmFormEntity:txtQuantidadeVerde">Estoque (VERDE):</label>
+    	<h:inputText id="txtQuantidadeVerde" value="#{managedBean.entity.quantidadeVerde}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+    	
+    	<label for="frmFormEntity:txtQuantidadeAmarelo">Estoque (AMARELO):</label>
+    	<h:inputText id="txtQuantidadeAmarelo" value="#{managedBean.entity.quantidadeAmarelo}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+    	
+    	<label for="frmFormEntity:txtQuantidadeVermelho">Estoque (VERMELHO):</label>
+    	<h:inputText id="txtQuantidadeVermelho" value="#{managedBean.entity.quantidadeVermelho}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+    	
+    	<h:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="#{managedBean.entity.arquivado}"/>
+    	<label>Perecível</label>
+    	
+    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+	    	<label>
+	    		<h:outputText value="Validade do estoque atual: " />
+	    		<h:outputText value="#{managedBean.entity.validade}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+	    	</label>
+	    	<p:spacer height="1"/>						
+		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+			<label>
+				<h:outputText value="Valor unitário do estoque: #{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " />
+				<h:outputText value="#{managedBean.entity.valor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</label>
+			<p:spacer height="1"/>				
+		</h:panelGroup>
+    	
+    	<label for="frmFormEntity:txtCaracteristicas">Características:</label>
+    	<h:inputTextarea id="txtCaracteristicas" value="#{managedBean.entity.caracteristicas}" disabled="#{managedBean.entity.arquivado}"/>
 		
 		<p:accordionPanel activeIndex="1" rendered="#{managedBean.operation == 'edit'}">
 			<p:tab title="Clique aqui para visualizar o histórico de movimentação">
 		
-				<p:dataTable value="#{managedBean.entity.movimentacao}" var="mov" rendered="#{managedBean.operation == 'edit'}">
-					<p:column style="text-align: center; vertical-align: middle;">
+				<h:dataTable value="#{managedBean.entity.movimentacao}" var="mov" rendered="#{managedBean.operation == 'edit'}">
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Operação" />
 						</f:facet>
 						<h:outputText value="#{mov.operacaoDespensa}" />
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Data" />
 						</f:facet>
 						<h:outputText value="#{mov.dataOperacao}">
 							<f:converter converterId="dateConverter"/>
 						</h:outputText>
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Quantidade" />
 						</f:facet>
 						<h:outputText value="#{mov.quantidade}" />
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Valor" />
 						</f:facet>
 						<h:outputText value="-" rendered="#{mov.operacaoDespensa == 'CONSUMO'}"/>
-						<h:outputText value="R$ " rendered="#{mov.operacaoDespensa == 'COMPRA'}"/>
+						<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " rendered="#{mov.operacaoDespensa == 'COMPRA'}"/>
 						<h:outputText value="#{mov.valor}" rendered="#{mov.operacaoDespensa == 'COMPRA'}">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
-					</p:column>
-				</p:dataTable>
-		
+					</h:column>
+				</h:dataTable>
+						
 			</p:tab>
 		</p:accordionPanel>
 		
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		&nbsp;		
-		<h:commandLink title="Salvar" action="#{managedBean.save}" rendered="#{!managedBean.entity.arquivado}">
-			<p:graphicImage value="/resources/images/gravar.png" />
-		</h:commandLink>
-		&nbsp;
-		<h:commandLink title="Arquivar" action="#{managedBean.arquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
-			<p:graphicImage value="/resources/images/arquivar.png" />
-		</h:commandLink>
-		&nbsp;
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+     		<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="10" />
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{!managedBean.entity.arquivado}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+     	<p:spacer width="10" />
 		<h:commandLink title="Desarquivar" action="#{managedBean.desarquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == true}">
-			<p:graphicImage value="/resources/images/desarquivar.png" />
+			<h:graphicImage id="imgEnable" height="48" width="48" value="/resources/images/svg/checkmark.svg"/>
+			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+		</h:commandLink>		
+		<p:spacer width="10" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == true}"/>			
+		<h:commandLink title="Arquivar" action="#{managedBean.arquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
+			<h:graphicImage id="imgDisable" height="48" width="48" value="/resources/images/svg/cancel.svg"/>
 		</h:commandLink>
-		&nbsp;
+		<p:spacer width="10" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}"/>
 		<h:commandLink title="Apagar histórico de movimentação" action="#{managedBean.apagarHistorico}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
-			<p:graphicImage value="/resources/images/lixeira.png" />
+			<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
 		</h:commandLink>		
 	</ui:define>
 

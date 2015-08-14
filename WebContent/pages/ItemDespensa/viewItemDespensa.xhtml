@@ -96,50 +96,53 @@
 			</h:outputText>
 			
 			Valor unitário:
-			<h:outputText value="#{managedBean.entity.valor}">
-				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-			</h:outputText>	
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario}"/>
+				<h:outputText value="#{managedBean.entity.valor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>	
 			
 			Perecível:
-			<p:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="true"/>			
+			<h:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="true"/>			
 			
 		</h:panelGrid>
 		
 		<p:accordionPanel activeIndex="1">
 			<p:tab title="Clique aqui para visualizar o histórico de movimentação">
 		
-				<p:dataTable value="#{managedBean.entity.movimentacao}" var="mov">
-					<p:column style="text-align: center; vertical-align: middle;">
+				<h:dataTable value="#{managedBean.entity.movimentacao}" var="mov">
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Operação" />
 						</f:facet>
 						<h:outputText value="#{mov.operacaoDespensa}" />
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Data" />
 						</f:facet>
 						<h:outputText value="#{mov.dataOperacao}">
 							<f:converter converterId="dateConverter"/>
 						</h:outputText>
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Quantidade" />
 						</f:facet>
 						<h:outputText value="#{mov.quantidade}" />
-					</p:column>
-					<p:column style="text-align: center; vertical-align: middle;">
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Valor" />
 						</f:facet>
 						<h:outputText value="-" rendered="#{mov.operacaoDespensa == 'CONSUMO'}"/>
-						<h:outputText value="R$ " rendered="#{mov.operacaoDespensa == 'COMPRA'}"/>
+						<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " rendered="#{mov.operacaoDespensa == 'COMPRA'}"/>
 						<h:outputText value="#{mov.valor}" rendered="#{mov.operacaoDespensa == 'COMPRA'}">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
-					</p:column>
-				</p:dataTable>
+					</h:column>
+				</h:dataTable>
 		
 			</p:tab>
 		</p:accordionPanel>

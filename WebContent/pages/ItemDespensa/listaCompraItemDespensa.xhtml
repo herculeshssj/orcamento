@@ -57,93 +57,86 @@
 
 	<ui:param name="managedBean" value="#{itemDespensaMB}" />
 	
-	<ui:define name="conteudo">
+	<ui:define name="campos">
 	
-	<h:form id="frmListaCompra">
-	
-		<p:messages />
+		<h:panelGrid columns="7">
 		
-		Despensa:
-		<h:selectOneMenu value="#{managedBean.despensa}" converter="entityConverter">
-	    	<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-	    	<p:ajax update="txtItemDespensa" listener="#{managedBean.getListaItemDespensa}"/>
-	    </h:selectOneMenu>
-	    &nbsp;
-		Item de despensa:
-		<h:selectOneMenu id="txtItemDespensa" value="#{managedBean.itemDespensa}" converter="entityConverter">
-	    	<f:selectItems value="#{managedBean.listaItemDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-	    </h:selectOneMenu>
-	    &nbsp;
-	    Quantidade:
-	    <p:inputText value="#{managedBean.quantidadeItemDespensa}" size="3" maxlength="5"/>
-	    &nbsp;
-	    <h:commandLink title="Adicionar item à lista" action="#{managedBean.adicionarItemListaCompra}">
-			<p:graphicImage value="/resources/images/adicionar.png" width="32" height="32"/> 
-		</h:commandLink>
-	    
-	    <br/><br/>
-	
-		<p:dataTable id="tableListEntity" width="100%" value="#{managedBean.listaCompras}" var="item">
-
+			Despensa:
+			<h:selectOneMenu value="#{managedBean.despensa}" converter="entityConverter">
+		    	<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		    	<p:ajax update="txtItemDespensa" listener="#{managedBean.getListaItemDespensa}"/>
+		    </h:selectOneMenu>
+		    
+		    Item:
+		    <h:selectOneMenu id="txtItemDespensa" value="#{managedBean.itemDespensa}" converter="entityConverter">
+		    	<f:selectItems value="#{managedBean.listaItemDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		    </h:selectOneMenu>
+		    
+		    Quantidade:
+		    <h:inputText value="#{managedBean.quantidadeItemDespensa}" size="3" maxlength="5"/>
+		    
+		    <h:commandLink id="lnkAddRow" title="Adicionar item à lista" action="#{managedBean.adicionarItemListaCompra}">
+	     		<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
+	     	</h:commandLink>
+		
+		</h:panelGrid>
+		
+		<p:dataTable id="tableListaCompra" width="100%" value="#{managedBean.listaCompras}" var="item">
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Descrição" />
 				</f:facet>
 				<h:outputText value="#{item.descricao}"/>
-			</p:column>
-			
+			</p:column>			
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Marca" />
 				</f:facet>
 				<h:outputText value="#{item.marca}"/>
 			</p:column>
-
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Quantidade a comprar" />
 				</f:facet>
-				<h:outputText value="#{item.quantidadeAtual}"/> &nbsp;
+				<h:outputText value="#{item.quantidadeAtual} "/>
 				<h:outputText value="#{item.unidadeMedida.sigla}"/>
-			</p:column>
-			
+			</p:column>			
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value="Valor aproximado" />
 				</f:facet>
-				<h:outputText value="R$ "/>
+				<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} "/>
 				<h:outputText value="#{item.valor}">
-					<f:convertNumber type="currency" pattern="###.##"/>
+					<f:convertNumber pattern="###.##"/>
 				</h:outputText>
-			</p:column>
-			
+			</p:column>			
 			<p:column style="text-align: center; vertical-align: middle;" exportable="false">
 				<f:facet name="header">
 					<h:outputText value="Ação" />
 				</f:facet>
-				<h:commandLink title="Remover item da lista" action="#{managedBean.removerItemListaCompra}"> 
-					<p:graphicImage value="/resources/images/excluir.png" width="32" height="32"/> 
-					<f:setPropertyActionListener value="#{item}" target="#{managedBean.itemDespensa}" />
-				</h:commandLink>
+				<h:commandLink id="lnkDelRow" title="Remover detalhe" action="#{managedBean.removerItemListaCompra}">
+		     		<h:graphicImage id="imgDelRow" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
+		     		<f:setPropertyActionListener value="#{item}" target="#{managedBean.itemDespensa}"/>
+		     	</h:commandLink>
 			</p:column>
-
 		</p:dataTable>
+			
+	</ui:define>
 	
-		<h:commandLink action="#{managedBean.cancel}">
-			<p:graphicImage value="/resources/images/voltar.png" width="32" height="32"/>
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+     		<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>
+     	&nbsp;&nbsp;
+     	<h:commandLink title="Exportar para MS-Excel">
+			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
+			<p:dataExporter type="xls" target="tableListaCompra" fileName="ListaDeCompras" encoding="iso-8859-1"/> 
 		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
-		<h:commandLink>
-			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
-			<p:dataExporter type="xls" target="tableListEntity" fileName="lista-de-compras" encoding="iso-8859-1"/> 
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;
 		<h:commandLink title="Exportar para PDF">
-			<p:graphicImage value="/resources/images/pdf.png" width="32" height="32"/>
-			<p:dataExporter type="pdf" target="tableListEntity" fileName="lista-de-compras" encoding="iso-8859-1"/> 
-		</h:commandLink>		
-	</h:form>
-	
+			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
+			<p:dataExporter type="pdf" target="tableListaCompra" fileName="ListaDeCompras" encoding="iso-8859-1"/> 
+		</h:commandLink>
 	</ui:define>
 
 </ui:composition>
