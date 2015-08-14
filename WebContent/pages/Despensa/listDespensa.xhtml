@@ -56,13 +56,13 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{unidadeMedidaMB}" />
+	<ui:param name="managedBean" value="#{despensaMB}" />
 	<ui:param name="colunaPesquisa" value="3" />
 	
 	<ui:define name="parametro_pesquisa">
 		<h:panelGroup>
 			<label for="frmListEntity:txtDescricao">Descrição:</label>
-		    <h:inputText id="txtDescricao" value="#{managedBean.descricaoUnidade}"/>
+		    <h:inputText id="txtDescricao" value="#{managedBean.descricaoDespensa}"/>
 	    </h:panelGroup>	    	    
 	</ui:define>
 	
@@ -77,9 +77,9 @@
 		 </h:column>
 		 <h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
-				<h:outputText value="Sigla"/>
+				<h:outputText value="Itens existentes"/>
 			</f:facet>
-			<h:outputText value="#{item.sigla}"/>
+			<h:outputText value="#{item.quantidadeItens}"/>
 		 </h:column>
 	</ui:define>
 	

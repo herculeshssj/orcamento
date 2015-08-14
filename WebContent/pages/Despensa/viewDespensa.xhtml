@@ -52,35 +52,24 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+    xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/listagem.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{unidadeMedidaMB}" />
-	<ui:param name="colunaPesquisa" value="3" />
-	
-	<ui:define name="parametro_pesquisa">
-		<h:panelGroup>
-			<label for="frmListEntity:txtDescricao">Descrição:</label>
-		    <h:inputText id="txtDescricao" value="#{managedBean.descricaoUnidade}"/>
-	    </h:panelGroup>	    	    
-	</ui:define>
-	
-	<ui:define name="pesquisa_avancada"></ui:define>
-	
-	<ui:define name="colunas">
-		<h:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Descrição"/>
-			</f:facet>
-			<h:outputText value="#{item.descricao}"/>
-		 </h:column>
-		 <h:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Sigla"/>
-			</f:facet>
-			<h:outputText value="#{item.sigla}"/>
-		 </h:column>
+	<ui:param name="managedBean" value="#{despensaMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Descrição:
+			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+			
+			Local de armazenamento:
+			<h:outputText value="#{managedBean.entity.localArmazenamento}"/>
+						
+		</h:panelGrid>
+		
 	</ui:define>
 	
 </ui:composition>

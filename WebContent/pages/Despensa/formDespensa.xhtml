@@ -53,7 +53,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario_simples.xhtml">
+<ui:composition template="/templates/formulario.xhtml">
 
 	<ui:param name="managedBean" value="#{despensaMB}" />
 	
@@ -61,36 +61,13 @@
 			
 		<h:panelGrid columns="2">
 			
-			Descrição:
-			<p:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50"/>				
+			<label for="frmFormEntity:txtDescricao">Descrição:</label>
+			<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50"/>				
 			
-			Local de armazenamento:
-			<p:inputTextarea id="txtLocalArmazenamento" value="#{managedBean.entity.localArmazenamento}" cols="30" rows="3"/>				
+			<label for="frmFormEntity:txtLocalArmazenamento">Local de armazenamento:</label>
+			<h:inputTextarea id="txtLocalArmazenamento" value="#{managedBean.entity.localArmazenamento}" cols="30" rows="3"/>				
 			
 		</h:panelGrid>
-		
-	</ui:define>
-	
-	<ui:define name="pesquisa">
-		Descrição:
-	    <p:inputText value="#{managedBean.descricaoDespensa}" />
-	</ui:define>
-
-	<ui:define name="colunas">
-	
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Descrição" />
-			</f:facet>
-			<h:outputText value="#{item.descricao}" />
-		</p:column>
-		
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Itens existentes" />
-			</f:facet>
-			<h:outputText value="#{item.quantidadeItens}"/>
-		</p:column>
 		
 	</ui:define>
 
