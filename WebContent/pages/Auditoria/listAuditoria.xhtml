@@ -57,98 +57,108 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{auditoriaMB}" />
+	<ui:param name="colunaPesquisa" value="7" />
 	
 	<ui:define name="botoes"></ui:define>
 	
-	<ui:define name="pesquisa">
-		Usuário:
-		<h:selectOneMenu value="#{managedBean.criterio.usuario}" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
-			<f:selectItem itemLabel="Todos"/>
-			<f:selectItems value="#{managedBean.listaUsuarios}" var="item" itemLabel="#{item.login}" itemValue="#{item.login}"/>
-		</h:selectOneMenu>
-		<h:selectOneMenu value="#{managedBean.criterio.usuario}" rendered="#{managedBean.usuarioLogado.login != 'admin'}">
-			<f:selectItems value="#{managedBean.listaUsuarios}" var="item" itemLabel="#{item.login}" itemValue="#{item.login}"/>
-		</h:selectOneMenu>
-		&nbsp;
-		Início:
-		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.inicio}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>
-		&nbsp;
-		Fim:
-		<p:inputMask size="8" mask="99/99/9999" value="#{managedBean.criterio.fim}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>
-		&nbsp;
-		Classe:
-		<h:selectOneMenu value="#{managedBean.criterio.classe}">
-			<f:selectItem itemLabel="Todos"/>
-			<f:selectItems value="#{managedBean.listaClasses}"/>
-		</h:selectOneMenu>
-		&nbsp;
-		Transação:
-		<h:selectOneMenu value="#{managedBean.criterio.transacao}">
-			<f:selectItem itemLabel="Todos"/>
-			<f:selectItem itemLabel="Inserção" itemValue="INSERT"/>
-			<f:selectItem itemLabel="Alteração" itemValue="UPDATE"/>
-			<f:selectItem itemLabel="Exclusão" itemValue="DELETE"/>
-		</h:selectOneMenu>
-		&nbsp;
+	<ui:define name="parametro_pesquisa">
+		<h:panelGroup>
+			<label>Usuário:</label>
+			<h:selectOneMenu value="#{managedBean.criterio.usuario}" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
+				<f:selectItem itemLabel="Todos"/>
+				<f:selectItems value="#{managedBean.listaUsuarios}" var="item" itemLabel="#{item.login}" itemValue="#{item.login}"/>
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup>
+			<label for="frmListEntity:txtInicio">Início:</label>
+			<p:inputMask id="txtInicio" size="8" mask="99/99/9999" value="#{managedBean.criterio.inicio}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>
+		<h:panelGroup>
+			<label for="frmListEntity:txtFim">Fim:</label>
+			<p:inputMask id="txtFim" size="8" mask="99/99/9999" value="#{managedBean.criterio.fim}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+	    </h:panelGroup>
+		<h:panelGroup>
+			<label>Classe:</label>
+			<h:selectOneMenu value="#{managedBean.criterio.classe}">
+				<f:selectItem itemLabel="Todos"/>
+				<f:selectItems value="#{managedBean.listaClasses}"/>
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup>
+			<label>Transação:</label>
+			<h:selectOneMenu value="#{managedBean.criterio.transacao}">
+				<f:selectItem itemLabel="Todos"/>
+				<f:selectItem itemLabel="Inserção" itemValue="INSERT"/>
+				<f:selectItem itemLabel="Alteração" itemValue="UPDATE"/>
+				<f:selectItem itemLabel="Exclusão" itemValue="DELETE"/>
+			</h:selectOneMenu>
+		</h:panelGroup>
 	</ui:define>
 
-	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Usuário" />
-			</f:facet>
-			<h:outputText value="#{item.usuario}" />
-		</p:column>
-
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Classe" />
-			</f:facet>
-			<h:outputText value="#{item.classe}" />
-		</p:column>
-
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Data" />
-			</f:facet>
-			<h:outputText value="#{item.dataHora}" />
-		</p:column>
-		
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Transação" />
-			</f:facet>
-			<h:outputText value="#{item.transacao}" />
-		</p:column>
-
-	</ui:define>
-
-	<ui:define name="acoes">
-		<p:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Ações" />
-			</f:facet>
-			<h:commandButton title="Visualizar" image="/resources/images/pesquisar.png" action="#{managedBean.view}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
-			</h:commandButton>
-			&nbsp;&nbsp;&nbsp;			
-			<h:commandButton title="Excluir" image="/resources/images/excluir.png" action="#{managedBean.delete}" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
-			</h:commandButton>
-		</p:column>
+	<ui:define name="tabela">
+		<p:dataTable id="sheetTableListEntity" width="100%" value="#{managedBean.listEntity}" var="item" style="font-size: 16px;">
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Usuário" />
+				</f:facet>
+				<h:outputText value="#{item.usuario}" />
+			</p:column>
+	
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Classe" />
+				</f:facet>
+				<h:outputText value="#{item.classe}" />
+			</p:column>
+	
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Data" />
+				</f:facet>
+				<h:outputText value="#{item.dataHora}" />
+			</p:column>
+			
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Transação" />
+				</f:facet>
+				<h:outputText value="#{item.transacao}" />
+			</p:column>
+			
+			<p:column style="text-align: center; vertical-align: middle;" exportable="false">
+				<f:facet name="header">
+					<h:outputText value="Ações" />
+				</f:facet>
+				<h:commandLink title="Visualizar" action="#{managedBean.view}">
+	     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+	     			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+	     		</h:commandLink>			
+				&nbsp;&nbsp;&nbsp;
+				<h:commandLink title="Excluir" action="#{managedBean.delete}">
+					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+				</h:commandLink>			
+			</p:column>
+			
+			<f:facet name="footer">
+       			<h:outputText value="#{managedBean.quantRegistros} item(ns) encontrado(s)"></h:outputText>
+   			</f:facet>
+		</p:dataTable>
 	</ui:define>
 	
 	<ui:define name="outras_opcoes">
 		<h:commandLink title="Exportar para MS-Excel">
-			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
-			<p:dataExporter type="xls" target="tableListEntity" fileName="auditoria" /> 
+			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
+			<p:dataExporter type="xls" target="sheetTableListEntity" fileName="Auditoria" encoding="iso-8859-1"/> 
 		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
-		<h:commandButton title="Excluir registros" image="/resources/images/lixeira.png" action="#{managedBean.excluirLog}" rendered="#{managedBean.usuarioLogado.login == 'admin'}"/>
+		<h:commandLink title="Excluir registros" action="#{managedBean.excluirLog}">
+			<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
+		</h:commandLink>
 	</ui:define>
 
 </ui:composition>

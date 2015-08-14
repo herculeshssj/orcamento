@@ -106,13 +106,13 @@
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink title="Voltar" action="#{managedBean.cancel}" immediate="true">
-			<p:graphicImage value="/resources/images/voltar.png" />
-		</h:commandLink>
-		<p:spacer width="10"/>
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+   			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+   		</h:commandLink>				
+		<p:spacer width="20" />
 		<h:commandLink title="Exportar para MS-Excel">
-			<p:graphicImage value="/resources/images/excel.png" width="32" height="32"/>
-			<p:dataExporter type="xls" target="tableAuditoriaDadosJson" fileName="auditoriadados" /> 
+			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
+			<p:dataExporter type="xls" target="tableAuditoriaDadosJson" fileName="DadosAuditoria" encoding="iso-8859-1"/> 
 		</h:commandLink>
 	</ui:define>
 	
