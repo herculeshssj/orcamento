@@ -201,8 +201,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 						// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
 						// o valor registrado durante o fechamento da fatura
 						if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
-								|| fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)
-								|| fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.ANTIGA)) {
+								|| fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
 							for (Moeda m : moedas) {
 								m.setTaxaConversao(m.getValorConversao());
 							}
@@ -237,12 +236,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	@Override
-	public String create() {
-		entity.setStatusFaturaCartao(StatusFaturaCartao.ANTIGA);
-		return super.create();
-	}
-	
-	@Override
 	public String edit() {
 		try {
 			entity = getService().buscarPorID(idEntity);
@@ -254,24 +247,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			operation = "edit";
 			actionTitle = " - Editar";
 			return goToFormPage;
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	@Override
-	public String view() {
-		try {
-			entity = getService().buscarPorID(idEntity);
-			lancamentosAdicionados.clear();
-			lancamentosAdicionados.addAll(entity.getDetalheFatura());
-			detalhesFaturaCartao.clear();
-			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
-			this.calcularSaldoCompraSaqueParceladoPorMoeda();
-			operation = "delete";
-			actionTitle = " - Excluir";
-			return goToViewPage;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -497,26 +472,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
-	public String fecharFaturaAntiga() {
-		try {
-			// Verifica se um lançamento foi selecionado na listagem				
-			if(lancamento ==  null || lancamento.getConta() == null) {
-				warnMessage("Selecione um lançamento!");
-				return "";
-			}
-			
-			getService().fecharFaturaAntiga(faturaSelecionada, moedas, lancamento);
-			infoMessage("Fatura antiga fechada e quitada com sucesso!");
-			
-			this.reprocessarBusca();
-			
-			return "/pages/FaturaCartao/listFaturaCartao";			
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
 	public void reabrirFatura() {
 		try {
 			getService().reabrirFatura(getService().buscarPorID(idEntity));
@@ -637,8 +592,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
 			// o valor registrado durante o fechamento da fatura
 			if (entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
-					|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)
-					|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ANTIGA)) {
+					|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
 				for (Moeda m : moedas) {
 					m.setTaxaConversao(m.getValorConversao());
 				}
@@ -692,7 +646,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<SelectItem> getListaStatusFaturaCartao() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		listaSelectItem.add(new SelectItem(null, "Fatura mais recentes"));
-		listaSelectItem.add(new SelectItem(StatusFaturaCartao.ANTIGA, "Faturas antigas"));
 		listaSelectItem.add(new SelectItem(StatusFaturaCartao.QUITADA, "Faturas quitadas"));
 		listaSelectItem.add(new SelectItem(StatusFaturaCartao.VENCIDA, "Faturas vencidas"));
 		return listaSelectItem;

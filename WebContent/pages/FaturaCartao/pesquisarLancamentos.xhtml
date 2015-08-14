@@ -60,7 +60,7 @@
 	<h:panelGrid columns="4">
 		<h:panelGroup>
 			Descrição:
-			<p:inputText value="#{managedBean.criterioBusca.descricao}" size="30"/>
+			<h:inputText value="#{managedBean.criterioBusca.descricao}" size="30"/>
 		</h:panelGroup>
 		
 		<h:panelGroup>
@@ -78,8 +78,8 @@
 		</h:panelGroup>
 		
 		<p:commandLink actionListener="#{managedBean.pesquisarLancamento}" title="Pesquisar" update="tableLancamentosEncontrados">
-			<h:graphicImage value="/resources/images/pesquisar.png" />
-		</p:commandLink>
+   			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+   		</p:commandLink>
 	</h:panelGrid>
 	
 	<h:dataTable id="tableLancamentosEncontrados" var="item" value="#{managedBean.lancamentosEncontrados}">
