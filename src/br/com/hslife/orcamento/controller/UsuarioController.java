@@ -166,16 +166,12 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	}
 	
 	@PostConstruct
-	public String startUpUser() {
+	public void startUpUser() {
 		try {
-			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
-			operation = "edit";
-			actionTitle = " - Editar";
-			return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
+			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin()); 
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return "";
 	}
 	
 	public String edit() {

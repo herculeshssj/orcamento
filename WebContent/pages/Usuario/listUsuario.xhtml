@@ -56,22 +56,19 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{usuarioMB}" />
+	<ui:param name="colunaPesquisa" value="3" />
 	
-	<ui:define name="botoes">
-	    <h:commandLink action="#{managedBean.create}" title="Novo registro" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
-	    	<h:graphicImage value="/resources/images/novo.png"/>
-	 	</h:commandLink>
-     </ui:define>
-
-	<ui:define name="pesquisa">
-		Login:
-	    <p:inputText value="#{managedBean.loginUsuario}" />
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label for="frmListEntity:txtLogin">Login:</label>
+		    <h:inputText id="txtLogin" value="#{managedBean.loginUsuario}"/>
+	    </h:panelGroup>	    	    
 	</ui:define>
-
+	
 	<ui:define name="pesquisa_avancada"></ui:define>
-
+	
 	<ui:define name="colunas">
-		<p:column style="text-align: center; vertical-align: middle;">
+		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Usuário" />
 			</f:facet>
@@ -81,36 +78,43 @@
 			<h:outputText value=")"/>
 			<br/>
 			<h:outputText value="#{item.email}"/>
-		</p:column>		
-		<p:column style="text-align: center; vertical-align: middle;">
+		</h:column>		
+		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Ativo" />
 			</f:facet>
-			<p:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
-		</p:column>
+			<h:selectBooleanCheckbox value="#{item.ativo}" disabled="true" />
+		</h:column>
 	</ui:define>
 
 	<ui:define name="acoes">
-		<p:column style="text-align: center; vertical-align: middle;">
+		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Ações" />
 			</f:facet>
-			<h:commandButton value="Editar" image="/resources/images/alterar.png" action="#{managedBean.edit}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
-			</h:commandButton>
+			<h:commandLink title="Editar" action="#{managedBean.edit}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
+			<p:spacer width="10"/>
+			
+			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.login != 'admin'}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
+			<p:spacer width="10" rendered="#{item.login != 'admin'}"/>
+			
+			<h:commandLink title="Usar credenciais do usuário" action="#{managedBean.logarComo}" rendered="#{managedBean.usuarioLogado.login == 'admin' and item.login != 'admin'}">
+				<h:graphicImage id="imgPrivacy" height="48" width="48" value="/resources/images/svg/privacy.svg"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
 			<p:spacer width="10" rendered="#{managedBean.usuarioLogado.login == 'admin' and item.login != 'admin'}"/>
-			<h:commandButton value="Excluir" image="/resources/images/excluir.png" action="#{managedBean.view}" rendered="#{managedBean.usuarioLogado.login == 'admin' and item.login != 'admin'}">
+			
+			<h:commandLink title="Deslogar das credenciais do usuário" action="#{managedBean.deslogarComo}" rendered="#{managedBean.usuarioLogado.logado == true and item.login == managedBean.usuarioLogado.login}">
+				<h:graphicImage id="imgLogout" height="48" width="48" value="/resources/images/svg/light_at_the_end_of_tunnel.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>
-			<p:spacer width="10" rendered="#{managedBean.usuarioLogado.login == 'admin' and item.login != 'admin'}"/>
-			<h:commandButton title="Usar credenciais do usuário" image="/resources/images/entrar.png" action="#{managedBean.logarComo}" rendered="#{managedBean.usuarioLogado.login == 'admin' and item.login != 'admin'}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>
-			<p:spacer width="10" rendered="#{managedBean.usuarioLogado.logado == true and item.login == managedBean.usuarioLogado.login}"/>
-			<h:commandButton title="Deslogar das credenciais do usuário" image="/resources/images/fechar.png" action="#{managedBean.deslogarComo}" rendered="#{managedBean.usuarioLogado.logado == true and item.login == managedBean.usuarioLogado.login}">
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandButton>			
-		</p:column>
+			</h:commandLink>			
+		</h:column>
 	</ui:define>
 </ui:composition>
 </html>

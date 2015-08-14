@@ -58,38 +58,47 @@
 	<ui:param name="managedBean" value="#{usuarioMB}" />
 
 	<ui:define name="campos">
-	
-		<label for="frmFormEntity:txtNome">Nome:</label>
-		<h:inputText id="txtNome" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}" />
-		
-		<label for="frmFormEntity:txtLogin">Login:</label>
-		<h:inputText id="txtLogin" value="#{managedBean.entity.login}" disabled="#{managedBean.operation == 'edit'}" />
-		
-		<label for="frmFormEntity:txtEmail">E-Mail:</label>
-		<h:inputText id="txtEmail" value="#{managedBean.entity.email}" disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}">
-			<f:validator validatorId="emailValidator"/>
-		</h:inputText>
-		
-		<label for="frmFormEntity:txtSenha">Senha:</label>
-		<h:inputText id="txtSenha" value="#{managedBean.novaSenha}" disabled="#{!managedBean.entity.ativo}" />
-		
-		<label for="frmFormEntity:txtConfirmaSenha">Confirme a senha:</label>
-		<h:inputText id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}" disabled="#{!managedBean.entity.ativo}" />
-		
-		<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
-			<label>Data de criação:
-				<h:outputText id="txtDataCriacao" value="#{managedBean.entity.dataCriacao}">
-					<f:converter converterId="dateConverter"/>
-				</h:outputText>
-			</label>
-			<p:spacer height="1"/>
-			<label>
-				<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
-				Ativo
-			</label>
-		</h:panelGroup>
+
+		<h:panelGrid columns="2">
+			
+			Nome:
+			<h:inputText id="txtNome" value="#{managedBean.entity.nome}"/>
+			
+			Login:
+			<h:inputText id="txtLogin" value="#{managedBean.entity.login}" disabled="true" />
+			
+			E-Mail:
+			<h:inputText id="txtEmail" value="#{managedBean.entity.email}">
+				<f:validator validatorId="emailValidator"/>
+			</h:inputText>
+								
+			Senha:
+			<p:password id="txtSenha" value="#{managedBean.novaSenha}" size="30" />
+			
+			Confirme a senha:
+			<p:password id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}" size="30" />
+			
+			Data de criação:
+			<h:outputText id="txtDataCriacao" value="#{managedBean.entity.dataCriacao}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Ativo:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true" />
+				
+		</h:panelGrid>
 
 	</ui:define>
 	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.saveUser}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+     	&nbsp;&nbsp;&nbsp;
+     	<h:commandLink title="Deslogar das credenciais do usuário" action="#{managedBean.deslogarComo}" rendered="#{managedBean.usuarioLogado.logado == true}">
+			<h:graphicImage id="imgLogout" height="48" width="48" value="/resources/images/svg/light_at_the_end_of_tunnel.svg"/>
+			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.usuarioLogado.id}"/>
+		</h:commandLink>
+	</ui:define>
 </ui:composition>
 </html>

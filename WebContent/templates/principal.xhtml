@@ -241,29 +241,24 @@
 			<li id="menu-item-11438" class="menu-item menu-item-main-menu menu-item-opcoes has-dropdown not-click">
 				<a href="#">Opções</a>
 				<ul class="dropdown">
-					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.tipoUsuario == 'ROLE_ADMIN'}">
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
 					<li id="menu-item-8184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/Auditoria/listAuditoria.faces">Auditoria do Sistema</a>
 					</li>
 					</h:panelGroup>
-					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.tipoUsuario == 'ROLE_USER'}">
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login != 'admin'}">
 					<li id="menu-item-8185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
-						<a href="#{request.contextPath}/pages/Usuario/formUsuario.faces">Minha conta</a>
+						<a href="#{request.contextPath}/pages/Usuario/minhaConta.faces">Minha conta</a>
 					</li>
 					</h:panelGroup>
 					<li id="menu-item-8190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/OpcaoSistema/formOpcaoSistema.faces">Opções do Sistema</a>
 					</li>
-					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.tipoUsuario == 'ROLE_ADMIN'}">
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
 					<li id="menu-item-8185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/Usuario/listUsuario.faces">Usuários</a>
 					</li>
 					</h:panelGroup>					
-					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.tipoUsuario == 'ROLE_ADMIN'}">
-					<li id="menu-item-8185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
-						<a href="#{request.contextPath}/pages/Versao/formVersao.faces">Versões do Sistema</a>
-					</li>					
-					</h:panelGroup>
 				</ul>
 			</li>
 			<li class="divider"></li>
