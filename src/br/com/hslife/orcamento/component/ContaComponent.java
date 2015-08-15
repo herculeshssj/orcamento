@@ -617,7 +617,7 @@ public class ContaComponent implements Serializable {
 			LancamentoConta proximaMensalidade;
 			
 			if (ultimaMensalidade == null) {
-				proximaMensalidade = new LancamentoConta();
+				proximaMensalidade = new LancamentoConta(pagamentoPeriodo);
 				proximaMensalidade.setDataVencimento(new Date());
 			} else {
 				proximaMensalidade = ultimaMensalidade.clonarLancamentos(1, IncrementoClonagemLancamento.NENHUM).get(0);
@@ -625,10 +625,11 @@ public class ContaComponent implements Serializable {
 			
 			proximaMensalidade.setLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico());
 			
-			if (proximaMensalidade.getDataVencimento().getDay() >= proximaMensalidade.getLancamentoPeriodico().getDiaVencimento()) {
-				proximaMensalidade.setDataVencimento(proximaMensalidade.getLancamentoPeriodico().getPeriodoLancamento().getDataPeriodo(proximaMensalidade.getDataVencimento()));
-			}
-			
+			// Incrementa a data de vencimento independente do valor informado
+			proximaMensalidade.setDataVencimento(proximaMensalidade.getLancamentoPeriodico().getPeriodoLancamento().getDataPeriodo(proximaMensalidade.getDataVencimento()));
+			// Corrige o dia de vencimento
+			proximaMensalidade.getDataVencimento().setDate(proximaMensalidade.getLancamentoPeriodico().getDiaVencimento());
+						
 			proximaMensalidade.setAno(proximaMensalidade.getDataVencimento().getYear() + 1900);
 			proximaMensalidade.setPeriodo(proximaMensalidade.getDataVencimento().getMonth() + 1);
 			proximaMensalidade.setDataPagamento(proximaMensalidade.getDataVencimento());
