@@ -450,10 +450,6 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			return;
 		}
 		
-		if (detalheLancamento.getValor() > lancamentoSelecionado.getValorPago()) {
-			warnMessage("Valor informado supera o valor do lançamento!");
-			return;
-		}
 		if (detalheLancamento.getValor() > lancamentoSelecionado.getTotalADetalhar()) {
 			warnMessage("Valor informado supera o total a detalhar!");
 			return;

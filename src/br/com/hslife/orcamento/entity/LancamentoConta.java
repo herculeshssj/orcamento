@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,8 +70,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-
-
 
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
@@ -288,7 +287,8 @@ public class LancamentoConta extends EntityPersistence {
 				resultado += detalhe.getValor();
 			}
 		}		
-		return this.valorPago - resultado;
+		BigDecimal result = new BigDecimal(this.valorPago - resultado).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+		return result.doubleValue();
 	}
 
 	public void setId(Long id) {
