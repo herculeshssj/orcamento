@@ -442,11 +442,15 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public List<Conta> getListaConta() {
 		try {
-			return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());						
+			if (getOpcoesSistema().getExibirContasInativas()) {
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), null);
+			} else {
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
+			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<>();
+		return new ArrayList<Conta>();
 	}
 	
 	public List<Categoria> getListaCategoria() {
