@@ -84,13 +84,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			criteria.add(criterion);
 		}
 		
-		if (criterioBusca.getLimiteResultado() == 0) {
-			return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();
-			//return criteria.addOrder(Order.asc("dataPagamento")).list();
-		} else {
-			return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).setMaxResults(criterioBusca.getLimiteResultado()).list();
-			//return criteria.addOrder(Order.asc("dataPagamento")).setMaxResults(criterioBusca.getLimiteResultado()).list();
-		}		
+		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).addOrder(Order.asc("dataPagamento")).list();		
 	}
 	
 	public LancamentoConta findLastLancamentoContaByConta(Conta conta) {

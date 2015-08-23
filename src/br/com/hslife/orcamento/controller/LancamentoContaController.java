@@ -163,16 +163,26 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		dataFechamento = null;
 	}
 	
+	/*
+	 * Método privado usado para aplicar o limite de resultados da pesquisa de 
+	 * lançamentos.
+	 */
+	private void setarLimiteLancamentos(final List<LancamentoConta> lancamentos) {
+		listEntity = new ArrayList<>();
+		for (final LancamentoConta l : lancamentos) {
+			listEntity.add(l);
+			if (listEntity.size() >= getOpcoesSistema().getLimiteQuantidadeRegistros())
+				break;			
+		}
+	}
+	
 	@Override
 	public void find() {
 		try {			
 			if (criterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
-			} else {				
-				// Seta o limite de resultado da pesquisa
-				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
-				
-				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+			} else {
+				this.setarLimiteLancamentos(getService().buscarPorCriterioBusca(criterioBusca));
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -218,10 +228,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				criterioBusca.setDataFim(null);
 			}
 			
-			// Seta o limite de resultado da pesquisa
-			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
-			
-			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+			this.setarLimiteLancamentos(getService().buscarPorCriterioBusca(criterioBusca));
 			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -255,10 +262,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				// Mostra todos os lançamentos que não estão vinculados a uma fatura
 				criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO});
 				
-				// Seta o limite de resultado da pesquisa
-				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
-				
-				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+				this.setarLimiteLancamentos(getService().buscarPorCriterioBusca(criterioBusca));
 				
 				if (listEntity != null && listEntity.size() > 0) {
 					criterioBusca.setDataInicio(listEntity.get(0).getDataPagamento());
