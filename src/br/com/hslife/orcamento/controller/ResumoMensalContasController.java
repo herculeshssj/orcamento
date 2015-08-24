@@ -241,17 +241,19 @@ public class ResumoMensalContasController extends AbstractController {
 	}
 	
 	public List<Conta> getListaConta() {
-		List<Conta> contas = new ArrayList<>();
+		//List<Conta> contas = new ArrayList<>();
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null);
+				//contas = 
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null);
 			} else {
-				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
+				//contas = 
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
 			}
-			if (contas != null && !contas.isEmpty()) {
-				contaSelecionada = contas.get(0);
-			}
-			return contas;
+//			if (contas != null && !contas.isEmpty()) {
+//				contaSelecionada = contas.get(0);
+//			}
+			//return contas;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -261,15 +263,12 @@ public class ResumoMensalContasController extends AbstractController {
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
-			
-			List<FechamentoPeriodo> resultado = lancamentoContaService.buscarTodosFechamentoPorConta(contaSelecionada);
-			if (resultado != null) {
-				if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
-					for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
-						fechamentos.add(resultado.get(i));
+			if (contaSelecionada != null) {
+				for (FechamentoPeriodo fechamento : lancamentoContaService.buscarTodosFechamentoPorConta(contaSelecionada)) {
+					fechamentos.add(fechamento);
+					if (fechamentos.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
+						break;
 					}
-				} else {
-					fechamentos.addAll(resultado);
 				}
 			}
 		} catch (BusinessException be) {
@@ -277,6 +276,26 @@ public class ResumoMensalContasController extends AbstractController {
 		}
 		return fechamentos;
 	}
+	
+//	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
+//		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
+//		try {			
+//			
+//			List<FechamentoPeriodo> resultado = lancamentoContaService.buscarTodosFechamentoPorConta(contaSelecionada);
+//			if (resultado != null) {
+//				if (resultado.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
+//					for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
+//						fechamentos.add(resultado.get(i));
+//					}
+//				} else {
+//					fechamentos.addAll(resultado);
+//				}
+//			}
+//		} catch (BusinessException be) {
+//			errorMessage(be.getMessage());
+//		}
+//		return fechamentos;
+//	}
 	
 	public void atualizaListaFechamentoPeriodo() {
 		this.getListaFechamentoPeriodo();
