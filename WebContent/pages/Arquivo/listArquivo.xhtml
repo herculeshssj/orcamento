@@ -104,8 +104,8 @@
 			<f:facet name="header">
 				<h:outputText value="Prazo" />
 			</f:facet>
-			<h:graphicImage name="greenlight.png" library="images" rendered="#{!item.prazoExpirado}"/>
-			<h:graphicImage name="redlight.png" library="images"  rendered="#{item.prazoExpirado}"/>
+			<h:graphicImage id="imgHight" height="48" width="48" value="/resources/images/svg/low_priority.svg" rendered="#{!item.prazoExpirado}"/>
+			<h:graphicImage id="imgLow" height="48" width="48" value="/resources/images/svg/high_priority.svg" rendered="#{item.prazoExpirado}"/>
 		</h:column>
 	</ui:define>
 
