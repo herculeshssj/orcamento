@@ -492,14 +492,12 @@ public class ContaComponent implements Serializable {
 			else
 				l.setFechamentoPeriodo(fechamentoReaberto);
 
-			if (lancamentosPeriodicos.contains(l.getLancamentoPeriodico())) {
+			if (lancamentosPeriodicos != null && lancamentosPeriodicos.contains(l.getLancamentoPeriodico())) {
 				this.registrarPagamento(l);
 			} else {
 				lancamentoContaRepository.update(l);
 			}
 		}
-		
-		
 	}
 	
 	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException {

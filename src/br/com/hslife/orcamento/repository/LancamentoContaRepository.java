@@ -66,7 +66,6 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.util.Util;
 
 @Repository
 public class LancamentoContaRepository extends AbstractCRUDRepository<LancamentoConta> {
@@ -98,10 +97,16 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		return (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.hashImportacao = :hash").setString("hash", hash).setMaxResults(1).uniqueResult();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void deleteAllLancamentoContaAfterDateByConta(Date dataPagamento, Conta conta) {
-		String sql = "delete from lancamentoconta where idConta = " + conta.getId() + " and dataPagamento > '" + Util.formataDataHora(dataPagamento, Util.DATABASE) + "'";
-		Query query = getSession().createSQLQuery(sql);
-		query.executeUpdate();
+		Query query = getQuery("FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.dataPagamento > :data")
+				.setLong("idConta", conta.getId())
+				.setDate("data", dataPagamento);
+		
+		// Itera o resultado apagando cada lançamento encontrado
+		for (LancamentoConta l : (List<LancamentoConta>)query.list()) {
+			this.delete(l);
+		}
 	}
 		
 	public boolean existsLinkageFaturaCartao(LancamentoConta lancamento) {

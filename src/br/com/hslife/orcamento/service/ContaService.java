@@ -59,7 +59,9 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
@@ -148,7 +150,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	@Override
 	public void desativarConta(Conta conta, String situacaoLancamentos) throws BusinessException {
 		
-		if (situacaoLancamentos.equals("QUITAR")) {
+		if (situacaoLancamentos.equals("QUITAR")) {			
 			// Busca o último lançamento cadastrado, caso não exista cria um novo lançamento e define a data de 
 			// pagamento com a data atual
 			LancamentoConta ultimoLancamento;
@@ -156,7 +158,12 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 				ultimoLancamento = lancamentoContaRepository.findLastLancamentoContaByConta(conta);
 			else {
 				ultimoLancamento = new LancamentoConta();
+				ultimoLancamento.setDescricao("Último lançamento - Encerramento da conta");
+				ultimoLancamento.setMoeda(conta.getMoeda());
+				ultimoLancamento.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 				ultimoLancamento.setDataPagamento(new Date());
+				ultimoLancamento.setValorPago(0);
+				ultimoLancamento.setTipoLancamento(TipoLancamento.DESPESA);
 			}				
 			
 			// Realiza o fechamento do período
