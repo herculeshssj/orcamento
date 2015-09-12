@@ -91,9 +91,8 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Remoção do registro de moeda nas faturas
-	alter table faturacartao drop foreign key fk_moeda_faturacartao;
-	alter table faturacartao drop column idMoeda;
+	-- Aumentado a quantidade de caracteres para a descrição do modelo de documento - Github Issue #134
+	alter table modelodocumento change column `descricao` `descricao` varchar(200);
     
     /*** Fim do bloco de atualizações da base ***/
     

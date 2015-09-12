@@ -97,7 +97,7 @@ public class ModeloDocumento extends EntityPersistence {
 	public void validate() throws BusinessException {
 		EntityPersistenceUtil.validaCampoNulo("Conteúdo", this.conteudo);
 		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
 	}
 	
 	public ModeloDocumento clonar() {
