@@ -409,12 +409,23 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public String importarLancamentos() {
+		// Verifica se a conta seleciona está ativa
+		if (!criterioBusca.getConta().isAtivo()) {
+			warnMessage("A conta encontra-se inativa!");
+			return "";
+		}
+		
 		importacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		importacaoLancamentoMB.setGoToListPage(goToListPage);
 		return importacaoLancamentoMB.create();
 	}
 	
 	public String fecharPeriodoView() {
+		// Verifica se a conta seleciona está ativa
+		if (!criterioBusca.getConta().isAtivo()) {
+			warnMessage("A conta encontra-se inativa!");
+			return "";
+		}
 		if (fechamentoPeriodo != null && fechamentoPeriodo.getOperacao().equals(OperacaoConta.FECHAMENTO)) {
 			warnMessage("Período selecionado encontra-se fechado.");
 			return "";
@@ -464,6 +475,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public String reabrirPeriodoView() {
+		// Verifica se a conta seleciona está ativa
+		if (!criterioBusca.getConta().isAtivo()) {
+			warnMessage("A conta encontra-se inativa!");
+			return "";
+		}
 		if (fechamentoPeriodo == null) {
 			warnMessage("Selecione um fechamento de período!");
 			return "";
