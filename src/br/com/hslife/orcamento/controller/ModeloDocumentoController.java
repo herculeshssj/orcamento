@@ -161,6 +161,11 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 			errorMessage(be.getMessage());
 		}
 	}
+	
+	public String visualizarModeloDocumento() {
+		conteudoModelo = entity.getConteudo();
+		return "/pages/ModeloDocumento/visualizarDocumento";
+	}
 
 	public IModeloDocumento getService() {
 		return service;

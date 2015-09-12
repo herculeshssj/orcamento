@@ -92,6 +92,11 @@
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
 			</h:commandLink>
 			<p:spacer width="10"/>
+			<h:commandLink title="Visualizar" action="#{managedBean.visualizarModeloDocumento}" target="_blank">
+     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+     			<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+     		</h:commandLink>
+     		<p:spacer width="10"/>
 			<h:commandLink title="Editar" action="#{managedBean.edit}">
 				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
