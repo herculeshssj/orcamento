@@ -71,10 +71,10 @@
 		</h:inputText>
 		
 		<label for="frmFormEntity:txtSenha">Senha:</label>
-		<h:inputText id="txtSenha" value="#{managedBean.novaSenha}" disabled="#{!managedBean.entity.ativo}" />
+		<h:inputSecret id="txtSenha" value="#{managedBean.novaSenha}" disabled="#{!managedBean.entity.ativo}" />
 		
 		<label for="frmFormEntity:txtConfirmaSenha">Confirme a senha:</label>
-		<h:inputText id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}" disabled="#{!managedBean.entity.ativo}" />
+		<h:inputSecret id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}" disabled="#{!managedBean.entity.ativo}" />
 		
 		<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
 			<label>Data de criação:

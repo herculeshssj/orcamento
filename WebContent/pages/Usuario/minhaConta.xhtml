@@ -73,10 +73,10 @@
 			</h:inputText>
 								
 			Senha:
-			<p:password id="txtSenha" value="#{managedBean.novaSenha}" size="30" />
+			<h:inputSecret id="txtSenha" value="#{managedBean.novaSenha}" size="30" />
 			
 			Confirme a senha:
-			<p:password id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}" size="30" />
+			<h:inputSecret id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}" size="30" />
 			
 			Data de criação:
 			<h:outputText id="txtDataCriacao" value="#{managedBean.entity.dataCriacao}">
