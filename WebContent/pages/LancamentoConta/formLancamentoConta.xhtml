@@ -80,20 +80,26 @@
 		<label for="frmFormEntity:txtNumeroDocumento">Número do documento:</label>
 		<h:inputText id="txtNumeroDocumento" value="#{managedBean.entity.numeroDocumento}" disabled="#{!managedBean.entity.conta.ativo}"/>
 		
-		<label for="frmFormEntity:txtPeriodo"><h:outputText value="Período / Ano:" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}"/></label>
-		<h:panelGrid columns="3" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
-			<h:inputText value="#{managedBean.entity.periodo}" size="5"/>
-			<h:outputText value=" / " />
-			<h:inputText value="#{managedBean.entity.ano}" size="5"/>
-		</h:panelGrid>
+		<h:panelGroup rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
+			<label for="frmFormEntity:txtPeriodo"><h:outputText value="Período / Ano:" /></label>
+			<h:panelGrid columns="3">
+				<h:inputText value="#{managedBean.entity.periodo}" size="5"/>
+				<h:outputText value=" / " />
+				<h:inputText value="#{managedBean.entity.ano}" size="5"/>
+			</h:panelGrid>
+		</h:panelGroup>
 		
-		<label><h:outputText value="Parcela:" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}"/></label>
-		<h:inputText value="#{managedBean.entity.parcela}" rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}" disabled="true"/>
+		<h:panelGroup rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}">
+			<label><h:outputText value="Parcela:" /></label>
+			<h:inputText value="#{managedBean.entity.parcela}" disabled="true"/>
+		</h:panelGroup>
 		
-		<label for="frmFormEntity:txtDataVencimento"><h:outputText value="Data de vencimento:" rendered="#{managedBean.entity.lancamentoPeriodico != null}" /></label>
-		<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}" rendered="#{managedBean.entity.statusLancamentoConta != 'QUITADO' and managedBean.entity.lancamentoPeriodico != null}">
-    		<f:converter converterId="dateConverter"/>
-    	</p:inputMask>
+		<h:panelGroup rendered="#{managedBean.entity.lancamentoPeriodico != null}">
+			<label for="frmFormEntity:txtDataVencimento"><h:outputText value="Data de vencimento:" /></label>
+			<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>
+    	</h:panelGroup>
     	
     	<label for="frmFormEntity:txtDataPagamento">Data de pagamento:</label>
     	<p:inputMask id="txtDataPagamento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataPagamento}" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
