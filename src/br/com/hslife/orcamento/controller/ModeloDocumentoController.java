@@ -72,6 +72,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 	
 	private String descricaoModeloPesquisa;
 	private boolean somenteAtivos = true;
+	private boolean modeloAtivo = true;
 	private String descricaoModelo;
 	private String conteudoModelo;
 	private String statusSalvamento;
@@ -119,6 +120,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 		String retorno = super.edit();
 		conteudoModelo = entity.getConteudo();
 		descricaoModelo = entity.getDescricao();
+		modeloAtivo = entity.isAtivo();
 		return retorno;
 	}
 	
@@ -126,13 +128,14 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 		try {
 			if (entity.getId() == null) {
 				
-				if (descricaoModelo ==  null || descricaoModelo.isEmpty()) {
+				if (descricaoModelo !=  null || !descricaoModelo.isEmpty()) {
 					descricaoModelo = "Modelo salvo automaticamente em " + Util.formataDataHora(new Date(), Util.DATAHORA);
 				}
 				
 				entity.setUsuario(getUsuarioLogado());
 				entity.setConteudo(conteudoModelo);
 				entity.setDescricao(descricaoModelo);
+				entity.setAtivo(modeloAtivo);
 				getService().cadastrar(entity);
 				
 				// Tentando contornar a exceção org.hibernate.StaleObjectStateException
@@ -141,6 +144,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 				ModeloDocumento modelo = getService().buscarPorID(entity.getId());
 				modelo.setConteudo(conteudoModelo);
 				modelo.setDescricao(descricaoModelo);
+				modelo.setAtivo(modeloAtivo);
 				getService().alterar(modelo);
 			}
 			statusSalvamento = "Modelo de documento salvo automaticamente em " + new Date().toString();
@@ -213,5 +217,13 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 
 	public void setStatusSalvamento(String statusSalvamento) {
 		this.statusSalvamento = statusSalvamento;
+	}
+
+	public boolean isModeloAtivo() {
+		return modeloAtivo;
+	}
+
+	public void setModeloAtivo(boolean modeloAtivo) {
+		this.modeloAtivo = modeloAtivo;
 	}
 }
