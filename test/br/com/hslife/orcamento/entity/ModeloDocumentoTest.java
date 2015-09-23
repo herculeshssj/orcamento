@@ -77,7 +77,6 @@ public class ModeloDocumentoTest {
 		} catch (Throwable t) {
 			fail(t.getMessage());
 		}
-		fail("Falha no teste!");
 	}
 	
 	@Test

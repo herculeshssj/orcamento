@@ -161,7 +161,8 @@ public class AgendaServiceTest extends AbstractTestServices {
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
 		int contador = 0;
-		for (Agenda agenda : agendaService.buscarAgendamentoLancamentosAgendados(conta, new Date(), new Date())) {
+		//for (Agenda agenda : agendaService.buscarAgendamentoLancamentosAgendados(conta, new Date(), new Date())) {
+		for (Agenda agenda : agendaService.buscarAgendamentoLancamentosAgendados(conta, null, null)) {
 			for (int i = 0; i < 3; i++) {
 				if ((lancamentos.get(i).getConta().getLabel() + " - " + lancamentos.get(i).getDescricao()).equals(agenda.getDescricao()) /*&& agenda.getLancamentoAgendado().isAgendado()*/) {
 					contador++;
@@ -175,8 +176,8 @@ public class AgendaServiceTest extends AbstractTestServices {
 	public void testBuscarPorCriterioAgendamento() throws BusinessException {
 		CriterioAgendamento criterioBusca = new CriterioAgendamento();
 		criterioBusca.setDescricao("Compromisso de teste");
-		criterioBusca.setInicio(new Date());
-		criterioBusca.setFim(new Date());
+		//criterioBusca.setInicio(new Date());
+		//criterioBusca.setFim(new Date());
 		criterioBusca.setTipo(TipoAgendamento.COMPROMISSO);
 		
 		List<Agenda> listaAgenda = agendaService.buscarPorCriterioAgendamento(criterioBusca);

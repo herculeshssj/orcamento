@@ -48,15 +48,10 @@ package br.com.hslife.orcamento.entity;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 import org.json.JSONObject;
 
@@ -71,7 +66,7 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	public abstract String getLabel();
 	
 	public abstract void validate() throws BusinessException;
-	
+	/*
 	@Column(nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@Version
@@ -84,7 +79,7 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	public void setVersionEntity(Date versionEntity) {
 		this.versionEntity = versionEntity;
 	}
-
+	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;

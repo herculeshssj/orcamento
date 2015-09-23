@@ -68,6 +68,7 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 	
 	private Usuario usuario = new Usuario();
 	private Agenda agenda = new Agenda();
+	Date dataSelecionada = new Date();
 	
 	@Autowired
 	private AgendaRepository agendaRepository;
@@ -89,8 +90,8 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		agenda = new Agenda();
 		agenda.setUsuario(usuario);
 		agenda.setDescricao("Compromisso de teste");
-		agenda.setInicio(new Date());
-		agenda.setFim(new Date());
+		agenda.setInicio(dataSelecionada);
+		agenda.setFim(dataSelecionada);
 		agenda.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
 		agenda.setEmitirAlerta(true);
 	}
@@ -162,8 +163,8 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		
 		CriterioAgendamento criterioBusca = new CriterioAgendamento();
 		criterioBusca.setDescricao("Compromisso de teste");
-		criterioBusca.setInicio(new Date());
-		criterioBusca.setFim(new Date());
+		//criterioBusca.setInicio(dataSelecionada);
+		//criterioBusca.setFim(dataSelecionada);
 		criterioBusca.setTipo(TipoAgendamento.COMPROMISSO);
 		
 		List<Agenda> listaAgenda = agendaRepository.findByCriterioAgendamento(criterioBusca);

@@ -112,7 +112,7 @@ public class AuditoriaAspect {
 			auditoria.setBrowser("Internal Browser");
 		}
 	
-		auditoria.setVersionAuditedEntity(entity.getVersionEntity());
+		//auditoria.setVersionAuditedEntity(entity.getVersionEntity());
 		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
@@ -155,7 +155,7 @@ public class AuditoriaAspect {
 				auditoria.setBrowser("Internal Browser");
 			}
 			
-			auditoria.setVersionAuditedEntity(entity.getVersionEntity());
+			//auditoria.setVersionAuditedEntity(entity.getVersionEntity());
 			auditoria.setDadosAuditados(entity.generateJsonValues());
 			
 			sessionFactory.getCurrentSession().persist(auditoria);
@@ -199,7 +199,7 @@ public class AuditoriaAspect {
 			auditoria.setBrowser("Internal Browser");
 		}
 		
-		auditoria.setVersionAuditedEntity(entity.getVersionEntity());
+		//auditoria.setVersionAuditedEntity(entity.getVersionEntity());
 		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
