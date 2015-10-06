@@ -86,6 +86,7 @@ public class TestString {
 	public void textSHA256() {
 		System.out.println("Texto criptografado em SHA-256\n");
 		System.out.println(Util.SHA256("A4m1n@01$") + "\n");
+		System.out.println(Util.SHA256("admin") + "\n");
 		System.out.println("Tamanho do SHA-256: " + Util.SHA256("Texto criptografado em SHA-256").length());
 	}
 }

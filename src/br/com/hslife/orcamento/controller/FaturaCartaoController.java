@@ -172,6 +172,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	@Override
 	public void find() {
+		if (cartaoSelecionado == null) {
+			warnMessage("Selecione o cartão!");
+			return;
+		}
 		try {
 			
 			if (statusFatura == null) {

@@ -2306,8 +2306,8 @@ alter table lancamentoconta_detalhelancamento add constraint fk_detalhelancament
 drop table versao; 
 
 /* Exclusão da coluna idLancamentoConta da tabela detalhelancamento */
-ALTER TABLE `orcamento`.`detalhelancamento` DROP FOREIGN KEY `fk_detalhelancamento_lancamentoconta`;
-ALTER TABLE `orcamento`.`detalhelancamento` DROP COLUMN `idLancamentoConta`, DROP INDEX `fk_detalhelancamento_lancamentoconta` ;
+ALTER TABLE `detalhelancamento` DROP FOREIGN KEY `fk_detalhelancamento_lancamentoconta`;
+ALTER TABLE `detalhelancamento` DROP COLUMN `idLancamentoConta`, DROP INDEX `fk_detalhelancamento_lancamentoconta` ;
 
 -- Exclusão de opção do sistema para prazo de arquivo em geral - Github Issue #120
 delete from opcaosistema where chave = 'ARQUIVO_TEMPO_GUARDA_GERAL';
@@ -2318,3 +2318,10 @@ alter table faturacartao drop column idMoeda;
 
 -- Aumentado a quantidade de caracteres para a descrição do modelo de documento - Github Issue #134
 alter table modelodocumento change column `descricao` `descricao` varchar(200);
+
+/* Ajustes no script para uma instalação do zero do sistema - Github Issue #2 */
+
+-- Definição de login e senha iniciais
+-- Usuário: admin
+-- Senha: admin
+update usuario set senha = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918' where login = 'admin';

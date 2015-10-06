@@ -132,6 +132,7 @@ public class PanoramaCadastroController extends AbstractController {
 	public List<SelectItem> getListaCadastro() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (CadastroSistema enumeration : CadastroSistema.values()) {
+			if (enumeration.equals(CadastroSistema.MEIOPAGAMENTO) && !getOpcoesSistema().getExibirMeioPagamento()) continue;
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

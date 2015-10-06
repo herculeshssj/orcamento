@@ -100,6 +100,11 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	}
 	
 	public String find() {
+		if (criterioBusca.getConta() == null) {
+			warnMessage("Informe a conta!");
+			return "";
+		}
+		
 		if (ano < 1970) {
 			warnMessage("Ano deve ser maior que 1970!");
 		} else {

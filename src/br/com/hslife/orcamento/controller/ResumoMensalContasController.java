@@ -129,6 +129,10 @@ public class ResumoMensalContasController extends AbstractController {
 	}
 	
 	public String find() {
+		if (contaSelecionada == null) {
+			warnMessage("Informe a conta!");
+			return "";
+		}
 		try {
 			resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
 			this.gerarGraficoCreditoDebito();

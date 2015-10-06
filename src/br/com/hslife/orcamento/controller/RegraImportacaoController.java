@@ -103,6 +103,10 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 	@Override
 	public void find() {
 		try {
+			if (contaSelecionada == null) {
+				warnMessage("Selecione a conta!");
+				return;
+			}
 			listEntity = getService().buscarTodosPorConta(contaSelecionada);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
