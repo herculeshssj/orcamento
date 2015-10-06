@@ -194,6 +194,10 @@ public class LancamentoPeriodico extends EntityPersistence {
 		return resultado == 0;
 	}
 	
+	public boolean isPossuiAnexo() {
+		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
+	}
+	
 	public Long getId() {
 		return id;
 	}

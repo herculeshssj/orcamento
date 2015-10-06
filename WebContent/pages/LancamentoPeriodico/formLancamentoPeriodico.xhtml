@@ -173,11 +173,11 @@
 					Comprovante:
 					<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}"/>
 					<h:panelGroup>
-						<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+						<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
 							<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
 						</h:commandLink>
 						&nbsp;&nbsp;&nbsp;
-						<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}">
+						<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO' and managedBean.entity.possuiAnexo}">
 							<h:graphicImage id="imgDeleteFile" value="/resources/images/svg/delete_row.svg" height="48" width="48"/>
 						</h:commandLink>								
 					</h:panelGroup>

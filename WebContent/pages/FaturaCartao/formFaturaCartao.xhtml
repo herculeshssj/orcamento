@@ -70,7 +70,7 @@
 			
 		</h:panelGrid>
 		
-		<h:panelGrid columns="4">
+		<h:panelGrid columns="2">
 			
 			Data de vencimento:
 			<h:outputText value="#{managedBean.entity.dataVencimento}">
@@ -97,11 +97,11 @@
 			Anexar fatura:
 			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" />
 			<h:panelGroup>
-				<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+				<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
 					<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
 				</h:commandLink>
 				&nbsp;&nbsp;&nbsp;
-				<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}">
+				<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
 					<h:graphicImage id="imgDeleteFile" value="/resources/images/svg/delete_row.svg" height="48" width="48"/>
 				</h:commandLink>								
 			</h:panelGroup>			

@@ -102,8 +102,8 @@
 			</h:outputText>				
 		</h:panelGroup>
 		
-		Fatura anexa:
-		<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+		<h:outputText value="Fatura anexa:" rendered="#{managedBean.entity.possuiAnexo}"/>
+		<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
 			<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
 		</h:commandLink>
 		
@@ -128,8 +128,8 @@
 			</h:outputText>				
 		</h:panelGroup>
 		
-		<h:outputText/>
-		<h:outputText/>
+		<h:outputText rendered="#{managedBean.entity.possuiAnexo}"/>
+		<h:outputText rendered="#{managedBean.entity.possuiAnexo}"/>
 		
 	</h:panelGrid>
 	

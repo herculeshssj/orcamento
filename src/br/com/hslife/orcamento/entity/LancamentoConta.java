@@ -290,6 +290,10 @@ public class LancamentoConta extends EntityPersistence {
 		BigDecimal result = new BigDecimal(this.valorPago - resultado).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 		return result.doubleValue();
 	}
+	
+	public boolean isPossuiAnexo() {
+		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
+	}
 
 	public void setId(Long id) {
 		this.id = id;

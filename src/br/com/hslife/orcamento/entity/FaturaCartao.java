@@ -186,6 +186,10 @@ public class FaturaCartao extends EntityPersistence {
 		detalheFatura.clear();
 		detalheFatura.addAll(detalhes);
 	}
+	
+	public boolean isPossuiAnexo() {
+		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
+	}
 
 	public Long getId() {
 		return id;
