@@ -146,17 +146,20 @@ public class PanoramaCadastroController extends AbstractController {
 			switch (cadastroSelecionado) {
 				case CATEGORIA : 
 					for (Categoria c : categoriaService.buscarTipoCategoriaEDescricaoEAtivoPorUsuario(null, null, null, getUsuarioLogado())) {
-						listaSelectItem.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
+						listaSelectItem.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao() 
+								+ (c.isAtivo() ? "" : " [INATIVO]")));
 					}
 					break;
 				case FAVORECIDO : 
 					for (Favorecido f : favorecidoService.buscarTipoPessoaENomeEAtivoPorUsuario(null, null, null, getUsuarioLogado())) {
-						listaSelectItem.add(new SelectItem(f.getId(), f.getTipoPessoa() + " - " + f.getNome()));
+						listaSelectItem.add(new SelectItem(f.getId(), f.getTipoPessoa() + " - " + f.getNome()
+								+ (f.isAtivo() ? "" : " [INATIVO]")));
 					}
 					break;
 				case MEIOPAGAMENTO : 
 					for (MeioPagamento m : meioPagamentoService.buscarDescricaoEAtivoPorUsuario(null, null, getUsuarioLogado())) {
-						listaSelectItem.add(new SelectItem(m.getId(), m.getDescricao()));
+						listaSelectItem.add(new SelectItem(m.getId(), m.getDescricao()
+								+ (m.isAtivo() ? "" : " [INATIVO]")));
 					}
 					break;
 				case MOEDA : 
