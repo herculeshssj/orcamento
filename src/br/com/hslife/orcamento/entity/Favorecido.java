@@ -65,6 +65,7 @@ import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -132,6 +133,8 @@ public class Favorecido extends EntityPersistence {
 		if (this.usuario == null) {
 			throw new BusinessException("Informe o usuário!");
 		}
+		
+		EntityPersistenceUtil.validaCampoNulo("Tipo de pessoa", this.tipoPessoa);
 		
 		try {
 			CPFValidator validatorCpf = new CPFValidator();
