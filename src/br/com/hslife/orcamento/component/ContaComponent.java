@@ -631,6 +631,7 @@ public class ContaComponent implements Serializable {
 			proximaMensalidade.setAno(proximaMensalidade.getDataVencimento().getYear() + 1900);
 			proximaMensalidade.setPeriodo(proximaMensalidade.getDataVencimento().getMonth() + 1);
 			proximaMensalidade.setDataPagamento(proximaMensalidade.getDataVencimento());
+			proximaMensalidade.setValorPago(proximaMensalidade.getLancamentoPeriodico().getValorParcela());
 			
 			// Define a descrição definitiva do lançamento a ser criado
 			proximaMensalidade.setDescricao(proximaMensalidade.getLancamentoPeriodico().getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
