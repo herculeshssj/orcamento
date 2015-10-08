@@ -145,7 +145,6 @@
 				<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
 					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 				</h:selectOneMenu>
-				<h:outputText value="#{managedBean.entity.moeda.label}" rendered="#{!managedBean.entity.conta.ativo}"/>
 				
 			</h:panelGrid>
 			
