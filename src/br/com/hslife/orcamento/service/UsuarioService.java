@@ -313,6 +313,31 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		if (u == null || u.getLogin().equals("admin")) {
 			throw new BusinessException("Login não encontrado!");
 		} else if (u.getEmail().equals(entity.getEmail())) {
+			// Antes de proceder com a alteração da senha, verifica se o usuário não se encontra inativo no sistema
+			if (!u.isAtivo()) {
+				// Envia mensagem de e-mail avisando que a conta está inativa
+				StringBuilder mensagemEmail = new StringBuilder();
+				
+				mensagemEmail.append("Prezado " + u.getNome() + "\n\n");
+				mensagemEmail.append("Sua conta encontra-se inativa.\n\n");
+				mensagemEmail.append("Caso queira voltar a utilizar o sistema e acessar novamente seus dados, por favor entre em contato.\n\n");
+				mensagemEmail.append("Atenciosamente,\n\n");
+				mensagemEmail.append("Administrador do Sistema.\n");
+				
+				try {
+					emailComponent.setDestinatario(u.getNome());
+					emailComponent.setEmailDestinatario(u.getEmail());
+					emailComponent.setAssunto("Orçamento Doméstico - Conta inativa");
+					emailComponent.setMensagem(mensagemEmail.toString());
+					emailComponent.enviarEmail();
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new BusinessException(e);
+				}
+				return;
+			}
+			
+			
 			// Gera hash da data atual para extrair a senha
 			String hash = Util.MD5((new Date().toString()));
 			

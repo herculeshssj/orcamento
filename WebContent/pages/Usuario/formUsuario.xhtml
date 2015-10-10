@@ -66,7 +66,7 @@
 		<h:inputText id="txtLogin" value="#{managedBean.entity.login}" disabled="#{managedBean.operation == 'edit'}" />
 		
 		<label for="frmFormEntity:txtEmail">E-Mail:</label>
-		<h:inputText id="txtEmail" value="#{managedBean.entity.email}" disabled="#{!managedBean.entity.ativo || managedBean.entity.login == 'admin'}">
+		<h:inputText id="txtEmail" value="#{managedBean.entity.email}" disabled="#{!managedBean.entity.ativo}">
 			<f:validator validatorId="emailValidator"/>
 		</h:inputText>
 		
@@ -84,7 +84,7 @@
 			</label>
 			<p:spacer height="1"/>
 			<label>
-				<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+				<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}"/>
 				Ativo
 			</label>
 		</h:panelGroup>
