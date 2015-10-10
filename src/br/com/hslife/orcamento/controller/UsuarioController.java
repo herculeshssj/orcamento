@@ -131,7 +131,13 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 				getService().cadastrar(entity, novaSenha, confirmaSenha);
 				infoMessage("Usuário cadastrado com sucesso!");
 			} else {
-				getService().alterar(entity, novaSenha, confirmaSenha);
+				// Verifica se o usuário está tentando ativar somente sua conta
+				if (novaSenha != null & confirmaSenha != null) {
+					getService().alterar(entity, novaSenha, confirmaSenha);
+				} else {
+					getService().alterar(entity);
+				}
+				
 				infoMessage("Usuário alterado com sucesso!");
 			}			
 			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
