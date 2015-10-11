@@ -93,6 +93,8 @@
 				<h:outputText value="Descrição"/>
 			</f:facet>
 			<h:outputText value="#{item.descricao}" />
+			<p:spacer width="5" rendered="#{item.emitirAlerta}"/>
+			<h:graphicImage id="imgAlarm" value="/resources/images/svg/alarm_clock.svg" height="20" width="20" rendered="#{item.emitirAlerta}"/>     			
   		</h:column>
   		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
