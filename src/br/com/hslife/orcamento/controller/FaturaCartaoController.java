@@ -242,7 +242,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	@Override
 	public String edit() {
 		try {
-			entity = getService().buscarPorID(idEntity);
+			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			String idFatura = fParams.get("idEdicaoFatura");
+			
+			entity = getService().buscarPorID(Long.parseLong(idFatura));
 			lancamentosAdicionados.clear();
 			lancamentosAdicionados.addAll(entity.getDetalheFatura());
 			detalhesFaturaCartao.clear();
@@ -437,7 +440,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public String fecharFaturaView() {
 		try {
-			faturaSelecionada = getService().buscarPorID(idEntity);
+			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			String idFatura = fParams.get("idFecharFatura");
+			
+			faturaSelecionada = getService().buscarPorID(Long.parseLong(idFatura));
 			detalhesFaturaCartao.clear();
 			detalhesFaturaCartao.addAll(faturaSelecionada.getDetalheFatura());
 			this.calcularSaldoCompraSaqueParceladoPorMoeda();
@@ -478,7 +484,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public void reabrirFatura() {
 		try {
-			getService().reabrirFatura(getService().buscarPorID(idEntity));
+			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			String idFatura = fParams.get("idReabrirFatura");
+			
+			getService().reabrirFatura(getService().buscarPorID(Long.parseLong(idFatura)));
 			
 			infoMessage("Fatura reaberta com sucesso!");
 			
@@ -492,7 +501,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public String quitarFaturaView() {
 		try {
 			if (!prontoParaQuitar) {
-				faturaSelecionada = getService().buscarPorID(idEntity);
+				Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+				String idFatura = fParams.get("idQuitarFatura");
+				
+				faturaSelecionada = getService().buscarPorID(Long.parseLong(idFatura));
 				criterioBusca = new CriterioBuscaLancamentoConta();
 				contaSelecionada = null;
 				valorAQuitar = 0;
@@ -587,7 +599,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	public String detalheFatura() {		
 		try {			
-			entity = getService().buscarPorID(idEntity);
+			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+			String idFatura = fParams.get("idDetalheFatura");
+			
+			entity = getService().buscarPorID(Long.parseLong(idFatura));
 			lancamentosEncontrados.clear();
 			lancamentosEncontrados.addAll(entity.getDetalheFatura());
 			detalhesFaturaCartao.clear(); 

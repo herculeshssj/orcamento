@@ -89,6 +89,7 @@
 					<f:facet name="header">
 						<h:commandLink id="#{fatura}btnSearch" title="Visualizar detalhes" action="#{managedBean.detalheFatura}">
 							<h:graphicImage id="imgSearch" height="40" width="40" value="/resources/images/svg/search.svg"/>
+							<f:param name="idDetalheFatura" value="#{fatura.id}"/>
 						</h:commandLink>										
 			  			<p:spacer width="5"/>
 			  			<h:outputText value="Detalhes" />
@@ -96,6 +97,7 @@
 			  			
 			  			<h:commandLink title="Editar fatura" action="#{managedBean.edit}" rendered="#{fatura.statusFaturaCartao == 'ABERTA' or fatura.statusFaturaCartao == 'FUTURA'}">
 							<h:graphicImage id="imgEdit" height="40" width="40" value="/resources/images/svg/edit_image.svg"/>
+							<f:param name="idEdicaoFatura" value="#{fatura.id}"/>
 						</h:commandLink>										
 			  			<p:spacer width="5" rendered="#{fatura.statusFaturaCartao == 'ABERTA' or fatura.statusFaturaCartao == 'FUTURA'}"/>
 			  			<h:outputText value="Editar" rendered="#{fatura.statusFaturaCartao == 'ABERTA' or fatura.statusFaturaCartao == 'FUTURA'}"/>
@@ -103,6 +105,7 @@
 			  			
 						<h:commandLink title="Fechar fatura" action="#{managedBean.fecharFaturaView}" rendered="#{fatura.statusFaturaCartao == 'ABERTA'}">
 							<h:graphicImage id="imgClose" height="40" width="40" value="/resources/images/svg/inspection.svg"/>
+							<f:param name="idFecharFatura" value="#{fatura.id}"/>
 						</h:commandLink>										
 			  			<p:spacer width="5" rendered="#{fatura.statusFaturaCartao == 'ABERTA'}"/>
 			  			<h:outputText value="Fechar" rendered="#{fatura.statusFaturaCartao == 'ABERTA'}"/>
@@ -110,6 +113,7 @@
 						
 						<h:commandLink title="Reabrir fatura" action="#{managedBean.reabrirFatura}" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}">
 							<h:graphicImage id="imgReopen" height="40" width="40" value="/resources/images/svg/process.svg"/>
+							<f:param name="idReabrirFatura" value="#{fatura.id}"/>
 						</h:commandLink>										
 			  			<p:spacer width="5" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>
 			  			<h:outputText value="Reabrir" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>
@@ -117,6 +121,7 @@
 			  			
 			  			<h:commandLink title="Quitar fatura" action="#{managedBean.quitarFaturaView}" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}">
 							<h:graphicImage id="imgPay" height="40" width="40" value="/resources/images/svg/donate.svg"/>
+							<f:param name="idQuitarFatura" value="#{fatura.id}"/>
 						</h:commandLink>										
 			  			<p:spacer width="5" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>
 			  			<h:outputText value="Quitar" rendered="#{fatura.statusFaturaCartao == 'FECHADA'}"/>
