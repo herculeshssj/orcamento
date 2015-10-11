@@ -101,6 +101,19 @@ public class Endereco extends EntityPersistence {
 	public Endereco() {
 		
 	}
+	
+	private Endereco(Builder builder) {
+		this.descricao = builder.descricao;
+		this.tipoLogradouro = builder.tipoLogradouro;
+		this.logradouro = builder.logradouro;
+		this.complemento = builder.complemento;
+		this.numero = builder.numero;
+		this.bairro = builder.bairro;
+		this.cidade = builder.cidade;
+		this.estado = builder.estado;
+		this.cep = builder.cep;
+		this.usuario = builder.usuario;
+	}
 
 	@Override
 	public String getLabel() {
@@ -135,8 +148,7 @@ public class Endereco extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		
+	public void validate() throws BusinessException {		
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Tipo de logradouro", this.tipoLogradouro, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Logradouro", this.logradouro, 150);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Número", this.numero, 10);
@@ -146,9 +158,73 @@ public class Endereco extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("Estado", this.estado, 2);
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringOpcional("CEP", this.cep, 8);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
+	}
+	
+	public static class Builder {
+
+		private String descricao;
+		private String tipoLogradouro;
+		private String logradouro;
+		private String bairro;
+		private String cidade;
+		private String estado;
+		private Usuario usuario;
+		private String numero = "";
+		private String complemento = "";
+		private String cep = "";
 		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+		public Builder(String descricao) {
+			this.descricao = descricao;
+		}
+		
+		public Builder tipoLogradouro(String tipoLogradouro) {
+			this.tipoLogradouro = tipoLogradouro;
+			return this;
+		}
+		
+		public Builder logradouro(String logradouro) {
+			this.logradouro = logradouro;
+			return this;
+		}
+		
+		public Builder bairro(String bairro) {
+			this.bairro = bairro;
+			return this;
+		}
+		
+		public Builder cidade(String cidade) {
+			this.cidade = cidade;
+			return this;
+		}
+		
+		public Builder estado(String estado) {
+			this.estado = estado;
+			return this;
+		}
+		
+		public Builder numero(String numero) {
+			this.numero = numero;
+			return this;
+		}
+		
+		public Builder complemento(String complemento) {
+			this.complemento = complemento;
+			return this;
+		}
+		
+		public Builder cep(String cep) {
+			this.cep = cep;
+			return this;
+		}
+		
+		public Builder usuario(Usuario usuario) {
+			this.usuario = usuario;
+			return this;
+		}
+		
+		public Endereco build() {
+			return new Endereco(this);
 		}
 	}
 	

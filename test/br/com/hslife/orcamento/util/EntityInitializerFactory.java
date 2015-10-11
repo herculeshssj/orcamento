@@ -51,7 +51,6 @@ import java.util.Date;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
-import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
@@ -79,21 +78,6 @@ public class EntityInitializerFactory {
 		usuario.setSenha(Util.SHA1("teste"));
 		usuario.setTipoUsuario(TipoUsuario.ROLE_USER);
 		return usuario;
-	}
-	
-	public static Endereco initializeEndereco(Usuario usuario) {
-		Endereco endereco = new Endereco();
-		endereco.setTipoLogradouro("Avenida");
-		endereco.setLogradouro("Ministro Lafaeyte de Andrade");
-		endereco.setNumero("1683");
-		endereco.setComplemento("Bl. 3 Apt. 404");
-		endereco.setBairro("Marco II");
-		endereco.setCidade("Nova Iguaçu");
-		endereco.setEstado("RJ");
-		endereco.setCep("26261220");
-		endereco.setDescricao("Residencial");
-		endereco.setUsuario(usuario);
-		return endereco;
 	}
 	
 	public static Telefone initializeTelefone(Usuario usuario) {

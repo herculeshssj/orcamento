@@ -81,7 +81,17 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 		usuarioRepository.save(usuario);
 		
 		// Cria uma nova instância de endereço para testar os recursos do CRUD
-		endereco = EntityInitializerFactory.initializeEndereco(usuario);
+		endereco = new Endereco.Builder("Residencial")
+			.tipoLogradouro("Avenida")
+			.logradouro("Ministro Lafaeyte de Andrade")
+			.numero("1683")
+			.complemento("Bl. 3 Apt. 404")
+			.bairro("Marco II")
+			.cidade("Nova Iguaçu")
+			.estado("RJ")
+			.cep("26261220")
+			.usuario(usuario)
+			.build();
 	}
 
 	@Test
