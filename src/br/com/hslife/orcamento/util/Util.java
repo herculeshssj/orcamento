@@ -200,8 +200,7 @@ public class Util {
      */
     public static double arredondar(double valor) {
 		BigDecimal valorAArredondar = new BigDecimal(valor);
-		valorAArredondar.setScale(2, BigDecimal.ROUND_CEILING);
-		return valorAArredondar.doubleValue();
+		return valorAArredondar.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();
     }
     
     /*

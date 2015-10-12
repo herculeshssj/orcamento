@@ -46,7 +46,6 @@
 
 package br.com.hslife.orcamento.component;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,12 +62,7 @@ import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.OpcaoSistemaRepository;
 
 @Component
-public class OpcaoSistemaComponent implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6347980819772095724L;
+public class OpcaoSistemaComponent {
 	
 	@Autowired
 	private OpcaoSistemaRepository opcaoSistemaRepository;

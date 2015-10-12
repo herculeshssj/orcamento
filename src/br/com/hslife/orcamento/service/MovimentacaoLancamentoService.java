@@ -187,6 +187,8 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 			if (contaOrigem.equals(contaDestino)) {
 				throw new BusinessException("Conta de destino não pode ser igual a conta de origem!");
 			}
+		} else {
+			throw new BusinessException("Conta de origem e/ou destino não informada(s)!");
 		}
 		
 		LancamentoConta lancamentoOrigem = new LancamentoConta(lancamentoATransferir);

@@ -46,8 +46,6 @@
 
 package br.com.hslife.orcamento.component;
 
-import java.io.Serializable;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -59,12 +57,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.repository.UsuarioRepository;
 
 @Component
-public class UsuarioComponent implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4741861118032661689L;
+public class UsuarioComponent {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;

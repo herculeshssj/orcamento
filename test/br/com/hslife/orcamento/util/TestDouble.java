@@ -67,26 +67,26 @@ public class TestDouble {
 	}
 	
 	//@Test
-	public void testBigDecimal() {
-	      System.out.println();
-	        BigDecimal a = new BigDecimal(0.001).setScale(2,RoundingMode.CEILING);  
-	        BigDecimal b = new BigDecimal(0.11).setScale(2,RoundingMode.CEILING);  
-	        BigDecimal c = new BigDecimal(333.3334545345).setScale(2,RoundingMode.CEILING);  
-	        BigDecimal d = new BigDecimal(1.11).setScale(2,RoundingMode.CEILING);  
-	        double ai = a.doubleValue();  
-	        double bi = b.doubleValue();  
-	        double ci = c.doubleValue();  
-	        double di = d.doubleValue();  
-	        System.out.println(a);  
-	        System.out.println(b);  
-	        System.out.println(c);  
-	        System.out.println(d);  
-	        System.out.println(ai);  
-	        System.out.println(bi);  
-	        System.out.println(ci);  
-	        System.out.println(di);       
-	      
-	}
+//	public void testBigDecimal() {
+//	      System.out.println();
+//	        BigDecimal a = new BigDecimal(0.001).setScale(2,RoundingMode.CEILING);  
+//	        BigDecimal b = new BigDecimal(0.11).setScale(2,RoundingMode.CEILING);  
+//	        BigDecimal c = new BigDecimal(333.3334545345).setScale(2,RoundingMode.CEILING);  
+//	        BigDecimal d = new BigDecimal(1.11).setScale(2,RoundingMode.CEILING);  
+//	        double ai = a.doubleValue();  
+//	        double bi = b.doubleValue();  
+//	        double ci = c.doubleValue();  
+//	        double di = d.doubleValue();  
+//	        System.out.println(a);  
+//	        System.out.println(b);  
+//	        System.out.println(c);  
+//	        System.out.println(d);  
+//	        System.out.println(ai);  
+//	        System.out.println(bi);  
+//	        System.out.println(ci);  
+//	        System.out.println(di);       
+//	      
+//	}
 	
 	//@Test
 	public void testCasaDecimal() {

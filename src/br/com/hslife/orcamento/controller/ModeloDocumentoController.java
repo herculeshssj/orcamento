@@ -128,7 +128,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 		try {
 			if (entity.getId() == null) {
 				
-				if (descricaoModelo !=  null || !descricaoModelo.isEmpty()) {
+				if (descricaoModelo !=  null && !descricaoModelo.isEmpty()) {
 					descricaoModelo = "Modelo salvo automaticamente em " + Util.formataDataHora(new Date(), Util.DATAHORA);
 				}
 				

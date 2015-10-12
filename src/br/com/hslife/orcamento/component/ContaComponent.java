@@ -46,7 +46,6 @@
 
 package br.com.hslife.orcamento.component;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,12 +81,7 @@ import br.com.hslife.orcamento.util.EntityLabelComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Component
-public class ContaComponent implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4282979732617114700L;
+public class ContaComponent {
 
 	@Autowired
 	private ContaRepository contaRepository;
