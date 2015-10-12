@@ -59,6 +59,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOrcamento;
@@ -124,6 +125,11 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	@Override
 	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findAllByUsuario(usuario);
+	}
+	
+	@Override
+	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) throws BusinessException {
+		return getRepository().findAbrangenciaByUsuario(abrangencia, usuario);
 	}
 	
 	@Override

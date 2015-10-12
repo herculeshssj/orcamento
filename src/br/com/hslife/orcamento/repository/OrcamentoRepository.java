@@ -52,6 +52,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 
 @Repository
 public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
@@ -63,6 +64,14 @@ public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
 	@SuppressWarnings("unchecked")
 	public List<Orcamento> findAllByUsuario(Usuario usuario) {
 		return getQuery("FROM Orcamento orcamento WHERE orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Orcamento> findAbrangenciaByUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) {
+		return getQuery("FROM Orcamento orcamento WHERE orcamento.abrangenciaOrcamento = :abrangencia AND orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
+				.setParameter("abrangencia", abrangencia)
 				.setLong("idUsuario", usuario.getId())
 				.list();
 	}

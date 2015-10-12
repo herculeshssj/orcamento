@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -56,6 +57,11 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.BarChartSeries;
+import org.primefaces.model.chart.LineChartSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -120,6 +126,10 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	
 	private boolean mostrarInformacao;
 	
+	private BarChartModel orcamentoModel;
+	private boolean exibirGrafico = false;
+	private TipoCategoria tipoCategoria;
+	
 	public OrcamentoController() {
 		super(new Orcamento());
 		moduleTitle = "Orçamento do Período";
@@ -132,6 +142,8 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		listEntity = new ArrayList<Orcamento>();
 		listaDetalheOrcamento = new ArrayList<DetalheOrcamento>();
 		listaItemDetalheOrcamento = new ArrayList<DetalheOrcamento>();
+		
+		exibirGrafico = false;
 	}
 	
 	@Override
@@ -142,6 +154,69 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 			Collections.sort(listaDetalheOrcamento, new DetalheOrcamentoComparator());
 			mostrarInformacao = true;
 		}
+	}
+	
+	public void buscarEAtualizar() {
+		find();
+		gerarGraficoDashboard();		
+	}
+	
+	private void gerarGraficoDashboard() {
+		orcamentoModel = new BarChartModel();
+		
+		int yMinimo = 0;
+		int yMaximo = 0;
+		
+		BarChartSeries previstoSeries = new BarChartSeries();
+		previstoSeries.setLabel("Previsto");
+		
+		for (DetalheOrcamento detalhe : listaDetalheOrcamento) {
+			if (tipoCategoria != null && !detalhe.getTipoCategoria().equals(tipoCategoria))
+				continue;
+						
+			previstoSeries.set(detalhe.getDescricao(), detalhe.getPrevisao());
+			
+			if (detalhe.getPrevisao() >= 0) {
+				if (detalhe.getPrevisao() > yMaximo) yMaximo = new BigDecimal(detalhe.getPrevisao() + 100).intValue();
+			} else {
+				if (detalhe.getPrevisao() < yMinimo) yMinimo = new BigDecimal(detalhe.getPrevisao() + 100).intValue();
+			}
+		}
+		
+		LineChartSeries realizadoSeries = new LineChartSeries();
+		realizadoSeries.setLabel("Realizado");
+		
+		for (DetalheOrcamento detalhe : listaDetalheOrcamento) {
+			if (tipoCategoria != null && !detalhe.getTipoCategoria().equals(tipoCategoria))
+				continue;
+			
+			realizadoSeries.set(detalhe.getDescricao(), detalhe.getRealizado());
+			
+			if (detalhe.getRealizado() >= 0) {
+				if (detalhe.getRealizado() > yMaximo) yMaximo = new BigDecimal(detalhe.getRealizado() + 100).intValue();
+			} else {
+				if (detalhe.getRealizado() < yMinimo) yMinimo = new BigDecimal(detalhe.getRealizado() + 100).intValue();
+			}
+		}
+ 
+		orcamentoModel.addSeries(previstoSeries);
+		orcamentoModel.addSeries(realizadoSeries);
+		
+		orcamentoModel.setTitle(orcamentoSelecionado.getDescricao());
+		orcamentoModel.setLegendPosition("s");
+		orcamentoModel.setExtender("ext1");
+		
+		Axis xAxis = orcamentoModel.getAxis(AxisType.X);
+		Axis yAxis = orcamentoModel.getAxis(AxisType.Y);
+		
+		xAxis.setTickAngle(-90);
+		yAxis.setMin(yMinimo);
+		yAxis.setMax(yMaximo);
+		
+		orcamentoModel.getAxes().put(AxisType.X, xAxis);
+		orcamentoModel.getAxes().put(AxisType.Y, yAxis);
+		
+		exibirGrafico = true;
 	}
 	
 	@Override
@@ -433,6 +508,15 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		return new ArrayList<>();
 	}
 	
+	public List<Orcamento> getListaOrcamentoCategoria() {
+		try {
+			return getService().buscarAbrangeciaPorUsuario(AbrangenciaOrcamento.CATEGORIA, getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<Orcamento>();
+	}
+	
 	public List<SelectItem> getListaTipoOrcamento() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (TipoOrcamento orcamento : TipoOrcamento.values()) {
@@ -537,5 +621,29 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 
 	public void setOrcamentoSelecionado(Orcamento orcamentoSelecionado) {
 		this.orcamentoSelecionado = orcamentoSelecionado;
+	}
+
+	public boolean isExibirGrafico() {
+		return exibirGrafico;
+	}
+
+	public void setExibirGrafico(boolean exibirGrafico) {
+		this.exibirGrafico = exibirGrafico;
+	}
+
+	public BarChartModel getOrcamentoModel() {
+		return orcamentoModel;
+	}
+
+	public void setOrcamentoModel(BarChartModel orcamentoModel) {
+		this.orcamentoModel = orcamentoModel;
+	}
+
+	public TipoCategoria getTipoCategoria() {
+		return tipoCategoria;
+	}
+
+	public void setTipoCategoria(TipoCategoria tipoCategoria) {
+		this.tipoCategoria = tipoCategoria;
 	}
 }

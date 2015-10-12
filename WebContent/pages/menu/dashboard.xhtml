@@ -51,7 +51,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/principal.xhtml">
 
@@ -60,29 +61,72 @@
 	</ui:define>
 
 	<ui:define name="conteudo">
+	
+		<script type="text/javascript">
+	    function ext1() {
+	        this.cfg.legend= {
+	             show: true,
+	             location: 's',
+	             placement: 'outsideGrid'
+	           }   
+	    }
+		</script>
+	
+		<h:form id="frmDashboard">
 		
-		<h5>Agenda do dia</h5>
-		
-		<h:dataTable value="#{agendaMB.agendamentosDoDia}" var="item">
-			<h:column style="text-align: center; vertical-align: middle;">
-				<f:facet name="header">
-					<h:outputText value="Descrição"/>
-				</f:facet>
-				<h:outputText value="#{item.descricao}" />
-	  		</h:column>
-	  		<h:column style="text-align: center; vertical-align: middle;">
-				<f:facet name="header">
-					<h:outputText value="Tipo"/>
-				</f:facet>
-				<h:outputText value="#{item.tipoAgendamento}" />
-	  		</h:column>  			
-	  		<h:column style="text-align: center; vertical-align: middle;">
-				<f:facet name="header">
-					<h:outputText value="Data"/>
-				</f:facet>
-				<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
-	  		</h:column>
-  		</h:dataTable>
+			<h5>Agenda do dia</h5>
+			
+			<h:dataTable value="#{agendaMB.agendamentosDoDia}" var="item">
+				<h:column style="text-align: center; vertical-align: middle;">
+					<f:facet name="header">
+						<h:outputText value="Descrição"/>
+					</f:facet>
+					<h:outputText value="#{item.descricao}" />
+		  		</h:column>
+		  		<h:column style="text-align: center; vertical-align: middle;">
+					<f:facet name="header">
+						<h:outputText value="Tipo"/>
+					</f:facet>
+					<h:outputText value="#{item.tipoAgendamento}" />
+		  		</h:column>  			
+		  		<h:column style="text-align: center; vertical-align: middle;">
+					<f:facet name="header">
+						<h:outputText value="Data"/>
+					</f:facet>
+					<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
+		  		</h:column>
+	  		</h:dataTable>
+	  		
+	  		<hr/>
+			
+  			<p:tabView>
+  				<p:tab title="Orçamento">
+  					<h:panelGrid columns="3">
+	  			
+	  					<h:panelGroup>
+				  			<label>Selecione:</label>
+				  			<h:selectOneMenu value="#{orcamentoMB.orcamentoSelecionado}" converter="entityConverter">
+								<f:selectItems value="#{orcamentoMB.listaOrcamentoCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup>
+							<label>Categoria:</label>
+							<h:selectOneMenu value="#{orcamentoMB.tipoCategoria}">
+								<f:selectItem itemLabel="Todos"/>
+								<f:selectItems value="#{enumCombo.listaTipoCategoria}"/>
+							</h:selectOneMenu>
+						</h:panelGroup>
+						<h:commandLink title="Pesquisar" action="#{orcamentoMB.buscarEAtualizar}">
+							<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+						</h:commandLink>
+						
+			  		</h:panelGrid>
+  				
+  					<p:chart type="bar" responsive="true" id="barOrcamento" model="#{orcamentoMB.orcamentoModel}" style="height:600px" rendered="#{orcamentoMB.exibirGrafico}"/>
+  				</p:tab>
+  			</p:tabView>
+  		
+  		</h:form>
      
 	</ui:define>
 	
