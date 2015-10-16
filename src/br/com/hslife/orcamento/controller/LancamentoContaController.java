@@ -163,26 +163,14 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		dataFechamento = null;
 	}
 	
-	/*
-	 * Método privado usado para aplicar o limite de resultados da pesquisa de 
-	 * lançamentos.
-	 */
-	private void setarLimiteLancamentos(final List<LancamentoConta> lancamentos) {
-		listEntity = new ArrayList<>();
-		for (final LancamentoConta l : lancamentos) {
-			listEntity.add(l);
-			if (listEntity.size() >= getOpcoesSistema().getLimiteQuantidadeRegistros())
-				break;			
-		}
-	}
-	
 	@Override
 	public void find() {
 		try {			
 			if (criterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
 			} else {
-				this.setarLimiteLancamentos(getService().buscarPorCriterioBusca(criterioBusca));
+				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+				getService().buscarPorCriterioBusca(criterioBusca);
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -228,7 +216,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				criterioBusca.setDataFim(null);
 			}
 			
-			this.setarLimiteLancamentos(getService().buscarPorCriterioBusca(criterioBusca));
+			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+			getService().buscarPorCriterioBusca(criterioBusca);
 			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -262,7 +251,8 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				// Mostra todos os lançamentos que não estão vinculados a uma fatura
 				criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO});
 				
-				this.setarLimiteLancamentos(getService().buscarPorCriterioBusca(criterioBusca));
+				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+				getService().buscarPorCriterioBusca(criterioBusca);
 				
 				if (listEntity != null && listEntity.size() > 0) {
 					criterioBusca.setDataInicio(listEntity.get(0).getDataPagamento());

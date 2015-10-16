@@ -157,7 +157,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	}
 	
 	public void buscarEAtualizar() {
-		find();
+		atualizarValores();
 		gerarGraficoDashboard();		
 	}
 	
