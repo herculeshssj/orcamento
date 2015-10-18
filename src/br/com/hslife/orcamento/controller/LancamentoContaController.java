@@ -170,7 +170,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				warnMessage("Informe a conta!");
 			} else {
 				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
-				getService().buscarPorCriterioBusca(criterioBusca);
+				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
 			}
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -217,7 +217,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			}
 			
 			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
-			getService().buscarPorCriterioBusca(criterioBusca);
+			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
 			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -252,7 +252,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO});
 				
 				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
-				getService().buscarPorCriterioBusca(criterioBusca);
+				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
 				
 				if (listEntity != null && listEntity.size() > 0) {
 					criterioBusca.setDataInicio(listEntity.get(0).getDataPagamento());
