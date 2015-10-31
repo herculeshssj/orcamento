@@ -49,10 +49,6 @@ package br.com.hslife.orcamento.entity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -113,14 +109,14 @@ public class RelatorioColunaTest {
 			fail(t.getMessage());
 		}
 	}
-	/*
+	
 	@Test
-	public void testValidateNome() {
+	public void testValidateMascaraFormatacaoPreenchido() {
 		try {
-			entity.setNome("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+			entity.setFormatar(true);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Nome aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo Máscara de formatação não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -128,43 +124,16 @@ public class RelatorioColunaTest {
 	}
 	
 	@Test
-	public void testValidateDescricao() {
+	public void testValidateMascaraFormatacaoTamanho() {
 		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+			entity.setFormatar(true);
+			entity.setMascaraFormatacao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Descrição aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo Máscara de formatação aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
 		}
 	}
-	
-	@Test
-	public void testValidateConsultaSQL() {
-		try {
-			entity.setConsultaSQL(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo Consulta SQL não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-	}
-	
-	@Test
-	public void testValidateUsuario() {
-		try {
-			entity.setUsuario(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo Usuário não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-	}
-*/	
-	
 }

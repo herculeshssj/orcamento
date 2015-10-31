@@ -147,6 +147,4 @@ public class RelatorioCustomizadoTest {
 			fail(t.getMessage());
 		}
 	}
-	
-	
 }
