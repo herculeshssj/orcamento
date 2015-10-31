@@ -93,15 +93,18 @@ public class RelatorioColuna extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return this.textoExibicao + "(" + this.nomeColuna + ")";
+		return this.textoExibicao + " (" + this.nomeColuna + ")";
 	}
 
 	@Override
 	public void validate() throws BusinessException {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome da coluna", this.nomeColuna, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Texto de exibição", this.textoExibicao, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Máscara de formatação", this.mascaraFormatacao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de dado", this.tipoDado);
+		
+		if (this.formatar) {
+			EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Máscara de formatação", this.mascaraFormatacao, 50);
+		}
 	}
 
 	public Long getId() {
