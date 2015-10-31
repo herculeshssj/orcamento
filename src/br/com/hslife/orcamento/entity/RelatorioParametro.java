@@ -60,7 +60,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="relatoriocoluna")
+@Table(name="relatorioparametro")
 @SuppressWarnings("serial")
 public class RelatorioParametro extends EntityPersistence {
 	

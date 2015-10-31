@@ -48,7 +48,6 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -95,7 +94,7 @@ public class RelatorioCustomizado extends EntityPersistence {
 	
 	public RelatorioCustomizado() {
 		colunasRelatorio = new LinkedHashSet<>();
-		parametrosRelatorio = new TreeSet<>(); 
+		parametrosRelatorio = new LinkedHashSet<>();
 	}
 	
 	@Override

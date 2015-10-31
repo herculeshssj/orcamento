@@ -47,6 +47,8 @@
 package br.com.hslife.orcamento.util;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
@@ -57,10 +59,14 @@ import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.entity.RegraImportacao;
+import br.com.hslife.orcamento.entity.RelatorioColuna;
+import br.com.hslife.orcamento.entity.RelatorioCustomizado;
+import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 
@@ -68,6 +74,48 @@ public class EntityInitializerFactory {
 
 	private EntityInitializerFactory() {
 		// Classe não pode ser inicializada.
+	}
+	
+	// Cria uma nova instância de Usuário a partir do Builder da classe
+	public static Usuario createUsuario() {
+		return new Usuario.Builder()
+			.email("contato@hslife.com.br")
+			.login("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA))
+			.nome("Usuário de Teste - " + Util.formataDataHora(new Date(), Util.DATAHORA))
+			.senha(Util.SHA256("teste"))
+			.build();
+	}
+	
+	// Cria uma nova instância de RelatorioCustomizado
+	// TODO criar um builder que instancie todo o objeto, incluindo suas composições
+	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario) {
+		RelatorioCustomizado entity = new RelatorioCustomizado();
+		entity.setNome("Relatório de teste");
+		entity.setDescricao("Relatório customizado para testes");
+		entity.setConsultaSQL("SELECT * FROM lancamentoconta");
+		entity.setUsuario(usuario);
+		
+		Set<RelatorioColuna> colunas = new LinkedHashSet<>();
+		for (int i = 0; i < 3; i++) {
+			RelatorioColuna coluna = new RelatorioColuna();
+			coluna.setNomeColuna("coluna" + i);
+			coluna.setTextoExibicao("Coluna " + i);
+			coluna.setTipoDado(TipoDado.STRING);
+			colunas.add(coluna);
+		}
+		entity.setColunasRelatorio(colunas);
+		
+		Set<RelatorioParametro> parametros = new LinkedHashSet<>();
+		for (int i = 0; i < 3; i++) {
+			RelatorioParametro parametro = new RelatorioParametro();
+			parametro.setNomeParametro("parametro" + i);
+			parametro.setTextoExibicao("Parâmetro " + i);
+			parametro.setTipoDado(TipoDado.STRING);
+			parametros.add(parametro);
+		}
+		entity.setParametrosRelatorio(parametros);
+		
+		return entity;
 	}
 	
 	public static Usuario initializeUsuario() {

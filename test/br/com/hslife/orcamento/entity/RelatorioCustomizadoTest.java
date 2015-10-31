@@ -49,14 +49,9 @@ package br.com.hslife.orcamento.entity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.exception.BusinessException;
 
 public class RelatorioCustomizadoTest {
@@ -69,26 +64,6 @@ public class RelatorioCustomizadoTest {
 		entity.setDescricao("Relatório customizado para testes");
 		entity.setConsultaSQL("SELECT * FROM lancamentoconta");
 		entity.setUsuario(new Usuario());
-		
-		Set<RelatorioColuna> colunas = new LinkedHashSet<>();
-		for (int i = 0; i < 3; i++) {
-			RelatorioColuna coluna = new RelatorioColuna();
-			coluna.setNomeColuna("coluna" + i);
-			coluna.setTextoExibicao("Coluna " + i);
-			coluna.setTipoDado(TipoDado.STRING);
-			colunas.add(coluna);
-		}
-		entity.setColunasRelatorio(colunas);
-		
-		Set<RelatorioParametro> parametros = new TreeSet<>();
-		for (int i = 0; i < 3; i++) {
-			RelatorioParametro parametro = new RelatorioParametro();
-			parametro.setNomeParametro("parametro" + i);
-			parametro.setTextoExibicao("Parâmetro " + i);
-			parametro.setTipoDado(TipoDado.STRING);
-			parametros.add(parametro);
-		}
-		entity.setParametrosRelatorio(parametros);
 	}
 	
 	@Test
