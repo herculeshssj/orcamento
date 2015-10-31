@@ -48,12 +48,16 @@ package br.com.hslife.orcamento.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="relatoriocoluna")
@@ -73,8 +77,9 @@ public class RelatorioColuna extends EntityPersistence {
 	@Column(length=100, nullable=false)
 	private String textoExibicao;
 	
-	@Column(nullable=false)
-	private String tipoDado;
+	@Column(length=15, nullable=false)
+	@Enumerated(EnumType.STRING)
+	private TipoDado tipoDado;
 	
 	@Column
 	private boolean formatar;
@@ -93,7 +98,10 @@ public class RelatorioColuna extends EntityPersistence {
 
 	@Override
 	public void validate() throws BusinessException {
-		
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome da coluna", this.nomeColuna, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Texto de exibição", this.textoExibicao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Máscara de formatação", this.mascaraFormatacao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de dado", this.tipoDado);
 	}
 
 	public Long getId() {
@@ -128,14 +136,6 @@ public class RelatorioColuna extends EntityPersistence {
 		this.textoExibicao = textoExibicao;
 	}
 
-	public String getTipoDado() {
-		return tipoDado;
-	}
-
-	public void setTipoDado(String tipoDado) {
-		this.tipoDado = tipoDado;
-	}
-
 	public boolean isFormatar() {
 		return formatar;
 	}
@@ -150,5 +150,13 @@ public class RelatorioColuna extends EntityPersistence {
 
 	public void setMascaraFormatacao(String mascaraFormatacao) {
 		this.mascaraFormatacao = mascaraFormatacao;
+	}
+
+	public TipoDado getTipoDado() {
+		return tipoDado;
+	}
+
+	public void setTipoDado(TipoDado tipoDado) {
+		this.tipoDado = tipoDado;
 	}
 }

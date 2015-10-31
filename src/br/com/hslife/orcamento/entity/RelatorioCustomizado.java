@@ -46,16 +46,21 @@
 
 package br.com.hslife.orcamento.entity;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -73,16 +78,24 @@ public class RelatorioCustomizado extends EntityPersistence {
 	private String nome;
 	
 	@Column(length=50, nullable=false)
-	private String descrição;
+	private String descricao;
 	
-	@Transient
-	private List<RelatorioColuna> colunasRelatorio;
+	@Column(columnDefinition="text", nullable=false)
+	private String consultaSQL;
 	
-	@Transient
-	private List<RelatorioParametro> parametrosRelatorio;
+	@ManyToOne
+	@JoinColumn(name="idUsuario", nullable=false)
+	private Usuario usuario;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	private Set<RelatorioColuna> colunasRelatorio;
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
+	private Set<RelatorioParametro> parametrosRelatorio;
 	
 	public RelatorioCustomizado() {
-		colunasRelatorio = new LinkedList<>();
+		colunasRelatorio = new LinkedHashSet<>();
+		parametrosRelatorio = new TreeSet<>(); 
 	}
 	
 	@Override
@@ -93,7 +106,9 @@ public class RelatorioCustomizado extends EntityPersistence {
 	@Override
 	public void validate() throws BusinessException {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descrição, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Consulta SQL", this.consultaSQL);
+		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
 	}
 
 	public Long getId() {
@@ -112,27 +127,43 @@ public class RelatorioCustomizado extends EntityPersistence {
 		this.nome = nome;
 	}
 
-	public String getDescrição() {
-		return descrição;
-	}
-
-	public void setDescrição(String descrição) {
-		this.descrição = descrição;
-	}
-
-	public List<RelatorioColuna> getColunasRelatorio() {
+	public Set<RelatorioColuna> getColunasRelatorio() {
 		return colunasRelatorio;
 	}
 
-	public void setColunasRelatorio(List<RelatorioColuna> colunasRelatorio) {
+	public void setColunasRelatorio(Set<RelatorioColuna> colunasRelatorio) {
 		this.colunasRelatorio = colunasRelatorio;
 	}
 
-	public List<RelatorioParametro> getParametrosRelatorio() {
+	public Set<RelatorioParametro> getParametrosRelatorio() {
 		return parametrosRelatorio;
 	}
 
-	public void setParametrosRelatorio(List<RelatorioParametro> parametrosRelatorio) {
+	public void setParametrosRelatorio(Set<RelatorioParametro> parametrosRelatorio) {
 		this.parametrosRelatorio = parametrosRelatorio;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getConsultaSQL() {
+		return consultaSQL;
+	}
+
+	public void setConsultaSQL(String consultaSQL) {
+		this.consultaSQL = consultaSQL;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 }
