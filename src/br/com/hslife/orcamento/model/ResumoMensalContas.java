@@ -109,6 +109,10 @@ public class ResumoMensalContas {
 		this.categorias.addAll(categorias);
 		this.categorias.add(saldoAtualCategorias);
 	}
+	
+	public void setCategoriasCartao(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
 
 	public void setFavorecidos(List<Favorecido> favorecidos) {
 		this.favorecidos = favorecidos;
