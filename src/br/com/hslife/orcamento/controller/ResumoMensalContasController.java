@@ -115,6 +115,10 @@ public class ResumoMensalContasController extends AbstractController {
 	private String styleCorrectionCredito = "width:820px;height:600px";
 	private String styleCorrectionDebito = "width:820px;height:600px";
 	
+	private boolean exibirPieCategoriaDebito = true;
+	private boolean exibirPieCategoriaCredito = true;
+	private boolean exibirBarComparativo = true;
+	
 	public ResumoMensalContasController() {
 		// Inicializa os gráficos com um valor default
 		pieCategoriaCredito = new PieChartModel();
@@ -183,6 +187,19 @@ public class ResumoMensalContasController extends AbstractController {
 		// POG para realizar a correção no style do Pie Chart >:(
 		styleCorrectionCredito = "height:" + (600 + (30 * pieSizeC)) + "px";
 		styleCorrectionDebito = "height:" + (600 + (30 * pieSizeD)) + "px";
+		
+		// Verifica se as abas de crédito e débito devem ser exibidas
+		if (pieCategoriaCredito.getData().isEmpty()) {
+			exibirPieCategoriaCredito = false;
+		} else {
+			exibirPieCategoriaCredito = true;
+		}
+		
+		if (pieCategoriaDebito.getData().isEmpty()) {
+			exibirPieCategoriaDebito = false;
+		} else {
+			exibirPieCategoriaDebito = true;
+		}
 	}
 	
 	private void gerarGraficoComparativo() {
@@ -205,12 +222,19 @@ public class ResumoMensalContasController extends AbstractController {
 		
 		ChartSeries receitaSeries = new ChartSeries();
 		receitaSeries.setLabel("Receitas");		
-		//receitaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(receitas));
-		
+		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
+			receitaSeries.set(faturaCartao == null ? "Próximas faturas / Lançamento registrados" : faturaCartao.getLabel(), Math.abs(receitas));
+		} else {
+			receitaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(receitas));
+		}
 		
 		ChartSeries despesaSeries = new ChartSeries();
 		despesaSeries.setLabel("Despesas");
-		//despesaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(despesas));
+		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
+			despesaSeries.set(faturaCartao == null ? "Próximas faturas / Lançamento registrados" : faturaCartao.getLabel(), Math.abs(despesas));
+		} else {
+			despesaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(despesas));
+		}
 		
         barComparativo.addSeries(receitaSeries);  
         barComparativo.addSeries(despesaSeries);
@@ -219,8 +243,10 @@ public class ResumoMensalContasController extends AbstractController {
         	maxValueBarComparativo = new BigDecimal(Math.abs(receitas + (receitas * 0.10))).intValue();
         } else {
         	maxValueBarComparativo = new BigDecimal(Math.abs(despesas + (despesas * 0.10))).intValue();
-        }
+        } 
         
+        // Verifica se a aba deverá ser exibida
+        exibirBarComparativo = exibirPieCategoriaCredito & exibirPieCategoriaDebito;
 	}
 	
 	public void registrarOrcamento() {
@@ -235,7 +261,12 @@ public class ResumoMensalContasController extends AbstractController {
 		// Seta os atributos do orcamento
 		orcamentoAGerar.setTipoOrcamento(TipoOrcamento.CONTA);
 		orcamentoAGerar.setConta(contaSelecionada);
-		orcamentoAGerar.setDescricao(fechamentoSelecionado == null ? "Orçamento - Período atual" : "Orçamento - " + fechamentoSelecionado.getLabel());
+		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
+			orcamentoAGerar.setDescricao(faturaCartao == null ? "Orçamento - Próximas faturas" : "Orçamento - " + faturaCartao.getLabel());
+		} else {
+			orcamentoAGerar.setDescricao(fechamentoSelecionado == null ? "Orçamento - Período atual" : "Orçamento - " + fechamentoSelecionado.getLabel());
+		}
+		
 		orcamentoAGerar.setInicio(resumoMensal.getInicio());
 		orcamentoAGerar.setFim(resumoMensal.getFim());
 		orcamentoAGerar.setUsuario(getUsuarioLogado());
@@ -254,19 +285,12 @@ public class ResumoMensalContasController extends AbstractController {
 	}
 	
 	public List<Conta> getListaConta() {
-		//List<Conta> contas = new ArrayList<>();
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				//contas = 
 				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null);
 			} else {
-				//contas = 
 				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
 			}
-//			if (contas != null && !contas.isEmpty()) {
-//				contaSelecionada = contas.get(0);
-//			}
-			//return contas;
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -417,5 +441,29 @@ public class ResumoMensalContasController extends AbstractController {
 
 	public void setFaturaCartao(FaturaCartao faturaCartao) {
 		this.faturaCartao = faturaCartao;
+	}
+
+	public boolean isExibirPieCategoriaDebito() {
+		return exibirPieCategoriaDebito;
+	}
+
+	public void setExibirPieCategoriaDebito(boolean exibirPieCategoriaDebito) {
+		this.exibirPieCategoriaDebito = exibirPieCategoriaDebito;
+	}
+
+	public boolean isExibirPieCategoriaCredito() {
+		return exibirPieCategoriaCredito;
+	}
+
+	public void setExibirPieCategoriaCredito(boolean exibirPieCategoriaCredito) {
+		this.exibirPieCategoriaCredito = exibirPieCategoriaCredito;
+	}
+
+	public boolean isExibirBarComparativo() {
+		return exibirBarComparativo;
+	}
+
+	public void setExibirBarComparativo(boolean exibirBarComparativo) {
+		this.exibirBarComparativo = exibirBarComparativo;
 	}
 }

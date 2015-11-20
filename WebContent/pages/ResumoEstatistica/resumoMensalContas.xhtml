@@ -188,17 +188,17 @@
 					</h:column>					
 				</h:dataTable>
 			</p:tab>
-			<p:tab title="Receitas">
+			<p:tab title="Receitas" rendered="#{managedBean.exibirPieCategoriaCredito}">
 				<center>
 			 		<p:chart type="pie" responsive="true" id="pieCategoriaCredito" model="#{managedBean.pieCategoriaCredito}" style="#{managedBean.styleCorrectionCredito}"/>
 			 	</center>								
 			</p:tab>
-			<p:tab title="Despesas">
+			<p:tab title="Despesas" rendered="#{managedBean.exibirPieCategoriaDebito}">
 				<center>
 					<p:chart type="pie" responsive="true" id="pieCategoriaDebito" model="#{managedBean.pieCategoriaDebito}" style="#{managedBean.styleCorrectionDebito}" />
 				</center>
 			</p:tab>
-			<p:tab title="Comparativo">
+			<p:tab title="Comparativo" rendered="#{managedBean.exibirBarComparativo}">
 				<center>
 					<p:chart type="bar" responsive="true" id="barComparativo" model="#{managedBean.barComparativo}" style="height:600px"/>
 				</center> 

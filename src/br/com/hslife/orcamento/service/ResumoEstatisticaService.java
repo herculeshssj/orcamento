@@ -456,17 +456,45 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
 		List<LancamentoConta> lancamentos = new ArrayList<>();
 		
+		// Seta a conta no resumo
+		resumoMensal.setConta(conta);
+		
 		// Busca a fatura selecionada
 		if (faturaCartao == null) {
 			// Busca todos os lançamentos registrados e agendados do cartão
 			CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 			criterioBusca.setConta(conta);
 			criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[] {StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
-			lancamentos.addAll(lancamentoContaRepository.findByCriterioBusca(criterioBusca));
+			
+			// Adiciona os lançamentos já convertendo o valor para a moeda padrão
+			for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioBusca(criterioBusca)) {
+				if (!lancamento.getMoeda().equals(conta.getMoeda())) {
+					lancamento.setValorPago(lancamento.getValorPago() * lancamento.getMoeda().getValorConversao());
+				}
+				lancamentos.add(lancamento);
+			}
 		} else {
 			// Busca a fatura e adiciona os lançamentos contidos nela
 			FaturaCartao fatura = faturaCartaoRepository.findById(faturaCartao.getId());
-			lancamentos.addAll(fatura.getDetalheFatura());
+			
+			// Adiciona os lançamentos já convertendo o valor de acordo com a tabela de conversões de moeda
+			for (LancamentoConta lancamento : fatura.getDetalheFatura()) {
+				if (!lancamento.getMoeda().equals(conta.getMoeda())) {
+					for (Iterator<ConversaoMoeda> i = fatura.getConversoesMoeda().iterator(); i.hasNext(); ) {
+						ConversaoMoeda conversao = i.next();
+						if (conversao.getMoeda().equals(lancamento.getMoeda())) {
+							lancamento.setValorPago(lancamento.getValorPago() * conversao.getTaxaConversao());
+						}
+					}
+				}
+				lancamentos.add(lancamento);
+			}
+		}
+		
+		// Seta as datas de início e fim do resumo
+		if (lancamentos != null && lancamentos.size() > 0) {
+			resumoMensal.setInicio(lancamentos.get(0).getDataPagamento());
+			resumoMensal.setFim(lancamentos.get(lancamentos.size()-1).getDataPagamento());
 		}
 		
 		resumoMensal.setCategoriasCartao(contaComponent.organizarLancamentosPorCategoria(lancamentos));

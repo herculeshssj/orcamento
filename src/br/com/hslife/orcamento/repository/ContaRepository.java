@@ -97,7 +97,6 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	public List<Conta> findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}
 	

@@ -295,7 +295,7 @@
 				    </f:facet>
 				    <h:commandLink title="Visualizar detalhes" action="#{managedBean.detalheFatura}">
 						<h:graphicImage id="imgSearch" height="40" width="40" value="/resources/images/svg/search.svg"/>
-						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+						<f:param name="idDetalheFatura" value="#{item.id}"/>
 					</h:commandLink>										
 		  			<p:spacer width="5"/>
 		  			
