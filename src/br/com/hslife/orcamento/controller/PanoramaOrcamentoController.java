@@ -84,9 +84,14 @@ public class PanoramaOrcamentoController extends AbstractController {
 	
 	private List<DetalheOrcamento> listaDetalheOrcamento = new ArrayList<DetalheOrcamento>();
 	private Orcamento orcamentoSelecionado;
-	private TipoCategoria tipoCategoria;
+	
 	private BarChartModel orcamentoModel;
-	private boolean exibirGrafico = false;
+	private BarChartModel orcamentoModelCredito;
+	private BarChartModel orcamentoModelDebito;
+	
+	private boolean exibirGraficoCredito = false;
+	private boolean exibirGraficoDebito = false;
+	private boolean mostrarInformacao = false;
 
 	public PanoramaOrcamentoController() {
 		moduleTitle = "Panorama do Orçamento";
@@ -100,17 +105,22 @@ public class PanoramaOrcamentoController extends AbstractController {
 	@Override
 	protected void initializeEntity() {
 		orcamentoSelecionado = null;
-		listaDetalheOrcamento = new ArrayList<DetalheOrcamento>();		
-		exibirGrafico = false;
+		listaDetalheOrcamento = new ArrayList<DetalheOrcamento>();
 	}
 	
 	public void buscarEAtualizar() {
 		atualizarValores();
-		gerarGraficoDashboard();		
+		gerarGrafico();
+		mostrarInformacao = true;
 	}
 	
-	private void gerarGraficoDashboard() {
-		orcamentoModel = new BarChartModel();
+	private void gerarGrafico() {
+		this.gerarGraficoCreditos();
+		this.gerarGraficoDebitos();
+	}
+	
+	private void gerarGraficoCreditos() {
+		orcamentoModelCredito = new BarChartModel();
 		
 		int yMinimo = 0;
 		int yMaximo = 0;
@@ -119,7 +129,7 @@ public class PanoramaOrcamentoController extends AbstractController {
 		previstoSeries.setLabel("Previsto");
 		
 		for (DetalheOrcamento detalhe : listaDetalheOrcamento) {
-			if (tipoCategoria != null && !detalhe.getTipoCategoria().equals(tipoCategoria))
+			if (detalhe.getTipoCategoria().equals(TipoCategoria.DEBITO))
 				continue;
 						
 			previstoSeries.set(detalhe.getDescricao(), detalhe.getPrevisao());
@@ -135,7 +145,7 @@ public class PanoramaOrcamentoController extends AbstractController {
 		realizadoSeries.setLabel("Realizado");
 		
 		for (DetalheOrcamento detalhe : listaDetalheOrcamento) {
-			if (tipoCategoria != null && !detalhe.getTipoCategoria().equals(tipoCategoria))
+			if (detalhe.getTipoCategoria().equals(TipoCategoria.DEBITO))
 				continue;
 			
 			realizadoSeries.set(detalhe.getDescricao(), detalhe.getRealizado());
@@ -147,24 +157,82 @@ public class PanoramaOrcamentoController extends AbstractController {
 			}
 		}
  
-		orcamentoModel.addSeries(previstoSeries);
-		orcamentoModel.addSeries(realizadoSeries);
+		orcamentoModelCredito.addSeries(previstoSeries);
+		orcamentoModelCredito.addSeries(realizadoSeries);
 		
-		orcamentoModel.setTitle(orcamentoSelecionado.getDescricao());
-		orcamentoModel.setLegendPosition("s");
-		orcamentoModel.setExtender("ext1");
+		orcamentoModelCredito.setTitle(orcamentoSelecionado.getDescricao());
+		orcamentoModelCredito.setLegendPosition("s");
+		orcamentoModelCredito.setExtender("ext1");
 		
-		Axis xAxis = orcamentoModel.getAxis(AxisType.X);
-		Axis yAxis = orcamentoModel.getAxis(AxisType.Y);
+		Axis xAxis = orcamentoModelCredito.getAxis(AxisType.X);
+		Axis yAxis = orcamentoModelCredito.getAxis(AxisType.Y);
 		
 		xAxis.setTickAngle(-90);
 		yAxis.setMin(yMinimo);
 		yAxis.setMax(yMaximo);
 		
-		orcamentoModel.getAxes().put(AxisType.X, xAxis);
-		orcamentoModel.getAxes().put(AxisType.Y, yAxis);
+		orcamentoModelCredito.getAxes().put(AxisType.X, xAxis);
+		orcamentoModelCredito.getAxes().put(AxisType.Y, yAxis);
 		
-		exibirGrafico = true;
+		exibirGraficoCredito = true;
+	}
+	
+	private void gerarGraficoDebitos() {
+		orcamentoModelDebito = new BarChartModel();
+		
+		int yMinimo = 0;
+		int yMaximo = 0;
+		
+		BarChartSeries previstoSeries = new BarChartSeries();
+		previstoSeries.setLabel("Previsto");
+		
+		for (DetalheOrcamento detalhe : listaDetalheOrcamento) {
+			if (detalhe.getTipoCategoria().equals(TipoCategoria.CREDITO))
+				continue;
+						
+			previstoSeries.set(detalhe.getDescricao(), detalhe.getPrevisao());
+			
+			if (detalhe.getPrevisao() >= 0) {
+				if (detalhe.getPrevisao() > yMaximo) yMaximo = new BigDecimal(detalhe.getPrevisao() + 100).intValue();
+			} else {
+				if (detalhe.getPrevisao() < yMinimo) yMinimo = new BigDecimal(detalhe.getPrevisao() + 100).intValue();
+			}
+		}
+		
+		LineChartSeries realizadoSeries = new LineChartSeries();
+		realizadoSeries.setLabel("Realizado");
+		
+		for (DetalheOrcamento detalhe : listaDetalheOrcamento) {
+			if (detalhe.getTipoCategoria().equals(TipoCategoria.CREDITO))
+				continue;
+			
+			realizadoSeries.set(detalhe.getDescricao(), detalhe.getRealizado());
+			
+			if (detalhe.getRealizado() >= 0) {
+				if (detalhe.getRealizado() > yMaximo) yMaximo = new BigDecimal(detalhe.getRealizado() + 100).intValue();
+			} else {
+				if (detalhe.getRealizado() < yMinimo) yMinimo = new BigDecimal(detalhe.getRealizado() + 100).intValue();
+			}
+		}
+ 
+		orcamentoModelDebito.addSeries(previstoSeries);
+		orcamentoModelDebito.addSeries(realizadoSeries);
+		
+		orcamentoModelDebito.setTitle(orcamentoSelecionado.getDescricao());
+		orcamentoModelDebito.setLegendPosition("s");
+		orcamentoModelDebito.setExtender("ext1");
+		
+		Axis xAxis = orcamentoModelDebito.getAxis(AxisType.X);
+		Axis yAxis = orcamentoModelDebito.getAxis(AxisType.Y);
+		
+		xAxis.setTickAngle(-90);
+		yAxis.setMin(yMinimo);
+		yAxis.setMax(yMaximo);
+		
+		orcamentoModelDebito.getAxes().put(AxisType.X, xAxis);
+		orcamentoModelDebito.getAxes().put(AxisType.Y, yAxis);
+		
+		exibirGraficoDebito = true;
 	}
 	
 	private void find() {
@@ -217,14 +285,6 @@ public class PanoramaOrcamentoController extends AbstractController {
 		this.listaDetalheOrcamento = listaDetalheOrcamento;
 	}
 
-	public TipoCategoria getTipoCategoria() {
-		return tipoCategoria;
-	}
-
-	public void setTipoCategoria(TipoCategoria tipoCategoria) {
-		this.tipoCategoria = tipoCategoria;
-	}
-
 	public BarChartModel getOrcamentoModel() {
 		return orcamentoModel;
 	}
@@ -233,11 +293,43 @@ public class PanoramaOrcamentoController extends AbstractController {
 		this.orcamentoModel = orcamentoModel;
 	}
 
-	public boolean isExibirGrafico() {
-		return exibirGrafico;
+	public boolean isMostrarInformacao() {
+		return mostrarInformacao;
 	}
 
-	public void setExibirGrafico(boolean exibirGrafico) {
-		this.exibirGrafico = exibirGrafico;
+	public void setMostrarInformacao(boolean mostrarInformacao) {
+		this.mostrarInformacao = mostrarInformacao;
+	}
+
+	public BarChartModel getOrcamentoModelCredito() {
+		return orcamentoModelCredito;
+	}
+
+	public void setOrcamentoModelCredito(BarChartModel orcamentoModelCredito) {
+		this.orcamentoModelCredito = orcamentoModelCredito;
+	}
+
+	public BarChartModel getOrcamentoModelDebito() {
+		return orcamentoModelDebito;
+	}
+
+	public void setOrcamentoModelDebito(BarChartModel orcamentoModelDebito) {
+		this.orcamentoModelDebito = orcamentoModelDebito;
+	}
+
+	public boolean isExibirGraficoCredito() {
+		return exibirGraficoCredito;
+	}
+
+	public void setExibirGraficoCredito(boolean exibirGraficoCredito) {
+		this.exibirGraficoCredito = exibirGraficoCredito;
+	}
+
+	public boolean isExibirGraficoDebito() {
+		return exibirGraficoDebito;
+	}
+
+	public void setExibirGraficoDebito(boolean exibirGraficoDebito) {
+		this.exibirGraficoDebito = exibirGraficoDebito;
 	}
 }
