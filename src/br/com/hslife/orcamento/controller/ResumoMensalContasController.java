@@ -222,6 +222,7 @@ public class ResumoMensalContasController extends AbstractController {
 		
 		ChartSeries receitaSeries = new ChartSeries();
 		receitaSeries.setLabel("Receitas");		
+
 		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 			receitaSeries.set(faturaCartao == null ? "Próximas faturas / Lançamento registrados" : faturaCartao.getLabel(), Math.abs(receitas));
 		} else {
@@ -427,20 +428,20 @@ public class ResumoMensalContasController extends AbstractController {
 		this.maxValueBarComparativo = maxValueBarComparativo;
 	}
 
-	public BarChartModel getBarComparativo() {
-		return barComparativo;
-	}
-
-	public void setBarComparativo(BarChartModel barComparativo) {
-		this.barComparativo = barComparativo;
-	}
-
 	public FaturaCartao getFaturaCartao() {
 		return faturaCartao;
 	}
 
 	public void setFaturaCartao(FaturaCartao faturaCartao) {
 		this.faturaCartao = faturaCartao;
+	}
+
+	public BarChartModel getBarComparativo() {
+		return barComparativo;
+	}
+
+	public void setBarComparativo(BarChartModel barComparativo) {
+		this.barComparativo = barComparativo;
 	}
 
 	public boolean isExibirPieCategoriaDebito() {
