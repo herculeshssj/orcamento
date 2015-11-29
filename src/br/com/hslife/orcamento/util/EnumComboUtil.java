@@ -64,6 +64,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 
@@ -179,8 +180,16 @@ public class EnumComboUtil {
 	
 	public List<SelectItem> getListaStatusLancamentoConta() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (StatusLancamentoConta status : StatusLancamentoConta.values()) {
-			listaSelectItem.add(new SelectItem(status, status.toString()));
+		for (StatusLancamentoConta enumeration : StatusLancamentoConta.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaTipoDado() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (TipoDado enumeration : TipoDado.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;
 	}

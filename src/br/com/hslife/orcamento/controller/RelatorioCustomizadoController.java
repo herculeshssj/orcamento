@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -72,8 +73,10 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	
 	private String nomeRelatorio;
 	
-	private RelatorioColuna colunaRelatorio;
-	private RelatorioParametro parametroRelatorio;
+	private RelatorioColuna colunaRelatorio = new RelatorioColuna();
+	private RelatorioColuna colunaRelatorioTemp; // usado na mudança de ordem das colunas
+	private RelatorioParametro parametroRelatorio = new RelatorioParametro();
+	private RelatorioParametro parametroRelatorioTemp; // usado para exclusão de parâmentros da listagem
 	
 	public RelatorioCustomizadoController() {
 		super(new RelatorioCustomizado());
@@ -83,7 +86,12 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	@Override
 	protected void initializeEntity() {
 		entity = new RelatorioCustomizado();
-		listEntity = new ArrayList<RelatorioCustomizado>();		
+		listEntity = new ArrayList<RelatorioCustomizado>();
+		
+		colunaRelatorio = new RelatorioColuna();
+		colunaRelatorioTemp = new RelatorioColuna();
+		parametroRelatorio = new RelatorioParametro();
+		parametroRelatorioTemp = new RelatorioParametro();
 	}
 	
 	@Override
@@ -99,6 +107,44 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	public String save() {
 		entity.setUsuario(getUsuarioLogado());
 		return super.save();
+	}
+	
+	public void adicionarColuna() {
+		colunaRelatorio.setOrdem(entity.getColunasRelatorio().size() + 1);
+		entity.getColunasRelatorio().add(colunaRelatorio);
+		colunaRelatorio = new RelatorioColuna();
+	}
+	
+	public void removerColuna() {
+		// Remove o item selecionado
+		for (Iterator<RelatorioColuna> iterator = entity.getColunasRelatorio().iterator(); iterator.hasNext(); ) {
+			RelatorioColuna item = iterator.next();
+			if (item.getOrdem() == colunaRelatorioTemp.getOrdem()) {
+				iterator.remove();
+			}
+		}
+		
+		// Renumera a numeração da ordem das colunas
+		int i = 1;
+		for (RelatorioColuna coluna : entity.getColunasRelatorio()) {
+			coluna.setOrdem(i);
+			i++;
+		}
+	}
+	
+	public void subirNivel() {
+		//TODO implementar
+		// Tem o Collections.swap(), mas só funciona com List<>
+	}
+	
+	public void descerNivel() {
+		// TODO implementar
+	}
+	
+	public void atualizarFormColunas() {
+		// Método criado para poder setar os valores digitados no momento
+		// da seleção do checkbox "Formatar".
+		this.getColunaRelatorio();
 	}
 
 	public String getNomeRelatorio() {
@@ -127,5 +173,21 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 
 	public void setParametroRelatorio(RelatorioParametro parametroRelatorio) {
 		this.parametroRelatorio = parametroRelatorio;
+	}
+
+	public RelatorioColuna getColunaRelatorioTemp() {
+		return colunaRelatorioTemp;
+	}
+
+	public void setColunaRelatorioTemp(RelatorioColuna colunaRelatorioTemp) {
+		this.colunaRelatorioTemp = colunaRelatorioTemp;
+	}
+
+	public RelatorioParametro getParametroRelatorioTemp() {
+		return parametroRelatorioTemp;
+	}
+
+	public void setParametroRelatorioTemp(RelatorioParametro parametroRelatorioTemp) {
+		this.parametroRelatorioTemp = parametroRelatorioTemp;
 	}
 }

@@ -71,23 +71,30 @@
 		<p:tabView>
 			<p:tab title="Colunas">
 			
-				<label for="frmFormEntity:txtNomeColuna">Nome da coluna:</label>
-				<h:inputText id="txtNomeColuna" value="#{managedBean.colunaRelatorio.nomeColuna}" size="50"/>
+				<p:outputPanel id="pnlFormColunas">
+					<label for="frmFormEntity:txtNomeColuna">Nome da coluna:</label>
+					<h:inputText id="txtNomeColuna" value="#{managedBean.colunaRelatorio.nomeColuna}" size="50"/>
+					
+					<label for="frmFormEntity:txtTextoExibicaoColuna">Texto de exibição:</label>
+					<h:inputText id="txtTextoExibicaoColuna" value="#{managedBean.colunaRelatorio.textoExibicao}" size="50"/>
+					
+					<label for="frmFormEntity:txtTipoDadoColuna">Tipo de Dado:</label>
+					<h:selectOneMenu id="txtTipoDadoColuna" value="#{managedBean.colunaRelatorio.tipoDado}">
+						<f:selectItems value="#{enumCombo.listaTipoDado}"/>
+					</h:selectOneMenu>
+									
+					<h:selectBooleanCheckbox value="#{managedBean.colunaRelatorio.formatar}">
+						<p:ajax update="pnlFormColunas" listener="#{managedBean.atualizarFormColunas}"/>
+					</h:selectBooleanCheckbox>
+					<label>Formatar?</label>
+					
+					<p:outputPanel id="pnlMascaraFormatacaoColuna" rendered="#{managedBean.colunaRelatorio.formatar}">
+						<label for="frmFormEntity:txtMascaraFormatacaoColuna">Máscara Formatação:</label>
+						<h:inputText id="txtMascaraFormatacaoColuna" value="#{managedBean.colunaRelatorio.mascaraFormatacao}" size="50"/>
+					</p:outputPanel>
+				</p:outputPanel>
 				
-				<label for="frmFormEntity:txtTextoExibicaoColuna">Texto de exibição:</label>
-				<h:inputText id="txtTextoExibicaoColuna" value="#{managedBean.colunaRelatorio.textoExibicao}" size="50"/>
-				
-				<label for="frmFormEntity:txtTipoDadoColuna">Tipo de Dado:</label>
-				<h:selectOneMenu id="txtTipoDadoColuna" value="#{managedBean.colunaRelatorio.tipoDado}">
-				</h:selectOneMenu>
-								
-				<h:selectBooleanCheckbox value="#{managedBean.colunaRelatorio.formatar}"/>
-				<label>Formatar?</label>
-				
-				<label for="frmFormEntity:txtMascaraFormatacaoColuna">Máscara Formatação:</label>
-				<h:inputText id="txtMascaraFormatacaoColuna" value="#{managedBean.colunaRelatorio.mascaraFormatacao}" size="50"/>
-				
-				<h:commandLink value="Adicionar coluna"/>
+				<p:commandLink value="Adicionar coluna" actionListener="#{managedBean.adicionarColuna}" update="pnlFormColunas,tableColunasRelatorio" />
 				
 				<h:dataTable id="tableColunasRelatorio" value="#{managedBean.entity.colunasRelatorio}" var="itemColuna">
 					<h:column>
@@ -130,17 +137,17 @@
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>
-						<h:commandLink id="lnkUp" title="Subir um nível">
+						<h:commandLink id="lnkUp" title="Subir um nível" action="#{managedBean.subirNivel}">
 		     				<h:graphicImage id="imgUp" height="48" width="48" value="/resources/images/svg/collapse.svg"/>
-		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorio}"/>
+		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorioTemp}"/>
 		     			</h:commandLink>
-		     			<h:commandLink id="lnkDown" title="Descer um nível">
+		     			<h:commandLink id="lnkDown" title="Descer um nível" action="#{managedBean.descerNivel}">
 		     				<h:graphicImage id="imgDown" height="48" width="48" value="/resources/images/svg/expand.svg"/>
-		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorio}"/>
+		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorioTemp}"/>
 		     			</h:commandLink>
-						<h:commandLink id="lnkDelRowColuna" title="Remover coluna">
+						<h:commandLink id="lnkDelRowColuna" title="Remover coluna" action="#{managedBean.removerColuna}">
 		     				<h:graphicImage id="imgDelRowColuna" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
-		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorio}"/>
+		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorioTemp}"/>
 		     			</h:commandLink>
 					</h:column>
 				</h:dataTable>
@@ -157,6 +164,7 @@
 				
 				<label for="frmFormEntity:txtTipoDadoParametro">Tipo de Dado:</label>
 				<h:selectOneMenu id="txtTipoDadoParametro" value="#{managedBean.parametroRelatorio.tipoDado}">
+					<f:selectItems value="#{enumCombo.listaTipoDado}"/>
 				</h:selectOneMenu>
 				
 				<h:commandLink value="Adicionar parâmetro"/>
@@ -186,7 +194,7 @@
 						</f:facet>
 						<h:commandLink id="lnkDelRowParametro" title="Remover parâmetro">
 		     				<h:graphicImage id="imgDelRowParametro" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
-		     				<f:setPropertyActionListener value="#{itemParametro}" target="#{managedBean.parametroRelatorio}"/>
+		     				<f:setPropertyActionListener value="#{itemParametro}" target="#{managedBean.parametroRelatorioTemp}"/>
 		     			</h:commandLink>
 					</h:column>
 				</h:dataTable>
