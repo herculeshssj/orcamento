@@ -146,6 +146,21 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 		// da seleção do checkbox "Formatar".
 		this.getColunaRelatorio();
 	}
+	
+	public void adicionarParametro() {
+		entity.getParametrosRelatorio().add(parametroRelatorio);
+		parametroRelatorio = new RelatorioParametro();
+	}
+	
+	public void removerParametro() {
+		// Remove o item selecionado
+		for (Iterator<RelatorioParametro> iterator = entity.getParametrosRelatorio().iterator(); iterator.hasNext(); ) {
+			RelatorioParametro item = iterator.next();
+			if (item.getNomeParametro() == parametroRelatorioTemp.getNomeParametro()) {
+				iterator.remove();
+			}
+		}
+	}
 
 	public String getNomeRelatorio() {
 		return nomeRelatorio;

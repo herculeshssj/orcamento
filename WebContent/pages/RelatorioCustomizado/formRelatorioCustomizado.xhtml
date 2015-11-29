@@ -156,18 +156,20 @@
 			
 			<p:tab title="Parâmetros">
 				
-				<label for="frmFormEntity:txtNomeParametro">Nome do parâmetro:</label>
-				<h:inputText id="txtNomeParametro" value="#{managedBean.parametroRelatorio.nomeParametro}" size="50"/>
+				<p:outputPanel id="pnlFormParametro">
+					<label for="frmFormEntity:txtNomeParametro">Nome do parâmetro:</label>
+					<h:inputText id="txtNomeParametro" value="#{managedBean.parametroRelatorio.nomeParametro}" size="50"/>
+					
+					<label for="frmFormEntity:txtTextoExibicaoParametro">Texto de exibição:</label>
+					<h:inputText id="txtTextoExibicaoParametro" value="#{managedBean.parametroRelatorio.textoExibicao}" size="50"/>
+					
+					<label for="frmFormEntity:txtTipoDadoParametro">Tipo de Dado:</label>
+					<h:selectOneMenu id="txtTipoDadoParametro" value="#{managedBean.parametroRelatorio.tipoDado}">
+						<f:selectItems value="#{enumCombo.listaTipoDado}"/>
+					</h:selectOneMenu>
+				</p:outputPanel>
 				
-				<label for="frmFormEntity:txtTextoExibicaoParametro">Texto de exibição:</label>
-				<h:inputText id="txtTextoExibicaoParametro" value="#{managedBean.parametroRelatorio.textoExibicao}" size="50"/>
-				
-				<label for="frmFormEntity:txtTipoDadoParametro">Tipo de Dado:</label>
-				<h:selectOneMenu id="txtTipoDadoParametro" value="#{managedBean.parametroRelatorio.tipoDado}">
-					<f:selectItems value="#{enumCombo.listaTipoDado}"/>
-				</h:selectOneMenu>
-				
-				<h:commandLink value="Adicionar parâmetro"/>
+				<p:commandLink value="Adicionar parâmetro" actionListener="#{managedBean.adicionarParametro}" update="pnlFormParametro,tableParametrosRelatorio"/>
 				
 				<h:dataTable id="tableParametrosRelatorio" value="#{managedBean.entity.parametrosRelatorio}" var="itemParametro">
 					<h:column>
@@ -192,7 +194,7 @@
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>
-						<h:commandLink id="lnkDelRowParametro" title="Remover parâmetro">
+						<h:commandLink id="lnkDelRowParametro" title="Remover parâmetro" action="#{managedBean.removerParametro}">
 		     				<h:graphicImage id="imgDelRowParametro" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
 		     				<f:setPropertyActionListener value="#{itemParametro}" target="#{managedBean.parametroRelatorioTemp}"/>
 		     			</h:commandLink>
