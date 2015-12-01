@@ -49,8 +49,8 @@ package br.com.hslife.orcamento.entity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.junit.Before;
@@ -70,7 +70,7 @@ public class RelatorioParametroTest {
 		entity.setConsultaSQL("SELECT * FROM lancamentoconta");
 		entity.setUsuario(new Usuario());
 		
-		Set<RelatorioColuna> colunas = new LinkedHashSet<>();
+		SortedSet<RelatorioColuna> colunas = new TreeSet<>();
 		for (int i = 0; i < 3; i++) {
 			RelatorioColuna coluna = new RelatorioColuna();
 			coluna.setNomeColuna("coluna" + i);

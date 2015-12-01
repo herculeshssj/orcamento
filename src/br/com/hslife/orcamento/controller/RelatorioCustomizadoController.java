@@ -47,7 +47,10 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -58,6 +61,7 @@ import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
+import br.com.hslife.orcamento.util.RelatorioColunaComparator;
 
 @Component("relatorioCustomizadoMB")
 @Scope("session")
@@ -109,6 +113,20 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 		return super.save();
 	}
 	
+	@Override
+	public String edit() {
+		String retorno = super.edit();
+		
+		// Ordena as colunas da consulta
+		List<RelatorioColuna> listaColunas = new LinkedList<RelatorioColuna>();
+		listaColunas.addAll(entity.getColunasRelatorio());
+		Collections.sort(listaColunas, new RelatorioColunaComparator());
+		entity.getColunasRelatorio().clear();
+		entity.getColunasRelatorio().addAll(listaColunas);
+		
+		return retorno;
+	}
+	
 	public void adicionarColuna() {
 		colunaRelatorio.setOrdem(entity.getColunasRelatorio().size() + 1);
 		entity.getColunasRelatorio().add(colunaRelatorio);
@@ -133,12 +151,75 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	}
 	
 	public void subirNivel() {
-		//TODO implementar
-		// Tem o Collections.swap(), mas só funciona com List<>
+		// Adiciona o conteúdo do Set de colunas na lista temporária
+		List<RelatorioColuna> listaColunas = new LinkedList<RelatorioColuna>();
+		listaColunas.addAll(entity.getColunasRelatorio());
+		
+		// Variáveis auxiliares para guardar do índice
+		int indiceAtual = 0;
+		int indiceAnterior = 0;		
+		
+		// Varre a lista a procura do elemento selecionado
+		for (int i = 0; i < listaColunas.size(); i++) {
+			if (listaColunas.get(i).equals(colunaRelatorioTemp)) {
+				indiceAtual = i;
+				indiceAnterior = indiceAtual - 1;
+				break;
+			}
+		}
+		
+		// Realiza o swap dos elementos da lista caso indice anterior ser
+		// igual ou maior que zero
+		if (indiceAnterior >= 0) {
+			Collections.swap(listaColunas, indiceAtual, indiceAnterior);
+		}
+		
+		// Limpa o Set da entidade e adiciona o conteúdo da lista
+		entity.getColunasRelatorio().clear();
+		entity.getColunasRelatorio().addAll(listaColunas);
+		
+		// Renumera a numeração da ordem das colunas
+		int i = 1;
+		for (RelatorioColuna coluna : entity.getColunasRelatorio()) {
+			coluna.setOrdem(i);
+			i++;
+		}
 	}
 	
 	public void descerNivel() {
-		// TODO implementar
+		// Adiciona o conteúdo do Set de colunas na lista temporária
+		List<RelatorioColuna> listaColunas = new LinkedList<RelatorioColuna>();
+		listaColunas.addAll(entity.getColunasRelatorio());
+		
+		// Variáveis auxiliares para guardar do índice
+		int indiceAtual = 0;
+		int indicePosterior = 0;		
+		
+		// Varre a lista a procura do elemento selecionado
+		for (int i = 0; i < listaColunas.size(); i++) {
+			if (listaColunas.get(i).equals(colunaRelatorioTemp)) {
+				indiceAtual = i;
+				indicePosterior = indiceAtual + 1;
+				break;
+			}
+		}
+		
+		// Realiza o swap dos elementos da lista caso indice anterior ser
+		// igual ou maior que zero
+		if (indicePosterior < listaColunas.size()) {
+			Collections.swap(listaColunas, indiceAtual, indicePosterior);
+		}
+		
+		// Limpa o Set da entidade e adiciona o conteúdo da lista
+		entity.getColunasRelatorio().clear();
+		entity.getColunasRelatorio().addAll(listaColunas);
+		
+		// Renumera a numeração da ordem das colunas
+		int i = 1;
+		for (RelatorioColuna coluna : entity.getColunasRelatorio()) {
+			coluna.setOrdem(i);
+			i++;
+		}
 	}
 	
 	public void atualizarFormColunas() {
