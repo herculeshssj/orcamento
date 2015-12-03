@@ -44,7 +44,6 @@
   
   -->
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -56,27 +55,96 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{bancoMB}" />
-
+	<ui:param name="managedBean" value="#{relatorioCustomizadoMB}" />
+	
 	<ui:define name="campos">
-			
+	
 		<h:panelGrid columns="2">
+		
+			<label for="frmFormEntity:txtNome">Nome:</label>
+			<h:outputText id="txtNome" value="#{managedBean.entity.nome}"/>
 			
-			Banco:
-			<h:outputText id="txtNome" value="#{managedBean.entity.nome}" />				
+			<label for="frmFormEntity:txtDescricao">Descrição:</label>
+			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 			
-			Número:
-			<h:outputText id="txtNumero" value="#{managedBean.entity.numero}" />				
-			
-			Padrão:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
-			
-			Ativo:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+			<label for="frmFormEntity:txtConsultaSQL">SQL:</label>
+			<h:inputTextarea id="txtConsultaSQL" value="#{managedBean.entity.consultaSQL}" readonly="true"/>	
 			
 		</h:panelGrid>
+	
+		<p:tabView>
+			<p:tab title="Colunas">
+				
+				<h:dataTable id="tableColunasRelatorio" value="#{managedBean.entity.colunasRelatorio}" var="itemColuna">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Ordem"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.ordem}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Coluna"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.nomeColuna}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Texto de Exibição"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.textoExibicao}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Tipo"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.tipoDado}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Formatar?"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.formatar}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Máscara"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.mascaraFormatacao}"/>
+					</h:column>
+				</h:dataTable>
+		
+			</p:tab>
+			
+			<p:tab title="Parâmetros">
+							
+				<h:dataTable id="tableParametrosRelatorio" value="#{managedBean.entity.parametrosRelatorio}" var="itemParametro">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Parâmetro"/>
+						</f:facet>
+						<h:outputText value="#{itemParametro.nomeParametro}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Texto de Exibição"/>
+						</f:facet>
+						<h:outputText value="#{itemParametro.textoExibicao}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Tipo"/>
+						</f:facet>
+						<h:outputText value="#{itemParametro.tipoDado}"/>
+					</h:column>
+				</h:dataTable>
+				
+			</p:tab>
+			
+		</p:tabView>
+				
 		
 	</ui:define>
-	
+
 </ui:composition>
 </html>
