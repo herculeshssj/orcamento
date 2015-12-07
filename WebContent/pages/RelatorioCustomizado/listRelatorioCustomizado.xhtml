@@ -89,7 +89,7 @@
 			<f:facet name="header">
 				<h:outputText value="Ações" />
 			</f:facet>
-			<h:commandLink title="Gerar relatório" action="#{managedBean.gerarRelatorio}">
+			<h:commandLink title="Gerar relatório" action="#{managedBean.gerarRelatorioView}">
 				<h:graphicImage id="imgPreview" height="48" width="48" value="/resources/images/svg/fine_print.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>

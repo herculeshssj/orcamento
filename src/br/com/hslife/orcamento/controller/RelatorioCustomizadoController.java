@@ -52,6 +52,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.faces.component.html.HtmlPanelGroup;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -62,6 +64,7 @@ import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
 import br.com.hslife.orcamento.util.RelatorioColunaComparator;
+import br.com.hslife.orcamento.util.RelatorioCustomizadoUtil;
 
 @Component("relatorioCustomizadoMB")
 @Scope("session")
@@ -80,7 +83,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	private RelatorioColuna colunaRelatorio = new RelatorioColuna();
 	private RelatorioColuna colunaRelatorioTemp; // usado na mudança de ordem das colunas
 	private RelatorioParametro parametroRelatorio = new RelatorioParametro();
-	private RelatorioParametro parametroRelatorioTemp; // usado para exclusão de parâmentros da listagem
+	private RelatorioParametro parametroRelatorioTemp; // usado para exclusão de parâmentros da listagem 
 	
 	public RelatorioCustomizadoController() {
 		super(new RelatorioCustomizado());
@@ -125,6 +128,31 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 		entity.getColunasRelatorio().addAll(listaColunas);
 		
 		return retorno;
+	}
+	
+	public String gerarRelatorioView() {
+		try {
+			entity = getService().buscarPorID(idEntity);
+			actionTitle = " - " + entity.getNome();
+			return "/pages/RelatorioCustomizado/gerarRelatorio";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public HtmlPanelGroup getCriteriaComponents() {
+		return RelatorioCustomizadoUtil.getGeneratedComponentsToCriteriaPage(entity);
+	}
+	
+	public void setCriteriaComponents(HtmlPanelGroup panelGroup) {
+		// Faz nada. Método criado por causa do JSF lifecycle que tenta gravar no 
+		// atributo criteriaComponents
+	}
+	
+	public String gerarRelatorio() {
+		actionTitle = " - " + entity.getNome() + " [Resultado]";
+		return "/pages/RelatorioCustomizado/visualizarRelatorio";
 	}
 	
 	public void adicionarColuna() {
