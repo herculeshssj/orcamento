@@ -84,7 +84,7 @@
 			</label>
 			<p:spacer height="1"/>
 			<label>
-				<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}"/>
+				<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="#{managedBean.entity.login == 'admin'}"/>
 				Ativo
 			</label>
 		</h:panelGroup>
