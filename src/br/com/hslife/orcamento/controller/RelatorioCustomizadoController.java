@@ -48,9 +48,11 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.component.html.HtmlPanelGroup;
 
@@ -84,6 +86,9 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	private RelatorioColuna colunaRelatorioTemp; // usado na mudança de ordem das colunas
 	private RelatorioParametro parametroRelatorio = new RelatorioParametro();
 	private RelatorioParametro parametroRelatorioTemp; // usado para exclusão de parâmentros da listagem 
+	
+	// Map que guarda os valores informados nos parâmetros de busca
+	private Map<String, Object> parameterValues = new HashMap<>();
 	
 	public RelatorioCustomizadoController() {
 		super(new RelatorioCustomizado());
@@ -133,12 +138,25 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	public String gerarRelatorioView() {
 		try {
 			entity = getService().buscarPorID(idEntity);
+			
+			// Inicializa o Map dos valores dos parâmetros
+			if (entity.getParametrosRelatorio() != null && !entity.getParametrosRelatorio().isEmpty()) {
+				for (RelatorioParametro parametro : entity.getParametrosRelatorio()) {
+					parameterValues.put(parametro.getNomeParametro(), null);
+				}
+			}
+			
 			actionTitle = " - " + entity.getNome();
 			return "/pages/RelatorioCustomizado/gerarRelatorio";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
+	}
+	
+	public String gerarRelatorio() {
+		actionTitle = " - " + entity.getNome() + " [Resultado]";
+		return "/pages/RelatorioCustomizado/visualizarRelatorio";
 	}
 	
 	public HtmlPanelGroup getCriteriaComponents() {
@@ -150,9 +168,13 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 		// atributo criteriaComponents
 	}
 	
-	public String gerarRelatorio() {
-		actionTitle = " - " + entity.getNome() + " [Resultado]";
-		return "/pages/RelatorioCustomizado/visualizarRelatorio";
+	public HtmlPanelGroup getResultComponents() {
+		return RelatorioCustomizadoUtil.getGeneratedComponentsToResultPage();
+	}
+	
+	public void setResultComponents(HtmlPanelGroup panelGroup) {
+		// Faz nada. Método criado por causa do JSF lifecycle que tenta gravar no 
+		// atributo resultComponents
 	}
 	
 	public void adicionarColuna() {
@@ -265,7 +287,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 		// Remove o item selecionado
 		for (Iterator<RelatorioParametro> iterator = entity.getParametrosRelatorio().iterator(); iterator.hasNext(); ) {
 			RelatorioParametro item = iterator.next();
-			if (item.getNomeParametro() == parametroRelatorioTemp.getNomeParametro()) {
+			if (item.getNomeParametro().equals(parametroRelatorioTemp.getNomeParametro())) {
 				iterator.remove();
 			}
 		}
@@ -314,4 +336,12 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	public void setParametroRelatorioTemp(RelatorioParametro parametroRelatorioTemp) {
 		this.parametroRelatorioTemp = parametroRelatorioTemp;
 	}
+
+	public Map<String, Object> getParameterValues() {
+		return parameterValues;
+	}
+
+	public void setParameterValues(Map<String, Object> parameterValues) {
+		this.parameterValues = parameterValues;
+	}	
 }

@@ -46,27 +46,23 @@
 
 package br.com.hslife.orcamento.util;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlPanelGroup;
 
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
-
-import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
-import br.com.hslife.orcamento.enumeration.CadastroSistema;
-import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.entity.RelatorioParametro;
 
+/**
+ * Cria as páginas de consulta e resultado a partir
+ * dos dados do relatório customizado passado.
+ * 
+ * @author herculeshssj
+ *
+ */
 public class RelatorioCustomizadoUtil {
+	
+	// Classe não pode ser instantiada
+	private RelatorioCustomizadoUtil() {}
 	
 	/**
 	 * Retorna os componentes gerados para a página de seleção 
@@ -75,26 +71,38 @@ public class RelatorioCustomizadoUtil {
 	 * @return objeto HtmlPanelGroup com os componentes gerados
 	 */
 	public static HtmlPanelGroup getGeneratedComponentsToCriteriaPage(RelatorioCustomizado relatorioCustomizado) {
-		HtmlPanelGroup panelGroup = new HtmlPanelGroup();
-		panelGroup.setId("grpCriteriaComponents");
+		// Cria um novo panel group
+		HtmlPanelGroup panelGroup = JSFComponentUtil.createPanelGroup("grpCriteriaComponents", null);
 		
-		// Cria o panelGrid para alinhar os componentes
-		HtmlPanelGrid panelGrid = RelatorioCustomizadoUtil.createPanelGrid("pnlCriteria", 2);
+		// Cria um novo panel grip para alinhar os componentes
+		HtmlPanelGrid panelGrid = JSFComponentUtil.createPanelGrid("pnlCriteria", 2, null);
 		
-		// Verifica a existência de critérios de busca. Existindo,
-		// monta a tela de consulta
-		if (relatorioCustomizado.getParametrosRelatorio() != null && !relatorioCustomizado.getParametrosRelatorio().isEmpty()) {
+		// Verifica a existência de critérios de busca. Existindo, monta a tela de consulta
+		if (relatorioCustomizado.getParametrosRelatorio() != null & !relatorioCustomizado.getParametrosRelatorio().isEmpty()) {
 			
-			// TODO implementar
+			// Itera a lista de parâmetros para criar o formulário de critério de busca
+			for (RelatorioParametro parametro : relatorioCustomizado.getParametrosRelatorio()) {
+				switch (parametro.getTipoDado()) {
+					case DATE :
+						// Cria o label
+						panelGrid.getChildren().add(CustomComponentUtil.createLabelField("lbl" + parametro.getNomeParametro(), parametro.getTextoExibicao()));
+						// Cria o inputMask
+						panelGrid.getChildren().add(CustomComponentUtil.createDateTimeField("txt" + parametro.getNomeParametro(), 
+								JSFComponentUtil.createValueExpression("#{relatorioCustomizadoMB.parameterValues['" + parametro.getNomeParametro() + "']}", Object.class)));
+					default:
+						// não faz nada por enquanto
+				}
+			}
 			
 		} else {
-			panelGrid = RelatorioCustomizadoUtil.createPanelGrid("pnlCriteria", 1);
+			// Define o panel grid para uma coluna
+			panelGrid = JSFComponentUtil.createPanelGrid("pngCriteria", 1, null);
 			
-			// Cria um outputText avisando que não existe parâmetros de consulta
-			panelGrid.getChildren().add(RelatorioCustomizadoUtil.createOutputText("txtMsgSemCriterios", "Sem critérios a selecionar.", null));
+			// Seta uma mensagem de aviso informando a ausência de critérios de busca
+			panelGrid.getChildren().add(JSFComponentUtil.createOutputText("txtMsgSemCriterio", "Sem critérios a selecionar", null));
 		}
 		
-		// Adiciona o panelGrid com os componentes criados ao panelGroup
+		// Adiciona o panel grid com os componentes criados no panel group
 		panelGroup.getChildren().add(panelGrid);
 		
 		return panelGroup;
@@ -108,20 +116,5 @@ public class RelatorioCustomizadoUtil {
 	 */
 	public static HtmlPanelGroup getGeneratedComponentsToResultPage() {
 		return null;
-	}
-	
-	private static HtmlPanelGrid createPanelGrid(String id, int columns) {
-		HtmlPanelGrid panelGrid = new HtmlPanelGrid();
-		panelGrid.setId(id);
-		panelGrid.setColumns(columns);
-		return panelGrid;
-	}
-	
-	private static HtmlOutputText createOutputText(String id, String value, String title) {
-		HtmlOutputText outputText = new HtmlOutputText();
-		outputText.setId(id);
-		outputText.setValue(value);
-		outputText.setTitle(title);
-		return outputText;
 	}
 }
