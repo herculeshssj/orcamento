@@ -112,6 +112,24 @@
 				<p:inputMask value="#{managedBean.dataPagamento}" size="10" required="true" requiredMessage="Informe a data de pagamento da fatura!" mask="99/99/9999">
 					<f:converter converterId="dateConverter"/>
 				</p:inputMask>
+				
+				Categoria:
+				<h:selectOneMenu id="txtCategoria" value="#{managedBean.faturaSelecionada.categoriaSelecionada}"  converter="entityConverter">
+					<f:selectItem itemLabel="Nenhuma categoria"/>
+					<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+		
+				Favorecido:
+				<h:selectOneMenu id="txtFavorecido" value="#{managedBean.faturaSelecionada.favorecidoSelecionado}" converter="entityConverter">
+					<f:selectItem itemLabel="Nenhum favorecido"/>
+					<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+		
+				<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+				<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.faturaSelecionada.meioPagamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+					<f:selectItem itemLabel="Nenhum meio de pagamento"/>
+					<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
 			
 			</h:panelGrid>
 			
@@ -127,6 +145,24 @@
 				<p:inputMask value="#{managedBean.dataParcelamento}" size="10" required="true" requiredMessage="Informe a data de parcelamento da fatura!" mask="99/99/9999">
 					<f:converter converterId="dateConverter"/>
 				</p:inputMask>
+				
+				Categoria:
+				<h:selectOneMenu id="txtCategoriaParcelamento" value="#{managedBean.faturaSelecionada.categoriaSelecionada}"  converter="entityConverter">
+					<f:selectItem itemLabel="Nenhuma categoria"/>
+					<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+		
+				Favorecido:
+				<h:selectOneMenu id="txtFavorecidoParcelamento" value="#{managedBean.faturaSelecionada.favorecidoSelecionado}" converter="entityConverter">
+					<f:selectItem itemLabel="Nenhum favorecido"/>
+					<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+		
+				<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+				<h:selectOneMenu id="txtMeioPagamentoParcelamento" value="#{managedBean.faturaSelecionada.meioPagamentoSelecionado}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+					<f:selectItem itemLabel="Nenhum meio de pagamento"/>
+					<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
 			</h:panelGrid>
 			
 			<p:outputPanel rendered="#{managedBean.formaPagamento == 'LANCAMENTO'}">

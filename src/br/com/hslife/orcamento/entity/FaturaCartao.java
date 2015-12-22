@@ -69,6 +69,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -137,6 +138,15 @@ public class FaturaCartao extends EntityPersistence {
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=true)
 	private Arquivo arquivo;
+	
+	@Transient
+	private Categoria categoriaSelecionada;
+	
+	@Transient
+	private Favorecido favorecidoSelecionado;
+	
+	@Transient
+	private MeioPagamento meioPagamentoSelecionado;
 	
 	public FaturaCartao() {
 		conversoesMoeda = new ArrayList<ConversaoMoeda>();
@@ -325,5 +335,29 @@ public class FaturaCartao extends EntityPersistence {
 
 	public void setAno(int ano) {
 		this.ano = ano;
+	}
+
+	public Categoria getCategoriaSelecionada() {
+		return categoriaSelecionada;
+	}
+
+	public void setCategoriaSelecionada(Categoria categoriaSelecionada) {
+		this.categoriaSelecionada = categoriaSelecionada;
+	}
+
+	public Favorecido getFavorecidoSelecionado() {
+		return favorecidoSelecionado;
+	}
+
+	public void setFavorecidoSelecionado(Favorecido favorecidoSelecionado) {
+		this.favorecidoSelecionado = favorecidoSelecionado;
+	}
+
+	public MeioPagamento getMeioPagamentoSelecionado() {
+		return meioPagamentoSelecionado;
+	}
+
+	public void setMeioPagamentoSelecionado(MeioPagamento meioPagamentoSelecionado) {
+		this.meioPagamentoSelecionado = meioPagamentoSelecionado;
 	}
 }

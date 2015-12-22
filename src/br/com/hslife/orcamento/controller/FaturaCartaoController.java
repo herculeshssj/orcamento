@@ -69,22 +69,29 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.CartaoCredito;
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
+import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
+import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.DetalheFaturaComparator;
@@ -113,6 +120,15 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	@Autowired
 	private IConta contaService;
+	
+	@Autowired
+	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
 	
 	private Moeda moedaPadrao;
 	private boolean faturaFechada;
@@ -660,6 +676,33 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
+	}
+	
+	public List<Categoria> getListaCategoria() {
+		try {
+			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		} 
+		return new ArrayList<Categoria>();
+	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<SelectItem> getListaStatusFaturaCartao() {

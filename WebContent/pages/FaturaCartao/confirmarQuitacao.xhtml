@@ -105,6 +105,15 @@
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			
+			Categoria:
+			<h:outputText value="#{managedBean.faturaSelecionada.categoriaSelecionada.label}" />
+			
+			Favorecido:
+			<h:outputText value="#{managedBean.faturaSelecionada.favorecidoSelecionado.label}" />
+						
+			<h:outputText value="Meio de pagamento:"/>
+			<h:outputText value="#{managedBean.faturaSelecionada.meioPagamentoSelecionado.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>			
+			
 		</h:panelGrid>
 			
 		<h:panelGrid columns="2" rendered="#{managedBean.formaPagamento == 'PARCELAMENTO'}">
@@ -118,7 +127,17 @@
 			Data de parcelamento:
 			<h:outputText value="#{managedBean.dataParcelamento}">
 				<f:converter converterId="dateConverter"/>
-			</h:outputText>			
+			</h:outputText>	
+			
+			Categoria:
+			<h:outputText value="#{managedBean.faturaSelecionada.categoriaSelecionada.label}" />
+			
+			Favorecido:
+			<h:outputText value="#{managedBean.faturaSelecionada.favorecidoSelecionado.label}" />
+						
+			<h:outputText value="Meio de pagamento:"/>
+			<h:outputText value="#{managedBean.faturaSelecionada.meioPagamentoSelecionado.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>			
+					
 		</h:panelGrid>
 			
 		<h:panelGroup rendered="#{managedBean.formaPagamento == 'LANCAMENTO'}">

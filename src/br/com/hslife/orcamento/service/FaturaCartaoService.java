@@ -66,19 +66,13 @@ import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
-import br.com.hslife.orcamento.repository.CategoriaRepository;
-import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
-import br.com.hslife.orcamento.repository.FavorecidoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
-import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
-import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("faturaCartaoService")
@@ -93,23 +87,23 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	@Autowired
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
 	
-	@Autowired
-	private MoedaRepository moedaRepository;
-	
-	@Autowired
-	private ContaRepository contaRepository;
+//	@Autowired
+//	private MoedaRepository moedaRepository;
+//	
+//	@Autowired
+//	private ContaRepository contaRepository;
 	
 	@Autowired
 	private ContaComponent contaComponent;
 	
-	@Autowired
-	private CategoriaRepository categoriaRepository;
-	
-	@Autowired
-	private FavorecidoRepository favorecidoRepository;
-	
-	@Autowired
-	private MeioPagamentoRepository meioPagamentoRepository;
+//	@Autowired
+//	private CategoriaRepository categoriaRepository;
+//	
+//	@Autowired
+//	private FavorecidoRepository favorecidoRepository;
+//	
+//	@Autowired
+//	private MeioPagamentoRepository meioPagamentoRepository;
 	
 	public FaturaCartaoRepository getRepository() {
 		return repository;
@@ -124,13 +118,13 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		this.lancamentoContaRepository = lancamentoContaRepository;
 	}
 
-	public void setMoedaRepository(MoedaRepository moedaRepository) {
-		this.moedaRepository = moedaRepository;
-	}
-
-	public void setContaRepository(ContaRepository contaRepository) {
-		this.contaRepository = contaRepository;
-	}
+//	public void setMoedaRepository(MoedaRepository moedaRepository) {
+//		this.moedaRepository = moedaRepository;
+//	}
+//
+//	public void setContaRepository(ContaRepository contaRepository) {
+//		this.contaRepository = contaRepository;
+//	}
 
 	@Override
 	public void validar(FaturaCartao entity) throws BusinessException {
@@ -303,9 +297,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		lancamentoPagamento.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 		lancamentoPagamento.setValorPago(valorAQuitar);
 		lancamentoPagamento.setTipoLancamento(TipoLancamento.DESPESA);
-		lancamentoPagamento.setCategoria(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(faturaCartao.getConta().getUsuario(), TipoCategoria.DEBITO));
-		lancamentoPagamento.setFavorecido(favorecidoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
-		lancamentoPagamento.setMeioPagamento(meioPagamentoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
+		lancamentoPagamento.setCategoria(faturaCartao.getCategoriaSelecionada());
+		lancamentoPagamento.setFavorecido(faturaCartao.getFavorecidoSelecionado());
+		lancamentoPagamento.setMeioPagamento(faturaCartao.getMeioPagamentoSelecionado());
 		
 		// Determina o valor do saldo devedor
 		double saldoDevedor = (faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()) - valorAQuitar;
@@ -368,9 +362,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		parcelamentoFatura.setUsuario(faturaCartao.getConta().getUsuario());
 		parcelamentoFatura.setValorCompra(fatura.getValorPago());
 		parcelamentoFatura.setValorParcela(Util.arredondar(fatura.getValorPago() / quantParcelas));
-		parcelamentoFatura.setCategoria(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(faturaCartao.getConta().getUsuario(), TipoCategoria.DEBITO));
-		parcelamentoFatura.setFavorecido(favorecidoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
-		parcelamentoFatura.setMeioPagamento(meioPagamentoRepository.findDefaultByUsuario(faturaCartao.getConta().getUsuario()));
+		parcelamentoFatura.setCategoria(faturaCartao.getCategoriaSelecionada());
+		parcelamentoFatura.setFavorecido(faturaCartao.getFavorecidoSelecionado());
+		parcelamentoFatura.setMeioPagamento(faturaCartao.getMeioPagamentoSelecionado());
 		lancamentoPeriodicoRepository.save(parcelamentoFatura);
 		
 		// Realiza o parcelamento
