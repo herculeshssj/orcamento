@@ -120,7 +120,10 @@
 				<h:outputText value="À pagar"/>
 			</f:facet>
 			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
-			<h:outputText value="#{item.totalAPagar}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+			<h:outputText value="#{item.totalAPagar}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida != 'QUITADO'}">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:outputText>
+			<h:outputText value="0" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida == 'QUITADO'}">
 				<f:convertNumber type="currency" pattern="###.##"/>
 			</h:outputText>
 		</p:column>
