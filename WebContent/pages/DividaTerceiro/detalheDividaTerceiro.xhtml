@@ -141,7 +141,7 @@
    		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
 		<h:commandLink title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO'}">
-			<p:graphicImage value="/resources/images/habilitar.png" />
+			<h:graphicImage id="imgCertificate" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
 		</h:commandLink>
 	</ui:define>
 	
