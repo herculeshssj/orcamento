@@ -47,15 +47,12 @@
 package br.com.hslife.orcamento.service;
 
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -87,7 +84,7 @@ public class RelatorioCustomizadoService extends AbstractCRUDService<RelatorioCu
 	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues) throws BusinessException {
 		// TODO definir o tipo Date, Time e Timestamp(ou date/time), pois eles são diferentes. Atualmente foi definido o tipo Date.
 		
-		/*** 1º - constrói o SQL nativo ***/
+		// Obtém a consulta SQL nativa
 		String nativeSQL = entity.getConsultaSQL();
 		
 		// Itera a lista de parâmetros, caso exista, para poder definir os valores no formato correto do SQL nativo
@@ -104,29 +101,11 @@ public class RelatorioCustomizadoService extends AbstractCRUDService<RelatorioCu
 			}
 		}
 		
-		/*** 2º - executa a consulta nativa montada***/
-		List<List<Object>> queryResult = getRepository().executeCustomNativeSQL(nativeSQL);
+		// Executa a consulta montada
+		List<Map<String,Object>> queryResult = getRepository().executeCustomNativeSQL(nativeSQL);
 		
-		/*** 3º - transforma o resultado em um List<Map<String, Object>> ***/
-		List<Map<String, Object>> mapQueryResult = new LinkedList<>();
-		
-		// Itera as linhas
-		for (List<Object> linhasResultado : queryResult) {
-			
-			// Itera as colunas
-			int contador = 0;
-			Map<String, Object> colunasResultado = new LinkedHashMap<>();
-			for (RelatorioColuna coluna : entity.getColunasRelatorio()) {
-				colunasResultado.put(coluna.getNomeColuna(), linhasResultado.get(contador));
-				contador++;
-			}
-			
-			// Adiciona no Map de resultados
-			mapQueryResult.add(colunasResultado);
-		}		
-		
-		/*** 4º - retorna o resultado ***/
-		return mapQueryResult;
+		// Retorna o resultado
+		return queryResult;
 	}
 	
 }

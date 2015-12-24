@@ -49,6 +49,8 @@ package br.com.hslife.orcamento.util;
 import java.util.Map;
 
 import javax.el.ValueExpression;
+import javax.faces.component.html.HtmlColumn;
+import javax.faces.component.html.HtmlDataTable;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
@@ -66,6 +68,55 @@ public class JSFComponentUtil {
 	
 	// Classe não pode ser instanciada
 	private JSFComponentUtil() {}
+	
+	/*
+	 * Criar um novo <h:column /> 
+	 */
+	public static HtmlColumn createColumn(Map<String, Object> params) {
+		HtmlColumn column = new HtmlColumn();
+		
+		try {
+			// Caso haja mais parâmetros a serem setados, estes parâmetros estarão no Map
+			if (params != null && !params.isEmpty()) {
+				// Configure a partir daqui a atribuição dinâmica dos atribos do column
+				
+				// Atributo "rendered"
+				column.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
+				
+			}
+		} catch (Exception e) {
+			// Encapsula a exceção original na IllegalArgumentException e relança a exceção
+			throw new IllegalArgumentException(e.getCause());
+		}
+		
+		return column;
+	}
+	
+	/*
+	 * Cria um novo <h:dataTable />
+	 */
+	public static HtmlDataTable createDatatable(String id, ValueExpression value, Map<String, Object> params) {
+		HtmlDataTable dataTable = new HtmlDataTable();
+		dataTable.setId(id);
+		dataTable.setVar("item");
+		dataTable.setValueExpression("value", value);
+		
+		try {
+			// Caso haja mais parâmetros a serem setados, estes parâmetros estarão no Map
+			if (params != null && !params.isEmpty()) {
+				// Configure a partir daqui a atribuição dinâmica dos atribos do dataTable
+				
+				// Atributo "rendered"
+				dataTable.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
+				
+			}
+		} catch (Exception e) {
+			// Encapsula a exceção original na IllegalArgumentException e relança a exceção
+			throw new IllegalArgumentException(e.getCause());
+		}
+		
+		return dataTable;
+	}
 	
 	/*
 	 * Cria um novo <h:inputText />

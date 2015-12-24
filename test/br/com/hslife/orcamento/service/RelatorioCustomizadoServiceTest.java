@@ -318,6 +318,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 			lancamento.setMoeda(moeda);
 			lancamento.setDataPagamento(new Date());
 			lancamento.setDescricao("Lançamento de teste " + i);
+			lancamento.setValorPago(i * 100);
 			lancamentoContaService.cadastrar(lancamento);
 		}
 		

@@ -46,9 +46,15 @@
 
 package br.com.hslife.orcamento.util;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.component.html.HtmlColumn;
+import javax.faces.component.html.HtmlDataTable;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlPanelGroup;
 
+import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 
@@ -114,7 +120,28 @@ public class RelatorioCustomizadoUtil {
 	 * 
 	 * @return objeto HtmlPanelGroup com os componentes gerados
 	 */
-	public static HtmlPanelGroup getGeneratedComponentsToResultPage() {
-		return null;
+	public static HtmlPanelGroup getGeneratedComponentsToResultPage(RelatorioCustomizado relatorioCustomizado, List<Map<String, Object>> queryResult) {
+		// Cria um novo panel group
+		HtmlPanelGroup panelGroup = JSFComponentUtil.createPanelGroup("grpResultComponents", null);
+		
+		// Cria um novo dataTable
+		HtmlDataTable dataTable = JSFComponentUtil.createDatatable("tableResults", JSFComponentUtil.createValueExpression("#{relatorioCustomizadoMB.queryResult}", List.class), null);
+		
+		// Itera a lista de colunas do relatório customizado para criar os componentes <h:column /> correspondentes
+		for (RelatorioColuna coluna : relatorioCustomizado.getColunasRelatorio()) {
+			
+			// Cria o componente <h:column />
+			HtmlColumn column = JSFComponentUtil.createColumn(null);
+			column.getFacets().put("header", JSFComponentUtil.createOutputText("lblColumn" + coluna.getNomeColuna(), coluna.getTextoExibicao(), null));
+			
+			// Adiciona a coluna no dataTable
+			dataTable.getChildren().add(column);
+		}
+		
+		// Adiciona o dataTable ao panelGroup
+		panelGroup.getChildren().add(dataTable);
+		
+		return panelGroup;
+		
 	}
 }

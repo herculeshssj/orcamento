@@ -90,6 +90,9 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	// Map que guarda os valores informados nos parâmetros de busca
 	private Map<String, Object> parameterValues = new HashMap<>();
 	
+	// List de Map que guarda o resultado de consulta
+	List<Map<String, Object>> queryResult = new LinkedList<>();
+	
 	public RelatorioCustomizadoController() {
 		super(new RelatorioCustomizado());
 		moduleTitle = "Relatórios Customizados";
@@ -173,7 +176,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 			actionTitle = " - " + entity.getNome() + " [Resultado]";
 			
 			// Processa o relatório customizado passando os valores informados para os parâmetros
-			getService().processarRelatorioCustomizado(entity, parameterValues);
+			queryResult = getService().processarRelatorioCustomizado(entity, parameterValues);
 			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -192,7 +195,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	}
 	
 	public HtmlPanelGroup getResultComponents() {
-		return RelatorioCustomizadoUtil.getGeneratedComponentsToResultPage();
+		return RelatorioCustomizadoUtil.getGeneratedComponentsToResultPage(entity, queryResult);
 	}
 	
 	public void setResultComponents(HtmlPanelGroup panelGroup) {
@@ -366,5 +369,13 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 
 	public void setParameterValues(Map<String, Object> parameterValues) {
 		this.parameterValues = parameterValues;
-	}	
+	}
+
+	public List<Map<String, Object>> getQueryResult() {
+		return queryResult;
+	}
+
+	public void setQueryResult(List<Map<String, Object>> queryResult) {
+		this.queryResult = queryResult;
+	}
 }

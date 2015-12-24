@@ -47,9 +47,10 @@
 package br.com.hslife.orcamento.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
-import org.hibernate.transform.Transformers;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
@@ -85,8 +86,7 @@ public class RelatorioCustomizadoRepository extends AbstractCRUDRepository<Relat
 	 * Executa via native SQL a consulta
 	 */
 	@SuppressWarnings("unchecked")
-	public List<List<Object>> executeCustomNativeSQL(String nativeSQL) {
-		List<List<Object>> rowList = getSession().createSQLQuery(nativeSQL).setResultTransformer(Transformers.TO_LIST).list();
-		return rowList;
+	public List<Map<String, Object>> executeCustomNativeSQL(String nativeSQL) {
+		return getSession().createSQLQuery(nativeSQL).setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE).list();
 	}
 }

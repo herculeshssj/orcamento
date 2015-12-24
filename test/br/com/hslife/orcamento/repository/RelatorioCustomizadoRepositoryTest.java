@@ -54,6 +54,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -220,14 +221,15 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 		
 		String nativeSQL = "select id, ativo, descricao, padrao, tipoCategoria from categoria where idUsuario = " + usuario.getId();
 		
-		List<List<Object>> queryResult = relatorioCustomizadoRepository.executeCustomNativeSQL(nativeSQL);
+		List<Map<String, Object>> queryResult = relatorioCustomizadoRepository.executeCustomNativeSQL(nativeSQL);
 		
-		// Itera as linhas
-		for (List<Object> linhas : queryResult) {
+		for (Map<String, Object> linhas : queryResult) {
 			// Itera as colunas
-			for (Object colunas : linhas) {
-				System.out.print(colunas+"\t");
-			}
+			System.out.println("ID: " + linhas.get("id"));
+			System.out.println("Ativo: " + linhas.get("ativo"));
+			System.out.println("Descrição: " + linhas.get("descricao"));
+			System.out.println("Padrão: " + linhas.get("padrao"));
+			System.out.println("Tipo de categoria: " + linhas.get("tipoCategoria"));
 			System.out.println();
 		}
 	}
