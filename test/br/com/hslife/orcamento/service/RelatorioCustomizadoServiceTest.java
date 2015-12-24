@@ -52,19 +52,30 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
@@ -75,13 +86,23 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	private IUsuario usuarioService;
 	
 	@Autowired
+	private IConta contaService;
+	
+	@Autowired
+	private IMoeda moedaService;
+	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
+	
+	@Autowired
 	private IRelatorioCustomizado relatorioCustomizadoService;
 	
 	private RelatorioCustomizado relatorio;
+	private Usuario usuario;
 	
 	@Before
 	public void initializeTestEnvironment() throws BusinessException {
-		Usuario usuario = EntityInitializerFactory.createUsuario();
+		usuario = EntityInitializerFactory.createUsuario();
 		usuarioService.cadastrar(usuario);
 		
 		relatorio = EntityInitializerFactory.createRelatorioCustomizado(usuario);
@@ -212,6 +233,110 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 			if (!listaRelatorios.contains(relatorio)) {
 				fail("Objeto não encontrado.");
 			}
+		}
+	}
+	
+	@Test
+	public void testProcessarRelatorioCustomizado() throws BusinessException {
+		// Instancia as colunas
+		Set<RelatorioColuna> colunas = new LinkedHashSet<>();
+		
+		// Nome da conta
+		RelatorioColuna coluna = new RelatorioColuna();
+		coluna.setNomeColuna("nomeConta");
+		coluna.setOrdem(1);
+		coluna.setTextoExibicao("Conta");
+		coluna.setTipoDado(TipoDado.STRING);
+		coluna.setFormatar(false);
+		colunas.add(coluna);
+		
+		// tipo de lançamento
+		coluna = new RelatorioColuna();
+		coluna.setNomeColuna("tipoLancamento");
+		coluna.setOrdem(2);
+		coluna.setTextoExibicao("Tipo");
+		coluna.setTipoDado(TipoDado.STRING);
+		coluna.setFormatar(false);
+		colunas.add(coluna);
+		
+		// descrição do lançamento
+		coluna = new RelatorioColuna();
+		coluna.setNomeColuna("descricao");
+		coluna.setOrdem(3);
+		coluna.setTextoExibicao("Descrição");
+		coluna.setTipoDado(TipoDado.STRING);
+		coluna.setFormatar(false);
+		colunas.add(coluna);
+		
+		// Data de pagamento
+		coluna = new RelatorioColuna();
+		coluna.setNomeColuna("dataPagamento");
+		coluna.setOrdem(4);
+		coluna.setTextoExibicao("Pago em");
+		coluna.setTipoDado(TipoDado.STRING);
+		coluna.setFormatar(false);
+		colunas.add(coluna);
+		
+		// valor pago
+		coluna = new RelatorioColuna();
+		coluna.setNomeColuna("valorPago");
+		coluna.setOrdem(5);
+		coluna.setTextoExibicao("Valor");
+		coluna.setTipoDado(TipoDado.STRING);
+		coluna.setFormatar(false);
+		colunas.add(coluna);
+		
+		// Instancia os parâmetros
+		Set<RelatorioParametro> parametros = new LinkedHashSet<>();
+		RelatorioParametro parametro = new RelatorioParametro();
+		
+		// Data inicial
+		parametro.setNomeParametro("dataInicio");
+		parametro.setTextoExibicao("Data Inicial");
+		parametro.setTipoDado(TipoDado.DATE);
+		parametros.add(parametro);
+		
+		// Data final
+		parametro = new RelatorioParametro();
+		parametro.setNomeParametro("dataFim");
+		parametro.setTextoExibicao("Data Fim");
+		parametro.setTipoDado(TipoDado.DATE);
+		parametros.add(parametro);
+		
+		relatorio = EntityInitializerFactory.createRelatorioCustomizado(usuario, "select c.descricao as nomeConta, l.tipoLancamento, l.descricao, l.dataPagamento, l.valorPago from lancamentoconta l inner join conta c on c.id = l.idConta where l.dataPagamento >= :dataInicio and l.dataPagamento <= :dataFim and c.idUsuario = " + usuario.getId(), colunas, parametros);
+		relatorioCustomizadoService.cadastrar(relatorio);
+		
+		Moeda moeda = EntityInitializerFactory.initializeMoeda(usuario);
+		moedaService.cadastrar(moeda);
+		
+		Conta conta = EntityInitializerFactory.initializeConta(usuario, moeda);
+		contaService.cadastrar(conta);
+		
+		for (int i = 1; i <= 5; i++) {
+			LancamentoConta lancamento = new LancamentoConta();
+			lancamento.setConta(conta);
+			lancamento.setMoeda(moeda);
+			lancamento.setDataPagamento(new Date());
+			lancamento.setDescricao("Lançamento de teste " + i);
+			lancamentoContaService.cadastrar(lancamento);
+		}
+		
+		// Seta os parâmetros
+		Map<String, Object> parameterValues = new HashMap<>();
+		parameterValues.put("dataInicio", new Date());
+		parameterValues.put("dataFim", new Date());
+		
+		List<Map<String, Object>> resultado = relatorioCustomizadoService.processarRelatorioCustomizado(relatorio, parameterValues);
+		
+		//Itera as linhas
+		for (Map<String, Object> linhas : resultado) {
+			// Itera as colunas
+			System.out.println("Nome da conta: " + linhas.get("nomeConta"));
+			System.out.println("Tipo: " + linhas.get("tipoLancamento"));
+			System.out.println("Descrição: " + linhas.get("descricao"));
+			System.out.println("Pago em: " + linhas.get("dataPagamento"));
+			System.out.println("Valor: " + linhas.get("valorPago"));
+			System.out.println();
 		}
 	}
 }

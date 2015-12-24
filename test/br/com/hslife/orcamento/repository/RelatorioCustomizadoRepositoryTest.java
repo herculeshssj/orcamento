@@ -59,10 +59,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
@@ -74,11 +76,15 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 	@Autowired
 	private RelatorioCustomizadoRepository relatorioCustomizadoRepository;
 	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+	
 	private RelatorioCustomizado relatorio;
+	private Usuario usuario;
 	
 	@Before
 	public void initializeEntities() {
-		Usuario usuario = EntityInitializerFactory.createUsuario();
+		usuario = EntityInitializerFactory.createUsuario();
 		usuarioRepository.save(usuario);
 		
 		relatorio = EntityInitializerFactory.createRelatorioCustomizado(usuario);
@@ -199,5 +205,30 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 			i++;
 		}
 		assertEquals(3, i);
+	}
+	
+	@Test
+	public void testExecuteCustomNativeSQL() {
+		for (int i = 1; i <= 3; i++) {
+			Categoria categoria = new Categoria();
+			categoria.setAtivo(true);
+			categoria.setDescricao("Categoria " + i);
+			categoria.setTipoCategoria(TipoCategoria.CREDITO);
+			categoria.setUsuario(usuario);
+			categoriaRepository.save(categoria);
+		}
+		
+		String nativeSQL = "select id, ativo, descricao, padrao, tipoCategoria from categoria where idUsuario = " + usuario.getId();
+		
+		List<List<Object>> queryResult = relatorioCustomizadoRepository.executeCustomNativeSQL(nativeSQL);
+		
+		// Itera as linhas
+		for (List<Object> linhas : queryResult) {
+			// Itera as colunas
+			for (Object colunas : linhas) {
+				System.out.print(colunas+"\t");
+			}
+			System.out.println();
+		}
 	}
 }

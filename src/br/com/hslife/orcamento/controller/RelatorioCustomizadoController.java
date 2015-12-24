@@ -155,10 +155,33 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	}
 	
 	public String gerarRelatorio() {
-		actionTitle = " - " + entity.getNome() + " [Resultado]";
+		// Valida a entrada dos parâmetros
+		if (entity.getParametrosRelatorio() != null && !entity.getParametrosRelatorio().isEmpty()) {
+			for (String key : parameterValues.keySet()) {
+				if (parameterValues.get(key) == null) {
+					warnMessage("Todos os parâmetros devem ser informados!");
+					return "";
+				}
+				if (parameterValues.get(key) != null && parameterValues.get(key) instanceof String && ((String)parameterValues.get(key)).isEmpty()) {
+					warnMessage("Todos os parâmetros devem ser informados!");
+					return "";
+				}
+			}
+		}
+		
+		try {
+			actionTitle = " - " + entity.getNome() + " [Resultado]";
+			
+			// Processa o relatório customizado passando os valores informados para os parâmetros
+			getService().processarRelatorioCustomizado(entity, parameterValues);
+			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
 		return "/pages/RelatorioCustomizado/visualizarRelatorio";
 	}
-	
+
 	public HtmlPanelGroup getCriteriaComponents() {
 		return RelatorioCustomizadoUtil.getGeneratedComponentsToCriteriaPage(entity);
 	}

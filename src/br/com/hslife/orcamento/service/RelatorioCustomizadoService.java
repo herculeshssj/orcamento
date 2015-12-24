@@ -46,16 +46,23 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
+import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
 import br.com.hslife.orcamento.repository.RelatorioCustomizadoRepository;
+import br.com.hslife.orcamento.util.Util;
 
 @Service("relatorioCustomizadoService")
 public class RelatorioCustomizadoService extends AbstractCRUDService<RelatorioCustomizado> implements IRelatorioCustomizado {
@@ -74,6 +81,52 @@ public class RelatorioCustomizadoService extends AbstractCRUDService<RelatorioCu
 	@Override
 	public List<RelatorioCustomizado> buscarNomePorUsuario(String nome,	Usuario usuario) throws BusinessException {
 		return getRepository().findNomeByUsuario(nome, usuario);
+	}
+
+	@Override
+	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues) throws BusinessException {
+		// TODO definir o tipo Date, Time e Timestamp(ou date/time), pois eles são diferentes. Atualmente foi definido o tipo Date.
+		
+		/*** 1º - constrói o SQL nativo ***/
+		String nativeSQL = entity.getConsultaSQL();
+		
+		// Itera a lista de parâmetros, caso exista, para poder definir os valores no formato correto do SQL nativo
+		for (RelatorioParametro parametro : entity.getParametrosRelatorio()) {
+			
+			// Substitui no SQL o alias do parâmetro pelo valor que foi passado
+			switch (parametro.getTipoDado()) {
+				case DATE:
+					nativeSQL = nativeSQL.replace(":" + parametro.getNomeParametro(), "'" + Util.formataDataHora((Date)parameterValues.get(parametro.getNomeParametro()), Util.DATABASE_DATA) + "'");
+					break;
+				default:
+					// Faz nada por enquanto
+					break;
+			}
+		}
+		
+		/*** 2º - executa a consulta nativa montada***/
+		List<List<Object>> queryResult = getRepository().executeCustomNativeSQL(nativeSQL);
+		
+		/*** 3º - transforma o resultado em um List<Map<String, Object>> ***/
+		List<Map<String, Object>> mapQueryResult = new LinkedList<>();
+		
+		// Itera as linhas
+		for (List<Object> linhasResultado : queryResult) {
+			
+			// Itera as colunas
+			int contador = 0;
+			Map<String, Object> colunasResultado = new LinkedHashMap<>();
+			for (RelatorioColuna coluna : entity.getColunasRelatorio()) {
+				colunasResultado.put(coluna.getNomeColuna(), linhasResultado.get(contador));
+				contador++;
+			}
+			
+			// Adiciona no Map de resultados
+			mapQueryResult.add(colunasResultado);
+		}		
+		
+		/*** 4º - retorna o resultado ***/
+		return mapQueryResult;
 	}
 	
 }

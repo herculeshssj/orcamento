@@ -67,6 +67,7 @@ public class Util {
 	public static final String DATA = "data";
 	public static final String HORA = "hora";
 	public static final String DATABASE = "database";
+	public static final String DATABASE_DATA = "database_data";
 		
 	private Util() {
 		// Esta classe não pode ser instanciada
@@ -131,6 +132,9 @@ public class Util {
     		formata = new SimpleDateFormat("HH:mm");
     	}    	
         if (opcao.equals(Util.DATABASE)) {
+        	formata = new SimpleDateFormat("yyyy-MM-dd");
+        }
+        if (opcao.equals(Util.DATABASE_DATA)) {
         	formata = new SimpleDateFormat("yyyy-MM-dd");
         }
 

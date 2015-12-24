@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.repository;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
@@ -78,5 +79,14 @@ public class RelatorioCustomizadoRepository extends AbstractCRUDRepository<Relat
 		hqlQuery.setParameter("idUsuario", usuario.getId());
 		
 		return hqlQuery.list();
+	}
+	
+	/*
+	 * Executa via native SQL a consulta
+	 */
+	@SuppressWarnings("unchecked")
+	public List<List<Object>> executeCustomNativeSQL(String nativeSQL) {
+		List<List<Object>> rowList = getSession().createSQLQuery(nativeSQL).setResultTransformer(Transformers.TO_LIST).list();
+		return rowList;
 	}
 }

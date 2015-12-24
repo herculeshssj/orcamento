@@ -118,6 +118,17 @@ public class EntityInitializerFactory {
 		return entity;
 	}
 	
+	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario, String consultaSQL, Set<RelatorioColuna> colunas, Set<RelatorioParametro> parametros) {
+		RelatorioCustomizado entity = new RelatorioCustomizado();
+		entity.setNome("Relatório de teste");
+		entity.setDescricao("Relatório customizado para testes");
+		entity.setConsultaSQL(consultaSQL);
+		entity.setUsuario(usuario);
+		entity.setColunasRelatorio(colunas);
+		entity.setParametrosRelatorio(parametros);
+		return entity;
+	}
+	
 	public static Usuario initializeUsuario() {
 		Usuario usuario = new Usuario();
 		usuario.setEmail("contato@hslife.com.br");
