@@ -168,6 +168,31 @@ public class JSFComponentUtil {
 	}
 	
 	/*
+	 * Cria um novo <h:outputText /> passando um ValueExpression
+	 */
+	public static HtmlOutputText createOutputText(String id, ValueExpression value, Map<String, Object> params) {
+		HtmlOutputText outputText = new HtmlOutputText();
+		outputText.setId(id);
+		outputText.setValueExpression("value", value);
+		
+		try {
+			// Caso haja mais parâmetros a serem setados, estes parâmetros estarão no Map
+			if (params != null && !params.isEmpty()) {
+				// Configure a partir daqui a atribuição dinâmica dos atribos do outputText
+				
+				// Atributo "rendered"
+				outputText.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
+				
+			}
+		} catch (Exception e) {
+			// Encapsula a exceção original na IllegalArgumentException e relança a exceção
+			throw new IllegalArgumentException(e.getCause());
+		}
+		
+		return outputText;
+	}
+	
+	/*
 	 * Cria um novo <h:panelGrid />
 	 */
 	public static HtmlPanelGrid createPanelGrid(String id, int columns, Map<String, Object> params) {

@@ -46,8 +46,8 @@
 
 package br.com.hslife.orcamento.util;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.component.html.HtmlColumn;
 import javax.faces.component.html.HtmlDataTable;
@@ -120,7 +120,7 @@ public class RelatorioCustomizadoUtil {
 	 * 
 	 * @return objeto HtmlPanelGroup com os componentes gerados
 	 */
-	public static HtmlPanelGroup getGeneratedComponentsToResultPage(RelatorioCustomizado relatorioCustomizado, List<Map<String, Object>> queryResult) {
+	public static HtmlPanelGroup getGeneratedComponentsToResultPage(RelatorioCustomizado relatorioCustomizado) {
 		// Cria um novo panel group
 		HtmlPanelGroup panelGroup = JSFComponentUtil.createPanelGroup("grpResultComponents", null);
 		
@@ -133,6 +133,21 @@ public class RelatorioCustomizadoUtil {
 			// Cria o componente <h:column />
 			HtmlColumn column = JSFComponentUtil.createColumn(null);
 			column.getFacets().put("header", JSFComponentUtil.createOutputText("lblColumn" + coluna.getNomeColuna(), coluna.getTextoExibicao(), null));
+			
+			// Exibe o resultado da coluna
+			switch (coluna.getTipoDado()) {
+			case STRING:
+				column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", String.class), null));
+				break;
+			case DOUBLE:
+				column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", Double.class), null));
+				break;
+			case DATE:
+				column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", Date.class), null));
+				break;
+			default:
+				break;
+			}
 			
 			// Adiciona a coluna no dataTable
 			dataTable.getChildren().add(column);

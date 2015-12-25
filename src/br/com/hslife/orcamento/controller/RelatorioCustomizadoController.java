@@ -195,7 +195,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	}
 	
 	public HtmlPanelGroup getResultComponents() {
-		return RelatorioCustomizadoUtil.getGeneratedComponentsToResultPage(entity, queryResult);
+		return RelatorioCustomizadoUtil.getGeneratedComponentsToResultPage(entity);
 	}
 	
 	public void setResultComponents(HtmlPanelGroup panelGroup) {
