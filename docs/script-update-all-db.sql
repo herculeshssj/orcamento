@@ -2330,7 +2330,7 @@ update usuario set senha = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f
 create table relatoriocustomizado(
 	id bigint not null auto_increment,
 	nome varchar(50) not null,
-	descricao varchar(50) not null,
+	descricao varchar(200) not null,
 	consultaSQL text not null,
 	idUsuario bigint not null,
 	primary key (id)

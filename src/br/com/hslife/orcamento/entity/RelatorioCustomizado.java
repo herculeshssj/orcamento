@@ -76,7 +76,7 @@ public class RelatorioCustomizado extends EntityPersistence {
 	@Column(length=50, nullable=false)
 	private String nome;
 	
-	@Column(length=50, nullable=false)
+	@Column(length=200, nullable=false)
 	private String descricao;
 	
 	@Column(columnDefinition="text", nullable=false)
@@ -105,7 +105,7 @@ public class RelatorioCustomizado extends EntityPersistence {
 	@Override
 	public void validate() throws BusinessException {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
 		EntityPersistenceUtil.validaCampoNulo("Consulta SQL", this.consultaSQL);
 		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
 	}
