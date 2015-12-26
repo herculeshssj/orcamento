@@ -98,6 +98,7 @@ public class RelatorioCustomizadoUtil {
 						// Cria o inputMask
 						panelGrid.getChildren().add(CustomComponentUtil.createDateTimeField("txt" + parametro.getNomeParametro(), 
 								JSFComponentUtil.createValueExpression("#{relatorioCustomizadoMB.parameterValues['" + parametro.getNomeParametro() + "']}", Object.class)));
+						break;
 					case BOOLEAN:
 						throw new UnsupportedOperationException("Rotina não implementada.");
 						//break;
