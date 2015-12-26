@@ -82,9 +82,11 @@
 					<h:selectOneMenu id="txtTipoDadoColuna" value="#{managedBean.colunaRelatorio.tipoDado}">
 						<f:selectItems value="#{enumCombo.listaTipoDado}"/>
 					</h:selectOneMenu>
-									
+					<!-- Estrutura comentada pois no momento não há necessidade de realizar a formatação dos dados mostrados
+						 A formatação está toda programada no código.
+						  				
 					<h:selectBooleanCheckbox value="#{managedBean.colunaRelatorio.formatar}">
-						<p:ajax update="pnlFormColunas" listener="#{managedBean.atualizarFormColunas}"/>
+						<p:ajax update="pnlFormColunas" listener="{managedBean.atualizarFormColunas}"/>
 					</h:selectBooleanCheckbox>
 					<label>Formatar?</label>
 					
@@ -92,6 +94,7 @@
 						<label for="frmFormEntity:txtMascaraFormatacaoColuna">Máscara Formatação:</label>
 						<h:inputText id="txtMascaraFormatacaoColuna" value="#{managedBean.colunaRelatorio.mascaraFormatacao}" size="50"/>
 					</p:outputPanel>
+					 -->
 				</p:outputPanel>
 				
 				<p:commandLink value="Adicionar coluna" actionListener="#{managedBean.adicionarColuna}" update="pnlFormColunas,tableColunasRelatorio" />
@@ -121,6 +124,7 @@
 						</f:facet>
 						<h:outputText value="#{itemColuna.tipoDado}"/>
 					</h:column>
+					<!-- 
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Formatar?"/>
@@ -133,6 +137,7 @@
 						</f:facet>
 						<h:outputText value="#{itemColuna.mascaraFormatacao}"/>
 					</h:column>
+					 -->
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Ações"/>

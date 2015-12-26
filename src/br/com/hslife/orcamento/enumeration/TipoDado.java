@@ -47,15 +47,18 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoDado {
+	// Mantendo somente os tipos que serão mais usados.
 	INTEGER("Inteiro"), 
 	LONG("Inteiro longo"),
-	FLOAT("Ponto flutuante simples precisão"), 
+	//FLOAT("Ponto flutuante simples precisão"), 
 	DOUBLE("Ponto flutuante dupla precisão"),
-	BIGINTEGER("Inteiro gigante"), 
-	BIGDECIMAL("Ponto flutuante gigante"),
+	//BIGINTEGER("Inteiro gigante"), 
+	//BIGDECIMAL("Ponto flutuante gigante"),
 	BOOLEAN("Booleano"),
 	STRING("Texto"),
-	DATE("Data/Hora");
+	DATE("Data");
+	//HOUR("Hora"),
+	//DATATIME("Data/Hora");
 	
 	private String descricao;
 	

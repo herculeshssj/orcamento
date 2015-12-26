@@ -48,6 +48,8 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,8 +63,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
+
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.RelatorioColunaComparator;
 
 @Entity
 @Table(name="relatoriocustomizado")
@@ -87,13 +93,14 @@ public class RelatorioCustomizado extends EntityPersistence {
 	private Usuario usuario;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
-	private Set<RelatorioColuna> colunasRelatorio;
+	@Sort(type=SortType.COMPARATOR, comparator=RelatorioColunaComparator.class)
+	private SortedSet<RelatorioColuna> colunasRelatorio;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	private Set<RelatorioParametro> parametrosRelatorio;
 	
 	public RelatorioCustomizado() {
-		colunasRelatorio = new LinkedHashSet<>();
+		colunasRelatorio = new TreeSet<>();
 		parametrosRelatorio = new LinkedHashSet<>();
 	}
 	
@@ -126,14 +133,6 @@ public class RelatorioCustomizado extends EntityPersistence {
 		this.nome = nome;
 	}
 
-	public Set<RelatorioColuna> getColunasRelatorio() {
-		return colunasRelatorio;
-	}
-
-	public void setColunasRelatorio(Set<RelatorioColuna> colunasRelatorio) {
-		this.colunasRelatorio = colunasRelatorio;
-	}
-
 	public Set<RelatorioParametro> getParametrosRelatorio() {
 		return parametrosRelatorio;
 	}
@@ -164,5 +163,13 @@ public class RelatorioCustomizado extends EntityPersistence {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public SortedSet<RelatorioColuna> getColunasRelatorio() {
+		return colunasRelatorio;
+	}
+
+	public void setColunasRelatorio(SortedSet<RelatorioColuna> colunasRelatorio) {
+		this.colunasRelatorio = colunasRelatorio;
 	}
 }

@@ -318,6 +318,13 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 			}
 		}
 	}
+	
+	public Integer getTotalRegistros() {
+		if (queryResult != null && !queryResult.isEmpty()) {
+			return queryResult.size();
+		}
+		return 0;
+	}
 
 	public String getNomeRelatorio() {
 		return nomeRelatorio;

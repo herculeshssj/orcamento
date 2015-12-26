@@ -59,6 +59,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -239,7 +241,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	@Test
 	public void testProcessarRelatorioCustomizado() throws BusinessException {
 		// Instancia as colunas
-		Set<RelatorioColuna> colunas = new LinkedHashSet<>();
+		SortedSet<RelatorioColuna> colunas = new TreeSet<>();
 		
 		// Nome da conta
 		RelatorioColuna coluna = new RelatorioColuna();

@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.util;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 
 import org.primefaces.component.inputmask.InputMask;
 
@@ -80,6 +81,9 @@ public class PrimeFacesComponentUtil {
 				
 				// Atributo "rendered"
 				inputMask.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
+				
+				// Atributo "converter"
+				inputMask.setConverter(params.containsKey("converter") ? (Converter)params.get("converter") : null);
 				
 			}
 		} catch (Exception e) {

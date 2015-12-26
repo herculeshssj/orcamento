@@ -49,6 +49,8 @@ package br.com.hslife.orcamento.util;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
@@ -95,7 +97,7 @@ public class EntityInitializerFactory {
 		entity.setConsultaSQL("SELECT * FROM lancamentoconta");
 		entity.setUsuario(usuario);
 		
-		Set<RelatorioColuna> colunas = new LinkedHashSet<>();
+		SortedSet<RelatorioColuna> colunas = new TreeSet<>();
 		for (int i = 0; i < 3; i++) {
 			RelatorioColuna coluna = new RelatorioColuna();
 			coluna.setNomeColuna("coluna" + i);
@@ -118,7 +120,7 @@ public class EntityInitializerFactory {
 		return entity;
 	}
 	
-	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario, String consultaSQL, Set<RelatorioColuna> colunas, Set<RelatorioParametro> parametros) {
+	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario, String consultaSQL, SortedSet<RelatorioColuna> colunas, Set<RelatorioParametro> parametros) {
 		RelatorioCustomizado entity = new RelatorioCustomizado();
 		entity.setNome("Relatório de teste");
 		entity.setDescricao("Relatório customizado para testes");

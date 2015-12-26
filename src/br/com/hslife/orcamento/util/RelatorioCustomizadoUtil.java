@@ -47,13 +47,16 @@
 package br.com.hslife.orcamento.util;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.component.html.HtmlColumn;
 import javax.faces.component.html.HtmlDataTable;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlPanelGroup;
 
+import br.com.hslife.orcamento.converter.DateConverter;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
@@ -95,6 +98,21 @@ public class RelatorioCustomizadoUtil {
 						// Cria o inputMask
 						panelGrid.getChildren().add(CustomComponentUtil.createDateTimeField("txt" + parametro.getNomeParametro(), 
 								JSFComponentUtil.createValueExpression("#{relatorioCustomizadoMB.parameterValues['" + parametro.getNomeParametro() + "']}", Object.class)));
+					case BOOLEAN:
+						throw new UnsupportedOperationException("Rotina não implementada.");
+						//break;
+					case DOUBLE:
+						throw new UnsupportedOperationException("Rotina não implementada.");
+						//break;
+					case INTEGER:
+						throw new UnsupportedOperationException("Rotina não implementada.");
+						//break;
+					case LONG:
+						throw new UnsupportedOperationException("Rotina não implementada.");
+						//break;
+					case STRING:
+						throw new UnsupportedOperationException("Rotina não implementada.");
+						//break;
 					default:
 						// não faz nada por enquanto
 				}
@@ -136,22 +154,40 @@ public class RelatorioCustomizadoUtil {
 			
 			// Exibe o resultado da coluna
 			switch (coluna.getTipoDado()) {
-			case STRING:
-				column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", String.class), null));
-				break;
-			case DOUBLE:
-				column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", Double.class), null));
-				break;
-			case DATE:
-				column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", Date.class), null));
-				break;
-			default:
-				break;
+				case STRING:
+					column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", String.class), null));
+					break;
+				case DOUBLE:
+					column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", Double.class), null));
+					break;
+				case DATE:
+					Map<String, Object> params = new HashMap<>();
+					params.put("converter", new DateConverter());
+					column.getChildren().add(JSFComponentUtil.createOutputText("txtResult" + coluna.getNomeColuna(), JSFComponentUtil.createValueExpression("#{item['" + coluna.getNomeColuna() +"']}", Date.class), params));
+					break;
+				case BOOLEAN:
+					throw new UnsupportedOperationException("Rotina não implementada.");
+					//break;
+				case INTEGER:
+					throw new UnsupportedOperationException("Rotina não implementada.");
+					//break;
+				case LONG:
+					throw new UnsupportedOperationException("Rotina não implementada.");
+					//break;
+				default:
+					break;
 			}
 			
 			// Adiciona a coluna no dataTable
 			dataTable.getChildren().add(column);
 		}
+		
+		// Adição do rodapé da tabela
+		HtmlPanelGroup panelFooter = JSFComponentUtil.createPanelGroup("pnlFooter", null);
+		panelFooter.getChildren().add(JSFComponentUtil.createOutputText("lblFooterLabel", "Total de registros: ", null));
+		panelFooter.getChildren().add(JSFComponentUtil.createOutputText("lblFooter", JSFComponentUtil.createValueExpression("#{relatorioCustomizadoMB.totalRegistros}", Integer.class), null));
+		
+		dataTable.getFacets().put("footer", panelFooter);		
 		
 		// Adiciona o dataTable ao panelGroup
 		panelGroup.getChildren().add(dataTable);

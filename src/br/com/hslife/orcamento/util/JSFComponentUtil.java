@@ -56,6 +56,7 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 
 /**
  * Cria os componentes que herdam de UIComponent,
@@ -134,6 +135,9 @@ public class JSFComponentUtil {
 				// Atributo "rendered"
 				inputText.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
 				
+				// Atributo "converter"
+				inputText.setConverter(params.containsKey("converter") ? (Converter)params.get("converter") : null);
+				
 			}
 		} catch (Exception e) {
 			// Encapsula a exceção original na IllegalArgumentException e relança a exceção
@@ -157,6 +161,9 @@ public class JSFComponentUtil {
 				
 				// Atributo "rendered"
 				outputText.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
+				
+				// Atributo "converter"
+				outputText.setConverter(params.containsKey("converter") ? (Converter)params.get("converter") : null);
 				
 			}
 		} catch (Exception e) {
@@ -182,6 +189,9 @@ public class JSFComponentUtil {
 				
 				// Atributo "rendered"
 				outputText.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
+				
+				// Atributo "converter"
+				outputText.setConverter(params.containsKey("converter") ? (Converter)params.get("converter") : null);
 				
 			}
 		} catch (Exception e) {
