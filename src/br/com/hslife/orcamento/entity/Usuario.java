@@ -104,6 +104,16 @@ public class Usuario extends EntityPersistence {
 		logado = false;
 	}
 	
+	private Usuario(Builder builder) {
+		this.nome = builder.nome;
+		this.login = builder.login;
+		this.senha = builder.senha;
+		this.dataCriacao = builder.dataCriacao;
+		this.email = builder.email;
+		this.tipoUsuario = builder.tipoUsuario;
+		this.ativo = builder.ativo;
+	}
+	
 	@Override
 	public String getLabel() {
 		return this.nome;
@@ -112,6 +122,55 @@ public class Usuario extends EntityPersistence {
 	@Override
 	public void validate() {
 				
+	}
+	
+	public static class Builder {
+		private String nome;
+		private String login;
+		private String senha;
+		private Date dataCriacao = new Date();
+		private String email;
+		private TipoUsuario tipoUsuario = TipoUsuario.ROLE_USER;
+		private boolean ativo = true;
+		
+		public Builder nome(String nome) {
+			this.nome = nome;
+			return this;
+		}
+		
+		public Builder login(String login) {
+			this.login = login;
+			return this;
+		}
+		
+		public Builder senha(String senha) {
+			this.senha = senha;
+			return this;
+		}
+		
+		public Builder dataCriacao(Date dataCriacao) {
+			this.dataCriacao = dataCriacao;
+			return this;
+		}
+		
+		public Builder email(String email) {
+			this.email = email;
+			return this;
+		}
+		
+		public Builder tipoUsuario(TipoUsuario tipoUsuario) {
+			this.tipoUsuario = tipoUsuario;
+			return this;
+		}
+		
+		public Builder ativo(boolean ativo) {
+			this.ativo = ativo;
+			return this;
+		}
+		
+		public Usuario build() {
+			return new Usuario(this);
+		}
 	}
 
 	public Long getId() {

@@ -207,7 +207,7 @@ public class EnderecoTest {
 			entity.setUsuario(null);
 			entity.validate();			
 		} catch (BusinessException be) {
-			assertEquals("Informe o usuário!", be.getMessage());
+			assertEquals("Campo Usuário não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

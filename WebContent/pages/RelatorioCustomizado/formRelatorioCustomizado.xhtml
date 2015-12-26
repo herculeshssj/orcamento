@@ -1,0 +1,217 @@
+<!--
+  
+  	Copyright (c) 2012 - 2016 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{relatorioCustomizadoMB}" />
+	
+	<ui:define name="campos">
+	
+		<label for="frmFormEntity:txtNome">Nome:</label>
+		<h:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50"/>
+		
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50"/>
+		
+		<label for="frmFormEntity:txtConsultaSQL">SQL:</label>
+		<h:inputTextarea id="txtConsultaSQL" value="#{managedBean.entity.consultaSQL}"/>
+		
+		<p:tabView>
+			<p:tab title="Colunas">
+			
+				<p:outputPanel id="pnlFormColunas">
+					<label for="frmFormEntity:txtNomeColuna">Nome da coluna:</label>
+					<h:inputText id="txtNomeColuna" value="#{managedBean.colunaRelatorio.nomeColuna}" size="50"/>
+					
+					<label for="frmFormEntity:txtTextoExibicaoColuna">Texto de exibição:</label>
+					<h:inputText id="txtTextoExibicaoColuna" value="#{managedBean.colunaRelatorio.textoExibicao}" size="50"/>
+					
+					<label for="frmFormEntity:txtTipoDadoColuna">Tipo de Dado:</label>
+					<h:selectOneMenu id="txtTipoDadoColuna" value="#{managedBean.colunaRelatorio.tipoDado}">
+						<f:selectItems value="#{enumCombo.listaTipoDado}"/>
+					</h:selectOneMenu>
+					<!-- Estrutura comentada pois no momento não há necessidade de realizar a formatação dos dados mostrados
+						 A formatação está toda programada no código.
+						  				
+					<h:selectBooleanCheckbox value="#{managedBean.colunaRelatorio.formatar}">
+						<p:ajax update="pnlFormColunas" listener="{managedBean.atualizarFormColunas}"/>
+					</h:selectBooleanCheckbox>
+					<label>Formatar?</label>
+					
+					<p:outputPanel id="pnlMascaraFormatacaoColuna" rendered="#{managedBean.colunaRelatorio.formatar}">
+						<label for="frmFormEntity:txtMascaraFormatacaoColuna">Máscara Formatação:</label>
+						<h:inputText id="txtMascaraFormatacaoColuna" value="#{managedBean.colunaRelatorio.mascaraFormatacao}" size="50"/>
+					</p:outputPanel>
+					 -->
+				</p:outputPanel>
+				
+				<p:commandLink value="Adicionar coluna" actionListener="#{managedBean.adicionarColuna}" update="pnlFormColunas,tableColunasRelatorio" />
+				
+				<h:dataTable id="tableColunasRelatorio" value="#{managedBean.entity.colunasRelatorio}" var="itemColuna">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Ordem"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.ordem}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Coluna"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.nomeColuna}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Texto de Exibição"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.textoExibicao}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Tipo"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.tipoDado}"/>
+					</h:column>
+					<!-- 
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Formatar?"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.formatar}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Máscara"/>
+						</f:facet>
+						<h:outputText value="#{itemColuna.mascaraFormatacao}"/>
+					</h:column>
+					 -->
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Ações"/>
+						</f:facet>
+						<h:commandLink id="lnkUp" title="Subir um nível" action="#{managedBean.subirNivel}">
+		     				<h:graphicImage id="imgUp" height="48" width="48" value="/resources/images/svg/collapse.svg"/>
+		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorioTemp}"/>
+		     			</h:commandLink>
+		     			<h:commandLink id="lnkDown" title="Descer um nível" action="#{managedBean.descerNivel}">
+		     				<h:graphicImage id="imgDown" height="48" width="48" value="/resources/images/svg/expand.svg"/>
+		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorioTemp}"/>
+		     			</h:commandLink>
+						<h:commandLink id="lnkDelRowColuna" title="Remover coluna" action="#{managedBean.removerColuna}">
+		     				<h:graphicImage id="imgDelRowColuna" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
+		     				<f:setPropertyActionListener value="#{itemColuna}" target="#{managedBean.colunaRelatorioTemp}"/>
+		     			</h:commandLink>
+					</h:column>
+				</h:dataTable>
+		
+			</p:tab>
+			
+			<p:tab title="Parâmetros">
+				
+				<p:outputPanel id="pnlFormParametro">
+					<label for="frmFormEntity:txtNomeParametro">Nome do parâmetro:</label>
+					<h:inputText id="txtNomeParametro" value="#{managedBean.parametroRelatorio.nomeParametro}" size="50"/>
+					
+					<label for="frmFormEntity:txtTextoExibicaoParametro">Texto de exibição:</label>
+					<h:inputText id="txtTextoExibicaoParametro" value="#{managedBean.parametroRelatorio.textoExibicao}" size="50"/>
+					
+					<label for="frmFormEntity:txtTipoDadoParametro">Tipo de Dado:</label>
+					<h:selectOneMenu id="txtTipoDadoParametro" value="#{managedBean.parametroRelatorio.tipoDado}">
+						<f:selectItems value="#{enumCombo.listaTipoDado}"/>
+					</h:selectOneMenu>
+				</p:outputPanel>
+				
+				<p:commandLink value="Adicionar parâmetro" actionListener="#{managedBean.adicionarParametro}" update="pnlFormParametro,tableParametrosRelatorio"/>
+				
+				<h:dataTable id="tableParametrosRelatorio" value="#{managedBean.entity.parametrosRelatorio}" var="itemParametro">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Parâmetro"/>
+						</f:facet>
+						<h:outputText value="#{itemParametro.nomeParametro}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Texto de Exibição"/>
+						</f:facet>
+						<h:outputText value="#{itemParametro.textoExibicao}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Tipo"/>
+						</f:facet>
+						<h:outputText value="#{itemParametro.tipoDado}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Ações"/>
+						</f:facet>
+						<h:commandLink id="lnkDelRowParametro" title="Remover parâmetro" action="#{managedBean.removerParametro}">
+		     				<h:graphicImage id="imgDelRowParametro" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
+		     				<f:setPropertyActionListener value="#{itemParametro}" target="#{managedBean.parametroRelatorioTemp}"/>
+		     			</h:commandLink>
+					</h:column>
+				</h:dataTable>
+				
+			</p:tab>
+			
+		</p:tabView>
+				
+		
+	</ui:define>
+
+</ui:composition>
+</html>
