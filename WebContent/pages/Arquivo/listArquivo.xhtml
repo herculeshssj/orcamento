@@ -116,7 +116,7 @@
 			</f:facet>
 			<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
 				<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
 			</h:commandLink>								
 	  		<p:spacer width="10"/>			
 			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.prazoExpirado}">
