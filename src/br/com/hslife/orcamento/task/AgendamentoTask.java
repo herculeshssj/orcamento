@@ -61,9 +61,9 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Component
 public class AgendamentoTask {

@@ -93,7 +93,7 @@ import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.DetalheFaturaComparator;
 import br.com.hslife.orcamento.util.Util;
 

@@ -44,7 +44,7 @@
   
 ***/
 
-package br.com.hslife.orcamento.util;
+package br.com.hslife.orcamento.model;
 
 import java.util.ArrayList;
 import java.util.Date;

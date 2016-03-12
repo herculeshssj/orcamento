@@ -60,9 +60,9 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Service("agendaService")
 public class AgendaService extends AbstractCRUDService<Agenda> implements IAgenda {

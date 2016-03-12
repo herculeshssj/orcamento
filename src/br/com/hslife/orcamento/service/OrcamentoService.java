@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOrcamento;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.repository.CategoriaRepository;
 import br.com.hslife.orcamento.repository.FavorecidoRepository;
@@ -70,7 +71,6 @@ import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.OrcamentoRepository;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
 
 @Service("orcamentoService")
 public class OrcamentoService extends AbstractCRUDService<Orcamento> implements IOrcamento {

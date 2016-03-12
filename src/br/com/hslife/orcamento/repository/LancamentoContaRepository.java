@@ -65,7 +65,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 
 @Repository
 public class LancamentoContaRepository extends AbstractCRUDRepository<LancamentoConta> {

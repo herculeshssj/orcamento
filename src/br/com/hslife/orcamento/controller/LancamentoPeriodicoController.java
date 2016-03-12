@@ -87,7 +87,7 @@ import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.util.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 
 @Component("lancamentoPeriodicoMB")
 @Scope("session")
