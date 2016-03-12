@@ -72,7 +72,6 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
@@ -82,9 +81,6 @@ import br.com.hslife.orcamento.util.Util;
 
 @Component
 public class ContaComponent {
-
-	@Autowired
-	private ContaRepository contaRepository;
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
@@ -109,10 +105,6 @@ public class ContaComponent {
 	public void setFechamentoPeriodoRepository(
 			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
 		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-
-	public void setContaRepository(ContaRepository contaRepository) {
-		this.contaRepository = contaRepository;
 	}
 	
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {

@@ -63,7 +63,6 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
-import br.com.hslife.orcamento.repository.AuditoriaRepository;
 import br.com.hslife.orcamento.repository.BancoRepository;
 import br.com.hslife.orcamento.repository.CategoriaRepository;
 import br.com.hslife.orcamento.repository.FavorecidoRepository;
@@ -84,9 +83,6 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	
 	@Autowired
 	private EmailComponent emailComponent;
-	
-	@Autowired
-	private AuditoriaRepository auditoriaRepository;
 	
 	@Autowired
 	private IdentidadeRepository identidadeRepository;
@@ -127,10 +123,6 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	
 	public void setEmailComponent(EmailComponent emailComponent) {
 		this.emailComponent = emailComponent;
-	}
-
-	public void setAuditoriaRepository(AuditoriaRepository auditoriaRepository) {
-		this.auditoriaRepository = auditoriaRepository;
 	}
 	
 	public void setIdentidadeRepository(IdentidadeRepository identidadeRepository) {

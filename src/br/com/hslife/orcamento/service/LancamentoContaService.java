@@ -72,7 +72,6 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
@@ -93,9 +92,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
-	
-	@Autowired
-	private FaturaCartaoRepository faturaCartaoRepository;
 	
 	@Autowired
 	private MoedaRepository moedaRepository;
@@ -124,11 +120,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	public void setLancamentoImportadoRepository(
 			LancamentoImportadoRepository lancamentoImportadoRepository) {
 		this.lancamentoImportadoRepository = lancamentoImportadoRepository;
-	}
-	
-	public void setFaturaCartaoRepository(
-			FaturaCartaoRepository faturaCartaoRepository) {
-		this.faturaCartaoRepository = faturaCartaoRepository;
 	}
 
 	public void setMoedaRepository(MoedaRepository moedaRepository) {

@@ -59,7 +59,6 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.InfoOFX;
@@ -72,9 +71,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 	 * 
 	 */
 	private static final long serialVersionUID = 3650197694657342579L;
-
-	@Autowired
-	private IConta contaService;
 	
 	@Autowired
 	private IImportacaoLancamento service;
@@ -248,10 +244,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setService(IImportacaoLancamento service) {
 		this.service = service;
-	}
-
-	public void setContaService(IConta contaService) {
-		this.contaService = contaService;
 	}
 
 	public Conta getContaSelecionada() {

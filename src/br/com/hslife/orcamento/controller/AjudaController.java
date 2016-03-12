@@ -50,7 +50,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.component.EmailComponent;
 import br.com.hslife.orcamento.facade.IUsuario;
 
 @Component("ajudaMB")
@@ -61,9 +60,6 @@ public class AjudaController extends AbstractController {
 	 * 
 	 */
 	private static final long serialVersionUID = 7392773085395093554L;
-	
-	@Autowired
-	private EmailComponent emailComponent;
 	
 	@Autowired
 	private IUsuario usuarioService;

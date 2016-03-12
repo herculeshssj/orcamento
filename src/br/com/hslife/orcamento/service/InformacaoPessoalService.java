@@ -51,7 +51,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Telefone;
@@ -73,9 +72,6 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	
 	@Autowired
 	private TelefoneRepository telefoneRepository;
-	
-	@Autowired
-	private UsuarioComponent usuarioComponent;
 
 	@Override
 	public void salvarDadosPessoais(Pessoal pessoal) throws BusinessException {

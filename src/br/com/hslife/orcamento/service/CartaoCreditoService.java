@@ -64,8 +64,6 @@ import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.repository.CartaoCreditoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
-import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.repository.MoedaRepository;
 
 @Service("cartaoCreditoService")
 public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> implements ICartaoCredito {
@@ -75,12 +73,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	
 	@Autowired
 	private ContaRepository contaRepository;
-	
-	@Autowired
-	private MoedaRepository moedaRepository;
-	
-	@Autowired
-	private LancamentoContaRepository lancamentoContaRepository;
 	
 	@Autowired
 	private FaturaCartaoRepository faturaCartaoRepository;
@@ -95,15 +87,6 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 
 	public void setContaRepository(ContaRepository contaRepository) {
 		this.contaRepository = contaRepository;
-	}
-
-	public void setMoedaRepository(MoedaRepository moedaRepository) {
-		this.moedaRepository = moedaRepository;
-	}
-
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
 	}
 	
 	@Override

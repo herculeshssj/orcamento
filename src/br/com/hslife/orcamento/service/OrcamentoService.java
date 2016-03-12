@@ -65,11 +65,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOrcamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.repository.CategoriaRepository;
-import br.com.hslife.orcamento.repository.FavorecidoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
-import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.OrcamentoRepository;
 
 @Service("orcamentoService")
@@ -77,18 +73,6 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	
 	@Autowired
 	private OrcamentoRepository repository;
-	
-	@Autowired
-	private CategoriaRepository categoriaRepository;
-	
-	@Autowired
-	private FavorecidoRepository favorecidoRepository;
-	
-	@Autowired
-	private MeioPagamentoRepository meioPagamentoRepository;
-	
-	@Autowired
-	private MoedaRepository moedaRepository;
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
