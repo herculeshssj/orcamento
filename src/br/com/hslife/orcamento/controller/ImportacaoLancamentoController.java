@@ -79,15 +79,9 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private IMoeda moedaService;
 	
 	private Conta contaSelecionada;
-	private Arquivo arquivoAnexado;
-	@Deprecated
-	private boolean gerarNovosLancamentos;
+	private Arquivo arquivoAnexado;	
 	private boolean exibirInfoArquivo;
 	private InfoOFX infoArquivo;
-	@Deprecated
-	private List<LancamentoConta> lancamentoContaAInserir;
-	@Deprecated
-	private List<LancamentoConta> lancamentoContaAAtualizar;
 	private List<LancamentoConta> lancamentoContaACriarAtualizar;
 	
 	private LancamentoImportado entity;
@@ -113,6 +107,10 @@ public class ImportacaoLancamentoController extends AbstractController {
 		return goToListPage();
 	}
 	
+	public String getModuleTitle() {		
+		return super.getModuleTitle() + actionTitle;
+	}
+	
 	private void find() {
 		try {
 			listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
@@ -123,6 +121,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public String create() {
 		exibirInfoArquivo = false;
+		actionTitle = "";
 		find();
 		return "/pages/ImportacaoLancamento/formImportacaoLancamento";
 	}
@@ -142,9 +141,9 @@ public class ImportacaoLancamentoController extends AbstractController {
 				}
 			}
 			
-			lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
-			lancamentoContaAAtualizar = getService().buscarLancamentoContaAAtualizar(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
-			lancamentoContaAInserir = getService().gerarLancamentoContaAInserir(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
+			lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(contaSelecionada, getService().buscarLancamentoImportadoPorConta(contaSelecionada));
+			actionTitle = " - Confirmar";
+			
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -212,7 +211,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public String processarLancamentos() {
 		try {
-			getService().processarLancamentosImportados(contaSelecionada, gerarNovosLancamentos);
+			getService().processarLancamentos(contaSelecionada, lancamentoContaACriarAtualizar);
 			infoMessage("Lançamentos importados com sucesso!");
 			initializeEntity();
 		} catch (BusinessException be) {
@@ -277,32 +276,6 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setArquivoAnexado(Arquivo arquivoAnexado) {
 		this.arquivoAnexado = arquivoAnexado;
-	}
-
-	public List<LancamentoConta> getLancamentoContaAInserir() {
-		return lancamentoContaAInserir;
-	}
-
-	public void setLancamentoContaAInserir(
-			List<LancamentoConta> lancamentoContaAInserir) {
-		this.lancamentoContaAInserir = lancamentoContaAInserir;
-	}
-
-	public List<LancamentoConta> getLancamentoContaAAtualizar() {
-		return lancamentoContaAAtualizar;
-	}
-
-	public void setLancamentoContaAAtualizar(
-			List<LancamentoConta> lancamentoContaAAtualizar) {
-		this.lancamentoContaAAtualizar = lancamentoContaAAtualizar;
-	}
-
-	public boolean isGerarNovosLancamentos() {
-		return gerarNovosLancamentos;
-	}
-
-	public void setGerarNovosLancamentos(boolean gerarNovosLancamentos) {
-		this.gerarNovosLancamentos = gerarNovosLancamentos;
 	}
 
 	public LancamentoImportado getEntity() {

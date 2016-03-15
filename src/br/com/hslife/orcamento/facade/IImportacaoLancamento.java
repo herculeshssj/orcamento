@@ -68,13 +68,9 @@ public interface IImportacaoLancamento {
 	
 	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException;
 	
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(List<LancamentoImportado> lancamentosImportados) throws BusinessException;
-	@Deprecated
-	public List<LancamentoConta> buscarLancamentoContaAAtualizar(List<LancamentoImportado> lancamentosImportados) throws BusinessException;
-	@Deprecated
-	public List<LancamentoConta> gerarLancamentoContaAInserir(List<LancamentoImportado> lancamentosImportados) throws BusinessException;
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException;
 	
-	public void processarLancamentosImportados(Conta conta, boolean gerarNovosLancamentos) throws BusinessException;
+	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException;
 	
 	public void importarLancamento(LancamentoImportado entity) throws BusinessException;
 	

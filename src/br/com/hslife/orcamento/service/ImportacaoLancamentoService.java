@@ -121,33 +121,6 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	@Autowired
 	private RegraImportacaoComponent regraImportacaoComponent;
 
-	public void setLancamentoImportadoRepository(
-			LancamentoImportadoRepository lancamentoImportadoRepository) {
-		this.lancamentoImportadoRepository = lancamentoImportadoRepository;
-	}
-
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
-	}
-	
-	public void setCategoriaRepository(CategoriaRepository categoriaRepository) {
-		this.categoriaRepository = categoriaRepository;
-	}
-
-	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
-		this.usuarioComponent = usuarioComponent;
-	}
-
-	public void setFavorecidoRepository(FavorecidoRepository favorecidoRepository) {
-		this.favorecidoRepository = favorecidoRepository;
-	}
-
-	public void setMeioPagamentoRepository(
-			MeioPagamentoRepository meioPagamentoRepository) {
-		this.meioPagamentoRepository = meioPagamentoRepository;
-	}
-
 	@Override
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException {
 		return lancamentoImportadoRepository.findByConta(conta);
@@ -178,31 +151,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@Override
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(List<LancamentoImportado> lancamentosImportados)
-			throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarLancamentoContaAAtualizar(List<LancamentoImportado> lancamentosImportados) throws BusinessException {
-		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
-		for (LancamentoImportado li : lancamentosImportados) {
-			if (lancamentoContaRepository.findByHash(li.getHash()) != null) {
-				lancamentos.add(lancamentoContaRepository.findByHash(li.getHash()));
-			}
-		}
-		return lancamentos;
-	}
-
-	@Override
-	public List<LancamentoConta> gerarLancamentoContaAInserir(List<LancamentoImportado> lancamentosImportados) throws BusinessException {
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
-		
-		LancamentoConta lc;
+				
 		Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioLogado, TipoCategoria.CREDITO);
 		Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioLogado, TipoCategoria.DEBITO);
 		
@@ -221,11 +175,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			moedas.put(moeda.getCodigoMonetario(), moeda);
 		}
 		
-		Conta conta = null;
+		LancamentoConta lc = null;
 		
 		// Itera a lista de lançamentos importados para gerar os lançamentos da conta correspondentes
 		for (LancamentoImportado li : lancamentosImportados) {
-			if (lancamentoContaRepository.findByHash(li.getHash()) == null) {
+			
+			lc = lancamentoContaRepository.findByHash(li.getHash());
+			
+			if (lc == null) {
 			
 				lc = new LancamentoConta();
 				
@@ -249,6 +206,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				lc.setNumeroDocumento(li.getDocumento());
 				lc.setValorPago(Math.abs(li.getValor()));
 				lc.setHashImportacao(li.getHash());
+				lc.setSelecionado(true);
 				
 				// Seta o status do lançamento a ser inserido
 				if (li.getData().after(new Date())) {
@@ -258,7 +216,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				}
 				
 				lancamentos.add(lc);
-				conta = lc.getConta();
+			} else {
+				lc.setSelecionado(false);
+				lancamentos.add(lc);
 			}
 		}
 		if (lancamentos.isEmpty())
@@ -268,56 +228,21 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@Override
-	public void processarLancamentosImportados(Conta conta, boolean gerarNovosLancamentos) throws BusinessException {
-		List<LancamentoConta> lancamentosAInserir = new ArrayList<LancamentoConta>();
-		List<LancamentoConta> lancamentosAAtualizar = new ArrayList<LancamentoConta>(); 
-		
-		lancamentosAAtualizar = this.buscarLancamentoContaAAtualizar(this.buscarLancamentoImportadoPorConta(conta));
-		lancamentosAInserir = this.gerarLancamentoContaAInserir(buscarLancamentoImportadoPorConta(conta));
-		
-		Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
-
-		// Cria os novos lançamentos
-		if (!gerarNovosLancamentos) {
-			for (LancamentoConta l : lancamentosAInserir) {
-				lancamentoContaRepository.save(l);
-				
-				// Exclui o lançamento importado
-				lancamentoImportadoRepository.delete(lancamentoImportadoRepository.findByHash(l.getHashImportacao()));
+	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException {
+		for (LancamentoConta l : lancamentos) {
+			if (l.isSelecionado()) {
+				if (l.getId() == null) {
+					// Salva o lançamento da conta
+					lancamentoContaRepository.save(l);
+					// Exclui o lançamento importado
+					lancamentoImportadoRepository.delete(lancamentoImportadoRepository.findByHash(l.getHashImportacao()));
+				} else {
+					// Atualiza o lançamento da conta
+					lancamentoContaRepository.update(l);
+					// Exclui o lançamento importado
+					lancamentoImportadoRepository.delete(lancamentoImportadoRepository.findByHash(l.getHashImportacao()));
+				}
 			}
-		}
-		
-		// Atualiza os lançamentos existentes
-		LancamentoImportado li;
-		for (LancamentoConta l : lancamentosAAtualizar) {
-			li = lancamentoImportadoRepository.findByHash(l.getHashImportacao());
-			
-			l.setDataPagamento(li.getData());	
-
-			// Seta o status do lançamento a ser inserido
-			if (li.getData().after(new Date())) {
-				l.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
-			} else if (l.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
-				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-			}
-			
-			l.setHistorico(li.getHistorico());
-			l.setNumeroDocumento(li.getDocumento());
-			l.setValorPago(Math.abs(li.getValor()));
-			l.setMoeda(moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()) == null 
-					? moedaPadrao 
-					: moedaRepository.findCodigoMoedaByUsuario(li.getMoeda(), usuarioComponent.getUsuarioLogado()));
-			
-			if (li.getValor() > 0) {
-				l.setTipoLancamento(TipoLancamento.RECEITA);
-			} else {
-				l.setTipoLancamento(TipoLancamento.DESPESA);
-			}
-			
-			lancamentoContaRepository.update(l);
-			
-			// Exclui o lançamento importado
-			lancamentoImportadoRepository.delete(li);
 		}
 	}
 	
