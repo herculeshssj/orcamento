@@ -178,6 +178,13 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@Override
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(List<LancamentoImportado> lancamentosImportados)
+			throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public List<LancamentoConta> buscarLancamentoContaAAtualizar(List<LancamentoImportado> lancamentosImportados) throws BusinessException {
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
 		for (LancamentoImportado li : lancamentosImportados) {

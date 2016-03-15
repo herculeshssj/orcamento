@@ -80,16 +80,21 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	private Conta contaSelecionada;
 	private Arquivo arquivoAnexado;
+	@Deprecated
 	private boolean gerarNovosLancamentos;
 	private boolean exibirInfoArquivo;
 	private InfoOFX infoArquivo;
-	
+	@Deprecated
 	private List<LancamentoConta> lancamentoContaAInserir;
+	@Deprecated
 	private List<LancamentoConta> lancamentoContaAAtualizar;
+	private List<LancamentoConta> lancamentoContaACriarAtualizar;
 	
 	private LancamentoImportado entity;
 	private List<LancamentoImportado> listEntity;
 	private Long idEntity;
+	
+	private boolean selecionarTodosLancamentos;
 
 	private String goToListPage = "";
 	
@@ -137,6 +142,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 				}
 			}
 			
+			lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
 			lancamentoContaAAtualizar = getService().buscarLancamentoContaAAtualizar(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
 			lancamentoContaAInserir = getService().gerarLancamentoContaAInserir(getService().buscarLancamentoImportadoPorConta(contaSelecionada));
 		} catch (BusinessException be) {
@@ -213,6 +219,17 @@ public class ImportacaoLancamentoController extends AbstractController {
 			errorMessage(be.getMessage());
 		}
 		return goToListPage();
+	}
+	
+	public void selecionarTodos() {
+		if (lancamentoContaACriarAtualizar != null && lancamentoContaACriarAtualizar.size() > 0)
+			for (LancamentoConta l : lancamentoContaACriarAtualizar) {
+				if (selecionarTodosLancamentos) {
+					l.setSelecionado(true);
+				} else {
+					l.setSelecionado(false);
+				}
+			}
 	}
 	
 	public List<Conta> getListaConta() {
@@ -334,5 +351,21 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setGoToListPage(String goToListPage) {
 		this.goToListPage = goToListPage;
+	}
+
+	public List<LancamentoConta> getLancamentoContaACriarAtualizar() {
+		return lancamentoContaACriarAtualizar;
+	}
+
+	public void setLancamentoContaACriarAtualizar(List<LancamentoConta> lancamentoContaACriarAtualizar) {
+		this.lancamentoContaACriarAtualizar = lancamentoContaACriarAtualizar;
+	}
+
+	public boolean isSelecionarTodosLancamentos() {
+		return selecionarTodosLancamentos;
+	}
+
+	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
+		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
 	}
 }
