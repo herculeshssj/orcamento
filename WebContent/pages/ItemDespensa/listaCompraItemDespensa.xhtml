@@ -119,6 +119,16 @@
 		     		<f:setPropertyActionListener value="#{item}" target="#{managedBean.itemDespensa}"/>
 		     	</h:commandLink>
 			</p:column>
+			<p:columnGroup type="footer">
+	            <p:row>
+	                <p:column footerText="#{managedBean.totalItens} itens" />
+	                <p:column footerText="" />	                
+	                <p:column footerText="#{managedBean.totalItensListaCompra} itens a comprar" />
+	                <p:column footerText="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} #{managedBean.totalValorListaCompra}" />
+	                <p:column footerText="" />
+	            </p:row>	            
+        	</p:columnGroup>
+			
 		</p:dataTable>
 			
 	</ui:define>
@@ -129,12 +139,12 @@
      	</h:commandLink>
      	&nbsp;&nbsp;
      	<h:commandLink title="Exportar para MS-Excel">
-			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
+			<p:graphicImage value="/resources/images/MSExcel.png" width="48" height="48"/>
 			<p:dataExporter type="xls" target="tableListaCompra" fileName="ListaDeCompras" encoding="iso-8859-1"/> 
 		</h:commandLink>
 		&nbsp;&nbsp;
 		<h:commandLink title="Exportar para PDF">
-			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
+			<p:graphicImage value="/resources/images/PDF.png" width="48" height="48"/>
 			<p:dataExporter type="pdf" target="tableListaCompra" fileName="ListaDeCompras" encoding="iso-8859-1"/> 
 		</h:commandLink>
 	</ui:define>

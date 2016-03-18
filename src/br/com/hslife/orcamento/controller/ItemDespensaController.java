@@ -98,6 +98,9 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	private boolean exibirCamposCompra;
 	
 	private List<ItemDespensa> listaCompras;
+	private int totalItensListaCompra = 0;
+	private double totalValorListaCompra = 0.0;
+	private int totalItens;
 	
 	public ItemDespensaController() {
 		super(new ItemDespensa());
@@ -202,18 +205,6 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 		return "";
 	}
 	
-	public String gerarListaCompras() {
-		try {			
-			listaCompras = getService().gerarListaCompras(getUsuarioLogado());
-			actionTitle = " - Lista de Compras";
-			operation = "list";
-			return "/pages/ItemDespensa/listaCompraItemDespensa";
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
 	public String arquivar() {
 		try {
 			getService().arquivarItemDespensa(entity);
@@ -292,6 +283,19 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 		return "";
 	}
 	
+	public String gerarListaCompras() {
+		try {			
+			listaCompras = getService().gerarListaCompras(getUsuarioLogado());
+			this.calcularTotaisListaCompra();
+			actionTitle = " - Lista de Compras";
+			operation = "list";
+			return "/pages/ItemDespensa/listaCompraItemDespensa";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public void adicionarItemListaCompra() {
 		if (itemDespensa == null) {
 			warnMessage("Selecione um item de despensa!");
@@ -306,12 +310,24 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 		itemDespensa.setQuantidadeAtual(quantidadeItemDespensa);
 		itemDespensa.setValor(itemDespensa.getValor() * quantidadeItemDespensa);
 		listaCompras.add(itemDespensa);
-		
+		this.calcularTotaisListaCompra();
 		itemDespensa = new ItemDespensa();
 	}
 	
 	public void removerItemListaCompra() {
 		listaCompras.remove(itemDespensa);
+		this.calcularTotaisListaCompra();
+	}
+	
+	private void calcularTotaisListaCompra() {
+		// Calcula o total de itens e o valor de cada um
+		totalItensListaCompra = 0;
+		totalValorListaCompra = 0.0;
+		for (ItemDespensa item : listaCompras) {
+			totalItensListaCompra += item.getQuantidadeAtual();
+			totalValorListaCompra += item.getValor();
+		}
+		totalItens = listaCompras.size();
 	}
 	
 	public void exibirCamposValidadeValor() {
@@ -451,5 +467,29 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 
 	public void setQuantidadeItemDespensa(int quantidadeItemDespensa) {
 		this.quantidadeItemDespensa = quantidadeItemDespensa;
+	}
+
+	public int getTotalItensListaCompra() {
+		return totalItensListaCompra;
+	}
+
+	public void setTotalItensListaCompra(int totalItensListaCompra) {
+		this.totalItensListaCompra = totalItensListaCompra;
+	}
+
+	public double getTotalValorListaCompra() {
+		return totalValorListaCompra;
+	}
+
+	public void setTotalValorListaCompra(double totalValorListaCompra) {
+		this.totalValorListaCompra = totalValorListaCompra;
+	}
+
+	public int getTotalItens() {
+		return totalItens;
+	}
+
+	public void setTotalItens(int totalItens) {
+		this.totalItens = totalItens;
 	}
 }
