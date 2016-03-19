@@ -66,6 +66,8 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IDespensa;
 import br.com.hslife.orcamento.facade.IItemDespensa;
 import br.com.hslife.orcamento.facade.IUnidadeMedida;
+import br.com.hslife.orcamento.util.ItemDespensaComparator;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("itemDespensaMB")
 @Scope("session")
@@ -310,12 +312,14 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 		itemDespensa.setQuantidadeAtual(quantidadeItemDespensa);
 		itemDespensa.setValor(itemDespensa.getValor() * quantidadeItemDespensa);
 		listaCompras.add(itemDespensa);
+		listaCompras.sort(new ItemDespensaComparator());
 		this.calcularTotaisListaCompra();
 		itemDespensa = new ItemDespensa();
 	}
 	
 	public void removerItemListaCompra() {
 		listaCompras.remove(itemDespensa);
+		listaCompras.sort(new ItemDespensaComparator());
 		this.calcularTotaisListaCompra();
 	}
 	
@@ -326,6 +330,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 		for (ItemDespensa item : listaCompras) {
 			totalItensListaCompra += item.getQuantidadeAtual();
 			totalValorListaCompra += item.getValor();
+			totalValorListaCompra = Util.arredondar(totalValorListaCompra);
 		}
 		totalItens = listaCompras.size();
 	}
