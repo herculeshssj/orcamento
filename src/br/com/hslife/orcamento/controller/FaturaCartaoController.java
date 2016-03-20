@@ -596,7 +596,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			this.reprocessarBusca();
 			
 			prontoParaQuitar = false;
-			
+			actionTitle = "";
 			return "/pages/FaturaCartao/listFaturaCartao";
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
