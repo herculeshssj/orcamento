@@ -52,10 +52,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -85,6 +83,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -96,6 +95,7 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
@@ -134,6 +134,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private IFaturaCartao faturaCartaoService;
 	
 	@Autowired
+	private ILancamentoPeriodico lancamentoPeriodicoService;
+	
+	@Autowired
 	private MovimentacaoLancamentoController movimentacaoLancamentoMB;
 	
 	@Autowired
@@ -147,7 +150,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private FaturaCartao faturaCartao;
 	private Date dataFechamento;
 	
-	private Set<LancamentoPeriodico> lancamentosPeriodicos = new HashSet<>();
+	private List<LancamentoPeriodico> lancamentosPeriodicos = new ArrayList<>();
 	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
@@ -420,22 +423,21 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Período selecionado encontra-se fechado.");
 			return "";
 		}
-		actionTitle = " - Fechar período";
-		lancamentosPeriodicos = new HashSet<>();
-		findByPeriodo();
-		for (LancamentoConta l : listEntity) {
-			if (l.getLancamentoPeriodico() != null && l.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
-				l.getLancamentoPeriodico().setSelecionado(true);
-				lancamentosPeriodicos.add(l.getLancamentoPeriodico());
-			}
-		}
-		if (fechamentoPeriodo != null && fechamentoPeriodo.getOperacao().equals(OperacaoConta.REABERTURA)) {
-			dataFechamento = fechamentoPeriodo.getData();
+		try {
+			actionTitle = " - Fechar período";
+			lancamentosPeriodicos = lancamentoPeriodicoService
+					.buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
 			for (LancamentoPeriodico lp : lancamentosPeriodicos) {
-				lp.setSelecionado(false);
+				lp.setSelecionado(true);
 			}
+			if (fechamentoPeriodo != null && fechamentoPeriodo.getOperacao().equals(OperacaoConta.REABERTURA)) {
+				dataFechamento = fechamentoPeriodo.getData();				
+			}
+			return "/pages/LancamentoConta/fecharPeriodo";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
-		return "/pages/LancamentoConta/fecharPeriodo";
+		return "";
 	}
 	
 	public String fecharPeriodo() {
@@ -936,12 +938,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		this.dataFechamento = dataFechamento;
 	}
 
-	public Set<LancamentoPeriodico> getLancamentosPeriodicos() {
+	public List<LancamentoPeriodico> getLancamentosPeriodicos() {
 		return lancamentosPeriodicos;
 	}
 
 	public void setLancamentosPeriodicos(
-			Set<LancamentoPeriodico> lancamentosPeriodicos) {
+			List<LancamentoPeriodico> lancamentosPeriodicos) {
 		this.lancamentosPeriodicos = lancamentosPeriodicos;
 	}
 
