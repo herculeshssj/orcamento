@@ -86,14 +86,14 @@
 				</f:facet>
 				<h:outputText value="#{item.descricao}" />
 			</p:column>			
-			<p:column style="text-align: center; vertical-align: middle;">
+			<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
 				<f:facet name="header">
 					<h:outputText value="Em estoque" />
 				</f:facet>
 				<h:outputText value="#{item.quantidadeAtual} " style="#{item.arquivado == true ? 'text-decoration: line-through;' : 'text-decoration: none;'}" />
 				<h:outputText value="#{item.unidadeMedida.sigla}" style="#{item.arquivado == true ? 'text-decoration: line-through;' : 'text-decoration: none;'}" />
 			</p:column>			
-			<p:column style="text-align: center; vertical-align: middle;" exportable="false">
+			<p:column style="text-align: center; vertical-align: middle;" exportable="false" rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
 				<f:facet name="header">
 					<h:outputText value="Nível" />
 				</f:facet>
@@ -107,11 +107,13 @@
 				<f:facet name="header">
 					<h:outputText value="Ações"/>
 				</f:facet>
-				<h:commandLink title="Registrar compra/consumo" action="#{managedBean.registrarCompraConsumoView}" rendered="#{!item.arquivado}">
-					<h:graphicImage id="imgConsume" height="48" width="48" value="/resources/images/svg/feed_in.svg"/>
-					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-				</h:commandLink>
-				&nbsp;&nbsp;&nbsp;
+				<h:panelGroup rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+					<h:commandLink title="Registrar compra/consumo" action="#{managedBean.registrarCompraConsumoView}" rendered="#{!item.arquivado}">
+						<h:graphicImage id="imgConsume" height="48" width="48" value="/resources/images/svg/feed_in.svg"/>
+						<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+					</h:commandLink>
+					&nbsp;&nbsp;&nbsp;
+				</h:panelGroup>
 				<h:commandLink title="Editar" action="#{managedBean.edit}">
 					<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
@@ -140,10 +142,12 @@
 			<p:graphicImage value="/resources/images/PDF.png" width="48" height="48"/>
 			<p:dataExporter type="pdf" target="sheetTableListEntity" fileName="Inventario" encoding="iso-8859-1"/> 
 		</h:commandLink>
-		&nbsp;&nbsp;
-		<h:commandLink title="Desfazer último registro compra/consumo" action="#{managedBean.desfazerRegistroCompraConsumoView}">
-			<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/undo.svg"/>
-		</h:commandLink>
+		<h:panelGroup rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+			&nbsp;&nbsp;
+			<h:commandLink title="Desfazer último registro compra/consumo" action="#{managedBean.desfazerRegistroCompraConsumoView}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+			</h:commandLink>
+		</h:panelGroup>
 	</ui:define>
 
 </ui:composition>

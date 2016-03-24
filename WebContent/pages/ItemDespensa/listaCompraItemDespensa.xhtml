@@ -59,26 +59,29 @@
 	
 	<ui:define name="campos">
 	
-		<h:panelGrid columns="7">
-		
-			Despensa:
-			<h:selectOneMenu value="#{managedBean.despensa}" converter="entityConverter">
-		    	<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		    	<p:ajax update="txtItemDespensa" listener="#{managedBean.getListaItemDespensa}"/>
-		    </h:selectOneMenu>
-		    
-		    Item:
-		    <h:selectOneMenu id="txtItemDespensa" value="#{managedBean.itemDespensa}" converter="entityConverter">
-		    	<f:selectItems value="#{managedBean.listaItemDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		    </h:selectOneMenu>
-		    
-		    Quantidade:
-		    <h:inputText value="#{managedBean.quantidadeItemDespensa}" size="3" maxlength="5"/>
-		    
-		    <h:commandLink id="lnkAddRow" title="Adicionar item à lista" action="#{managedBean.adicionarItemListaCompra}">
-	     		<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
-	     	</h:commandLink>
-		
+		<h:panelGrid columns="4">
+			<h:panelGroup>
+				<label>Despensa:</label>
+				<h:selectOneMenu value="#{managedBean.despensa}" converter="entityConverter">
+		    		<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		    		<p:ajax update="txtItemDespensa" listener="#{managedBean.getListaItemDespensa}"/>
+		    	</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label>Item:</label>
+				<h:selectOneMenu id="txtItemDespensa" value="#{managedBean.itemDespensa}" converter="entityConverter">
+		    		<f:selectItems value="#{managedBean.listaItemDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		    	</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label>Quantidade:</label>
+				<h:inputText value="#{managedBean.quantidadeItemDespensa}" size="3" maxlength="5"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:commandLink id="lnkAddRow" title="Adicionar item à lista" action="#{managedBean.adicionarItemListaCompra}">
+	     			<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
+	     		</h:commandLink>
+			</h:panelGroup>		
 		</h:panelGrid>
 		
 		<p:dataTable id="tableListaCompra" width="100%" value="#{managedBean.listaCompras}" var="item">
@@ -101,7 +104,7 @@
 				<h:outputText value="#{item.quantidadeAtual} "/>
 				<h:outputText value="#{item.unidadeMedida.sigla}"/>
 			</p:column>			
-			<p:column style="text-align: center; vertical-align: middle;">
+			<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
 				<f:facet name="header">
 					<h:outputText value="Valor aproximado" />
 				</f:facet>
@@ -124,7 +127,7 @@
 	                <p:column footerText="#{managedBean.totalItens} itens" />
 	                <p:column footerText="" />	                
 	                <p:column footerText="#{managedBean.totalItensListaCompra} itens a comprar" />
-	                <p:column footerText="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} #{managedBean.totalValorListaCompra}" />
+	                <p:column footerText="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} #{managedBean.totalValorListaCompra}" rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}"/>
 	                <p:column footerText="" />
 	            </p:row>	            
         	</p:columnGroup>

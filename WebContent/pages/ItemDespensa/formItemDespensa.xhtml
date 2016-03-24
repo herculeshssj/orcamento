@@ -84,50 +84,55 @@
     	<label for="frmFormEntity:txtMarca">Marca:</label>
     	<h:inputText id="txtMarca" value="#{managedBean.entity.marca}" disabled="#{managedBean.entity.arquivado}"/>
     	
-    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
-    		<label>
-    			<h:outputText value="Quantidade atual: " />
-				<h:outputText id="txtQuantidadeAtual" value="#{managedBean.entity.quantidadeAtual}"/>
-			</label>
-			<p:spacer height="1"/>
-		</h:panelGroup>
+    	<!-- Mostra as opções de estoque se a opção do sistema estiver ativa -->
+    	<h:panelGroup rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
     	
-    	<label for="frmFormEntity:txtQuantidadeVerde">Estoque (VERDE):</label>
-    	<h:inputText id="txtQuantidadeVerde" value="#{managedBean.entity.quantidadeVerde}" size="10" disabled="#{managedBean.entity.arquivado}"/>
-    	
-    	<label for="frmFormEntity:txtQuantidadeAmarelo">Estoque (AMARELO):</label>
-    	<h:inputText id="txtQuantidadeAmarelo" value="#{managedBean.entity.quantidadeAmarelo}" size="10" disabled="#{managedBean.entity.arquivado}"/>
-    	
-    	<label for="frmFormEntity:txtQuantidadeVermelho">Estoque (VERMELHO):</label>
-    	<h:inputText id="txtQuantidadeVermelho" value="#{managedBean.entity.quantidadeVermelho}" size="10" disabled="#{managedBean.entity.arquivado}"/>
-    	
-    	<h:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="#{managedBean.entity.arquivado}"/>
-    	<label>Perecível</label>
-    	
-    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
-	    	<label>
-	    		<h:outputText value="Validade do estoque atual: " />
-	    		<h:outputText value="#{managedBean.entity.validade}">
-					<f:converter converterId="dateConverter"/>
-				</h:outputText>
-	    	</label>
-	    	<p:spacer height="1"/>						
-		</h:panelGroup>
+	    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+	    		<label>
+	    			<h:outputText value="Quantidade atual: " />
+					<h:outputText id="txtQuantidadeAtual" value="#{managedBean.entity.quantidadeAtual}"/>
+				</label>
+				<p:spacer height="1"/>
+			</h:panelGroup>
+	    	
+	    	<label for="frmFormEntity:txtQuantidadeVerde">Estoque (VERDE):</label>
+	    	<h:inputText id="txtQuantidadeVerde" value="#{managedBean.entity.quantidadeVerde}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+	    	
+	    	<label for="frmFormEntity:txtQuantidadeAmarelo">Estoque (AMARELO):</label>
+	    	<h:inputText id="txtQuantidadeAmarelo" value="#{managedBean.entity.quantidadeAmarelo}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+	    	
+	    	<label for="frmFormEntity:txtQuantidadeVermelho">Estoque (VERMELHO):</label>
+	    	<h:inputText id="txtQuantidadeVermelho" value="#{managedBean.entity.quantidadeVermelho}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+	    	
+	    	<h:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="#{managedBean.entity.arquivado}"/>
+	    	<label>Perecível</label>
+	    	
+	    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+		    	<label>
+		    		<h:outputText value="Validade do estoque atual: " />
+		    		<h:outputText value="#{managedBean.entity.validade}">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+		    	</label>
+		    	<p:spacer height="1"/>						
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+				<label>
+					<h:outputText value="Valor unitário do estoque: #{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " />
+					<h:outputText value="#{managedBean.entity.valor}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</label>
+				<p:spacer height="1"/>				
+			</h:panelGroup>
 		
-		<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
-			<label>
-				<h:outputText value="Valor unitário do estoque: #{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " />
-				<h:outputText value="#{managedBean.entity.valor}">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>
-			</label>
-			<p:spacer height="1"/>				
 		</h:panelGroup>
     	
     	<label for="frmFormEntity:txtCaracteristicas">Características:</label>
     	<h:inputTextarea id="txtCaracteristicas" value="#{managedBean.entity.caracteristicas}" disabled="#{managedBean.entity.arquivado}"/>
 		
-		<p:accordionPanel activeIndex="1" rendered="#{managedBean.operation == 'edit'}">
+		<p:accordionPanel activeIndex="1" rendered="#{managedBean.operation == 'edit' and managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
 			<p:tab title="Clique aqui para visualizar o histórico de movimentação">
 		
 				<h:dataTable value="#{managedBean.entity.movimentacao}" var="mov" rendered="#{managedBean.operation == 'edit'}">
@@ -185,10 +190,12 @@
 		<h:commandLink title="Arquivar" action="#{managedBean.arquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
 			<h:graphicImage id="imgDisable" height="48" width="48" value="/resources/images/svg/cancel.svg"/>
 		</h:commandLink>
-		<p:spacer width="10" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}"/>
-		<h:commandLink title="Apagar histórico de movimentação" action="#{managedBean.apagarHistorico}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
-			<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
-		</h:commandLink>		
+		<h:panelGroup rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+			<p:spacer width="10" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}"/>
+			<h:commandLink title="Apagar histórico de movimentação" action="#{managedBean.apagarHistorico}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
+				<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
+			</h:commandLink>
+		</h:panelGroup>
 	</ui:define>
 
 </ui:composition>

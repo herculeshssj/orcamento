@@ -2374,3 +2374,21 @@ create table relatoriocustomizado_relatorioparametro(
 
 alter table relatoriocustomizado_relatorioparametro add constraint fk_relatoriocustomizado_parametro foreign key (relatoriocustomizado_id) references relatoriocustomizado(id);
 alter table relatoriocustomizado_relatorioparametro add constraint fk_relatorioparametro foreign key (parametrosrelatorio_id) references relatorioparametro(id);
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2016 ***/
+
+-- Inclusão de parâmetro para habilitar/desabilitar o controle de estoque
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+	select
+	'CONTROLAR_ESTOQUE_DESPENSA',
+	'true',
+	'USER',
+	true,
+	true,
+	false,
+	'BOOLEAN',
+	id,
+	'2016-04-01 00:00:00.000',
+	'ItemDespensa'
+	from
+	usuario;

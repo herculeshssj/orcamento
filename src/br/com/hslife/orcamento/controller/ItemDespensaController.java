@@ -286,9 +286,13 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	}
 	
 	public String gerarListaCompras() {
-		try {			
-			listaCompras = getService().gerarListaCompras(getUsuarioLogado());
-			this.calcularTotaisListaCompra();
+		try {
+			if (getOpcoesSistema().getControlarEstoqueItemDespensa()) {
+				listaCompras = getService().gerarListaCompras(getUsuarioLogado());
+				this.calcularTotaisListaCompra();
+			} else {
+				listaCompras = new ArrayList<>();
+			}
 			actionTitle = " - Lista de Compras";
 			operation = "list";
 			return "/pages/ItemDespensa/listaCompraItemDespensa";

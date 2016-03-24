@@ -91,54 +91,21 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Relatórios customizados - Github Issue #150
-	create table relatoriocustomizado(
-		id bigint not null auto_increment,
-		nome varchar(50) not null,
-		descricao varchar(200) not null,
-		consultaSQL text not null,
-		idUsuario bigint not null,
-		primary key (id)
-	) Engine=InnoDB;
-	
-	alter table relatoriocustomizado add constraint fk_relatoriocustomizado_usuario foreign key (idUsuario) references usuario(id);
-	
-	create table relatoriocoluna(
-		id bigint not null auto_increment,
-		ordem int,
-		nomeColuna varchar(50) not null,
-		textoExibicao varchar(50) not null,
-		tipoDado varchar(15) not null,
-		formatar boolean,
-		mascaraFormatacao varchar(50),
-		primary key(id)
-	) Engine=InnoDB;
-	
-	create table relatorioparametro(
-		id bigint not null auto_increment,
-		nomeParametro varchar(50) not null,
-		tipoDado varchar(15) not null,
-		textoExibicao varchar(50) not null,
-		primary key (id)
-	);
-	
-	create table relatoriocustomizado_relatoriocoluna(
-		relatoriocustomizado_id bigint not null,
-		colunasrelatorio_id bigint not null,
-		unique(colunasRelatorio_id)
-	) engine=InnoDB;
-	
-	alter table relatoriocustomizado_relatoriocoluna add constraint fk_relatoriocustomizado_coluna foreign key (relatoriocustomizado_id) references relatoriocustomizado(id);
-	alter table relatoriocustomizado_relatoriocoluna add constraint fk_relatoriocoluna foreign key (colunasrelatorio_id) references relatoriocoluna(id);
-	
-	create table relatoriocustomizado_relatorioparametro(
-		relatoriocustomizado_id bigint not null,
-		parametrosrelatorio_id bigint not null,
-		unique(parametrosRelatorio_id)
-	) engine=InnoDB;
-	
-	alter table relatoriocustomizado_relatorioparametro add constraint fk_relatoriocustomizado_parametro foreign key (relatoriocustomizado_id) references relatoriocustomizado(id);
-	alter table relatoriocustomizado_relatorioparametro add constraint fk_relatorioparametro foreign key (parametrosrelatorio_id) references relatorioparametro(id);
+	-- Inclusão de parâmetro para habilitar/desabilitar o controle de estoque
+	insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
+		select
+		'CONTROLAR_ESTOQUE_DESPENSA',
+		'true',
+		'USER',
+		true,
+		true,
+		false,
+		'BOOLEAN',
+		id,
+		'2016-04-01 00:00:00.000',
+		'ItemDespensa'
+		from
+		usuario;
     
     /*** Fim do bloco de atualizações da base ***/
     

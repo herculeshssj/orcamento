@@ -236,6 +236,7 @@ public class OpcaoSistemaComponent {
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_FATURACARTAO", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS", Integer.valueOf(1));
+		opcoesUsuario.put("CONTROLAR_ESTOQUE_DESPENSA", Boolean.TRUE);
 		this.salvarOpcoesUser(opcoesUsuario, entity);
 	}
 	
@@ -257,6 +258,7 @@ public class OpcaoSistemaComponent {
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTA_EXIBIR_INATIVAS", this.getExibirContasInativas());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", this.getLimiteQuantidadeFechamentos());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", this.getFormaAgrupamentoPagamento());
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTROLAR_ESTOQUE_DESPENSA", this.getControlarEstoqueItemDespensa());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("MOEDA_PADRAO", moedaPadrao);
 	}
 	
@@ -453,6 +455,25 @@ public class OpcaoSistemaComponent {
 			e.printStackTrace();
 		}
 		return null; // Este return nunca deve ser invocado.
+	}
+	
+	public Boolean getControlarEstoqueItemDespensa() {
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		try {
+			// Verifica se o valor existe no cache
+			if (recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA") != null) {
+				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA"));
+			} else {
+				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTROLAR_ESTOQUE_DESPENSA", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA", Boolean.valueOf(opcao.getValor()));
+					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA"));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 	
 	/*** Métodos Setters das opções do sistema existentes ***/
