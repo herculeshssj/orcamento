@@ -128,4 +128,11 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 		
 		return hqlQuery.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<LancamentoPeriodico> findByDescricaoAndUsuario(String descricao, Usuario usuarioLogado) {
+		return getQuery("FROM LancamentoPeriodico lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuarioLogado.getId())
+				.list();
+	}
 }

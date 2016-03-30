@@ -49,7 +49,9 @@ package br.com.hslife.orcamento.facade;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.model.AnexoEntidade;
 import br.com.hslife.orcamento.model.CriterioArquivo;
 
 
@@ -59,4 +61,7 @@ public interface IArquivo {
 	
 	public void excluir(Arquivo arquivo) throws BusinessException;
 
+	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container) throws BusinessException;
+	
+	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) throws BusinessException;
 }

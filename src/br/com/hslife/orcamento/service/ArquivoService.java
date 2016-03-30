@@ -46,17 +46,29 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.entity.Documento;
+import br.com.hslife.orcamento.entity.FaturaCartao;
+import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IArquivo;
+import br.com.hslife.orcamento.model.AnexoEntidade;
 import br.com.hslife.orcamento.model.CriterioArquivo;
 import br.com.hslife.orcamento.repository.ArquivoRepository;
+import br.com.hslife.orcamento.repository.DocumentoRepository;
+import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
+import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 
 @Service("arquivoService")
 @Transactional
@@ -64,6 +76,21 @@ public class ArquivoService implements IArquivo {
 	
 	@Autowired
 	private ArquivoRepository repository;
+	
+	@Autowired
+	private DocumentoRepository documentoRepository;
+	
+	@Autowired
+	private FaturaCartaoRepository faturaCartaoRepository;
+	
+	@Autowired
+	private LancamentoContaRepository lancamentoContaRepository;
+	
+	@Autowired
+	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 
 	public ArquivoRepository getRepository() {
 		return repository;
@@ -110,5 +137,79 @@ public class ArquivoService implements IArquivo {
 				}
 				break;
 		}
+	}
+	
+	@Override
+	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container) throws BusinessException {
+		List<AnexoEntidade> listaAnexos = new ArrayList<>();
+		AnexoEntidade anexo;
+		switch (container) {
+			case DOCUMENTOS:
+				for (Documento d : documentoRepository.findByNomeAndUsuario(descricao, usuarioComponent.getUsuarioLogado())) {
+					anexo = new AnexoEntidade();
+					anexo.setId(d.getId());
+					anexo.setDescricao(d.getLabel());
+					anexo.setContemAnexo(d.getArquivo() == null ? false : true);
+					listaAnexos.add(anexo);
+				}
+				break;
+			case FATURACARTAO:
+				for (FaturaCartao f : faturaCartaoRepository.findAllByUsuario(usuarioComponent.getUsuarioLogado())) {
+					if (f.getLabel().contains(descricao)) {
+						anexo = new AnexoEntidade();
+						anexo.setId(f.getId());
+						anexo.setDescricao(f.getLabel());
+						anexo.setContemAnexo(f.getArquivo() == null ? false : true);
+						listaAnexos.add(anexo);
+					}					
+				}
+				break;
+			case LANCAMENTOCONTA:
+				for (LancamentoConta l : lancamentoContaRepository.findByDescricaoAndUsuario(descricao, usuarioComponent.getUsuarioLogado())) {
+					anexo = new AnexoEntidade();
+					anexo.setId(l.getId());
+					anexo.setDescricao(l.getLabel());
+					anexo.setContemAnexo(l.getArquivo() == null ? false : true);
+					listaAnexos.add(anexo);
+				}
+				break;
+			case LANCAMENTOPERIODICO:
+				for (LancamentoPeriodico l : lancamentoPeriodicoRepository.findByDescricaoAndUsuario(descricao, usuarioComponent.getUsuarioLogado())) {
+					anexo = new AnexoEntidade();
+					anexo.setId(l.getId());
+					anexo.setDescricao(l.getLabel());
+					anexo.setContemAnexo(l.getArquivo() == null ? false : true);
+					listaAnexos.add(anexo);
+				}
+				break;
+		}
+		return listaAnexos;
+	}
+	
+	@Override
+	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) throws BusinessException {
+		switch (container) {
+			case DOCUMENTOS:
+				Documento d = documentoRepository.findById(idEntity);
+				d.setArquivo(anexo);
+				documentoRepository.update(d);
+				break;
+			case FATURACARTAO: 
+				FaturaCartao f = faturaCartaoRepository.findById(idEntity);
+				f.setArquivo(anexo);
+				faturaCartaoRepository.update(f);
+				break;
+			case LANCAMENTOCONTA:
+				LancamentoConta l = lancamentoContaRepository.findById(idEntity);
+				l.setArquivo(anexo);
+				lancamentoContaRepository.update(l);
+				break;
+			case LANCAMENTOPERIODICO:
+				LancamentoPeriodico lp = lancamentoPeriodicoRepository.findById(idEntity);
+				lp.setArquivo(anexo);
+				lancamentoPeriodicoRepository.update(lp);
+				break;
+		}
+		
 	}
 }

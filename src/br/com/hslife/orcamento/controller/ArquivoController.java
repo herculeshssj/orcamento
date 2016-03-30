@@ -57,6 +57,7 @@ import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -65,6 +66,7 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IArquivo;
+import br.com.hslife.orcamento.model.AnexoEntidade;
 import br.com.hslife.orcamento.model.CriterioArquivo;
 
 @Component("arquivoMB")
@@ -87,6 +89,12 @@ public class ArquivoController extends AbstractController {
 	private String operation = "delete";
 	
 	private BigDecimal espacoOcupado = new BigDecimal(0);
+	
+	private Container container;
+	private String descricao;
+	private AnexoEntidade entidadeSelecionada;
+	
+	private List<AnexoEntidade> listContainer;
 
 	public ArquivoController() {		
 		moduleTitle = "Arquivos Anexados";
@@ -106,6 +114,8 @@ public class ArquivoController extends AbstractController {
 		
 		listEntity = null;
 		listEntity = new ArrayList<Arquivo>();
+		
+		listContainer.clear();
 	}
 	
 	@Override
@@ -155,6 +165,39 @@ public class ArquivoController extends AbstractController {
 		return "";
 	}
 	
+	public String create() {		
+		return "/pages/Arquivo/formArquivo";
+	}
+	
+	public void findEntity() {
+		try {
+			listContainer = getService().buscarEntidadesPorDescricao(descricao, container);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void save() {
+		try {
+			if (entidadeSelecionada == null) {
+				warnMessage("Selecione uma entidade!");
+				return;
+			}
+			
+			if (entity == null || entity.getDados() == null || entity.getDados().length == 0) {
+				warnMessage("Anexe um arquivo!");
+				return;
+			}
+			
+			getService().salvarAnexo(entidadeSelecionada.getId(), container, entity);
+			
+			infoMessage("Anexo salvo com sucesso!");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
 	public String view() {
 		return "/pages/Arquivo/viewArquivo";
 	}
@@ -195,6 +238,18 @@ public class ArquivoController extends AbstractController {
 		} catch (Exception e) {
 			errorMessage(e.getMessage());
 		}		
+	}
+	
+	public void carregarArquivo(FileUploadEvent event) {
+		if (event.getFile() != null) {
+			if (entity == null) entity = new Arquivo();
+			entity.setDados(event.getFile().getContents());
+			entity.setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			entity.setContentType(event.getFile().getContentType());
+			entity.setTamanho(event.getFile().getSize());
+			entity.setContainer(container);
+			entity.setUsuario(getUsuarioLogado());
+		} 
 	}
 	
 	public List<SelectItem> getListaContainer() {
@@ -264,4 +319,36 @@ public class ArquivoController extends AbstractController {
 	public void setOperation(String operation) {
 		this.operation = operation;
 	}
+
+	public Container getContainer() {
+		return container;
+	}
+
+	public void setContainer(Container container) {
+		this.container = container;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public AnexoEntidade getEntidadeSelecionada() {
+		return entidadeSelecionada;
+	}
+
+	public void setEntidadeSelecionada(AnexoEntidade entidadeSelecionada) {
+		this.entidadeSelecionada = entidadeSelecionada;
+	}
+
+	public List<AnexoEntidade> getListContainer() {
+		return listContainer;
+	}
+
+	public void setListContainer(List<AnexoEntidade> listContainer) {
+		this.listContainer = listContainer;
+	}	
 }

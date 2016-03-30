@@ -299,4 +299,11 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 				.setLong("idConta", conta.getId())
 				.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findByDescricaoAndUsuario(String descricao, Usuario usuarioLogado) {
+		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuarioLogado.getId())
+				.list();
+	}
 }
