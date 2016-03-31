@@ -147,6 +147,18 @@
 				<h:outputText value="#{managedBean.lancamentoSelecionado.totalADetalhar}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
+				|
+				Créditos:
+				<h:outputText value="#{managedBean.lancamentoSelecionado.moeda.simboloMonetario} " style="color: #0000FF;"/>
+				<h:outputText value="#{managedBean.lancamentoSelecionado.totalCredito}"  style="color: #0000FF;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+				|
+				Débitos:
+				<h:outputText value="#{managedBean.lancamentoSelecionado.moeda.simboloMonetario} " style="color: #FF0000;"/>
+				<h:outputText value="#{managedBean.lancamentoSelecionado.totalDebito}" style="color: #FF0000;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
 			</f:facet>
 		</h:dataTable>
 		

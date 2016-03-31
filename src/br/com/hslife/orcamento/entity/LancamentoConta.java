@@ -291,6 +291,30 @@ public class LancamentoConta extends EntityPersistence {
 		return result.doubleValue();
 	}
 	
+	public double getTotalCredito() {
+		double resultado = 0.0;
+		if (detalhes != null && !detalhes.isEmpty()) {
+			for (DetalheLancamento detalhe : detalhes) {
+				if (detalhe.getValor() > 0) {
+					resultado += detalhe.getValor();
+				}
+			}
+		}
+		return resultado;
+	}
+	
+	public double getTotalDebito() {
+		double resultado = 0.0;
+		if (detalhes != null && !detalhes.isEmpty()) {
+			for (DetalheLancamento detalhe : detalhes) {
+				if (detalhe.getValor() <= 0) {
+					resultado += detalhe.getValor();
+				}
+			}
+		}
+		return resultado;
+	}
+	
 	public boolean isPossuiAnexo() {
 		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
 	}
