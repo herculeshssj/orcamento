@@ -91,21 +91,12 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Inclusão de parâmetro para habilitar/desabilitar o controle de estoque
-	insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
-		select
-		'CONTROLAR_ESTOQUE_DESPENSA',
-		'true',
-		'USER',
-		true,
-		true,
-		false,
-		'BOOLEAN',
-		id,
-		'2016-04-01 00:00:00.000',
-		'ItemDespensa'
-		from
-		usuario;
+	-- Inclusão das colunas usadas para importação via CSV - Issue #178
+	alter table lancamentoimportado add column observacao varchar(200) null;
+	alter table lancamentoimportado add column categoria varchar(200) null;
+	alter table lancamentoimportado add column favorecido varchar(200) null;
+	alter table lancamentoimportado add column meiopagamento varchar(200) null;
+	alter table lancamentoimportado add column quantidade integer default 1;
 	
     /*** Fim do bloco de atualizações da base ***/
     

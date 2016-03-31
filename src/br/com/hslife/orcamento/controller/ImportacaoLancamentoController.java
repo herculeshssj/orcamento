@@ -83,6 +83,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private boolean exibirInfoArquivo;
 	private InfoOFX infoArquivo;
 	private List<LancamentoConta> lancamentoContaACriarAtualizar;
+	private String tipoArquivo;
 	
 	private LancamentoImportado entity;
 	private List<LancamentoImportado> listEntity;
@@ -173,7 +174,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	
 	public void processarArquivo() {
 		if (arquivoAnexado == null || arquivoAnexado.getDados() == null || arquivoAnexado.getDados().length == 0) {
-			warnMessage("Carregue um arquivo OFX antes de processar!");			
+			warnMessage("Carregue um arquivo OFX/CSV antes de processar!");			
 		} else {
 			try {
 				getService().processarArquivoImportado(arquivoAnexado, contaSelecionada);
@@ -340,5 +341,13 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setSelecionarTodosLancamentos(boolean selecionarTodosLancamentos) {
 		this.selecionarTodosLancamentos = selecionarTodosLancamentos;
+	}
+
+	public String getTipoArquivo() {
+		return tipoArquivo;
+	}
+
+	public void setTipoArquivo(String tipoArquivo) {
+		this.tipoArquivo = tipoArquivo;
 	}
 }

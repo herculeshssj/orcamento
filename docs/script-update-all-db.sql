@@ -2392,3 +2392,10 @@ insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, requ
 	'ItemDespensa'
 	from
 	usuario;
+	
+-- Inclusão das colunas usadas para importação via CSV - Issue #178
+alter table lancamentoimportado add column observacao varchar(200) null;
+alter table lancamentoimportado add column categoria varchar(200) null;
+alter table lancamentoimportado add column favorecido varchar(200) null;
+alter table lancamentoimportado add column meiopagamento varchar(200) null;
+alter table lancamentoimportado add column quantidade integer default 1;

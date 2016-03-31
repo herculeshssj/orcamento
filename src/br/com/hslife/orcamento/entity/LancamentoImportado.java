@@ -94,6 +94,21 @@ public class LancamentoImportado extends EntityPersistence {
 	@Column(length=5, nullable=true)
 	private String moeda;
 	
+	@Column(length=200, nullable=true)
+	private String observacao;
+	
+	@Column(length=200, nullable=true)
+	private String categoria;
+	
+	@Column(length=200, nullable=true)
+	private String favorecido;
+	
+	@Column(length=200, nullable=true)
+	private String meiopagamento;
+	
+	@Column
+	private Integer quantidade = 1;
+	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
@@ -178,5 +193,45 @@ public class LancamentoImportado extends EntityPersistence {
 
 	public void setMoeda(String moeda) {
 		this.moeda = moeda;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+	public String getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(String favorecido) {
+		this.favorecido = favorecido;
+	}
+
+	public String getMeiopagamento() {
+		return meiopagamento;
+	}
+
+	public void setMeiopagamento(String meiopagamento) {
+		this.meiopagamento = meiopagamento;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
 	}
 }

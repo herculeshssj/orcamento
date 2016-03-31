@@ -66,6 +66,12 @@
 				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 			</h:selectOneMenu>					
 			
+			Tipo de arquivo:
+			<h:selectOneRadio value="#{managedBean.tipoArquivo}">
+				<f:selectItem itemLabel="OFX" itemValue="OFX"/>
+				<f:selectItem itemLabel="CSV" itemValue="CSV"/>
+			</h:selectOneRadio>
+			
 			Selecione o arquivo:
 			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>
 			
