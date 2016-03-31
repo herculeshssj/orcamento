@@ -282,26 +282,31 @@
 			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
      	</h:commandLink>				
 		<p:spacer width="20" />
+		
 		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO'}">
      		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
      	</h:commandLink>
      	<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento == 'ATIVO' and managedBean.operation == 'edit'}"/>
+     	
 		<h:commandLink title="Suspender lançamento" action="#{managedBean.suspenderLancamento}" rendered="#{managedBean.entity.statusLancamento == 'ATIVO' and managedBean.operation == 'edit'}">
 			<h:graphicImage id="imgSuspend" height="48" width="48" value="/resources/images/svg/bad_decision.svg"/>
 			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 		</h:commandLink>
 		<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento == 'SUSPENSO' and managedBean.operation == 'edit'}"/>
+		
 		<h:commandLink title="Ativar lançamento" action="#{managedBean.ativarLancamento}" rendered="#{managedBean.entity.statusLancamento == 'SUSPENSO' and managedBean.operation == 'edit'}">
 			<h:graphicImage id="imgActivate" height="48" width="48" value="/resources/images/svg/approve.svg"/>
 			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 		</h:commandLink>
 		<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento != 'ENCERRADO' and managedBean.operation == 'edit'}"/>
+		
 		<h:commandLink title="Encerrar lançamento" action="#{managedBean.encerrarLancamento}" rendered="#{managedBean.entity.statusLancamento != 'ENCERRADO' and managedBean.operation == 'edit'}">
 			<h:graphicImage id="imgFinish" height="48" width="48" value="/resources/images/svg/disapprove.svg"/>
 			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 		</h:commandLink>
 		<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento == 'ENCERRADO'}"/>
-		<h:commandLink title="Reativar lançamento" action="#{managedBean.reativarLancamento}" rendered="#{managedBean.entity.statusLancamento == 'ENCERRADO'}">
+		
+		<h:commandLink title="Reativar lançamento" action="#{managedBean.reativarLancamento}" rendered="#{managedBean.entity.statusLancamento == 'ENCERRADO' and managedBean.entity.tipoLancamentoPeriodico != 'PARCELADO'}">
 			<h:graphicImage id="imgReactivate" height="48" width="48" value="/resources/images/svg/make_decision.svg"/>
 			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 		</h:commandLink>
