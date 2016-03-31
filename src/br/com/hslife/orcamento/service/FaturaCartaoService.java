@@ -199,6 +199,12 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 			getRepository().update(faturaVencida);			
 		}
 		
+		// Verifica se a fatura possui saldo total e saldo devedor zerado
+		// Caso tenha, a fatura é automaticamento quitada
+		if (faturaCartao.getSaldoDevedor() == 0 && faturaCartao.getValorFatura() == 0) {
+			faturaCartao.setStatusFaturaCartao(StatusFaturaCartao.QUITADA);
+		}
+		
 		// Salva a fatura do cartão
 		getRepository().update(faturaCartao);
 		
