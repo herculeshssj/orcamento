@@ -176,7 +176,7 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		agendaRepository.save(agenda);
 		
 		Long esperado = 1l;
-		Long resultado = agendaRepository.countAgendamentoByDataInicioAndDataFimAndAlerta(new Date(), new Date(), true);
+		Long resultado = agendaRepository.countAgendamentoByDataInicioAndDataFimAndAlertaAndUsuario(new Date(), new Date(), true, usuario);
 		assertEquals(esperado, resultado);
 	}
 }

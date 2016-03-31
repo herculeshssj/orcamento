@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.model;
 
 import java.util.Date;
 
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 
 public class CriterioAgendamento {
@@ -59,6 +60,8 @@ public class CriterioAgendamento {
 	private Date fim;
 	
 	private TipoAgendamento tipo;
+	
+	private Usuario usuario;
 
 	public Date getInicio() {
 		return inicio;
@@ -90,5 +93,13 @@ public class CriterioAgendamento {
 
 	public void setTipo(TipoAgendamento tipo) {
 		this.tipo = tipo;
-	}	
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }

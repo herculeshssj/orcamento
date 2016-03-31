@@ -112,6 +112,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 				criterioBusca.getFim().setMinutes(59);
 				criterioBusca.getFim().setSeconds(59);
 			}
+			criterioBusca.setUsuario(getUsuarioLogado());
 			
 			listEntity = getService().buscarPorCriterioAgendamento(criterioBusca);
 		} catch (BusinessException be) {

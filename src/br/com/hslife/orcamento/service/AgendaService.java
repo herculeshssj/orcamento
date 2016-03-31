@@ -53,6 +53,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
@@ -72,6 +73,9 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 	
 	public AgendaRepository getRepository() {
 		return repository;
@@ -118,7 +122,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 		fim.setHours(23);
 		fim.setMinutes(59);
 		fim.setSeconds(59);
-		return getRepository().countAgendamentoByDataInicioOrDataFimAndAlerta(inicio, fim, true);
+		return getRepository().countAgendamentoByDataInicioOrDataFimAndAlerta(inicio, fim, true, usuarioComponent.getUsuarioLogado());
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -135,6 +139,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 		fim.setSeconds(59);
 		criterioBusca.setInicio(inicio);
 		criterioBusca.setFim(fim);
+		criterioBusca.setUsuario(usuarioComponent.getUsuarioLogado());
 		return getRepository().findByCriterioAgendamento(criterioBusca);
 	}
 }

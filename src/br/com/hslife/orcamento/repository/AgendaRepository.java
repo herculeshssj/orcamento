@@ -93,22 +93,28 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 			criteria.add(Restrictions.eq("tipoAgendamento", criterioBusca.getTipo()));
 		}
 		
+		if (criterioBusca.getUsuario() != null) {
+			criteria.add(Restrictions.eq("usuario.id", criterioBusca.getUsuario().getId()));
+		}
+		
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}
 	
-	public long countAgendamentoByDataInicioAndDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta) {
-		return (Long)getQuery("SELECT COUNT(*) FROM Agenda agenda WHERE agenda.inicio >= :inicio AND agenda.fim <= :fim AND agenda.emitirAlerta = :alerta")
+	public long countAgendamentoByDataInicioAndDataFimAndAlertaAndUsuario(Date inicio, Date fim, boolean emiteAlerta, Usuario usuario) {
+		return (Long)getQuery("SELECT COUNT(*) FROM Agenda agenda WHERE agenda.inicio >= :inicio AND agenda.fim <= :fim AND agenda.emitirAlerta = :alerta AND agenda.usuario.id = :idUsuario")
 				.setTimestamp("inicio", inicio)
 				.setTimestamp("fim", fim)
 				.setBoolean("alerta", emiteAlerta)
+				.setLong("idUsuario", usuario.getId())
 				.uniqueResult();
 	}
 	
-	public long countAgendamentoByDataInicioOrDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta) {
-		return (Long)getQuery("SELECT COUNT(*) FROM Agenda agenda WHERE ((agenda.inicio BETWEEN :inicio AND :fim) OR (agenda.fim BETWEEN :inicio AND :fim)) AND agenda.emitirAlerta = :alerta")
+	public long countAgendamentoByDataInicioOrDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta, Usuario usuario) {
+		return (Long)getQuery("SELECT COUNT(*) FROM Agenda agenda WHERE ((agenda.inicio BETWEEN :inicio AND :fim) OR (agenda.fim BETWEEN :inicio AND :fim)) AND agenda.emitirAlerta = :alerta AND agenda.usuario.id = :idUsuario")
 				.setTimestamp("inicio", inicio)
 				.setTimestamp("fim", fim)
 				.setBoolean("alerta", emiteAlerta)
+				.setLong("idUsuario", usuario.getId())
 				.uniqueResult();
 	}
 	
@@ -128,5 +134,5 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 				.setTimestamp("fim", fim)
 				.setBoolean("alerta", emiteAlerta)
 				.list();
-	}
+	}	
 }
