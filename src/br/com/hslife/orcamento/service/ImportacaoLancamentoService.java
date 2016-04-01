@@ -47,24 +47,19 @@
 package br.com.hslife.orcamento.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.ofx4j.domain.data.MessageSetType;
-import net.sf.ofx4j.domain.data.ResponseEnvelope;
-import net.sf.ofx4j.domain.data.ResponseMessageSet;
-import net.sf.ofx4j.domain.data.banking.BankStatementResponseTransaction;
-import net.sf.ofx4j.domain.data.banking.BankingResponseMessageSet;
-import net.sf.ofx4j.domain.data.common.Transaction;
-import net.sf.ofx4j.domain.data.creditcard.CreditCardResponseMessageSet;
-import net.sf.ofx4j.domain.data.creditcard.CreditCardStatementResponseTransaction;
-import net.sf.ofx4j.domain.data.signon.SignonResponse;
-import net.sf.ofx4j.io.AggregateUnmarshaller;
-
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +88,16 @@ import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.Util;
+import net.sf.ofx4j.domain.data.MessageSetType;
+import net.sf.ofx4j.domain.data.ResponseEnvelope;
+import net.sf.ofx4j.domain.data.ResponseMessageSet;
+import net.sf.ofx4j.domain.data.banking.BankStatementResponseTransaction;
+import net.sf.ofx4j.domain.data.banking.BankingResponseMessageSet;
+import net.sf.ofx4j.domain.data.common.Transaction;
+import net.sf.ofx4j.domain.data.creditcard.CreditCardResponseMessageSet;
+import net.sf.ofx4j.domain.data.creditcard.CreditCardStatementResponseTransaction;
+import net.sf.ofx4j.domain.data.signon.SignonResponse;
+import net.sf.ofx4j.io.AggregateUnmarshaller;
 
 @Service("importacaoLancamentoService")
 public class ImportacaoLancamentoService implements IImportacaoLancamento {
@@ -186,7 +191,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			
 				lc = new LancamentoConta();
 				
-				if (li.getValor() > 0) {
+				if (li.getValor() > 0 && (li.getTipo() != null && li.getTipo().equalsIgnoreCase("CREDITO"))) {
 					lc.setTipoLancamento(TipoLancamento.RECEITA);
 					lc.setCategoria(categoriaPadraoCredito);
 				} else {
@@ -261,7 +266,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			
 			Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 			
-			if (entity.getValor() > 0) {
+			if (entity.getValor() > 0 && (entity.getTipo() != null && entity.getTipo().equalsIgnoreCase("CREDITO"))) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
 				l.setCategoria(categoriaPadraoCredito);
 			} else {
@@ -570,5 +575,50 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		} catch (Exception e) {
 			throw new BusinessException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
+	}
+	
+	@Override
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws BusinessException, IOException {
+		// Declaração e leitura dos dados do CSV
+		final Reader reader = new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "UTF-8");
+		final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
+		
+		// Declaração das variáveis
+		LancamentoImportado lancamentoImportado = new LancamentoImportado();
+		
+		try {
+		
+			for (CSVRecord record : parser) {
+				
+				int quantidade = Integer.parseInt(record.get("QUANTIDADE"));
+				
+				lancamentoImportado.setConta(conta);
+				lancamentoImportado.setData(new SimpleDateFormat("yyyy-MM-dd").parse(record.get("DATA")));
+				lancamentoImportado.setHistorico(record.get("HISTORICO"));
+				lancamentoImportado.setValor(Double.parseDouble(record.get("VALOR")));
+				lancamentoImportado.setMoeda(record.get("MOEDA"));
+				lancamentoImportado.setDocumento(record.get("DOCUMENTO"));
+				lancamentoImportado.setObservacao(record.get("OBSERVACAO"));
+				lancamentoImportado.setCategoria(record.get("CATEGORIA"));
+				lancamentoImportado.setFavorecido(record.get("FAVORECIDO"));
+				lancamentoImportado.setMeiopagamento(record.get("MEIOPAGAMENTO"));
+								
+				// Insere o lançamento importado X vezes de acordo com o campo QUANTIDADE
+				for (int i = 1; i <= quantidade; i++) {
+					lancamentoImportado.setHash(Util.MD5(lancamentoImportado.hashForCSV(i)));
+					lancamentoImportadoRepository.save(lancamentoImportado);
+					lancamentoImportado.setId(null);
+				}
+			}
+		
+		} catch (Exception e) {
+			throw new BusinessException(e);
+		} finally {
+		
+			// Fecha os streams
+			parser.close();
+			reader.close();
+		}
+		
 	}
 }

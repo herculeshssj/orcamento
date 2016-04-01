@@ -106,8 +106,8 @@ public class LancamentoImportado extends EntityPersistence {
 	@Column(length=200, nullable=true)
 	private String meiopagamento;
 	
-	@Column
-	private Integer quantidade = 1;
+	@Column(length=10, nullable=true)
+	private String tipo;
 	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
@@ -123,7 +123,23 @@ public class LancamentoImportado extends EntityPersistence {
 	}
 	
 	public String getFullLabel() {
-		return null;
+		return Util.formataDataHora(this.data, Util.DATA) + " - " + this.moeda + " " + this.valor + " - " + this.historico;
+	}
+	
+	public String hashForCSV(int i) {
+		return new StringBuilder()
+				.append(this.data.toString())
+				.append(this.historico)
+				.append(this.documento)
+				.append(this.valor.toString())
+				.append(this.moeda)
+				.append(this.observacao)
+				.append(this.categoria)
+				.append(this.favorecido)
+				.append(this.meiopagamento)
+				.append(this.tipo)
+				.append("[" + i + "]")
+				.toString();
 	}
 
 	@Override
@@ -227,11 +243,11 @@ public class LancamentoImportado extends EntityPersistence {
 		this.meiopagamento = meiopagamento;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public String getTipo() {
+		return tipo;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 }

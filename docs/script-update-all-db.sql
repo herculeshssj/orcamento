@@ -2398,4 +2398,4 @@ alter table lancamentoimportado add column observacao varchar(200) null;
 alter table lancamentoimportado add column categoria varchar(200) null;
 alter table lancamentoimportado add column favorecido varchar(200) null;
 alter table lancamentoimportado add column meiopagamento varchar(200) null;
-alter table lancamentoimportado add column quantidade integer default 1;
+alter table lancamentoimportado add column tipo varchar(10) null;

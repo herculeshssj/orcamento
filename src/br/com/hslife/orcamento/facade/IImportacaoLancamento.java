@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.io.IOException;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Arquivo;
@@ -67,6 +68,8 @@ public interface IImportacaoLancamento {
 	public void excluirLancamentoImportado(LancamentoImportado entity) throws BusinessException;
 	
 	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException;
+	
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws BusinessException, IOException; 
 	
 	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException;
 	
