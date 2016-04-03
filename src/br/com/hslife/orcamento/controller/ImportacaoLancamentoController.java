@@ -180,11 +180,11 @@ public class ImportacaoLancamentoController extends AbstractController {
 				if (tipoArquivo.equalsIgnoreCase("OFX")) {
 					getService().processarArquivoImportado(arquivoAnexado, contaSelecionada);
 					infoArquivo = getService().obterInformacaoArquivoImportado(arquivoAnexado, contaSelecionada);
+					exibirInfoArquivo = true;
 				} else {
 					getService().processarArquivoCSVImportado(arquivoAnexado, contaSelecionada);
-				}
-				
-				exibirInfoArquivo = true;
+					exibirInfoArquivo = false;
+				}				
 				infoMessage("Arquivo processado com sucesso!");
 				find();
 			} catch (Exception e) {

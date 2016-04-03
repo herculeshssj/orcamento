@@ -52,6 +52,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -87,6 +88,7 @@ import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
+import br.com.hslife.orcamento.util.LancamentoContaComparator;
 import br.com.hslife.orcamento.util.Util;
 import net.sf.ofx4j.domain.data.MessageSetType;
 import net.sf.ofx4j.domain.data.ResponseEnvelope;
@@ -278,8 +280,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		}
 		if (lancamentos.isEmpty())
 			return lancamentos;
-		else
+		else {
+			// Ordena os lançamentos
+			Collections.sort(lancamentos, new LancamentoContaComparator());
 			return regraImportacaoComponent.processarRegras(conta, lancamentos);
+		}
 	}
 
 	@Override
