@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.primefaces.model.chart.BarChartModel;
@@ -74,6 +75,7 @@ import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("resumoMensalContasMB")
 @Scope("session")
@@ -121,8 +123,7 @@ public class ResumoMensalContasController extends AbstractController {
 	private boolean exibirPieCategoriaCredito = true;
 	private boolean exibirBarComparativo = true;
 	
-	private int mes;
-	private int ano;
+	private String mesAno;
 	
 	public ResumoMensalContasController() {
 		// Inicializa os gráficos com um valor default
@@ -153,8 +154,11 @@ public class ResumoMensalContasController extends AbstractController {
 				if (contaSelecionada.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO))
 					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaCartao);
 				else {
-					// TODO implementar a parte de geração das datas 
-					//resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, dataInicio, dataFim);
+					String[] dataParticionada = mesAno.split("/");
+					 
+					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, 
+							Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])), // Data inicial
+							Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]))); // Data final
 				}
 			else
 				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
@@ -344,20 +348,15 @@ public class ResumoMensalContasController extends AbstractController {
 		return faturas;
 	}
 	
-	public List<Integer> getListaMes() {
-		List<Integer> meses = new ArrayList<>();
-		for (int i = 1; i <= 12; i++) {
-			meses.add(i);
+	public List<String> getListaMesAno() {
+		List<String> mesAno = new LinkedList<>();
+		Calendar data = Calendar.getInstance();
+		for (int i = 0; i < 12; i++) {
+			data.add(Calendar.MONTH, -1);
+			String temp = data.get(Calendar.MONTH) + 1 + "/" + data.get(Calendar.YEAR);
+			mesAno.add(temp);
 		}
-		return meses;
-	}
-	
-	public List<Integer> getListaAno() {
-		List<Integer> anos = new ArrayList<>();
-		for (int i = Calendar.getInstance().get(Calendar.YEAR) + 5; i > Calendar.getInstance().get(Calendar.YEAR) - 6; i--) {
-			anos.add(i);
-		}
-		return anos;
+		return mesAno;
 	}
 	
 	public void atualizaListaFechamentoPeriodo() {
@@ -494,19 +493,11 @@ public class ResumoMensalContasController extends AbstractController {
 		this.exibirBarComparativo = exibirBarComparativo;
 	}
 
-	public int getMes() {
-		return mes;
+	public String getMesAno() {
+		return mesAno;
 	}
 
-	public void setMes(int mes) {
-		this.mes = mes;
-	}
-
-	public int getAno() {
-		return ano;
-	}
-
-	public void setAno(int ano) {
-		this.ano = ano;
+	public void setMesAno(String mesAno) {
+		this.mesAno = mesAno;
 	}
 }

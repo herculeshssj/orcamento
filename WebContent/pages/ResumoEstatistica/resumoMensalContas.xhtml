@@ -87,14 +87,9 @@
 				</h:panelGroup>
 				
 				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO' and managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'DEBITO'}">
-					<label>Mês:</label>
-					<h:selectOneMenu id="txtMes" value="#{managedBean.mes}">
-						<f:selectItems value="#{managedBean.listaMes}"/>
-					</h:selectOneMenu>
-					&nbsp;
-					<label>Ano:</label>
-					<h:selectOneMenu id="txtAno" value="#{managedBean.ano}">
-						<f:selectItems value="#{managedBean.listaAno}" />			
+					<label>Período:</label>
+					<h:selectOneMenu id="txtMesAno" value="#{managedBean.mesAno}">
+						<f:selectItems value="#{managedBean.listaMesAno}" />
 					</h:selectOneMenu>
 				</h:panelGroup>
 				
