@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.primefaces.model.chart.BarChartModel;
@@ -63,6 +64,7 @@ import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.Orcamento;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
@@ -119,6 +121,9 @@ public class ResumoMensalContasController extends AbstractController {
 	private boolean exibirPieCategoriaCredito = true;
 	private boolean exibirBarComparativo = true;
 	
+	private int mes;
+	private int ano;
+	
 	public ResumoMensalContasController() {
 		// Inicializa os gráficos com um valor default
 		pieCategoriaCredito = new PieChartModel();
@@ -145,7 +150,12 @@ public class ResumoMensalContasController extends AbstractController {
 		}
 		try {
 			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO))
-				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaCartao);
+				if (contaSelecionada.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO))
+					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaCartao);
+				else {
+					// TODO implementar a parte de geração das datas 
+					//resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, dataInicio, dataFim);
+				}
 			else
 				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
 			this.gerarGraficoCreditoDebito();
@@ -334,6 +344,22 @@ public class ResumoMensalContasController extends AbstractController {
 		return faturas;
 	}
 	
+	public List<Integer> getListaMes() {
+		List<Integer> meses = new ArrayList<>();
+		for (int i = 1; i <= 12; i++) {
+			meses.add(i);
+		}
+		return meses;
+	}
+	
+	public List<Integer> getListaAno() {
+		List<Integer> anos = new ArrayList<>();
+		for (int i = Calendar.getInstance().get(Calendar.YEAR) + 5; i > Calendar.getInstance().get(Calendar.YEAR) - 6; i--) {
+			anos.add(i);
+		}
+		return anos;
+	}
+	
 	public void atualizaListaFechamentoPeriodo() {
 		this.getListaFechamentoPeriodo();
 	}
@@ -466,5 +492,21 @@ public class ResumoMensalContasController extends AbstractController {
 
 	public void setExibirBarComparativo(boolean exibirBarComparativo) {
 		this.exibirBarComparativo = exibirBarComparativo;
+	}
+
+	public int getMes() {
+		return mes;
+	}
+
+	public void setMes(int mes) {
+		this.mes = mes;
+	}
+
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
 	}
 }

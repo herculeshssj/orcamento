@@ -78,11 +78,23 @@
 					</h:selectOneMenu>
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO'}">
+				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO' and managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'CREDITO'}">
 					<label>Fatura:</label>
 					<h:selectOneMenu id="txtFatura" value="#{managedBean.faturaCartao}" converter="entityConverter">
 						<f:selectItem itemLabel="Próximas faturas / Lançamento registrados" />
 						<f:selectItems value="#{managedBean.listaFaturaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					</h:selectOneMenu>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO' and managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'DEBITO'}">
+					<label>Mês:</label>
+					<h:selectOneMenu id="txtMes" value="#{managedBean.mes}">
+						<f:selectItems value="#{managedBean.listaMes}"/>
+					</h:selectOneMenu>
+					&nbsp;
+					<label>Ano:</label>
+					<h:selectOneMenu id="txtAno" value="#{managedBean.ano}">
+						<f:selectItems value="#{managedBean.listaAno}" />			
 					</h:selectOneMenu>
 				</h:panelGroup>
 				

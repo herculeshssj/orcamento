@@ -504,6 +504,33 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return resumoMensal;
 	}
 	
+	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, Date dataInicio, Date dataFim) throws BusinessException {
+		ResumoMensalContas resumoMensal = new ResumoMensalContas();
+		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+		
+		// Preenche os parâmetros de busca
+		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		criterioBusca.setConta(conta);
+		resumoMensal.setConta(conta);
+		
+		criterioBusca.setDataInicio(dataInicio);
+		criterioBusca.setDataFim(dataFim);
+		
+		// Realiza a busca
+		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+		
+		// Processa as categorias, favorecidos e meios de pagamento
+		resumoMensal.setCategoriasCartao(contaComponent.organizarLancamentosPorCategoria(lancamentos));
+		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		
+		// Seta no resumo o início e fim do período buscado
+		resumoMensal.setInicio(criterioBusca.getDataInicio());
+		resumoMensal.setFim(criterioBusca.getDataFim());
+		
+		return resumoMensal;
+	}
+	
 	@Override
 	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
