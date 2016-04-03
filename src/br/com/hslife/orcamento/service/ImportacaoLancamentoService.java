@@ -154,6 +154,48 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			default : throw new BusinessException("Opção inválida para conta!");
 		}
 	}
+	
+	private Categoria buscarCategoria(String categoriaImportada, Usuario usuario) throws BusinessException {
+		// Verifica se a categoria informada existe na base de dados
+		List<Categoria> categorias = categoriaRepository.findByDescricaoAndUsuario(categoriaImportada, usuario);
+		Categoria categoriaEncontrada = null;
+		for (Categoria c : categorias) {
+			if (c.getDescricao().contains(categoriaImportada)) {
+				categoriaEncontrada = c;
+				break;
+			}
+		}
+		
+		return categoriaEncontrada;
+	}
+	
+	private Favorecido buscarFavorecido(String favorecidoImportado, Usuario usuario) throws BusinessException {
+		// Verifica se o favorecido informado existe na base de dados
+		List<Favorecido> favorecidos = favorecidoRepository.findByNomeAndUsuario(favorecidoImportado, usuario);
+		Favorecido favorecidoEncontrado = null;
+		for (Favorecido f : favorecidos) {
+			if (f.getNome().contains(favorecidoImportado)) {
+				favorecidoEncontrado = f;
+				break;
+			}
+		}
+		
+		return favorecidoEncontrado;
+	}
+	
+	private MeioPagamento buscarMeioPagamento(String meioPagamentoImportada, Usuario usuario) throws BusinessException {
+		// Verifica se o meio de pagamento informado existe na base de dados
+		List<MeioPagamento> meiosPagamento = meioPagamentoRepository.findByDescricaoAndUsuario(meioPagamentoImportada, usuario);
+		MeioPagamento meioPagamentoEncontrado = null;
+		for (MeioPagamento m : meiosPagamento) {
+			if (m.getDescricao().contains(meioPagamentoImportada)) {
+				meioPagamentoEncontrado = m;
+				break;
+			}
+		}
+		
+		return meioPagamentoEncontrado;
+	}
 
 	@Override
 	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException {
@@ -193,13 +235,21 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				
 				if (li.getValor() > 0 && (li.getTipo() != null && li.getTipo().equalsIgnoreCase("CREDITO"))) {
 					lc.setTipoLancamento(TipoLancamento.RECEITA);
-					lc.setCategoria(categoriaPadraoCredito);
+					lc.setCategoria(this.buscarCategoria(li.getCategoria(), usuarioLogado) == null 
+							? categoriaPadraoCredito 
+							: this.buscarCategoria(li.getCategoria(), usuarioLogado));
 				} else {
 					lc.setTipoLancamento(TipoLancamento.DESPESA);
-					lc.setCategoria(categoriaPadraoDebito);
+					lc.setCategoria(this.buscarCategoria(li.getCategoria(), usuarioLogado) == null 
+							? categoriaPadraoDebito 
+							: this.buscarCategoria(li.getCategoria(), usuarioLogado));
 				}
-				lc.setFavorecido(favorecidoPadrao);
-				lc.setMeioPagamento(meioPagamentoPadrao);
+				lc.setFavorecido(this.buscarFavorecido(li.getFavorecido(), usuarioLogado) == null
+							? favorecidoPadrao
+							: this.buscarFavorecido(li.getFavorecido(), usuarioLogado));
+				lc.setMeioPagamento(this.buscarMeioPagamento(li.getMeiopagamento(), usuarioLogado) == null
+							? meioPagamentoPadrao
+							: this.buscarMeioPagamento(li.getMeiopagamento(), usuarioLogado));
 				
 				// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
 				lc.setMoeda(moedas.get(li.getMoeda()) == null ? moedaPadrao : moedas.get(li.getMoeda()));				
