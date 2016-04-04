@@ -78,6 +78,7 @@ import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.DetalheLancamentoComparator;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 
@@ -180,7 +181,7 @@ public class LancamentoConta extends EntityPersistence {
 	private LancamentoImportado lancamentoImportado;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
-	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamento.class)
+	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamentoComparator.class)
 	private SortedSet<DetalheLancamento> detalhes;
 	
 	public LancamentoConta() {
