@@ -78,17 +78,14 @@
 					</h:selectOneMenu>
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO' and managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'CREDITO'}">
-					<label>Fatura:</label>
-					<h:selectOneMenu id="txtFatura" value="#{managedBean.faturaCartao}" converter="entityConverter">
+				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO'}">
+					<label>Fatura/Período:</label>
+					<h:selectOneMenu id="txtFatura" value="#{managedBean.faturaCartao}" converter="entityConverter" rendered="#{managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'CREDITO'}">
 						<f:selectItem itemLabel="Próximas faturas / Lançamento registrados" />
 						<f:selectItems value="#{managedBean.listaFaturaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 					</h:selectOneMenu>
-				</h:panelGroup>
-				
-				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO' and managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'DEBITO'}">
-					<label>Período:</label>
-					<h:selectOneMenu id="txtMesAno" value="#{managedBean.mesAno}">
+					<h:selectOneMenu id="txtMesAno" value="#{managedBean.mesAno}" rendered="#{managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'DEBITO'}">
+						<f:selectItem itemLabel="Período atual"/>
 						<f:selectItems value="#{managedBean.listaMesAno}" />
 					</h:selectOneMenu>
 				</h:panelGroup>

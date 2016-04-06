@@ -53,6 +53,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -85,6 +86,7 @@ import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -149,6 +151,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private FechamentoPeriodo fechamentoPeriodo;
 	private FaturaCartao faturaCartao;
 	private Date dataFechamento;
+	private String mesAno;
 	
 	private List<LancamentoPeriodico> lancamentosPeriodicos = new ArrayList<>();
 	
@@ -263,6 +266,29 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 			}
 			
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void findByPeriodoCartao() {
+		if (criterioBusca.getConta() == null) {
+			warnMessage("Informe a conta!");
+			return;
+		}
+		try {
+			if (mesAno == null || mesAno.isEmpty()) {
+				// Preguiça...
+				mesAno = (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR);
+			}
+			
+			String[] dataParticionada = mesAno.split("/");
+			
+			criterioBusca.setDataInicio(Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])));
+			criterioBusca.setDataFim(Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])));
+			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
+			
+			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -709,6 +735,17 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return faturas;
 	}
 	
+	public List<String> getListaMesAno() {
+		List<String> mesAno = new LinkedList<>();
+		Calendar data = Calendar.getInstance();
+		for (int i = 0; i < 12; i++) {
+			data.add(Calendar.MONTH, -1);
+			String temp = data.get(Calendar.MONTH) + 1 + "/" + data.get(Calendar.YEAR);
+			mesAno.add(temp);
+		}
+		return mesAno;
+	}
+	
 	public void atualizaListaFechamentoPeriodo() {
 		this.getListaFechamentoPeriodo();
 	}
@@ -953,5 +990,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 
 	public void setFaturaCartao(FaturaCartao faturaCartao) {
 		this.faturaCartao = faturaCartao;
+	}
+
+	public String getMesAno() {
+		return mesAno;
+	}
+
+	public void setMesAno(String mesAno) {
+		this.mesAno = mesAno;
 	}
 }

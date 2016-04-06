@@ -104,10 +104,14 @@
 				</h:panelGroup>
 				
 				<h:panelGroup rendered="#{managedBean.criterioBusca.conta.tipoConta == 'CARTAO'}">
-					<label>Fatura:</label>
-					<h:selectOneMenu id="txtFatura" value="#{managedBean.faturaCartao}" converter="entityConverter">
+					<label>Fatura/Período:</label>
+					<h:selectOneMenu id="txtFatura" value="#{managedBean.faturaCartao}" converter="entityConverter" rendered="#{managedBean.criterioBusca.conta.cartaoCredito.tipoCartao == 'CREDITO'}">
 						<f:selectItem itemLabel="Próximas faturas / Lançamento registrados" />
 						<f:selectItems value="#{managedBean.listaFaturaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					</h:selectOneMenu>
+					<h:selectOneMenu id="txtMesAno" value="#{managedBean.mesAno}" rendered="#{managedBean.criterioBusca.conta.cartaoCredito.tipoCartao == 'DEBITO'}">
+						<f:selectItem itemLabel="Período atual"/>
+						<f:selectItems value="#{managedBean.listaMesAno}" />
 					</h:selectOneMenu>
 				</h:panelGroup>
 				
@@ -134,8 +138,11 @@
 				</h:panelGroup>
 				
 				<h:panelGroup rendered="#{managedBean.criterioBusca.conta.tipoConta == 'CARTAO'}">
-					<h:commandLink title="Selecionar" action="#{managedBean.findByFatura}">
+					<h:commandLink title="Selecionar" action="#{managedBean.findByFatura}" rendered="#{managedBean.criterioBusca.conta.cartaoCredito.tipoCartao == 'CREDITO'}">
 						<h:graphicImage id="imgSelectCartao" height="48" width="48" value="/resources/images/svg/advance.svg"/>
+					</h:commandLink>
+					<h:commandLink title="Selecionar" action="#{managedBean.findByPeriodoCartao}" rendered="#{managedBean.criterioBusca.conta.cartaoCredito.tipoCartao == 'DEBITO'}">
+						<h:graphicImage id="imgSelectCartaoDebito" height="48" width="48" value="/resources/images/svg/advance.svg"/>
 					</h:commandLink>
 					<h:commandLink title="Importar lançamentos" action="#{managedBean.importarLancamentos}">
 						<h:graphicImage id="imgImportCartao" height="48" width="48" value="/resources/images/svg/import.svg"/>

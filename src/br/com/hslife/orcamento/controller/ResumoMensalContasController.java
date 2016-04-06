@@ -154,6 +154,11 @@ public class ResumoMensalContasController extends AbstractController {
 				if (contaSelecionada.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO))
 					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaCartao);
 				else {
+					if (mesAno == null || mesAno.isEmpty()) {
+						// Preguiça...
+						mesAno = (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR);
+					}
+					
 					String[] dataParticionada = mesAno.split("/");
 					 
 					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, 
