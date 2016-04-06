@@ -235,7 +235,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			
 				lc = new LancamentoConta();
 				
-				if (li.getValor() > 0 && (li.getTipo() != null && li.getTipo().equalsIgnoreCase("CREDITO"))) {
+				if (li.getValor() > 0 || (li.getTipo() != null && li.getTipo().equalsIgnoreCase("CREDITO"))) {
 					lc.setTipoLancamento(TipoLancamento.RECEITA);
 					lc.setCategoria(this.buscarCategoria(li.getCategoria(), usuarioLogado) == null 
 							? categoriaPadraoCredito 
@@ -308,6 +308,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Override
 	public void importarLancamento(LancamentoImportado entity) throws BusinessException {
+		// Armazena o usuário logado para diminuir o acesso a base
+		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		
 		LancamentoConta l = lancamentoContaRepository.findByHash(entity.getHash());
 		if (l == null) {
 			// Cria um novo lançamento
@@ -321,12 +324,16 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			
 			Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 			
-			if (entity.getValor() > 0 && (entity.getTipo() != null && entity.getTipo().equalsIgnoreCase("CREDITO"))) {
+			if (entity.getValor() > 0 || (entity.getTipo() != null && entity.getTipo().equalsIgnoreCase("CREDITO"))) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
-				l.setCategoria(categoriaPadraoCredito);
+				l.setCategoria(this.buscarCategoria(entity.getCategoria(), usuarioLogado) == null 
+						? categoriaPadraoCredito 
+						: this.buscarCategoria(entity.getCategoria(), usuarioLogado));
 			} else {
 				l.setTipoLancamento(TipoLancamento.DESPESA);
-				l.setCategoria(categoriaPadraoDebito);
+				l.setCategoria(this.buscarCategoria(entity.getCategoria(), usuarioLogado) == null 
+						? categoriaPadraoDebito 
+						: this.buscarCategoria(entity.getCategoria(), usuarioLogado));
 			}
 			
 			// Seta o status do lançamento a ser inserido
@@ -336,8 +343,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			}
 			
-			l.setFavorecido(favorecidoPadrao);
-			l.setMeioPagamento(meioPagamentoPadrao);
+			l.setFavorecido(this.buscarFavorecido(entity.getFavorecido(), usuarioLogado) == null
+					? favorecidoPadrao
+					: this.buscarFavorecido(entity.getFavorecido(), usuarioLogado));
+			l.setMeioPagamento(this.buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado) == null
+					? meioPagamentoPadrao
+					: this.buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado));
 			
 			l.setConta(entity.getConta());
 			l.setDataPagamento(entity.getData());
@@ -363,7 +374,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			l.setNumeroDocumento(entity.getDocumento());
 			l.setValorPago(Math.abs(entity.getValor()));
 			
-			if (entity.getValor() > 0) {
+			if (entity.getValor() > 0 || (entity.getTipo() != null && entity.getTipo().equalsIgnoreCase("CREDITO"))) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
 			} else {
 				l.setTipoLancamento(TipoLancamento.DESPESA);
