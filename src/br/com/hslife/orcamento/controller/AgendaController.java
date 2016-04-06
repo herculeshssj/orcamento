@@ -51,6 +51,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,15 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	public AgendaController() {
 		super(new Agenda());
 		moduleTitle = "Agendamentos";
+	}
+	
+	@Override
+	@PostConstruct
+	public String startUp() {
+		// Preenche os campos com a data atual
+		criterioBusca.setInicio(new Date());
+		criterioBusca.setFim(new Date());
+		return super.startUp();
 	}
 	
 	@Override
