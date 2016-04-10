@@ -66,9 +66,6 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 	private Endereco endereco = new Endereco();
 	
 	@Autowired
-	private PessoalRepository pessoalRepository;
-	
-	@Autowired
 	private EnderecoRepository enderecoRepository;
 	
 	@Autowired

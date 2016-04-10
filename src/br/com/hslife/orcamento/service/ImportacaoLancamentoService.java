@@ -157,7 +157,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		}
 	}
 	
-	private Categoria buscarCategoria(String categoriaImportada, Usuario usuario) throws BusinessException {
+	private Categoria buscarCategoria(String categoriaImportada, TipoLancamento tipoLancamento, Usuario usuario) throws BusinessException {
 		// Verifica se a categoria informada existe na base de dados
 		List<Categoria> categorias = categoriaRepository.findByDescricaoAndUsuario(categoriaImportada, usuario);
 		Categoria categoriaEncontrada = null;
@@ -168,10 +168,17 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			}
 		}
 		
+		if (categoriaEncontrada == null) {
+			if (tipoLancamento.equals(TipoLancamento.RECEITA))
+				categoriaEncontrada = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuario, TipoCategoria.CREDITO);
+			else
+				categoriaEncontrada = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuario, TipoCategoria.DEBITO);
+		}
+		
 		return categoriaEncontrada;
 	}
 	
-	private Favorecido buscarFavorecido(String favorecidoImportado, Usuario usuario) throws BusinessException {
+	private Favorecido buscarFavorecido(String favorecidoImportado, Usuario usuario) throws BusinessException {		
 		// Verifica se o favorecido informado existe na base de dados
 		List<Favorecido> favorecidos = favorecidoRepository.findByNomeAndUsuario(favorecidoImportado, usuario);
 		Favorecido favorecidoEncontrado = null;
@@ -181,6 +188,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				break;
 			}
 		}
+		
+		if (favorecidoEncontrado == null) 
+			favorecidoEncontrado = favorecidoRepository.findDefaultByUsuario(usuario);
 		
 		return favorecidoEncontrado;
 	}
@@ -196,6 +206,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			}
 		}
 		
+		if (meioPagamentoEncontrado == null)
+			meioPagamentoEncontrado = meioPagamentoRepository.findDefaultByUsuario(usuario);
+		
 		return meioPagamentoEncontrado;
 	}
 
@@ -205,13 +218,6 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
-				
-		Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioLogado, TipoCategoria.CREDITO);
-		Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioLogado, TipoCategoria.DEBITO);
-		
-		Favorecido favorecidoPadrao = favorecidoRepository.findDefaultByUsuario(usuarioLogado);
-		
-		MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioLogado);
 		
 		// Itera a lista de todas as moedas existentes e guarda em um Map todas elas
 		// e na variável moedaPadrao a moeda padrão do usuário. 
@@ -237,21 +243,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				
 				if (li.getValor() > 0 || (li.getTipo() != null && li.getTipo().equalsIgnoreCase("CREDITO"))) {
 					lc.setTipoLancamento(TipoLancamento.RECEITA);
-					lc.setCategoria(this.buscarCategoria(li.getCategoria(), usuarioLogado) == null 
-							? categoriaPadraoCredito 
-							: this.buscarCategoria(li.getCategoria(), usuarioLogado));
+					lc.setCategoria(this.buscarCategoria(li.getCategoria(), lc.getTipoLancamento(), usuarioLogado));
 				} else {
 					lc.setTipoLancamento(TipoLancamento.DESPESA);
-					lc.setCategoria(this.buscarCategoria(li.getCategoria(), usuarioLogado) == null 
-							? categoriaPadraoDebito 
-							: this.buscarCategoria(li.getCategoria(), usuarioLogado));
+					lc.setCategoria(this.buscarCategoria(li.getCategoria(), lc.getTipoLancamento(), usuarioLogado));
 				}
-				lc.setFavorecido(this.buscarFavorecido(li.getFavorecido(), usuarioLogado) == null
-							? favorecidoPadrao
-							: this.buscarFavorecido(li.getFavorecido(), usuarioLogado));
-				lc.setMeioPagamento(this.buscarMeioPagamento(li.getMeiopagamento(), usuarioLogado) == null
-							? meioPagamentoPadrao
-							: this.buscarMeioPagamento(li.getMeiopagamento(), usuarioLogado));
+				
+				lc.setFavorecido(this.buscarFavorecido(li.getFavorecido(), usuarioLogado));			
+				lc.setMeioPagamento(this.buscarMeioPagamento(li.getMeiopagamento(), usuarioLogado));
 				
 				// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
 				lc.setMoeda(moedas.get(li.getMoeda()) == null ? moedaPadrao : moedas.get(li.getMoeda()));				
@@ -315,25 +314,15 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		if (l == null) {
 			// Cria um novo lançamento
 			l = new LancamentoConta();
-			Categoria categoriaPadraoCredito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.CREDITO);
-			Categoria categoriaPadraoDebito = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuarioComponent.getUsuarioLogado(), TipoCategoria.DEBITO);
-			
-			Favorecido favorecidoPadrao = favorecidoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
-			
-			MeioPagamento meioPagamentoPadrao = meioPagamentoRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 			
 			Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
 			
-			if (entity.getValor() > 0 || (entity.getTipo() != null && entity.getTipo().equalsIgnoreCase("CREDITO"))) {
+			if (entity.getValor() > 0) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
-				l.setCategoria(this.buscarCategoria(entity.getCategoria(), usuarioLogado) == null 
-						? categoriaPadraoCredito 
-						: this.buscarCategoria(entity.getCategoria(), usuarioLogado));
+				l.setCategoria(this.buscarCategoria(entity.getCategoria(), l.getTipoLancamento(), usuarioLogado));
 			} else {
 				l.setTipoLancamento(TipoLancamento.DESPESA);
-				l.setCategoria(this.buscarCategoria(entity.getCategoria(), usuarioLogado) == null 
-						? categoriaPadraoDebito 
-						: this.buscarCategoria(entity.getCategoria(), usuarioLogado));
+				l.setCategoria(this.buscarCategoria(entity.getCategoria(), l.getTipoLancamento(), usuarioLogado));
 			}
 			
 			// Seta o status do lançamento a ser inserido
@@ -343,12 +332,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			}
 			
-			l.setFavorecido(this.buscarFavorecido(entity.getFavorecido(), usuarioLogado) == null
-					? favorecidoPadrao
-					: this.buscarFavorecido(entity.getFavorecido(), usuarioLogado));
-			l.setMeioPagamento(this.buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado) == null
-					? meioPagamentoPadrao
-					: this.buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado));
+			l.setFavorecido(this.buscarFavorecido(entity.getFavorecido(), usuarioLogado));
+			l.setMeioPagamento(this.buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado));
 			
 			l.setConta(entity.getConta());
 			l.setDataPagamento(entity.getData());
@@ -374,7 +359,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			l.setNumeroDocumento(entity.getDocumento());
 			l.setValorPago(Math.abs(entity.getValor()));
 			
-			if (entity.getValor() > 0 || (entity.getTipo() != null && entity.getTipo().equalsIgnoreCase("CREDITO"))) {
+			if (entity.getValor() > 0) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
 			} else {
 				l.setTipoLancamento(TipoLancamento.DESPESA);

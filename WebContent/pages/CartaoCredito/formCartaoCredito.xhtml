@@ -91,54 +91,54 @@
 		</h:selectOneMenu>
 		
 		<p:outputPanel id="pnlCartaoCredito">
-		
-		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+				
 			<h:panelGroup>
 				<label for="frmFormEntity:txtLimiteCartao">Limite do cartão:</label>
 				<h:inputText id="txtLimiteCartao" value="#{managedBean.entity.limiteCartao}" size="10" disabled="#{!managedBean.entity.ativo}">
 					<f:convertNumber type="currency" pattern="###.##"/>
 				</h:inputText>
 			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtLimiteSaque">Limite para saque:</label>
-				<h:inputText id="txtLimiteSaque" value="#{managedBean.entity.limiteSaque}" size="10" disabled="#{!managedBean.entity.ativo}">
-					<f:convertNumber type="currency" pattern="###.##"/>
-				</h:inputText>
-			</h:panelGroup>
-		</h:panelGrid>
-		
-		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
-			<h:panelGroup>
-				<label for="frmFormEntity:txtJuros">Juros:</label>
-				<h:inputText id="txtJuros" value="#{managedBean.entity.juros}" size="10" disabled="#{!managedBean.entity.ativo}">
-					<f:convertNumber type="percent" pattern="###.##"/>
-				</h:inputText>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtMulta">Multa:</label>
-				<h:inputText id="txtMulta" value="#{managedBean.entity.multa}" size="10" disabled="#{!managedBean.entity.ativo}">
-					<f:convertNumber type="percent" pattern="###.##"/>
-				</h:inputText>
-			</h:panelGroup>
-		</h:panelGrid>
-		
-		<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">			
-			<h:panelGroup>
-				<label for="frmFormEntity:txtDiaFechamentoFatura">Dia de fechamento da fatura:</label>
-				<h:inputText id="txtDiaFechamentoFatura" value="#{managedBean.entity.diaFechamentoFatura}" size="5" disabled="#{!managedBean.entity.ativo}"/>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtDiaVencimentoFatura">Dia de vencimento da fatura:</label>
-				<h:inputText id="txtDiaVencimentoFatura" value="#{managedBean.entity.diaVencimentoFatura}" size="5" disabled="#{!managedBean.entity.ativo}"/>
-			</h:panelGroup>
-		</h:panelGrid>
-		
-		<h:panelGrid columns="4" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
-			<label for="frmFormEntity:txtMes">Validade:</label>
-			<h:inputText id="txtMes" value="#{managedBean.entity.mesValidade}" size="2" disabled="#{!managedBean.entity.ativo}"/>
-			<h:outputText value=" / " />
-			<h:inputText value="#{managedBean.entity.anoValidade}" size="4" disabled="#{!managedBean.entity.ativo}"/>
-		</h:panelGrid>	
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+				<h:panelGroup>
+					<label for="frmFormEntity:txtLimiteSaque">Limite para saque:</label>
+					<h:inputText id="txtLimiteSaque" value="#{managedBean.entity.limiteSaque}" size="10" disabled="#{!managedBean.entity.ativo}">
+						<f:convertNumber type="currency" pattern="###.##"/>
+					</h:inputText>
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+				<h:panelGroup>
+					<label for="frmFormEntity:txtJuros">Juros:</label>
+					<h:inputText id="txtJuros" value="#{managedBean.entity.juros}" size="10" disabled="#{!managedBean.entity.ativo}">
+						<f:convertNumber type="percent" pattern="###.##"/>
+					</h:inputText>
+				</h:panelGroup>
+				<h:panelGroup>
+					<label for="frmFormEntity:txtMulta">Multa:</label>
+					<h:inputText id="txtMulta" value="#{managedBean.entity.multa}" size="10" disabled="#{!managedBean.entity.ativo}">
+						<f:convertNumber type="percent" pattern="###.##"/>
+					</h:inputText>
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">			
+				<h:panelGroup>
+					<label for="frmFormEntity:txtDiaFechamentoFatura">Dia de fechamento da fatura:</label>
+					<h:inputText id="txtDiaFechamentoFatura" value="#{managedBean.entity.diaFechamentoFatura}" size="5" disabled="#{!managedBean.entity.ativo}"/>
+				</h:panelGroup>
+				<h:panelGroup>
+					<label for="frmFormEntity:txtDiaVencimentoFatura">Dia de vencimento da fatura:</label>
+					<h:inputText id="txtDiaVencimentoFatura" value="#{managedBean.entity.diaVencimentoFatura}" size="5" disabled="#{!managedBean.entity.ativo}"/>
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+				<label for="frmFormEntity:txtMes">Validade:</label>
+				<h:inputText id="txtMes" value="#{managedBean.entity.mesValidade}" size="2" disabled="#{!managedBean.entity.ativo}"/>
+				<h:outputText value=" / " />
+				<h:inputText value="#{managedBean.entity.anoValidade}" size="4" disabled="#{!managedBean.entity.ativo}"/>
+			</h:panelGrid>	
 		
 		</p:outputPanel>		
 

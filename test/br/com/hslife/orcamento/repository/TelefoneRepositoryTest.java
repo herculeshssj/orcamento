@@ -69,9 +69,6 @@ public class TelefoneRepositoryTest extends AbstractTestRepositories {
 	private Telefone telefone = new Telefone();
 	
 	@Autowired
-	private PessoalRepository pessoalRepository;
-	
-	@Autowired
 	private TelefoneRepository telefoneRepository;
 	
 	@Autowired

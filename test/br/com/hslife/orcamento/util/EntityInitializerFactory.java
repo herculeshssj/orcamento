@@ -89,7 +89,6 @@ public class EntityInitializerFactory {
 	}
 	
 	// Cria uma nova instância de RelatorioCustomizado
-	// TODO criar um builder que instancie todo o objeto, incluindo suas composições
 	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario) {
 		RelatorioCustomizado entity = new RelatorioCustomizado();
 		entity.setNome("Relatório de teste");

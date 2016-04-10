@@ -202,7 +202,6 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				mapFaturasEncontradas.clear();
 				
 				for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
-					// TODO criar uma opção de sistema que controla a quantidade de faturas a exibir
 					if (contFaturas <= 5) { 
 						listEntity.add(fatura);
 						

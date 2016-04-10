@@ -127,7 +127,7 @@ public class Arquivo extends EntityPersistence {
 	public void setOpcoesSistema(Map<String, Integer> opcoesSistema) {
 		this.opcoesSistema = opcoesSistema;
 	}
-	// TODO diminuir complexidade
+	
 	public boolean isPrazoExpirado() {
 		switch(this.container) {
 			case DOCUMENTOS : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS"));

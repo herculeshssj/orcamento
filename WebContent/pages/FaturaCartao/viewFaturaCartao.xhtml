@@ -102,8 +102,10 @@
 			</h:outputText>				
 		</h:panelGroup>
 		
-		Fatura anexa:
-		<h:commandButton title="Baixar arquivo" action="#{managedBean.baixarArquivo}" image="/resources/images/baixa.png"/>
+		<h:outputText value="Fatura anexa:" rendered="#{managedBean.entity.possuiAnexo}"/>
+		<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
+			<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+		</h:commandLink>
 		
 		Pagamento mínimo:
 		<h:panelGroup>

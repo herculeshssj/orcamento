@@ -46,6 +46,7 @@
 
   -->
 
+<!DOCTYPE project>
 <project name="Orçamento Doméstico" default="deploy">
 	
 	<!-- Carrega o arquivo de propriedades com os valores das variáveis -->

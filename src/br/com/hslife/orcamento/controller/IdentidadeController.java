@@ -98,7 +98,7 @@ public class IdentidadeController extends AbstractController {
 	@PostConstruct
 	public String startUp() {
 		try {
-			//TODO pode-se otimizar fazendo uma única chamada ao Service e usando uma cláusula if
+			//FIXME pode-se otimizar fazendo uma única chamada ao Service e usando uma cláusula if
 			/*
 			 * Exemplo: cpf = getService.buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
 			 * if (cpf == null) cpf = new Identidade(getUsuarioLogado(), TipoIdentidade.CPF);

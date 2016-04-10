@@ -88,8 +88,7 @@ public class AccessLoginPageListener implements PhaseListener{
 
 	@Override
 	public void beforePhase(PhaseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		// Nada a fazer		
 	}
 
 	@Override

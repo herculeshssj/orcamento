@@ -196,7 +196,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	}
 	
 	public boolean existsLinkagesCartao(Conta conta) {
-		// TODO implementar!!!!!!
+		// FIXME implementar!!!!!!
 		boolean result = false;
 		/*
 		BigInteger resultFechamentoPeriodo = (BigInteger)getSession().createSQLQuery("select count(id) from fechamentoperiodo where operacao = 'FECHAMENTO' and idContaBancaria = " + conta.getId()).uniqueResult();

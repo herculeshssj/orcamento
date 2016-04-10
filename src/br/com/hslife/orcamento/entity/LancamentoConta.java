@@ -319,6 +319,10 @@ public class LancamentoConta extends EntityPersistence {
 	public boolean isPossuiAnexo() {
 		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
 	}
+	
+	public boolean isHasDetalhes() {
+		return this.detalhes != null && !this.detalhes.isEmpty();
+	}
 
 	public void setId(Long id) {
 		this.id = id;

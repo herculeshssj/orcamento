@@ -61,10 +61,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IModeloDocumento;
-import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.facade.IRegraImportacao;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
@@ -74,16 +71,7 @@ public class ModeloDocumentoServiceTest extends AbstractTestServices {
 	private Usuario usuario = new Usuario();
 	
 	@Autowired
-	private IRegraImportacao regraImportacaoService;
-	
-	@Autowired
 	private IUsuario usuarioService;
-	
-	@Autowired
-	private IMoeda moedaService;
-	
-	@Autowired
-	private IConta contaService;
 	
 	@Autowired
 	private IModeloDocumento modeloDocumentoService;

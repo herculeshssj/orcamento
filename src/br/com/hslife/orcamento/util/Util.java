@@ -107,6 +107,8 @@ public class Util {
             md = MessageDigest.getInstance("SHA-256");
             BigInteger hash = new BigInteger(1, md.digest(texto.getBytes()));
             sen = hash.toString(16);
+        } catch (NullPointerException e) {
+        	e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -351,7 +353,7 @@ public class Util {
     		int diferenca = (texto.length() - limite) + 5;
     		
     		// Agora calcula-se o tamanho das Strings que ficarão à direita e à esquerda
-    		int tamanhoString = Math.round((texto.length() - diferenca) / 2);
+    		int tamanhoString = Math.round(new BigDecimal((texto.length() - diferenca) / 2).floatValue());
     		
     		// Agora se gera a parte da esquerda da String suprimida acrescido das reticências
     		textoSuprimido = texto.substring(0, tamanhoString) + " ... ";
