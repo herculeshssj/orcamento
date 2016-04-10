@@ -76,6 +76,7 @@ import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -151,6 +152,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		// Itera todas as contas do usuário
 		for (Conta conta : contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, new TipoConta[]{}, usuario, null)) { // resolvendo a ambiguidade do método
+			
+			// FIXME decidir como irei tratar o saldo atual dos cartões de débito
+			// Caso seja cartão de débito, passa adiante
+			if (conta.getTipoConta().equals(TipoConta.CARTAO) && conta.getCartaoCredito().getTipoCartao().equals(TipoCartao.DEBITO))
+				continue;
 			
 			// Define a descrição da conta
 			saldoAtual.setDescricaoConta(conta.getDescricao());
