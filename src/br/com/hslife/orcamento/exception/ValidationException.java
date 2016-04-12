@@ -48,31 +48,34 @@ package br.com.hslife.orcamento.exception;
 
 import br.com.hslife.orcamento.util.Util;
 
-public class BusinessException extends RuntimeException {
-	
-	private static final long serialVersionUID = -6615643150827475837L;
+public class ValidationException extends BusinessException {
 
-	public BusinessException() {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1049971770661470865L;
+
+	public ValidationException() {
 		super();
 	}
 
-	public BusinessException(String message) {
+	public ValidationException(String message) {
 		super(message);
 	}
 	
-	public BusinessException(Exception exception) {
+	public ValidationException(Exception exception) {
 		super(exception);
 	}
 	
-	public BusinessException(String message, Exception exception) {
+	public ValidationException(String message, Exception exception) {
 		super(message, exception);
 	}
 	
-	public BusinessException(String[] messages) {
+	public ValidationException(String[] messages) {
 		super(Util.montarString(messages));		
 	}
 	
-	public BusinessException(String[] messages, Exception exception) {
+	public ValidationException(String[] messages, Exception exception) {
 		super(Util.montarString(messages), exception);
 	}
 }

@@ -53,7 +53,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 
 @Component("categoriaDocumentoMB")
@@ -84,11 +83,7 @@ public class CategoriaDocumentoController extends AbstractCRUDController<Categor
 	
 	@Override
 	public void find() {
-		try {			
-			listEntity = getService().buscarPorDescricaoEUsuario(descricaoCategoria, getUsuarioLogado());		
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		listEntity = getService().buscarPorDescricaoEUsuario(descricaoCategoria, getUsuarioLogado());
 	}
 	
 	@Override

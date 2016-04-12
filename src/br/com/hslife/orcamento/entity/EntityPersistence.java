@@ -55,8 +55,6 @@ import javax.persistence.MappedSuperclass;
 
 import org.json.JSONObject;
 
-import br.com.hslife.orcamento.exception.BusinessException;
-
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class EntityPersistence implements Comparable<EntityPersistence>, Serializable {
@@ -65,7 +63,7 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	
 	public abstract String getLabel();
 	
-	public abstract void validate() throws BusinessException;
+	public abstract void validate();
 	/*
 	@Column(nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
