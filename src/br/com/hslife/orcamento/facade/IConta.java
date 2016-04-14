@@ -53,7 +53,6 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IConta extends ICRUDService<Conta> {
 	

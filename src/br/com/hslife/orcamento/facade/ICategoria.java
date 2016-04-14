@@ -52,7 +52,6 @@ import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface ICategoria extends ICRUDService<Categoria> {
 	

@@ -51,7 +51,6 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IRegraImportacao extends ICRUDService<RegraImportacao>{
 

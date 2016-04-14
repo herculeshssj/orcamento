@@ -53,7 +53,6 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IAgenda extends ICRUDService<Agenda> {
 	

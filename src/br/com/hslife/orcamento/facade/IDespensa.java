@@ -51,7 +51,6 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.Despensa;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IDespensa extends ICRUDService<Despensa> {
 	

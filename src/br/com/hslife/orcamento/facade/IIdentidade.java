@@ -52,7 +52,6 @@ import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IIdentidade extends ICRUDService<Identidade> {
 

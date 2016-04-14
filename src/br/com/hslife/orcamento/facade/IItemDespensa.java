@@ -53,7 +53,6 @@ import br.com.hslife.orcamento.entity.ItemDespensa;
 import br.com.hslife.orcamento.entity.MovimentoItemDespensa;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IItemDespensa extends ICRUDService<ItemDespensa> {
 	

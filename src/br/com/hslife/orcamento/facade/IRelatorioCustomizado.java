@@ -52,7 +52,6 @@ import java.util.Map;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface IRelatorioCustomizado extends ICRUDService<RelatorioCustomizado> {
 	

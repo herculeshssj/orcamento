@@ -62,7 +62,6 @@ import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	

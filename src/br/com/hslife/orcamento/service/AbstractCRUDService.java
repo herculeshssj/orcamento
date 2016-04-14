@@ -47,30 +47,29 @@
 package br.com.hslife.orcamento.service;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.repository.AbstractCRUDRepository;
 
 public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	
 	protected abstract AbstractCRUDRepository<E> getRepository();
 	
-	public void cadastrar(E entity) throws BusinessException {
+	public void cadastrar(E entity) {
 		getRepository().save(entity);		
 	}
 
-	public void alterar(E entity) throws BusinessException {
+	public void alterar(E entity) {
 		getRepository().update(entity);		
 	}
 
-	public void excluir(E entity) throws BusinessException {
+	public void excluir(E entity) {
 		getRepository().delete(entity);		
 	}
 
-	public E buscarPorID(Long id) throws BusinessException {
+	public E buscarPorID(Long id) {
 		return getRepository().findById(id);
 	}
 	
-	public void validar(E entity) throws BusinessException {
+	public void validar(E entity) {
 		entity.validate();
 	}
 }

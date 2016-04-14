@@ -51,7 +51,6 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.service.ICRUDService;
 
 
 public interface IUnidadeMedida extends ICRUDService<UnidadeMedida> {
