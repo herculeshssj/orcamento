@@ -117,39 +117,6 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		return component;
 	}
 
-	public void setComponent(UsuarioComponent component) {
-		this.component = component;
-	}
-	
-	public void setEmailComponent(EmailComponent emailComponent) {
-		this.emailComponent = emailComponent;
-	}
-	
-	public void setIdentidadeRepository(IdentidadeRepository identidadeRepository) {
-		this.identidadeRepository = identidadeRepository;
-	}
-
-	public void setBancoRepository(BancoRepository bancoRepository) {
-		this.bancoRepository = bancoRepository;
-	}
-
-	public void setCategoriaRepository(CategoriaRepository categoriaRepository) {
-		this.categoriaRepository = categoriaRepository;
-	}
-
-	public void setFavorecidoRepository(FavorecidoRepository favorecidoRepository) {
-		this.favorecidoRepository = favorecidoRepository;
-	}
-
-	public void setMeioPagamentoRepository(
-			MeioPagamentoRepository meioPagamentoRepository) {
-		this.meioPagamentoRepository = meioPagamentoRepository;
-	}
-
-	public void setMoedaRepository(MoedaRepository moedaRepository) {
-		this.moedaRepository = moedaRepository;
-	}
-
 	@Override
 	public void excluir(Usuario entity) throws BusinessException {
 		// Conta os registros de atividade do usuário.
@@ -232,7 +199,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 
 	@Override
-	public void cadastrar(Usuario entity, String novaSenha, String confirmaSenha) throws BusinessException {
+	public void cadastrar(Usuario entity, String novaSenha, String confirmaSenha) {
 		// Verifica se as senhas estão nulas ou vazias
 		if (Util.eVazio(novaSenha) || Util.eVazio(confirmaSenha)) {
 			throw new BusinessException("Senhas não podem estar vazias!");
@@ -256,7 +223,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public void alterar(Usuario entity, String novaSenha, String confirmaSenha) throws BusinessException {
+	public void alterar(Usuario entity, String novaSenha, String confirmaSenha) {
 		// Verifica se as senhas estão nulas ou vazias
 		if (Util.eVazio(novaSenha) || Util.eVazio(confirmaSenha)) {
 			throw new BusinessException("Senhas não podem estar vazias!");
@@ -277,7 +244,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public void efetuarRegistro(Usuario entity) throws BusinessException {
+	public void efetuarRegistro(Usuario entity) {
 		// Gera hash da data atual para extrair a senha
 		String hash = Util.MD5((new Date().toString()));
 		
@@ -309,7 +276,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public void recuperarSenha(Usuario entity) throws BusinessException {
+	public void recuperarSenha(Usuario entity) {
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		
 		if (u == null || u.getLogin().equals("admin")) {
@@ -372,7 +339,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		}		
 	}
 	
-	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws BusinessException {
+	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) {
 		try {
 			Usuario admin = getRepository().findByLogin("admin");
 			emailComponent.setRemetente(getComponent().getUsuarioLogado().getNome());
@@ -388,7 +355,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public List<Usuario> getListaUsuarios() throws BusinessException {
+	public List<Usuario> getListaUsuarios() {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		if (getComponent().getUsuarioLogado().getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
 			for (Usuario u : getRepository().findAll()) {
@@ -401,19 +368,17 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public Usuario buscarPorLogin(String login) throws BusinessException {
+	public Usuario buscarPorLogin(String login) {
 		return getRepository().findByLogin(login);
 	}
 	
 	@Override
-	public List<Usuario> buscarTodosPorLogin(String login) throws BusinessException {
+	public List<Usuario> buscarTodosPorLogin(String login) {
 		return getRepository().findAllByLogin(login);
 	}
 	
 	@Override
-	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) throws BusinessException {
+	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) {
 		return getRepository().findUserActivity(usuario);
 	}
-	
-	
 }

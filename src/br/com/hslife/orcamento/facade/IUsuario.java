@@ -50,26 +50,25 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 
 public interface IUsuario extends ICRUDService<Usuario> {
 	
-	public List<Usuario> getListaUsuarios() throws BusinessException;
+	public List<Usuario> getListaUsuarios();
 	
-	public Usuario buscarPorLogin(String login) throws BusinessException;
+	public Usuario buscarPorLogin(String login);
 	
-	public List<Usuario> buscarTodosPorLogin(String login) throws BusinessException;
+	public List<Usuario> buscarTodosPorLogin(String login);
 	
-	public void cadastrar(Usuario entity, String novaSenha, String confirmaSenha) throws BusinessException;
+	public void cadastrar(Usuario entity, String novaSenha, String confirmaSenha);
 	
-	public void alterar(Usuario entity, String novaSenha, String confirmaSenha) throws BusinessException;
+	public void alterar(Usuario entity, String novaSenha, String confirmaSenha);
 	
-	public void efetuarRegistro(Usuario entity) throws BusinessException;
+	public void efetuarRegistro(Usuario entity);
 	
-	public void recuperarSenha(Usuario entity) throws BusinessException;
+	public void recuperarSenha(Usuario entity);
 	
-	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) throws BusinessException;
+	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario);
 	
-	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws BusinessException;	
+	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem);	
 }

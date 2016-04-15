@@ -61,7 +61,6 @@ import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
 
 @Component("usuarioMB")
@@ -100,16 +99,12 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	}
 	
 	public void find() {
-		try {
-			if (getUsuarioLogado().getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
-				listEntity = getService().buscarTodosPorLogin(loginUsuario);
-			} else {
-				listEntity = new ArrayList<Usuario>();
-				listEntity.add(getUsuarioLogado());
-			}			
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		if (getUsuarioLogado().getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
+			listEntity = getService().buscarTodosPorLogin(loginUsuario);
+		} else {
+			listEntity = new ArrayList<Usuario>();
+			listEntity.add(getUsuarioLogado());
+		}			
 	}
 	
 	public String list() {
@@ -125,109 +120,78 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
 	}
 	
-	public String save() {
-		try {
-			if (entity.getId() == null) {
-				getService().cadastrar(entity, novaSenha, confirmaSenha);
-				infoMessage("Usuário cadastrado com sucesso!");
+	public String save() {		
+		if (entity.getId() == null) {
+			getService().cadastrar(entity, novaSenha, confirmaSenha);
+			infoMessage("Usuário cadastrado com sucesso!");
+		} else {
+			// Verifica se o usuário está tentando ativar somente sua conta
+			if (novaSenha != null & confirmaSenha != null) {
+				getService().alterar(entity, novaSenha, confirmaSenha);
 			} else {
-				// Verifica se o usuário está tentando ativar somente sua conta
-				if (novaSenha != null & confirmaSenha != null) {
-					getService().alterar(entity, novaSenha, confirmaSenha);
-				} else {
-					getService().alterar(entity);
-				}
-				
-				infoMessage("Usuário alterado com sucesso!");
-			}			
-			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-			if (listEntity != null && !listEntity.isEmpty()) {
-				// Inicializa os objetos
-				initializeEntity();
-				
-				// Obtém o valor da opção do sistema
-				OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-							
-				// Determina se a busca será executada novamente
-				if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-					find();
-				}
-			} else {
-				initializeEntity();
+				getService().alterar(entity);
 			}
-			return list();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+			
+			infoMessage("Usuário alterado com sucesso!");
+		}			
+		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
+		if (listEntity != null && !listEntity.isEmpty()) {
+			// Inicializa os objetos
+			initializeEntity();
+			
+			// Obtém o valor da opção do sistema
+			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
+						
+			// Determina se a busca será executada novamente
+			if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
+				find();
+			}
+		} else {
+			initializeEntity();
 		}
-		return "";
+		return list();		
 	}
 	
 	public void saveUser() {
-		try {
-			getService().alterar(entity, novaSenha, confirmaSenha);
-			infoMessage("Dados do usuário alterados com sucesso!");					
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		getService().alterar(entity, novaSenha, confirmaSenha);
+		infoMessage("Dados do usuário alterados com sucesso!");		
 	}
 	
 	@PostConstruct
 	public void startUpUser() {
-		try {
-			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin()); 
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());	
 	}
 	
 	public String edit() {
-		try {
-			entity = getService().buscarPorID(idEntity);
-			operation = "edit";
-			actionTitle = " - Editar";
-			return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
+		entity = getService().buscarPorID(idEntity);
+		operation = "edit";
+		actionTitle = " - Editar";
+		return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
 	}
 	
 	@Override
 	public String view() {
-		try {
-			// Obtém o relatório de atividades do usuário
-			mapAtividadeUsuario = getService().buscarAtividadeUsuario(getService().buscarPorID(idEntity));
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		// Obtém o relatório de atividades do usuário
+		mapAtividadeUsuario = getService().buscarAtividadeUsuario(getService().buscarPorID(idEntity));
 		return super.view();
 	}
 	
 	public void logarComo() {
-		try {
-			Usuario u = getService().buscarPorID(idEntity);
-			u.setNome(u.getNome() + "(admin)");
-			u.setLogado(true);
-			
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", u);
-			
-			infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
-			
-		} catch (Exception e) {
-			errorMessage(e.getMessage());
-		}
+		Usuario u = getService().buscarPorID(idEntity);
+		u.setNome(u.getNome() + "(admin)");
+		u.setLogado(true);
+		
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", u);
+		
+		infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
 	}
 	
 	public void deslogarComo() {
-		try {
-			Usuario u = getService().buscarPorID(idEntity);
-			
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioComponent.getUsuarioLogado());
-			
-			infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());
-		} catch (Exception e) {
-			errorMessage(e.getMessage());
-		}
+		Usuario u = getService().buscarPorID(idEntity);
+		
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioComponent.getUsuarioLogado());
+		
+		infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());		
 	}
 
 	public String getLoginUsuario() {

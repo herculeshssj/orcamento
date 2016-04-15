@@ -81,14 +81,10 @@ public class AjudaController extends AbstractController {
 	public void enviarMensagem() {
 		if (assuntoMensagem.isEmpty() || mensagem.isEmpty()) {
 			warnMessage("Informe o assunto e o texto da mensagem!");
-		} else {
-			try {
-				usuarioService.enviarMensagemParaAdmin(assuntoMensagem, mensagem);
-				infoMessage("Mensagem enviada com sucesso!");
-				initializeEntity();
-			} catch (Exception e) {
-				errorMessage(e.getMessage());
-			}
+		} else {			
+			usuarioService.enviarMensagemParaAdmin(assuntoMensagem, mensagem);
+			infoMessage("Mensagem enviada com sucesso!");
+			initializeEntity();			
 		}
 	}
 
