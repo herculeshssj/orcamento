@@ -61,7 +61,6 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 
@@ -107,27 +106,23 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void find() {
-		try {
-			// Caso a data de início ou fim estejam preenchidos, 
-			// seta o horário com o limite correspondente para
-			// cada um
-			if (criterioBusca.getInicio() != null) {
-				criterioBusca.getInicio().setHours(0);
-				criterioBusca.getInicio().setMinutes(0);
-				criterioBusca.getInicio().setSeconds(0);
-			}
-			
-			if (criterioBusca.getFim() != null) {
-				criterioBusca.getFim().setHours(23);
-				criterioBusca.getFim().setMinutes(59);
-				criterioBusca.getFim().setSeconds(59);
-			}
-			criterioBusca.setUsuario(getUsuarioLogado());
-			
-			listEntity = getService().buscarPorCriterioAgendamento(criterioBusca);
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}		
+		// Caso a data de início ou fim estejam preenchidos, 
+		// seta o horário com o limite correspondente para
+		// cada um
+		if (criterioBusca.getInicio() != null) {
+			criterioBusca.getInicio().setHours(0);
+			criterioBusca.getInicio().setMinutes(0);
+			criterioBusca.getInicio().setSeconds(0);
+		}
+		
+		if (criterioBusca.getFim() != null) {
+			criterioBusca.getFim().setHours(23);
+			criterioBusca.getFim().setMinutes(59);
+			criterioBusca.getFim().setSeconds(59);
+		}
+		criterioBusca.setUsuario(getUsuarioLogado());
+		
+		listEntity = getService().buscarPorCriterioAgendamento(criterioBusca);				
 	}
 	
 	@Override
@@ -150,34 +145,24 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	
 	@Override
 	public String edit() {		
-		try {
-			entity = (Agenda) getService().buscarPorID(idEntity);	
-			
-			if (entity.getInicio() != null) {
-				horaInicio = entity.extrairHora(entity.getInicio());
-				minutoInicio = entity.extrairMinuto(entity.getInicio());
-			}
-			if (entity.getFim() != null) {
-				horaFim = entity.extrairHora(entity.getFim());
-				minutoFim = entity.extrairMinuto(entity.getFim());
-			}
-			
-			operation = "edit";
-			actionTitle = " - Editar";
-			return goToFormPage;
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+		entity = (Agenda) getService().buscarPorID(idEntity);	
+		
+		if (entity.getInicio() != null) {
+			horaInicio = entity.extrairHora(entity.getInicio());
+			minutoInicio = entity.extrairMinuto(entity.getInicio());
 		}
-		return "";
+		if (entity.getFim() != null) {
+			horaFim = entity.extrairHora(entity.getFim());
+			minutoFim = entity.extrairMinuto(entity.getFim());
+		}
+		
+		operation = "edit";
+		actionTitle = " - Editar";
+		return goToFormPage;
 	}
 	
 	public Long getAgendamentosDeHoje() {
-		try {
-			return getService().contarAgendamentosDeHojeComAlerta();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return 0l;
+		return getService().contarAgendamentosDeHojeComAlerta();		
 	}
 	
 	public String getAgendaDoDia() {
@@ -186,13 +171,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	}
 	
 	public List<Agenda> getAgendamentosDoDia() {
-		List<Agenda> agendas = new ArrayList<Agenda>();
-		try {
-			return getService().buscarAgendamentosDoDia();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return agendas;
+		return getService().buscarAgendamentosDoDia();
 	}
 	
 	public List<Integer> getListaHoras() {

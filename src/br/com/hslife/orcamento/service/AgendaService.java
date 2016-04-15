@@ -58,7 +58,6 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
@@ -86,7 +85,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 	}
 	
 	@Override
-	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) throws BusinessException {
+	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) {
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		List<Agenda> agendamentos = new ArrayList<>();
 		Agenda agenda = new Agenda();
@@ -106,7 +105,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 	}
 	
 	@Override
-	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) throws BusinessException {
+	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) {
 		return getRepository().findByCriterioAgendamento(criterioBusca);
 	}
 	
@@ -126,7 +125,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 	}
 	
 	@SuppressWarnings("deprecation")
-	public List<Agenda> buscarAgendamentosDoDia() throws BusinessException {
+	public List<Agenda> buscarAgendamentosDoDia() {
 		CriterioAgendamento criterioBusca = new CriterioAgendamento();
 		Date inicio = new Date();
 		inicio.setHours(0);
