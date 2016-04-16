@@ -92,7 +92,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private boolean selecionarTodosLancamentos;
 
 	private String goToListPage = "";
-	
+	//FIXME remover try...catch
 	public ImportacaoLancamentoController() {
 		moduleTitle = "Importação de Lançamentos";
 	}

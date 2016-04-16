@@ -80,7 +80,7 @@ public class SaldoAtualContasController extends AbstractController {
 	private IMoeda moedaService;
 	
 	private boolean lancamentoAgendado = false;
-	
+	//FIXME remover try...catch
 	public SaldoAtualContasController() {
 		moduleTitle = "Saldo Atual das Contas";
 	}

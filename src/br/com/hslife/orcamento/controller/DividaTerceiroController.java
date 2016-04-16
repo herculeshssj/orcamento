@@ -103,7 +103,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	private enum VisualizacaoDocumento {
 		MODELO_DOCUMENTO, TERMO_DIVIDA, TERMO_QUITACAO, COMPROVANTE_PAGAMENTO, MODELO_COMPROVANTE;
 	}
-	
+	//FIXME remover try...catch
 	public DividaTerceiroController() {
 		super(new DividaTerceiro());
 		moduleTitle = "Dívida de Favorecidos";

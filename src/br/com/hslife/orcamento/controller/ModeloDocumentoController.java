@@ -76,7 +76,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 	private String descricaoModelo;
 	private String conteudoModelo;
 	private String statusSalvamento;
-
+	//FIXME remover try...catch
 	public ModeloDocumentoController() {
 		super(new ModeloDocumento());
 		

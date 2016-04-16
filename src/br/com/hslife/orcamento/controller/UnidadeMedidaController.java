@@ -69,7 +69,7 @@ public class UnidadeMedidaController extends AbstractCRUDController<UnidadeMedid
 	private IUnidadeMedida service;
 	
 	private String descricaoUnidade;
-
+	//FIXME remover try...catch
 	public UnidadeMedidaController() {
 		super(new UnidadeMedida());
 		moduleTitle = "Unidades de Medida";

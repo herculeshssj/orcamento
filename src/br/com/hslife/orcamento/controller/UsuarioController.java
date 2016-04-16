@@ -84,7 +84,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	private String confirmaSenha;
 	
 	private Map<String, Long> mapAtividadeUsuario = new HashMap<String, Long>();
-
+	// TODO testar pois foram removidos os try...catch e não se sabe se afetou alguma funcionalidade
 	public UsuarioController() {
 		super(new Usuario());
 		moduleTitle = "Usuários";

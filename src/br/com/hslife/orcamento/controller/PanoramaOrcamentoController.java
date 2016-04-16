@@ -92,7 +92,7 @@ public class PanoramaOrcamentoController extends AbstractController {
 	private boolean exibirGraficoCredito = false;
 	private boolean exibirGraficoDebito = false;
 	private boolean mostrarInformacao = false;
-
+	//FIXME remover try...catch
 	public PanoramaOrcamentoController() {
 		moduleTitle = "Panorama do Orçamento";
 	}

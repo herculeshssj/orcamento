@@ -64,7 +64,7 @@ public class RecuperarSenhaController {
 	private IUsuario service;
 	
 	private Usuario entity;
-	
+	//FIXME remover try...catch
 	public RecuperarSenhaController() {
 		entity = new Usuario();
 	}

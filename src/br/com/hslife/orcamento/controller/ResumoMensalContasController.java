@@ -124,7 +124,7 @@ public class ResumoMensalContasController extends AbstractController {
 	private boolean exibirBarComparativo = true;
 	
 	private String mesAno;
-	
+	//FIXME remover try...catch
 	public ResumoMensalContasController() {
 		// Inicializa os gráficos com um valor default
 		pieCategoriaCredito = new PieChartModel();

@@ -103,7 +103,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	private int totalItensListaCompra = 0;
 	private double totalValorListaCompra = 0.0;
 	private int totalItens;
-	
+	//FIXME remover try...catch
 	public ItemDespensaController() {
 		super(new ItemDespensa());
 		moduleTitle = "Itens de Despensa";

@@ -119,7 +119,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	private MeioPagamento meioPagamentoSelecionado;
 	
 	private String goToListContaPage = "/pages/LancamentoConta/listLancamentoConta";
-
+	//FIXME remover try...catch
 	public MovimentacaoLancamentoController() {
 		lancamentosSelecionados = new ArrayList<LancamentoConta>();
 		

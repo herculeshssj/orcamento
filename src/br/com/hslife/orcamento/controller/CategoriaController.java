@@ -71,7 +71,7 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 	
 	private TipoCategoria tipoCategoria;
 	private boolean somenteAtivos = true;
-	
+	//FIXME remover try...catch
 	public CategoriaController() {
 		super(new Categoria());
 		moduleTitle = "Categorias";

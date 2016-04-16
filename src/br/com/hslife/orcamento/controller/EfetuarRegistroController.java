@@ -64,7 +64,7 @@ public class EfetuarRegistroController {
 	private IUsuario service;
 	
 	private Usuario entity;
-	
+	//FIXME remover try...catch
 	public EfetuarRegistroController() {
 		entity = new Usuario();
 	}

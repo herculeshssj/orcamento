@@ -80,7 +80,7 @@ public class AuditoriaController extends AbstractController {
 	private Auditoria entity;
 	private List<Auditoria> listEntity;
 	private Long idEntity;
-
+	//FIXME remover try...catch
 	public AuditoriaController() {
 		criterio = new CriterioAuditoria();
 		

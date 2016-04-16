@@ -83,7 +83,7 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 		
 	private CategoriaDocumento categoriaSelecionada;
 	private String nomeDocumento;
-
+	//FIXME remover try...catch
 	public DocumentoController() {
 		super(new Documento());
 		

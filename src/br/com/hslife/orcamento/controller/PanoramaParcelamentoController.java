@@ -116,7 +116,7 @@ public class PanoramaParcelamentoController extends AbstractController {
 	
 	private double saldoCredor;
 	private double saldoDevedor;
-	
+	//FIXME remover try...catch
 	public PanoramaParcelamentoController() {
 		moduleTitle = "Panorama dos Parcelamento";
 	}

@@ -73,7 +73,7 @@ public class OpcaoSistemaController extends AbstractController {
 	private Map<String, Object> opcoesGlobal = new HashMap<String, Object>();
 	private Map<String, Object> opcoesGlobalAdmin = new HashMap<String, Object>();
 	private Map<String, Object> opcoesUser = new HashMap<String, Object>();
-	
+	//FIXME remover try...catch
 	public OpcaoSistemaController() {
 		
 	}

@@ -74,7 +74,7 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	
 	private String nomeFavorecido;
 	private boolean somenteAtivos = true;
-	
+	//FIXME remover try...catch
 	public FavorecidoController() {
 		super(new Favorecido());
 		moduleTitle = "Favorecido / Sacado";

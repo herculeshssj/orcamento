@@ -84,7 +84,7 @@ public class IdentidadeController extends AbstractController {
 	private Identidade passaporte;
 	
 	private List<Identidade> documentos = new ArrayList<>();
-
+	//FIXME remover try...catch
 	public IdentidadeController() {
 		moduleTitle = "Documentos de Identidade";
 	}

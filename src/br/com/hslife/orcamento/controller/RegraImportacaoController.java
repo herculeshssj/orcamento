@@ -93,7 +93,7 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 	private IMeioPagamento meioPagamentoService;
 	
 	private Conta contaSelecionada;
-	
+	//FIXME remover try...catch
 	public RegraImportacaoController() {
 		super(new RegraImportacao());
 	

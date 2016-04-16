@@ -70,7 +70,7 @@ public class MoedaController extends AbstractCRUDController<Moeda> {
 	
 	private String nomeMoeda;
 	private boolean somenteAtivos = true;
-	
+	//FIXME remover try...catch
 	public MoedaController() {
 		super(new Moeda());
 		moduleTitle = "Moeda";

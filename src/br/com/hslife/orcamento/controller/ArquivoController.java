@@ -95,7 +95,7 @@ public class ArquivoController extends AbstractController {
 	private AnexoEntidade entidadeSelecionada;
 	
 	private List<AnexoEntidade> listContainer;
-
+	//FIXME remover try...catch
 	public ArquivoController() {		
 		moduleTitle = "Arquivos Anexados";
 	}
