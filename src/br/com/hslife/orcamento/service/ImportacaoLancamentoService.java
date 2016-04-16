@@ -274,6 +274,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				lancamentos.add(lc);
 			} else {
 				lc.setSelecionado(false);
+				
+				// Seta o status do lançamento a ser atualizado
+				if (li.getData().after(new Date())) {
+					lc.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+				} else if (lc.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
+					lc.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+				}
+				
 				lancamentos.add(lc);
 			}
 		}
