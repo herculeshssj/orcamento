@@ -58,7 +58,6 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.InfoOFX;
@@ -92,7 +91,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private boolean selecionarTodosLancamentos;
 
 	private String goToListPage = "";
-	//FIXME remover try...catch
+	
 	public ImportacaoLancamentoController() {
 		moduleTitle = "Importação de Lançamentos";
 	}
@@ -113,11 +112,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	private void find() {
-		try {
-			listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);		
 	}
 	
 	public String create() {
@@ -133,21 +128,17 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public String confirmarImportacao() {
-		try {
-			// Altera a moeda dos lançamentos importados que foram alterados
-			for (LancamentoImportado li : getService().buscarLancamentoImportadoPorConta(contaSelecionada)) {
-				if (!li.getMoeda().equals(listEntity.get(listEntity.indexOf(li)).getMoeda())) {
-					// Salva o lançamento importado
-					getService().atualizarLancamentoImportado(listEntity.get(listEntity.indexOf(li)));
-				}
+		// Altera a moeda dos lançamentos importados que foram alterados
+		for (LancamentoImportado li : getService().buscarLancamentoImportadoPorConta(contaSelecionada)) {
+			if (!li.getMoeda().equals(listEntity.get(listEntity.indexOf(li)).getMoeda())) {
+				// Salva o lançamento importado
+				getService().atualizarLancamentoImportado(listEntity.get(listEntity.indexOf(li)));
 			}
-			
-			lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(contaSelecionada, getService().buscarLancamentoImportadoPorConta(contaSelecionada));
-			actionTitle = " - Confirmar";
-			
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
 		}
+		
+		lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(contaSelecionada, getService().buscarLancamentoImportadoPorConta(contaSelecionada));
+		actionTitle = " - Confirmar";
+		
 		return "/pages/ImportacaoLancamento/confirmarImportacao";
 	}
 	
@@ -194,35 +185,30 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public void excluirLancamentoImportado() {
-		try {
-			entity = getService().buscarPorID(idEntity);
-			getService().excluirLancamentoImportado(entity);
-			infoMessage("Lançamento excluído com sucesso!");
-			find();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		entity = getService().buscarPorID(idEntity);
+		getService().excluirLancamentoImportado(entity);
+		infoMessage("Lançamento excluído com sucesso!");
+		find();		
+	}
+	
+	public void apagarLancamentos() {
+		getService().apagarLancamentosImportados(contaSelecionada);
+		infoMessage("Lançamentos excluídos com sucesso!");
+		find();
 	}
 	
 	public void importarLancamento() {
-		try {
-			entity = getService().buscarPorID(idEntity);
-			getService().importarLancamento(entity);
-			infoMessage("Lançamento importado com sucesso!");
-			find();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		entity = getService().buscarPorID(idEntity);
+		getService().importarLancamento(entity);
+		infoMessage("Lançamento importado com sucesso!");
+		find();		
 	}
 	
 	public String processarLancamentos() {
-		try {
-			getService().processarLancamentos(contaSelecionada, lancamentoContaACriarAtualizar);
-			infoMessage("Lançamentos importados com sucesso!");
-			initializeEntity();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		getService().processarLancamentos(contaSelecionada, lancamentoContaACriarAtualizar);
+		infoMessage("Lançamentos importados com sucesso!");
+		initializeEntity();
+		
 		return goToListPage();
 	}
 	
@@ -252,12 +238,13 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public List<String> getListaCodigoMonetario() {
-		try {
-			return moedaService.buscarTodosCodigoMonetarioPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+		List<String> result = moedaService.buscarTodosCodigoMonetarioPorUsuario(getUsuarioLogado());
+		
+		if (result == null) {
+			return new ArrayList<>();
+		} else {
+			return result;
 		}
-		return new ArrayList<String>();
 	}
 	
 	public IImportacaoLancamento getService() {

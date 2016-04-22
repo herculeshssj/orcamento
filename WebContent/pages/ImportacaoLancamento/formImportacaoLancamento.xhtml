@@ -206,6 +206,9 @@
 		<h:commandLink id="lnkAvancar" title="Avançar" action="#{managedBean.confirmarImportacao}" immediate="true">
 			<h:graphicImage id="imgForward" height="48" width="48" value="/resources/images/svg/redo.svg"/>
 		</h:commandLink>
+		<h:commandLink title="Apagar lançamentos importados" action="#{managedBean.apagarLancamentos}">
+			<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
+		</h:commandLink>
 	</ui:define>
 		
 </ui:composition>

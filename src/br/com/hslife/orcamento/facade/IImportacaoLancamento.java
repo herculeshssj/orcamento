@@ -78,4 +78,6 @@ public interface IImportacaoLancamento {
 	public void importarLancamento(LancamentoImportado entity) throws BusinessException;
 	
 	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException;
+	
+	public void apagarLancamentosImportados(Conta conta);
 }

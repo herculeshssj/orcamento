@@ -682,4 +682,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		}
 		
 	}
+	
+	@Override
+	public void apagarLancamentosImportados(Conta conta) {
+		List<LancamentoImportado> lancamentos = lancamentoImportadoRepository.findByConta(conta);
+		for (LancamentoImportado li : lancamentos) {
+			lancamentoImportadoRepository.delete(li);
+		}
+	}
 }
