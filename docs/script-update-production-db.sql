@@ -91,12 +91,53 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Inclusão das colunas usadas para importação via CSV - Issue #178
-	alter table lancamentoimportado add column observacao varchar(200) null;
-	alter table lancamentoimportado add column categoria varchar(200) null;
-	alter table lancamentoimportado add column favorecido varchar(200) null;
-	alter table lancamentoimportado add column meiopagamento varchar(200) null;
-	alter table lancamentoimportado add column tipo varchar(10) null;
+	/*** Remoção das colunas de versionEntity - Github Issue #180 ***/
+
+	-- Agenda
+	alter table agenda drop column versionEntity;
+	
+	-- Cadastros
+	alter table banco drop column versionEntity;
+	alter table cartaocredito drop column versionEntity;
+	alter table categoria drop column versionEntity;
+	alter table favorecido drop column versionEntity;
+	alter table meiopagamento drop column versionEntity;
+	alter table moeda drop column versionEntity;
+	alter table conta drop column versionEntity;
+	alter table regraimportacao drop column versionEntity;
+	
+	-- Despensa
+	alter table despensa drop column versionEntity;
+	alter table itemdespensa drop column versionEntity;
+	alter table movimentoitemdespensa drop column versionEntity;
+	alter table unidademedida drop column versionEntity;
+	
+	-- Documentos
+	alter table arquivo drop column versionEntity;
+	alter table categoriadocumento drop column versionEntity;
+	alter table documento drop column versionEntity;
+	alter table endereco drop column versionEntity;
+	alter table identidade drop column versionEntity;
+	alter table modelodocumento drop column versionEntity;
+	alter table pessoal drop column versionEntity;
+	alter table telefone drop column versionEntity;
+	
+	-- Lançamentos
+	alter table conversaomoeda drop column versionEntity;
+	alter table detalhelancamento drop column versionEntity;
+	alter table detalheorcamento drop column versionEntity;
+	alter table dividaterceiro drop column versionEntity;
+	alter table faturacartao drop column versionEntity;
+	alter table fechamentoperiodo drop column versionEntity;
+	alter table lancamentoconta drop column versionEntity;
+	alter table lancamentoimportado drop column versionEntity;
+	alter table lancamentoperiodico drop column versionEntity;
+	alter table orcamento drop column versionEntity;
+	alter table pagamentodividaterceiro drop column versionEntity;
+	
+	-- Opções
+	alter table opcaosistema drop column versionEntity;
+	alter table usuario drop column versionEntity;
 	
     /*** Fim do bloco de atualizações da base ***/
     

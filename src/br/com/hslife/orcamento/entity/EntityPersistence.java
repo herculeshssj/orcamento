@@ -64,20 +64,7 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	public abstract String getLabel();
 	
 	public abstract void validate();
-	/*
-	@Column(nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	@Version
-	private Date versionEntity;
-	
-	public Date getVersionEntity() {
-		return versionEntity;
-	}
 
-	public void setVersionEntity(Date versionEntity) {
-		this.versionEntity = versionEntity;
-	}
-	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
