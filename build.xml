@@ -65,7 +65,7 @@
 	<target name="info">
 		<echo>Geração do build do projeto Orçamento Doméstico</echo>
 		<echo>Todos os direitos reservados a ${copyright}.</echo>
-		<echo>${website}.</echo>
+		<echo>${website}</echo>
 	</target>
 
 	<!-- Compilação dos arquivos fonte -->
