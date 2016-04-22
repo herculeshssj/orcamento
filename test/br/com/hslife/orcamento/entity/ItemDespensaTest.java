@@ -70,7 +70,7 @@ public class ItemDespensaTest {
 			entity.setMarca("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Marca favorita aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Marca favorita' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

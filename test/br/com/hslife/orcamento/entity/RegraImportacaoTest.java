@@ -71,7 +71,7 @@ public class RegraImportacaoTest {
 			entity.setTexto("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Texto a pesquisar aceita no máximo 100 caracteres!", be.getMessage());
+			assertEquals("Campo 'Texto a pesquisar' aceita no máximo 100 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -85,7 +85,7 @@ public class RegraImportacaoTest {
 			entity.setConta(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Conta não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Conta' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

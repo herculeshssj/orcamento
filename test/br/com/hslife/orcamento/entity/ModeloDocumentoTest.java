@@ -72,7 +72,7 @@ public class ModeloDocumentoTest {
 			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Descrição aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -85,7 +85,7 @@ public class ModeloDocumentoTest {
 			entity.setUsuario(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Usuário não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -99,7 +99,7 @@ public class ModeloDocumentoTest {
 			entity.setConteudo(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Conteúdo não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Conteúdo' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

@@ -102,7 +102,7 @@ public class DividaTerceiroTest {
 			entity.setDataNegociacao(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Data da negociação não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Data da negociação' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -116,7 +116,7 @@ public class DividaTerceiroTest {
 			entity.setJustificativa(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Justificativa não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Justificativa' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -134,7 +134,7 @@ public class DividaTerceiroTest {
 			entity.setJustificativa(s.toString());
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Justificativa aceita no máximo 4000 caracteres!", be.getMessage());
+			assertEquals("Campo 'Justificativa' aceita no máximo 4000 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -148,7 +148,7 @@ public class DividaTerceiroTest {
 			entity.setTipoCategoria(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Categoria da dívida não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Categoria da dívida' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -162,7 +162,7 @@ public class DividaTerceiroTest {
 			entity.setFavorecido(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Favorecido não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Favorecido' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -176,7 +176,7 @@ public class DividaTerceiroTest {
 			entity.setMoeda(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Moeda não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Moeda' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -190,7 +190,7 @@ public class DividaTerceiroTest {
 			entity.setUsuario(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Usuário não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -220,7 +220,7 @@ public class DividaTerceiroTest {
 				pagamento.setDataPagamento(null);
 				pagamento.validate();
 			} catch (BusinessException be) {
-				assertEquals("Campo Data do pagamento não pode ser nulo.", be.getMessage());
+				assertEquals("Campo 'Data do pagamento' não pode ser nulo.", be.getMessage());
 				continue;
 			} catch (Throwable t) {
 				fail(t.getMessage());

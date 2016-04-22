@@ -89,7 +89,7 @@ public class EnderecoTest {
 			entity.setTipoLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Tipo de logradouro aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Tipo de logradouro' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -103,7 +103,7 @@ public class EnderecoTest {
 			entity.setLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Logradouro aceita no máximo 150 caracteres!", be.getMessage());
+			assertEquals("Campo 'Logradouro' aceita no máximo 150 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -119,7 +119,7 @@ public class EnderecoTest {
 			entity.setNumero("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Número aceita no máximo 10 caracteres!", be.getMessage());
+			assertEquals("Campo 'Número' aceita no máximo 10 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -135,7 +135,7 @@ public class EnderecoTest {
 			entity.setComplemento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Complemento aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Complemento' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -149,7 +149,7 @@ public class EnderecoTest {
 			entity.setBairro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Bairro aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Bairro' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -163,7 +163,7 @@ public class EnderecoTest {
 			entity.setCidade("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Cidade aceita no máximo 100 caracteres!", be.getMessage());
+			assertEquals("Campo 'Cidade' aceita no máximo 100 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -177,7 +177,7 @@ public class EnderecoTest {
 			entity.setEstado("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Estado aceita exatamente 2 caracteres!", be.getMessage());
+			assertEquals("Campo 'Estado' aceita exatamente 2 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -193,7 +193,7 @@ public class EnderecoTest {
 			entity.setCep("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo CEP aceita exatamente 8 caracteres!", be.getMessage());
+			assertEquals("Campo 'CEP' aceita exatamente 8 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -207,7 +207,7 @@ public class EnderecoTest {
 			entity.setUsuario(null);
 			entity.validate();			
 		} catch (BusinessException be) {
-			assertEquals("Campo Usuário não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -221,7 +221,7 @@ public class EnderecoTest {
 			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Descrição aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

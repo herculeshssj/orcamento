@@ -77,7 +77,7 @@ public class RelatorioCustomizadoTest {
 			entity.setNome("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Nome aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Nome' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -90,7 +90,7 @@ public class RelatorioCustomizadoTest {
 			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Descrição aceita no máximo 200 caracteres!", be.getMessage());
+			assertEquals("Campo 'Descrição' aceita no máximo 200 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -103,7 +103,7 @@ public class RelatorioCustomizadoTest {
 			entity.setConsultaSQL(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Consulta SQL não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Consulta SQL' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -116,7 +116,7 @@ public class RelatorioCustomizadoTest {
 			entity.setUsuario(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Usuário não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

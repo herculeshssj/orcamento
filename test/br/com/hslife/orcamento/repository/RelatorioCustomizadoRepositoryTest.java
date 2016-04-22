@@ -187,6 +187,7 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 			}
 			i++;
 		}
+		// FIXME problema: SortedSet e TreeSet no atributo colunasRelatorio(). Elemento é inserido com ID null
 		assertEquals(3, i);
 		
 		i = 0;

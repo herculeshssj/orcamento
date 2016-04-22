@@ -102,7 +102,7 @@ public class RelatorioParametroTest {
 			entity.setNome("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Nome aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Nome' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -128,7 +128,7 @@ public class RelatorioParametroTest {
 			entity.setConsultaSQL(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Consulta SQL não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Consulta SQL' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -141,7 +141,7 @@ public class RelatorioParametroTest {
 			entity.setUsuario(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Usuário não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());

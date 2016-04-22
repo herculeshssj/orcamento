@@ -77,7 +77,7 @@ public class RelatorioColunaTest {
 			entity.setNomeColuna("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Nome da coluna aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Nome da coluna' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -90,7 +90,7 @@ public class RelatorioColunaTest {
 			entity.setTextoExibicao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Texto de exibição aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Texto de exibição' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -103,7 +103,7 @@ public class RelatorioColunaTest {
 			entity.setTipoDado(null);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Tipo de dado não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Tipo de dado' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -116,7 +116,7 @@ public class RelatorioColunaTest {
 			entity.setFormatar(true);
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Máscara de formatação não pode ser nulo.", be.getMessage());
+			assertEquals("Campo 'Máscara de formatação' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
@@ -130,7 +130,7 @@ public class RelatorioColunaTest {
 			entity.setMascaraFormatacao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
 		} catch (BusinessException be) {
-			assertEquals("Campo Máscara de formatação aceita no máximo 50 caracteres!", be.getMessage());
+			assertEquals("Campo 'Máscara de formatação' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
 			fail(t.getMessage());
