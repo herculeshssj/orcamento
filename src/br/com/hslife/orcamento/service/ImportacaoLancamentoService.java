@@ -129,26 +129,26 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	private RegraImportacaoComponent regraImportacaoComponent;
 
 	@Override
-	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException {
+	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) {
 		return lancamentoImportadoRepository.findByConta(conta);
 	}
 	
 	@Override
-	public void excluirLancamentoImportado(LancamentoImportado entity) throws BusinessException {
+	public void excluirLancamentoImportado(LancamentoImportado entity) {
 		lancamentoImportadoRepository.delete(entity);
 	}
 	
 	@Override
-	public void atualizarLancamentoImportado(LancamentoImportado entity) throws BusinessException {
+	public void atualizarLancamentoImportado(LancamentoImportado entity) {
 		lancamentoImportadoRepository.update(entity);		
 	}
 	
-	public LancamentoImportado buscarPorID(Long id) throws BusinessException {
+	public LancamentoImportado buscarPorID(Long id) {
 		return lancamentoImportadoRepository.findByID(id);
 	}
 	
 	@Override
-	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
+	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) {
 		switch (conta.getTipoConta()) {
 			case CORRENTE : this.processarArquivoImportadoContaCorrente(arquivo, conta); break;
 			case POUPANCA : this.processarArquivoImportadoContaPoupanca(arquivo, conta); break;
@@ -157,7 +157,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		}
 	}
 	
-	private Categoria buscarCategoria(String categoriaImportada, TipoLancamento tipoLancamento, Usuario usuario) throws BusinessException {
+	private Categoria buscarCategoria(String categoriaImportada, TipoLancamento tipoLancamento, Usuario usuario) {
 		// Verifica se a categoria informada existe na base de dados
 		List<Categoria> categorias = categoriaRepository.findByDescricaoAndUsuario(categoriaImportada, usuario);
 		Categoria categoriaEncontrada = null;
@@ -178,7 +178,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		return categoriaEncontrada;
 	}
 	
-	private Favorecido buscarFavorecido(String favorecidoImportado, Usuario usuario) throws BusinessException {		
+	private Favorecido buscarFavorecido(String favorecidoImportado, Usuario usuario) {		
 		// Verifica se o favorecido informado existe na base de dados
 		List<Favorecido> favorecidos = favorecidoRepository.findByNomeAndUsuario(favorecidoImportado, usuario);
 		Favorecido favorecidoEncontrado = null;
@@ -195,7 +195,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		return favorecidoEncontrado;
 	}
 	
-	private MeioPagamento buscarMeioPagamento(String meioPagamentoImportada, Usuario usuario) throws BusinessException {
+	private MeioPagamento buscarMeioPagamento(String meioPagamentoImportada, Usuario usuario) {
 		// Verifica se o meio de pagamento informado existe na base de dados
 		List<MeioPagamento> meiosPagamento = meioPagamentoRepository.findByDescricaoAndUsuario(meioPagamentoImportada, usuario);
 		MeioPagamento meioPagamentoEncontrado = null;
@@ -213,7 +213,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@Override
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException {
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		
@@ -296,7 +296,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@Override
-	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException {
+	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos) {
 		for (LancamentoConta l : lancamentos) {
 			if (l.isSelecionado()) {
 				if (l.getId() == null) {
@@ -315,7 +315,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void importarLancamento(LancamentoImportado entity) throws BusinessException {
+	public void importarLancamento(LancamentoImportado entity) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		
@@ -391,7 +391,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Override
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
+	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) {
 		InfoOFX info = new InfoOFX();
 		try {
 			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
@@ -436,7 +436,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) throws BusinessException {
+	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) {
 		try {
 			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
 			
@@ -514,7 +514,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) throws BusinessException {
+	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) {
 		try {
 			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
 			
@@ -592,7 +592,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) throws BusinessException {
+	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) {
 		try {
 			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
 			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
@@ -639,7 +639,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws BusinessException, IOException {
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws IOException {
 		// Declaração e leitura dos dados do CSV
 		final Reader reader = new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "UTF-8");
 		final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
