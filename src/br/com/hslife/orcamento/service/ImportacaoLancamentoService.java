@@ -262,7 +262,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				lc.setNumeroDocumento(li.getDocumento());
 				lc.setValorPago(Math.abs(li.getValor()));
 				lc.setHashImportacao(li.getHash());
-				lc.setSelecionado(true);
+				lc.setObservacao(li.getObservacao());
+				lc.setSelecionado(true);				
 				
 				// Seta o status do lançamento a ser inserido
 				if (li.getData().after(new Date())) {
@@ -350,6 +351,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			l.setNumeroDocumento(entity.getDocumento());
 			l.setValorPago(Math.abs(entity.getValor()));
 			l.setHashImportacao(entity.getHash());
+			l.setObservacao(entity.getObservacao());
 			l.setMoeda(moedaRepository.findCodigoMoedaByUsuario(entity.getMoeda(), usuarioComponent.getUsuarioLogado()) == null 
 					? moedaPadrao 
 					: moedaRepository.findCodigoMoedaByUsuario(entity.getMoeda(), usuarioComponent.getUsuarioLogado()));
