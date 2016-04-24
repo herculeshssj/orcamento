@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<JDBC name="databaseAppender" tableName="logs"
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="org.apache.log4j.xml" level="debug">
+			<AppenderRef ref="A1" />
+		</Logger>
+		<Root level="debug">
+			<AppenderRef ref="STDOUT" />
+		</Root>
+	</Loggers>
+</Configuration>
+
+<!-- 
+# Root logger option
+log4j.rootLogger=DEBUG, stdout, file
+
+# Redirect log messages to console
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+# Redirect log messages to a log file
+log4j.appender.file=org.apache.log4j.RollingFileAppender
+#outputs to Tomcat home
+log4j.appender.file.File=${catalina.home}/logs/myapp.log
+log4j.appender.file.MaxFileSize=5MB
+log4j.appender.file.MaxBackupIndex=10
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error">
+  <Appenders>
+    <JDBC name="databaseAppender" tableName="LOGGING.APPLICATION_LOG">
+      <ConnectionFactory class="net.example.db.ConnectionFactory" method="getDatabaseConnection" />
+      <Column name="EVENT_ID" literal="LOGGING.APPLICATION_LOG_SEQUENCE.NEXTVAL" />
+      <Column name="EVENT_DATE" isEventTimestamp="true" />
+      <Column name="LEVEL" pattern="%level" />
+      <Column name="LOGGER" pattern="%logger" />
+      <Column name="MESSAGE" pattern="%message" />
+      <Column name="THROWABLE" pattern="%ex{full}" />
+    </JDBC>
+  </Appenders>
+  <Loggers>
+    <Root level="warn">
+      <AppenderRef ref="databaseAppender"/>
+    </Root>
+  </Loggers>
+</Configuration>
+-->
