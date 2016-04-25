@@ -317,6 +317,7 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return false;
 	}
@@ -336,6 +337,7 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return false;
 	}
@@ -355,6 +357,7 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return 100; // valor padrão.
 	}
@@ -374,6 +377,7 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return "";
 	}
@@ -393,6 +397,7 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return false;
 	}
@@ -412,6 +417,7 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return 12; // valor padrão.
 	}
@@ -423,6 +429,7 @@ public class OpcaoSistemaComponent {
 				return Boolean.valueOf(opcao.getValor());
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return false;
 	}
@@ -436,8 +443,9 @@ public class OpcaoSistemaComponent {
 			return opcoes;
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
-		return opcoes; 
+		//return opcoes; 
 	}
 	
 	public Moeda getMoedaPadrao() {
@@ -453,8 +461,9 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
-		return null; // Este return nunca deve ser invocado.
+		//return null; // Este return nunca deve ser invocado.
 	}
 	
 	public Boolean getControlarEstoqueItemDespensa() {
@@ -472,6 +481,7 @@ public class OpcaoSistemaComponent {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new BusinessException(e);
 		}
 		return true;
 	}

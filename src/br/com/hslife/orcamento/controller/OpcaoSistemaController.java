@@ -55,7 +55,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 
 @Component("opcaoSistemaMB")
@@ -73,7 +72,7 @@ public class OpcaoSistemaController extends AbstractController {
 	private Map<String, Object> opcoesGlobal = new HashMap<String, Object>();
 	private Map<String, Object> opcoesGlobalAdmin = new HashMap<String, Object>();
 	private Map<String, Object> opcoesUser = new HashMap<String, Object>();
-	//FIXME remover try...catch
+
 	public OpcaoSistemaController() {
 		
 	}
@@ -103,36 +102,23 @@ public class OpcaoSistemaController extends AbstractController {
 	}
 	
 	private void carregarOpcoesUser() {
-		try {
-			opcoesUser = getService().buscarOpcoesUser(getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		opcoesUser = getService().buscarOpcoesUser(getUsuarioLogado());		
 	}
 
 	private void carregarOpcoesGlobalAdmin() {
-		try {
-			opcoesGlobalAdmin = getService().buscarOpcoesGlobalAdmin();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		opcoesGlobalAdmin = getService().buscarOpcoesGlobalAdmin();
 	}
 
 	private void carregarOpcoesGlobal() {
 		
 	}
 
-	public String save() {
-		try {
-			getService().salvarOpcoesGlobal(opcoesGlobal);
-			getService().salvarOpcoesGlobalAdmin(opcoesGlobalAdmin);
-			getService().salvarOpcoesUser(opcoesUser, getUsuarioLogado());
-			getService().atualizarCacheOpcoesSistema();
-			infoMessage("Opções salvas com sucesso!");
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}		
-		return "";
+	public void save() {
+		getService().salvarOpcoesGlobal(opcoesGlobal);
+		getService().salvarOpcoesGlobalAdmin(opcoesGlobalAdmin);
+		getService().salvarOpcoesUser(opcoesUser, getUsuarioLogado());
+		getService().atualizarCacheOpcoesSistema();
+		infoMessage("Opções salvas com sucesso!");
 	}
 
 	public IOpcaoSistema getService() {

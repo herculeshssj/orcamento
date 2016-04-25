@@ -2447,3 +2447,6 @@ alter table pagamentodividaterceiro drop column versionEntity;
 -- Opções
 alter table opcaosistema drop column versionEntity;
 alter table usuario drop column versionEntity;
+
+-- Inclusão do parâmetro API-KEY para o envio de e-mail via SendGrid - Github Issue #181
+insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso) values ('EMAIL_APIKEY', '', 'GLOBAL_ADMIN', true, true, true, 'STRING', 'email');

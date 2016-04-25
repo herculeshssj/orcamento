@@ -53,7 +53,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 
 @Service
@@ -66,27 +65,23 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		return component;
 	}
 
-	public void setComponent(OpcaoSistemaComponent component) {
-		this.component = component;
-	}
-
-	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) throws BusinessException {
+	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) {
 		getComponent().salvarOpcoesGlobal(opcoesSistema);
 	}
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException {
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) {
 		getComponent().salvarOpcoesGlobalAdmin(opcoesSistema);
 	}
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws BusinessException {
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) {
 		getComponent().salvarOpcoesUser(opcoesSistema, usuario);
 	}
 	
-	public Map<String, Object> buscarOpcoesGlobalAdmin() throws BusinessException {
+	public Map<String, Object> buscarOpcoesGlobalAdmin() {
 		return getComponent().buscarOpcoesGlobalAdmin();
 	}
 	
-	public Map<String, Object> buscarOpcoesUser(Usuario usuario) throws BusinessException {
+	public Map<String, Object> buscarOpcoesUser(Usuario usuario) {
 		return getComponent().buscarOpcoesUser(usuario);
 	}
 	

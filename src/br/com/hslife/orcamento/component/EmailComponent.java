@@ -72,6 +72,7 @@ public class EmailComponent {
 	private boolean usarSSL;
 	private String charset;
 	private String metodoEnvio;
+	private String apiKey;
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;	
@@ -107,7 +108,7 @@ public class EmailComponent {
 	private void populateParameters() {
 		Map<String, Object> parametros = opcaoSistemaComponent.buscarOpcoesGlobalAdminPorCDU("email");
 		servidor = (String)parametros.get("EMAIL_SERVIDOR");
-		porta = (Integer)parametros.get("EMAIL_PORTA");
+		porta = Integer.valueOf((String)parametros.get("EMAIL_PORTA"));
 		usuario = (String)parametros.get("EMAIL_USUARIO");
 		senha = (String)parametros.get("EMAIL_SENHA");
 		usarSSL = (Boolean)parametros.get("EMAIL_USAR_SSL");
@@ -115,10 +116,17 @@ public class EmailComponent {
 		metodoEnvio = (String)parametros.get("EMAIL_METODO_ENVIO");
 		remetente = (String)parametros.get("EMAIL_REMETENTE");
 		emailRemetente = (String)parametros.get("EMAIL_EMAIL_REMETENTE");
+		apiKey = (String)parametros.get("EMAIL_APIKEY");
 	}
 	
 	private void enviarEmailSendGrid() throws SendGridException {
-		SendGrid sendGrid = new SendGrid(usuario, senha);
+		SendGrid sendGrid;
+		// Verifica se o API KEY está preenchido
+		if (apiKey != null && !apiKey.trim().isEmpty()) {
+			sendGrid = new SendGrid(apiKey);
+		} else {
+			sendGrid = new SendGrid(usuario, senha);
+		}
 		
 		SendGrid.Email email = new SendGrid.Email();
 		email.addTo(emailDestinatario, destinatario);
