@@ -138,6 +138,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		
 		lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(contaSelecionada, getService().buscarLancamentoImportadoPorConta(contaSelecionada));
 		actionTitle = " - Confirmar";
+		selecionarTodosLancamentos = false;
 		
 		return "/pages/ImportacaoLancamento/confirmarImportacao";
 	}
