@@ -225,23 +225,27 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	
 	@Override
 	public void alterar(Usuario entity, String novaSenha, String confirmaSenha) {
-		// Verifica se as senhas estão nulas ou vazias
-		if (Util.eVazio(novaSenha) || Util.eVazio(confirmaSenha)) {
-			throw new BusinessException("Senhas não podem estar vazias!");
-		}
+		if (Util.eVazio(novaSenha) & Util.eVazio(confirmaSenha)) {
 		
-		if (novaSenha.equals(confirmaSenha)) {
-			Usuario u = getRepository().findById(entity.getId());
-			if (u.getSenha().equals(Util.SHA256(confirmaSenha))) {
-				throw new BusinessException("Nova senha não pode ser igual a senha atual!");
-			} else 
-				entity.setSenha(Util.SHA256(confirmaSenha));			
-		} else {
-			if (!novaSenha.equals(confirmaSenha)) {
-				throw new BusinessException("As senhas não coincidem!");
-			}			
+			// Verifica se as senhas estão nulas ou vazias
+			if (Util.eVazio(novaSenha) || Util.eVazio(confirmaSenha)) {
+				throw new BusinessException("Senhas não podem estar vazias!");
+			}
+			
+			if (novaSenha.equals(confirmaSenha)) {
+				Usuario u = getRepository().findById(entity.getId());
+				if (u.getSenha().equals(Util.SHA256(confirmaSenha))) {
+					throw new BusinessException("Nova senha não pode ser igual a senha atual!");
+				} else 
+					entity.setSenha(Util.SHA256(confirmaSenha));			
+			} else {
+				if (!novaSenha.equals(confirmaSenha)) {
+					throw new BusinessException("As senhas não coincidem!");
+				}			
+			}
+			getRepository().update(entity);
+			
 		}
-		getRepository().update(entity);
 	}
 	
 	@Override
