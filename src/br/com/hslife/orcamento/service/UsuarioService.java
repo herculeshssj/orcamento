@@ -139,6 +139,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			// Exclui as opções do sistema do usuário
 			opcaoSistemaComponent.excluirOpcoesUsuario(entity);
 			
+			//FIXME melhorar os ifs para poder eliminar os System.out.println()
 			// Exclui o banco padrão
 			if (bancoRepository.findDefaultByUsuario(entity) == null)
 				System.out.println("Não existe banco padrão.");

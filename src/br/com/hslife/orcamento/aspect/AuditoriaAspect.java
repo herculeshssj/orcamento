@@ -80,8 +80,6 @@ public class AuditoriaAspect {
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..save(..)) && args(entity)")
 	public void afterSave(EntityPersistence entity) {
-		//System.out.println("Salvamento detectado. Executando auditoria da classe " + entity.getClass().getName());
-		
 		Auditoria auditoria = new Auditoria();
 		
 		auditoria.setClasse(entity.getClass().getSimpleName());
@@ -116,15 +114,11 @@ public class AuditoriaAspect {
 		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
-		
-		//System.out.println("Auditoria realizada!");
 	}
 	
 	@AfterReturning("execution(public void br.com.hslife.orcamento.repository..update(..)) && args(entity)")
 	public void afterUpdate(EntityPersistence entity) {
 		try {
-			//System.out.println("Atualização detectada. Executando auditoria da classe " + entity.getClass().getName());
-			
 			Auditoria auditoria  = new Auditoria();
 			
 			auditoria.setClasse(entity.getClass().getSimpleName());
@@ -159,8 +153,6 @@ public class AuditoriaAspect {
 			auditoria.setDadosAuditados(entity.generateJsonValues());
 			
 			sessionFactory.getCurrentSession().persist(auditoria);
-			
-			//System.out.println("Auditoria realizada!");
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -168,8 +160,6 @@ public class AuditoriaAspect {
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..delete(..)) && args(entity)")
 	public void beforeDelete(EntityPersistence entity) {
-		//System.out.println("Exclusão detectada. Executando auditoria da classe " + entity.getClass().getName());
-				
 		Auditoria auditoria = new Auditoria();
 		
 		auditoria.setClasse(entity.getClass().getSimpleName());
@@ -203,7 +193,5 @@ public class AuditoriaAspect {
 		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
-		
-		//System.out.println("Auditoria realizada!");
 	}
 }

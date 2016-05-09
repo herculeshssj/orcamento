@@ -62,7 +62,7 @@ public class LancamentoContaComparator implements Comparator<LancamentoConta>{
 				}
 			}			
 		} catch (NullPointerException npe) {
-			System.out.println(npe.getMessage());
+			npe.printStackTrace();
 		}
 		return 0;
 	}

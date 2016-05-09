@@ -136,7 +136,6 @@ public class EmailComponent {
 		email.setText(mensagem);
 		
 		SendGrid.Response response = sendGrid.send(email);
-		System.out.println(response.getMessage());
 	}
 	
 	public void enviarEmail() throws EmailException, SendGridException {

@@ -66,7 +66,7 @@ public class ItemDespensaComparator implements Comparator<ItemDespensa>{
 				}
 			}			
 		} catch (NullPointerException npe) {
-			System.out.println(npe.getMessage());
+			npe.printStackTrace();
 		}
 		return 0;
 	}

@@ -62,7 +62,7 @@ public class DetalheOrcamentoComparator implements Comparator<DetalheOrcamento>{
 				}
 			}			
 		} catch (NullPointerException npe) {
-			System.out.println(npe.getMessage());
+			npe.printStackTrace();
 		}
 		return 0;
 	}
