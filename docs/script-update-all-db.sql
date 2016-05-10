@@ -2447,3 +2447,14 @@ alter table pagamentodividaterceiro drop column versionEntity;
 -- Opções
 alter table opcaosistema drop column versionEntity;
 alter table usuario drop column versionEntity;
+
+-- Logs com Log4J 2 - Github Issue #171
+create table logs (
+	id bigint not null auto_increment,
+	date datetime null,
+	level varchar(10) null,
+	logger varchar(500) null,
+	message text null,
+	throwable text null,
+	primary key(id)
+) Engine=InnoDB;
