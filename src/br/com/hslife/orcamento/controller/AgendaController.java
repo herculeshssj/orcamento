@@ -63,6 +63,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 
@@ -133,7 +134,8 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	@Override
 	public String create() {
 		entity.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
-		return super.create();
+		throw new BusinessException("Teste com exceção");
+		//return super.create();
 	}
 	
 	@Override
