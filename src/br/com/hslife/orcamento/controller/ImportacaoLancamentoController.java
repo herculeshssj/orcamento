@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.primefaces.event.FileUploadEvent;
@@ -61,6 +62,8 @@ import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.InfoOFX;
+import br.com.hslife.orcamento.util.LancamentoContaComparator;
+import br.com.hslife.orcamento.util.LancamentoImportadoComparator;
 
 @Component("importacaoLancamentoMB")
 @Scope("session")
@@ -112,7 +115,8 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	private void find() {
-		listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);		
+		listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
+		Collections.sort(listEntity, new LancamentoImportadoComparator());
 	}
 	
 	public String create() {
@@ -137,6 +141,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		}
 		
 		lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(contaSelecionada, getService().buscarLancamentoImportadoPorConta(contaSelecionada));
+		Collections.sort(lancamentoContaACriarAtualizar, new LancamentoContaComparator());
 		actionTitle = " - Confirmar";
 		selecionarTodosLancamentos = false;
 		
