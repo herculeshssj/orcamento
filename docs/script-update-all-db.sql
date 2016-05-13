@@ -2450,7 +2450,6 @@ alter table usuario drop column versionEntity;
 
 -- Inclusão do parâmetro API-KEY para o envio de e-mail via SendGrid - Github Issue #181
 insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, casoDeUso) values ('EMAIL_APIKEY', '', 'GLOBAL_ADMIN', true, true, true, 'STRING', 'email');
-alter table usuario drop column versionEntity;
 
 -- Logs com Log4J 2 - Github Issue #171
 create table logs (

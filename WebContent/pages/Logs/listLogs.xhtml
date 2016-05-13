@@ -56,79 +56,61 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{auditoriaMB}" />
-	<ui:param name="colunaPesquisa" value="7" />
+	<ui:param name="managedBean" value="#{logMB}" />
+	<ui:param name="colunaPesquisa" value="5" />
 	
 	<ui:define name="botoes"></ui:define>
 	
-	<ui:define name="parametro_pesquisa">
-		<h:panelGroup>
-			<label>Usuário:</label>
-			<h:selectOneMenu value="#{managedBean.criterio.usuario}" rendered="#{managedBean.usuarioLogado.login == 'admin'}">
-				<f:selectItem itemLabel="Todos"/>
-				<f:selectItems value="#{managedBean.listaUsuarios}" var="item" itemLabel="#{item.login}" itemValue="#{item.login}"/>
-			</h:selectOneMenu>
-		</h:panelGroup>
+	<ui:define name="parametro_pesquisa">		
 		<h:panelGroup>
 			<label for="frmListEntity:txtInicio">Início:</label>
-			<p:inputMask id="txtInicio" size="8" mask="99/99/9999" value="#{managedBean.criterio.inicio}">
+			<p:inputMask id="txtInicio" size="8" mask="99/99/9999" value="#{managedBean.criterioBusca.inicio}">
 		    	<f:converter converterId="dateConverter"/>
 		    </p:inputMask>
 	    </h:panelGroup>
 		<h:panelGroup>
 			<label for="frmListEntity:txtFim">Fim:</label>
-			<p:inputMask id="txtFim" size="8" mask="99/99/9999" value="#{managedBean.criterio.fim}">
+			<p:inputMask id="txtFim" size="8" mask="99/99/9999" value="#{managedBean.criterioBusca.fim}">
 		    	<f:converter converterId="dateConverter"/>
 		    </p:inputMask>
 	    </h:panelGroup>
 		<h:panelGroup>
-			<label>Classe:</label>
-			<h:selectOneMenu value="#{managedBean.criterio.classe}">
-				<f:selectItem itemLabel="Todos"/>
-				<f:selectItems value="#{managedBean.listaClasses}"/>
+			<label>Nível:</label>
+			<h:selectOneMenu value="#{managedBean.criterioBusca.logLevel}">
+				<f:selectItem itemLabel="Todos"/>				
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<h:panelGroup>
-			<label>Transação:</label>
-			<h:selectOneMenu value="#{managedBean.criterio.transacao}">
-				<f:selectItem itemLabel="Todos"/>
-				<f:selectItem itemLabel="Inserção" itemValue="INSERT"/>
-				<f:selectItem itemLabel="Alteração" itemValue="UPDATE"/>
-				<f:selectItem itemLabel="Exclusão" itemValue="DELETE"/>
+			<label>Logger:</label>
+			<h:selectOneMenu value="#{managedBean.criterioBusca.logger}">
+				<f:selectItem itemLabel="Todos"/>				
 			</h:selectOneMenu>
 		</h:panelGroup>
 	</ui:define>
-	
+
 	<ui:define name="pesquisa_avancada"></ui:define>
 
 	<ui:define name="tabela">
 		<p:dataTable id="sheetTableListEntity" width="100%" value="#{managedBean.listEntity}" var="item" style="font-size: 16px;">
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
-					<h:outputText value="Usuário" />
-				</f:facet>
-				<h:outputText value="#{item.usuario}" />
-			</p:column>
-	
-			<p:column style="text-align: center; vertical-align: middle;">
-				<f:facet name="header">
-					<h:outputText value="Classe" />
-				</f:facet>
-				<h:outputText value="#{item.classe}" />
-			</p:column>
-	
-			<p:column style="text-align: center; vertical-align: middle;">
-				<f:facet name="header">
 					<h:outputText value="Data" />
 				</f:facet>
-				<h:outputText value="#{item.dataHora}" />
+				<h:outputText value="#{item.logDate}" />
 			</p:column>
 			
 			<p:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
-					<h:outputText value="Transação" />
+					<h:outputText value="Nível" />
 				</f:facet>
-				<h:outputText value="#{item.transacao}" />
+				<h:outputText value="#{item.logLevel}" />
+			</p:column>
+			
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Logger" />
+				</f:facet>
+				<h:outputText value="#{item.logger}" />
 			</p:column>
 			
 			<p:column style="text-align: center; vertical-align: middle;" exportable="false">
@@ -153,11 +135,6 @@
 	</ui:define>
 	
 	<ui:define name="outras_opcoes">
-		<h:commandLink title="Exportar para MS-Excel">
-			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
-			<p:dataExporter type="xls" target="sheetTableListEntity" fileName="Auditoria" encoding="iso-8859-1"/> 
-		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
 		<h:commandLink title="Excluir registros" action="#{managedBean.excluirLog}">
 			<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
 		</h:commandLink>

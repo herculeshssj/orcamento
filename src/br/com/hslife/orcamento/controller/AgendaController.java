@@ -76,8 +76,6 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	 */
 	private static final long serialVersionUID = 8085348187243579495L;
 	
-	private static final Logger logger = LogManager.getLogger(AgendaController.class);
-	
 	private String descricaoAgendamento;
 	private TipoAgendamento tipoAgendamento;
 	private Date inicioAgendamento;
@@ -99,7 +97,6 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 		// Preenche os campos com a data atual
 		criterioBusca.setInicio(new Date());
 		criterioBusca.setFim(new Date());
-		logger.info("Entrou no módulo Agenda");
 		return super.startUp();
 	}
 	

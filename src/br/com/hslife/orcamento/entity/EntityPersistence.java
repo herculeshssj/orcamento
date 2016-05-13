@@ -55,6 +55,8 @@ import javax.persistence.MappedSuperclass;
 
 import org.json.JSONObject;
 
+import br.com.hslife.orcamento.exception.ValidationException;
+
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class EntityPersistence implements Comparable<EntityPersistence>, Serializable {
@@ -63,7 +65,7 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	
 	public abstract String getLabel();
 	
-	public abstract void validate();
+	public abstract void validate() throws ValidationException;
 
 	@Override
 	public int hashCode() {
