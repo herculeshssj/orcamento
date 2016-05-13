@@ -98,12 +98,6 @@
 			</h:commandLink>
 			<p:spacer width="10"/>
 			
-			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.login != 'admin'}">
-				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandLink>
-			<p:spacer width="10" rendered="#{item.login != 'admin'}"/>
-			
 			<h:commandLink title="Usar credenciais do usuário" action="#{managedBean.logarComo}" rendered="#{managedBean.usuarioLogado.login == 'admin' and item.login != 'admin'}">
 				<h:graphicImage id="imgPrivacy" height="48" width="48" value="/resources/images/svg/privacy.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>

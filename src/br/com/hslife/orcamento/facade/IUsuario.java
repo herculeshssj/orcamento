@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.facade;
 
 import java.util.List;
-import java.util.Map;
 
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -60,15 +59,9 @@ public interface IUsuario extends ICRUDService<Usuario> {
 	
 	public List<Usuario> buscarTodosPorLogin(String login);
 	
-	public void cadastrar(Usuario entity, String novaSenha, String confirmaSenha);
-	
-	public void alterar(Usuario entity, String novaSenha, String confirmaSenha);
-	
 	public void efetuarRegistro(Usuario entity);
 	
 	public void recuperarSenha(Usuario entity);
-	
-	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario);
 	
 	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem);	
 }

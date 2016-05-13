@@ -49,7 +49,6 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,18 +56,10 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.EmailComponent;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
-import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
-import br.com.hslife.orcamento.repository.BancoRepository;
-import br.com.hslife.orcamento.repository.CategoriaRepository;
-import br.com.hslife.orcamento.repository.FavorecidoRepository;
-import br.com.hslife.orcamento.repository.IdentidadeRepository;
-import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
-import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.UsuarioRepository;
 import br.com.hslife.orcamento.util.Util;
 
@@ -85,32 +76,10 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	private EmailComponent emailComponent;
 	
 	@Autowired
-	private IdentidadeRepository identidadeRepository;
-	
-	@Autowired
-	private BancoRepository bancoRepository;
-	
-	@Autowired
-	private CategoriaRepository categoriaRepository;
-	
-	@Autowired
-	private FavorecidoRepository favorecidoRepository;
-	
-	@Autowired
-	private MeioPagamentoRepository meioPagamentoRepository;
-	
-	@Autowired
-	private MoedaRepository moedaRepository;
-	
-	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
 
 	public UsuarioRepository getRepository() {
 		return repository;
-	}
-
-	public void setRepository(UsuarioRepository repository) {
-		this.repository = repository;
 	}
 
 	public UsuarioComponent getComponent() {
@@ -118,146 +87,25 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 
 	@Override
-	public void excluir(Usuario entity) throws BusinessException {
-		// Conta os registros de atividade do usuário.
-		long totalAtividade = 0;
-		Map<String, Long> atividadeUsuarioMap = this.buscarAtividadeUsuario(entity);
-		atividadeUsuarioMap.remove("IDENTIDADE");
-		atividadeUsuarioMap.remove("OPCAO_SISTEMA");
-		for (Long valor : atividadeUsuarioMap.values()) {
-			totalAtividade += valor;
+	public void cadastrar(Usuario entity) {		
+		// Verifica se o login informado já consta na base
+		Usuario u = getRepository().findByLogin(entity.getLogin());
+		if (u != null) {
+			throw new BusinessException("Login já cadastrado para outro usuário!");
 		}
 		
-		// Verifica se o total é igual a 6. Se for, não é possível excluir, caso contrário exclui os
-		// registros que faltam e logo em seguida exclui o usuário.
-		if (totalAtividade <= 6) {
-			// Exclui os documentos de identidade do usuário
-			for (Identidade identidade : identidadeRepository.findByUsuario(entity)) {
-				identidadeRepository.delete(identidade);
-			}
-		
-			// Exclui as opções do sistema do usuário
-			opcaoSistemaComponent.excluirOpcoesUsuario(entity);
-			
-			//FIXME melhorar os ifs para poder eliminar os System.out.println()
-			// Exclui o banco padrão
-			if (bancoRepository.findDefaultByUsuario(entity) == null)
-				System.out.println("Não existe banco padrão.");
-			else 				
-				bancoRepository.delete(bancoRepository.findDefaultByUsuario(entity));
-			
-			// Exclui o favorecido padrão
-			if (favorecidoRepository.findDefaultByUsuario(entity) == null)
-				System.out.println("Não existe favorecido padrão.");
-			else
-				favorecidoRepository.delete(favorecidoRepository.findDefaultByUsuario(entity));
-				
-			// Exclui o meio de pagamento padrão
-			if (meioPagamentoRepository.findDefaultByUsuario(entity) == null)
-				System.out.println("Não existe meio de pagamento padrão.");
-			else
-				meioPagamentoRepository.delete(meioPagamentoRepository.findDefaultByUsuario(entity));	
-			
-			// Exclui a moeda padrão
-			if (moedaRepository.findDefaultByUsuario(entity) == null)
-				System.out.println("Não existe moeda padrão.");
-			else
-				moedaRepository.delete(moedaRepository.findDefaultByUsuario(entity));
-			
-			// Exclui as categoria
-			if (categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.CREDITO) == null 
-					&& categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.DEBITO) == null)
-				System.out.println("Não existem categorias padrão.");
-			else {
-				categoriaRepository.delete(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.CREDITO));
-				categoriaRepository.delete(categoriaRepository.findDefaultByTipoCategoriaAndUsuario(entity, TipoCategoria.DEBITO));
-			}								
-			
-			// Exclui o usuário
-			super.excluir(entity);
-			
-			// Envia mensagem de e-mail avisando da exclusão da conta
-			StringBuilder mensagemEmail = new StringBuilder();
-			
-			mensagemEmail.append("Prezado " + entity.getNome() + "\n\n");
-			mensagemEmail.append("Sua conta foi excluída em virtude de inatividade no sistema.\n\n");
-			mensagemEmail.append("Caso queira voltar a utilizar o sistema, por favor efetuar novamente seu registro.\n\n");
-			mensagemEmail.append("Atenciosamente,\n\n");
-			mensagemEmail.append("Administrador do Sistema.\n");
-			
-			try {
-				emailComponent.setDestinatario(entity.getNome());
-				emailComponent.setEmailDestinatario(entity.getEmail());
-				emailComponent.setAssunto("Orçamento Doméstico - Exclusão de conta de usuário");
-				emailComponent.setMensagem(mensagemEmail.toString());
-				emailComponent.enviarEmail();
-			} catch (Exception e) {
-				e.printStackTrace();				
-			}
-		}
-		else 
-			throw new BusinessException("Não é possível excluir! Usuário possui atividade no sistema.");
-	}
-
-	@Override
-	public void cadastrar(Usuario entity, String novaSenha, String confirmaSenha) {
-		// Verifica se as senhas estão nulas ou vazias
-		if (Util.eVazio(novaSenha) || Util.eVazio(confirmaSenha)) {
-			throw new BusinessException("Senhas não podem estar vazias!");
-		}
-		
-		if (novaSenha.equals(confirmaSenha)) {
-			Usuario u = getRepository().findByLogin(entity.getLogin());
-			if (u != null) {
-				throw new BusinessException("Login já cadastrado para outro usuário!");
-			} else {
-				entity.setSenha(Util.SHA256(confirmaSenha));
-				getRepository().save(entity);
-				opcaoSistemaComponent.setarOpcoesPadraoUsuario(entity);
-			}
-		} else {
-			if (!novaSenha.equals(confirmaSenha)) {
-				throw new BusinessException("As senhas não coincidem!");
-			}
-			throw new BusinessException("Informe a senha do usuário!");
-		}
-	}
-	
-	@Override
-	public void alterar(Usuario entity, String novaSenha, String confirmaSenha) {
-		if (Util.eVazio(novaSenha) & Util.eVazio(confirmaSenha)) {
-		
-			// Verifica se as senhas estão nulas ou vazias
-			if (Util.eVazio(novaSenha) || Util.eVazio(confirmaSenha)) {
-				throw new BusinessException("Senhas não podem estar vazias!");
-			}
-			
-			if (novaSenha.equals(confirmaSenha)) {
-				Usuario u = getRepository().findById(entity.getId());
-				if (u.getSenha().equals(Util.SHA256(confirmaSenha))) {
-					throw new BusinessException("Nova senha não pode ser igual a senha atual!");
-				} else 
-					entity.setSenha(Util.SHA256(confirmaSenha));			
-			} else {
-				if (!novaSenha.equals(confirmaSenha)) {
-					throw new BusinessException("As senhas não coincidem!");
-				}			
-			}
-			getRepository().update(entity);
-			
-		}
+		getRepository().save(entity);
+		opcaoSistemaComponent.setarOpcoesPadraoUsuario(entity);
 	}
 	
 	@Override
 	public void efetuarRegistro(Usuario entity) {
-		// Gera hash da data atual para extrair a senha
-		String hash = Util.MD5((new Date().toString()));
-		
-		// Extrai do hash a senha aleatória do usuário
+		// Gera hash da data atual para poder gerar a senha aleatório do usuário
+		String hash = Util.MD5(new Date().toString());
 		String senha = hash.substring(0, 16);
+		entity.setSenha(Util.SHA256(senha));
 		
-		// invoca o método de cadastrar usuário
-		this.cadastrar(entity, senha, senha);
+		this.cadastrar(entity);
 		
 		// Efetua o envio do e-mail com a senha
 		StringBuilder mensagemEmail = new StringBuilder();
@@ -284,63 +132,64 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	public void recuperarSenha(Usuario entity) {
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		
-		if (u == null || u.getLogin().equals("admin")) {
+		// Verifica se o usuário informado existe, se não é o usuário admin, e se o e-mail informado coincide com o 
+		// cadastrado
+		if (u == null || u.getLogin().equals("admin") || !u.getEmail().equals(entity.getEmail())) {
 			throw new BusinessException("Login não encontrado!");
-		} else if (u.getEmail().equals(entity.getEmail())) {
-			// Antes de proceder com a alteração da senha, verifica se o usuário não se encontra inativo no sistema
-			if (!u.isAtivo()) {
-				// Envia mensagem de e-mail avisando que a conta está inativa
-				StringBuilder mensagemEmail = new StringBuilder();
-				
-				mensagemEmail.append("Prezado " + u.getNome() + "\n\n");
-				mensagemEmail.append("Sua conta encontra-se inativa.\n\n");
-				mensagemEmail.append("Caso queira voltar a utilizar o sistema e acessar novamente seus dados, por favor entre em contato.\n\n");
-				mensagemEmail.append("Atenciosamente,\n\n");
-				mensagemEmail.append("Administrador do Sistema.\n");
-				
-				try {
-					emailComponent.setDestinatario(u.getNome());
-					emailComponent.setEmailDestinatario(u.getEmail());
-					emailComponent.setAssunto("Orçamento Doméstico - Conta inativa");
-					emailComponent.setMensagem(mensagemEmail.toString());
-					emailComponent.enviarEmail();
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new BusinessException(e);
-				}
-				return;
-			}
-			
-			
-			// Gera hash da data atual para extrair a senha
-			String hash = Util.MD5((new Date().toString()));
-			
-			// Extrai do hash a senha aleatória do usuário
-			String senha = hash.substring(0, 16);
-			
-			// invoca o método de alterar usuário
-			this.alterar(u, senha, senha);
-			
-			// Efetua o envio do e-mail com a senha
+		}
+		
+		// Verifica se o usuário encontra-se ativo no sistema
+		if (!u.isAtivo()) {
+			// Envia mensagem de e-mail avisando que a conta está inativa
 			StringBuilder mensagemEmail = new StringBuilder();
 			
 			mensagemEmail.append("Prezado " + u.getNome() + "\n\n");
-			mensagemEmail.append("Segue abaixo a senha gerada:\n\n");
-			mensagemEmail.append("Senha: " + senha + "\n\n");
-			mensagemEmail.append("Caso tenha dificuldade de acesso entre em contato com o administrador para alterar sua senha.\n\n\n");
-			mensagemEmail.append("Administrador do Sistema");
+			mensagemEmail.append("Sua conta encontra-se inativa.\n\n");
+			mensagemEmail.append("Caso queira voltar a utilizar o sistema e acessar novamente seus dados, por favor entre em contato.\n\n");
+			mensagemEmail.append("Atenciosamente,\n\n");
+			mensagemEmail.append("Administrador do Sistema.\n");
 			
 			try {
 				emailComponent.setDestinatario(u.getNome());
 				emailComponent.setEmailDestinatario(u.getEmail());
-				emailComponent.setAssunto("Orçamento Doméstico - Recuperação de senha");
+				emailComponent.setAssunto("Orçamento Doméstico - Conta inativa");
 				emailComponent.setMensagem(mensagemEmail.toString());
 				emailComponent.enviarEmail();
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new BusinessException(e);
 			}
-		} else {
-			throw new BusinessException("E-Mail informado não confere com o cadastrado!");
+			return;
+		}
+			
+		// Gera hash da data atual para extrair a senha
+		String hash = Util.MD5((new Date().toString()));
+		
+		// Extrai do hash a senha aleatória do usuário
+		String senha = hash.substring(0, 16);
+		u.setSenha(Util.SHA256(senha));
+		u.setConfirmaSenha(u.getSenha());
+		
+		// invoca o método de alterar usuário
+		this.alterar(u);
+		
+		// Efetua o envio do e-mail com a senha
+		StringBuilder mensagemEmail = new StringBuilder();
+		
+		mensagemEmail.append("Prezado " + u.getNome() + "\n\n");
+		mensagemEmail.append("Segue abaixo a senha gerada:\n\n");
+		mensagemEmail.append("Senha: " + senha + "\n\n");
+		mensagemEmail.append("Caso tenha dificuldade de acesso entre em contato com o administrador para alterar sua senha.\n\n\n");
+		mensagemEmail.append("Administrador do Sistema");
+		
+		try {
+			emailComponent.setDestinatario(u.getNome());
+			emailComponent.setEmailDestinatario(u.getEmail());
+			emailComponent.setAssunto("Orçamento Doméstico - Recuperação de senha");
+			emailComponent.setMensagem(mensagemEmail.toString());
+			emailComponent.enviarEmail();
+		} catch (Exception e) {
+			throw new BusinessException(e);
 		}		
 	}
 	
@@ -380,10 +229,5 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	@Override
 	public List<Usuario> buscarTodosPorLogin(String login) {
 		return getRepository().findAllByLogin(login);
-	}
-	
-	@Override
-	public Map<String, Long> buscarAtividadeUsuario(Usuario usuario) {
-		return getRepository().findUserActivity(usuario);
 	}
 }

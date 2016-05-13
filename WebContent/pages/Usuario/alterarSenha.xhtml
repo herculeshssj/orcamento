@@ -60,39 +60,24 @@
 	<ui:define name="campos">
 
 		<h:panelGrid columns="2">
+		
+			<label for="frmFormEntity:txtSenhaAtual">Senha atual:</label>
+			<h:inputSecret id="txtSenhaAtual" value="#{managedBean.senhaAtual}" required="true" requiredMessage="Informe a senha atual!"/>
 			
-			Nome:
-			<h:inputText id="txtNome" value="#{managedBean.entity.nome}"/>
+			<label for="frmFormEntity:txtNovaSenha">Nova senha:</label>
+			<h:inputSecret id="txtNovaSenha" value="#{managedBean.novaSenha}" required="true" requiredMessage="Informe a nova senha!"/>
 			
-			Login:
-			<h:inputText id="txtLogin" value="#{managedBean.entity.login}" disabled="true" />
-			
-			E-Mail:
-			<h:inputText id="txtEmail" value="#{managedBean.entity.email}">
-				<f:validator validatorId="emailValidator"/>
-			</h:inputText>
-								
-			Data de criação:
-			<h:outputText id="txtDataCriacao" value="#{managedBean.entity.dataCriacao}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
-			Ativo:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true" />
+			<label for="frmFormEntity:txtConfirmaSenha">Confirma nova senha:</label>
+			<h:inputSecret id="txtConfirmaSenha" value="#{managedBean.confirmaSenha}" required="true" requiredMessage="Confirme a nova senha!"/>
 				
 		</h:panelGrid>
 
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.saveUser}">
+		<h:commandLink id="lnkOk" title="Alterar Senha" action="#{managedBean.alterarSenha}">
      		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
      	</h:commandLink>
-     	&nbsp;&nbsp;&nbsp;
-     	<h:commandLink title="Deslogar das credenciais do usuário" action="#{managedBean.deslogarComo}" rendered="#{managedBean.usuarioLogado.logado == true}">
-			<h:graphicImage id="imgLogout" height="48" width="48" value="/resources/images/svg/light_at_the_end_of_tunnel.svg"/>
-			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.usuarioLogado.id}"/>
-		</h:commandLink>
 	</ui:define>
 </ui:composition>
 </html>

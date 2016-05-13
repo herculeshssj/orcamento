@@ -61,6 +61,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="usuario")
@@ -96,6 +97,9 @@ public class Usuario extends EntityPersistence {
 	@Transient
 	private boolean logado;
 	
+	@Transient
+	private String confirmaSenha;
+	
 	public Usuario() {
 		dataCriacao = new Date();
 		ativo = true;
@@ -121,7 +125,9 @@ public class Usuario extends EntityPersistence {
 	
 	@Override
 	public void validate() {
-				
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Login", this.login, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("E-Mail", this.email, 40);
 	}
 	
 	public static class Builder {
@@ -243,5 +249,13 @@ public class Usuario extends EntityPersistence {
 
 	public void setLogado(boolean logado) {
 		this.logado = logado;
+	}
+
+	public String getConfirmaSenha() {
+		return confirmaSenha;
+	}
+
+	public void setConfirmaSenha(String confirmaSenha) {
+		this.confirmaSenha = confirmaSenha;
 	}
 }

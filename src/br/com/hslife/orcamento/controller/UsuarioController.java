@@ -50,7 +50,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +57,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
-import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.facade.IUsuario;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("usuarioMB")
 @Scope("session")
@@ -78,13 +76,14 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
-	private String loginUsuario;	
+	private String loginUsuario;
 	
+	private String senhaAtual;
 	private String novaSenha;
 	private String confirmaSenha;
 	
 	private Map<String, Long> mapAtividadeUsuario = new HashMap<String, Long>();
-	// TODO testar pois foram removidos os try...catch e não se sabe se afetou alguma funcionalidade
+
 	public UsuarioController() {
 		super(new Usuario());
 		moduleTitle = "Usuários";
@@ -94,17 +93,10 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	protected void initializeEntity() {
 		entity = new Usuario();
 		listEntity = new ArrayList<Usuario>();
-		novaSenha = "";
-		confirmaSenha = "";
 	}
 	
 	public void find() {
-		if (getUsuarioLogado().getTipoUsuario().equals(TipoUsuario.ROLE_ADMIN)) {
-			listEntity = getService().buscarTodosPorLogin(loginUsuario);
-		} else {
-			listEntity = new ArrayList<Usuario>();
-			listEntity.add(getUsuarioLogado());
-		}			
+		listEntity = getService().buscarTodosPorLogin(loginUsuario);			
 	}
 	
 	public String list() {
@@ -120,46 +112,27 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
 	}
 	
-	public String save() {		
+	@Override
+	public String save() {
 		if (entity.getId() == null) {
-			getService().cadastrar(entity, novaSenha, confirmaSenha);
-			infoMessage("Usuário cadastrado com sucesso!");
+			entity.setSenha(Util.SHA256(entity.getConfirmaSenha()));
 		} else {
-			// Verifica se o usuário está tentando ativar somente sua conta
-			if (novaSenha != null & confirmaSenha != null) {
-				getService().alterar(entity, novaSenha, confirmaSenha);
-			} else {
-				getService().alterar(entity);
-			}
-			
-			infoMessage("Usuário alterado com sucesso!");
-		}			
-		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-		if (listEntity != null && !listEntity.isEmpty()) {
-			// Inicializa os objetos
-			initializeEntity();
-			
-			// Obtém o valor da opção do sistema
-			OpcaoSistema opcao = getOpcoesSistema().buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", getUsuarioLogado());
-						
-			// Determina se a busca será executada novamente
-			if (opcao != null && Boolean.valueOf(opcao.getValor())) {					
-				find();
-			}
-		} else {
-			initializeEntity();
+			if (entity.getConfirmaSenha() != null && !entity.getConfirmaSenha().isEmpty()) {
+				entity.setSenha(Util.SHA256(entity.getConfirmaSenha()));
+			}		
 		}
-		return list();		
+		return super.save();
 	}
 	
 	public void saveUser() {
-		getService().alterar(entity, novaSenha, confirmaSenha);
+		getService().alterar(entity);
 		infoMessage("Dados do usuário alterados com sucesso!");		
 	}
 	
-	@PostConstruct
-	public void startUpUser() {
-		entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());	
+	public String minhaConta() {
+		entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
+		actionTitle = " - Minha Conta";
+		return "/pages/" + entity.getClass().getSimpleName() + "/minhaConta"; 
 	}
 	
 	public String edit() {
@@ -167,13 +140,6 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		operation = "edit";
 		actionTitle = " - Editar";
 		return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
-	}
-	
-	@Override
-	public String view() {
-		// Obtém o relatório de atividades do usuário
-		mapAtividadeUsuario = getService().buscarAtividadeUsuario(getService().buscarPorID(idEntity));
-		return super.view();
 	}
 	
 	public void logarComo() {
@@ -194,28 +160,60 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());		
 	}
 
+	public void efetuarRegistro() {
+		getService().efetuarRegistro(entity);
+		infoMessage("Usuário registrado com sucesso!");
+		infoMessage("Senha de acesso foi enviada para o e-mail informado.");
+		initializeEntity();
+	}
+	
+	public void recuperarSenha() {
+		getService().recuperarSenha(entity);
+		infoMessage("Senha alterada com sucesso!");
+		infoMessage("Senha de acesso foi envada para o e-mail cadastrado.");
+		initializeEntity();
+	}
+	
+	public String alterarSenhaView() {
+		entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
+		actionTitle = " - Alterar Senha";
+		return "/pages/" + entity.getClass().getSimpleName() + "/alterarSenha";
+	}
+	
+	public void alterarSenha() {
+		// Traz as credenciais do usuário da base
+		Usuario u = getService().buscarPorLogin(getUsuarioLogado().getLogin());
+		
+		// Verifica se a senha atual informada coincide com a armazenada na base
+		if (!Util.SHA256(senhaAtual).equals(u.getSenha())) {
+			warnMessage("Senha atual não confere!");
+			return;
+		}
+		
+		// Verifica se a nova senha é idêntica a atual
+		if (Util.SHA256(confirmaSenha).equals(u.getSenha())) {
+			warnMessage("Nova senha não pode ser igual a senha atual!");
+			return;
+		}
+		
+		// Verifica se as senhas digitadas são iguais
+		if (!Util.SHA256(confirmaSenha).equals(Util.SHA256(novaSenha))) {
+			warnMessage("As senhas não coincidem!");
+			return;
+		}
+		
+		// Seta a nova senha na entidade e salva na base
+		entity.setSenha(Util.SHA256(confirmaSenha));
+		getService().alterar(entity);
+		infoMessage("Senha alterada com sucesso!");
+	}
+	
 	public String getLoginUsuario() {
 		return loginUsuario;
 	}
 
 	public void setLoginUsuario(String loginUsuario) {
 		this.loginUsuario = loginUsuario;
-	}
-
-	public String getNovaSenha() {
-		return novaSenha;
-	}
-
-	public void setNovaSenha(String novaSenha) {
-		this.novaSenha = novaSenha;
-	}
-
-	public String getConfirmaSenha() {
-		return confirmaSenha;
-	}
-
-	public void setConfirmaSenha(String confirmaSenha) {
-		this.confirmaSenha = confirmaSenha;
 	}
 
 	public IUsuario getService() {
@@ -236,5 +234,29 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 
 	public void setMapAtividadeUsuario(Map<String, Long> mapAtividadeUsuario) {
 		this.mapAtividadeUsuario = mapAtividadeUsuario;
+	}
+
+	public String getSenhaAtual() {
+		return senhaAtual;
+	}
+
+	public void setSenhaAtual(String senhaAtual) {
+		this.senhaAtual = senhaAtual;
+	}
+
+	public String getNovaSenha() {
+		return novaSenha;
+	}
+
+	public void setNovaSenha(String novaSenha) {
+		this.novaSenha = novaSenha;
+	}
+
+	public String getConfirmaSenha() {
+		return confirmaSenha;
+	}
+
+	public void setConfirmaSenha(String confirmaSenha) {
+		this.confirmaSenha = confirmaSenha;
 	}
 }
