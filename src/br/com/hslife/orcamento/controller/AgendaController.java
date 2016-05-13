@@ -54,6 +54,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -61,6 +63,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 
@@ -72,6 +75,8 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	 * 
 	 */
 	private static final long serialVersionUID = 8085348187243579495L;
+	
+	private static final Logger logger = LogManager.getLogger(AgendaController.class);
 	
 	private String descricaoAgendamento;
 	private TipoAgendamento tipoAgendamento;
@@ -94,6 +99,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 		// Preenche os campos com a data atual
 		criterioBusca.setInicio(new Date());
 		criterioBusca.setFim(new Date());
+		logger.info("Entrou no módulo Agenda");
 		return super.startUp();
 	}
 	
@@ -128,7 +134,8 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	@Override
 	public String create() {
 		entity.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
-		return super.create();
+		throw new BusinessException("Teste com exceção");
+		//return super.create();
 	}
 	
 	@Override

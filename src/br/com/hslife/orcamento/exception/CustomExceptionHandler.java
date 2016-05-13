@@ -48,8 +48,6 @@ package br.com.hslife.orcamento.exception;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
@@ -61,12 +59,15 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /*
  * Tutorial: http://wmarkito.wordpress.com/2012/04/05/adding-global-exception-handling-using-jsf-2-x-exceptionhandler/
  */
 public class CustomExceptionHandler extends ExceptionHandlerWrapper {
 
-	private static final Logger log = Logger.getLogger(CustomExceptionHandler.class.getCanonicalName());
+	private static final Logger logger = LogManager.getLogger(CustomExceptionHandler.class);
     private ExceptionHandler wrapped;
  
     CustomExceptionHandler(ExceptionHandler exception) {
@@ -106,7 +107,8 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
             try {
  
                 //log error ?
-                log.log(Level.SEVERE, "Critical Exception!", t);
+            	logger.catching(t);
+                //log.log(Level.SEVERE, "Critical Exception!", t);
                 
                 // Iterate stackTrace to print on error page
                 StringBuilder stackTraceBuilder = new StringBuilder();

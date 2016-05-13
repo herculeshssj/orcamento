@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>		
+		<JDBC name="databaseAppender" tableName="logs">
+			<ConnectionFactory class="br.com.hslife.orcamento.repository.ConnectionFactory" method="getDatabaseConnection" />
+      		<Column name="date" isEventTimestamp="true" />
+      		<Column name="level" pattern="%level" />
+      		<Column name="logger" pattern="%logger" />
+      		<Column name="message" pattern="%message" />
+      		<Column name="throwable" pattern="%ex{full}" />
+		</JDBC>
+	</Appenders>
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="databaseAppender" />
+		</Root>
+	</Loggers>
+</Configuration>

@@ -56,6 +56,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import br.com.hslife.orcamento.enumeration.SituacaoOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -66,6 +69,8 @@ import br.com.hslife.orcamento.util.Util;
 @Table(name="detalheorcamento")
 @SuppressWarnings("serial")
 public class DetalheOrcamento extends EntityPersistence {
+	
+	private static final Logger logger = LogManager.getLogger(DetalheOrcamento.class);
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -153,6 +158,8 @@ public class DetalheOrcamento extends EntityPersistence {
 			return Util.arredondar( ((this.realizado == 0 ? 1 : this.realizado) / (this.previsao == 0 ? 1 : this.previsao)) * 100 ); 
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
+			logger.catching(nfe);
+			System.out.println("Houve divisão por zero, infinity ou NaN");
 			return 0;
 		}
 	}
@@ -162,6 +169,8 @@ public class DetalheOrcamento extends EntityPersistence {
 			return Util.arredondar( ((this.realizadoCredito == 0 ? 1 : this.realizadoCredito) / (this.previsaoCredito == 0 ? 1 : this.previsaoCredito)) * 100 ); 
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
+			logger.catching(nfe);
+			System.out.println("Houve divisão por zero, infinity ou NaN");
 			return 0;
 		}
 	}
@@ -171,6 +180,8 @@ public class DetalheOrcamento extends EntityPersistence {
 			return Util.arredondar( ((this.realizadoDebito == 0 ? 1 : this.realizadoDebito) / (this.previsaoDebito == 0 ? 1 : this.previsaoDebito)) * 100 ); 
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
+			logger.catching(nfe);
+			System.out.println("Houve divisão por zero, infinity ou NaN");
 			return 0;
 		}
 	}
