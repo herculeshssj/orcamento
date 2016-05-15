@@ -63,6 +63,7 @@
 			<h:panelGroup>
 				<label>Despensa:</label>
 				<h:selectOneMenu value="#{managedBean.despensa}" converter="entityConverter">
+					<f:selectItem itemLabel="Selecione" />
 		    		<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		    		<p:ajax update="txtItemDespensa" listener="#{managedBean.getListaItemDespensa}"/>
 		    	</h:selectOneMenu>
@@ -78,9 +79,9 @@
 				<h:inputText value="#{managedBean.quantidadeItemDespensa}" size="3" maxlength="5"/>
 			</h:panelGroup>
 			<h:panelGroup>
-				<h:commandLink id="lnkAddRow" title="Adicionar item à lista" action="#{managedBean.adicionarItemListaCompra}">
+				<p:commandLink id="lnkAddRow" title="Adicionar item à lista" actionListener="#{managedBean.adicionarItemListaCompra}" update="tableListaCompra">
 	     			<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
-	     		</h:commandLink>
+	     		</p:commandLink>
 			</h:panelGroup>		
 		</h:panelGrid>
 		

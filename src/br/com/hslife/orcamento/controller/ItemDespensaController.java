@@ -103,7 +103,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	private int totalItensListaCompra = 0;
 	private double totalValorListaCompra = 0.0;
 	private int totalItens;
-	//FIXME remover try...catch
+	
 	public ItemDespensaController() {
 		super(new ItemDespensa());
 		moduleTitle = "Itens de Despensa";
@@ -303,22 +303,30 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	}
 	
 	public void adicionarItemListaCompra() {
-		if (itemDespensa == null) {
-			warnMessage("Selecione um item de despensa!");
-			return;
+		if (itemDespensa != null) {
+			
+			// Verifica se o item existe na lista de compras
+			// Caso não exista, adiciona. Se existir, incrementa a
+			// quantidade
+			if (listaCompras.contains(itemDespensa)) {
+				int quantidade = listaCompras.get(listaCompras.indexOf(itemDespensa)).getQuantidadeAtual();
+				double valor = listaCompras.get(listaCompras.indexOf(itemDespensa)).getValor();
+				
+				quantidade = quantidade + quantidadeItemDespensa;
+				valor = itemDespensa.getValor() * quantidade;
+				
+				listaCompras.get(listaCompras.indexOf(itemDespensa)).setQuantidadeAtual(quantidade);
+				listaCompras.get(listaCompras.indexOf(itemDespensa)).setValor(valor);
+			} else {
+				itemDespensa.setQuantidadeAtual(quantidadeItemDespensa);
+				itemDespensa.setValor(itemDespensa.getValor() * quantidadeItemDespensa);
+				listaCompras.add(itemDespensa);
+				listaCompras.sort(new ItemDespensaComparator());				
+			}
+			
+			this.calcularTotaisListaCompra();
+			itemDespensa = new ItemDespensa();
 		}
-		
-		if (listaCompras.contains(itemDespensa)) {
-			warnMessage("Item selecionado já está na listagem!");
-			return;
-		} 
-		
-		itemDespensa.setQuantidadeAtual(quantidadeItemDespensa);
-		itemDespensa.setValor(itemDespensa.getValor() * quantidadeItemDespensa);
-		listaCompras.add(itemDespensa);
-		listaCompras.sort(new ItemDespensaComparator());
-		this.calcularTotaisListaCompra();
-		itemDespensa = new ItemDespensa();
 	}
 	
 	public void removerItemListaCompra() {
@@ -357,13 +365,10 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	}
 	
 	public List<ItemDespensa> getListaItemDespensa() {
-		try {
-			if (despensa != null)
+		if (despensa != null) {
 			return getService().buscarPorDespensaUsuarioEArquivado(despensa, getUsuarioLogado(), false);
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
 		}
-		return new ArrayList<ItemDespensa>();
+		return new ArrayList<>();
 	}
 	
 	public List<UnidadeMedida> getListaUnidadeMedida() {
