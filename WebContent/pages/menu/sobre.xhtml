@@ -72,23 +72,23 @@
 		
 		<p>Entre em contato para dúvidas, críticas e sugestões.</p>
 			
-			<h:form id="frmAjuda">
+			<h:form id="frmSobre">
 			
 			<p:messages />
 			
 			<label>Nome:</label>
-			<h:outputText value="#{ajudaMB.usuarioLogado.nome}"/>
+			<h:outputText value="#{sobreMB.usuarioLogado.nome}"/>
 				
 			<label>E-Mail:</label>
-			<h:outputText value="#{ajudaMB.usuarioLogado.email}"/>
+			<h:outputText value="#{sobreMB.usuarioLogado.email}"/>
 				
-			<label for="frmAjuda:txtAssunto">Assunto:</label>
-			<h:inputText id="txtAssunto" value="#{ajudaMB.assuntoMensagem}" size="50"/>
+			<label for="frmSobre:txtAssunto">Assunto:</label>
+			<h:inputText id="txtAssunto" value="#{sobreMB.assuntoMensagem}" size="50"/>
 				
-			<label for="frmAjuda:txtMensagem">Mensagem:</label>
-			<h:inputTextarea id="txtMensagem" value="#{ajudaMB.mensagem}" rows="5" cols="50"/>
+			<label for="frmSobre:txtMensagem">Mensagem:</label>
+			<h:inputTextarea id="txtMensagem" value="#{sobreMB.mensagem}" rows="5" cols="50"/>
 				
-			<h:commandLink id="lnkSend" title="Enviar" action="#{ajudaMB.enviarMensagem}">
+			<h:commandLink id="lnkSend" title="Enviar" action="#{sobreMB.enviarMensagem}">
 				<h:graphicImage id="imgSend" height="48" width="48" value="/resources/images/svg/feedback.svg"/>
 			</h:commandLink>
 		

@@ -52,9 +52,9 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.facade.IUsuario;
 
-@Component("ajudaMB")
+@Component("sobreMB")
 @Scope("session")
-public class AjudaController extends AbstractController {
+public class SobreController extends AbstractController {
 
 	/**
 	 * 
