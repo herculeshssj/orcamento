@@ -50,6 +50,8 @@ import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,6 +60,8 @@ import com.sendgrid.SendGridException;
 
 @Component
 public class EmailComponent {
+	
+	private static final Logger logger = LogManager.getLogger(EmailComponent.class);
 	
 	private String servidor;
 	private Integer porta;
@@ -136,6 +140,7 @@ public class EmailComponent {
 		email.setText(mensagem);
 		
 		SendGrid.Response response = sendGrid.send(email);
+		logger.info("E-Mail enviado com código " + response.getCode() + ".\n\n" + response.getMessage());
 	}
 	
 	public void enviarEmail() throws EmailException, SendGridException {

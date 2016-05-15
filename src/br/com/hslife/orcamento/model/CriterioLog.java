@@ -103,7 +103,7 @@ public class CriterioLog {
 		hibernateCriterions.remove("inicio");
 		
 		if (inicio != null) {
-			hibernateCriterions.put("inicio", Restrictions.ge("data", inicio));
+			hibernateCriterions.put("inicio", Restrictions.ge("logDate", inicio));
 		}
 	}
 
@@ -117,7 +117,7 @@ public class CriterioLog {
 		hibernateCriterions.remove("fim");
 		
 		if (fim != null) {
-			hibernateCriterions.put("fim", Restrictions.le("data", fim));
+			hibernateCriterions.put("fim", Restrictions.le("logDate", fim));
 		}
 	}	
 	

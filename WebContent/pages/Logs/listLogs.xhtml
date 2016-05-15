@@ -77,13 +77,15 @@
 		<h:panelGroup>
 			<label>Nível:</label>
 			<h:selectOneMenu value="#{managedBean.criterioBusca.logLevel}">
-				<f:selectItem itemLabel="Todos"/>				
+				<f:selectItem itemLabel="Todos"/>		
+				<f:selectItems value="#{managedBean.listaNivel}" />		
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<h:panelGroup>
 			<label>Logger:</label>
 			<h:selectOneMenu value="#{managedBean.criterioBusca.logger}">
-				<f:selectItem itemLabel="Todos"/>				
+				<f:selectItem itemLabel="Todos"/>
+				<f:selectItems value="#{managedBean.listaLogger}" />
 			</h:selectOneMenu>
 		</h:panelGroup>
 	</ui:define>

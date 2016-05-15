@@ -93,118 +93,49 @@ public class LogController extends AbstractController {
 	public void find() {
 		listEntity = getService().buscarPorCriterios(criterioBusca);	
 	}
-	/*
-	public String view() {
-		try {
-			entity = getService().buscarPorId(idEntity);
-			return "/pages/Auditoria/viewAuditoria";
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	public String delete() {
-		try {
-			entity = getService().buscarPorId(idEntity);
-			getService().excluir(entity);
-			infoMessage("Registro excluído com sucesso!");
-			initializeEntity();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
-	}
-	
-	public String excluirLog() {
-		if (listEntity == null || listEntity.isEmpty()) {
-			infoMessage("Nenhum resultado encontrado!");
-		} else {
-			try {
-				for (Auditoria auditoria : listEntity) {
-					entity = getService().buscarPorId(auditoria.getId());
-					getService().excluir(entity);
-				}				
-				infoMessage("Registros excluídos com sucesso!");
-				initializeEntity();
-			} catch (BusinessException be) {
-				errorMessage(be.getMessage());
-			}			
-		}
-		return "";
-	}
 	
 	public String cancel() {
 		initializeEntity();
 		return startUp();
 	}
 	
-	public List<Usuario> getListaUsuarios() {
-		try {
-			return usuarioService.getListaUsuarios();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+	public String view() {
+		entity = getService().buscarPorID(idEntity);
+		return "/pages/Logs/viewLogs";
+	}
+	
+	public void delete() {
+		entity = getService().buscarPorID(idEntity);
+		getService().excluir(entity);
+		infoMessage("Registro excluído com sucesso!");
+		initializeEntity();
+	}
+	
+	public void excluirLog() {
+		if (listEntity == null || listEntity.isEmpty()) {
+			warnMessage("Nenhum resultado encontrado!");
+			return;
 		}
-		return new ArrayList<Usuario>();
-	}
-	
-	public List<String> getListaClasses() {
-		try {
-			return getService().buscarClasses();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+		
+		for (Logs log : listEntity) {
+			entity = getService().buscarPorID(log.getId());
+			getService().excluir(log);
 		}
-		return new ArrayList<String>();
+		infoMessage("Registros excluídos com sucesso!");
+		initializeEntity();
 	}
 	
+	public List<String> getListaNivel() {
+		List<String> result = getService().buscarTodosNiveis();
+		if (result == null) result = new ArrayList<>();
+		return result;
+	}
 	
-	
-	/* Métodos Getters e Setters *
-
-	public CriterioAuditoria getCriterio() {
-		return criterio;
+	public List<String> getListaLogger() {
+		List<String> result = getService().buscarTodosLoggers();
+		if (result == null) result = new ArrayList<>();
+		return result;
 	}
-
-	public void setCriterio(CriterioAuditoria criterio) {
-		this.criterio = criterio;
-	}
-
-	public void setService(IAuditoria service) {
-		this.service = service;
-	}
-
-	public IAuditoria getService() {
-		return service;
-	}
-
-	public void setUsuarioService(IUsuario usuarioService) {
-		this.usuarioService = usuarioService;
-	}
-
-	public Auditoria getEntity() {
-		return entity;
-	}
-
-	public void setEntity(Auditoria entity) {
-		this.entity = entity;
-	}
-
-	public List<Auditoria> getListEntity() {
-		return listEntity;
-	}
-
-	public void setListEntity(List<Auditoria> listEntity) {
-		this.listEntity = listEntity;
-	}
-
-	public Long getIdEntity() {
-		return idEntity;
-	}
-
-	public void setIdEntity(Long idEntity) {
-		this.idEntity = idEntity;
-	}
-	*/
 	
 	public int getQuantRegistros() {
 		if (listEntity == null || listEntity.isEmpty()) {

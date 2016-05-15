@@ -55,4 +55,11 @@ public interface ILog {
 	
 	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca);
 
+	public List<String> buscarTodosNiveis();
+	
+	public List<String> buscarTodosLoggers();
+	
+	public Logs buscarPorID(Long id);
+	
+	public void excluir(Logs logs);
 }

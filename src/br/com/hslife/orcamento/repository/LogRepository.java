@@ -69,4 +69,24 @@ public class LogRepository extends AbstractRepository {
 		
 		return criteria.addOrder(Order.desc("logDate")).list();
 	}
+	
+	public Logs findByID(Long id) {
+		return (Logs)getQuery("FROM Logs log WHERE log.id = :idLog")
+				.setLong("idLog", id)
+				.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> findAllLevel() {
+		return getQuery("SELECT DISTINCT log.logLevel FROM Logs log").list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> findAllLogger() {
+		return getQuery("SELECT DISTINCT log.logger FROM Logs log").list();
+	}
+	
+	public void delete(Logs entity) {
+		getSession().delete(entity);
+	}
 }

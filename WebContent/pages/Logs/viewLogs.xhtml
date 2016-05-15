@@ -1,4 +1,4 @@
-/***
+<!--
   
   	Copyright (c) 2012 - 2016 Hércules S. S. José
 
@@ -42,54 +42,50 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-***/
+  -->
 
-package br.com.hslife.orcamento.service;
 
-import java.util.List;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
-import br.com.hslife.orcamento.entity.Logs;
-import br.com.hslife.orcamento.facade.ILog;
-import br.com.hslife.orcamento.model.CriterioLog;
-import br.com.hslife.orcamento.repository.LogRepository;
+<ui:composition template="/templates/visualizar.xhtml">
 
-@Service("logService")
-@Transactional
-public class LogService implements ILog {
+	<ui:param name="managedBean" value="#{logMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+		
+			Data:
+			<h:outputText value="#{managedBean.entity.logDate}"/>
+			
+			Nível:
+			<h:outputText value="#{managedBean.entity.logLevel}"/>
+			
+			Logger:
+			<h:outputText value="#{managedBean.entity.logger}"/>
+			
+			Mensagem:
+			<h:outputText value="#{managedBean.entity.logMessage}"/>
+			
+			Exceção:
+			<h:outputText value="#{managedBean.entity.logException}"/>
+			
+		</h:panelGrid>
 	
-	@Autowired
-	private LogRepository repository;
-
-	public LogRepository getRepository() {
-		return repository;
-	}
-
-	@Override
-	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) {
-		return getRepository().findByCriteriosLog(criterioBusca);
-	}
+	</ui:define>
 	
-	@Override
-	public List<String> buscarTodosLoggers() {
-		return getRepository().findAllLogger();
-	}
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+   			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+   		</h:commandLink>				
+	</ui:define>
 	
-	@Override
-	public List<String> buscarTodosNiveis() {
-		return getRepository().findAllLevel();
-	}
-	
-	@Override
-	public Logs buscarPorID(Long id) {
-		return getRepository().findByID(id);
-	}
-	
-	@Override
-	public void excluir(Logs logs) {
-		getRepository().delete(logs);
-	}
-}
+</ui:composition>
+</html>
