@@ -105,7 +105,7 @@ public class LancamentoConta extends EntityPersistence {
 	@Column(nullable=true)
 	private String historico;
 	
-	@Column(length=50, nullable=false)
+	@Column(length=50, nullable=true)
 	private String numeroDocumento;
 	
 	@Column(columnDefinition="text", nullable=true)
