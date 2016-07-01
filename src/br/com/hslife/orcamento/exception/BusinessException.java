@@ -46,11 +46,16 @@
 
 package br.com.hslife.orcamento.exception;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import br.com.hslife.orcamento.util.Util;
 
 public class BusinessException extends RuntimeException {
 	
 	private static final long serialVersionUID = -6615643150827475837L;
+	
+	private static final Logger logger = LogManager.getLogger(CustomExceptionHandler.class);
 
 	public BusinessException() {
 		super();
@@ -58,21 +63,26 @@ public class BusinessException extends RuntimeException {
 
 	public BusinessException(String message) {
 		super(message);
+		logger.catching(this);
 	}
 	
 	public BusinessException(Exception exception) {
 		super(exception);
+		logger.catching(exception);
 	}
 	
 	public BusinessException(String message, Exception exception) {
 		super(message, exception);
+		logger.catching(exception);
 	}
 	
 	public BusinessException(String[] messages) {
-		super(Util.montarString(messages));		
+		super(Util.montarString(messages));
+		logger.catching(this);
 	}
 	
 	public BusinessException(String[] messages, Exception exception) {
 		super(Util.montarString(messages), exception);
+		logger.catching(exception);
 	}
 }

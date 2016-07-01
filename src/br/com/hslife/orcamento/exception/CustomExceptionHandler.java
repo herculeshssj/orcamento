@@ -50,7 +50,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
-import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
@@ -94,10 +93,6 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
             // Verifica se a exceção é ViewExpiredException
             boolean sessaoExpirada = false;
             if (t instanceof ViewExpiredException) sessaoExpirada = true;
-            
-            // Verifica se o erro herda de BusinessException
-            boolean erroNegocio = false;
-            if (t instanceof BusinessException) erroNegocio = true;
  
             final FacesContext fc = FacesContext.getCurrentInstance();
             final Map<String, Object> requestMap = fc.getExternalContext().getRequestMap();
@@ -128,10 +123,6 @@ public class CustomExceptionHandler extends ExceptionHandlerWrapper {
                     requestMap.put("exceptionMessage", stackTraceBuilder.toString());
                     nav.handleNavigation(fc, null, "/login");
                     fc.renderResponse();
-                } else if (erroNegocio) {
-                	fc.addMessage(null, new FacesMessage(t.getMessage()));
-                	nav.handleNavigation(fc, null, "");
-                	fc.renderResponse();
                 } else {
                 	//redirect error page
                     requestMap.put("exceptionMessage", stackTraceBuilder.toString());
