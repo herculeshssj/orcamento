@@ -44,18 +44,31 @@
   
 ***/
 
-package br.com.hslife.orcamento.enumeration;
+package br.com.hslife.orcamento.controller;
 
-public enum StatusLancamentoConta {
-	AGENDADO("Agendado"), QUITADO("Quitado"), REGISTRADO("Registrado"), VALIDAR("À validar");
-	
-	private String descricao;
-	
-	private StatusLancamentoConta(String descricao) {
-		this.descricao = descricao;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component("registroCompraConsumoDespensaMB")
+@Scope("session")
+public class RegistroDespensaController extends AbstractController {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8125040211933443671L;
+
+	@Override
+	protected void initializeEntity() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public String toString() {
-		return descricao;
+	@Override
+	public String startUp() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	
 }

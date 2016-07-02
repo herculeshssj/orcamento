@@ -55,7 +55,7 @@ public class BusinessException extends RuntimeException {
 	
 	private static final long serialVersionUID = -6615643150827475837L;
 	
-	private static final Logger logger = LogManager.getLogger(CustomExceptionHandler.class);
+	private static final Logger logger = LogManager.getLogger(BusinessException.class);
 
 	public BusinessException() {
 		super();
