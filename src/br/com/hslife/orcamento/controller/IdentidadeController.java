@@ -56,8 +56,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Identidade;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IIdentidade;
 
 @Component("identidadeMB")
@@ -84,7 +84,7 @@ public class IdentidadeController extends AbstractController {
 	private Identidade passaporte;
 	
 	private List<Identidade> documentos = new ArrayList<>();
-	//FIXME remover try...catch
+
 	public IdentidadeController() {
 		moduleTitle = "Documentos de Identidade";
 	}
@@ -94,92 +94,53 @@ public class IdentidadeController extends AbstractController {
 		
 	}
 
+	private Identidade carregarIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) {
+		Identidade documento = getService().buscarPorUsuarioETipoIdentidade(usuario, tipoIdentidade);
+		if (documento == null) {
+			return new Identidade(usuario, tipoIdentidade);
+		} else {
+			return documento;
+		}
+	}
+	
 	@Override
 	@PostConstruct
 	public String startUp() {
-		try {
-			//FIXME pode-se otimizar fazendo uma única chamada ao Service e usando uma cláusula if
-			/*
-			 * Exemplo: cpf = getService.buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
-			 * if (cpf == null) cpf = new Identidade(getUsuarioLogado(), TipoIdentidade.CPF);
-			 */
-			// Carrega o CPF
-			cpf = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF) == null 
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.CPF) 
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
-			
-			// Carrega o RG
-			rg = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.RG) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.RG)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.RG);
-			
-			// Carrega o título de eleitor
-			tituloEleitor = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR);
-			
-			// Carrega o PIS/PASEP
-			pisPasep = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP);
-			
-			// Carrega a carteira de trabalho
-			carteiraTrabalho = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO);
-			
-			// Carrega a certidão de nascimento
-			certidaoNascimento = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO);
-			
-			// Carrega a carteira de motorista
-			cnh = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CNH) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.CNH)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.CNH);
-			
-			// Carrega o certificado de reservista
-			docMilitar = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
-			
-			// Carrega o passaporte
-			passaporte = getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE) == null
-					? new Identidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE)
-					: getService().buscarPorUsuarioETipoIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
-
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}		
+		cpf = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
+		rg = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.RG);
+		tituloEleitor = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR);
+		pisPasep = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP);
+		carteiraTrabalho = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO);
+		certidaoNascimento = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO);
+		cnh = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CNH);
+		docMilitar = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
+		passaporte = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
+	
 		return "/pages/Identidade/formIdentidade";
 	}
 	
-	public void salvarDocumentos() {
-		try {			
-			// Adiciona os documentos no arraylist
-			documentos.clear();
-			documentos.add(cpf);
-			documentos.add(rg);
-			documentos.add(tituloEleitor);
-			documentos.add(pisPasep);
-			documentos.add(carteiraTrabalho);
-			documentos.add(certidaoNascimento);
-			documentos.add(cnh);
-			documentos.add(docMilitar);
-			documentos.add(passaporte);
-			
-			// Valida os documentos de identidade
-			for (Identidade identidade : documentos) {
-				identidade.validate();
-			}
-			
-			// Salva os documentos
-			getService().salvarDocumentos(documentos);
-			
-			infoMessage("Documentos salvos com sucesso!");
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
+	public void salvarDocumentos() {		
+		// Adiciona os documentos no arraylist
+		documentos.clear();
+		documentos.add(cpf);
+		documentos.add(rg);
+		documentos.add(tituloEleitor);
+		documentos.add(pisPasep);
+		documentos.add(carteiraTrabalho);
+		documentos.add(certidaoNascimento);
+		documentos.add(cnh);
+		documentos.add(docMilitar);
+		documentos.add(passaporte);
+		
+		// Valida os documentos de identidade
+		for (Identidade identidade : documentos) {
+			identidade.validate();
 		}
+		
+		// Salva os documentos
+		getService().salvarDocumentos(documentos);
+		
+		infoMessage("Documentos salvos com sucesso!");
 	}
 	
 	public IIdentidade getService() {
