@@ -113,6 +113,12 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		}
 		
 		super.alterar(entity);
+		
+		// Atualiza a descrição da conta se for diferente do cartão de crédito
+		if (!conta.getDescricao().equalsIgnoreCase(entity.getDescricao())) {
+			conta.setDescricao(entity.getDescricao());
+			contaRepository.update(conta);
+		}
 	}
 	
 	private void criarFaturaCartao(Conta conta) {
