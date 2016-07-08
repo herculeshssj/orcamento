@@ -64,4 +64,8 @@ public interface IUsuario extends ICRUDService<Usuario> {
 	public void recuperarSenha(Usuario entity);
 	
 	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem);	
+	
+	public Usuario buscarPorTokenID(String token);
+	
+	public void gerarTokenID(Usuario usuario);
 }

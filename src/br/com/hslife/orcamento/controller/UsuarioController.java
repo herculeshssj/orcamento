@@ -208,6 +208,12 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		infoMessage("Senha alterada com sucesso!");
 	}
 	
+	public String gerarTokenID() {
+		getService().gerarTokenID(getUsuarioLogado());
+		infoMessage("Token gerado com sucesso!");
+		return this.minhaConta();
+	}
+	
 	public String getLoginUsuario() {
 		return loginUsuario;
 	}

@@ -230,4 +230,16 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	public List<Usuario> buscarTodosPorLogin(String login) {
 		return getRepository().findAllByLogin(login);
 	}
+	
+	@Override
+	public Usuario buscarPorTokenID(String token) {
+		return getRepository().findByTokenID(token);
+	}
+	
+	@Override
+	public void gerarTokenID(Usuario usuario) {
+		Usuario u = getRepository().findByLogin(usuario.getLogin());
+		u.setTokenID(Util.SHA256(new Date().toString()));
+		getRepository().update(u);
+	}
 }

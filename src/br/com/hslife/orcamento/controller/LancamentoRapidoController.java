@@ -65,6 +65,9 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -121,6 +124,22 @@ public class LancamentoRapidoController extends AbstractController {
 
 	public void registrar() {
 		try {
+			// Se a conta for do tipo Cartão e o cartão for do tipo Crédito seta a moeda selecionada. 
+			// Caso contrário seta a moeda da conta
+			if (lancamento.getConta().getTipoConta().equals(TipoConta.CARTAO) 
+					&& lancamento.getConta().getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO)) {
+				// Mantém a moeda selecionada na combo
+			} else {
+				lancamento.setMoeda(lancamento.getConta().getMoeda());
+			}
+			
+			// Seta o tipo de lançamento de acordo com a categoria selecionada
+			// Se nenhuma categoria for selecionada o padrão é Despesa
+			lancamento.setTipoLancamento(TipoLancamento.DESPESA);
+			if (lancamento.getCategoria() != null && lancamento.getCategoria().getTipoCategoria().equals(TipoCategoria.CREDITO)) {
+				lancamento.setTipoLancamento(TipoLancamento.RECEITA);
+			}
+			
 			lancamento.setStatusLancamentoConta(StatusLancamentoConta.VALIDAR);
 			lancamento.validate();
 			lancamentoContaService.cadastrar(lancamento);
@@ -142,7 +161,7 @@ public class LancamentoRapidoController extends AbstractController {
 	
 	@Override
 	public Usuario getUsuarioLogado() {
-		return usuarioService.buscarPorLogin(userTokenID);
+		return usuarioService.buscarPorTokenID(userTokenID);
 	}
 	
 	public List<Conta> getListaConta() {

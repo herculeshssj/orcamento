@@ -2375,7 +2375,7 @@ create table relatoriocustomizado_relatorioparametro(
 alter table relatoriocustomizado_relatorioparametro add constraint fk_relatoriocustomizado_parametro foreign key (relatoriocustomizado_id) references relatoriocustomizado(id);
 alter table relatoriocustomizado_relatorioparametro add constraint fk_relatorioparametro foreign key (parametrosrelatorio_id) references relatorioparametro(id);
 
-/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUL2016 ***/
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO JUN2016 ***/
 
 -- Inclusão de parâmetro para habilitar/desabilitar o controle de estoque
 insert into opcaosistema (chave, valor, tipoOpcaoSistema, enabled, visible, required, tipoValor, idUsuario, versionEntity, casoDeUso)
@@ -2461,3 +2461,8 @@ create table logs (
 	throwable text null,
 	primary key(id)
 ) Engine=InnoDB;
+
+/*** ATUALIZAÇÃO DA BASE DE DADOS PARA A VERSÃO DEZ2016 ***/
+
+-- Lançamento rápido - TokenID do usuário
+alter table usuario add column tokenid varchar(128) null;

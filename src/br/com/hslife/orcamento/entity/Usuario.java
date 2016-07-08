@@ -94,6 +94,9 @@ public class Usuario extends EntityPersistence {
 	@Column
 	private boolean ativo;
 	
+	@Column(length=128, nullable=true)
+	private String tokenID;
+	
 	@Transient
 	private boolean logado;
 	
@@ -257,5 +260,13 @@ public class Usuario extends EntityPersistence {
 
 	public void setConfirmaSenha(String confirmaSenha) {
 		this.confirmaSenha = confirmaSenha;
+	}
+
+	public String getTokenID() {
+		return tokenID;
+	}
+
+	public void setTokenID(String tokenID) {
+		this.tokenID = tokenID;
 	}
 }

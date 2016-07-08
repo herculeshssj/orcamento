@@ -80,4 +80,8 @@ public class UsuarioRepository extends AbstractCRUDRepository<Usuario> {
 		criteria.add(Restrictions.ilike("login", login, MatchMode.ANYWHERE));
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
+	
+	public Usuario findByTokenID(String token) {
+		return (Usuario)getQuery("FROM Usuario u WHERE u.tokenID = :token").setString("token", token).uniqueResult();
+	}
 }

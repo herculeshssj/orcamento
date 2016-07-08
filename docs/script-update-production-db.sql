@@ -91,16 +91,8 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Logs com Log4J 2 - Github Issue #171
-	create table logs (
-		id bigint not null auto_increment,
-		date datetime null,
-		level varchar(10) null,
-		logger varchar(500) null,
-		message text null,
-		throwable text null,
-		primary key(id)
-	) Engine=InnoDB;
+	-- Lançamento rápido - TokenID do usuário
+	alter table usuario add column tokenid varchar(128) null;
 	
     /*** Fim do bloco de atualizações da base ***/
     

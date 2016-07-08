@@ -77,6 +77,15 @@
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			
+			TokenID:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.entity.tokenID}"/>
+				<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20"/>
+				<p:tooltip for="imgInfo">
+					<h:outputText value="Use este token para acessar as funcionalidades do sistema com suas credenciais."/>
+				</p:tooltip>
+			</h:panelGroup>
+			
 			Ativo:
 			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true" />
 				
@@ -87,6 +96,10 @@
 	<ui:define name="acoes">
 		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.saveUser}">
      		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+     	&nbsp;&nbsp;&nbsp;
+     	<h:commandLink id="lnkID" title="Gerar token" action="#{managedBean.gerarTokenID}">
+     		<h:graphicImage id="imgKey" height="48" width="48" value="/resources/images/svg/key.svg"/>
      	</h:commandLink>
      	&nbsp;&nbsp;&nbsp;
      	<h:commandLink title="Deslogar das credenciais do usuário" action="#{managedBean.deslogarComo}" rendered="#{managedBean.usuarioLogado.logado == true}">

@@ -76,11 +76,6 @@
 				<f:selectItems value="#{lancamentoRapidoMB.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 			
-			Tipo:
-			<p:selectOneRadio value="#{lancamentoRapidoMB.lancamento.tipoLancamento}" required="true" requiredMessage="Informe o tipo de lançamento!">
-				<f:selectItems value="#{lancamentoRapidoMB.listaTipoLancamento}"/>
-			</p:selectOneRadio>
-			
 			Descrição:
 			<p:inputText value="#{lancamentoRapidoMB.lancamento.descricao}" required="true" requiredMessage="Informe a descrição!"/>
 			
