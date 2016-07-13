@@ -111,3 +111,14 @@ No Eclipse, abra a perspectiva Git. Clique em Add an existing Git repository. Se
 Após isso clique no repositório e selecione Import Projects from Git Repository. Clique em Next, e na próxima tela em Finnish.
 
 Para executar o projeto, clique com botão direito em cima do projeto, escolha Run As -> Run on Server. Na tela que se abre, selecione o Tomcat configurado e clique em Finnish.
+
+### Plugins Eclipse
+
+Abaixo segue uma relação de plugins para Eclipse que apoiam o desenvolvimento do projeto, melhorando a qualidade do código fonte. A maioria está disponível do Eclipse Marketplace
+
+* FindBugs
+* ECLemma
+* JDeodorant
+* JDepend4Eclipse
+* Metrics
+* Smart Save
