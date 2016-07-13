@@ -109,29 +109,20 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	}
 	
 	protected void reprocessarBusca() {
-		// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
-		if (listEntity != null && !listEntity.isEmpty()) {
-			// Inicializa os objetos
-			initializeEntity();
-			
-			// Determina se a busca será executada novamente
-			if (getOpcoesSistema().getExibirBuscasRealizadas()) {
-				find();
-			}
-		} else {
-			initializeEntity();
-		}
+		// Reprocessa a busca caso a opção do sistema esteja ativada
+		initializeEntity();
+		if (getOpcoesSistema().getExibirBuscasRealizadas())		
+			find();
 	}
 	
 	public String save() {
-		if (entity.getId() == null) {
-			validate(operation);
-			getService().cadastrar(entity);
-			infoMessage("Registro cadastrado com sucesso!");
-		} else {
-			validate(operation);
+		validate(operation);
+		if (entity.getId() != null) {
 			getService().alterar(entity);
 			infoMessage("Registro alterado com sucesso!");
+		} else {
+			getService().cadastrar(entity);
+			infoMessage("Registro cadastrado com sucesso!");
 		}
 		return list();
 	}
@@ -176,11 +167,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	}
 	
 	public int getQuantRegistros() {
-		if (listEntity == null || listEntity.isEmpty()) {
-			return 0;
-		} else {
-			return listEntity.size();
-		}
+		return listEntity == null || listEntity.isEmpty() ? 0 : listEntity.size();
 	}
 
 	public E getEntity() {

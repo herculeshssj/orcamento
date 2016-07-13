@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<meta charset="utf-8">
+
+<link href="css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet"/>
+<link href="css/jquery.dataTables_themeroller.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet"/>
+<script language="javascript" type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script language="javascript" type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.valuelabels.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.tooltip.min.js"></script>
+
+<!-- Our ChartDrawer class -->
+<script language="javascript" type="text/javascript" src="js/chartdrawer.js"></script>
+
+<script language="javascript" type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/jquery.dataTables.columnFilter.js"></script>
+<!-- This file contain variable robustaData that include all bad smell data -->
+<script language="javascript" type="text/javascript" src="js/data.js"></script>
+
+<script type="text/javascript">
+
+<!-- DRAW CHART -->
+function drawChart(robustaData) {
+	var drawer = new ChartDrawer('#placeholder', robustaData.badSmellTypeDensity);
+	drawer.bindToggle('#toggle-chart-type', '<span class="ui-button-text">Show Donut Chart</span>', '<span class="ui-button-text">Show Bar Chart</span>');
+	drawer.drawBar();
+}
+
+<!-- FUNCTION TO QUICK FILTER BY PACKAGE NAME -->
+function filterPackage() {
+	$('#package-list a').click(function() {
+		var rawName = $(this).attr('href');
+		if(!rawName) return;
+		var packageName = rawName.substring(1);
+		var packageNameInput = $('#badsmell-table tfoot input').first();
+		packageNameInput.val(packageName).keyup();
+		packageNameInput.removeClass('search_init');
+		$('#tabs').tabs({active: 1});
+	});
+}
+
+function createPackageTable(robustaData) {
+	var columns = [
+		{ "sTitle": "#" },
+		{ "sTitle": "Package Name", 
+			"mRender": function ( data, type, full ) {
+						if(full[10] > 0)
+							return '<a href="#'+data+'">'+data+'</a>';
+						return data;
+			} },
+		{ "sTitle": "Lines Of Code (LOC)" },
+		{ "sTitle": "Empty Catch Block" },
+		{ "sTitle": "Dummy Handler" },
+		{ "sTitle": "Unprotected Main Program" },
+		{ "sTitle": "Nested Try Statement" },
+		{ "sTitle": "Careless Cleanup" },
+		{ "sTitle": "Exception Thrown From Finally Block " },
+		{ "sTitle": "Total"}
+	];
+	var packageTable = $('#package-table').dataTable({
+		"fnDrawCallback": filterPackage,
+        "aaData": robustaData.allPackageData,
+		"aoColumns": columns,
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"iDisplayLength": 10,
+		"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+	});
+}
+
+function createAllBadSmellDataTable(robustaData) {
+	var allBadSmellData = $('#badsmell-table').dataTable( {
+        "aaData": robustaData.allBadSmellData,
+		"aoColumns": [
+			{ "mData": "packageName", "sTitle": "Package"},
+			{ "mData": "smellType", "sTitle": "Bad Smell Type" },
+			{ "mData": "className", "sTitle": "Class" },
+			{ "mData": "methodName", "sTitle": "Method" },
+			{ "mData": "line", "sTitle": "Line Number", 
+				"mRender": function ( data, type, full ) {
+					return '<a href="'+full.codeLink+'"  title="Go to this line" >'+data+'</a>';
+				}
+			}
+		],
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"iDisplayLength": 40,
+		"aLengthMenu": [[20, 40, 60, -1], [20, 40, 60, "All"]]
+	});
+	<!-- bad smell filter -->
+	allBadSmellData.columnFilter( {
+		"aoColumns": [
+					{ "type": "text"}, 
+					{ "type": "select", "values": [	"Empty Catch Block", "Dummy Handler", "Unprotected Main Program", 
+												"Nested Try Statement", "Careless Cleanup",
+												"Exception Thrown From Finally Block "]},
+					{ "type": "text"}, 
+					{ "type": "text"},
+					null
+				]
+	});
+}
+
+function fetchProjectInfo(robustaData) {
+	var projectInfo = robustaData.projectData;
+	$('#project-name').text(projectInfo.name);
+	$('#report-creation-date').text(projectInfo.date);
+	$('#project-loc').text(projectInfo.loc);
+	$('#project-try').text(projectInfo.trynumber);
+	$('#project-catch').text(projectInfo.catchnumber);
+	$('#project-finally').text(projectInfo.finallynumber);
+}
+
+
+<!-- INIT EVERYTHING -->
+$(function(){
+	$("#tabs").tabs();
+	$("#toggle-chart-type").button();
+
+	<!-- PACKAGE TABLE -->
+	createPackageTable(robustaData);
+
+	<!-- ALL BAD SMELL DATA -->
+	createAllBadSmellDataTable(robustaData);
+	
+	fetchProjectInfo(robustaData);
+	
+	<!-- DRAW CHART -->
+	drawChart(robustaData);
+});
+
+
+
+</script>
+<title>Robusta Report</title>
+</head>
+<body>
+<div id="outer-wrap">
+
+	<!-- HEADER -->
+	<div id="header">
+	  <div id="logo">
+		<h2 id="report-title">Robusta</h2>
+		<span id="sub-title">Code Smell Report</span> </div>
+	  <div id="project-info"> <div id="prjname"><span class="label">Project name: </span><span class="value" id="project-name">Robusta</span></div>
+		<div id="report-date"><span class="label">Report date: </span><span class="value" id="report-creation-date">4/22/2014</span> </div></div>
+	</div>
+	<!-- END HEADER -->
+	
+	<!-- TABS -->
+	<div id="tabs">
+	
+		<!-- TAB CAPTIONS -->
+	  <ul>
+		<li><a href="#tabs-1">Summary</a></li>
+		<li><a href="#tabs-2">Details</a></li>
+	  </ul>
+	  <!-- END TAB CAPTIONS -->
+	  
+	  <!-- TAB 1 -->
+	  <div id="tabs-1">
+		
+		<!-- Bad Smell Chart -->
+		<div id="bad-smell-chart">
+		  <h3 class="region-title">Bad Smell Chart</h3>
+		  <div class="chart">
+			<button id="toggle-chart-type" value="bar">Show Donut Chart</button>
+			<div id="placeholder"  style="width:800px;height:300px;margin:0 auto;"></div>
+		  </div>
+		</div>
+		<!-- END Bad Smell Chart -->
+		
+		<!--Project info -->
+		<div id="code-info-region">
+			<h3 class="region-title">Source Code Information</h3>
+			<div id="code-info" class="chart">
+				<table class="ui-widget ui-widget-content">
+						<tr class="ui-widget-header ">
+							<th>Lines Of Code (LOC)</th>
+							<th>Number Of Try Block</th>
+							<th>Number Of Catch Clause</th>
+							<th>Number Of Finally Block</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="project-loc">46377</td>
+							<td id="project-try">469</td>
+							<td id="project-catch">500</td>
+							<td id="project-finally">118</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END package list -->	
+		
+		<!-- package list -->
+		<div id="package-region">
+			<h3 class="region-title">Package List</h3>
+			<div id="package-list" class="chart">
+				<table cellpadding="0" cellspacing="0" border="0" class="display" id="package-table"></table>
+			</div>
+		</div>
+		<!-- END package list -->	
+		
+	  </div>
+	  <!-- END TAB 1 -->
+	  
+	  <!-- TAB 2 -->
+	  <div id="tabs-2">
+		<h3 class="region-title">Bad Smell Details</h3>
+		<div id="badsmell-list" class="chart">
+			<table cellpadding="0" cellspacing="0" border="0" class="display" id="badsmell-table">
+			<tfoot><tr>
+				<th>Package Name</th>
+				<th>Bad Smell Type</th>
+				<th>Java File</th>
+				<th>Method Name</th>
+				<th> </th>
+			</tr></tfoot>
+			</table>
+		</div>
+	  </div>
+	  <!-- END TAB 2 -->
+	  
+	</div>
+	<!-- END TABS -->
+	
+</div>
+</body>
+</html>

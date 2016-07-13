@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<meta charset="utf-8">
+
+<link href="css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet"/>
+<link href="css/jquery.dataTables_themeroller.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet"/>
+
+<script language="javascript" type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script language="javascript" type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.tooltip.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/datatrend.js"></script>
+<script language="javascript" type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+
+<script language="javascript" type="text/javascript" src="js/TrendDrawer.js"></script>
+<script language="javascript" type="text/javascript">
+function createAllPastReportTable(){
+	$('#reportTable').DataTable( {
+		"order": [[0, "asc"]],
+		"paging": false,
+		"bJQueryUI": true,
+		"scrollY": "250px",
+		"scrollCollapse": true,
+		"filter": false,
+		"oLanguage": {
+			"sInfo": "Total: _TOTAL_ Past Report(s)",
+		},
+		"sDom": '<"H"i>t<"F"ip>',
+		"data": allPastReport,
+		"columns": [
+			{ "title": "#", "class": "center"  },
+			{ "title": "Date", "class": "center", "sWidth": "200px"  },
+			{ "title": "Careless Clean Up", "class": "center"  },
+			{ "title": "Dummy Handler", "class": "center"  },
+			{ "title": "Empty Catch Block", "class": "center"  },
+			{ "title": "Nested Try", "class": "center"  },
+			{ "title": "Exception Thrown From Finally Block", "class": "center"  },
+			{ "title": "Unprotected Main", "class": "center" },
+			{ "title": "Total", "class": "center" }
+		]
+	} );
+	
+	$("#reportTable_info").html('All Bad Smell Past Reports');
+}
+
+function fetchProjectInfo(trendReportData) {
+	var projectInfo = trendReportData.projectName;
+	$('#project-name').text(projectInfo);
+}
+$(function(){
+	$("#tabs").tabs();
+	var trendDrawer = new TrendDrawer('#placeholder', $(".legend"), trendReportData);
+	trendDrawer.drawTrendReport();
+	createAllPastReportTable();
+	fetchProjectInfo(trendReportData);
+});
+</script>
+<title>Robusta Report</title>
+</head>
+<body>
+<div id="outer-wrap">
+
+	<!-- HEADER -->
+	<div id="header">
+	  <div id="logo">
+		<h2 id="report-title">Robusta</h2>
+		<span id="sub-title">Code Smell Report</span> </div>
+	  <div id="project-info"> <div id="prjname"><span class="label">Project name: </span><span class="value" id="project-name">Robusta</span></div>
+	</div>
+	</div>
+	<!-- END HEADER -->
+	
+	<!-- TABS -->
+	<div id="tabs">
+	
+		<!-- TAB CAPTIONS -->
+	  <ul>
+		<li><a href="#tabs-1">Bad Smell Trend Report</a></li>
+	  </ul>
+	  <!-- END TAB CAPTIONS -->
+	  
+	  <!-- TAB 1 -->
+	  <div id="tabs-1">
+		
+		<!-- Trend Report Chart -->
+		<div id="badsmelltype-trend">
+		  <h3 class="region-title">Trend Report</h3>
+		  <div class="chart">
+			<div id="placeholder"  style="width:800px;height:300px;margin:0 10px;"></div>
+			<div class="legend"></div>
+		  </div>
+		</div>
+		<!-- END Trend Report Chart -->
+		<!-- All past Report Information -->
+		<div id="package-region">
+			<!-- <h3 class="region-title">All Past Reports</h3> -->
+			<div id="package-list" class="chart">
+				<table cellpadding="0" cellspacing="0" border="0" class="display" id="reportTable" style="text-align:center;">
+				</table>
+			</div>
+		</div>
+	  </div>
+	  <!-- END TAB 1 -->
+	</div>
+	<!-- END TABS -->
+	
+</div>
+</body>
+</html>

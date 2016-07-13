@@ -168,8 +168,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	}
 	
 	public String getAgendaDoDia() {
-		Long quantCompromissos = this.getAgendamentosDeHoje();
-		return "Agenda (" + quantCompromissos.toString() + ")";
+		return "Agenda (" + this.getAgendamentosDeHoje().toString() + ")";
 	}
 	
 	public List<Agenda> getAgendamentosDoDia() {

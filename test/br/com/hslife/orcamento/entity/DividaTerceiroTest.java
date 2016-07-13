@@ -86,7 +86,7 @@ public class DividaTerceiroTest {
 		entity.setMoeda(moeda);
 		
 		PagamentoDividaTerceiro pagamento;
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; ++i) {
 			pagamento = new PagamentoDividaTerceiro();
 			pagamento.setComprovantePagamento("Comprovante de pagamento da dívida de teste " + i);
 			pagamento.setDataPagamento(new Date());
@@ -128,9 +128,8 @@ public class DividaTerceiroTest {
 	public void testValidateTamanhoJustificativa() {
 		try {
 			StringBuilder s = new StringBuilder(10000);
-			for (int i = 0; i < 10000; i++) {
+			for (int i = 0; i < 10000; ++i) 
 				s.append("a");
-			}
 			entity.setJustificativa(s.toString());
 			entity.validate();
 		} catch (BusinessException be) {
@@ -215,16 +214,15 @@ public class DividaTerceiroTest {
 	
 	@Test
 	public void testValidateDataPagamento() {
-		for (PagamentoDividaTerceiro pagamento : entity.getPagamentos()) {
-			try {
-				pagamento.setDataPagamento(null);
-				pagamento.validate();
-			} catch (BusinessException be) {
-				assertEquals("Campo 'Data do pagamento' não pode ser nulo.", be.getMessage());
-				continue;
-			} catch (Throwable t) {
-				fail(t.getMessage());
-			} 
+		for (PagamentoDividaTerceiro pagamento : entity.getPagamentos()) 
+		try {
+			pagamento.setDataPagamento(null);
+			pagamento.validate();
+		} catch (BusinessException be) {
+			assertEquals("Campo 'Data do pagamento' não pode ser nulo.", be.getMessage());
+			continue;
+		} catch (Throwable t) {
+			fail(t.getMessage());
 		}		
 	}
 }
