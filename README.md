@@ -118,7 +118,6 @@ Abaixo segue uma relação de plugins para Eclipse que apoiam o desenvolvimento 
 
 * FindBugs
 * ECLemma
-* JDeodorant
 * JDepend4Eclipse
 * Metrics
 * Smart Save
