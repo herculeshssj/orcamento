@@ -116,8 +116,13 @@ Para executar o projeto, clique com botão direito em cima do projeto, escolha R
 
 Abaixo segue uma relação de plugins para Eclipse que apoiam o desenvolvimento do projeto, melhorando a qualidade do código fonte. A maioria está disponível do Eclipse Marketplace
 
+* DBeaver
 * FindBugs
 * ECLemma
+* JAutodoc
 * JDepend4Eclipse
 * Metrics
+* Robusta
 * Smart Save
+* Snipmatch
+* Spartan Refactoring
