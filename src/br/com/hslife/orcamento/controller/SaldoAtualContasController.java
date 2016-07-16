@@ -80,7 +80,7 @@ public class SaldoAtualContasController extends AbstractController {
 	private IMoeda moedaService;
 	
 	private boolean lancamentoAgendado = false;
-	//FIXME remover try...catch
+	
 	public SaldoAtualContasController() {
 		moduleTitle = "Saldo Atual das Contas";
 	}
@@ -102,12 +102,9 @@ public class SaldoAtualContasController extends AbstractController {
 	}
 	
 	private void gerarSaldoAtualContas() {
-		listEntity = new ArrayList<SaldoAtualConta>();
-		try {
-			listEntity = getService().gerarSaldoAtualContas(lancamentoAgendado, getUsuarioLogado());
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
+		listEntity = getService().gerarSaldoAtualContas(lancamentoAgendado, getUsuarioLogado());
+		if (listEntity == null || listEntity.isEmpty())
+			listEntity = new ArrayList<>();
 	}
 
 	public IResumoEstatistica getService() {
@@ -119,43 +116,35 @@ public class SaldoAtualContasController extends AbstractController {
 	}
 
 	public List<SaldoAtualConta> getLimiteCartaoCredito() {
-		List<SaldoAtualConta> saldos = new ArrayList<>();
-		for (SaldoAtualConta saldo : listEntity) {
-			if (saldo.isAtivo() && saldo.getTipoConta().equals(TipoConta.CARTAO)) {
-				saldos.add(saldo);
-			}
-		}
-		return saldos;
+		List<SaldoAtualConta> $ = new ArrayList<>();
+		for (SaldoAtualConta saldo : listEntity) 
+			if (saldo.isAtivo() && saldo.getTipoConta().equals(TipoConta.CARTAO)) 
+				$.add(saldo);
+		return $;
 	}
 	
 	public List<SaldoAtualConta> getContasAtivas() {
-		List<SaldoAtualConta> saldos = new ArrayList<>();
-		for (SaldoAtualConta saldo : listEntity) {
-			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) {
-				saldos.add(saldo);
-			}
-		}
-		return saldos;				
+		List<SaldoAtualConta> $ = new ArrayList<>();
+		for (SaldoAtualConta saldo : listEntity) 
+			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) 
+				$.add(saldo);
+		return $;				
 	}
 
 	public double getSaldoTotalContas() {
-		double saldoTotalContas = 0.0;
-		for (SaldoAtualConta saldo : listEntity) {
-			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) {
-				saldoTotalContas += saldo.getSaldoAtual();
-			}
-		}
-		return saldoTotalContas;
+		double $ = 0.0;
+		for (SaldoAtualConta saldo : listEntity) 
+			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) 
+				$ += saldo.getSaldoAtual();
+		return $;
 	}
 
 	public List<SaldoAtualConta> getContasInativas() {		
-		List<SaldoAtualConta> saldos = new ArrayList<>();
-		for (SaldoAtualConta saldo : listEntity) {
-			if (!saldo.isAtivo()) {
-				saldos.add(saldo);
-			}
-		}
-		return saldos;			
+		List<SaldoAtualConta> $ = new ArrayList<>();
+		for (SaldoAtualConta saldo : listEntity) 
+			if (!saldo.isAtivo()) 
+				$.add(saldo);
+		return $;			
 	}
 	
 	public Moeda getMoedaPadrao() {

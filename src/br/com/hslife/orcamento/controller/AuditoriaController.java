@@ -80,7 +80,7 @@ public class AuditoriaController extends AbstractController {
 	private Auditoria entity;
 	private List<Auditoria> listEntity;
 	private Long idEntity;
-	//FIXME remover try...catch
+	
 	public AuditoriaController() {
 		criterio = new CriterioAuditoria();
 		
@@ -98,13 +98,8 @@ public class AuditoriaController extends AbstractController {
 		return "/pages/Auditoria/listAuditoria";
 	}
 	
-	public String find() {
-		try {
-			listEntity = getService().buscarPorCriterios(criterio);	
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
+	public void find() {
+		listEntity = getService().buscarPorCriterios(criterio);	
 	}
 	
 	public String view() {
@@ -117,16 +112,11 @@ public class AuditoriaController extends AbstractController {
 		return "";
 	}
 	
-	public String delete() {
-		try {
-			entity = getService().buscarPorId(idEntity);
-			getService().excluir(entity);
-			infoMessage("Registro excluído com sucesso!");
-			initializeEntity();
-		} catch (BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
+	public void delete() {
+		entity = getService().buscarPorId(idEntity);
+		getService().excluir(entity);
+		infoMessage("Registro excluído com sucesso!");
+		initializeEntity();
 	}
 	
 	public String excluirLog() {
@@ -171,11 +161,7 @@ public class AuditoriaController extends AbstractController {
 	}
 	
 	public int getQuantRegistros() {
-		if (listEntity == null || listEntity.isEmpty()) {
-			return 0;
-		} else {
-			return listEntity.size();
-		}
+		return listEntity == null || listEntity.isEmpty() ? 0 : listEntity.size();
 	}
 	
 	/* Métodos Getters e Setters */
