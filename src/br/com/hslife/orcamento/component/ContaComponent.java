@@ -70,7 +70,6 @@ import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
@@ -96,20 +95,6 @@ public class ContaComponent {
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
-
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
-	}
-
-	public void setFechamentoPeriodoRepository(
-			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
-		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-	
-	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
-		this.usuarioComponent = usuarioComponent;
-	}
 	
 	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) {
 		return fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
@@ -151,7 +136,7 @@ public class ContaComponent {
 		return Util.arredondar(total);
 	}
 	
-	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) throws BusinessException {
+	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) {
 		List<Categoria> categorias = new ArrayList<Categoria>();
 		
 		/* Usa-se o Set para separar as categorias da listagem de lançamentos */
@@ -221,7 +206,7 @@ public class ContaComponent {
 		return categorias;
 	}
 
-	public List<Favorecido> organizarLancamentosPorFavorecido(List<LancamentoConta> lancamentos) throws BusinessException {
+	public List<Favorecido> organizarLancamentosPorFavorecido(List<LancamentoConta> lancamentos) {
 		List<Favorecido> favorecidos = new ArrayList<Favorecido>();
 		
 		/* Usa-se o Set para separar os favorecidos da listagem de lançamentos */
@@ -301,7 +286,7 @@ public class ContaComponent {
 		return favorecidos;
 	}
 
-	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) throws BusinessException {
+	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) {
 		List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
 		
 		/* Usa-se o Set para separar os meios de pagamento da listagem de lançamentos */
@@ -381,24 +366,24 @@ public class ContaComponent {
 		return meiosPagamento;
 	}
 
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException {
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) {
 		return fechamentoPeriodoRepository.findByContaAndOperacaoConta(conta, operacaoConta);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta) {
 		this.fecharPeriodo(dataFechamento, conta, null, null);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) {
 		this.fecharPeriodo(dataFechamento, conta, null, lancamentosPeriodicos);
 	}
 	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) {
 		this.fecharPeriodo(fechamentoPeriodo.getData(), fechamentoPeriodo.getConta(), fechamentoPeriodo, lancamentosPeriodicos);
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos) {
 		// Obtém-se o último fechamento realizado
 		FechamentoPeriodo fechamentoAnterior;
 		if (fechamentoReaberto == null)
@@ -437,6 +422,7 @@ public class ContaComponent {
 			// Antes de prosseguir, verifica se não existem períodos reabertos
 			List<FechamentoPeriodo> fechamentosReabertos = fechamentoPeriodoRepository.findByContaAndOperacaoConta(conta, OperacaoConta.REABERTURA);
 			if (fechamentosReabertos != null && !fechamentosReabertos.isEmpty()) {
+				// TODO refatorara para uma especificação que valide a possibilidade de fechamento
 				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
 			}
 			
@@ -458,6 +444,7 @@ public class ContaComponent {
 			// períodos reabertos anteriores
 			List<FechamentoPeriodo> fechamentosAnterioresReabertos = fechamentoPeriodoRepository.findFechamentosAnterioresReabertos(fechamentoReaberto);
 			if (fechamentosAnterioresReabertos != null && !fechamentosAnterioresReabertos.isEmpty()) {
+				// TODO refatorara para uma especificação que valide a possibilidade de fechamento
 				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
 			}
 			
@@ -486,7 +473,7 @@ public class ContaComponent {
 		}
 	}
 	
-	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException {
+	public void reabrirPeriodo(FechamentoPeriodo entity) {
 		// Busca os fechamentos posteriores ao fechamento selecionado
 		List<FechamentoPeriodo> fechamentosPosteriores = fechamentoPeriodoRepository.findFechamentosPosteriores(entity);
 		
@@ -585,7 +572,7 @@ public class ContaComponent {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException {		
+	public void registrarPagamento(LancamentoConta pagamentoPeriodo) {		
 		pagamentoPeriodo.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 		
 		// Atualiza o pagamento

@@ -57,7 +57,6 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.OpcaoSistemaRepository;
 
@@ -76,7 +75,7 @@ public class OpcaoSistemaComponent {
 	// Guarda em cache os valores das opções do sistema
 	private Map<Usuario, Map<String, Object>> cacheUsuarioOpcoesSistema = new HashMap<>();
 	
-	public OpcaoSistema buscarPorChaveEUsuario(String chave, Usuario usuario) throws BusinessException {
+	public OpcaoSistema buscarPorChaveEUsuario(String chave, Usuario usuario) {
 		return opcaoSistemaRepository.findOpcaoUserByChave(chave, usuario);
 	}
 
@@ -141,7 +140,7 @@ public class OpcaoSistemaComponent {
 		
 	}
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException {
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) {
 		OpcaoSistema opcao = new OpcaoSistema();
 		for (String chave : opcoesSistema.keySet()) {
 			opcao = opcaoSistemaRepository.findOpcaoGlobalAdminByChave(chave);
@@ -163,7 +162,7 @@ public class OpcaoSistemaComponent {
 		}
 	}
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws BusinessException {
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) {
 		OpcaoSistema opcao;
 		for (String chave : opcoesSistema.keySet()) {			
 			opcao = opcaoSistemaRepository.findOpcaoUserByChave(chave, usuario);
@@ -213,16 +212,17 @@ public class OpcaoSistemaComponent {
 		}
 	}
 	
-	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) throws BusinessException {
+	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) {
 		if (opcao.isRequired()) {
 			//if (valor == null || ((String)valor).isEmpty()) { -- Mudança feita em virtude da atualização para JSF 2.2.10 e PrimeFaces 5.2
 			if (valor == null) {
+				// TODO substituir por uma especificação que valida campos obrigatórios
 				throw new BusinessException("Campo " + opcao.getChave() + " não pode ser vazio!");
 			}
 		}
 	}
 	
-	public void setarOpcoesPadraoUsuario(Usuario entity) throws BusinessException {
+	public void setarOpcoesPadraoUsuario(Usuario entity) {
 		// Seta as opções do sistema que são individuais para cada usuário
 		Map<String, Object> opcoesUsuario = new HashMap<String, Object>();
 		opcoesUsuario.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.FALSE);
@@ -304,185 +304,150 @@ public class OpcaoSistemaComponent {
 	
 	public Boolean getExibirMeioPagamento() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO") != null) {
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO") != null) {
+			return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO"));
+		} else {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_MEIO_PAGAMENTO", usuarioLogado);
+			if (opcao != null) {
+				setarParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.valueOf(opcao.getValor()));
 				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO"));
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_MEIO_PAGAMENTO", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.valueOf(opcao.getValor()));
-					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO"));
-				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
 		}
+		
 		return false;
 	}
 	
 	public Boolean getExibirBuscasRealizadas() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS") != null) {
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS") != null) {
+			return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS"));
+		} else {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", usuarioLogado);
+			if (opcao != null) {
+				setarParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.valueOf(opcao.getValor()));
 				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS"));
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("GERAL_EXIBIR_BUSCAS_REALIZADAS", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.valueOf(opcao.getValor()));
-					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS"));
-				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
 		}
+		
 		return false;
 	}
 	
 	public Integer getLimiteQuantidadeRegistros() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS") != null) {
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS") != null) {
+			return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS"));
+		} else {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", usuarioLogado);
+			if (opcao != null) {
+				setarParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", Integer.valueOf(opcao.getValor()));
 				return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS"));
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", Integer.valueOf(opcao.getValor()));
-					return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS"));
-				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
 		}
+		
 		return 100; // valor padrão.
 	}
 	
 	public String getFormaAgrupamentoPagamento() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS") != null) {
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS") != null) {
+			return (String)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS");
+		} else {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", usuarioLogado);
+			if (opcao != null) {
+				setarParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", opcao.getValor());
 				return (String)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS");
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", opcao.getValor());
-					return (String)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS");
-				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
 		}
+		
 		return "";
 	}
 	
 	public Boolean getExibirContasInativas() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS") != null) {
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS") != null) {
+			return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS"));
+		} else {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", usuarioLogado);
+			if (opcao != null) {
+				setarParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS", Boolean.valueOf(opcao.getValor()));
 				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS"));
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTA_EXIBIR_INATIVAS", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS", Boolean.valueOf(opcao.getValor()));
-					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS"));
-				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
 		}
+		
 		return false;
 	}
 	
 	public Integer getLimiteQuantidadeFechamentos() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS") != null) {
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS") != null) {
+			return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS"));
+		} else {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", usuarioLogado);
+			if (opcao != null) {
+				setarParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(opcao.getValor()));
 				return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS"));
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(opcao.getValor()));
-					return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS"));
-				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
 		}
+			
 		return 12; // valor padrão.
 	}
 	
 	public Boolean getNotificarAgendamentosEmail(Usuario usuario) {
-		try {
-			OpcaoSistema opcao = buscarPorChaveEUsuario("NOTIFICAR_AGENDAMENTO_EMAIL", usuario);
-			if (opcao != null)
-				return Boolean.valueOf(opcao.getValor());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
-		}
+		OpcaoSistema opcao = buscarPorChaveEUsuario("NOTIFICAR_AGENDAMENTO_EMAIL", usuario);
+		if (opcao != null)
+			return Boolean.valueOf(opcao.getValor());
+		
 		return false;
 	}
 	
 	public Map<String, Integer> getOpcoesArquivosAnexados(Usuario usuario) {
 		Map<String, Integer> opcoes = new HashMap<String, Integer>();
-		try {
-			for (OpcaoSistema opcao : opcaoSistemaRepository.findOpcoesUserByCasoUso("Arquivo", usuario)) {
-				opcoes.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
-			}
-			return opcoes;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
+		
+		for (OpcaoSistema opcao : opcaoSistemaRepository.findOpcoesUserByCasoUso("Arquivo", usuario)) {
+			opcoes.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
 		}
-		//return opcoes; 
+		return opcoes; 
 	}
 	
 	public Moeda getMoedaPadrao() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO") != null) {
-				return (Moeda)recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO");
-			} else {
-				Moeda moeda = moedaRepository.findDefaultByUsuario(usuarioLogado);
-				setarParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO", moeda);
-				return (Moeda)recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO") != null) {
+			return (Moeda)recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO");
+		} else {
+			Moeda moeda = moedaRepository.findDefaultByUsuario(usuarioLogado);
+			setarParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO", moeda);
+			return (Moeda)recuperaParametroCacheUsuario(usuarioLogado, "MOEDA_PADRAO");
 		}
-		//return null; // Este return nunca deve ser invocado.
 	}
 	
 	public Boolean getControlarEstoqueItemDespensa() {
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA") != null) {
+		
+		// Verifica se o valor existe no cache
+		if (recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA") != null) {
+			return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA"));
+		} else {
+			OpcaoSistema opcao = buscarPorChaveEUsuario("CONTROLAR_ESTOQUE_DESPENSA", usuarioLogado);
+			if (opcao != null) {
+				setarParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA", Boolean.valueOf(opcao.getValor()));
 				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA"));
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("CONTROLAR_ESTOQUE_DESPENSA", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA", Boolean.valueOf(opcao.getValor()));
-					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA"));
-				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BusinessException(e);
 		}
+		
 		return true;
 	}
 	

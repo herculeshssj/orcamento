@@ -49,6 +49,8 @@ package br.com.hslife.orcamento.aspect;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.hibernate.SessionFactory;
@@ -63,6 +65,8 @@ import br.com.hslife.orcamento.entity.Usuario;
 @Aspect
 @Component
 public class AuditoriaAspect {
+	
+	private static final Logger logger = LogManager.getLogger(AuditoriaAspect.class);
 	
 	@Autowired 
 	private SessionFactory sessionFactory;
@@ -80,6 +84,7 @@ public class AuditoriaAspect {
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..save(..)) && args(entity)")
 	public void afterSave(EntityPersistence entity) {
+		try {
 		Auditoria auditoria = new Auditoria();
 		
 		auditoria.setClasse(entity.getClass().getSimpleName());
@@ -114,6 +119,10 @@ public class AuditoriaAspect {
 		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
+		} catch (Throwable t) {
+			logger.catching(t);
+			t.printStackTrace();
+		}
 	}
 	
 	@AfterReturning("execution(public void br.com.hslife.orcamento.repository..update(..)) && args(entity)")
@@ -154,12 +163,14 @@ public class AuditoriaAspect {
 			
 			sessionFactory.getCurrentSession().persist(auditoria);
 		} catch (Throwable t) {
+			logger.catching(t);
 			t.printStackTrace();
 		}
 	}
 	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..delete(..)) && args(entity)")
 	public void beforeDelete(EntityPersistence entity) {
+		try {
 		Auditoria auditoria = new Auditoria();
 		
 		auditoria.setClasse(entity.getClass().getSimpleName());
@@ -193,5 +204,9 @@ public class AuditoriaAspect {
 		auditoria.setDadosAuditados(entity.generateJsonValues());
 		
 		sessionFactory.getCurrentSession().persist(auditoria);
+		} catch (Throwable t) {
+			logger.catching(t);
+			t.printStackTrace();
+		}
 	}
 }

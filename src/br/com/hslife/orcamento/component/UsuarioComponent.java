@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.component;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -59,23 +61,25 @@ import br.com.hslife.orcamento.repository.UsuarioRepository;
 @Component
 public class UsuarioComponent {
 	
+	private static final Logger logger = LogManager.getLogger(UsuarioComponent.class);
+	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
-	public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
-		this.usuarioRepository = usuarioRepository;
-	}
 
 	public Usuario getUsuarioLogado() {
-		String login = "";
-		SecurityContext context = SecurityContextHolder.getContext();
-        if (context instanceof SecurityContext) {
-            Authentication authentication = context.getAuthentication();
-            if (authentication instanceof Authentication) {
-            	login = ((User)authentication.getPrincipal()).getUsername();
-            }
+		try {
+			String login = "";
+			SecurityContext context = SecurityContextHolder.getContext();
+	        if (context instanceof SecurityContext) {
+	            Authentication authentication = context.getAuthentication();
+	            if (authentication instanceof Authentication) {
+	            	login = ((User)authentication.getPrincipal()).getUsername();
+	            }
+	        }
+	        return usuarioRepository.findByLogin(login);
+		} catch (Throwable t) {
+        	logger.catching(t);
+        	throw new RuntimeException(t);
         }
-        return usuarioRepository.findByLogin(login);
 	}
-
 }
