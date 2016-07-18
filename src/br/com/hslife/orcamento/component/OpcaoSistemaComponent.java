@@ -57,6 +57,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.repository.OpcaoSistemaRepository;
 

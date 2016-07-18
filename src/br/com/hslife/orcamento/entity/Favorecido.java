@@ -115,6 +115,12 @@ public class Favorecido extends EntityPersistence {
 	}
 	
 	@Override
+	public void validate() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public String getLabel() {
 		return nome;
 	}

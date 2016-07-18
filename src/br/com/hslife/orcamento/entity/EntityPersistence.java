@@ -66,6 +66,8 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	public abstract Long getId();
 	
 	public abstract String getLabel();
+	
+	public abstract void validate();
 
 	@Override
 	public int hashCode() {
