@@ -61,7 +61,6 @@ import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 @Repository
 public class ContaRepository extends AbstractCRUDRepository<Conta> {
@@ -71,7 +70,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Conta> findAll() throws BusinessException {
+	public List<Conta> findAll() {
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));
 		return criteria.addOrder(Order.asc("descricao")).list();
@@ -101,7 +100,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Conta> findAllAtivos() throws BusinessException {
+	public List<Conta> findAllAtivos() {
 		Criteria criteria = getSession().createCriteria(Conta.class);
 		criteria.add(Restrictions.eq("ativo", true));
 		criteria.add(Restrictions.ne("tipoConta", TipoConta.CARTAO));

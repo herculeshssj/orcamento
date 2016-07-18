@@ -53,19 +53,19 @@ import java.util.Map;
 
 import javax.persistence.MappedSuperclass;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-
-import br.com.hslife.orcamento.exception.ValidationException;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class EntityPersistence implements Comparable<EntityPersistence>, Serializable {
 	
+	private static final Logger logger = LogManager.getLogger(EntityPersistence.class);
+	
 	public abstract Long getId();
 	
 	public abstract String getLabel();
-	
-	public abstract void validate() throws ValidationException;
 
 	@Override
 	public int hashCode() {
@@ -124,6 +124,7 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 			}
 		}
 		catch (Exception e) {
+			logger.catching(e);
 			e.printStackTrace();
 		}
 		return camposClasse;

@@ -58,7 +58,6 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 @Repository
 public class CategoriaDocumentoRepository extends AbstractCRUDRepository<CategoriaDocumento> {
@@ -68,7 +67,7 @@ public class CategoriaDocumentoRepository extends AbstractCRUDRepository<Categor
 	}
 		
 	@SuppressWarnings("unchecked")
-	public List<CategoriaDocumento> findByDescricaoAndUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<CategoriaDocumento> findByDescricaoAndUsuario(String descricao, Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(CategoriaDocumento.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));
 		if (!usuario.getLogin().equals("admin")) {
@@ -78,14 +77,14 @@ public class CategoriaDocumentoRepository extends AbstractCRUDRepository<Categor
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<CategoriaDocumento> findByDescricao(String descricao) throws BusinessException {
+	public List<CategoriaDocumento> findByDescricao(String descricao) {
 		Criteria criteria = getSession().createCriteria(CategoriaDocumento.class);
 		criteria.add(Restrictions.ilike("descricao", descricao, MatchMode.ANYWHERE));				
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<CategoriaDocumento> findByUsuario(Usuario usuario) throws BusinessException {
+	public List<CategoriaDocumento> findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(CategoriaDocumento.class);		
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));		
 		return criteria.addOrder(Order.asc("descricao")).list();

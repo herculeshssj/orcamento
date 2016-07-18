@@ -66,7 +66,6 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -103,89 +102,45 @@ public class EntityComboUtil {
 	private OpcaoSistemaComponent opcaoSistemaComponent;
 	
 	public List<Banco> getListaBanco() {
-		try {
-			return bancoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<Banco>();
+		return bancoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
 	}
 	
 	public List<Categoria> getListaCategoria() {
-		try {
-			return categoriaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<>();
+		return categoriaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
 	}
 	
 	public List<Categoria> getListaCategoriaCredito() {
-		try {
-			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<>();
+		return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, usuarioComponent.getUsuarioLogado());
 	}
 	
 	public List<Categoria> getListaCategoriaDebito() {
-		try {
-			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<>();
+		return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, usuarioComponent.getUsuarioLogado());
 	}
 	
 	public List<Conta> getListaConta() {
-		try {
-			if (opcaoSistemaComponent.getExibirContasInativas())
-				return contaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-			else
-				return contaService.buscarAtivosPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<>();
+		if (opcaoSistemaComponent.getExibirContasInativas())
+			return contaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+		else
+			return contaService.buscarAtivosPorUsuario(usuarioComponent.getUsuarioLogado());
 	}
 	
 	public List<Conta> getListaContaCartao() {
-		try {
-			if (opcaoSistemaComponent.getExibirContasInativas())
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), null);
-			else
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), true);
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<>();
+		if (opcaoSistemaComponent.getExibirContasInativas())
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), null);
+		else
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), true);
 	}
 	
 	public List<Favorecido> getListaFavorecido() {
-		try {
-			return favorecidoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<>();
+		return favorecidoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());		
 	}
 	
 	public List<MeioPagamento> getListaMeioPagamento() {
-		try {
-			return meioPagamentoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<>();
+		return meioPagamentoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+		
 	}
 	
 	public List<Moeda> getListaMoeda() {
-		try {
-			return moedaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
-		}
-		return new ArrayList<Moeda>();
+		return moedaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
 	}
 }

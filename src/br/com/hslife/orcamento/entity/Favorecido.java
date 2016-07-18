@@ -60,12 +60,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.com.caelum.stella.validation.CNPJValidator;
-import br.com.caelum.stella.validation.CPFValidator;
-import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
-import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -122,35 +117,6 @@ public class Favorecido extends EntityPersistence {
 	@Override
 	public String getLabel() {
 		return nome;
-	}
-	
-	@Override
-	public void validate() throws BusinessException {
-		if (this.nome == null || this.nome.trim().isEmpty()) {
-			throw new BusinessException("Informe um nome!");
-		}
-		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
-		}
-		
-		EntityPersistenceUtil.validaCampoNulo("Tipo de pessoa", this.tipoPessoa);
-		
-		try {
-			CPFValidator validatorCpf = new CPFValidator();
-			CNPJValidator validatorCnpj = new CNPJValidator();
-			
-			if (this.cpfCnpj != null && !this.cpfCnpj.trim().isEmpty()) {
-				switch (this.tipoPessoa) {
-					case FISICA : validatorCpf.assertValid(this.cpfCnpj); break;
-					case JURIDICA : validatorCnpj.assertValid(this.cpfCnpj); break;
-				}
-			}			
-			
-		} catch (InvalidStateException ise) {
-			throw new BusinessException(ise.getMessage());
-		}
-	
 	}
 	
 	public String getSaldoPagoFormatado() {

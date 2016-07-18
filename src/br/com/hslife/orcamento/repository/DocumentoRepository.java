@@ -59,7 +59,6 @@ import org.springframework.stereotype.Repository;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Documento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 @Repository
 public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
@@ -69,7 +68,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Documento> findByNomeAndUsuario(String nome, Usuario usuario) throws BusinessException {
+	public List<Documento> findByNomeAndUsuario(String nome, Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.ilike("documento.nome", nome, MatchMode.ANYWHERE));
@@ -78,7 +77,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Documento> findByUsuario(Usuario usuario) throws BusinessException {
+	public List<Documento> findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.eq("categoria.usuario.id", usuario.getId()));
@@ -86,14 +85,14 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Documento> findByCategoriaDocumento(CategoriaDocumento categoriaDocumento) throws BusinessException {
+	public List<Documento> findByCategoriaDocumento(CategoriaDocumento categoriaDocumento) {
 		Criteria criteria = getSession().createCriteria(Documento.class);
 		criteria.add(Restrictions.eq("categoriaDocumento.id", categoriaDocumento.getId()));				
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Documento> findByCategoriaDocumentoAndUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) throws BusinessException {
+	public List<Documento> findByCategoriaDocumentoAndUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Documento.class, "documento")
 				.createAlias("documento.categoriaDocumento", "categoria", JoinType.INNER_JOIN);
 		criteria.add(Restrictions.eq("documento.categoriaDocumento.id", categoriaDocumento.getId()));
