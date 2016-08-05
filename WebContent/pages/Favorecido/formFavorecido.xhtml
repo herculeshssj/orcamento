@@ -68,7 +68,7 @@
 		</h:selectOneRadio>				
 		
 		<label for="frmFormEntity:txtCpf">CPF/CNPJ:</label>
-		<h:inputText id="txtCpf" value="#{managedBean.entity.cpfCnpj}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>				
+		<h:inputText id="txtCpf" value="#{managedBean.entity.cpfCnpj}" disabled="#{!managedBean.entity.ativo}"/>				
 		
 		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
 		<label>Padrão:</label>
