@@ -365,8 +365,12 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	}
 	
 	public List<ItemDespensa> getListaItemDespensa() {
-		if (despensa != null) {
-			return getService().buscarPorDespensaUsuarioEArquivado(despensa, getUsuarioLogado(), false);
+		try {
+			if (despensa != null) {
+				return getService().buscarPorDespensaUsuarioEArquivado(despensa, getUsuarioLogado(), false);
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
 	}

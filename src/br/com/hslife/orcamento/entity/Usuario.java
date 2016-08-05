@@ -61,6 +61,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -127,7 +128,7 @@ public class Usuario extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() {
+	public void validate() throws BusinessException {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Login", this.login, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("E-Mail", this.email, 40);

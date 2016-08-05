@@ -49,19 +49,20 @@ package br.com.hslife.orcamento.facade;
 import java.util.Map;
 
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IOpcaoSistema {
 	
-	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema);
+	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) throws BusinessException;
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema);
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException;
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario);
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws BusinessException;
 	
-	public Map<String, Object> buscarOpcoesGlobalAdmin();
+	public Map<String, Object> buscarOpcoesGlobalAdmin() throws BusinessException;
 	
-	public Map<String, Object> buscarOpcoesUser(Usuario usuario);
+	public Map<String, Object> buscarOpcoesUser(Usuario usuario) throws BusinessException;
 	
-	public void atualizarCacheOpcoesSistema();
+	public void atualizarCacheOpcoesSistema() throws BusinessException;
 
 }

@@ -50,6 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
 
 @Component("sobreMB")
@@ -79,12 +80,16 @@ public class SobreController extends AbstractController {
 	}
 
 	public void enviarMensagem() {
-		if (assuntoMensagem.isEmpty() || mensagem.isEmpty()) {
-			warnMessage("Informe o assunto e o texto da mensagem!");
-		} else {			
-			usuarioService.enviarMensagemParaAdmin(assuntoMensagem, mensagem);
-			infoMessage("Mensagem enviada com sucesso!");
-			initializeEntity();			
+		try {
+			if (assuntoMensagem.isEmpty() || mensagem.isEmpty()) {
+				warnMessage("Informe o assunto e o texto da mensagem!");
+			} else {			
+				usuarioService.enviarMensagemParaAdmin(assuntoMensagem, mensagem);
+				infoMessage("Mensagem enviada com sucesso!");
+				initializeEntity();			
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
 	}
 

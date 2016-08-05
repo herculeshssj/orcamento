@@ -87,7 +87,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 
 	@Override
-	public void cadastrar(Usuario entity) {		
+	public void cadastrar(Usuario entity) throws BusinessException{		
 		// Verifica se o login informado já consta na base
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		if (u != null) {
@@ -99,7 +99,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public void efetuarRegistro(Usuario entity) {
+	public void efetuarRegistro(Usuario entity) throws BusinessException {
 		// Gera hash da data atual para poder gerar a senha aleatório do usuário
 		String hash = Util.MD5(new Date().toString());
 		String senha = hash.substring(0, 16);
@@ -129,7 +129,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public void recuperarSenha(Usuario entity) {
+	public void recuperarSenha(Usuario entity) throws BusinessException {
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		
 		// Verifica se o usuário informado existe, se não é o usuário admin, e se o e-mail informado coincide com o 
@@ -193,7 +193,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		}		
 	}
 	
-	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) {
+	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws BusinessException {
 		try {
 			Usuario admin = getRepository().findByLogin("admin");
 			emailComponent.setRemetente(getComponent().getUsuarioLogado().getNome());

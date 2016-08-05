@@ -60,7 +60,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import br.com.caelum.stella.validation.CNPJValidator;
+import br.com.caelum.stella.validation.CPFValidator;
+import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -115,9 +120,31 @@ public class Favorecido extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() {
-		// TODO Auto-generated method stub
+	public void validate() throws BusinessException {
+		if (this.getNome() == null || this.getNome().trim().isEmpty()) {
+			throw new BusinessException("Informe um nome!");
+		}
 		
+		if (this.getUsuario() == null) {
+			throw new BusinessException("Informe o usuário!");
+		}
+		
+		EntityPersistenceUtil.validaCampoNulo("Tipo de pessoa", this.tipoPessoa);
+		
+		try {
+			CPFValidator validatorCpf = new CPFValidator();
+			CNPJValidator validatorCnpj = new CNPJValidator();
+			
+			if (this.getCpfCnpj() != null && !this.getCpfCnpj().trim().isEmpty()) {
+				switch (this.getTipoPessoa()) {
+					case FISICA : validatorCpf.assertValid(this.getCpfCnpj()); break;
+					case JURIDICA : validatorCnpj.assertValid(this.getCpfCnpj()); break;
+				}
+			}			
+			
+		} catch (InvalidStateException ise) {
+			throw new BusinessException(ise);
+		}		
 	}
 	
 	@Override

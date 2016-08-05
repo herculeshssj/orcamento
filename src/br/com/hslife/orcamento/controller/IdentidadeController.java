@@ -58,6 +58,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IIdentidade;
 
 @Component("identidadeMB")
@@ -94,7 +95,7 @@ public class IdentidadeController extends AbstractController {
 		
 	}
 
-	private Identidade carregarIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) {
+	private Identidade carregarIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) throws BusinessException{
 		Identidade documento = getService().buscarPorUsuarioETipoIdentidade(usuario, tipoIdentidade);
 		if (documento == null) {
 			return new Identidade(usuario, tipoIdentidade);
@@ -106,41 +107,49 @@ public class IdentidadeController extends AbstractController {
 	@Override
 	@PostConstruct
 	public String startUp() {
-		cpf = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
-		rg = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.RG);
-		tituloEleitor = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR);
-		pisPasep = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP);
-		carteiraTrabalho = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO);
-		certidaoNascimento = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO);
-		cnh = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CNH);
-		docMilitar = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
-		passaporte = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
-	
+		try {
+			cpf = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CPF);
+			rg = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.RG);
+			tituloEleitor = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.TITULO_ELEITOR);
+			pisPasep = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.PIS_PASEP);
+			carteiraTrabalho = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CARTEIRA_TRABALHO);
+			certidaoNascimento = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CERTIDAO_NASCIMENTO);
+			cnh = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CNH);
+			docMilitar = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
+			passaporte = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
 		return "/pages/Identidade/formIdentidade";
 	}
 	
 	public void salvarDocumentos() {		
-		// Adiciona os documentos no arraylist
-		documentos.clear();
-		documentos.add(cpf);
-		documentos.add(rg);
-		documentos.add(tituloEleitor);
-		documentos.add(pisPasep);
-		documentos.add(carteiraTrabalho);
-		documentos.add(certidaoNascimento);
-		documentos.add(cnh);
-		documentos.add(docMilitar);
-		documentos.add(passaporte);
-		
-		// Valida os documentos de identidade
-		for (Identidade identidade : documentos) {
-			identidade.validate();
+		try {
+			// Adiciona os documentos no arraylist
+			documentos.clear();
+			documentos.add(cpf);
+			documentos.add(rg);
+			documentos.add(tituloEleitor);
+			documentos.add(pisPasep);
+			documentos.add(carteiraTrabalho);
+			documentos.add(certidaoNascimento);
+			documentos.add(cnh);
+			documentos.add(docMilitar);
+			documentos.add(passaporte);
+			
+			// Valida os documentos de identidade
+			for (Identidade identidade : documentos) {
+				identidade.validate();
+			}
+			
+			// Salva os documentos
+			getService().salvarDocumentos(documentos);
+			
+			infoMessage("Documentos salvos com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
-		
-		// Salva os documentos
-		getService().salvarDocumentos(documentos);
-		
-		infoMessage("Documentos salvos com sucesso!");
 	}
 	
 	public IIdentidade getService() {

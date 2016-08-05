@@ -51,7 +51,7 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.hslife.orcamento.util.Util;
 
-public class BusinessException extends RuntimeException {
+public class BusinessException extends Exception {
 	
 	private static final long serialVersionUID = -6615643150827475837L;
 	

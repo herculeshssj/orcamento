@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.controller;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICRUDService;
 
 @SuppressWarnings({"rawtypes","unchecked"})
@@ -117,37 +118,56 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	}
 	
 	public String save() {
-		validate(operation);
-		if (entity.getId() != null) {
-			getService().alterar(entity);
-			infoMessage("Registro alterado com sucesso!");
-		} else {
-			getService().cadastrar(entity);
-			infoMessage("Registro cadastrado com sucesso!");
+		try {
+			validate(operation);
+			if (entity.getId() != null) {
+				getService().alterar(entity);
+				infoMessage("Registro alterado com sucesso!");
+			} else {
+				getService().cadastrar(entity);
+				infoMessage("Registro cadastrado com sucesso!");
+			}
+			return list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
-		return list();
+		return "";
 	}
 	
 	public String view() {
-		entity = (E) getService().buscarPorID(idEntity);
-		operation = "delete";
-		actionTitle = " - Excluir";
-		return goToViewPage;
-		
+		try {
+			entity = (E) getService().buscarPorID(idEntity);
+			operation = "delete";
+			actionTitle = " - Excluir";
+			return goToViewPage;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String edit() {
-		entity = (E) getService().buscarPorID(idEntity);
-		operation = "edit";
-		actionTitle = " - Editar";
-		return goToFormPage;
+		try {
+			entity = (E) getService().buscarPorID(idEntity);
+			operation = "edit";
+			actionTitle = " - Editar";
+			return goToFormPage;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String delete() {
-		validate(operation);
-		getService().excluir(entity);
-		infoMessage("Registro excluído com sucesso!");						
-		return list();
+		try {
+			validate(operation);
+			getService().excluir(entity);
+			infoMessage("Registro excluído com sucesso!");						
+			return list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public abstract void find();

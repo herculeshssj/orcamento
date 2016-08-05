@@ -102,9 +102,13 @@ public class SaldoAtualContasController extends AbstractController {
 	}
 	
 	private void gerarSaldoAtualContas() {
+		try {
 		listEntity = getService().gerarSaldoAtualContas(lancamentoAgendado, getUsuarioLogado());
 		if (listEntity == null || listEntity.isEmpty())
 			listEntity = new ArrayList<>();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 
 	public IResumoEstatistica getService() {

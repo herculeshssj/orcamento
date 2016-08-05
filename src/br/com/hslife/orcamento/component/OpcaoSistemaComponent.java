@@ -141,7 +141,7 @@ public class OpcaoSistemaComponent {
 		
 	}
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) {
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException {
 		OpcaoSistema opcao = new OpcaoSistema();
 		for (String chave : opcoesSistema.keySet()) {
 			opcao = opcaoSistemaRepository.findOpcaoGlobalAdminByChave(chave);
@@ -163,7 +163,7 @@ public class OpcaoSistemaComponent {
 		}
 	}
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) {
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws BusinessException {
 		OpcaoSistema opcao;
 		for (String chave : opcoesSistema.keySet()) {			
 			opcao = opcaoSistemaRepository.findOpcaoUserByChave(chave, usuario);
@@ -213,7 +213,7 @@ public class OpcaoSistemaComponent {
 		}
 	}
 	
-	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) {
+	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) throws BusinessException {
 		if (opcao.isRequired()) {
 			//if (valor == null || ((String)valor).isEmpty()) { -- Mudança feita em virtude da atualização para JSF 2.2.10 e PrimeFaces 5.2
 			if (valor == null) {
@@ -223,7 +223,7 @@ public class OpcaoSistemaComponent {
 		}
 	}
 	
-	public void setarOpcoesPadraoUsuario(Usuario entity) {
+	public void setarOpcoesPadraoUsuario(Usuario entity) throws BusinessException {
 		// Seta as opções do sistema que são individuais para cada usuário
 		Map<String, Object> opcoesUsuario = new HashMap<String, Object>();
 		opcoesUsuario.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.FALSE);

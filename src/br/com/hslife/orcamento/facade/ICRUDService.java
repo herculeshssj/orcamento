@@ -47,17 +47,18 @@
 package br.com.hslife.orcamento.facade;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
+import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface ICRUDService<E extends EntityPersistence> {
 	
-	public void cadastrar(E entity);
+	public void cadastrar(E entity) throws BusinessException;
 	
-	public void alterar(E entity);
+	public void alterar(E entity) throws BusinessException;
 	
-	public void excluir(E entity);
+	public void excluir(E entity) throws BusinessException;
 	
-	public E buscarPorID(Long id);
+	public E buscarPorID(Long id) throws BusinessException;
 	
-	public void validar(E entity);
+	public void validar(E entity) throws BusinessException;
 
 }

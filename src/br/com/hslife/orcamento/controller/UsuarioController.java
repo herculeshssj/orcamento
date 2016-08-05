@@ -58,6 +58,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.Util;
 
@@ -96,7 +97,11 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	}
 	
 	public void find() {
-		listEntity = getService().buscarTodosPorLogin(loginUsuario);			
+		try {
+			listEntity = getService().buscarTodosPorLogin(loginUsuario);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public String list() {
@@ -125,93 +130,137 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	}
 	
 	public void saveUser() {
-		getService().alterar(entity);
-		infoMessage("Dados do usuário alterados com sucesso!");		
+		try {
+			getService().alterar(entity);
+			infoMessage("Dados do usuário alterados com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public String minhaConta() {
-		entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
-		actionTitle = " - Minha Conta";
-		return "/pages/" + entity.getClass().getSimpleName() + "/minhaConta"; 
+		try {
+			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
+			actionTitle = " - Minha Conta";
+			return "/pages/" + entity.getClass().getSimpleName() + "/minhaConta";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String edit() {
-		entity = getService().buscarPorID(idEntity);
-		operation = "edit";
-		actionTitle = " - Editar";
-		return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName(); 
+		try {
+			entity = getService().buscarPorID(idEntity);
+			operation = "edit";
+			actionTitle = " - Editar";
+			return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public void logarComo() {
-		Usuario u = getService().buscarPorID(idEntity);
-		u.setNome(u.getNome() + "(admin)");
-		u.setLogado(true);
-		
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", u);
-		
-		infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
+		try {
+			Usuario u = getService().buscarPorID(idEntity);
+			u.setNome(u.getNome() + "(admin)");
+			u.setLogado(true);
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", u);
+			
+			infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void deslogarComo() {
-		Usuario u = getService().buscarPorID(idEntity);
-		
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioComponent.getUsuarioLogado());
-		
-		infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());		
+		try {
+			Usuario u = getService().buscarPorID(idEntity);
+			
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioComponent.getUsuarioLogado());
+			
+			infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 
 	public void efetuarRegistro() {
-		getService().efetuarRegistro(entity);
-		infoMessage("Usuário registrado com sucesso!");
-		infoMessage("Senha de acesso foi enviada para o e-mail informado.");
-		initializeEntity();
+		try {
+			getService().efetuarRegistro(entity);
+			infoMessage("Usuário registrado com sucesso!");
+			infoMessage("Senha de acesso foi enviada para o e-mail informado.");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void recuperarSenha() {
-		getService().recuperarSenha(entity);
-		infoMessage("Senha alterada com sucesso!");
-		infoMessage("Senha de acesso foi envada para o e-mail cadastrado.");
-		initializeEntity();
+		try {
+			getService().recuperarSenha(entity);
+			infoMessage("Senha alterada com sucesso!");
+			infoMessage("Senha de acesso foi envada para o e-mail cadastrado.");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public String alterarSenhaView() {
-		entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
-		actionTitle = " - Alterar Senha";
-		return "/pages/" + entity.getClass().getSimpleName() + "/alterarSenha";
+		try {
+			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
+			actionTitle = " - Alterar Senha";
+			return "/pages/" + entity.getClass().getSimpleName() + "/alterarSenha";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public void alterarSenha() {
-		// Traz as credenciais do usuário da base
-		Usuario u = getService().buscarPorLogin(getUsuarioLogado().getLogin());
-		
-		// Verifica se a senha atual informada coincide com a armazenada na base
-		if (!Util.SHA256(senhaAtual).equals(u.getSenha())) {
-			warnMessage("Senha atual não confere!");
-			return;
+		try {
+			// Traz as credenciais do usuário da base
+			Usuario u = getService().buscarPorLogin(getUsuarioLogado().getLogin());
+			
+			// Verifica se a senha atual informada coincide com a armazenada na base
+			if (!Util.SHA256(senhaAtual).equals(u.getSenha())) {
+				warnMessage("Senha atual não confere!");
+				return;
+			}
+			
+			// Verifica se a nova senha é idêntica a atual
+			if (Util.SHA256(confirmaSenha).equals(u.getSenha())) {
+				warnMessage("Nova senha não pode ser igual a senha atual!");
+				return;
+			}
+			
+			// Verifica se as senhas digitadas são iguais
+			if (!Util.SHA256(confirmaSenha).equals(Util.SHA256(novaSenha))) {
+				warnMessage("As senhas não coincidem!");
+				return;
+			}
+			
+			// Seta a nova senha na entidade e salva na base
+			entity.setSenha(Util.SHA256(confirmaSenha));
+			getService().alterar(entity);
+			infoMessage("Senha alterada com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
-		
-		// Verifica se a nova senha é idêntica a atual
-		if (Util.SHA256(confirmaSenha).equals(u.getSenha())) {
-			warnMessage("Nova senha não pode ser igual a senha atual!");
-			return;
-		}
-		
-		// Verifica se as senhas digitadas são iguais
-		if (!Util.SHA256(confirmaSenha).equals(Util.SHA256(novaSenha))) {
-			warnMessage("As senhas não coincidem!");
-			return;
-		}
-		
-		// Seta a nova senha na entidade e salva na base
-		entity.setSenha(Util.SHA256(confirmaSenha));
-		getService().alterar(entity);
-		infoMessage("Senha alterada com sucesso!");
 	}
 	
 	public String gerarTokenID() {
-		getService().gerarTokenID(getUsuarioLogado());
-		infoMessage("Token gerado com sucesso!");
-		return this.minhaConta();
+		try {
+			getService().gerarTokenID(getUsuarioLogado());
+			infoMessage("Token gerado com sucesso!");
+			return this.minhaConta();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String getLoginUsuario() {

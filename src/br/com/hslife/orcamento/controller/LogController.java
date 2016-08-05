@@ -54,6 +54,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Logs;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.model.CriterioLog;
 
@@ -91,7 +92,11 @@ public class LogController extends AbstractController {
 	}
 	
 	public void find() {
-		listEntity = getService().buscarPorCriterios(criterioBusca);	
+		try {
+			listEntity = getService().buscarPorCriterios(criterioBusca);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public String cancel() {
@@ -100,41 +105,64 @@ public class LogController extends AbstractController {
 	}
 	
 	public String view() {
-		entity = getService().buscarPorID(idEntity);
-		return "/pages/Logs/viewLogs";
+		try {
+			entity = getService().buscarPorID(idEntity);
+			return "/pages/Logs/viewLogs";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public void delete() {
-		entity = getService().buscarPorID(idEntity);
-		getService().excluir(entity);
-		infoMessage("Registro excluído com sucesso!");
-		initializeEntity();
+		try {
+			entity = getService().buscarPorID(idEntity);
+			getService().excluir(entity);
+			infoMessage("Registro excluído com sucesso!");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void excluirLog() {
-		if (listEntity == null || listEntity.isEmpty()) {
-			warnMessage("Nenhum resultado encontrado!");
-			return;
+		try {
+			if (listEntity == null || listEntity.isEmpty()) {
+				warnMessage("Nenhum resultado encontrado!");
+				return;
+			}
+			
+			for (Logs log : listEntity) {
+				entity = getService().buscarPorID(log.getId());
+				getService().excluir(log);
+			}
+			infoMessage("Registros excluídos com sucesso!");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
 		}
-		
-		for (Logs log : listEntity) {
-			entity = getService().buscarPorID(log.getId());
-			getService().excluir(log);
-		}
-		infoMessage("Registros excluídos com sucesso!");
-		initializeEntity();
 	}
 	
 	public List<String> getListaNivel() {
-		List<String> result = getService().buscarTodosNiveis();
-		if (result == null) result = new ArrayList<>();
-		return result;
+		try {
+			List<String> result = getService().buscarTodosNiveis();
+			if (result == null) result = new ArrayList<>();
+			return result;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<String> getListaLogger() {
-		List<String> result = getService().buscarTodosLoggers();
-		if (result == null) result = new ArrayList<>();
-		return result;
+		try {
+			List<String> result = getService().buscarTodosLoggers();
+			if (result == null) result = new ArrayList<>();
+			return result;
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public int getQuantRegistros() {

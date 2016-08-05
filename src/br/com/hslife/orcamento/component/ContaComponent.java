@@ -371,20 +371,20 @@ public class ContaComponent {
 		return fechamentoPeriodoRepository.findByContaAndOperacaoConta(conta, operacaoConta);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) {
+	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
 		this.fecharPeriodo(dataFechamento, conta, null, null);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
 		this.fecharPeriodo(dataFechamento, conta, null, lancamentosPeriodicos);
 	}
 	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) {
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
 		this.fecharPeriodo(fechamentoPeriodo.getData(), fechamentoPeriodo.getConta(), fechamentoPeriodo, lancamentosPeriodicos);
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos) {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  throws BusinessException {
 		// Obtém-se o último fechamento realizado
 		FechamentoPeriodo fechamentoAnterior;
 		if (fechamentoReaberto == null)

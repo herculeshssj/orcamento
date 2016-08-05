@@ -46,7 +46,7 @@
 
 package br.com.hslife.orcamento.util;
 
-import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 
 
 public class EntityPersistenceUtil {
@@ -55,57 +55,57 @@ public class EntityPersistenceUtil {
 		// Esta classe não pode ser instanciada.
 	}
 	
-	public static void validaTamanhoCampoStringOpcional(String nomeCampo, String campo, int tamanho) throws ValidationException {
+	public static void validaTamanhoCampoStringOpcional(String nomeCampo, String campo, int tamanho) throws BusinessException {
 		if (campo != null && campo.trim().length() > tamanho) {
-			throw new ValidationException("Campo '" + nomeCampo + "' aceita no máximo "+ tamanho + " caracteres!");
+			throw new BusinessException("Campo '" + nomeCampo + "' aceita no máximo "+ tamanho + " caracteres!");
 		}		
 	}
 	
-	public static void validaTamanhoExatoCampoStringOpcional(String nomeCampo, String campo, int tamanho) throws ValidationException {
+	public static void validaTamanhoExatoCampoStringOpcional(String nomeCampo, String campo, int tamanho) throws BusinessException {
 		if (campo != null && campo.trim().length() != tamanho) {
-			throw new ValidationException("Campo '" + nomeCampo + "' aceita exatamente "+ tamanho + " caracteres!");
+			throw new BusinessException("Campo '" + nomeCampo + "' aceita exatamente "+ tamanho + " caracteres!");
 		}		
 	}
 	
-	public static void validaTamanhoCampoStringObrigatorio(String nomeCampo, String campo, int tamanho) throws ValidationException {
+	public static void validaTamanhoCampoStringObrigatorio(String nomeCampo, String campo, int tamanho) throws BusinessException {
 		if (campo == null) {
-			throw new ValidationException("Campo '" + nomeCampo + "' não pode ser nulo.");
+			throw new BusinessException("Campo '" + nomeCampo + "' não pode ser nulo.");
 		}
 		
 		if (campo.trim().isEmpty()) {
-			throw new ValidationException("Campo '" + nomeCampo + "' não pode ser vazio.");
+			throw new BusinessException("Campo '" + nomeCampo + "' não pode ser vazio.");
 		}
 		
 		if (campo.trim().length() > tamanho) {
-			throw new ValidationException("Campo '" + nomeCampo + "' aceita no máximo "+ tamanho + " caracteres!");
+			throw new BusinessException("Campo '" + nomeCampo + "' aceita no máximo "+ tamanho + " caracteres!");
 		}		
 	}
 	
-	public static void validaTamanhoExatoCampoStringObrigatorio(String nomeCampo, String campo, int tamanho) throws ValidationException {
+	public static void validaTamanhoExatoCampoStringObrigatorio(String nomeCampo, String campo, int tamanho) throws BusinessException {
 		if (campo == null) {
-			throw new ValidationException("Campo '" + nomeCampo + "' não pode ser nulo.");
+			throw new BusinessException("Campo '" + nomeCampo + "' não pode ser nulo.");
 		}
 		
 		if (campo.trim().isEmpty()) {
-			throw new ValidationException("Campo '" + nomeCampo + "' não pode ser vazio.");
+			throw new BusinessException("Campo '" + nomeCampo + "' não pode ser vazio.");
 		}
 		
 		if (campo.trim().length() != tamanho) {
-			throw new ValidationException("Campo '" + nomeCampo + "' aceita exatamente "+ tamanho + " caracteres!");
+			throw new BusinessException("Campo '" + nomeCampo + "' aceita exatamente "+ tamanho + " caracteres!");
 		}		
 	}
 	
-	public static void validaCampoNulo(String nomeCampo, Object campo) throws ValidationException {
+	public static void validaCampoNulo(String nomeCampo, Object campo) throws BusinessException {
 		if (campo == null) {
-			throw new ValidationException("Campo '" + nomeCampo + "' não pode ser nulo.");
+			throw new BusinessException("Campo '" + nomeCampo + "' não pode ser nulo.");
 		}
 	}
 	
-	public static void validaCampoInteiroZerado(String nomeCampo, Integer campo) throws ValidationException {
+	public static void validaCampoInteiroZerado(String nomeCampo, Integer campo) throws BusinessException {
 		if (campo == null) {
-			throw new ValidationException("Campo '" + nomeCampo + "' não pode ser nulo.");
+			throw new BusinessException("Campo '" + nomeCampo + "' não pode ser nulo.");
 		} else if (campo.intValue() == 0) {
-			throw new ValidationException("Campo '" + nomeCampo + "' não pode ser zero.");
+			throw new BusinessException("Campo '" + nomeCampo + "' não pode ser zero.");
 		}
 	}
 }

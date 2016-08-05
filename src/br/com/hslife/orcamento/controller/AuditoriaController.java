@@ -99,7 +99,11 @@ public class AuditoriaController extends AbstractController {
 	}
 	
 	public void find() {
-		listEntity = getService().buscarPorCriterios(criterio);	
+		try {
+			listEntity = getService().buscarPorCriterios(criterio);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public String view() {
@@ -113,10 +117,14 @@ public class AuditoriaController extends AbstractController {
 	}
 	
 	public void delete() {
-		entity = getService().buscarPorId(idEntity);
-		getService().excluir(entity);
-		infoMessage("Registro excluído com sucesso!");
-		initializeEntity();
+		try {
+			entity = getService().buscarPorId(idEntity);
+			getService().excluir(entity);
+			infoMessage("Registro excluído com sucesso!");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public String excluirLog() {

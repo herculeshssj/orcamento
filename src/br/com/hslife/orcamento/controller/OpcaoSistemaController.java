@@ -55,6 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 
 @Component("opcaoSistemaMB")
@@ -102,11 +103,19 @@ public class OpcaoSistemaController extends AbstractController {
 	}
 	
 	private void carregarOpcoesUser() {
-		opcoesUser = getService().buscarOpcoesUser(getUsuarioLogado());		
+		try {
+			opcoesUser = getService().buscarOpcoesUser(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 
 	private void carregarOpcoesGlobalAdmin() {
-		opcoesGlobalAdmin = getService().buscarOpcoesGlobalAdmin();
+		try {
+			opcoesGlobalAdmin = getService().buscarOpcoesGlobalAdmin();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 
 	private void carregarOpcoesGlobal() {
@@ -114,11 +123,15 @@ public class OpcaoSistemaController extends AbstractController {
 	}
 
 	public void save() {
-		getService().salvarOpcoesGlobal(opcoesGlobal);
-		getService().salvarOpcoesGlobalAdmin(opcoesGlobalAdmin);
-		getService().salvarOpcoesUser(opcoesUser, getUsuarioLogado());
-		getService().atualizarCacheOpcoesSistema();
-		infoMessage("Opções salvas com sucesso!");
+		try {
+			getService().salvarOpcoesGlobal(opcoesGlobal);
+			getService().salvarOpcoesGlobalAdmin(opcoesGlobalAdmin);
+			getService().salvarOpcoesUser(opcoesUser, getUsuarioLogado());
+			getService().atualizarCacheOpcoesSistema();
+			infoMessage("Opções salvas com sucesso!");
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 
 	public IOpcaoSistema getService() {

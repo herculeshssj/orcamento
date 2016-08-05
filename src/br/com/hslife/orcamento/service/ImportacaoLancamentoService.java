@@ -148,7 +148,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) {
+	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
 		switch (conta.getTipoConta()) {
 			case CORRENTE : this.processarArquivoImportadoContaCorrente(arquivo, conta); break;
 			case POUPANCA : this.processarArquivoImportadoContaPoupanca(arquivo, conta); break;
@@ -391,7 +391,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Override
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) {
+	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
 		InfoOFX info = new InfoOFX();
 		try {
 			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
@@ -436,7 +436,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) {
+	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) throws BusinessException {
 		try {
 			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
 			
@@ -514,7 +514,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) {
+	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) throws BusinessException {
 		try {
 			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
 			
@@ -592,7 +592,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) {
+	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) throws BusinessException {
 		try {
 			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
 			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
@@ -639,7 +639,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws IOException {
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws BusinessException, IOException {
 		// Declaração e leitura dos dados do CSV
 		final Reader reader = new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "UTF-8");
 		final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());

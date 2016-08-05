@@ -69,6 +69,7 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -161,27 +162,57 @@ public class LancamentoRapidoController extends AbstractController {
 	
 	@Override
 	public Usuario getUsuarioLogado() {
-		return usuarioService.buscarPorTokenID(userTokenID);
+		try {
+			return usuarioService.buscarPorTokenID(userTokenID);
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return null;
 	}
 	
 	public List<Conta> getListaConta() {
-		return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());
+		try {
+			return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<Categoria> getListaCategoria() {
-		return categoriaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		try {
+			return categoriaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<Favorecido> getListaFavorecido() {
-		return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		try {
+			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
 		return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<Moeda> getListaMoeda() {
-		return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		try {
+			return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<SelectItem> getListaTipoLancamento() {
