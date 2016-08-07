@@ -60,6 +60,7 @@ import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 public class ConnectionFactory {
+	
     private static interface Singleton {
         final ConnectionFactory INSTANCE = new ConnectionFactory();
     }
@@ -67,6 +68,12 @@ public class ConnectionFactory {
     private final DataSource dataSource;
  
     private ConnectionFactory() {
+    	try {
+    		Class.forName("com.mysql.jdbc.Driver");
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
         Properties properties = new Properties();
         properties.setProperty("user", "orcamento");
         properties.setProperty("password", "d1nh31r0"); // or get properties from some configuration file
@@ -87,4 +94,5 @@ public class ConnectionFactory {
     public static Connection getDatabaseConnection() throws SQLException {
         return Singleton.INSTANCE.dataSource.getConnection();
     }
+   
 }
