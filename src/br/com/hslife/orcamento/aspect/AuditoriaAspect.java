@@ -56,6 +56,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Auditoria;
@@ -64,6 +66,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 @Aspect
 @Component
+@Transactional(propagation=Propagation.REQUIRES_NEW, rollbackFor={Throwable.class})
 public class AuditoriaAspect {
 	
 	private static final Logger logger = LogManager.getLogger(AuditoriaAspect.class);
@@ -74,14 +77,10 @@ public class AuditoriaAspect {
 	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
 	}
 
-	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
-		this.usuarioComponent = usuarioComponent;
-	}
-	
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..save(..)) && args(entity)")
 	public void afterSave(EntityPersistence entity) {
 		try {
@@ -102,7 +101,7 @@ public class AuditoriaAspect {
 			} else {
 				Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
 				if (u.isLogado())
-					auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+					auditoria.setUsuario(getUsuarioComponent().getUsuarioLogado().getLogin());
 				else
 					auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
 			}
@@ -145,7 +144,7 @@ public class AuditoriaAspect {
 				} else {
 					Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
 					if (u.isLogado())
-						auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+						auditoria.setUsuario(getUsuarioComponent().getUsuarioLogado().getLogin());
 					else
 						auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
 				}
@@ -187,7 +186,7 @@ public class AuditoriaAspect {
 			} else {
 				Usuario u = (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
 				if (u.isLogado())
-					auditoria.setUsuario(usuarioComponent.getUsuarioLogado().getLogin());
+					auditoria.setUsuario(getUsuarioComponent().getUsuarioLogado().getLogin());
 				else
 					auditoria.setUsuario(((Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado")).getLogin());
 			}

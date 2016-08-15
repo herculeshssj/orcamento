@@ -70,4 +70,6 @@ public interface IOpcaoSistema {
 	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) throws BusinessException;
 	
 	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws BusinessException;
+	
+	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws BusinessException; 
 }

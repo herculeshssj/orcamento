@@ -127,7 +127,7 @@ public class OpcaoSistemaController extends AbstractController {
 			getService().salvarOpcoesGlobal(opcoesGlobal);
 			getService().salvarOpcoesGlobalAdmin(opcoesGlobalAdmin);
 			getService().salvarOpcoesUser(opcoesUser, getUsuarioLogado());
-			getService().atualizarCacheOpcoesSistema();
+			getOpcoesSistema().atualizarCacheOpcoesSistema();
 			infoMessage("Opções salvas com sucesso!");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());

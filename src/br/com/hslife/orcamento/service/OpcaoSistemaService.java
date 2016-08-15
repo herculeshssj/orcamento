@@ -219,4 +219,9 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws BusinessException {
 		return getRepository().findOpcaoUserByChave(chave, usuario);
 	}
+	
+	@Override
+	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws BusinessException {
+		return getRepository().findOpcoesUserByCasoUso(casoDeUso, usuario);
+	}
 }
