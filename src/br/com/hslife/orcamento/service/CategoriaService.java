@@ -66,11 +66,8 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	private CategoriaRepository repository;
 	
 	public CategoriaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(CategoriaRepository repository) {
-		this.repository = repository;
 	}
 
 	@Override

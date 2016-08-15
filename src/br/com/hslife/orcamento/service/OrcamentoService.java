@@ -51,7 +51,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.Favorecido;
@@ -67,6 +66,7 @@ import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.OrcamentoRepository;
+import br.com.hslife.orcamento.util.LancamentoContaUtil;
 
 @Service("orcamentoService")
 public class OrcamentoService extends AbstractCRUDService<Orcamento> implements IOrcamento {
@@ -76,18 +76,17 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
-	
-	@Autowired
-	private ContaComponent contaComponent;
 
 	public OrcamentoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
-
-	public void setRepository(OrcamentoRepository repository) {
-		this.repository = repository;
-	}
 	
+	public LancamentoContaRepository getLancamentoContaRepository() {
+		this.lancamentoContaRepository.setSessionFactory(this.sessionFactory);
+		return lancamentoContaRepository;
+	}
+
 	@Override
 	public void cadastrar(Orcamento entity) throws BusinessException {
 		// Trata os IDs dos detalhes antes de prosseguir com o cadastro
@@ -130,13 +129,13 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 		criterioBusca.setConta(entity.getConta());
 		criterioBusca.setTipoConta(new TipoConta[]{entity.getTipoConta()});
 		
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+		List<LancamentoConta> lancamentos = getLancamentoContaRepository().findByCriterioBusca(criterioBusca);
 		
 		// Organiza os lançamentos e calcula seu saldo
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
 		switch (entity.getAbrangenciaOrcamento()) {
 			case CATEGORIA : 
-				resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), 0, contaComponent.calcularSaldoLancamentos(lancamentos));
+				resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), 0, LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
 				
 				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 					detalhe.setRealizado(0); // Apaga o valor registrado anteriormente
@@ -150,7 +149,7 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 				
 				break;
 			case FAVORECIDO : 
-				resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
+				resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
 				
 				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 					detalhe.setRealizadoCredito(0); // Apaga o valor registrado anteriormente
@@ -166,7 +165,7 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 				
 				break;
 			case MEIOPAGAMENTO : 
-				resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+				resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 				
 				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 					detalhe.setRealizadoCredito(0); // Apaga o valor registrado anteriormente

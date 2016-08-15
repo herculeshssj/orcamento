@@ -68,22 +68,19 @@ public class DespensaService extends AbstractCRUDService<Despensa> implements ID
 	private ItemDespensaRepository itemDespensaRepository;
 
 	public DespensaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
+	
+	public ItemDespensaRepository getItemDespensaRepository() {
+		this.itemDespensaRepository.setSessionFactory(this.sessionFactory);
+		return itemDespensaRepository;
+	}
 
-	public void setRepository(DespensaRepository repository) {
-		this.repository = repository;
-	}
-	
-	public void setItemDespensaRepository(
-			ItemDespensaRepository itemDespensaRepository) {
-		this.itemDespensaRepository = itemDespensaRepository;
-	}
-	
 	@Override
 	public void excluir(Despensa entity) throws BusinessException {
-		if (itemDespensaRepository.findByDespensa(entity) != null
-				&& !itemDespensaRepository.findByDespensa(entity).isEmpty()) {
+		if (getItemDespensaRepository().findByDespensa(entity) != null
+				&& !getItemDespensaRepository().findByDespensa(entity).isEmpty()) {
 			throw new BusinessException("Não é possível excluir! Existem itens vinculados a esta despensa!");
 		}
 		super.excluir(entity);

@@ -101,15 +101,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		return repository;
 	}
 
-	public void setRepository(LancamentoContaRepository repository) {
-		this.repository = repository;
-	}
-	
-	public void setFechamentoPeriodoRepository(
-			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
-		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-
 	public ContaComponent getComponent() {
 		return component;
 	}

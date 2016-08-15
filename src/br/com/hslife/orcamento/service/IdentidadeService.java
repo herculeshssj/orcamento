@@ -65,11 +65,8 @@ public class IdentidadeService extends AbstractCRUDService<Identidade> implement
 	private IdentidadeRepository repository;
 
 	public IdentidadeRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(IdentidadeRepository repository) {
-		this.repository = repository;
 	}
 
 	@Override

@@ -87,44 +87,12 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	@Autowired
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
 	
-//	@Autowired
-//	private MoedaRepository moedaRepository;
-//	
-//	@Autowired
-//	private ContaRepository contaRepository;
-	
 	@Autowired
 	private ContaComponent contaComponent;
-	
-//	@Autowired
-//	private CategoriaRepository categoriaRepository;
-//	
-//	@Autowired
-//	private FavorecidoRepository favorecidoRepository;
-//	
-//	@Autowired
-//	private MeioPagamentoRepository meioPagamentoRepository;
 	
 	public FaturaCartaoRepository getRepository() {
 		return repository;
 	}
-
-	public void setRepository(FaturaCartaoRepository repository) {
-		this.repository = repository;
-	}
-
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
-	}
-
-//	public void setMoedaRepository(MoedaRepository moedaRepository) {
-//		this.moedaRepository = moedaRepository;
-//	}
-//
-//	public void setContaRepository(ContaRepository contaRepository) {
-//		this.contaRepository = contaRepository;
-//	}
 
 	@Override
 	public void validar(FaturaCartao entity) throws BusinessException {

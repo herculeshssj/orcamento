@@ -69,10 +69,6 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
-
-	public void setRepository(FavorecidoRepository repository) {
-		this.repository = repository;
-	}
 	
 	@Override
 	public void cadastrar(Favorecido entity) throws BusinessException {		

@@ -68,11 +68,8 @@ public class RelatorioCustomizadoService extends AbstractCRUDService<RelatorioCu
 	private RelatorioCustomizadoRepository repository;
 	
 	public RelatorioCustomizadoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(RelatorioCustomizadoRepository repository) {
-		this.repository = repository;
 	}
 
 	@Override
@@ -83,6 +80,7 @@ public class RelatorioCustomizadoService extends AbstractCRUDService<RelatorioCu
 	@Override
 	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues) throws BusinessException {
 		// TODO definir o tipo Date, Time e Timestamp(ou date/time), pois eles são diferentes. Atualmente foi definido o tipo Date.
+		// FIXME terminar de implementar este método
 		
 		// Obtém a consulta SQL nativa
 		String nativeSQL = entity.getConsultaSQL();

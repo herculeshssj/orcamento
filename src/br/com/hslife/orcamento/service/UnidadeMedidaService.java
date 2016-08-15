@@ -68,16 +68,13 @@ public class UnidadeMedidaService extends AbstractCRUDService<UnidadeMedida> imp
 	private ItemDespensaRepository itemDespensaRepository;
 
 	public UnidadeMedidaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 
-	public void setRepository(UnidadeMedidaRepository repository) {
-		this.repository = repository;
-	}
-	
-	public void setItemDespensaRepository(
-			ItemDespensaRepository itemDespensaRepository) {
-		this.itemDespensaRepository = itemDespensaRepository;
+	public ItemDespensaRepository getItemDespensaRepository() {
+		this.itemDespensaRepository.setSessionFactory(this.sessionFactory);
+		return itemDespensaRepository;
 	}
 
 	@Override

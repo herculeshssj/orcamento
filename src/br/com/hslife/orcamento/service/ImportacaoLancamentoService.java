@@ -61,8 +61,11 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.RegraImportacaoComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
@@ -102,7 +105,11 @@ import net.sf.ofx4j.domain.data.signon.SignonResponse;
 import net.sf.ofx4j.io.AggregateUnmarshaller;
 
 @Service("importacaoLancamentoService")
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
 public class ImportacaoLancamentoService implements IImportacaoLancamento {
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;

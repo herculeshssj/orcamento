@@ -75,10 +75,6 @@ public class AuditoriaService implements IAuditoria {
 		return repository;
 	}
 
-	public void setRepository(AuditoriaRepository repository) {
-		this.repository = repository;
-	}
-
 	public Auditoria buscarPorId(Long id) throws BusinessException {
 		return getRepository().findById(id);
 	}

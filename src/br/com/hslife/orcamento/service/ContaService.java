@@ -92,31 +92,8 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 		return component;
 	}
 
-	public void setComponent(ContaComponent component) {
-		this.component = component;
-	}
-
 	public ContaRepository getRepository() {
 		return repository;
-	}
-
-	public void setRepository(ContaRepository repository) {
-		this.repository = repository;
-	}
-	
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
-	}
-
-	public void setLancamentoImportadoRepository(
-			LancamentoImportadoRepository lancamentoImportadoRepository) {
-		this.lancamentoImportadoRepository = lancamentoImportadoRepository;
-	}
-
-	public void setFechamentoPeriodoRepository(
-			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
-		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
 	}
 
 	@Override

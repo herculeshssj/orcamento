@@ -70,11 +70,8 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	private ItemDespensaRepository repository;
 
 	public ItemDespensaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(ItemDespensaRepository repository) {
-		this.repository = repository;
 	}
 	
 	@Override

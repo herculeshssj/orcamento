@@ -78,22 +78,25 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	private FaturaCartaoRepository faturaCartaoRepository;
 
 	public CartaoCreditoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
-
-	public void setRepository(CartaoCreditoRepository repository) {
-		this.repository = repository;
-	}
-
-	public void setContaRepository(ContaRepository contaRepository) {
-		this.contaRepository = contaRepository;
-	}
 	
+	public ContaRepository getContaRepository() {
+		this.contaRepository.setSessionFactory(this.sessionFactory);
+		return contaRepository;
+	}
+
+	public FaturaCartaoRepository getFaturaCartaoRepository() {
+		this.faturaCartaoRepository.setSessionFactory(this.sessionFactory);
+		return faturaCartaoRepository;
+	}
+
 	@Override
 	public void cadastrar(CartaoCredito entity) throws BusinessException {
 		// Salva o cartão, e logo em seguida a conta
 		super.cadastrar(entity);
-		contaRepository.save(entity.createConta());	
+		getContaRepository().save(entity.createConta());	
 		
 		if (entity.getTipoCartao().equals(TipoCartao.CREDITO)) {
 			this.criarFaturaCartao(entity.getConta());
@@ -102,12 +105,12 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	
 	@Override
 	public void alterar(CartaoCredito entity) throws BusinessException {
-		Conta conta = contaRepository.findByCartaoCredito(entity);
+		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		
 		// Verifica se o tipo do cartão foi alterado para poder realizar a criação da fatura
 		if (!conta.getCartaoCredito().getTipoCartao().equals(entity.getTipoCartao())) {
 			// Verifica se a conta já possui faturas registradas
-			if (!faturaCartaoRepository.existsFaturaCartao(conta)) {
+			if (!getFaturaCartaoRepository().existsFaturaCartao(conta)) {
 				this.criarFaturaCartao(conta);
 			}
 		}
@@ -117,7 +120,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		// Atualiza a descrição da conta se for diferente do cartão de crédito
 		if (!conta.getDescricao().equalsIgnoreCase(entity.getDescricao())) {
 			conta.setDescricao(entity.getDescricao());
-			contaRepository.update(conta);
+			getContaRepository().update(conta);
 		}
 	}
 	
@@ -140,7 +143,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		novaFatura.setMes(vencimento.get(Calendar.MONTH) + 1);
 		novaFatura.setAno(vencimento.get(Calendar.YEAR));
 		
-		faturaCartaoRepository.save(novaFatura);
+		getFaturaCartaoRepository().save(novaFatura);
 	}
 	
 	@Override
@@ -148,7 +151,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		if (getRepository().isSubstituto(entity)) {
 			throw new BusinessException("Não é possível excluir! O cartão selecionado substituiu outro já inativo!");
 		}
-		Conta conta = contaRepository.findByCartaoCredito(entity);
+		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		
 		// Feito um pequeno ajuste para viabilizar a exclusão de um cartão de crédito
 		// cadastrado e sem conta vinculada. O erro foi reportado na tarefa #1108
@@ -160,8 +163,8 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 				throw new BusinessException("Não é possível excluir! Existe vínculo com lançamentos e/ou faturas cadastradas!");
 			} else {
 				// Exclui a fatura aberta caso exista
-				if (faturaAberta != null) faturaCartaoRepository.delete(faturaAberta);
-				contaRepository.delete(conta);
+				if (faturaAberta != null) getFaturaCartaoRepository().delete(faturaAberta);
+				getContaRepository().delete(conta);
 				super.excluir(entity);
 			}
 		} else {
@@ -203,10 +206,10 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		for (CartaoCredito cartao : cartoes) {
 			if (cartao.isAtivo()) {
 				// Busca a conta vinculada ao cartão
-				Conta conta = contaRepository.findByCartaoCredito(cartao);
+				Conta conta = getContaRepository().findByCartaoCredito(cartao);
 				conta.setAtivo(false);
 				cartao.setAtivo(false);
-				contaRepository.update(conta);
+				getContaRepository().update(conta);
 				getRepository().update(cartao);
 			}
 		}
@@ -220,10 +223,10 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		getRepository().update(entity);
 		
 		// Vincula o novo cartão à conta do cartão antigo
-		Conta conta = contaRepository.findByCartaoCredito(entity);
+		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		conta.setCartaoCredito(entity.getCartaoSubstituto());
 		conta.setDescricao(entity.getDescricao());
-		contaRepository.update(conta);
+		getContaRepository().update(conta);
 	}
 	
 	@Override
@@ -231,9 +234,9 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		entity.setAtivo(true);
 		getRepository().update(entity);
 		
-		Conta conta = contaRepository.findByCartaoCredito(entity);
+		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		conta.setAtivo(true);
-		contaRepository.update(conta);
+		getContaRepository().update(conta);
 	}
 	
 	@Override
@@ -241,8 +244,8 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		entity.setAtivo(false);
 		getRepository().update(entity);
 		
-		Conta conta = contaRepository.findByCartaoCredito(entity);
+		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		conta.setAtivo(false);
-		contaRepository.update(conta);
+		getContaRepository().update(conta);
 	}
 }

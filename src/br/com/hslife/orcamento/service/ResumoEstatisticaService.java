@@ -60,7 +60,6 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
@@ -91,6 +90,7 @@ import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
+import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("resumoEstatisticaService")
@@ -116,9 +116,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	/*** Declaração dos componentes ***/
 	
 	@Autowired
-	private ContaComponent contaComponent;	
-	
-	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
 	/*** Declaração dos métodos Setters dos repositórios ***/
@@ -135,12 +132,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	public void setFechamentoPeriodoRepository(
 			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
 		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-
-	/*** Declaração dos métodos Setters dos componentes ***/
-	
-	public void setContaComponent(ContaComponent contaComponent) {
-		this.contaComponent = contaComponent;
 	}	
 
 	/*** Implementação dos métodos da interface ***/
@@ -216,7 +207,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterio);
 			
 			// Calcula o saldo dos lançamentos e registra no saldo atual
-			saldoAtual.setSaldoRegistrado(contaComponent.calcularSaldoLancamentosComConversao(lancamentos));
+			saldoAtual.setSaldoRegistrado(LancamentoContaUtil.calcularSaldoLancamentosComConversao(lancamentos));
 			
 			// Calcula o saldo atual da conta
 			saldoAtual.setSaldoAtual(saldoAtual.getSaldoPeriodo() + saldoAtual.getSaldoRegistrado());
@@ -365,7 +356,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}
 		
 		// Busca os lançamentos e classifica-os em suas respectivas categorias
-		List<Categoria> categorias = contaComponent.organizarLancamentosPorCategoria(lancamentosProcessados);
+		List<Categoria> categorias = LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentosProcessados);
 		
 		for (Categoria categoria : categorias) {
 			String oid = Util.MD5(categoria.getDescricao());
@@ -503,9 +494,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			resumoMensal.setFim(lancamentos.get(lancamentos.size()-1).getDataPagamento());
 		}
 		
-		resumoMensal.setCategoriasCartao(contaComponent.organizarLancamentosPorCategoria(lancamentos));
-		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		resumoMensal.setCategoriasCartao(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos));
+		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 		
 		return resumoMensal;
 	}
@@ -526,9 +517,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
 		
 		// Processa as categorias, favorecidos e meios de pagamento
-		resumoMensal.setCategoriasCartao(contaComponent.organizarLancamentosPorCategoria(lancamentos));
-		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		resumoMensal.setCategoriasCartao(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos));
+		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 		
 		// Seta no resumo o início e fim do período buscado
 		resumoMensal.setInicio(criterioBusca.getDataInicio());
@@ -577,12 +568,12 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		// Processa as categorias
 		if (fechamentoAnterior == null) {
-			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + contaComponent.calcularSaldoLancamentos(lancamentos));
+			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
 		} else {
-			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
+			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
 		}
-		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 		
 		// Seta no resumo o início e fim do período buscado
 		resumoMensal.setInicio(criterioBusca.getDataInicio());

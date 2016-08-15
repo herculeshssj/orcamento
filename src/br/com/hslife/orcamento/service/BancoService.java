@@ -65,11 +65,8 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	private BancoRepository repository;
 	
 	public BancoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return this.repository;
-	}
-	
-	public void setRepository(final BancoRepository repository) {
-		this.repository = repository;
 	}
 	
 	@Override
