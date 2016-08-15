@@ -97,6 +97,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	private MoedaRepository moedaRepository;
 
 	public LancamentoContaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 

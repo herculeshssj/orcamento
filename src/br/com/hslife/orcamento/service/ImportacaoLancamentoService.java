@@ -213,7 +213,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@Override
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) {
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		
@@ -315,7 +315,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void importarLancamento(LancamentoImportado entity) {
+	public void importarLancamento(LancamentoImportado entity) throws BusinessException {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
 		

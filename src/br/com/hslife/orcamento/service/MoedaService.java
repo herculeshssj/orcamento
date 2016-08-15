@@ -65,6 +65,7 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	private MoedaRepository repository;
 	
 	public MoedaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 

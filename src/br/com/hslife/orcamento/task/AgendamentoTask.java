@@ -64,138 +64,153 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IAgenda;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.repository.AgendaRepository;
-import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 
 @Component
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class, RuntimeException.class, Exception.class})
+@Transactional(propagation=Propagation.SUPPORTS)
 public class AgendamentoTask {
 	
 	private static final Logger logger = LogManager.getLogger(AgendamentoTask.class);
-	
-	@Autowired
-	private LancamentoContaRepository lancamentoContaRepository;
-	
-	@Autowired
-	private AgendaRepository agendaRepository;
 	
 	@Autowired
 	private EmailComponent emailComponent;
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
-
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
-	}
-
-	public void setAgendaRepository(AgendaRepository agendaRepository) {
-		this.agendaRepository = agendaRepository;
-	}
 	
+	@Autowired
+	private IAgenda service;
+	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
+	
+	public ILancamentoConta getLancamentoContaService() {
+		return lancamentoContaService;
+	}
+
+	public EmailComponent getEmailComponent() {
+		return emailComponent;
+	}
+
+	public OpcaoSistemaComponent getOpcaoSistemaComponent() {
+		return opcaoSistemaComponent;
+	}
+
+	public IAgenda getService() {
+		return service;
+	}
+
 	@Scheduled(fixedDelay=3600000)
 	@SuppressWarnings("deprecation")
 	public void enviarEmailNotificacao() {
-		Date inicio = new Date();
-		inicio.setHours(0);
-		inicio.setMinutes(0);
-		inicio.setSeconds(0);
-
-		Date fim = new Date(inicio.getTime());
-		fim.setHours(23);
-		fim.setMinutes(59);
-		fim.setSeconds(59);
-		List<Agenda> agendamentos =  agendaRepository.findAgendamentoByOrDataInicioOrDataFimAndAlerta(inicio, fim, true);
-		
-		
-		// Itera a lista de agendamentos encontrados, e para cada uma envia um e-mail para o usuário
-		for (Agenda a : agendamentos) {
-			// Se o usuário marcou para não receber notificação o e-mail não será enviado
-			if (opcaoSistemaComponent.getNotificarAgendamentosEmail(a.getUsuario())) {
+		try {
 			
-				StringBuilder mensagemEmail = new StringBuilder();
+			Date inicio = new Date();
+			inicio.setHours(0);
+			inicio.setMinutes(0);
+			inicio.setSeconds(0);
+	
+			Date fim = new Date(inicio.getTime());
+			fim.setHours(23);
+			fim.setMinutes(59);
+			fim.setSeconds(59);
+			List<Agenda> agendamentos = getService().buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(inicio, fim, true);
+			
+			
+			// Itera a lista de agendamentos encontrados, e para cada uma envia um e-mail para o usuário
+			for (Agenda a : agendamentos) {
+				// Se o usuário marcou para não receber notificação o e-mail não será enviado
+				if (getOpcaoSistemaComponent().getNotificarAgendamentosEmail(a.getUsuario())) {
 				
-				mensagemEmail.append("Prezado " + a.getUsuario().getNome() + ",\n\n");
-				mensagemEmail.append("O seguinte agendamento foi marcado para notificá-lo:\n\n");
-				mensagemEmail.append(a.getDescricao() + "\n");
-				mensagemEmail.append("Tipo: " + a.getTipoAgendamento() + "\n");
-				mensagemEmail.append("Período: \n" + a.getDateLabel() + "\n");
-				mensagemEmail.append("Dia inteiro: " + (a.isDiaInteiro() ? "SIM" : "NÃO") + "\n");
-				mensagemEmail.append("Notas: " + (a.getNotas() == null ? "-" : a.getNotas()) + "\n\n");
-				mensagemEmail.append("Caso não queira mais receber notificações a respeito desse evento, desmarque a caixa 'Emitir Alerta' nas propriedades do agendamento.\n\n\n");
-				mensagemEmail.append("Administrador do Sistema");
-				
-				try {
+					StringBuilder mensagemEmail = new StringBuilder();
+					
+					mensagemEmail.append("Prezado " + a.getUsuario().getNome() + ",\n\n");
+					mensagemEmail.append("O seguinte agendamento foi marcado para notificá-lo:\n\n");
+					mensagemEmail.append(a.getDescricao() + "\n");
+					mensagemEmail.append("Tipo: " + a.getTipoAgendamento() + "\n");
+					mensagemEmail.append("Período: \n" + a.getDateLabel() + "\n");
+					mensagemEmail.append("Dia inteiro: " + (a.isDiaInteiro() ? "SIM" : "NÃO") + "\n");
+					mensagemEmail.append("Notas: " + (a.getNotas() == null ? "-" : a.getNotas()) + "\n\n");
+					mensagemEmail.append("Caso não queira mais receber notificações a respeito desse evento, desmarque a caixa 'Emitir Alerta' nas propriedades do agendamento.\n\n\n");
+					mensagemEmail.append("Administrador do Sistema");
+					
 					emailComponent.setDestinatario(a.getUsuario().getNome());
 					emailComponent.setEmailDestinatario(a.getUsuario().getEmail());
 					emailComponent.setAssunto("Orçamento Doméstico - Lembrete de agendamento");
 					emailComponent.setMensagem(mensagemEmail.toString());
-					emailComponent.enviarEmail();
-				} catch (Exception e) {
-					e.printStackTrace();
+					emailComponent.enviarEmail();					
 				}
 			}
-		}
 		
+		} catch (Exception e) {
+			logger.catching(e);
+			e.printStackTrace();
+		}
 	}
 	
 	@Scheduled(fixedDelay=3600000)
 	@SuppressWarnings("deprecation")
 	public void executarTarefa() {
-		CriterioAgendamento criterioAgendamento = new CriterioAgendamento();
-		criterioAgendamento.setTipo(TipoAgendamento.PREVISAO);
-		
-		List<Agenda> agendamentos = agendaRepository.findByCriterioAgendamento(criterioAgendamento);
-		List<LancamentoConta> lancamentosAtualizados = new ArrayList<>();
-		LancamentoConta lancamento;
-		Date dataLancamento;
-		
-		for (Agenda agenda : agendamentos) {
-			Date dataAgenda = new Date(agenda.getInicio().getYear()+1900, agenda.getInicio().getMonth(), agenda.getInicio().getDate(), 0, 0, 0);
-			switch (agenda.getEntity()) {
-			case "LancamentoConta":
-				lancamento = lancamentoContaRepository.findById(agenda.getIdEntity());
-				if (lancamento != null) {
-					dataLancamento = new Date(lancamento.getDataPagamento().getYear()+1900, lancamento.getDataPagamento().getMonth(), lancamento.getDataPagamento().getDate(), 0, 0, 0);
-					if (lancamento.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO) && dataLancamento.equals(dataAgenda)) {
-						lancamentosAtualizados.add(lancamento);
-					} else {
-						agendaRepository.delete(agenda);
-					}					
-				} else {
-					agendaRepository.delete(agenda);
-				}
-				break;
-			default:
-				break;
-			}
-		}
-						
-		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
-		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
-		criterioBusca.setDataInicio(new Date());
-		
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
-		lancamentos.removeAll(lancamentosAtualizados);
-		
-		for (LancamentoConta l : lancamentos) {
-			Agenda agenda = new Agenda();
-			agenda.setDescricao(l.getDescricao());
-			agenda.setInicio(l.getDataPagamento());
-			agenda.setFim(l.getDataPagamento());
-			agenda.setDiaInteiro(true);
-			agenda.setEmitirAlerta(true);
-			agenda.setTipoAgendamento(TipoAgendamento.PREVISAO);
-			agenda.setNotas(l.getObservacao());
-			agenda.setUsuario(l.getConta().getUsuario());
-			agenda.setIdEntity(l.getId());
-			agenda.setEntity(l.getClass().getSimpleName());
+		try {
 			
-			agendaRepository.save(agenda);
-		}		
+			CriterioAgendamento criterioAgendamento = new CriterioAgendamento();
+			criterioAgendamento.setTipo(TipoAgendamento.PREVISAO);
+			
+			List<Agenda> agendamentos = getService().buscarPorCriterioAgendamento(criterioAgendamento);
+			List<LancamentoConta> lancamentosAtualizados = new ArrayList<>();
+			LancamentoConta lancamento;
+			Date dataLancamento;
+			
+			for (Agenda agenda : agendamentos) {
+				Date dataAgenda = new Date(agenda.getInicio().getYear()+1900, agenda.getInicio().getMonth(), agenda.getInicio().getDate(), 0, 0, 0);
+				switch (agenda.getEntity()) {
+				case "LancamentoConta":
+					lancamento = getLancamentoContaService().buscarPorID(agenda.getIdEntity());
+					if (lancamento != null) {
+						dataLancamento = new Date(lancamento.getDataPagamento().getYear()+1900, lancamento.getDataPagamento().getMonth(), lancamento.getDataPagamento().getDate(), 0, 0, 0);
+						if (lancamento.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO) && dataLancamento.equals(dataAgenda)) {
+							lancamentosAtualizados.add(lancamento);
+						} else {
+							getService().excluir(agenda);							
+						}					
+					} else {
+						getService().excluir(agenda);
+					}
+					break;
+				default:
+					break;
+				}
+			}
+							
+			CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+			criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
+			criterioBusca.setDataInicio(new Date());
+			
+			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
+			lancamentos.removeAll(lancamentosAtualizados);
+			
+			for (LancamentoConta l : lancamentos) {
+				Agenda agenda = new Agenda();
+				agenda.setDescricao(l.getDescricao());
+				agenda.setInicio(l.getDataPagamento());
+				agenda.setFim(l.getDataPagamento());
+				agenda.setDiaInteiro(true);
+				agenda.setEmitirAlerta(true);
+				agenda.setTipoAgendamento(TipoAgendamento.PREVISAO);
+				agenda.setNotas(l.getObservacao());
+				agenda.setUsuario(l.getConta().getUsuario());
+				agenda.setIdEntity(l.getId());
+				agenda.setEntity(l.getClass().getSimpleName());
+				
+				getService().cadastrar(agenda);
+			}
+		
+		} catch (Exception e) {
+			logger.catching(e);
+			e.printStackTrace();
+		}
 	}
 }

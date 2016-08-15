@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
@@ -77,13 +78,19 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 	private UsuarioComponent usuarioComponent;
 	
 	public AgendaRepository getRepository() {
+		repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
-
-	public void setRepository(AgendaRepository repository) {
-		this.repository = repository;
-	}
 	
+	public LancamentoContaRepository getLancamentoContaRepository() {
+		lancamentoContaRepository.setSessionFactory(this.sessionFactory);
+		return lancamentoContaRepository;
+	}
+
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
+	}
+
 	@Override
 	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) {
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
@@ -140,5 +147,10 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 		criterioBusca.setFim(fim);
 		criterioBusca.setUsuario(usuarioComponent.getUsuarioLogado());
 		return getRepository().findByCriterioAgendamento(criterioBusca);
+	}
+	
+	@Override
+	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta) throws BusinessException {
+		return getRepository().findAgendamentoByOrDataInicioOrDataFimAndAlerta(inicio, fim, emiteAlerta);
 	}
 }

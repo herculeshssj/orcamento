@@ -55,7 +55,10 @@ import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.repository.AbstractCRUDRepository;
 
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={
+		BusinessException.class, 
+		RuntimeException.class, 
+		Exception.class})
 public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	
 	@Autowired

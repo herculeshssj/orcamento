@@ -53,40 +53,60 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.RegraImportacao;
-import br.com.hslife.orcamento.repository.CategoriaRepository;
-import br.com.hslife.orcamento.repository.FavorecidoRepository;
-import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
-import br.com.hslife.orcamento.repository.RegraImportacaoRepository;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
+import br.com.hslife.orcamento.facade.IRegraImportacao;
 
 @Component
+@Transactional(propagation=Propagation.SUPPORTS)
 public class RegraImportacaoComponent {
 	
 	@Autowired
-	private RegraImportacaoRepository regraImportacaoRepository;
+	private IRegraImportacao service;
 	
 	@Autowired
-	private CategoriaRepository categoriaRepository;
+	private ICategoria categoriaService;
 	
 	@Autowired
-	private FavorecidoRepository favorecidoRepository;
+	private IFavorecido favorecidoService;
 	
 	@Autowired
-	private MeioPagamentoRepository meioPagamentoRepository;
+	private IMeioPagamento meioPagamentoService;
 	
-	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) {
+	public IRegraImportacao getService() {
+		return service;
+	}
+
+	public ICategoria getCategoriaService() {
+		return categoriaService;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
+	}
+
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
+	}
+
+	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws BusinessException {
 		List<LancamentoConta> lancamentos = new ArrayList<>();
 		lancamentos.add(lancamento);
 		return this.processarRegras(conta, lancamentos).get(0);
 	}
 	
-	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) {
+	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException {
 		Set<LancamentoConta> lancamentosProcessados = new HashSet<LancamentoConta>();
 		
-		List<RegraImportacao> regras = regraImportacaoRepository.findAllByConta(conta);
+		List<RegraImportacao> regras = getService().buscarTodosPorConta(conta);
 		// Não processa nada caso não tenha nenhuma regra cadastrada
 		if (regras == null || regras.isEmpty()) {
 			lancamentosProcessados.addAll(lancamentos);
@@ -101,13 +121,13 @@ public class RegraImportacaoComponent {
 				boolean matchFound = lancamento.getDescricao().toUpperCase().contains(regra.getTexto().toUpperCase());
 		        if (matchFound) {
 		        	if (regra.getIdCategoria() != null) {
-		        		lancamento.setCategoria(categoriaRepository.findById(regra.getIdCategoria()));
+		        		lancamento.setCategoria(getCategoriaService().buscarPorID(regra.getIdCategoria()));
 		        	}
 		        	if (regra.getIdFavorecido() != null) {
-		        		lancamento.setFavorecido(favorecidoRepository.findById(regra.getIdFavorecido()));
+		        		lancamento.setFavorecido(getFavorecidoService().buscarPorID(regra.getIdFavorecido()));
 		        	}
 		        	if (regra.getIdMeioPagamento() != null) {
-		        		lancamento.setMeioPagamento(meioPagamentoRepository.findById(regra.getIdMeioPagamento()));
+		        		lancamento.setMeioPagamento(getMeioPagamentoService().buscarPorID(regra.getIdMeioPagamento()));
 		        	}
 		        	lancamentosProcessados.add(lancamento);
 		        	break;
