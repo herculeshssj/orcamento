@@ -70,11 +70,8 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	private DividaTerceiroRepository repository;
 
 	public DividaTerceiroRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(DividaTerceiroRepository repository) {
-		this.repository = repository;
 	}
 	
 	@Override

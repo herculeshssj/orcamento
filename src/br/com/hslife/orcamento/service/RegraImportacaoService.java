@@ -64,6 +64,7 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	private RegraImportacaoRepository repository;
 	
 	public RegraImportacaoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 	

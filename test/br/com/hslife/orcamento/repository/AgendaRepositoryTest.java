@@ -53,6 +53,7 @@ import static org.junit.Assert.assertNull;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,9 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 	Date dataSelecionada = new Date();
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private AgendaRepository agendaRepository;
 	
 	@Autowired
@@ -78,6 +82,9 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 	
 	@Before
 	public void initializeEntities() {
+		agendaRepository.setSessionFactory(sessionFactory);
+		usuarioRepository.setSessionFactory(sessionFactory);
+		
 		// Cria um novo usuário
 		usuario.setEmail("contato@hslife.com.br");
 		usuario.setLogin("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA));

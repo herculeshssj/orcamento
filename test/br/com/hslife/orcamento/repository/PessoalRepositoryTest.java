@@ -52,6 +52,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,9 @@ public class PessoalRepositoryTest extends AbstractTestRepositories {
 	private Pessoal pessoal = new Pessoal();
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private PessoalRepository pessoalRepository;
 	
 	@Autowired
@@ -75,6 +79,9 @@ public class PessoalRepositoryTest extends AbstractTestRepositories {
 	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeEntities() {
+		pessoalRepository.setSessionFactory(sessionFactory);
+		usuarioRepository.setSessionFactory(sessionFactory);
+		
 		// Cria um novo usuário
 		usuario.setEmail("contato@hslife.com.br");
 		usuario.setLogin("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA));

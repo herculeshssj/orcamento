@@ -65,11 +65,8 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 	private MeioPagamentoRepository repository;
 	
 	public MeioPagamentoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(MeioPagamentoRepository repository) {
-		this.repository = repository;
 	}
 
 	@Override

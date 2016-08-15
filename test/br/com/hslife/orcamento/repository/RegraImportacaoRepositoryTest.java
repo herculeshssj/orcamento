@@ -50,6 +50,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,9 @@ public class RegraImportacaoRepositoryTest extends AbstractTestRepositories {
 	private RegraImportacao regra = new RegraImportacao();
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
@@ -81,6 +85,11 @@ public class RegraImportacaoRepositoryTest extends AbstractTestRepositories {
 	
 	@Before
 	public void initializeEntities() {
+		usuarioRepository.setSessionFactory(sessionFactory);
+		moedaRepository.setSessionFactory(sessionFactory);
+		contaRepository.setSessionFactory(sessionFactory);
+		regraImportacaoRepository.setSessionFactory(sessionFactory);
+		
 		usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioRepository.save(usuario);
 		
