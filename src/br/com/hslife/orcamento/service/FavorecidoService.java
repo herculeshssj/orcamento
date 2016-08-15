@@ -51,6 +51,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -66,6 +68,7 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	private FavorecidoRepository repository;
 
 	public FavorecidoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 
@@ -79,6 +82,17 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 			getRepository().updateAllToNotDefault(entity.getUsuario());
 		}
 		super.cadastrar(entity);
+		
+		// Grava uma instância fantasma
+		Favorecido fantasma = new Favorecido();
+		fantasma.setNome("Favorecido de teste fantasma ");
+		fantasma.setAtivo(true);
+		fantasma.setPadrao(false);
+		fantasma.setTipoPessoa(TipoPessoa.FISICA);
+		fantasma.setUsuario(entity.getUsuario());
+		super.cadastrar(fantasma);
+		
+		throw new BusinessException("Não pode gravar registro fantasma!");
 	}
 	
 	@Override
@@ -92,6 +106,16 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 			getRepository().updateAllToNotDefault(entity.getUsuario());
 		}
 		super.alterar(entity);
+		
+
+		// Grava uma instância fantasma
+		Favorecido fantasma = new Favorecido();
+		fantasma.setNome("Favorecido de teste fantasma Favorecido de teste fantasma Favorecido de teste fantasma Favorecido de teste fantasma Favorecido de teste fantasma Favorecido de teste fantasma Favorecido de teste fantasma");
+		fantasma.setAtivo(true);
+		fantasma.setPadrao(false);
+		fantasma.setTipoPessoa(TipoPessoa.FISICA);
+		fantasma.setUsuario(entity.getUsuario());
+		super.cadastrar(fantasma);
 	}
 	
 	@Override

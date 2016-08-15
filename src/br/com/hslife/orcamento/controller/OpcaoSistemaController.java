@@ -104,7 +104,7 @@ public class OpcaoSistemaController extends AbstractController {
 	
 	private void carregarOpcoesUser() {
 		try {
-			opcoesUser = getService().buscarOpcoesUser(getUsuarioLogado());
+			opcoesUser = getService().buscarMapOpcoesUser(getUsuarioLogado());
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -112,7 +112,7 @@ public class OpcaoSistemaController extends AbstractController {
 
 	private void carregarOpcoesGlobalAdmin() {
 		try {
-			opcoesGlobalAdmin = getService().buscarOpcoesGlobalAdmin();
+			opcoesGlobalAdmin = getService().buscarMapOpcoesGlobalAdmin();
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

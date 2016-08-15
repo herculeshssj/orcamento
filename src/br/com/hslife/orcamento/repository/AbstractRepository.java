@@ -55,7 +55,6 @@ import br.com.hslife.orcamento.util.RepositoryUtil;
 
 public abstract class AbstractRepository {
 	
-	@Autowired
 	protected SessionFactory sessionFactory;
 	
 	@Autowired

@@ -79,6 +79,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	private OpcaoSistemaComponent opcaoSistemaComponent;
 
 	public UsuarioRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 

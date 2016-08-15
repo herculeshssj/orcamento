@@ -50,9 +50,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.EmailComponent;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
@@ -60,13 +64,17 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.repository.AgendaRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 
 @Component
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class, RuntimeException.class, Exception.class})
 public class AgendamentoTask {
+	
+	private static final Logger logger = LogManager.getLogger(AgendamentoTask.class);
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;

@@ -49,8 +49,10 @@ package br.com.hslife.orcamento.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
@@ -71,8 +73,11 @@ import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 
 @Service("arquivoService")
-@Transactional
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
 public class ArquivoService implements IArquivo {
+	
+	@Autowired
+	public SessionFactory sessionFactory;
 	
 	@Autowired
 	private ArquivoRepository repository;
@@ -93,11 +98,32 @@ public class ArquivoService implements IArquivo {
 	private UsuarioComponent usuarioComponent;
 
 	public ArquivoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 
-	public void setRepository(ArquivoRepository repository) {
-		this.repository = repository;
+	public DocumentoRepository getDocumentoRepository() {
+		this.documentoRepository.setSessionFactory(this.sessionFactory);
+		return documentoRepository;
+	}
+	
+	public FaturaCartaoRepository getFaturaCartaoRepository() {
+		this.faturaCartaoRepository.setSessionFactory(this.sessionFactory);
+		return faturaCartaoRepository;
+	}
+
+	public LancamentoContaRepository getLancamentoContaRepository() {
+		this.lancamentoContaRepository.setSessionFactory(this.sessionFactory);
+		return lancamentoContaRepository;
+	}
+
+	public LancamentoPeriodicoRepository getLancamentoPeriodicoRepository() {
+		this.lancamentoPeriodicoRepository.setSessionFactory(this.sessionFactory);
+		return lancamentoPeriodicoRepository;
+	}
+
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
 	}
 
 	@Override
@@ -145,7 +171,7 @@ public class ArquivoService implements IArquivo {
 		AnexoEntidade anexo;
 		switch (container) {
 			case DOCUMENTOS:
-				for (Documento d : documentoRepository.findByNomeAndUsuario(descricao, usuarioComponent.getUsuarioLogado())) {
+				for (Documento d : getDocumentoRepository().findByNomeAndUsuario(descricao, getUsuarioComponent().getUsuarioLogado())) {
 					anexo = new AnexoEntidade();
 					anexo.setId(d.getId());
 					anexo.setDescricao(d.getLabel());
@@ -154,7 +180,7 @@ public class ArquivoService implements IArquivo {
 				}
 				break;
 			case FATURACARTAO:
-				for (FaturaCartao f : faturaCartaoRepository.findAllByUsuario(usuarioComponent.getUsuarioLogado())) {
+				for (FaturaCartao f : getFaturaCartaoRepository().findAllByUsuario(getUsuarioComponent().getUsuarioLogado())) {
 					if (f.getLabel().contains(descricao)) {
 						anexo = new AnexoEntidade();
 						anexo.setId(f.getId());
@@ -165,7 +191,7 @@ public class ArquivoService implements IArquivo {
 				}
 				break;
 			case LANCAMENTOCONTA:
-				for (LancamentoConta l : lancamentoContaRepository.findByDescricaoAndUsuario(descricao, usuarioComponent.getUsuarioLogado())) {
+				for (LancamentoConta l : getLancamentoContaRepository().findByDescricaoAndUsuario(descricao, getUsuarioComponent().getUsuarioLogado())) {
 					anexo = new AnexoEntidade();
 					anexo.setId(l.getId());
 					anexo.setDescricao(l.getLabel());
@@ -174,7 +200,7 @@ public class ArquivoService implements IArquivo {
 				}
 				break;
 			case LANCAMENTOPERIODICO:
-				for (LancamentoPeriodico l : lancamentoPeriodicoRepository.findByDescricaoAndUsuario(descricao, usuarioComponent.getUsuarioLogado())) {
+				for (LancamentoPeriodico l : getLancamentoPeriodicoRepository().findByDescricaoAndUsuario(descricao, getUsuarioComponent().getUsuarioLogado())) {
 					anexo = new AnexoEntidade();
 					anexo.setId(l.getId());
 					anexo.setDescricao(l.getLabel());
@@ -190,22 +216,22 @@ public class ArquivoService implements IArquivo {
 	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) throws BusinessException {
 		switch (container) {
 			case DOCUMENTOS:
-				Documento d = documentoRepository.findById(idEntity);
+				Documento d = getDocumentoRepository().findById(idEntity);
 				d.setArquivo(anexo);
 				documentoRepository.update(d);
 				break;
 			case FATURACARTAO: 
-				FaturaCartao f = faturaCartaoRepository.findById(idEntity);
+				FaturaCartao f = getFaturaCartaoRepository().findById(idEntity);
 				f.setArquivo(anexo);
 				faturaCartaoRepository.update(f);
 				break;
 			case LANCAMENTOCONTA:
-				LancamentoConta l = lancamentoContaRepository.findById(idEntity);
+				LancamentoConta l = getLancamentoContaRepository().findById(idEntity);
 				l.setArquivo(anexo);
 				lancamentoContaRepository.update(l);
 				break;
 			case LANCAMENTOPERIODICO:
-				LancamentoPeriodico lp = lancamentoPeriodicoRepository.findById(idEntity);
+				LancamentoPeriodico lp = getLancamentoPeriodicoRepository().findById(idEntity);
 				lp.setArquivo(anexo);
 				lancamentoPeriodicoRepository.update(lp);
 				break;

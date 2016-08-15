@@ -53,7 +53,6 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Documento;
@@ -63,7 +62,6 @@ import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioArquivo;
 
 @Repository
-@Transactional
 public class ArquivoRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")

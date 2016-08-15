@@ -48,48 +48,55 @@ package br.com.hslife.orcamento.service;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Logs;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.model.CriterioLog;
 import br.com.hslife.orcamento.repository.LogRepository;
 
 @Service("logService")
-@Transactional
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
 public class LogService implements ILog {
+	
+	@Autowired
+	public SessionFactory sessionFactory;
 	
 	@Autowired
 	private LogRepository repository;
 
 	public LogRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 
 	@Override
-	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) {
+	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) throws BusinessException {
 		return getRepository().findByCriteriosLog(criterioBusca);
 	}
 	
 	@Override
-	public List<String> buscarTodosLoggers() {
+	public List<String> buscarTodosLoggers() throws BusinessException {
 		return getRepository().findAllLogger();
 	}
 	
 	@Override
-	public List<String> buscarTodosNiveis() {
+	public List<String> buscarTodosNiveis() throws BusinessException {
 		return getRepository().findAllLevel();
 	}
 	
 	@Override
-	public Logs buscarPorID(Long id) {
+	public Logs buscarPorID(Long id) throws BusinessException {
 		return getRepository().findByID(id);
 	}
 	
 	@Override
-	public void excluir(Logs logs) {
+	public void excluir(Logs logs) throws BusinessException {
 		getRepository().delete(logs);
 	}
 }

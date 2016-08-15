@@ -56,7 +56,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.repository.UsuarioRepository;
+import br.com.hslife.orcamento.facade.IUsuario;
 
 @Component
 public class UsuarioComponent {
@@ -64,8 +64,12 @@ public class UsuarioComponent {
 	private static final Logger logger = LogManager.getLogger(UsuarioComponent.class);
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
-
+	private IUsuario usuarioService;
+	
+	private IUsuario getService() {
+		return this.usuarioService;
+	}
+	
 	public Usuario getUsuarioLogado() {
 		try {
 			String login = "";
@@ -76,7 +80,7 @@ public class UsuarioComponent {
 	            	login = ((User)authentication.getPrincipal()).getUsername();
 	            }
 	        }
-	        return usuarioRepository.findByLogin(login);
+	        return getService().buscarPorLogin(login);
 		} catch (Throwable t) {
         	logger.catching(t);
         	throw new RuntimeException(t);

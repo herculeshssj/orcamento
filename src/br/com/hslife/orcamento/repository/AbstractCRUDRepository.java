@@ -46,11 +46,8 @@
 
 package br.com.hslife.orcamento.repository;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import br.com.hslife.orcamento.entity.EntityPersistence;
 
-@Transactional
 public abstract class AbstractCRUDRepository<E extends EntityPersistence> extends AbstractRepository implements IRepository<E>{
 	
 	private E entity;
