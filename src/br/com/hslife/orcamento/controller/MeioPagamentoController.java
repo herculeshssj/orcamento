@@ -70,7 +70,7 @@ public class MeioPagamentoController extends AbstractCRUDController<MeioPagament
 	
 	private String descricaoMeioPagamento;
 	private boolean somenteAtivos = true;
-	//FIXME remover try...catch
+	
 	public MeioPagamentoController() {
 		super(new MeioPagamento());
 		moduleTitle = "Meios de Pagamento";

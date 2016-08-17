@@ -95,7 +95,7 @@ public class PanoramaCadastroController extends AbstractController {
 	public CadastroSistema cadastroSelecionado;
 	public Long idRegistro;
 	public List<Conta> contas;
-	//FIXME remover try...catch
+	
 	public PanoramaCadastroController() {
 		moduleTitle = "Panorama dos Cadastros";
 		

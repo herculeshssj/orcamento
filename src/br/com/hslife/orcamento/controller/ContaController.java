@@ -86,7 +86,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	private boolean somenteAtivos = true;
 	
 	private String opcaoLancamentos;
-	//FIXME remover try...catch
+
 	public ContaController() {
 		super(new Conta());
 		

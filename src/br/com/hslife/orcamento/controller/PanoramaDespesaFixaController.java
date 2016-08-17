@@ -115,7 +115,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 	
 	private double saldoCredor;
 	private double saldoDevedor;
-	//FIXME remover try...catch
+	
 	public PanoramaDespesaFixaController() {
 		moduleTitle = "Panorama das Despesas Fixas";
 	}

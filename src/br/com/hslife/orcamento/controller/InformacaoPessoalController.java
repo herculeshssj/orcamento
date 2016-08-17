@@ -79,7 +79,7 @@ public class InformacaoPessoalController extends AbstractController {
 	
 	private List<Endereco> listaEndereco;
 	private List<Telefone> listaTelefone;
-	//FIXME remover try...catch
+	
 	public InformacaoPessoalController() {		
 		moduleTitle = "Informações pessoais";
 	}

@@ -92,7 +92,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	
 	// List de Map que guarda o resultado de consulta
 	List<Map<String, Object>> queryResult = new LinkedList<>();
-	//FIXME remover try...catch
+	
 	public RelatorioCustomizadoController() {
 		super(new RelatorioCustomizado());
 		moduleTitle = "Relatórios Customizados";

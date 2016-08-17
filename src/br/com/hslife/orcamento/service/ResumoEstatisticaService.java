@@ -59,6 +59,8 @@ import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
@@ -94,6 +96,7 @@ import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("resumoEstatisticaService")
+@Transactional(propagation=Propagation.SUPPORTS)
 public class ResumoEstatisticaService implements IResumoEstatistica {
 
 	/*** Declaração dos repositórios ***/

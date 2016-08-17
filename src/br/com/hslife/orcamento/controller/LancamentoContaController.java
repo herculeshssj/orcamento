@@ -153,7 +153,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private String mesAno;
 	
 	private List<LancamentoPeriodico> lancamentosPeriodicos = new ArrayList<>();
-	//FIXME remover try...catch
+	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
 		moduleTitle = "Lançamentos da Conta / Cartão";

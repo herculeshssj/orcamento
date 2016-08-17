@@ -87,7 +87,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	private String numeroCartao = "";
 	private boolean exibir;
 	private TipoCartao tipoCartao;
-	//FIXME remover try...catch
+	
 	public CartaoCreditoController() {
 		super(new CartaoCredito());
 		
