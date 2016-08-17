@@ -57,6 +57,8 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 
 public final class LancamentoContaUtil {
 
@@ -404,5 +406,32 @@ public final class LancamentoContaUtil {
 		}
 			
 		return moedas;
+	}
+	
+	public static List<AgrupamentoLancamento> organizarLancamentosPorDebitoCredito(final List<LancamentoConta> lancamentos) {
+		List<AgrupamentoLancamento> debitosCreditos = new ArrayList<AgrupamentoLancamento>();
+		
+		AgrupamentoLancamento agrupamentoDebito = new AgrupamentoLancamento("Débitos");
+		AgrupamentoLancamento agrupamentoCredito = new AgrupamentoLancamento("Créditos");
+		
+		// Varre a lista de lançamentos para adicionar os lançamentos nas respectivas instâncias de AgrupamentoLancamento 
+		for (LancamentoConta l : lancamentos) {
+			if (l.getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				agrupamentoDebito.getLancamentos().add(l);
+				agrupamentoDebito.setSaldoPago(agrupamentoDebito.getSaldoPago() + l.getValorPago());
+			} else {
+				agrupamentoCredito.getLancamentos().add(l);
+				agrupamentoCredito.setSaldoPago(agrupamentoCredito.getSaldoPago() + l.getValorPago());
+			}
+		}
+		
+		// Corrige as casas decimais e adiciona na lista de AgrupamentoLancamento
+		agrupamentoCredito.setSaldoPago(Util.arredondar(agrupamentoCredito.getSaldoPago()));
+		agrupamentoDebito.setSaldoPago(Util.arredondar(agrupamentoDebito.getSaldoPago()));
+		
+		debitosCreditos.add(agrupamentoCredito);
+		debitosCreditos.add(agrupamentoDebito);
+
+		return debitosCreditos;
 	}
 }

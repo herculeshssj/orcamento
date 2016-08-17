@@ -96,13 +96,6 @@ public class OpcaoSistemaComponent {
 	public OpcaoSistema buscarPorChaveEUsuario(String chave, Usuario usuario) throws BusinessException {
 		return getService().buscarOpcaoUsuarioPorChave(chave, usuario);
 	}
-
-//	public void excluirOpcoesUsuario(Usuario usuario) {
-//		// Exclui as opções do sistema do usuário
-//		for (OpcaoSistema opcao : opcaoSistemaRepository.findByUsuario(usuario)) {
-//			opcaoSistemaRepository.delete(opcao);
-//		}
-//	}
 	
 	// Método foi deixado no componente para poder centralizar a manutenção de cada parâmetro
 	// O Service não conhece os parâmetros existentes, o Component sim.

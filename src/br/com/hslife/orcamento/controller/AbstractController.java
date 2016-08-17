@@ -52,13 +52,15 @@ import java.util.Locale;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.BusinessException;
 
 public abstract class AbstractController implements Serializable {	
 	
@@ -66,6 +68,8 @@ public abstract class AbstractController implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -4309624158532539748L;
+	
+	private static final Logger logger = LogManager.getLogger(AbstractController.class);
 	
 	protected String moduleTitle = "";
 	protected String actionTitle = "";
@@ -75,9 +79,6 @@ public abstract class AbstractController implements Serializable {
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
-	
-	@Autowired
-	private ContaComponent contaComponent;
 	
 	protected abstract void initializeEntity();
 	
@@ -111,7 +112,12 @@ public abstract class AbstractController implements Serializable {
 	}
 	
 	public Moeda getMoedaPadrao() {
-		return contaComponent.getMoedaPadrao();
+		try {
+		return getOpcoesSistema().getMoedaPadrao();
+		} catch (BusinessException be) {
+			logger.catching(be);
+		}
+		return null;
 	}
 	
 	public void infoMessage(String mensage) {

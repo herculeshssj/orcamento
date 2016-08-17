@@ -52,7 +52,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
@@ -77,7 +76,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	private ContaRepository repository;
 	
 	@Autowired
-	private ContaComponent component;
+	private FechamentoPeriodoService component;
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
@@ -88,7 +87,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
 	
-	public ContaComponent getComponent() {
+	public FechamentoPeriodoService getComponent() {
 		return component;
 	}
 

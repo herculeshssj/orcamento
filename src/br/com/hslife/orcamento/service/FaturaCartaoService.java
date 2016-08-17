@@ -53,7 +53,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
@@ -88,7 +87,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
 	
 	@Autowired
-	private ContaComponent contaComponent;
+	private FechamentoPeriodoService contaComponent;
 	
 	public FaturaCartaoRepository getRepository() {
 		return repository;

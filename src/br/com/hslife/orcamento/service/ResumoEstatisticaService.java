@@ -81,6 +81,7 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
@@ -89,7 +90,6 @@ import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
-import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.util.LancamentoContaUtil;
@@ -98,17 +98,27 @@ import br.com.hslife.orcamento.util.Util;
 @Service("resumoEstatisticaService")
 @Transactional(propagation=Propagation.SUPPORTS)
 public class ResumoEstatisticaService implements IResumoEstatistica {
+	
+	/*** Declaração dos serviços ***/
+	
+	@Autowired
+	private IFechamentoPeriodo fechamentoPeriodoService;
+	
+	/*** Declaração dos Getters dos serviços ***/
+	
+	public IFechamentoPeriodo getFechamentoPeriodoService() {
+		return fechamentoPeriodoService;
+	}
 
-	/*** Declaração dos repositórios ***/
+	// ------------------ Excluir ------------------
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
 	
+	
+
 	@Autowired
 	private ContaRepository contaRepository;
-	
-	@Autowired
-	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
 	
 	@Autowired
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
@@ -132,10 +142,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		this.contaRepository = contaRepository;
 	}
 
-	public void setFechamentoPeriodoRepository(
-			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
-		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}	
+	
 
 	/*** Implementação dos métodos da interface ***/
 	
@@ -177,7 +184,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				criterio.setConta(conta);
 			} else {
 				// Traz o último período de fechamento da conta
-				FechamentoPeriodo ultimoFechamento = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta); 
+				FechamentoPeriodo ultimoFechamento = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta); 
 				if (ultimoFechamento == null) {
 					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
 							? conta.getSaldoInicial()
@@ -402,8 +409,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
 		
-		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total	
-		FechamentoPeriodo fechamento = fechamentoPeriodoRepository.findLastFechamentoPeriodoBeforeDateByContaAndOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
+		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total
+		FechamentoPeriodo fechamento = getFechamentoPeriodoService().buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
 		if (fechamento == null) {
 			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
 		} else {
@@ -539,9 +546,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				
 		// Busca o fechamento do período anterior
 		if (fechamentoPeriodo != null) 
-			fechamentoAnterior = fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoPeriodo);
+			fechamentoAnterior = getFechamentoPeriodoService().buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
 		else
-			fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
+			fechamentoAnterior = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta);
 		
 		// Preenche os parâmetros de busca
 		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});

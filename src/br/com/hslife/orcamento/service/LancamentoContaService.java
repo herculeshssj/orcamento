@@ -46,49 +46,32 @@
 
 package br.com.hslife.orcamento.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.ContaComponent;
-import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.entity.LancamentoPeriodico;
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
-import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.repository.MoedaRepository;
-import br.com.hslife.orcamento.util.Util;
+import br.com.hslife.orcamento.util.LancamentoContaUtil;
 
 @Service("lancamentoContaService")
 public class LancamentoContaService extends AbstractCRUDService<LancamentoConta> implements ILancamentoConta {
 
 	@Autowired
 	private LancamentoContaRepository repository;
-	
-	@Autowired
-	private ContaComponent component;
-	
-	@Autowired
-	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
@@ -99,14 +82,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	public LancamentoContaRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public ContaComponent getComponent() {
-		return component;
-	}
-
-	public void setComponent(ContaComponent component) {
-		this.component = component;
 	}
 
 	public void setLancamentoImportadoRepository(
@@ -219,65 +194,8 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	}
 	
 	@Override
-	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos) {		
-		return getComponent().calcularSaldoLancamentos(lancamentos);
-	}
-	
-	public double saldoUltimoFechamento(Conta conta) throws BusinessException {
-		FechamentoPeriodo ultimoFechamento = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
-		if (ultimoFechamento == null) {
-			return conta.getSaldoInicial();
-		} else {
-			return ultimoFechamento.getSaldo();
-		}
-	}
-
-	@Override
-	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) throws BusinessException {
-		return getComponent().organizarLancamentosPorCategoria(lancamentos);
-	}
-
-	@Override
-	public List<Favorecido> organizarLancamentosPorFavorecido(List<LancamentoConta> lancamentos) throws BusinessException {
-		return getComponent().organizarLancamentosPorFavorecido(lancamentos);
-	}
-
-	@Override
-	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) throws BusinessException {
-		return getComponent().organizarLancamentosPorMeioPagamento(lancamentos);
-	}
-	
-	@Override
-	public List<Moeda> organizarLancamentosPorMoeda(List<LancamentoConta> lancamentos) throws BusinessException {
-		return getComponent().organizarLancamentosPorMoeda(lancamentos);
-	}
-
-	@Override
-	public List<AgrupamentoLancamento> organizarLancamentosPorDebitoCredito(List<LancamentoConta> lancamentos) throws BusinessException {
-		List<AgrupamentoLancamento> debitosCreditos = new ArrayList<AgrupamentoLancamento>();
-		
-		AgrupamentoLancamento agrupamentoDebito = new AgrupamentoLancamento("Débitos");
-		AgrupamentoLancamento agrupamentoCredito = new AgrupamentoLancamento("Créditos");
-		
-		// Varre a lista de lançamentos para adicionar os lançamentos nas respectivas instâncias de AgrupamentoLancamento 
-		for (LancamentoConta l : lancamentos) {
-			if (l.getTipoLancamento().equals(TipoLancamento.DESPESA)) {
-				agrupamentoDebito.getLancamentos().add(l);
-				agrupamentoDebito.setSaldoPago(agrupamentoDebito.getSaldoPago() + l.getValorPago());
-			} else {
-				agrupamentoCredito.getLancamentos().add(l);
-				agrupamentoCredito.setSaldoPago(agrupamentoCredito.getSaldoPago() + l.getValorPago());
-			}
-		}
-		
-		// Corrige as casas decimais e adiciona na lista de AgrupamentoLancamento
-		agrupamentoCredito.setSaldoPago(Util.arredondar(agrupamentoCredito.getSaldoPago()));
-		agrupamentoDebito.setSaldoPago(Util.arredondar(agrupamentoDebito.getSaldoPago()));
-		
-		debitosCreditos.add(agrupamentoCredito);
-		debitosCreditos.add(agrupamentoDebito);
-
-		return debitosCreditos;
+	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos) {
+		return LancamentoContaUtil.calcularSaldoLancamentos(lancamentos);
 	}
 	
 	@Override
@@ -288,48 +206,5 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	@Override
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException {
 		return getRepository().existsLinkageFaturaCartao(lancamento);
-	}
-	
-	@Override
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException {
-		return getComponent().buscarPorContaEOperacaoConta(conta, operacaoConta);
-	}
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
-		getComponent().fecharPeriodo(dataFechamento, conta);
-	}
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
-		getComponent().fecharPeriodo(dataFechamento, conta, lancamentosPeriodicos);
-	}
-	
-	@Override
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
-		getComponent().fecharPeriodo(fechamentoPeriodo, lancamentosPeriodicos);		
-	}
-	
-	@Override
-	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
-		return fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoPeriodo);
-	}
-	
-	@Override
-	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) {
-		return fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
-	}
-
-	@Override
-	public void reabrirPeriodo(FechamentoPeriodo entity)throws BusinessException {
-		getComponent().reabrirPeriodo(entity);		
-	}
-	
-	@Override
-	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws BusinessException {
-		return fechamentoPeriodoRepository.findAllByConta(conta);
-	}
-	
-	@Override
-	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws BusinessException {
-		return fechamentoPeriodoRepository.findById(id);
 	}
 }

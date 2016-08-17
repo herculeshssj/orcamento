@@ -83,6 +83,13 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		// TODO implementar
 	}
 	
+//	public void excluirOpcoesUsuario(Usuario usuario) {
+//	// Exclui as opções do sistema do usuário
+//	for (OpcaoSistema opcao : opcaoSistemaRepository.findByUsuario(usuario)) {
+//		opcaoSistemaRepository.delete(opcao);
+//	}
+//}
+	
 	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException {
 		OpcaoSistema opcao = new OpcaoSistema();
 		for (String chave : opcoesSistema.keySet()) {
