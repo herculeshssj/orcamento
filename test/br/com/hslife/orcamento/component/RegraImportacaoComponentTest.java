@@ -86,9 +86,6 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 	MeioPagamento meioPagamento = new MeioPagamento();
 	
 	@Autowired
-	private RegraImportacaoComponent regraImportacaoComponent;
-	
-	@Autowired
 	private IRegraImportacao regraImportacaoService;
 	
 	@Autowired
@@ -160,7 +157,7 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 		
 		lancamentosAProcessar.addAll(lancamento.clonarLancamentos(3, IncrementoClonagemLancamento.DIA));
 		
-		lancamentosProcessados = regraImportacaoComponent.processarRegras(conta, lancamentosAProcessar);
+		lancamentosProcessados = regraImportacaoService.processarRegras(conta, lancamentosAProcessar);
 		
 		int i = 0;
 		
@@ -190,7 +187,7 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 		
 		lancamentosAProcessar.addAll(lancamento.clonarLancamentos(3, IncrementoClonagemLancamento.DIA));
 		
-		lancamentosProcessados = regraImportacaoComponent.processarRegras(conta, lancamentosAProcessar);
+		lancamentosProcessados = regraImportacaoService.processarRegras(conta, lancamentosAProcessar);
 		
 		for (LancamentoConta processado : lancamentosProcessados) {
 			for (LancamentoConta aProcessar : lancamentosAProcessar) {

@@ -133,4 +133,8 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findAllCodigoMonetarioByUsuario(usuario);
 	}
+	
+	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario) throws BusinessException {
+		return getRepository().findCodigoMoedaByUsuario(codigoMonetario, usuario);
+	}
 }

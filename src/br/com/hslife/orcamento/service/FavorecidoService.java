@@ -124,4 +124,21 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario) throws BusinessException {
 		return getRepository().findTipoPessoaAndNomeAndAtivoByUsuario(tipoPessoa, nome, ativo, usuario);
 	}
+	
+	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario) throws BusinessException {		
+		// Verifica se o favorecido informado existe na base de dados
+		List<Favorecido> favorecidos = getRepository().findByNomeAndUsuario(nomeFavorecido, usuario);
+		Favorecido favorecidoEncontrado = null;
+		for (Favorecido f : favorecidos) {
+			if (f.getNome().contains(nomeFavorecido)) {
+				favorecidoEncontrado = f;
+				break;
+			}
+		}
+		
+		if (favorecidoEncontrado == null) 
+			favorecidoEncontrado = getRepository().findDefaultByUsuario(usuario);
+		
+		return favorecidoEncontrado;
+	}
 }

@@ -123,4 +123,21 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException {
 		return getRepository().findDescricaoAndAtivoByUsuario(descricao, ativo, usuario);
 	}
+	
+	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario) throws BusinessException {
+		// Verifica se o meio de pagamento informado existe na base de dados
+		List<MeioPagamento> meiosPagamento = getRepository().findByDescricaoAndUsuario(descricaoMeioPagamento, usuario);
+		MeioPagamento meioPagamentoEncontrado = null;
+		for (MeioPagamento m : meiosPagamento) {
+			if (m.getDescricao().contains(descricaoMeioPagamento)) {
+				meioPagamentoEncontrado = m;
+				break;
+			}
+		}
+		
+		if (meioPagamentoEncontrado == null)
+			meioPagamentoEncontrado = getRepository().findDefaultByUsuario(usuario);
+		
+		return meioPagamentoEncontrado;
+	}
 }

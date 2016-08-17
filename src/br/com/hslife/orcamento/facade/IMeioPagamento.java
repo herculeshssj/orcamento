@@ -54,6 +54,12 @@ import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
 	
+	/**
+	 * Buscar um meio de pagamento a partir dos parâmetros informados.
+	 * Caso não encontre, o meio de pagamento padrão é retornado.
+	 */
+	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario) throws BusinessException;
+	
 	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws BusinessException;
 	
 	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;

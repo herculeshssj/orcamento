@@ -67,15 +67,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.hslife.orcamento.component.RegraImportacaoComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Arquivo;
-import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -83,14 +79,15 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
+import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.facade.IRegraImportacao;
 import br.com.hslife.orcamento.model.InfoOFX;
-import br.com.hslife.orcamento.repository.CategoriaRepository;
-import br.com.hslife.orcamento.repository.FavorecidoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
-import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
-import br.com.hslife.orcamento.repository.MoedaRepository;
 import br.com.hslife.orcamento.util.LancamentoContaComparator;
 import br.com.hslife.orcamento.util.Util;
 import net.sf.ofx4j.domain.data.MessageSetType;
@@ -112,46 +109,80 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private LancamentoImportadoRepository lancamentoImportadoRepository;
+	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
+	
+	@Autowired
+	private IMoeda moedaService;
+	
+	@Autowired
+	private IRegraImportacao regraImportacaoService;
+	
+	@Autowired
+	private LancamentoImportadoRepository repository;
 	
 	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
 	
 	@Autowired
-	private CategoriaRepository categoriaRepository;
-	
-	@Autowired
-	private FavorecidoRepository favorecidoRepository;
-	
-	@Autowired
-	private MeioPagamentoRepository meioPagamentoRepository;
-	
-	@Autowired
 	private UsuarioComponent usuarioComponent;
-	
-	@Autowired
-	private MoedaRepository moedaRepository;
-	
-	@Autowired
-	private RegraImportacaoComponent regraImportacaoComponent;
+
+	public LancamentoImportadoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
+		return repository;
+	}
+
+	public ICategoria getCategoriaService() {
+		return categoriaService;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
+	}
+
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
+	}
+
+	public IMoeda getMoedaService() {
+		return moedaService;
+	}
+
+	public IRegraImportacao getRegraImportacaoService() {
+		return regraImportacaoService;
+	}
+
+	public LancamentoContaRepository getLancamentoContaRepository() {
+		this.lancamentoContaRepository.setSessionFactory(this.sessionFactory);
+		return lancamentoContaRepository;
+	}
+
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
+	}
 
 	@Override
 	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) {
-		return lancamentoImportadoRepository.findByConta(conta);
+		return getRepository().findByConta(conta);
 	}
 	
 	@Override
 	public void excluirLancamentoImportado(LancamentoImportado entity) {
-		lancamentoImportadoRepository.delete(entity);
+		getRepository().delete(entity);
 	}
 	
 	@Override
 	public void atualizarLancamentoImportado(LancamentoImportado entity) {
-		lancamentoImportadoRepository.update(entity);		
+		getRepository().update(entity);		
 	}
 	
 	public LancamentoImportado buscarPorID(Long id) {
-		return lancamentoImportadoRepository.findByID(id);
+		return getRepository().findByID(id);
 	}
 	
 	@Override
@@ -163,66 +194,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			default : throw new BusinessException("Opção inválida para conta!");
 		}
 	}
-	
-	private Categoria buscarCategoria(String categoriaImportada, TipoLancamento tipoLancamento, Usuario usuario) {
-		// Verifica se a categoria informada existe na base de dados
-		List<Categoria> categorias = categoriaRepository.findByDescricaoAndUsuario(categoriaImportada, usuario);
-		Categoria categoriaEncontrada = null;
-		for (Categoria c : categorias) {
-			if (c.getDescricao().contains(categoriaImportada)) {
-				categoriaEncontrada = c;
-				break;
-			}
-		}
-		
-		if (categoriaEncontrada == null) {
-			if (tipoLancamento.equals(TipoLancamento.RECEITA))
-				categoriaEncontrada = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuario, TipoCategoria.CREDITO);
-			else
-				categoriaEncontrada = categoriaRepository.findDefaultByTipoCategoriaAndUsuario(usuario, TipoCategoria.DEBITO);
-		}
-		
-		return categoriaEncontrada;
-	}
-	
-	private Favorecido buscarFavorecido(String favorecidoImportado, Usuario usuario) {		
-		// Verifica se o favorecido informado existe na base de dados
-		List<Favorecido> favorecidos = favorecidoRepository.findByNomeAndUsuario(favorecidoImportado, usuario);
-		Favorecido favorecidoEncontrado = null;
-		for (Favorecido f : favorecidos) {
-			if (f.getNome().contains(favorecidoImportado)) {
-				favorecidoEncontrado = f;
-				break;
-			}
-		}
-		
-		if (favorecidoEncontrado == null) 
-			favorecidoEncontrado = favorecidoRepository.findDefaultByUsuario(usuario);
-		
-		return favorecidoEncontrado;
-	}
-	
-	private MeioPagamento buscarMeioPagamento(String meioPagamentoImportada, Usuario usuario) {
-		// Verifica se o meio de pagamento informado existe na base de dados
-		List<MeioPagamento> meiosPagamento = meioPagamentoRepository.findByDescricaoAndUsuario(meioPagamentoImportada, usuario);
-		MeioPagamento meioPagamentoEncontrado = null;
-		for (MeioPagamento m : meiosPagamento) {
-			if (m.getDescricao().contains(meioPagamentoImportada)) {
-				meioPagamentoEncontrado = m;
-				break;
-			}
-		}
-		
-		if (meioPagamentoEncontrado == null)
-			meioPagamentoEncontrado = meioPagamentoRepository.findDefaultByUsuario(usuario);
-		
-		return meioPagamentoEncontrado;
-	}
 
 	@Override
 	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException {
 		// Armazena o usuário logado para diminuir o acesso a base
-		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
 		
@@ -230,7 +206,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		// e na variável moedaPadrao a moeda padrão do usuário. 
 		Moeda moedaPadrao = new Moeda();
 		Map<String, Moeda> moedas = new HashMap<String, Moeda>();
-		for (Moeda moeda : moedaRepository.findByUsuario(usuarioLogado)) {
+		for (Moeda moeda : getMoedaService().buscarPorUsuario(usuarioLogado)) {
 			if (moeda.isPadrao()) {
 				moedaPadrao = moeda;
 			}
@@ -242,7 +218,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		// Itera a lista de lançamentos importados para gerar os lançamentos da conta correspondentes
 		for (LancamentoImportado li : lancamentosImportados) {
 			
-			lc = lancamentoContaRepository.findByHash(li.getHash());
+			lc = getLancamentoContaRepository().findByHash(li.getHash());
 			
 			if (lc == null) {
 			
@@ -250,14 +226,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				
 				if (li.getValor() > 0 || (li.getTipo() != null && li.getTipo().equalsIgnoreCase("CREDITO"))) {
 					lc.setTipoLancamento(TipoLancamento.RECEITA);
-					lc.setCategoria(this.buscarCategoria(li.getCategoria(), lc.getTipoLancamento(), usuarioLogado));
+					lc.setCategoria(getCategoriaService().buscarCategoria(li.getCategoria(), TipoCategoria.CREDITO, usuarioLogado));
 				} else {
 					lc.setTipoLancamento(TipoLancamento.DESPESA);
-					lc.setCategoria(this.buscarCategoria(li.getCategoria(), lc.getTipoLancamento(), usuarioLogado));
+					lc.setCategoria(getCategoriaService().buscarCategoria(li.getCategoria(), TipoCategoria.DEBITO, usuarioLogado));
 				}
 				
-				lc.setFavorecido(this.buscarFavorecido(li.getFavorecido(), usuarioLogado));			
-				lc.setMeioPagamento(this.buscarMeioPagamento(li.getMeiopagamento(), usuarioLogado));
+				lc.setFavorecido(getFavorecidoService().buscarFavorecido(li.getFavorecido(), usuarioLogado));
+				lc.setMeioPagamento(getMeioPagamentoService().buscarMeioPagamento(li.getMeiopagamento(), usuarioLogado));
 				
 				// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
 				lc.setMoeda(moedas.get(li.getMoeda()) == null ? moedaPadrao : moedas.get(li.getMoeda()));				
@@ -298,7 +274,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		else {
 			// Ordena os lançamentos
 			Collections.sort(lancamentos, new LancamentoContaComparator());
-			return regraImportacaoComponent.processarRegras(conta, lancamentos);
+			return getRegraImportacaoService().processarRegras(conta, lancamentos);
 		}
 	}
 
@@ -308,14 +284,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			if (l.isSelecionado()) {
 				if (l.getId() == null) {
 					// Salva o lançamento da conta
-					lancamentoContaRepository.save(l);
+					getLancamentoContaRepository().save(l);
 					// Exclui o lançamento importado
-					lancamentoImportadoRepository.delete(lancamentoImportadoRepository.findByHash(l.getHashImportacao()));
+					getRepository().delete(getRepository().findByHash(l.getHashImportacao()));
 				} else {
 					// Atualiza o lançamento da conta
-					lancamentoContaRepository.update(l);
+					getLancamentoContaRepository().update(l);
 					// Exclui o lançamento importado
-					lancamentoImportadoRepository.delete(lancamentoImportadoRepository.findByHash(l.getHashImportacao()));
+					getRepository().delete(getRepository().findByHash(l.getHashImportacao()));
 				}
 			}
 		}
@@ -324,21 +300,21 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	@Override
 	public void importarLancamento(LancamentoImportado entity) throws BusinessException {
 		// Armazena o usuário logado para diminuir o acesso a base
-		Usuario usuarioLogado = usuarioComponent.getUsuarioLogado();
+		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
-		LancamentoConta l = lancamentoContaRepository.findByHash(entity.getHash());
+		LancamentoConta l = getLancamentoContaRepository().findByHash(entity.getHash());
 		if (l == null) {
 			// Cria um novo lançamento
 			l = new LancamentoConta();
 			
-			Moeda moedaPadrao = moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
+			Moeda moedaPadrao = getMoedaService().buscarPadraoPorUsuario(usuarioLogado);
 			
 			if (entity.getValor() > 0) {
 				l.setTipoLancamento(TipoLancamento.RECEITA);
-				l.setCategoria(this.buscarCategoria(entity.getCategoria(), l.getTipoLancamento(), usuarioLogado));
+				l.setCategoria(getCategoriaService().buscarCategoria(entity.getCategoria(), TipoCategoria.CREDITO, usuarioLogado));
 			} else {
 				l.setTipoLancamento(TipoLancamento.DESPESA);
-				l.setCategoria(this.buscarCategoria(entity.getCategoria(), l.getTipoLancamento(), usuarioLogado));
+				l.setCategoria(getCategoriaService().buscarCategoria(entity.getCategoria(), TipoCategoria.DEBITO, usuarioLogado));
 			}
 			
 			// Seta o status do lançamento a ser inserido
@@ -348,8 +324,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			}
 			
-			l.setFavorecido(this.buscarFavorecido(entity.getFavorecido(), usuarioLogado));
-			l.setMeioPagamento(this.buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado));
+			l.setFavorecido(getFavorecidoService().buscarFavorecido(entity.getFavorecido(), usuarioLogado));
+			l.setMeioPagamento(getMeioPagamentoService().buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado));
 			
 			l.setConta(entity.getConta());
 			l.setDataPagamento(entity.getData());
@@ -359,15 +335,15 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			l.setValorPago(Math.abs(entity.getValor()));
 			l.setHashImportacao(entity.getHash());
 			l.setObservacao(entity.getObservacao());
-			l.setMoeda(moedaRepository.findCodigoMoedaByUsuario(entity.getMoeda(), usuarioComponent.getUsuarioLogado()) == null 
+			l.setMoeda(getMoedaService().buscarCodigoMonetarioPorUsuario(entity.getMoeda(), usuarioLogado) == null 
 					? moedaPadrao 
-					: moedaRepository.findCodigoMoedaByUsuario(entity.getMoeda(), usuarioComponent.getUsuarioLogado()));
+					: getMoedaService().buscarCodigoMonetarioPorUsuario(entity.getMoeda(), usuarioLogado));
 			
 			// Salva o lançamento
-			lancamentoContaRepository.save(regraImportacaoComponent.processarRegras(entity.getConta(), l));
+			getLancamentoContaRepository().save(getRegraImportacaoService().processarRegras(entity.getConta(), l));
 			
 			// Exclui o lançamento importado
-			lancamentoImportadoRepository.delete(entity);
+			getRepository().delete(entity);
 		} else {
 			// Atualiza o lançamento existente
 						
@@ -389,10 +365,10 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			}
 			
-			lancamentoContaRepository.update(l);
+			getLancamentoContaRepository().update(l);
 			
 			// Exclui o lançamento importado
-			lancamentoImportadoRepository.delete(entity);
+			getRepository().delete(entity);
 		}
 	}
 	
@@ -483,7 +459,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			        for (Transaction transaction : list) {
 			        				            
 			            /* Aqui começa meu código */
-			            LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
+			            LancamentoImportado li = getRepository().findByHash(Util.MD5(transaction.getId()));
 			            if (li == null) {			            
 			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
 			            	if (transaction.getDatePosted().after(conta.getDataAbertura())) {
@@ -496,7 +472,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            		li.setHistorico(transaction.getMemo());
 			            		li.setValor(transaction.getAmount());
 				            
-			            		lancamentoImportadoRepository.save(li);
+			            		getRepository().save(li);
 			            	}
 			            } else {
 			            	// Caso o lançamento importado já exista, o mesmo será atualizado
@@ -508,7 +484,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		            		li.setHistorico(transaction.getMemo());
 		            		li.setValor(transaction.getAmount());
 			            
-		            		lancamentoImportadoRepository.update(li);
+		            		getRepository().update(li);
 			            }
 			            
 			            /* Fim do meu código */
@@ -561,7 +537,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			        for (Transaction transaction : list) {
 			        				            
 			            /* Aqui começa meu código */
-			            LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
+			            LancamentoImportado li = getRepository().findByHash(Util.MD5(transaction.getId()));
 			            if (li == null) {			            
 			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
 			            	if (transaction.getDatePosted().after(conta.getDataAbertura())) {
@@ -574,7 +550,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            		li.setHistorico(transaction.getMemo());
 			            		li.setValor(transaction.getAmount());
 				            
-			            		lancamentoImportadoRepository.save(li);
+			            		getRepository().save(li);
 			            	}
 			            } else {
 			            	// Caso o lançamento já exista ele será atualizado
@@ -586,7 +562,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		            		li.setHistorico(transaction.getMemo());
 		            		li.setValor(transaction.getAmount());
 			            
-		            		lancamentoImportadoRepository.update(li);
+		            		getRepository().update(li);
 			            }
 			            
 			            /* Fim do meu código */
@@ -615,7 +591,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					
 					List<Transaction> list = c.getMessage().getTransactionList().getTransactions();
 			        for (Transaction transaction : list) {			        	
-			        	LancamentoImportado li = lancamentoImportadoRepository.findByHash(Util.MD5(transaction.getId()));
+			        	LancamentoImportado li = getRepository().findByHash(Util.MD5(transaction.getId()));
 			            if (li == null) {			            
 			            	li = new LancamentoImportado();
 			            	li.setConta(conta);
@@ -625,7 +601,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            	li.setHistorico(transaction.getMemo());
 			            	li.setValor(transaction.getAmount());
 			            	
-			            	lancamentoImportadoRepository.save(li);			            	
+			            	getRepository().save(li);			            	
 			            } else {
 			            	// Caso o lançamento já exista o mesmo será atualizado
 			            	li.setConta(conta);
@@ -635,7 +611,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			            	li.setHistorico(transaction.getMemo());
 			            	li.setValor(transaction.getAmount());
 			            	
-			            	lancamentoImportadoRepository.update(li);
+			            	getRepository().update(li);
 			            }
 			       }
 				}				
@@ -674,7 +650,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				// Insere o lançamento importado X vezes de acordo com o campo QUANTIDADE
 				for (int i = 1; i <= quantidade; i++) {
 					lancamentoImportado.setHash(Util.MD5(lancamentoImportado.hashForCSV(i)));
-					lancamentoImportadoRepository.save(lancamentoImportado);
+					getRepository().save(lancamentoImportado);
 					lancamentoImportado.setId(null);
 				}
 			}
@@ -692,9 +668,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Override
 	public void apagarLancamentosImportados(Conta conta) {
-		List<LancamentoImportado> lancamentos = lancamentoImportadoRepository.findByConta(conta);
+		List<LancamentoImportado> lancamentos = getRepository().findByConta(conta);
 		for (LancamentoImportado li : lancamentos) {
-			lancamentoImportadoRepository.delete(li);
+			getRepository().delete(li);
 		}
 	}
 }

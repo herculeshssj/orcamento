@@ -46,26 +46,27 @@
 
 package br.com.hslife.orcamento.util;
 
-import org.springframework.stereotype.Component;
-
 import br.com.hslife.orcamento.entity.EntityPersistence;
 
-@Component
 public class RepositoryUtil {
+	
+	private RepositoryUtil() {
+		// Não pode ser instanciada
+	}
 
-	public void validAndAddToHQL(StringBuilder hql, String hqlToAppend, EntityPersistence entity) {
+	public static void validAndAddToHQL(StringBuilder hql, String hqlToAppend, EntityPersistence entity) {
 		if (entity != null && entity.getId() != null) {
 			hql.append(hqlToAppend);
 		}
 	}
 	
-	public void validAndAddToHQL(StringBuilder hql, String hqlToAppend, Boolean booleanValue) {
+	public static void validAndAddToHQL(StringBuilder hql, String hqlToAppend, Boolean booleanValue) {
 		if (booleanValue != null) {
 			hql.append(hqlToAppend);
 		}
 	}
 	
-	public void validAndAddToHQL(StringBuilder hql, String hqlToAppend, Object[] arrayValue) {
+	public static void validAndAddToHQL(StringBuilder hql, String hqlToAppend, Object[] arrayValue) {
 		if (arrayValue != null && arrayValue.length != 0) {
 			hql.append(hqlToAppend);
 		}

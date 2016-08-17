@@ -101,7 +101,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 		criterioBusca.setDataFim(dataFim);
 		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
 		
-		for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioBusca(criterioBusca)) {
+		for (LancamentoConta lancamento : getLancamentoContaRepository().findByCriterioBusca(criterioBusca)) {
 			agenda.setDataInicio(lancamento.getDataPagamento());
 			agenda.setDescricao(lancamento.getConta().getLabel() + " - " + lancamento.getDescricao());
 			agenda.setUsuario(lancamento.getConta().getUsuario());
@@ -128,7 +128,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 		fim.setHours(23);
 		fim.setMinutes(59);
 		fim.setSeconds(59);
-		return getRepository().countAgendamentoByDataInicioOrDataFimAndAlerta(inicio, fim, true, usuarioComponent.getUsuarioLogado());
+		return getRepository().countAgendamentoByDataInicioOrDataFimAndAlerta(inicio, fim, true, getUsuarioComponent().getUsuarioLogado());
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -145,7 +145,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 		fim.setSeconds(59);
 		criterioBusca.setInicio(inicio);
 		criterioBusca.setFim(fim);
-		criterioBusca.setUsuario(usuarioComponent.getUsuarioLogado());
+		criterioBusca.setUsuario(getUsuarioComponent().getUsuarioLogado());
 		return getRepository().findByCriterioAgendamento(criterioBusca);
 	}
 	

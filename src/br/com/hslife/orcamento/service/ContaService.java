@@ -93,6 +93,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 
 	public ContaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 

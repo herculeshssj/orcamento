@@ -55,6 +55,12 @@ import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface ICategoria extends ICRUDService<Categoria> {
 	
+	/**
+	 * Buscar uma categoria a partir dos parâmetros informados.
+	 * Caso não encontre, a categoria padrão é retornada.
+	 */
+	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException;
+	
 	public List<Categoria> buscarPorUsuario(Usuario usuario) throws BusinessException;
 	
 	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
