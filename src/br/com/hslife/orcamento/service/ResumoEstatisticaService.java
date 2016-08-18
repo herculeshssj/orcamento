@@ -59,8 +59,9 @@ import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
@@ -80,69 +81,74 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IFaturaCartao;
+import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.repository.ContaRepository;
-import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
-import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
-import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
+import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("resumoEstatisticaService")
+@Transactional(propagation=Propagation.SUPPORTS)
 public class ResumoEstatisticaService implements IResumoEstatistica {
+	
+	/*** Declaração dos serviços ***/
+	
+	@Autowired
+	private IFechamentoPeriodo fechamentoPeriodoService;
+	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
+	
+	@Autowired
+	private IConta contaService;
+	
+	@Autowired
+	private ILancamentoPeriodico lancamentoPeriodicoService;
+	
+	@Autowired
+	private IFaturaCartao faturaCartaoService;
+	
+	/*** Declaração dos Getters dos serviços ***/
+	
+	public IFechamentoPeriodo getFechamentoPeriodoService() {
+		return fechamentoPeriodoService;
+	}
+	
+	public ILancamentoConta getLancamentoContaService() {
+		return lancamentoContaService;
+	}
+	
+	public IConta getContaService() {
+		return contaService;
+	}
+	
+	public ILancamentoPeriodico getLancamentoPeriodicoService() {
+		return lancamentoPeriodicoService;
+	}
 
-	/*** Declaração dos repositórios ***/
-	
-	@Autowired
-	private LancamentoContaRepository lancamentoContaRepository;
-	
-	@Autowired
-	private ContaRepository contaRepository;
-	
-	@Autowired
-	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
-	
-	@Autowired
-	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
-	
-	@Autowired
-	private FaturaCartaoRepository faturaCartaoRepository;
+	public IFaturaCartao getFaturaCartaoService() {
+		return faturaCartaoService;
+	}
 
 	/*** Declaração dos componentes ***/
 	
 	@Autowired
-	private ContaComponent contaComponent;	
-	
-	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
-	/*** Declaração dos métodos Setters dos repositórios ***/
-		
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
+	/*** Declaração dos Getters dos componentes ***/
+	
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
 	}
 	
-	public void setContaRepository(ContaRepository contaRepository) {
-		this.contaRepository = contaRepository;
-	}
-
-	public void setFechamentoPeriodoRepository(
-			FechamentoPeriodoRepository fechamentoPeriodoRepository) {
-		this.fechamentoPeriodoRepository = fechamentoPeriodoRepository;
-	}
-
-	/*** Declaração dos métodos Setters dos componentes ***/
-	
-	public void setContaComponent(ContaComponent contaComponent) {
-		this.contaComponent = contaComponent;
-	}	
-
 	/*** Implementação dos métodos da interface ***/
 	
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) throws BusinessException {
@@ -151,7 +157,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
 		
 		// Itera todas as contas do usuário
-		for (Conta conta : contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, new TipoConta[]{}, usuario, null)) { // resolvendo a ambiguidade do método
+		for (Conta conta : getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuario, null)) { // resolvendo a ambiguidade do método
 			
 			// FIXME decidir como irei tratar o saldo atual dos cartões de débito
 			// Caso seja cartão de débito, passa adiante
@@ -183,7 +189,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				criterio.setConta(conta);
 			} else {
 				// Traz o último período de fechamento da conta
-				FechamentoPeriodo ultimoFechamento = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta); 
+				FechamentoPeriodo ultimoFechamento = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta); 
 				if (ultimoFechamento == null) {
 					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
 							? conta.getSaldoInicial()
@@ -213,10 +219,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				}
 			}
 			
-			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterio);
+			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterio);
 			
 			// Calcula o saldo dos lançamentos e registra no saldo atual
-			saldoAtual.setSaldoRegistrado(contaComponent.calcularSaldoLancamentosComConversao(lancamentos));
+			saldoAtual.setSaldoRegistrado(LancamentoContaUtil.calcularSaldoLancamentosComConversao(lancamentos));
 			
 			// Calcula o saldo atual da conta
 			saldoAtual.setSaldoAtual(saldoAtual.getSaldoPeriodo() + saldoAtual.getSaldoRegistrado());
@@ -257,18 +263,18 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		if (ano <= hoje.get(Calendar.YEAR)) {
 			// Ano atual e anteriores é trazido o que está atualmente registrado na conta
-			lancamentosProcessados = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			lancamentosProcessados = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		} else {
 			// Anos posteriores é realizado a estimativa baseado no mês e ano informado e os lançamentos periódicos ativos da conta
 			
 			/*** Lançamentos parcelados ***/
 			// Traz todos os lançamentos parcelados ativos da conta selecionada
-			List<LancamentoPeriodico> parcelamentos = lancamentoPeriodicoRepository.
-					findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+			List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
+					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);					
 			
 			// Itera os lançamentos parcelados a adiciona suas parcelas caso esteja no mesmo ano que o relatório
 			for (LancamentoPeriodico parcelamento : parcelamentos) {
-				List<LancamentoConta> parcelasLancamento = lancamentoContaRepository.findByLancamentoPeriodico(parcelamento);
+				List<LancamentoConta> parcelasLancamento = getLancamentoContaService().buscarPorLancamentoPeriodico(parcelamento);
 				
 				for (LancamentoConta parcela : parcelasLancamento) {
 					int anoParcela = parcela.getDataPagamento().getYear() + 1900;
@@ -283,14 +289,14 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			/*** Lançamentos fixos ***/
 			// Traz todos os lançamentos fixos ativos da conta selecionada
-			List<LancamentoPeriodico> despesasFixas = lancamentoPeriodicoRepository.
-					findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+			List<LancamentoPeriodico> despesasFixas = getLancamentoPeriodicoService().
+					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
 			
 			// Itera os lançamentos fixos
 			for (LancamentoPeriodico despesaFixa : despesasFixas) {
 				
 				// Busca a última mensalidade paga
-				LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(despesaFixa);
+				LancamentoConta ultimaMensalidade = getLancamentoContaService().buscarUltimoPagamentoPeriodoGerado(despesaFixa);
 				
 				// Verifica se a despesa fixa é mensal
 				if (despesaFixa.getPeriodoLancamento().equals(PeriodoLancamento.MENSAL)) {
@@ -351,7 +357,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			/*** Lançamentos avulsos ***/
 			// Traz os lançamentos avulsos existente no ano do relatório
-			avulsos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			avulsos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 			
 			// Itera os lançamentos avulsos para remover as mensalidades e parcelas
 			for (Iterator<LancamentoConta> iterator = avulsos.iterator(); iterator.hasNext(); ) {
@@ -365,7 +371,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}
 		
 		// Busca os lançamentos e classifica-os em suas respectivas categorias
-		List<Categoria> categorias = contaComponent.organizarLancamentosPorCategoria(lancamentosProcessados);
+		List<Categoria> categorias = LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentosProcessados);
 		
 		for (Categoria categoria : categorias) {
 			String oid = Util.MD5(categoria.getDescricao());
@@ -408,8 +414,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
 		
-		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total	
-		FechamentoPeriodo fechamento = fechamentoPeriodoRepository.findLastFechamentoPeriodoBeforeDateByContaAndOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
+		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total
+		FechamentoPeriodo fechamento = getFechamentoPeriodoService().buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
 		if (fechamento == null) {
 			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
 		} else {
@@ -473,7 +479,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[] {StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
 			
 			// Adiciona os lançamentos já convertendo o valor para a moeda padrão
-			for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioBusca(criterioBusca)) {
+			for (LancamentoConta lancamento : getLancamentoContaService().buscarPorCriterioBusca(criterioBusca)) {
 				if (!lancamento.getMoeda().equals(conta.getMoeda())) {
 					lancamento.setValorPago(lancamento.getValorPago() * lancamento.getMoeda().getValorConversao());
 				}
@@ -481,7 +487,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 		} else {
 			// Busca a fatura e adiciona os lançamentos contidos nela
-			FaturaCartao fatura = faturaCartaoRepository.findById(faturaCartao.getId());
+			FaturaCartao fatura = getFaturaCartaoService().buscarPorID(faturaCartao.getId());
 			
 			// Adiciona os lançamentos já convertendo o valor de acordo com a tabela de conversões de moeda
 			for (LancamentoConta lancamento : fatura.getDetalheFatura()) {
@@ -503,9 +509,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			resumoMensal.setFim(lancamentos.get(lancamentos.size()-1).getDataPagamento());
 		}
 		
-		resumoMensal.setCategoriasCartao(contaComponent.organizarLancamentosPorCategoria(lancamentos));
-		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		resumoMensal.setCategoriasCartao(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos));
+		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 		
 		return resumoMensal;
 	}
@@ -523,12 +529,12 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		criterioBusca.setDataFim(dataFim);
 		
 		// Realiza a busca
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		
 		// Processa as categorias, favorecidos e meios de pagamento
-		resumoMensal.setCategoriasCartao(contaComponent.organizarLancamentosPorCategoria(lancamentos));
-		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		resumoMensal.setCategoriasCartao(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos));
+		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 		
 		// Seta no resumo o início e fim do período buscado
 		resumoMensal.setInicio(criterioBusca.getDataInicio());
@@ -545,9 +551,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				
 		// Busca o fechamento do período anterior
 		if (fechamentoPeriodo != null) 
-			fechamentoAnterior = fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoPeriodo);
+			fechamentoAnterior = getFechamentoPeriodoService().buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
 		else
-			fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
+			fechamentoAnterior = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta);
 		
 		// Preenche os parâmetros de busca
 		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
@@ -573,16 +579,16 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}
 		
 		// Realiza a busca
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		
 		// Processa as categorias
 		if (fechamentoAnterior == null) {
-			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + contaComponent.calcularSaldoLancamentos(lancamentos));
+			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
 		} else {
-			resumoMensal.setCategorias(contaComponent.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + contaComponent.calcularSaldoLancamentos(lancamentos));
+			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
 		}
-		resumoMensal.setFavorecidos(contaComponent.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(contaComponent.organizarLancamentosPorMeioPagamento(lancamentos));
+		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
+		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 		
 		// Seta no resumo o início e fim do período buscado
 		resumoMensal.setInicio(criterioBusca.getDataInicio());
@@ -595,8 +601,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Override
 	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException {		
 		// Busca todas as contas existentes
-		List<Conta> contasExistentes = contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, new TipoConta[]{}, usuarioComponent.getUsuarioLogado(), null); // resolvendo a ambiguidade do método
-
+		List<Conta> contasExistentes = getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuarioComponent.getUsuarioLogado(), null); // resolvendo a ambiguidade do método
+		
 		// Declara a lista de contas que será retornada
 		List<Conta> contasProcessadas = new ArrayList<Conta>();
 		
@@ -610,7 +616,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			criterioBusca.setCadastro(cadastro);
 			
 			// Traz todos os lançamentos encontrados
-			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 			
 			// Se a lista de lançamentos vier zerada, passa para a próxima conta
 			if (lancamentos == null || lancamentos.isEmpty()) continue;
@@ -680,6 +686,5 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				return lancamento.getValorPago() * taxaConversao;
 			}
 		}
-	}
-	
+	}	
 }

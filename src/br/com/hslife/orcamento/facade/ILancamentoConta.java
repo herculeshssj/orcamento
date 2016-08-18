@@ -46,21 +46,16 @@
 
 package br.com.hslife.orcamento.facade;
 
-import java.util.Date;
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 
 public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
@@ -69,37 +64,25 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
 	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos);
 	
-	public double saldoUltimoFechamento(Conta conta) throws BusinessException;
-
-	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<Favorecido> organizarLancamentosPorFavorecido(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<Moeda> organizarLancamentosPorMoeda(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<AgrupamentoLancamento> organizarLancamentosPorDebitoCredito(List<LancamentoConta> lancamentos) throws BusinessException;
-	
-	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
-	
 	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento) throws BusinessException;
 	
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException;
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, StatusLancamentoConta pago) throws BusinessException;
 	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException;
+	public List<LancamentoConta> buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) throws BusinessException; 
 	
-	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, StatusLancamentoConta pago) throws BusinessException;
 	
-	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamentoConta pago) throws BusinessException;
 	
-	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws BusinessException;
+	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamentoConta pago) throws BusinessException;
 	
-	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws BusinessException;
+	public List<LancamentoConta> gerarPrevisaoProximosPagamentos(LancamentoPeriodico lancamentoPeriodico, int quantidadePeriodos) throws BusinessException;
 	
-	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws BusinessException;
+	public LancamentoConta buscarUltimoPagamentoPeriodoGerado(LancamentoPeriodico lancamentoPeriodico) throws BusinessException;
+	
+	public List<LancamentoConta> buscarPorLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) throws BusinessException;
 }

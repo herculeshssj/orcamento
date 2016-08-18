@@ -44,68 +44,29 @@
   
 ***/
 
-package br.com.hslife.orcamento.component;
+package br.com.hslife.orcamento.util;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import br.com.hslife.orcamento.entity.Categoria;
-import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
-import br.com.hslife.orcamento.enumeration.StatusLancamento;
-import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
-import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
-import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
-import br.com.hslife.orcamento.repository.MoedaRepository;
-import br.com.hslife.orcamento.util.EntityLabelComparator;
-import br.com.hslife.orcamento.util.Util;
+import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 
-@Component
-public class ContaComponent {
-	
-	@Autowired
-	private LancamentoContaRepository lancamentoContaRepository;
-	
-	@Autowired
-	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
-	
-	@Autowired
-	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
-	
-	@Autowired
-	private MoedaRepository moedaRepository;
-	
-	@Autowired
-	private UsuarioComponent usuarioComponent;
-	
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) {
-		return fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
+public final class LancamentoContaUtil {
+
+	private LancamentoContaUtil() {
+		// Classe estática e final. Não é possível herdar e instanciar
 	}
 	
-	public Moeda getMoedaPadrao() {
-		return moedaRepository.findDefaultByUsuario(usuarioComponent.getUsuarioLogado());
-	}
-	
-	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos) {		
+	public static double calcularSaldoLancamentos(final List<LancamentoConta> lancamentos) {		
 		double total = 0.0;
 		if (lancamentos != null) {
 			for (LancamentoConta l : lancamentos) {
@@ -119,7 +80,7 @@ public class ContaComponent {
 		return Util.arredondar(total);
 	}
 	
-	public double calcularSaldoLancamentosComConversao(List<LancamentoConta> lancamentos) {		
+	public static double calcularSaldoLancamentosComConversao(final List<LancamentoConta> lancamentos) {		
 		double total = 0.0;
 		for (LancamentoConta l : lancamentos) {
 			if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
@@ -137,7 +98,7 @@ public class ContaComponent {
 		return Util.arredondar(total);
 	}
 	
-	public List<Categoria> organizarLancamentosPorCategoria(List<LancamentoConta> lancamentos) {
+	public static List<Categoria> organizarLancamentosPorCategoria(final List<LancamentoConta> lancamentos) {
 		List<Categoria> categorias = new ArrayList<Categoria>();
 		
 		/* Usa-se o Set para separar as categorias da listagem de lançamentos */
@@ -207,7 +168,7 @@ public class ContaComponent {
 		return categorias;
 	}
 
-	public List<Favorecido> organizarLancamentosPorFavorecido(List<LancamentoConta> lancamentos) {
+	public static List<Favorecido> organizarLancamentosPorFavorecido(final List<LancamentoConta> lancamentos) {
 		List<Favorecido> favorecidos = new ArrayList<Favorecido>();
 		
 		/* Usa-se o Set para separar os favorecidos da listagem de lançamentos */
@@ -287,7 +248,7 @@ public class ContaComponent {
 		return favorecidos;
 	}
 
-	public List<MeioPagamento> organizarLancamentosPorMeioPagamento(List<LancamentoConta> lancamentos) {
+	public static List<MeioPagamento> organizarLancamentosPorMeioPagamento(final List<LancamentoConta> lancamentos) {
 		List<MeioPagamento> meiosPagamento = new ArrayList<MeioPagamento>();
 		
 		/* Usa-se o Set para separar os meios de pagamento da listagem de lançamentos */
@@ -366,133 +327,8 @@ public class ContaComponent {
 			
 		return meiosPagamento;
 	}
-
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) {
-		return fechamentoPeriodoRepository.findByContaAndOperacaoConta(conta, operacaoConta);
-	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
-		this.fecharPeriodo(dataFechamento, conta, null, null);
-	}
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
-		this.fecharPeriodo(dataFechamento, conta, null, lancamentosPeriodicos);
-	}
-	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
-		this.fecharPeriodo(fechamentoPeriodo.getData(), fechamentoPeriodo.getConta(), fechamentoPeriodo, lancamentosPeriodicos);
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  throws BusinessException {
-		// Obtém-se o último fechamento realizado
-		FechamentoPeriodo fechamentoAnterior;
-		if (fechamentoReaberto == null)
-			fechamentoAnterior = fechamentoPeriodoRepository.findUltimoFechamentoByConta(conta);
-		else 
-			fechamentoAnterior = fechamentoPeriodoRepository.findFechamentoPeriodoAnterior(fechamentoReaberto);
-		
-		double saldoFechamentoAnterior = 0;
-		
-		if (fechamentoAnterior == null) {
-			saldoFechamentoAnterior = conta.getSaldoInicial();
-		} else {
-			saldoFechamentoAnterior = fechamentoAnterior.getSaldo();
-		}
-		
-		// Incrementa a data do fechamento anterior
-		Calendar temp = Calendar.getInstance();
-		if (fechamentoAnterior != null) {
-			temp.setTime(fechamentoAnterior.getData());
-			temp.add(Calendar.DAY_OF_YEAR, 1);
-		} else
-			temp.setTime(conta.getDataAbertura());		
-		
-		// Calcula o saldo do período
-		CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
-		criterio.setConta(conta);
-		criterio.setDescricao("");
-		criterio.setDataInicio(temp.getTime());
-		criterio.setDataFim(dataFechamento);
-		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-		double saldoFechamento = this.calcularSaldoLancamentos(lancamentoContaRepository.findByCriterioBusca(criterio));
-		
-		// Cria o novo fechamento para a conta
-		FechamentoPeriodo novoFechamento = new FechamentoPeriodo();
-		if (fechamentoReaberto == null) {
-			// Antes de prosseguir, verifica se não existem períodos reabertos
-			List<FechamentoPeriodo> fechamentosReabertos = fechamentoPeriodoRepository.findByContaAndOperacaoConta(conta, OperacaoConta.REABERTURA);
-			if (fechamentosReabertos != null && !fechamentosReabertos.isEmpty()) {
-				// TODO refatorara para uma especificação que valide a possibilidade de fechamento
-				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
-			}
-			
-			novoFechamento.setConta(conta);
-			novoFechamento.setData(dataFechamento);
-			novoFechamento.setOperacao(OperacaoConta.FECHAMENTO);
-			novoFechamento.setDataAlteracao(new Date());
-			novoFechamento.setSaldo(saldoFechamentoAnterior + saldoFechamento);
-			
-			// Obtém o mês e ano da data de fechamento
-			temp.setTime(dataFechamento);
-			novoFechamento.setMes(temp.getTime().getMonth() + 1);
-			novoFechamento.setAno(temp.get(Calendar.YEAR));
-			
-			// Salva o fechamento
-			fechamentoPeriodoRepository.save(novoFechamento);
-		} else {
-			// Antes de prosseguir, verifica se o período selecionado não contém
-			// períodos reabertos anteriores
-			List<FechamentoPeriodo> fechamentosAnterioresReabertos = fechamentoPeriodoRepository.findFechamentosAnterioresReabertos(fechamentoReaberto);
-			if (fechamentosAnterioresReabertos != null && !fechamentosAnterioresReabertos.isEmpty()) {
-				// TODO refatorara para uma especificação que valide a possibilidade de fechamento
-				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
-			}
-			
-			// Altera os dados do fechamento já existente
-			fechamentoReaberto.setOperacao(OperacaoConta.FECHAMENTO);
-			fechamentoReaberto.setDataAlteracao(new Date());
-			fechamentoReaberto.setSaldo(saldoFechamentoAnterior + saldoFechamento);
-			
-			// Salva o fechamento
-			fechamentoPeriodoRepository.update(fechamentoReaberto);
-		}
-		
-		// Quita os lançamentos do período
-		for (LancamentoConta l : lancamentoContaRepository.findByCriterioBusca(criterio)) {
-			l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
-			if (fechamentoReaberto == null)
-				l.setFechamentoPeriodo(novoFechamento);
-			else
-				l.setFechamentoPeriodo(fechamentoReaberto);
-
-			if (lancamentosPeriodicos != null && lancamentosPeriodicos.contains(l.getLancamentoPeriodico())) {
-				this.registrarPagamento(l);
-			} else {
-				lancamentoContaRepository.update(l);
-			}
-		}
-	}
-	
-	public void reabrirPeriodo(FechamentoPeriodo entity) {
-		// Busca os fechamentos posteriores ao fechamento selecionado
-		List<FechamentoPeriodo> fechamentosPosteriores = fechamentoPeriodoRepository.findFechamentosPosteriores(entity);
-		
-		// Itera a lista de fechamentos realizando a reabertura dos mesmos e dos lançamentos vinculados
-		for (FechamentoPeriodo fechamentoPeriodo : fechamentosPosteriores) {
-			FechamentoPeriodo fechamento = fechamentoPeriodoRepository.findById(fechamentoPeriodo.getId());
-			fechamento.setOperacao(OperacaoConta.REABERTURA);
-			fechamento.setDataAlteracao(new Date());
-			fechamentoPeriodoRepository.update(fechamento);
-			
-			for (LancamentoConta l : fechamento.getLancamentos()) {
-				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-				lancamentoContaRepository.update(l);
-			}
-		}
-	}
-
-	public List<Moeda> organizarLancamentosPorMoeda(List<LancamentoConta> lancamentos) {
+	public static List<Moeda> organizarLancamentosPorMoeda(final List<LancamentoConta> lancamentos) {
 		List<Moeda> moedas = new ArrayList<Moeda>();
 		
 		/* Usa-se o Set para separar os moedas da listagem de lançamentos */
@@ -572,91 +408,30 @@ public class ContaComponent {
 		return moedas;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public void registrarPagamento(LancamentoConta pagamentoPeriodo) {		
-		pagamentoPeriodo.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
+	public static List<AgrupamentoLancamento> organizarLancamentosPorDebitoCredito(final List<LancamentoConta> lancamentos) {
+		List<AgrupamentoLancamento> debitosCreditos = new ArrayList<AgrupamentoLancamento>();
 		
-		// Atualiza o pagamento
-		lancamentoContaRepository.update(pagamentoPeriodo);
+		AgrupamentoLancamento agrupamentoDebito = new AgrupamentoLancamento("Débitos");
+		AgrupamentoLancamento agrupamentoCredito = new AgrupamentoLancamento("Créditos");
 		
-		// Gera o próximo pagamento para os lançamentos fixos
-		if (pagamentoPeriodo.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)
-				&& pagamentoPeriodo.getLancamentoPeriodico().getStatusLancamento().equals(StatusLancamento.ATIVO)) {
-			
-			// Busca o pagamento mais recente
-			LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(pagamentoPeriodo.getLancamentoPeriodico());
-			
-			LancamentoConta proximaMensalidade;
-			
-			if (ultimaMensalidade == null) {
-				proximaMensalidade = new LancamentoConta(pagamentoPeriodo);
-				proximaMensalidade.setDataVencimento(new Date());
+		// Varre a lista de lançamentos para adicionar os lançamentos nas respectivas instâncias de AgrupamentoLancamento 
+		for (LancamentoConta l : lancamentos) {
+			if (l.getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				agrupamentoDebito.getLancamentos().add(l);
+				agrupamentoDebito.setSaldoPago(agrupamentoDebito.getSaldoPago() + l.getValorPago());
 			} else {
-				proximaMensalidade = ultimaMensalidade.clonarLancamentos(1, IncrementoClonagemLancamento.NENHUM).get(0);
-			}
-			
-			proximaMensalidade.setLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico());
-			
-			// Incrementa a data de vencimento independente do valor informado
-			proximaMensalidade.setDataVencimento(proximaMensalidade.getLancamentoPeriodico().getPeriodoLancamento().getDataPeriodo(proximaMensalidade.getDataVencimento()));
-			// Corrige o dia de vencimento
-			proximaMensalidade.getDataVencimento().setDate(proximaMensalidade.getLancamentoPeriodico().getDiaVencimento());
-						
-			proximaMensalidade.setAno(proximaMensalidade.getDataVencimento().getYear() + 1900);
-			proximaMensalidade.setPeriodo(proximaMensalidade.getDataVencimento().getMonth() + 1);
-			proximaMensalidade.setDataPagamento(proximaMensalidade.getDataVencimento());
-			proximaMensalidade.setValorPago(proximaMensalidade.getLancamentoPeriodico().getValorParcela());
-			
-			// Define a descrição definitiva do lançamento a ser criado
-			proximaMensalidade.setDescricao(proximaMensalidade.getLancamentoPeriodico().getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
-			
-			lancamentoContaRepository.save(proximaMensalidade);
-			
-		} else {
-			// Verifica se o lançamento periódico vinculado já pode ser encerrado.
-			pagamentoPeriodo.getLancamentoPeriodico().setPagamentos(lancamentoContaRepository.findByLancamentoPeriodico(pagamentoPeriodo.getLancamentoPeriodico()));
-			if (pagamentoPeriodo.getLancamentoPeriodico().podeEncerrar()) {
-				pagamentoPeriodo.getLancamentoPeriodico().setStatusLancamento(StatusLancamento.ENCERRADO);
-				lancamentoPeriodicoRepository.update(pagamentoPeriodo.getLancamentoPeriodico());
+				agrupamentoCredito.getLancamentos().add(l);
+				agrupamentoCredito.setSaldoPago(agrupamentoCredito.getSaldoPago() + l.getValorPago());
 			}
 		}
-	}
-
-	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) {
 		
-		LancamentoConta parcela;
-		Calendar dataVencimento = Calendar.getInstance();
-		dataVencimento.setTime(lancamentoPeriodico.getDataPrimeiraParcela());
-				
-		for (int i = 1; i <= lancamentoPeriodico.getTotalParcela(); i++) {
-			parcela = new LancamentoConta();			
-			parcela.setAno(dataVencimento.get(Calendar.YEAR));
-			parcela.setLancamentoPeriodico(lancamentoPeriodico);
-			parcela.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
-			parcela.setDataVencimento(dataVencimento.getTime());
-			parcela.setParcela(i);
-			
-			// Setando os demais atributos
-			parcela.setConta(lancamentoPeriodico.getConta());
-			parcela.setDescricao(lancamentoPeriodico.getDescricao());
-			parcela.setValorPago(lancamentoPeriodico.getValorParcela());
-			parcela.setDataPagamento(parcela.getDataVencimento());
-			parcela.setCategoria(lancamentoPeriodico.getCategoria());
-			parcela.setFavorecido(lancamentoPeriodico.getFavorecido());
-			parcela.setMeioPagamento(lancamentoPeriodico.getMeioPagamento());
-			parcela.setMoeda(lancamentoPeriodico.getMoeda());
-			if (parcela.getDataVencimento().before(new Date()))
-				parcela.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-			else
-				parcela.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
-			
-			// Define a descrição definitiva do lançamento a ser criado
-			parcela.setDescricao(lancamentoPeriodico.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA)); 
-			
-			lancamentoContaRepository.save(parcela);
-			dataVencimento.add(Calendar.MONTH, 1);
-			dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
-		}
+		// Corrige as casas decimais e adiciona na lista de AgrupamentoLancamento
+		agrupamentoCredito.setSaldoPago(Util.arredondar(agrupamentoCredito.getSaldoPago()));
+		agrupamentoDebito.setSaldoPago(Util.arredondar(agrupamentoDebito.getSaldoPago()));
+		
+		debitosCreditos.add(agrupamentoCredito);
+		debitosCreditos.add(agrupamentoDebito);
+
+		return debitosCreditos;
 	}
-	
 }

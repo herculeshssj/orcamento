@@ -119,7 +119,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	private double previsaoDebito;
 	
 	private boolean mostrarInformacao;
-	//FIXME remover try...catch
+	
 	public OrcamentoController() {
 		super(new Orcamento());
 		moduleTitle = "Orçamento do Período";

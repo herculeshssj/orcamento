@@ -65,11 +65,8 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	private MoedaRepository repository;
 	
 	public MoedaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(MoedaRepository repository) {
-		this.repository = repository;
 	}
 	
 	@Override
@@ -135,5 +132,9 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	@Override
 	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) throws BusinessException {
 		return getRepository().findAllCodigoMonetarioByUsuario(usuario);
+	}
+	
+	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario) throws BusinessException {
+		return getRepository().findCodigoMoedaByUsuario(codigoMonetario, usuario);
 	}
 }

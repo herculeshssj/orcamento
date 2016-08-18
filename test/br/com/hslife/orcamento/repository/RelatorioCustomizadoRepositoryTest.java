@@ -56,6 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,9 @@ import br.com.hslife.orcamento.util.EntityInitializerFactory;
 public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories {
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
@@ -85,6 +89,10 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 	
 	@Before
 	public void initializeEntities() {
+		usuarioRepository.setSessionFactory(sessionFactory);
+		relatorioCustomizadoRepository.setSessionFactory(sessionFactory);
+		categoriaRepository.setSessionFactory(sessionFactory);
+		
 		usuario = EntityInitializerFactory.createUsuario();
 		usuarioRepository.save(usuario);
 		

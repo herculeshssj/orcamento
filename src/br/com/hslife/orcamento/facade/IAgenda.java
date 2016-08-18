@@ -63,4 +63,6 @@ public interface IAgenda extends ICRUDService<Agenda> {
 	public Long contarAgendamentosDeHojeComAlerta() throws BusinessException;
 	
 	public List<Agenda> buscarAgendamentosDoDia() throws BusinessException;
+	
+	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta) throws BusinessException;
 }

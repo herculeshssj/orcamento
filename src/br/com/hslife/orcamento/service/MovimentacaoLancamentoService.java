@@ -50,10 +50,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
@@ -66,29 +68,36 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IMovimentacaoLancamento;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
+import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("movimentacaoLancamentoService")
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
 public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	
 	@Autowired
-	private LancamentoContaRepository lancamentoContaRepository;
+	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private ContaComponent contaComponent;
+	private LancamentoContaRepository repository;
 	
+	public LancamentoContaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
+		return repository;
+	}
+
 	@Override
 	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta) throws BusinessException {
 		for (LancamentoConta l : lancamentos) {
 			l.setConta(conta);
-			lancamentoContaRepository.update(l);
+			getRepository().update(l);
 		}
 	}
 	
 	@Override
 	public void excluirLancamentos(List<LancamentoConta> lancamentos) throws BusinessException {
 		for (LancamentoConta l : lancamentos) {			
-			lancamentoContaRepository.delete(l);
+			getRepository().delete(l);
 		}		
 	}
 	
@@ -96,7 +105,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	public void removerVinculos(List<LancamentoConta> lancamentos) throws BusinessException {
 		for (LancamentoConta l : lancamentos) {
 			l.setHashImportacao(null);
-			lancamentoContaRepository.update(l);
+			getRepository().update(l);
 		}
 		
 	}
@@ -105,7 +114,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		for (LancamentoConta lancamentoOrigem : lancamentos) {
 			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(quantidade, incremento)) {
 				lancamentoCopiado.setConta(conta);
-				lancamentoContaRepository.save(lancamentoCopiado);
+				getRepository().save(lancamentoCopiado);
 			}
 		}
 	}
@@ -115,9 +124,9 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		List<LancamentoConta> lancamentosDivididos = lancamento.clonarLancamentos(quantidade, IncrementoClonagemLancamento.NENHUM);
 		for (LancamentoConta l : lancamentosDivididos) {
 			l.setValorPago(valorDividido);
-			lancamentoContaRepository.save(l);
+			getRepository().save(l);
 		}
-		lancamentoContaRepository.delete(lancamento);
+		getRepository().delete(lancamento);
 	}
 	
 	@Override
@@ -142,7 +151,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 			if (parametros.get("MEIOPAGAMENTO_DESTINO") != null) 
 				lancamento.setMeioPagamento((MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 			
-			lancamentoContaRepository.update(lancamento);
+			getRepository().update(lancamento);
 		}
 		
 	}
@@ -167,14 +176,14 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 			lancamentoMesclado.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 		}
 		
-		double valorPago = contaComponent.calcularSaldoLancamentos(lancamentos);
+		double valorPago = LancamentoContaUtil.calcularSaldoLancamentos(lancamentos);
 		
 		lancamentoMesclado.setValorPago(valorPago);
 		
-		lancamentoContaRepository.save(lancamentoMesclado);
+		getRepository().save(lancamentoMesclado);
 		
 		for (LancamentoConta l : lancamentos) {
-			lancamentoContaRepository.delete(l);
+			getRepository().delete(l);
 		}
 	}
 	
@@ -208,12 +217,12 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		lancamentoDestino.setFavorecido(parametros.get("FAVORECIDO_DESTINO") == null ? null : (Favorecido)parametros.get("FAVORECIDO_DESTINO"));
 		lancamentoDestino.setMeioPagamento(parametros.get("MEIOPAGAMENTO_DESTINO") == null ? null : (MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 		
-		lancamentoContaRepository.save(lancamentoOrigem);
-		lancamentoContaRepository.save(lancamentoDestino);
+		getRepository().save(lancamentoOrigem);
+		getRepository().save(lancamentoDestino);
 	}
 	
 	@Override
 	public void salvarDetalhamentoLancamento(LancamentoConta lancamento) throws BusinessException {
-		lancamentoContaRepository.update(lancamento);		
+		getRepository().update(lancamento);		
 	}
 }

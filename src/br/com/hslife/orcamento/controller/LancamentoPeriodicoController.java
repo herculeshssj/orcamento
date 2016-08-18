@@ -133,7 +133,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	private LancamentoConta lancamentoSelecionado;
 	private LancamentoConta[] lancamentosSelecionados;
 	private String tipoSelecao;
-	//FIXME remover try...catch
+	
 	public LancamentoPeriodicoController() {
 		super(new LancamentoPeriodico());
 
@@ -409,7 +409,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public List<LancamentoConta> getListaPagamentoPeriodo() {
 		try {
-			return getService().buscarPagamentosNaoPagosPorLancamentoPeriodico(entity);
+			return lancamentoContaService.buscarPagamentosNaoPagosPorLancamentoPeriodico(entity);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

@@ -58,6 +58,9 @@ import org.springframework.stereotype.Component;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
 
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IOpcaoSistema;
+
 @Component
 public class EmailComponent {
 	
@@ -79,10 +82,10 @@ public class EmailComponent {
 	private String apiKey;
 	
 	@Autowired
-	private OpcaoSistemaComponent opcaoSistemaComponent;	
-
-	public void setOpcaoSistemaComponent(OpcaoSistemaComponent opcaoSistemaComponent) {
-		this.opcaoSistemaComponent = opcaoSistemaComponent;
+	private IOpcaoSistema opcaoSistemaService;
+	
+	public IOpcaoSistema getOpcaoSistemaService() {
+		return opcaoSistemaService;
 	}
 
 	public void setRemetente(String remetente) {
@@ -109,8 +112,8 @@ public class EmailComponent {
 		this.mensagem = mensagem;
 	}
 
-	private void populateParameters() {
-		Map<String, Object> parametros = opcaoSistemaComponent.buscarOpcoesGlobalAdminPorCDU("email");
+	private void populateParameters() throws BusinessException {
+		Map<String, Object> parametros = getOpcaoSistemaService().buscarOpcoesGlobalAdminPorCDU("email");
 		servidor = (String)parametros.get("EMAIL_SERVIDOR");
 		porta = Integer.valueOf((String)parametros.get("EMAIL_PORTA"));
 		usuario = (String)parametros.get("EMAIL_USUARIO");
@@ -143,7 +146,7 @@ public class EmailComponent {
 		logger.info("E-Mail enviado com código " + response.getCode() + ".\n\n" + response.getMessage());
 	}
 	
-	public void enviarEmail() throws EmailException, SendGridException {
+	public void enviarEmail() throws BusinessException, EmailException, SendGridException {
 		// Carrega as configurações de envio de e-mail
 		this.populateParameters();
 		

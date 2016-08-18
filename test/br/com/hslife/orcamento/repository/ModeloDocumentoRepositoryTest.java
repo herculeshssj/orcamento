@@ -54,6 +54,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,9 @@ public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
 	private ModeloDocumento modelo = new ModeloDocumento();
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
@@ -75,6 +79,9 @@ public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
 	
 	@Before
 	public void initializeEntities() {
+		usuarioRepository.setSessionFactory(this.sessionFactory);
+		modeloDocumentoRepository.setSessionFactory(this.sessionFactory);
+		
 		usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioRepository.save(usuario);
 		

@@ -52,28 +52,41 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
+import br.com.hslife.orcamento.exception.BusinessException;
 
 @Component("startupUserParametersHandler")
 public class StartupUserParametersHandler implements AuthenticationSuccessHandler {
 	
+	private static final Logger logger = LogManager.getLogger(StartupUserParametersHandler.class);
+	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
+
+	public OpcaoSistemaComponent getOpcaoSistemaComponent() {
+		return opcaoSistemaComponent;
+	}
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		
-		// Carrega as opções do sistema do usuário autenticado
-		opcaoSistemaComponent.atualizarCacheOpcoesSistema();
+		try {
+			// Carrega as opções do sistema do usuário autenticado
+			getOpcaoSistemaComponent().atualizarCacheOpcoesSistema();			
+		} catch (BusinessException be) {
+			logger.catching(be);
+		} catch (Exception e) {
+			logger.catching(e);
+		}
 		
 		// Vai para o dashboard do sistema
 		response.sendRedirect(request.getContextPath() + "/pages/menu/dashboard.faces");
 	}
-
-	
 }

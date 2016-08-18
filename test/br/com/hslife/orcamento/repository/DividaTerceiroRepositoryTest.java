@@ -54,6 +54,7 @@ import static org.junit.Assert.fail;
 import java.util.Calendar;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,9 @@ public class DividaTerceiroRepositoryTest extends AbstractTestRepositories {
 	private DividaTerceiro dividaTerceiro = new DividaTerceiro();
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
@@ -88,6 +92,11 @@ public class DividaTerceiroRepositoryTest extends AbstractTestRepositories {
 	
 	@Before
 	public void initializeEntities() {
+		usuarioRepository.setSessionFactory(sessionFactory);
+		moedaRepository.setSessionFactory(sessionFactory);
+		favorecidoRepository.setSessionFactory(sessionFactory);
+		dividaTerceiroRepository.setSessionFactory(sessionFactory);
+		
 		usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioRepository.save(usuario);
 		

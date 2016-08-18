@@ -48,8 +48,11 @@ package br.com.hslife.orcamento.service;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
@@ -62,7 +65,11 @@ import br.com.hslife.orcamento.repository.PessoalRepository;
 import br.com.hslife.orcamento.repository.TelefoneRepository;
 
 @Service
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
 public class InformacaoPessoalService implements IInformacaoPessoal {
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Autowired
 	private PessoalRepository pessoalRepository;
@@ -73,60 +80,75 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	@Autowired
 	private TelefoneRepository telefoneRepository;
 
+	public PessoalRepository getPessoalRepository() {
+		this.pessoalRepository.setSessionFactory(this.sessionFactory);
+		return pessoalRepository;
+	}
+
+	public EnderecoRepository getEnderecoRepository() {
+		this.enderecoRepository.setSessionFactory(this.sessionFactory);
+		return enderecoRepository;
+	}
+
+	public TelefoneRepository getTelefoneRepository() {
+		this.telefoneRepository.setSessionFactory(this.sessionFactory);
+		return telefoneRepository;
+	}
+
 	@Override
 	public void salvarDadosPessoais(Pessoal pessoal) throws BusinessException {
 		pessoal.validate();
 		
 		// Se a entidade não possuir ID, grava um novo registro, caso contrário atualiza
 		if (pessoal.getId() == null) {
-			pessoalRepository.save(pessoal);
+			getPessoalRepository().save(pessoal);
 		} else {
-			pessoalRepository.update(pessoal);
+			getPessoalRepository().update(pessoal);
 		}
 	}
 	
 	@Override
 	public Pessoal buscarDadosPessoais(Usuario usuario) throws BusinessException {
-		return pessoalRepository.findByUsuario(usuario);
+		return getPessoalRepository().findByUsuario(usuario);
 	}
 
 	@Override
 	public List<Endereco> buscarEnderecos(Usuario usuario) throws BusinessException {
-		return enderecoRepository.findByUsuario(usuario);
+		return getEnderecoRepository().findByUsuario(usuario);
 	}
 
 	@Override
 	public List<Telefone> buscarTelefones(Usuario usuario) throws BusinessException {
-		return telefoneRepository.findByUsuario(usuario);
+		return getTelefoneRepository().findByUsuario(usuario);
 	}
 
 	@Override
 	public void salvarEndereco(Endereco entity) throws BusinessException {
 		entity.validate();
 		if (entity.getId() == null) {
-			enderecoRepository.save(entity);
+			getEnderecoRepository().save(entity);
 		} else {
-			enderecoRepository.update(entity);
+			getEnderecoRepository().update(entity);
 		}
 	}
 
 	@Override
 	public void excluirEndereco(Endereco entity) throws BusinessException {
-		enderecoRepository.delete(entity);		
+		getEnderecoRepository().delete(entity);		
 	}
 
 	@Override
 	public void salvarTelefone(Telefone entity) throws BusinessException {
 		entity.validate();
 		if (entity.getId() == null) {
-			telefoneRepository.save(entity);
+			getTelefoneRepository().save(entity);
 		} else {
-			telefoneRepository.update(entity);
+			getTelefoneRepository().update(entity);
 		}
 	}
 
 	@Override
 	public void excluirTelefone(Telefone entity) throws BusinessException {
-		telefoneRepository.delete(entity);		
+		getTelefoneRepository().delete(entity);		
 	}	
 }

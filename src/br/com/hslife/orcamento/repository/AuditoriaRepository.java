@@ -56,13 +56,11 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Auditoria;
 import br.com.hslife.orcamento.model.CriterioAuditoria;
 
 @Repository
-@Transactional
 public class AuditoriaRepository extends AbstractRepository {
 	
 	public void delete(Auditoria entity) {

@@ -48,8 +48,10 @@ package br.com.hslife.orcamento.service;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Auditoria;
@@ -59,18 +61,18 @@ import br.com.hslife.orcamento.model.CriterioAuditoria;
 import br.com.hslife.orcamento.repository.AuditoriaRepository;
 
 @Service("auditoriaService")
-@Transactional
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
 public class AuditoriaService implements IAuditoria {
+	
+	@Autowired
+	public SessionFactory sessionFactory;
 	
 	@Autowired
 	private AuditoriaRepository repository;
 
 	public AuditoriaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(AuditoriaRepository repository) {
-		this.repository = repository;
 	}
 
 	public Auditoria buscarPorId(Long id) throws BusinessException {

@@ -53,7 +53,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.component.ContaComponent;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
@@ -70,9 +69,9 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
+import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.util.Util;
 
 @Service("faturaCartaoService")
@@ -85,46 +84,28 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	private LancamentoContaRepository lancamentoContaRepository;
 	
 	@Autowired
-	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
-	
-//	@Autowired
-//	private MoedaRepository moedaRepository;
-//	
-//	@Autowired
-//	private ContaRepository contaRepository;
+	private FechamentoPeriodoService fechamentoPeriodoService;
 	
 	@Autowired
-	private ContaComponent contaComponent;
-	
-//	@Autowired
-//	private CategoriaRepository categoriaRepository;
-//	
-//	@Autowired
-//	private FavorecidoRepository favorecidoRepository;
-//	
-//	@Autowired
-//	private MeioPagamentoRepository meioPagamentoRepository;
+	private ILancamentoPeriodico lancamentoPeriodicoService;
 	
 	public FaturaCartaoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 
-	public void setRepository(FaturaCartaoRepository repository) {
-		this.repository = repository;
+	public ILancamentoPeriodico getLancamentoPeriodicoService() {
+		return lancamentoPeriodicoService;
 	}
 
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
+	public FechamentoPeriodoService getFechamentoPeriodoService() {
+		return fechamentoPeriodoService;
 	}
 
-//	public void setMoedaRepository(MoedaRepository moedaRepository) {
-//		this.moedaRepository = moedaRepository;
-//	}
-//
-//	public void setContaRepository(ContaRepository contaRepository) {
-//		this.contaRepository = contaRepository;
-//	}
+	public LancamentoContaRepository getLancamentoContaRepository() {
+		this.lancamentoContaRepository.setSessionFactory(this.sessionFactory);
+		return lancamentoContaRepository;
+	}
 
 	@Override
 	public void validar(FaturaCartao entity) throws BusinessException {
@@ -210,13 +191,13 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		
 		// Quita todos os lançamentos vinculados à fatura
 		for (LancamentoConta lancamento : faturaCartao.getDetalheFatura()) {
-			LancamentoConta l = lancamentoContaRepository.findById(lancamento.getId());
+			LancamentoConta l = getLancamentoContaRepository().findById(lancamento.getId());
 			if (l.getLancamentoPeriodico() != null) {
 				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
-				contaComponent.registrarPagamento(l);
+				getFechamentoPeriodoService().registrarPagamento(l);
 			} else {
 				l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
-				lancamentoContaRepository.update(l);
+				getLancamentoContaRepository().update(l);
 			}
 		}
 		
@@ -267,9 +248,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 				
 		// Reabre todos os lançamentos vinculados à fatura
 		for (LancamentoConta lancamento : fatura.getDetalheFatura()) {
-			LancamentoConta l = lancamentoContaRepository.findById(lancamento.getId());
+			LancamentoConta l = getLancamentoContaRepository().findById(lancamento.getId());
 			l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-			lancamentoContaRepository.update(l);
+			getLancamentoContaRepository().update(l);
 		}
 	}
 	
@@ -311,7 +292,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		double saldoDevedor = (faturaCartao.getValorFatura() + faturaCartao.getSaldoDevedor()) - valorAQuitar;
 		
 		// Salva o lançamento
-		lancamentoContaRepository.save(lancamentoPagamento);
+		getLancamentoContaRepository().save(lancamentoPagamento);
 		
 		// Atribui o lançamento à fatura
 		fatura.setLancamentoPagamento(lancamentoPagamento);
@@ -371,17 +352,13 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		parcelamentoFatura.setCategoria(faturaCartao.getCategoriaSelecionada());
 		parcelamentoFatura.setFavorecido(faturaCartao.getFavorecidoSelecionado());
 		parcelamentoFatura.setMeioPagamento(faturaCartao.getMeioPagamentoSelecionado());
-		lancamentoPeriodicoRepository.save(parcelamentoFatura);
-		
-		// Realiza o parcelamento
-		contaComponent.gerarParcelas(parcelamentoFatura);
-		
+		getLancamentoPeriodicoService().cadastrar(parcelamentoFatura);		
 	}
 	
 	@Override
 	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) throws BusinessException {
 		// Verifica se o lançamento selecionado já foi vinculado com outra fatura
-		if (lancamentoContaRepository.existsLinkagePagamentoFaturaCartao(lancamentoConta)) {
+		if (getLancamentoContaRepository().existsLinkagePagamentoFaturaCartao(lancamentoConta)) {
 			throw new BusinessException("Lançamento selecionado já foi usado para quitar outra fatura!");
 		}
 		

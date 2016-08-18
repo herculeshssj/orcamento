@@ -46,47 +46,189 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
+import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
+import br.com.hslife.orcamento.repository.OpcaoSistemaRepository;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Service
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
 public class OpcaoSistemaService implements IOpcaoSistema {
 	
 	@Autowired
-	private OpcaoSistemaComponent component;
-
-	public OpcaoSistemaComponent getComponent() {
-		return component;
+	public SessionFactory sessionFactory;
+	
+	@Autowired
+	private OpcaoSistemaRepository repository;
+	
+	public OpcaoSistemaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
+		return repository;
 	}
 
-	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) throws BusinessException{
-		getComponent().salvarOpcoesGlobal(opcoesSistema);
+	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) {
+		// TODO implementar
 	}
 	
+//	public void excluirOpcoesUsuario(Usuario usuario) {
+//	// Exclui as opções do sistema do usuário
+//	for (OpcaoSistema opcao : opcaoSistemaRepository.findByUsuario(usuario)) {
+//		opcaoSistemaRepository.delete(opcao);
+//	}
+//}
+	
 	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException {
-		getComponent().salvarOpcoesGlobalAdmin(opcoesSistema);
+		OpcaoSistema opcao = new OpcaoSistema();
+		for (String chave : opcoesSistema.keySet()) {
+			opcao = getRepository().findOpcaoGlobalAdminByChave(chave);
+			validarValorOpcaoSistema(opcao, opcoesSistema.get(opcao.getChave()));
+			if (opcoesSistema.get(chave) instanceof String) {
+				opcao.setTipoValor("STRING");
+				opcao.setValor((String)opcoesSistema.get(chave));
+			}
+			if (opcoesSistema.get(chave) instanceof Boolean) {
+				opcao.setTipoValor("BOOLEAN");
+				opcao.setValor(Boolean.toString((Boolean)opcoesSistema.get(chave)));
+			}
+			if (opcoesSistema.get(chave) instanceof Integer) {
+				opcao.setTipoValor("INTEGER");
+				opcao.setValor(Integer.toString((Integer)opcoesSistema.get(chave)));
+			}
+			//opcao.setValor((String)opcoesSistema.get(chave)); -- Mudança decorrente de usar o JSF 2.2.10 e PrimeFaces 5.2
+			getRepository().update(opcao);
+		}
 	}
 	
 	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws BusinessException {
-		getComponent().salvarOpcoesUser(opcoesSistema, usuario);
+		OpcaoSistema opcao;
+		for (String chave : opcoesSistema.keySet()) {			
+			opcao = getRepository().findOpcaoUserByChave(chave, usuario);
+			if (opcao != null) {
+				validarValorOpcaoSistema(opcao, opcoesSistema.get(opcao.getChave()));			
+				//opcao.setValor((String)opcoesSistema.get(chave)); -- Mudança decorrente de usar o JSF 2.2.10 e PrimeFaces 5.2
+				if (opcoesSistema.get(chave) instanceof String) {
+					opcao.setTipoValor("STRING");
+					opcao.setValor((String)opcoesSistema.get(chave));
+				}
+				if (opcoesSistema.get(chave) instanceof Boolean) {
+					opcao.setTipoValor("BOOLEAN");
+					opcao.setValor(Boolean.toString((Boolean)opcoesSistema.get(chave)));
+				}
+				if (opcoesSistema.get(chave) instanceof Integer) {
+					opcao.setTipoValor("INTEGER");
+					opcao.setValor(Integer.toString((Integer)opcoesSistema.get(chave)));
+				}
+				getRepository().update(opcao);
+			} else {
+				opcao = new OpcaoSistema();
+				opcao.setCasoDeUso("");
+				opcao.setChave(chave);
+				opcao.setTipoOpcaoSistema(TipoOpcaoSistema.USER);
+				opcao.setUsuario(usuario);
+				if (opcoesSistema.get(chave) instanceof String) {
+					opcao.setTipoValor("STRING");
+					opcao.setValor((String)opcoesSistema.get(chave));
+				}
+				if (opcoesSistema.get(chave) instanceof Boolean) {
+					opcao.setTipoValor("BOOLEAN");
+					opcao.setValor(Boolean.toString((Boolean)opcoesSistema.get(chave)));
+				}
+				if (opcoesSistema.get(chave) instanceof Integer) {
+					opcao.setTipoValor("INTEGER");
+					opcao.setValor(Integer.toString((Integer)opcoesSistema.get(chave)));
+				}
+				getRepository().save(opcao);
+			}
+		}
 	}
 	
-	public Map<String, Object> buscarOpcoesGlobalAdmin() throws BusinessException {
-		return getComponent().buscarOpcoesGlobalAdmin();
+	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) throws BusinessException {
+		if (opcao.isRequired()) {
+			EntityPersistenceUtil.validaCampoNulo(opcao.getChave(), valor);
+		}
 	}
 	
-	public Map<String, Object> buscarOpcoesUser(Usuario usuario) throws BusinessException {
-		return getComponent().buscarOpcoesUser(usuario);
+	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() throws BusinessException {
+		return getRepository().findOpcoesGlobalAdmin();
 	}
 	
-	public void atualizarCacheOpcoesSistema() throws BusinessException {
-		getComponent().atualizarCacheOpcoesSistema();
+	public Map<String, Object> buscarMapOpcoesGlobalAdmin() {
+		List<OpcaoSistema> opcoesSistema = getRepository().findOpcoesGlobalAdmin();
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		
+		for (OpcaoSistema opcao : opcoesSistema) {
+			if (opcao.getTipoValor().equals("STRING")) {
+				parametros.put(opcao.getChave(), opcao.getValor());
+			}
+			if (opcao.getTipoValor().equals("BOOLEAN")) {
+				parametros.put(opcao.getChave(), Boolean.valueOf(opcao.getValor()));
+			}
+			if (opcao.getTipoValor().equals("INTEGER")) {
+				parametros.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
+			}
+		}
+		
+		return parametros;
+	}
+	
+	public Map<String, Object> buscarMapOpcoesUser(Usuario usuario) {
+		List<OpcaoSistema> opcoesSistema = getRepository().findOpcoesUser(usuario);
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		
+		for (OpcaoSistema opcao : opcoesSistema) {
+			if (opcao.getTipoValor().equals("STRING")) {
+				parametros.put(opcao.getChave(), opcao.getValor());
+			}
+			if (opcao.getTipoValor().equals("BOOLEAN")) {
+				parametros.put(opcao.getChave(), Boolean.valueOf(opcao.getValor()));
+			}
+			if (opcao.getTipoValor().equals("INTEGER")) {
+				parametros.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
+			}
+		}
+		
+		return parametros;
+	}
+	
+	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) throws BusinessException {
+		List<OpcaoSistema> opcoesSistema = getRepository().findOpcoesGlobalAdminByCDU(cdu);
+		Map<String, Object> parametros = new HashMap<String, Object>();
+		
+		for (OpcaoSistema opcao : opcoesSistema) {
+			if (opcao.getTipoValor().equals("STRING")) {
+				parametros.put(opcao.getChave(), opcao.getValor());
+			}
+			if (opcao.getTipoValor().equals("BOOLEAN")) {
+				parametros.put(opcao.getChave(), Boolean.valueOf(opcao.getValor()));
+			}
+			if (opcao.getTipoValor().equals("INTEGER")) {
+				parametros.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
+			}
+		}
+		
+		return parametros;
+	}
+	
+	@Override
+	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws BusinessException {
+		return getRepository().findOpcaoUserByChave(chave, usuario);
+	}
+	
+	@Override
+	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws BusinessException {
+		return getRepository().findOpcoesUserByCasoUso(casoDeUso, usuario);
 	}
 }

@@ -95,6 +95,8 @@ import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
@@ -143,6 +145,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Autowired
 	private ImportacaoLancamentoController importacaoLancamentoMB;
 	
+	@Autowired
+	private IImportacaoLancamento importacaoLancamentoService;
+	
+	@Autowired
+	private IFechamentoPeriodo fechamentoPeriodoService;
+	
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	
 	private TipoCategoria tipoCategoriaSelecionada;	
@@ -153,7 +161,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	private String mesAno;
 	
 	private List<LancamentoPeriodico> lancamentosPeriodicos = new ArrayList<>();
-	//FIXME remover try...catch
+	
 	public LancamentoContaController() {
 		super(new LancamentoConta());
 		moduleTitle = "Lançamentos da Conta / Cartão";
@@ -194,9 +202,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			// Busca o fechamento do período anterior
 			FechamentoPeriodo fechamentoAnterior;
 			if (fechamentoPeriodo != null) 
-				fechamentoAnterior = getService().buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
+				fechamentoAnterior = fechamentoPeriodoService.buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
 			else
-				fechamentoAnterior = getService().buscarUltimoFechamentoConta(criterioBusca.getConta());
+				fechamentoAnterior = fechamentoPeriodoService.buscarUltimoFechamentoConta(criterioBusca.getConta());
 			
 			// Determina a data de início do período
 			if (fechamentoAnterior == null) {
@@ -480,9 +488,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			}
 			
 			if (fechamentoPeriodo != null) 
-				getService().fecharPeriodo(fechamentoPeriodo, new ArrayList<>(lancamentosPeriodicos));
+				fechamentoPeriodoService.fecharPeriodo(fechamentoPeriodo, new ArrayList<>(lancamentosPeriodicos));
 			else 
-				getService().fecharPeriodo(dataFechamento, criterioBusca.getConta(), new ArrayList<>(lancamentosPeriodicos));
+				fechamentoPeriodoService.fecharPeriodo(dataFechamento, criterioBusca.getConta(), new ArrayList<>(lancamentosPeriodicos));
 			
 			infoMessage("Período fechado com sucesso.");
 		} catch (BusinessException be) {
@@ -506,7 +514,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			return "";
 		}
 		try {
-			fechamentoPeriodo = getService().buscarFechamentoPorID(fechamentoPeriodo.getId());
+			fechamentoPeriodo = fechamentoPeriodoService.buscarFechamentoPorID(fechamentoPeriodo.getId());
 			Collections.sort(fechamentoPeriodo.getLancamentos(), new LancamentoContaComparator());
 			actionTitle = " - Reabrir período";
 			return "/pages/LancamentoConta/reabrirPeriodo";
@@ -518,7 +526,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public String reabrirPeriodo() {
 		try {
-			getService().reabrirPeriodo(fechamentoPeriodo);
+			fechamentoPeriodoService.reabrirPeriodo(fechamentoPeriodo);
 			infoMessage("Período reaberto com sucesso.");
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
@@ -647,7 +655,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
 		try {			
-			for (LancamentoImportado importado : getService().buscarLancamentoImportadoPorConta(entity.getConta())) {
+			for (LancamentoImportado importado : importacaoLancamentoService.buscarLancamentoImportadoPorConta(entity.getConta())) {
 				listagem.add(new SelectItem(importado, Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " "+ importado.getValor() + " - " + importado.getHistorico()));
 			}
 		} catch (BusinessException be) {
@@ -702,7 +710,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
 			if (criterioBusca.getConta() != null) {
-				for (FechamentoPeriodo fechamento : getService().buscarTodosFechamentoPorConta(criterioBusca.getConta())) {
+				for (FechamentoPeriodo fechamento : fechamentoPeriodoService.buscarTodosFechamentoPorConta(criterioBusca.getConta())) {
 					fechamentos.add(fechamento);
 					if (fechamentos.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
 						break;

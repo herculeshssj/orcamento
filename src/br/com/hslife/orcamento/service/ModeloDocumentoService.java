@@ -64,11 +64,8 @@ public class ModeloDocumentoService extends AbstractCRUDService<ModeloDocumento>
 	private ModeloDocumentoRepository repository;
 	
 	public ModeloDocumentoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(ModeloDocumentoRepository repository) {
-		this.repository = repository;
 	}
 
 	@Override

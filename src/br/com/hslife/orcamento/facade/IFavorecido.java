@@ -55,6 +55,12 @@ import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IFavorecido extends ICRUDService<Favorecido> {
 	
+	/**
+	 * Buscar um favorecido a partir dos parâmetros informados.
+	 * Caso não encontre, o favorecido padrão é retornado.
+	 */
+	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario) throws BusinessException;
+	
 	public List<Favorecido> buscarPorUsuario(Usuario usuario) throws BusinessException;
 	
 	public List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException;

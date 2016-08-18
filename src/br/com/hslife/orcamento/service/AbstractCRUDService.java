@@ -46,11 +46,23 @@
 
 package br.com.hslife.orcamento.service;
 
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.repository.AbstractCRUDRepository;
 
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={
+		BusinessException.class, 
+		RuntimeException.class, 
+		Exception.class})
 public abstract class AbstractCRUDService<E extends EntityPersistence> {
+	
+	@Autowired
+	public SessionFactory sessionFactory;
 	
 	protected abstract AbstractCRUDRepository<E> getRepository();
 	

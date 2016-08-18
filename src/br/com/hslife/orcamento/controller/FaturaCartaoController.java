@@ -156,7 +156,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private List<LancamentoConta> lancamentosAdicionados = new ArrayList<LancamentoConta>();
 	private Map<String, List<LancamentoConta>> mapFaturasEncontradas = new HashMap<>();
 	private Map<String, List<Moeda>> mapMoedasEncontradas = new HashMap<>();
-	//FIXME remover try...catch
+	
 	public FaturaCartaoController() {
 		super(new FaturaCartao());
 		

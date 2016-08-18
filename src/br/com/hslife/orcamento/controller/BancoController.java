@@ -70,7 +70,7 @@ public class BancoController extends AbstractCRUDController<Banco> {
 	
 	private String nomeBanco;
 	private boolean somenteAtivos = true;
-	//FIXME remover try...catch
+	
 	public BancoController() {
 		super(new Banco());
 		moduleTitle = "Bancos";

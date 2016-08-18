@@ -70,7 +70,7 @@ public class DespensaController extends AbstractCRUDController<Despensa> {
 	private IDespensa service;
 
 	private String descricaoDespensa;
-	//FIXME remover try...catch
+	
 	public DespensaController() {
 		super(new Despensa());
 		moduleTitle = "Despensa";

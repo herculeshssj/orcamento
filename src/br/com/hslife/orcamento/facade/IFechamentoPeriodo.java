@@ -46,34 +46,43 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.StatusLancamento;
-import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
+import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 
-public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> {
+public interface IFechamentoPeriodo {
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento) throws BusinessException;
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException;
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamento statusLancamento) throws BusinessException;
+	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException;
 	
-	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws BusinessException;
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException;
+	
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException;
+	
+	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  throws BusinessException;
+	
+	public void reabrirPeriodo(FechamentoPeriodo entity) throws BusinessException;
 	
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException;
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario) throws BusinessException;
+	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
 	
-	public void mesclarLancamentos(LancamentoConta pagamentoPeriodo, LancamentoConta lancamentoAMesclar) throws BusinessException;
+	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws BusinessException;
 	
-	public void vincularLancamentos(LancamentoPeriodico lancamentoPeriodico, List<LancamentoConta> lancamentosAVincular) throws BusinessException;
-
-	public void removerLancamentos(List<LancamentoConta> lancamentosARemover) throws BusinessException;
-		
-	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) throws BusinessException;
+	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws BusinessException;
+	
+	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws BusinessException;
+	
+	public double saldoUltimoFechamento(Conta conta) throws BusinessException;
+	
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao) throws BusinessException;
+	
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) throws BusinessException;
 }

@@ -64,11 +64,8 @@ public class CategoriaDocumentoService extends AbstractCRUDService<CategoriaDocu
 	private CategoriaDocumentoRepository repository;
 	
 	public CategoriaDocumentoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(CategoriaDocumentoRepository repository) {
-		this.repository = repository;
 	}
 
 	@Override

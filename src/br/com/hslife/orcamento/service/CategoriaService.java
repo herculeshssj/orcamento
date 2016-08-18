@@ -66,11 +66,8 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	private CategoriaRepository repository;
 	
 	public CategoriaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(CategoriaRepository repository) {
-		this.repository = repository;
 	}
 
 	@Override
@@ -143,5 +140,25 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	@Override
 	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, Usuario usuario) {
 		return getRepository().findTipoCategoriaAndDescricaoAndAtivoByUsuario(tipoCategoria, descricao, ativo, usuario);
+	}
+	
+	@Override
+	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {
+		// Verifica se a categoria informada existe na base de dados
+		List<Categoria> categorias = getRepository().findTipoCategoriaAndDescricaoAndAtivoByUsuario(tipoCategoria, descricaoCategoria, null, usuario);
+		Categoria categoriaEncontrada = null;
+		for (Categoria c : categorias) {
+			if (c.getDescricao().contains(descricaoCategoria)) {
+				categoriaEncontrada = c;
+				break;
+			}
+		}
+		
+		// Se não existir, retorna a categoria padrão para o tipo de categoria informada
+		if (categoriaEncontrada == null) {
+			categoriaEncontrada = getRepository().findDefaultByTipoCategoriaAndUsuario(usuario, tipoCategoria);
+		}
+		
+		return categoriaEncontrada;
 	}
 }

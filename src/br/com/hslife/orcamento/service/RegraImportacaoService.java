@@ -46,14 +46,21 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IRegraImportacao;
 import br.com.hslife.orcamento.repository.RegraImportacaoRepository;
 
@@ -63,15 +70,33 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	@Autowired
 	private RegraImportacaoRepository repository;
 	
+	@Autowired
+	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
+	
 	public RegraImportacaoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 	
-	public void setRepository(RegraImportacaoRepository repository) {
-		this.repository = repository;
+	public ICategoria getCategoriaService() {
+		return categoriaService;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
+	}
+
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
 	}
 	
-	 @Override
+	@Override
 	public void validar(RegraImportacao entity) throws BusinessException {
 		RegraImportacao regra = getRepository().findEqualEntity(entity);
 		if (regra != null && !regra.equals(entity)) {
@@ -82,5 +107,56 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	@Override
 	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws BusinessException {
 		return getRepository().findAllByConta(conta);
+	}
+	
+	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws BusinessException {
+		List<LancamentoConta> lancamentos = new ArrayList<>();
+		lancamentos.add(lancamento);
+		return this.processarRegras(conta, lancamentos).get(0);
+	}
+	
+	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException {
+		Set<LancamentoConta> lancamentosProcessados = new HashSet<LancamentoConta>();
+		
+		List<RegraImportacao> regras = this.buscarTodosPorConta(conta);
+		// Não processa nada caso não tenha nenhuma regra cadastrada
+		if (regras == null || regras.isEmpty()) {
+			lancamentosProcessados.addAll(lancamentos);
+			return new ArrayList<LancamentoConta>(lancamentosProcessados);
+		}
+		
+		for (LancamentoConta lancamento : lancamentos) {
+			
+			for (RegraImportacao regra : regras) {
+				//Pattern p = Pattern.compile(regra.getTexto());
+		        //Matcher m = p.matcher(lancamento.getDescricao());
+				boolean matchFound = lancamento.getDescricao().toUpperCase().contains(regra.getTexto().toUpperCase());
+		        if (matchFound) {
+		        	if (regra.getIdCategoria() != null) {
+		        		lancamento.setCategoria(getCategoriaService().buscarPorID(regra.getIdCategoria()));
+		        	}
+		        	if (regra.getIdFavorecido() != null) {
+		        		lancamento.setFavorecido(getFavorecidoService().buscarPorID(regra.getIdFavorecido()));
+		        	}
+		        	if (regra.getIdMeioPagamento() != null) {
+		        		lancamento.setMeioPagamento(getMeioPagamentoService().buscarPorID(regra.getIdMeioPagamento()));
+		        	}
+		        	lancamentosProcessados.add(lancamento);
+		        	break;
+		        } else {
+		            continue;
+		        }				
+			}
+			
+		}
+		
+		// Adiciona os lançamentos que não se enquadraram nas regras cadastradas
+		for (LancamentoConta l : lancamentos) {
+			if (!lancamentosProcessados.contains(l)) {
+				lancamentosProcessados.add(l);
+			}
+		}
+		
+		return new ArrayList<LancamentoConta>(lancamentosProcessados);
 	}
 }

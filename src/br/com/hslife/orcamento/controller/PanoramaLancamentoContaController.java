@@ -83,7 +83,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	
 	private PanoramaLancamentoConta entity;
 	private List<PanoramaLancamentoConta> listEntity;
-	//FIXME remover try...catch
+	
 	public PanoramaLancamentoContaController() {
 		moduleTitle = "Panorama dos Lançamentos da Conta";
 	}

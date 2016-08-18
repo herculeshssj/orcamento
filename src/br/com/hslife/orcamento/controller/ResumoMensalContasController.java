@@ -72,7 +72,7 @@ import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
-import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.util.Util;
@@ -96,13 +96,13 @@ public class ResumoMensalContasController extends AbstractController {
 	private IConta contaService;
 	
 	@Autowired
-	private ILancamentoConta lancamentoContaService;
-	
-	@Autowired
 	private OrcamentoController orcamentoMB;
 	
 	@Autowired
 	private IFaturaCartao faturaCartaoService;
+	
+	@Autowired
+	private IFechamentoPeriodo fechamentoPeriodoService;
 	
 	private Conta contaSelecionada;
 	private FechamentoPeriodo fechamentoSelecionado;
@@ -124,7 +124,7 @@ public class ResumoMensalContasController extends AbstractController {
 	private boolean exibirBarComparativo = true;
 	
 	private String mesAno;
-	//FIXME remover try...catch
+	
 	public ResumoMensalContasController() {
 		// Inicializa os gráficos com um valor default
 		pieCategoriaCredito = new PieChartModel();
@@ -321,7 +321,7 @@ public class ResumoMensalContasController extends AbstractController {
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
 			if (contaSelecionada != null) {
-				for (FechamentoPeriodo fechamento : lancamentoContaService.buscarTodosFechamentoPorConta(contaSelecionada)) {
+				for (FechamentoPeriodo fechamento : fechamentoPeriodoService.buscarTodosFechamentoPorConta(contaSelecionada)) {
 					fechamentos.add(fechamento);
 					if (fechamentos.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
 						break;

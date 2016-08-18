@@ -52,6 +52,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,9 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 	private Endereco endereco = new Endereco();
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private EnderecoRepository enderecoRepository;
 	
 	@Autowired
@@ -73,6 +77,9 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 	
 	@Before
 	public void initializeEntities() {
+		enderecoRepository.setSessionFactory(sessionFactory);
+		usuarioRepository.setSessionFactory(sessionFactory);
+		
 		// Cria um novo usuário
 		usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioRepository.save(usuario);

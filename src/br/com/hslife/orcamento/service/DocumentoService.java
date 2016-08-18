@@ -65,11 +65,8 @@ public class DocumentoService extends AbstractCRUDService<Documento> implements 
 	private DocumentoRepository repository;
 	
 	public DocumentoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
-	}
-
-	public void setRepository(DocumentoRepository repository) {
-		this.repository = repository;
 	}
 	
 	@Override
