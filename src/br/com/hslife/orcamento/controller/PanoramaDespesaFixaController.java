@@ -76,6 +76,7 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMoeda;
 
@@ -90,6 +91,9 @@ public class PanoramaDespesaFixaController extends AbstractController {
 
 	@Autowired
 	private ILancamentoPeriodico lancamentoPeriodicoService;
+	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
 	
 	@Autowired
 	private IMoeda moedaService;
@@ -172,12 +176,12 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
 		
 		if (periodoAConsiderar.equals("ANTERIOR")) {
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);			
+			pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);			
 		} else {
 			lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico.FIXO, StatusLancamento.ATIVO, getUsuarioLogado());
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);
+			pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.FIXO, getUsuarioLogado(), null);
 			for (LancamentoPeriodico lancamento : lancamentos) {
-				pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
+				pagamentos.addAll(lancamentoContaService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
 			}
 		}
 			
@@ -202,12 +206,12 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
 		
 		if (periodoAConsiderar.equals("ANTERIOR")) {
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
+			pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
 		} else {
 			lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, StatusLancamento.ATIVO);
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
+			pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.FIXO, tipoContaSelecionada, null);
 			for (LancamentoPeriodico lancamento : lancamentos) {
-				pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
+				pagamentos.addAll(lancamentoContaService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
 			}
 		}
 			
@@ -232,12 +236,12 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
 		
 		if (periodoAConsiderar.equals("ANTERIOR")) {
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
+			pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
 		} else {
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
+			pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.FIXO, contaSelecionada, null);
 			lancamentos = lancamentoPeriodicoService.buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, contaSelecionada, StatusLancamento.ATIVO);
 			for (LancamentoPeriodico lancamento : lancamentos) {
-				pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
+				pagamentos.addAll(lancamentoContaService.gerarPrevisaoProximosPagamentos(lancamento, periodo));
 			}
 		}
 			
@@ -261,10 +265,10 @@ public class PanoramaDespesaFixaController extends AbstractController {
 		List<LancamentoConta> pagamentosDespesa = new ArrayList<>();
 		
 		if (periodoAConsiderar.equals("ANTERIOR")) {
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
+			pagamentos = lancamentoContaService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
 		} else {
-			pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
-			pagamentos.addAll(lancamentoPeriodicoService.gerarPrevisaoProximosPagamentos(lancamentoSelecionado, periodo));
+			pagamentos = lancamentoContaService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
+			pagamentos.addAll(lancamentoContaService.gerarPrevisaoProximosPagamentos(lancamentoSelecionado, periodo));
 		}
 			
 		// Separa os pagamento de lançamentos fixos de receita dos de despesa

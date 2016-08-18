@@ -409,7 +409,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public List<LancamentoConta> getListaPagamentoPeriodo() {
 		try {
-			return getService().buscarPagamentosNaoPagosPorLancamentoPeriodico(entity);
+			return lancamentoContaService.buscarPagamentosNaoPagosPorLancamentoPeriodico(entity);
 		} catch (BusinessException be) {
 			errorMessage(be.getMessage());
 		}

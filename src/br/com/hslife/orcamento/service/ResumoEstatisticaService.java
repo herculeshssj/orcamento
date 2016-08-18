@@ -81,17 +81,17 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
-import br.com.hslife.orcamento.repository.ContaRepository;
-import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
-import br.com.hslife.orcamento.repository.LancamentoContaRepository;
-import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -104,46 +104,51 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Autowired
 	private IFechamentoPeriodo fechamentoPeriodoService;
 	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
+	
+	@Autowired
+	private IConta contaService;
+	
+	@Autowired
+	private ILancamentoPeriodico lancamentoPeriodicoService;
+	
+	@Autowired
+	private IFaturaCartao faturaCartaoService;
+	
 	/*** Declaração dos Getters dos serviços ***/
 	
 	public IFechamentoPeriodo getFechamentoPeriodoService() {
 		return fechamentoPeriodoService;
 	}
+	
+	public ILancamentoConta getLancamentoContaService() {
+		return lancamentoContaService;
+	}
+	
+	public IConta getContaService() {
+		return contaService;
+	}
+	
+	public ILancamentoPeriodico getLancamentoPeriodicoService() {
+		return lancamentoPeriodicoService;
+	}
 
-	// ------------------ Excluir ------------------
-	
-	@Autowired
-	private LancamentoContaRepository lancamentoContaRepository;
-	
-	
-
-	@Autowired
-	private ContaRepository contaRepository;
-	
-	@Autowired
-	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
-	
-	@Autowired
-	private FaturaCartaoRepository faturaCartaoRepository;
+	public IFaturaCartao getFaturaCartaoService() {
+		return faturaCartaoService;
+	}
 
 	/*** Declaração dos componentes ***/
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
-	/*** Declaração dos métodos Setters dos repositórios ***/
-		
-	public void setLancamentoContaRepository(
-			LancamentoContaRepository lancamentoContaRepository) {
-		this.lancamentoContaRepository = lancamentoContaRepository;
+	/*** Declaração dos Getters dos componentes ***/
+	
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
 	}
 	
-	public void setContaRepository(ContaRepository contaRepository) {
-		this.contaRepository = contaRepository;
-	}
-
-	
-
 	/*** Implementação dos métodos da interface ***/
 	
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) throws BusinessException {
@@ -152,7 +157,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
 		
 		// Itera todas as contas do usuário
-		for (Conta conta : contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, new TipoConta[]{}, usuario, null)) { // resolvendo a ambiguidade do método
+		for (Conta conta : getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuario, null)) { // resolvendo a ambiguidade do método
 			
 			// FIXME decidir como irei tratar o saldo atual dos cartões de débito
 			// Caso seja cartão de débito, passa adiante
@@ -214,7 +219,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				}
 			}
 			
-			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterio);
+			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterio);
 			
 			// Calcula o saldo dos lançamentos e registra no saldo atual
 			saldoAtual.setSaldoRegistrado(LancamentoContaUtil.calcularSaldoLancamentosComConversao(lancamentos));
@@ -258,18 +263,18 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		if (ano <= hoje.get(Calendar.YEAR)) {
 			// Ano atual e anteriores é trazido o que está atualmente registrado na conta
-			lancamentosProcessados = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			lancamentosProcessados = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		} else {
 			// Anos posteriores é realizado a estimativa baseado no mês e ano informado e os lançamentos periódicos ativos da conta
 			
 			/*** Lançamentos parcelados ***/
 			// Traz todos os lançamentos parcelados ativos da conta selecionada
-			List<LancamentoPeriodico> parcelamentos = lancamentoPeriodicoRepository.
-					findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+			List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
+					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);					
 			
 			// Itera os lançamentos parcelados a adiciona suas parcelas caso esteja no mesmo ano que o relatório
 			for (LancamentoPeriodico parcelamento : parcelamentos) {
-				List<LancamentoConta> parcelasLancamento = lancamentoContaRepository.findByLancamentoPeriodico(parcelamento);
+				List<LancamentoConta> parcelasLancamento = getLancamentoContaService().buscarPorLancamentoPeriodico(parcelamento);
 				
 				for (LancamentoConta parcela : parcelasLancamento) {
 					int anoParcela = parcela.getDataPagamento().getYear() + 1900;
@@ -284,14 +289,14 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			/*** Lançamentos fixos ***/
 			// Traz todos os lançamentos fixos ativos da conta selecionada
-			List<LancamentoPeriodico> despesasFixas = lancamentoPeriodicoRepository.
-					findByTipoLancamentoContaAndStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+			List<LancamentoPeriodico> despesasFixas = getLancamentoPeriodicoService().
+					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
 			
 			// Itera os lançamentos fixos
 			for (LancamentoPeriodico despesaFixa : despesasFixas) {
 				
 				// Busca a última mensalidade paga
-				LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(despesaFixa);
+				LancamentoConta ultimaMensalidade = getLancamentoContaService().buscarUltimoPagamentoPeriodoGerado(despesaFixa);
 				
 				// Verifica se a despesa fixa é mensal
 				if (despesaFixa.getPeriodoLancamento().equals(PeriodoLancamento.MENSAL)) {
@@ -352,7 +357,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			
 			/*** Lançamentos avulsos ***/
 			// Traz os lançamentos avulsos existente no ano do relatório
-			avulsos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			avulsos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 			
 			// Itera os lançamentos avulsos para remover as mensalidades e parcelas
 			for (Iterator<LancamentoConta> iterator = avulsos.iterator(); iterator.hasNext(); ) {
@@ -474,7 +479,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[] {StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
 			
 			// Adiciona os lançamentos já convertendo o valor para a moeda padrão
-			for (LancamentoConta lancamento : lancamentoContaRepository.findByCriterioBusca(criterioBusca)) {
+			for (LancamentoConta lancamento : getLancamentoContaService().buscarPorCriterioBusca(criterioBusca)) {
 				if (!lancamento.getMoeda().equals(conta.getMoeda())) {
 					lancamento.setValorPago(lancamento.getValorPago() * lancamento.getMoeda().getValorConversao());
 				}
@@ -482,7 +487,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 		} else {
 			// Busca a fatura e adiciona os lançamentos contidos nela
-			FaturaCartao fatura = faturaCartaoRepository.findById(faturaCartao.getId());
+			FaturaCartao fatura = getFaturaCartaoService().buscarPorID(faturaCartao.getId());
 			
 			// Adiciona os lançamentos já convertendo o valor de acordo com a tabela de conversões de moeda
 			for (LancamentoConta lancamento : fatura.getDetalheFatura()) {
@@ -524,7 +529,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		criterioBusca.setDataFim(dataFim);
 		
 		// Realiza a busca
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		
 		// Processa as categorias, favorecidos e meios de pagamento
 		resumoMensal.setCategoriasCartao(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos));
@@ -574,7 +579,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}
 		
 		// Realiza a busca
-		List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		
 		// Processa as categorias
 		if (fechamentoAnterior == null) {
@@ -596,8 +601,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Override
 	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException {		
 		// Busca todas as contas existentes
-		List<Conta> contasExistentes = contaRepository.findDescricaoOrTipoContaOrAtivoByUsuario(null, new TipoConta[]{}, usuarioComponent.getUsuarioLogado(), null); // resolvendo a ambiguidade do método
-
+		List<Conta> contasExistentes = getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuarioComponent.getUsuarioLogado(), null); // resolvendo a ambiguidade do método
+		
 		// Declara a lista de contas que será retornada
 		List<Conta> contasProcessadas = new ArrayList<Conta>();
 		
@@ -611,7 +616,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			criterioBusca.setCadastro(cadastro);
 			
 			// Traz todos os lançamentos encontrados
-			List<LancamentoConta> lancamentos = lancamentoContaRepository.findByCriterioBusca(criterioBusca);
+			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 			
 			// Se a lista de lançamentos vier zerada, passa para a próxima conta
 			if (lancamentos == null || lancamentos.isEmpty()) continue;
@@ -681,6 +686,5 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				return lancamento.getValorPago() * taxaConversao;
 			}
 		}
-	}
-	
+	}	
 }

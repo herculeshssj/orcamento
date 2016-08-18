@@ -46,7 +46,6 @@
 
 package br.com.hslife.orcamento.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -78,16 +77,22 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	private LancamentoContaRepository lancamentoContaRepository;
 	
 	@Autowired
-	private FechamentoPeriodoService contaComponent;
+	private FechamentoPeriodoService fechamentoPeriodoService;
 
 	public LancamentoPeriodicoRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
-
-	public void setRepository(LancamentoPeriodicoRepository repository) {
-		this.repository = repository;
-	}
 	
+	public LancamentoContaRepository getLancamentoContaRepository() {
+		this.lancamentoContaRepository.setSessionFactory(this.sessionFactory);
+		return lancamentoContaRepository;
+	}
+
+	public FechamentoPeriodoService getFechamentoPeriodoService() {
+		return fechamentoPeriodoService;
+	}
+
 	@Override
 	public void validar(LancamentoPeriodico entity) throws BusinessException {
 		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
@@ -103,7 +108,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		if (entity.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
 			gerarMensalidade(entity);
 		} else {
-			contaComponent.gerarParcelas(entity);
+			this.gerarParcelas(entity);
 		}
 	}
 	
@@ -129,52 +134,9 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
-	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException {		
-		contaComponent.registrarPagamento(pagamentoPeriodo);
-	}
-	
-	@Override
-	public List<LancamentoConta> gerarPrevisaoProximosPagamentos(LancamentoPeriodico lancamentoPeriodico, int quantidadePeriodos) throws BusinessException {
-		List<LancamentoConta> pagamentosGerados = new ArrayList<>();
-		// Gera o próximo pagamento para os lançamentos fixos
-		if (lancamentoPeriodico.getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.FIXO)) {
-			
-			// Busca o pagamento mais recente
-			LancamentoConta ultimaMensalidade = lancamentoContaRepository.findLastGeneratedPagamentoPeriodo(lancamentoPeriodico);
-			
-			Calendar dataVencimento = Calendar.getInstance();
-			dataVencimento.setTime(ultimaMensalidade.getDataVencimento());
-			
-			for (int i = 1; i <= quantidadePeriodos; i++) {
-			
-				// Determina a data do próximo pagamento
-				if (dataVencimento.get(Calendar.DAY_OF_MONTH) >= lancamentoPeriodico.getDiaVencimento()) {
-					switch (lancamentoPeriodico.getPeriodoLancamento()) {
-						case MENSAL : dataVencimento.add(Calendar.MONTH, 1); break;
-						case BIMESTRAL : dataVencimento.add(Calendar.MONTH, 2); break;
-						case TRIMESTRAL : dataVencimento.add(Calendar.MONTH, 3); break;
-						case QUADRIMESTRAL : dataVencimento.add(Calendar.MONTH, 4); break;
-						case SEMESTRAL : dataVencimento.add(Calendar.MONTH, 6); break;
-						case ANUAL : dataVencimento.add(Calendar.YEAR, 1); break;
-						default : throw new BusinessException("Período informado é inválido!");
-					}
-				}
-				
-				LancamentoConta proximaMensalidade = new LancamentoConta();
-				proximaMensalidade.setLancamentoPeriodico(lancamentoPeriodico);
-				dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
-				proximaMensalidade.setConta(lancamentoPeriodico.getConta());
-				proximaMensalidade.setAno(dataVencimento.get(Calendar.YEAR));
-				proximaMensalidade.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
-				proximaMensalidade.setDataVencimento(dataVencimento.getTime());
-				
-				pagamentosGerados.add(proximaMensalidade);
-			}
-			
-		} else {
-			throw new BusinessException("Só é possível gerar previsão de pagamento de lançamentos fixos!");
-		}
-		return pagamentosGerados;
+	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException {	
+		// FIXME definir melhor o conceito de registrar pagamento e realizar as refatorações necessárias
+		getFechamentoPeriodoService().registrarPagamento(pagamentoPeriodo);
 	}
 	
 	private void gerarMensalidade(LancamentoPeriodico entity) throws BusinessException {
@@ -271,42 +233,45 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 	
 	@Override
-	public List<LancamentoConta> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException {
-		return lancamentoContaRepository.findNotPagosByLancamentoPeriodico(entity);
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity) throws BusinessException {
-		return lancamentoContaRepository.findPagosByLancamentoPeriodico(entity);
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, StatusLancamentoConta pago) throws BusinessException {
-		return lancamentoContaRepository.findPagamentosByLancamentoPeriodicoAndPago(lancamento, pago);
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) throws BusinessException {
-		return lancamentoContaRepository.findAllPagamentosPagosActivedLancamentosByTipoLancamentoAndUsuario(tipo, usuario);
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, StatusLancamentoConta pago) throws BusinessException {
-		return lancamentoContaRepository.findPagamentosByTipoLancamentoAndUsuarioAndPago(tipo, usuario, pago);
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamentoConta pago) throws BusinessException {
-		return lancamentoContaRepository.findPagamentosByTipoLancamentoAndContaAndPago(tipo, conta, pago);
-	}
-	
-	@Override
-	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamentoConta pago) throws BusinessException {
-		return lancamentoContaRepository.findPagamentosByTipoLancamentoAndTipoContaAndPago(tipo, tipoConta, pago);
-	}
-	
-	@Override
 	public List<LancamentoPeriodico> buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamento statusLancamento) throws BusinessException {
 		return getRepository().findByTipoLancamentoAndTipoContaAndStatusLancamento(tipo, tipoConta, statusLancamento);
+	}
+	
+	@Override
+	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) throws BusinessException {
+		
+		LancamentoConta parcela;
+		Calendar dataVencimento = Calendar.getInstance();
+		dataVencimento.setTime(lancamentoPeriodico.getDataPrimeiraParcela());
+				
+		for (int i = 1; i <= lancamentoPeriodico.getTotalParcela(); i++) {
+			parcela = new LancamentoConta();			
+			parcela.setAno(dataVencimento.get(Calendar.YEAR));
+			parcela.setLancamentoPeriodico(lancamentoPeriodico);
+			parcela.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
+			parcela.setDataVencimento(dataVencimento.getTime());
+			parcela.setParcela(i);
+			
+			// Setando os demais atributos
+			parcela.setConta(lancamentoPeriodico.getConta());
+			parcela.setDescricao(lancamentoPeriodico.getDescricao());
+			parcela.setValorPago(lancamentoPeriodico.getValorParcela());
+			parcela.setDataPagamento(parcela.getDataVencimento());
+			parcela.setCategoria(lancamentoPeriodico.getCategoria());
+			parcela.setFavorecido(lancamentoPeriodico.getFavorecido());
+			parcela.setMeioPagamento(lancamentoPeriodico.getMeioPagamento());
+			parcela.setMoeda(lancamentoPeriodico.getMoeda());
+			if (parcela.getDataVencimento().before(new Date()))
+				parcela.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			else
+				parcela.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
+			
+			// Define a descrição definitiva do lançamento a ser criado
+			parcela.setDescricao(lancamentoPeriodico.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA)); 
+			
+			getLancamentoContaRepository().save(parcela);
+			dataVencimento.add(Calendar.MONTH, 1);
+			dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
+		}
 	}
 }

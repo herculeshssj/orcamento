@@ -76,6 +76,7 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.util.Util;
@@ -91,6 +92,9 @@ public class PanoramaParcelamentoController extends AbstractController {
 
 	@Autowired
 	private ILancamentoPeriodico lancamentoPeriodicoService;
+	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
 	
 	@Autowired
 	private IMoeda moedaService;
@@ -146,20 +150,20 @@ public class PanoramaParcelamentoController extends AbstractController {
 			switch (getOpcoesSistema().getFormaAgrupamentoPagamento()) {
 				case "INDIVIDUAL" : 
 					if (lancamentoSelecionado != null) {
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
+						pagamentos = lancamentoContaService.buscarPagamentosPorLancamentoPeriodicoEPago(lancamentoSelecionado, null);
 						break;
 					}						
 				case "CONTA": 
 					if (contaSelecionada != null) {
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.PARCELADO, contaSelecionada, null);
+						pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico.PARCELADO, contaSelecionada, null);
 						break;
 					}
 				case "TIPO_CONTA": 
 					if (tipoContaSelecionada != null) {
-						pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.PARCELADO, tipoContaSelecionada, null);
+						pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico.PARCELADO, tipoContaSelecionada, null);
 						break;
 					}
-				default: pagamentos = lancamentoPeriodicoService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.PARCELADO, getUsuarioLogado(), null);
+				default: pagamentos = lancamentoContaService.buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico.PARCELADO, getUsuarioLogado(), null);
 			}
 			
 			// Separa os pagamento de lançamentos fixos de receita dos de despesa

@@ -105,11 +105,11 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 		return lancamentoPeriodicoRepository;
 	}
 
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) {
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) throws BusinessException {
 		return getRepository().findUltimoFechamentoByConta(conta);
 	}
 
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) {
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException {
 		return getRepository().findByContaAndOperacaoConta(conta, operacaoConta);
 	}
 	
@@ -187,7 +187,7 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			// períodos reabertos anteriores
 			List<FechamentoPeriodo> fechamentosAnterioresReabertos = getRepository().findFechamentosAnterioresReabertos(fechamentoReaberto);
 			if (fechamentosAnterioresReabertos != null && !fechamentosAnterioresReabertos.isEmpty()) {
-				// TODO refatorara para uma especificação que valide a possibilidade de fechamento
+				// TODO refatorar para uma especificação que valide a possibilidade de fechamento
 				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
 			}
 			
@@ -284,43 +284,6 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 		}
 	}
 
-	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) {
-		
-		LancamentoConta parcela;
-		Calendar dataVencimento = Calendar.getInstance();
-		dataVencimento.setTime(lancamentoPeriodico.getDataPrimeiraParcela());
-				
-		for (int i = 1; i <= lancamentoPeriodico.getTotalParcela(); i++) {
-			parcela = new LancamentoConta();			
-			parcela.setAno(dataVencimento.get(Calendar.YEAR));
-			parcela.setLancamentoPeriodico(lancamentoPeriodico);
-			parcela.setPeriodo(dataVencimento.get(Calendar.MONTH) + 1);
-			parcela.setDataVencimento(dataVencimento.getTime());
-			parcela.setParcela(i);
-			
-			// Setando os demais atributos
-			parcela.setConta(lancamentoPeriodico.getConta());
-			parcela.setDescricao(lancamentoPeriodico.getDescricao());
-			parcela.setValorPago(lancamentoPeriodico.getValorParcela());
-			parcela.setDataPagamento(parcela.getDataVencimento());
-			parcela.setCategoria(lancamentoPeriodico.getCategoria());
-			parcela.setFavorecido(lancamentoPeriodico.getFavorecido());
-			parcela.setMeioPagamento(lancamentoPeriodico.getMeioPagamento());
-			parcela.setMoeda(lancamentoPeriodico.getMoeda());
-			if (parcela.getDataVencimento().before(new Date()))
-				parcela.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-			else
-				parcela.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
-			
-			// Define a descrição definitiva do lançamento a ser criado
-			parcela.setDescricao(lancamentoPeriodico.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA)); 
-			
-			getLancamentoContaRepository().save(parcela);
-			dataVencimento.add(Calendar.MONTH, 1);
-			dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
-		}
-	}
-	
 	@Override
 	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
 		return getRepository().findFechamentoPeriodoAnterior(fechamentoPeriodo);

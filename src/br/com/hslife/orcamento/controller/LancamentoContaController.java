@@ -96,6 +96,7 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
@@ -143,6 +144,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	@Autowired
 	private ImportacaoLancamentoController importacaoLancamentoMB;
+	
+	@Autowired
+	private IImportacaoLancamento importacaoLancamentoService;
 	
 	@Autowired
 	private IFechamentoPeriodo fechamentoPeriodoService;
@@ -651,7 +655,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public List<SelectItem> getListaLancamentoImportado() {
 		List<SelectItem> listagem = new ArrayList<SelectItem>();
 		try {			
-			for (LancamentoImportado importado : getService().buscarLancamentoImportadoPorConta(entity.getConta())) {
+			for (LancamentoImportado importado : importacaoLancamentoService.buscarLancamentoImportadoPorConta(entity.getConta())) {
 				listagem.add(new SelectItem(importado, Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " "+ importado.getValor() + " - " + importado.getHistorico()));
 			}
 		} catch (BusinessException be) {

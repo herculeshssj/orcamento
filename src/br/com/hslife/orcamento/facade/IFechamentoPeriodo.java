@@ -72,8 +72,6 @@ public interface IFechamentoPeriodo {
 	
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws BusinessException;
 	
-	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) throws BusinessException;
-	
 	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws BusinessException;
 	
 	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws BusinessException;
@@ -85,4 +83,6 @@ public interface IFechamentoPeriodo {
 	public double saldoUltimoFechamento(Conta conta) throws BusinessException;
 	
 	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao) throws BusinessException;
+	
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) throws BusinessException;
 }
