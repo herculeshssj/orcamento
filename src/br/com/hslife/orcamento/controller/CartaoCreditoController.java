@@ -133,7 +133,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		String retorno = super.edit();
 		entity.setMesValidade(entity.getValidade().getMonth() + 1);
 		entity.setAnoValidade(entity.getValidade().getYear() + 1900);
-		entity.setMoeda(entity.getConta().getMoeda());
+		//entity.setMoeda(entity.getConta().getMoeda());
 		return retorno;
 	}
 	
