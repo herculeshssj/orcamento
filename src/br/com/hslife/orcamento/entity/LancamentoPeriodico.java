@@ -124,7 +124,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@Enumerated(EnumType.STRING)
 	private TipoLancamentoPeriodico tipoLancamentoPeriodico;
 	
-	@Column(length=10, nullable=false)
+	@Column(length=10, nullable=true)
 	@Enumerated(EnumType.STRING)
 	private PeriodoLancamento periodoLancamento;
 	
