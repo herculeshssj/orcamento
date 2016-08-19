@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
+import br.com.hslife.orcamento.util.Util;
 
 @Repository
 public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao> {
@@ -192,4 +193,20 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 				.setDate("vencimento", dataVencimento)
 				.list();
 	}
+	
+	public boolean existsFaturaCartaoByContaAndDataVencimento(Conta conta, Date dataVencimento) {
+		boolean result = true;
+		
+		String sqlLancamento = "select count(id) from faturacartao where idConta = " + conta.getId() + " and dataVencimento = '" + Util.formataDataHora(dataVencimento, Util.DATABASE) + "'";
+		
+		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
+		
+		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
+		
+		if (queryResultLancamento.longValue() == 0) {
+			return false;
+		}
+		
+		return result;
+	} 
 }

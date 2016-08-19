@@ -171,6 +171,10 @@
 		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
      		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
      	</h:commandLink>
+     	<p:spacer width="20" />
+		<h:commandLink id="lnkRecovery" title="Reparar inconsistência na fatura" action="#{managedBean.reparar}" rendered="#{managedBean.operation != 'create' and managedBean.entity.ativo}">
+     		<h:graphicImage id="imgRecovery" height="48" width="48" value="/resources/images/svg/data_recovery.svg"/>
+     	</h:commandLink>
 	</ui:define>
 
 </ui:composition>

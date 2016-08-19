@@ -139,8 +139,13 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 			vencimento.add(Calendar.MONTH, 1);
 		}
 		
+		// Verifica se data de vencimento da fatura não conflita com outra existente
+		while (getFaturaCartaoRepository().existsFaturaCartaoByContaAndDataVencimento(conta, vencimento.getTime())) {
+			vencimento.add(Calendar.MONTH, 1);
+		}
+		
 		novaFatura.setDataVencimento(vencimento.getTime());
-		novaFatura.setMes(vencimento.get(Calendar.MONTH) + 1);
+		novaFatura.setMes(vencimento.get(Calendar.MONTH));
 		novaFatura.setAno(vencimento.get(Calendar.YEAR));
 		
 		getFaturaCartaoRepository().save(novaFatura);
@@ -247,5 +252,45 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		conta.setAtivo(false);
 		getContaRepository().update(conta);
+	}
+	
+	@Override
+	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito) throws BusinessException {
+		// Traz a conta do cartão selecionado
+		Conta conta = getContaRepository().findByCartaoCredito(cartaoCredito);
+		
+		// 1ª verificação - confere se existe faturas para o cartão informado
+		boolean existeFaturas = getFaturaCartaoRepository().existsFaturaCartao(conta);
+		
+		// 2ª verificação - confere se existe fatura aberta para o cartão informado
+		boolean existeFaturaAberta = getFaturaCartaoRepository().findFaturaCartaoAberta(conta) != null ? true : false;
+		
+		if (!existeFaturas) {
+			// Cria uma nova fatura para o cartão informado
+			this.criarFaturaCartao(conta);
+			return;
+		}
+		
+		if (!existeFaturaAberta) {
+			// Cria uma nova fatura aberta para o cartão informado
+			this.criarFaturaCartao(conta);
+			return;
+		}
+		
+		// Faz uma nova verificação para saber se a inconsistência foi resolvida ou não
+		
+		// 1ª verificação - confere se existe faturas para o cartão informado
+		existeFaturas = getFaturaCartaoRepository().existsFaturaCartao(conta);
+		
+		// 2ª verificação - confere se existe fatura aberta para o cartão informado
+		existeFaturaAberta = getFaturaCartaoRepository().findFaturaCartaoAberta(conta) != null ? true : false;
+		
+		if (!existeFaturas) {
+			throw new BusinessException("Não foi possível criar uma fatura para o cartão selecionado!");
+		}
+		
+		if (!existeFaturaAberta) {
+			throw new BusinessException("Não foi possível criar uma fatura aberta para o cartão selecionado!");
+		}
 	}
 }

@@ -225,6 +225,21 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		return "";
 	}
 	
+	public String reparar() {
+		try {
+			if (!entity.getTipoCartao().equals(TipoCartao.CREDITO)) {
+				warnMessage("Este recurso só funciona com cartões do crédito!");
+				return "";
+			}
+			getService().repararInconsistênciaFatura(entity);
+			infoMessage("Inconsistências reparadas com sucesso!");
+			return list();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public List<Banco> getListaBanco() {
 		try {
 			List<Banco> resultado = bancoService.buscarAtivosPorUsuario(getUsuarioLogado());
