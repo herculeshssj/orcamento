@@ -130,7 +130,7 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 		List<Favorecido> favorecidos = getRepository().findByNomeAndUsuario(nomeFavorecido, usuario);
 		Favorecido favorecidoEncontrado = null;
 		for (Favorecido f : favorecidos) {
-			if (f.getNome().contains(nomeFavorecido)) {
+			if (nomeFavorecido != null && !nomeFavorecido.trim().isEmpty() && f.getNome().contains(nomeFavorecido)) {
 				favorecidoEncontrado = f;
 				break;
 			}

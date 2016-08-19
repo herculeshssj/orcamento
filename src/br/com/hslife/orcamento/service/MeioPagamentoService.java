@@ -129,7 +129,7 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 		List<MeioPagamento> meiosPagamento = getRepository().findByDescricaoAndUsuario(descricaoMeioPagamento, usuario);
 		MeioPagamento meioPagamentoEncontrado = null;
 		for (MeioPagamento m : meiosPagamento) {
-			if (m.getDescricao().contains(descricaoMeioPagamento)) {
+			if (descricaoMeioPagamento != null && !descricaoMeioPagamento.trim().isEmpty() && m.getDescricao().contains(descricaoMeioPagamento)) {
 				meioPagamentoEncontrado = m;
 				break;
 			}

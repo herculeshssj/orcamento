@@ -143,12 +143,12 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
-	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {
+	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {		
 		// Verifica se a categoria informada existe na base de dados
 		List<Categoria> categorias = getRepository().findTipoCategoriaAndDescricaoAndAtivoByUsuario(tipoCategoria, descricaoCategoria, null, usuario);
 		Categoria categoriaEncontrada = null;
 		for (Categoria c : categorias) {
-			if (c.getDescricao().contains(descricaoCategoria)) {
+			if (descricaoCategoria != null && !descricaoCategoria.trim().isEmpty() && c.getDescricao().contains(descricaoCategoria)) {
 				categoriaEncontrada = c;
 				break;
 			}
