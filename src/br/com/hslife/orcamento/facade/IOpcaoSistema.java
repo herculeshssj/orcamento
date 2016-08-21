@@ -51,25 +51,25 @@ import java.util.Map;
 
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IOpcaoSistema {
 	
-	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) throws BusinessException;
+	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) throws ApplicationException;
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException;
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws ApplicationException;
 	
-	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() throws BusinessException;
+	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() throws ApplicationException;
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws BusinessException;
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws ApplicationException;
 	
-	public Map<String, Object> buscarMapOpcoesGlobalAdmin() throws BusinessException;
+	public Map<String, Object> buscarMapOpcoesGlobalAdmin() throws ApplicationException;
 	
-	public Map<String, Object> buscarMapOpcoesUser(Usuario usuario) throws BusinessException;
+	public Map<String, Object> buscarMapOpcoesUser(Usuario usuario) throws ApplicationException;
 
-	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) throws BusinessException;
+	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) throws ApplicationException;
 	
-	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws BusinessException;
+	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws ApplicationException;
 	
-	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws BusinessException; 
+	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws ApplicationException; 
 }

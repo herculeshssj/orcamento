@@ -61,7 +61,7 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.hslife.orcamento.enumeration.SituacaoOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -147,7 +147,7 @@ public class DetalheOrcamento extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException{
+	public void validate() throws ApplicationException{
 		EntityPersistenceUtil.validaCampoNulo("Descrição do item", descricao);
 		
 		EntityPersistenceUtil.validaCampoNulo("ID do item", idEntity);

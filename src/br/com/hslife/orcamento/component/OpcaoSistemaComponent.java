@@ -59,7 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 
@@ -93,13 +93,13 @@ public class OpcaoSistemaComponent {
 	// Guarda em cache os valores das opções do sistema
 	private Map<Usuario, Map<String, Object>> cacheUsuarioOpcoesSistema = new HashMap<>();
 	
-	public OpcaoSistema buscarPorChaveEUsuario(String chave, Usuario usuario) throws BusinessException {
+	public OpcaoSistema buscarPorChaveEUsuario(String chave, Usuario usuario) throws ApplicationException {
 		return getService().buscarOpcaoUsuarioPorChave(chave, usuario);
 	}
 	
 	// Método foi deixado no componente para poder centralizar a manutenção de cada parâmetro
 	// O Service não conhece os parâmetros existentes, o Component sim.
-	public void setarOpcoesPadraoUsuario(Usuario entity) throws BusinessException {
+	public void setarOpcoesPadraoUsuario(Usuario entity) throws ApplicationException {
 		// Seta as opções do sistema que são individuais para cada usuário
 		Map<String, Object> opcoesUsuario = new HashMap<String, Object>();
 		opcoesUsuario.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.FALSE);
@@ -118,7 +118,7 @@ public class OpcaoSistemaComponent {
 	}
 	
 	/* Atualização do cache de opções do sistema */
-	public void atualizarCacheOpcoesSistema() throws BusinessException {		
+	public void atualizarCacheOpcoesSistema() throws ApplicationException {		
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		Moeda moedaPadrao = getMoedaService().buscarPadraoPorUsuario(usuarioLogado);
 		// Verifica se existe entrada no cache para o usuário atual
@@ -192,7 +192,7 @@ public class OpcaoSistemaComponent {
 					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_MEIO_PAGAMENTO"));
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -213,7 +213,7 @@ public class OpcaoSistemaComponent {
 					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "GERAL_EXIBIR_BUSCAS_REALIZADAS"));
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -234,7 +234,7 @@ public class OpcaoSistemaComponent {
 					return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS"));
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -255,7 +255,7 @@ public class OpcaoSistemaComponent {
 					return (String)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS");
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -276,7 +276,7 @@ public class OpcaoSistemaComponent {
 					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTA_EXIBIR_INATIVAS"));
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -297,7 +297,7 @@ public class OpcaoSistemaComponent {
 					return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS"));
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -310,7 +310,7 @@ public class OpcaoSistemaComponent {
 			OpcaoSistema opcao = buscarPorChaveEUsuario("NOTIFICAR_AGENDAMENTO_EMAIL", usuario);
 			if (opcao != null)
 				return Boolean.valueOf(opcao.getValor());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -326,7 +326,7 @@ public class OpcaoSistemaComponent {
 				opcoes.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
 			}
 			return opcoes;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);
@@ -334,7 +334,7 @@ public class OpcaoSistemaComponent {
 		return null;
 	}
 	
-	public Moeda getMoedaPadrao() throws BusinessException {
+	public Moeda getMoedaPadrao() throws ApplicationException {
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
 		// Verifica se o valor existe no cache
@@ -360,7 +360,7 @@ public class OpcaoSistemaComponent {
 					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "CONTROLAR_ESTOQUE_DESPENSA"));
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);

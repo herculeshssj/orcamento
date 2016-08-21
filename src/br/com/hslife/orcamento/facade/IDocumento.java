@@ -51,18 +51,18 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Documento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IDocumento extends ICRUDService<Documento> {
 	
-	public List<Documento> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException;
+	public List<Documento> buscarPorNomeEUsuario(String nome, Usuario usuario) throws ApplicationException;
 	
-	public List<Documento> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Documento> buscarPorUsuario(Usuario usuario) throws ApplicationException;
 	
-	public List<Documento> buscarPorCategoriaDocumento(CategoriaDocumento categoriaDocumento) throws BusinessException;
+	public List<Documento> buscarPorCategoriaDocumento(CategoriaDocumento categoriaDocumento) throws ApplicationException;
 	
-	public List<Documento> buscarPorCategoriaDocumentoEUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) throws BusinessException;
+	public List<Documento> buscarPorCategoriaDocumentoEUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) throws ApplicationException;
 	
-	public List<Documento> buscarPorNomeECategoriaDocumentoPorUsuario(String nome, CategoriaDocumento categoria, Usuario usuario) throws BusinessException;
+	public List<Documento> buscarPorNomeECategoriaDocumentoPorUsuario(String nome, CategoriaDocumento categoria, Usuario usuario) throws ApplicationException;
 
 }

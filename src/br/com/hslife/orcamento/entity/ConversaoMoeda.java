@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 @Entity
 @Table(name="conversaomoeda")
@@ -94,7 +94,7 @@ public class ConversaoMoeda extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		
 	}
 

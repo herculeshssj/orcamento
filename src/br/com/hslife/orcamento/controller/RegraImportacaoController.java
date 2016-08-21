@@ -61,7 +61,7 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -108,7 +108,7 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 				return;
 			}
 			listEntity = getService().buscarTodosPorConta(contaSelecionada);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -126,7 +126,7 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 			} else {
 				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{}, getUsuarioLogado(), true); // resolvendo a ambiguidade do método
 			}			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
@@ -138,7 +138,7 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 			for (Categoria c : categoriaService.buscarAtivosPorUsuario(getUsuarioLogado())) {
 				lista.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return lista;
@@ -150,7 +150,7 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 			for (Favorecido f : favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado())) {
 				lista.add(new SelectItem(f.getId(), f.getNome()));
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return lista;
@@ -162,7 +162,7 @@ public class RegraImportacaoController extends AbstractCRUDController<RegraImpor
 			for (MeioPagamento m : meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado())) {
 				lista.add(new SelectItem(m.getId(), m.getDescricao()));
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return lista;

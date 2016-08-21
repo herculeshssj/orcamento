@@ -62,7 +62,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 @Entity
 @Table(name="despensa")
@@ -93,17 +93,17 @@ public class Despensa extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
+			throw new ApplicationException("Informe uma descrição!");
 		}
 		
 		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+			throw new ApplicationException("Informe o usuário!");
 		}
 		
 		if (this.localArmazenamento != null && this.localArmazenamento.length() > 255) {
-			throw new BusinessException("Campo 'local de armazenamento' aceita somente 255 caracteres!");
+			throw new ApplicationException("Campo 'local de armazenamento' aceita somente 255 caracteres!");
 		}
 	}
 	

@@ -58,7 +58,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Telefone;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IInformacaoPessoal;
 
 @Component("pessoalMB")
@@ -112,7 +112,7 @@ public class InformacaoPessoalController extends AbstractController {
 				telefone = new Telefone();
 				listaTelefone = getService().buscarTelefones(getUsuarioLogado());
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "/pages/Pessoal/formPessoal";
@@ -131,7 +131,7 @@ public class InformacaoPessoalController extends AbstractController {
 			//getService().salvarEnderecos(listaEndereco, getUsuarioLogado());
 			//getService().salvarTelefones(listaTelefone, getUsuarioLogado());
 			infoMessage("Dados salvos com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -143,7 +143,7 @@ public class InformacaoPessoalController extends AbstractController {
 			listaEndereco = getService().buscarEnderecos(getUsuarioLogado());
 			endereco = new Endereco();
 			infoMessage("Endereço salvo com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -155,7 +155,7 @@ public class InformacaoPessoalController extends AbstractController {
 			listaTelefone = getService().buscarTelefones(getUsuarioLogado());
 			telefone = new Telefone();
 			infoMessage("Telefone salvo com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -174,7 +174,7 @@ public class InformacaoPessoalController extends AbstractController {
 			listaEndereco = getService().buscarEnderecos(getUsuarioLogado());
 			endereco = new Endereco();
 			infoMessage("Endereço excluído com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -185,7 +185,7 @@ public class InformacaoPessoalController extends AbstractController {
 			listaTelefone = getService().buscarTelefones(getUsuarioLogado());
 			telefone = new Telefone();
 			infoMessage("Telefone excluído com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}

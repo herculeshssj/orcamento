@@ -65,7 +65,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IDividaTerceiro;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -92,7 +92,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	private IDividaTerceiro dividaTerceiroService;
 	
 	@Before
-	public void initializeTestEnvironment() throws BusinessException {
+	public void initializeTestEnvironment() throws ApplicationException {
 		usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioService.cadastrar(usuario);
 		
@@ -106,7 +106,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testCadastrar() throws BusinessException {
+	public void testCadastrar() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		assertNotNull(dividaTerceiro.getId());
@@ -117,7 +117,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testAlterar() throws BusinessException {
+	public void testAlterar() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		dividaTerceiro.setDataNegociacao(Calendar.getInstance().getTime());
@@ -153,7 +153,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testExcluir() throws BusinessException {
+	public void testExcluir() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		dividaTerceiroService.excluir(dividaTerceiro);
@@ -163,7 +163,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarPorID() throws BusinessException {
+	public void testBuscarPorID() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		DividaTerceiro dividaTest = dividaTerceiroService.buscarPorID(dividaTerceiro.getId());
@@ -175,12 +175,12 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testValidar() throws BusinessException {
+	public void testValidar() throws ApplicationException {
 		dividaTerceiroService.validar(dividaTerceiro);
 	}
 	
 	@Test
-	public void testBuscarFavorecido() throws BusinessException {
+	public void testBuscarFavorecido() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(favorecido, null, null, usuario);
@@ -195,7 +195,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarTipoCategoria() throws BusinessException {
+	public void testBuscarTipoCategoria() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, dividaTerceiro.getTipoCategoria(), null, usuario);
@@ -210,7 +210,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarStatusDivida() throws BusinessException {
+	public void testBuscarStatusDivida() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, null, dividaTerceiro.getStatusDivida(), usuario);
@@ -225,7 +225,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarPorUsuario() throws BusinessException {
+	public void testBuscarPorUsuario() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		
 		List<DividaTerceiro> listaDividas = dividaTerceiroService.buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, null, null, usuario);

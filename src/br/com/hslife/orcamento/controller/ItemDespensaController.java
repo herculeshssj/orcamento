@@ -62,7 +62,7 @@ import br.com.hslife.orcamento.entity.MovimentoItemDespensa;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.enumeration.OperacaoDespensa;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IDespensa;
 import br.com.hslife.orcamento.facade.IItemDespensa;
 import br.com.hslife.orcamento.facade.IUnidadeMedida;
@@ -127,7 +127,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 			} else {
 				listEntity = getService().buscarPorDespensaUsuarioEArquivado(despensa, getUsuarioLogado(), arquivado);
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -139,7 +139,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 			movimentoItemDespensa = new MovimentoItemDespensa();
 			validadeItemDespensa = new Date();
 			return "/pages/ItemDespensa/registrarCompraConsumo";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -169,7 +169,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 				initializeEntity();
 			}
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -201,7 +201,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 				initializeEntity();
 			}
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -227,7 +227,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 				initializeEntity();
 			}
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -253,7 +253,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 				initializeEntity();
 			}
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -279,7 +279,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 				initializeEntity();
 			}
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -296,7 +296,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 			actionTitle = " - Lista de Compras";
 			operation = "list";
 			return "/pages/ItemDespensa/listaCompraItemDespensa";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -358,7 +358,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	public List<Despensa> getListaDespensa() {
 		try {
 			return despensaService.buscarTodosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Despensa>();
@@ -369,7 +369,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 			if (despensa != null) {
 				return getService().buscarPorDespensaUsuarioEArquivado(despensa, getUsuarioLogado(), false);
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -378,7 +378,7 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 	public List<UnidadeMedida> getListaUnidadeMedida() {
 		try {
 			return unidadeMedidaService.buscarPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<UnidadeMedida>();

@@ -58,7 +58,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.Util;
 
@@ -99,7 +99,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	public void find() {
 		try {
 			listEntity = getService().buscarTodosPorLogin(loginUsuario);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -133,7 +133,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 		try {
 			getService().alterar(entity);
 			infoMessage("Dados do usuário alterados com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -143,7 +143,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
 			actionTitle = " - Minha Conta";
 			return "/pages/" + entity.getClass().getSimpleName() + "/minhaConta";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -155,7 +155,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			operation = "edit";
 			actionTitle = " - Editar";
 			return "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -170,7 +170,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", u);
 			
 			infoMessage("Operação realizada com sucesso. Logado como " + getUsuarioLogado().getNome());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -182,7 +182,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioComponent.getUsuarioLogado());
 			
 			infoMessage("Operação realizada com sucesso. Deslogado do usuário " + u.getNome());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -193,7 +193,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			infoMessage("Usuário registrado com sucesso!");
 			infoMessage("Senha de acesso foi enviada para o e-mail informado.");
 			initializeEntity();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -204,7 +204,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			infoMessage("Senha alterada com sucesso!");
 			infoMessage("Senha de acesso foi envada para o e-mail cadastrado.");
 			initializeEntity();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -214,7 +214,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			entity = getService().buscarPorLogin(getUsuarioLogado().getLogin());
 			actionTitle = " - Alterar Senha";
 			return "/pages/" + entity.getClass().getSimpleName() + "/alterarSenha";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -247,7 +247,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			entity.setSenha(Util.SHA256(confirmaSenha));
 			getService().alterar(entity);
 			infoMessage("Senha alterada com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -257,7 +257,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			getService().gerarTokenID(getUsuarioLogado());
 			infoMessage("Token gerado com sucesso!");
 			return this.minhaConta();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";

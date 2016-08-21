@@ -52,7 +52,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public class ModeloDocumentoTest {
 
@@ -71,7 +71,7 @@ public class ModeloDocumentoTest {
 		try {
 			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -84,7 +84,7 @@ public class ModeloDocumentoTest {
 		try {
 			entity.setUsuario(null);
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -98,7 +98,7 @@ public class ModeloDocumentoTest {
 		try {
 			entity.setConteudo(null);
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Conteúdo' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {

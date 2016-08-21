@@ -51,11 +51,11 @@ import java.util.Map;
 
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IRelatorioCustomizado extends ICRUDService<RelatorioCustomizado> {
 	
-	public List<RelatorioCustomizado> buscarNomePorUsuario(String nome, Usuario usuario) throws BusinessException;
+	public List<RelatorioCustomizado> buscarNomePorUsuario(String nome, Usuario usuario) throws ApplicationException;
 	
-	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues) throws BusinessException;
+	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues) throws ApplicationException;
 }

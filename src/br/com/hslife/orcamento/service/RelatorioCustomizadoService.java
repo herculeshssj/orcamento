@@ -56,7 +56,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
 import br.com.hslife.orcamento.repository.RelatorioCustomizadoRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -73,12 +73,12 @@ public class RelatorioCustomizadoService extends AbstractCRUDService<RelatorioCu
 	}
 
 	@Override
-	public List<RelatorioCustomizado> buscarNomePorUsuario(String nome,	Usuario usuario) throws BusinessException {
+	public List<RelatorioCustomizado> buscarNomePorUsuario(String nome,	Usuario usuario) throws ApplicationException {
 		return getRepository().findNomeByUsuario(nome, usuario);
 	}
 
 	@Override
-	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues) throws BusinessException {
+	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues) throws ApplicationException {
 		// TODO definir o tipo Date, Time e Timestamp(ou date/time), pois eles são diferentes. Atualmente foi definido o tipo Date.
 		// FIXME terminar de implementar este método
 		

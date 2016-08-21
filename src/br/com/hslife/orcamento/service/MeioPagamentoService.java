@@ -54,7 +54,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.repository.MeioPagamentoRepository;
 
@@ -70,7 +70,7 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 	}
 
 	@Override
-	public void cadastrar(MeioPagamento entity) throws BusinessException {		
+	public void cadastrar(MeioPagamento entity) throws ApplicationException {		
 		if (entity.isPadrao()) {
 			getRepository().updateAllToNotDefault(entity.getUsuario());
 		}
@@ -78,7 +78,7 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 	}
 	
 	@Override
-	public void alterar(MeioPagamento entity) throws BusinessException {
+	public void alterar(MeioPagamento entity) throws ApplicationException {
 		if (!entity.isPadrao()) {
 			if (entity.equals(getRepository().findDefaultByUsuario(entity.getUsuario()))) {
 				entity.setPadrao(true);
@@ -91,40 +91,40 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 	}
 	
 	@Override
-	public void excluir(MeioPagamento entity) throws BusinessException {
+	public void excluir(MeioPagamento entity) throws ApplicationException {
 		try {
 			super.excluir(entity);
 		} catch (DataIntegrityViolationException dive) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
+			throw new ApplicationException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
 		} catch (Exception e) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
+			throw new ApplicationException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
 		}
 	}
 	
 	@Override
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findEnabledByUsuario(usuario);
 	}
 
 	@Override
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException {
+	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws ApplicationException {
 		return getRepository().findByDescricaoUsuarioAndAtivo(descricao, usuario, ativo);
 	}
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException {
+	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws ApplicationException {
 		return getRepository().findDescricaoAndAtivoByUsuario(descricao, ativo, usuario);
 	}
 	
-	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario) throws BusinessException {
+	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario) throws ApplicationException {
 		// Verifica se o meio de pagamento informado existe na base de dados
 		List<MeioPagamento> meiosPagamento = getRepository().findByDescricaoAndUsuario(descricaoMeioPagamento, usuario);
 		MeioPagamento meioPagamentoEncontrado = null;

@@ -58,7 +58,7 @@ import org.springframework.stereotype.Component;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 
 @Component
@@ -112,7 +112,7 @@ public class EmailComponent {
 		this.mensagem = mensagem;
 	}
 
-	private void populateParameters() throws BusinessException {
+	private void populateParameters() throws ApplicationException {
 		Map<String, Object> parametros = getOpcaoSistemaService().buscarOpcoesGlobalAdminPorCDU("email");
 		servidor = (String)parametros.get("EMAIL_SERVIDOR");
 		porta = Integer.valueOf((String)parametros.get("EMAIL_PORTA"));
@@ -146,7 +146,7 @@ public class EmailComponent {
 		logger.info("E-Mail enviado com código " + response.getCode() + ".\n\n" + response.getMessage());
 	}
 	
-	public void enviarEmail() throws BusinessException, EmailException, SendGridException {
+	public void enviarEmail() throws ApplicationException, EmailException, SendGridException {
 		// Carrega as configurações de envio de e-mail
 		this.populateParameters();
 		

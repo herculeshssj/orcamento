@@ -58,7 +58,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IIdentidade;
 
 @Component("identidadeMB")
@@ -95,7 +95,7 @@ public class IdentidadeController extends AbstractController {
 		
 	}
 
-	private Identidade carregarIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) throws BusinessException{
+	private Identidade carregarIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) throws ApplicationException{
 		Identidade documento = getService().buscarPorUsuarioETipoIdentidade(usuario, tipoIdentidade);
 		if (documento == null) {
 			return new Identidade(usuario, tipoIdentidade);
@@ -117,7 +117,7 @@ public class IdentidadeController extends AbstractController {
 			cnh = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.CNH);
 			docMilitar = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.DOC_MILITAR);
 			passaporte = this.carregarIdentidade(getUsuarioLogado(), TipoIdentidade.PASSAPORTE);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		
@@ -147,7 +147,7 @@ public class IdentidadeController extends AbstractController {
 			getService().salvarDocumentos(documentos);
 			
 			infoMessage("Documentos salvos com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}

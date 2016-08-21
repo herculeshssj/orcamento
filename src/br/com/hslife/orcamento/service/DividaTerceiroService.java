@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IDividaTerceiro;
 import br.com.hslife.orcamento.repository.DividaTerceiroRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -76,14 +76,14 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	
 	@Override
 	public List<DividaTerceiro> buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(Favorecido favorecido, 
-			TipoCategoria tipoCategoria, StatusDivida statusDivida, Usuario usuario) throws BusinessException {
+			TipoCategoria tipoCategoria, StatusDivida statusDivida, Usuario usuario) throws ApplicationException {
 		return getRepository().findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(favorecido, tipoCategoria, statusDivida, usuario);
 	}
 	
 	@Override
-	public void vigorarDividaTerceiro(DividaTerceiro entity) throws BusinessException {
+	public void vigorarDividaTerceiro(DividaTerceiro entity) throws ApplicationException {
 		if (entity.getModeloDocumento() == null) {
-			throw new BusinessException("Selecione um modelo de termo/contrato!");
+			throw new ApplicationException("Selecione um modelo de termo/contrato!");
 		}		
 		entity.validate();
 		entity.setTermoDivida(entity.getModeloDocumento().getConteudo());
@@ -92,9 +92,9 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	}
 	
 	@Override
-	public void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException {
+	public void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa) throws ApplicationException {
 		if (justificativa == null || justificativa.isEmpty()) {
-			throw new BusinessException("Informe a justificativa para renegociar a dívida!");
+			throw new ApplicationException("Informe a justificativa para renegociar a dívida!");
 		}
 		
 		DividaTerceiro dividaAntiga = getRepository().findById(entity.getId());
@@ -121,13 +121,13 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		getRepository().save(novaDivida);
 	}
 	
-	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) throws BusinessException {
+	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) throws ApplicationException {
 		if (pagamento.getModeloDocumento() == null) {
-			throw new BusinessException("Selecione um modelo de comprovante de pagamento!");
+			throw new ApplicationException("Selecione um modelo de comprovante de pagamento!");
 		}
 		
 		if (entity.getTotalPago() + pagamento.getValorPagoConvertido() >= entity.getValorDivida() && entity.getModeloDocumento() == null) {
-			throw new BusinessException("Selecione um modelo de termo de quitação!");
+			throw new ApplicationException("Selecione um modelo de termo de quitação!");
 		}
 		
 		DividaTerceiro divida = getRepository().findById(entity.getId());
@@ -143,13 +143,13 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		getRepository().update(divida);
 	}
 	
-	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException {
+	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa) throws ApplicationException {
 		if (justificativa == null || justificativa.isEmpty()) {
-			throw new BusinessException("Informe a justificativa para encerrar a dívida!");
+			throw new ApplicationException("Informe a justificativa para encerrar a dívida!");
 		}
 		
 		if (justificativa.length() < 100) {
-			throw new BusinessException("Justificativa deve ter no mínimo 100 caracteres!");
+			throw new ApplicationException("Justificativa deve ter no mínimo 100 caracteres!");
 		}
 		
 		// Anexa a justificativa informada à existente

@@ -52,7 +52,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public class TelefoneTest {
 	
@@ -83,7 +83,7 @@ public class TelefoneTest {
 		try {
 			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -99,7 +99,7 @@ public class TelefoneTest {
 			entity.validate();
 			entity.setDdd("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'DDD' aceita no máximo 5 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -113,7 +113,7 @@ public class TelefoneTest {
 		try {			
 			entity.setNumero("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Número' aceita no máximo 15 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -129,7 +129,7 @@ public class TelefoneTest {
 			entity.validate();
 			entity.setRamal("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Ramal' aceita no máximo 5 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -143,7 +143,7 @@ public class TelefoneTest {
 		try {
 			entity.setUsuario(null);
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Informe o usuário!", be.getMessage());
 			return;
 		} catch (Throwable t) {

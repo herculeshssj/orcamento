@@ -66,7 +66,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -105,7 +105,7 @@ public class EntityComboUtil {
 	public List<Banco> getListaBanco() {
 		try {
 			return bancoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<Banco>();
@@ -114,7 +114,7 @@ public class EntityComboUtil {
 	public List<Categoria> getListaCategoria() {
 		try {
 			return categoriaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -123,7 +123,7 @@ public class EntityComboUtil {
 	public List<Categoria> getListaCategoriaCredito() {
 		try {
 			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -132,7 +132,7 @@ public class EntityComboUtil {
 	public List<Categoria> getListaCategoriaDebito() {
 		try {
 			return categoriaService.buscarPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -144,7 +144,7 @@ public class EntityComboUtil {
 				return contaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
 			else
 				return contaService.buscarAtivosPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -156,7 +156,7 @@ public class EntityComboUtil {
 				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), null);
 			else
 				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), true);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -165,7 +165,7 @@ public class EntityComboUtil {
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -174,7 +174,7 @@ public class EntityComboUtil {
 	public List<MeioPagamento> getListaMeioPagamento() {
 		try {
 			return meioPagamentoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -183,7 +183,7 @@ public class EntityComboUtil {
 	public List<Moeda> getListaMoeda() {
 		try {
 			return moedaService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<Moeda>();

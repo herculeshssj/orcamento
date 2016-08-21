@@ -69,7 +69,7 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -164,7 +164,7 @@ public class LancamentoRapidoController extends AbstractController {
 	public Usuario getUsuarioLogado() {
 		try {
 			return usuarioService.buscarPorTokenID(userTokenID);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return null;
@@ -173,7 +173,7 @@ public class LancamentoRapidoController extends AbstractController {
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -182,7 +182,7 @@ public class LancamentoRapidoController extends AbstractController {
 	public List<Categoria> getListaCategoria() {
 		try {
 			return categoriaService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -191,7 +191,7 @@ public class LancamentoRapidoController extends AbstractController {
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -200,7 +200,7 @@ public class LancamentoRapidoController extends AbstractController {
 	public List<MeioPagamento> getListaMeioPagamento() {
 		try {
 		return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -209,7 +209,7 @@ public class LancamentoRapidoController extends AbstractController {
 	public List<Moeda> getListaMoeda() {
 		try {
 			return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

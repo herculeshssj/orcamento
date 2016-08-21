@@ -54,7 +54,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public class PessoalTest {
 	
@@ -93,7 +93,7 @@ public class PessoalTest {
 		try {
 			entity.setGenero('G');
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Gênero inexistente!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -107,7 +107,7 @@ public class PessoalTest {
 		try {
 			entity.setEtnia("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Etnia' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -121,7 +121,7 @@ public class PessoalTest {
 		try {
 			entity.setTipoSanguineo("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Tipo Sanguíneo' aceita no máximo 5 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -135,7 +135,7 @@ public class PessoalTest {
 		try {
 			entity.setNacionalidade("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Nacionalidade' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -149,7 +149,7 @@ public class PessoalTest {
 		try {
 			entity.setNaturalidade("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Naturalidade' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -163,7 +163,7 @@ public class PessoalTest {
 		try {
 			entity.setEscolaridade("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Escolaridade' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -177,7 +177,7 @@ public class PessoalTest {
 		try {
 			entity.setFiliacaoPai("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Filiação Pai' aceita no máximo 100 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -191,7 +191,7 @@ public class PessoalTest {
 		try {
 			entity.setFiliacaoMae("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Filiação Mãe' aceita no máximo 100 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -205,7 +205,7 @@ public class PessoalTest {
 		try {
 			entity.setEstadoCivil("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Estado Civil' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -219,7 +219,7 @@ public class PessoalTest {
 		try {
 			entity.setUsuario(null);
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Informe o usuário!", be.getMessage());
 			return;
 		} catch (Throwable t) {

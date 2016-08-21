@@ -52,7 +52,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public class EnderecoTest {
 	
@@ -88,7 +88,7 @@ public class EnderecoTest {
 		try {
 			entity.setTipoLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Tipo de logradouro' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -102,7 +102,7 @@ public class EnderecoTest {
 		try {
 			entity.setLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Logradouro' aceita no máximo 150 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -118,7 +118,7 @@ public class EnderecoTest {
 			entity.validate();
 			entity.setNumero("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Número' aceita no máximo 10 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -134,7 +134,7 @@ public class EnderecoTest {
 			entity.validate();
 			entity.setComplemento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Complemento' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -148,7 +148,7 @@ public class EnderecoTest {
 		try {
 			entity.setBairro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Bairro' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -162,7 +162,7 @@ public class EnderecoTest {
 		try {
 			entity.setCidade("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Cidade' aceita no máximo 100 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -176,7 +176,7 @@ public class EnderecoTest {
 		try {
 			entity.setEstado("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Estado' aceita exatamente 2 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -192,7 +192,7 @@ public class EnderecoTest {
 			entity.validate();
 			entity.setCep("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'CEP' aceita exatamente 8 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -206,7 +206,7 @@ public class EnderecoTest {
 		try {
 			entity.setUsuario(null);
 			entity.validate();			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -220,7 +220,7 @@ public class EnderecoTest {
 		try {
 			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {

@@ -59,7 +59,7 @@ import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.repository.CartaoCreditoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
@@ -93,7 +93,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 
 	@Override
-	public void cadastrar(CartaoCredito entity) throws BusinessException {
+	public void cadastrar(CartaoCredito entity) throws ApplicationException {
 		// Salva o cartão, e logo em seguida a conta
 		super.cadastrar(entity);
 		getContaRepository().save(entity.createConta());	
@@ -104,7 +104,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public void alterar(CartaoCredito entity) throws BusinessException {
+	public void alterar(CartaoCredito entity) throws ApplicationException {
 		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		
 		// Verifica se o tipo do cartão foi alterado para poder realizar a criação da fatura
@@ -152,9 +152,9 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public void excluir(CartaoCredito entity) throws BusinessException {
+	public void excluir(CartaoCredito entity) throws ApplicationException {
 		if (getRepository().isSubstituto(entity)) {
-			throw new BusinessException("Não é possível excluir! O cartão selecionado substituiu outro já inativo!");
+			throw new ApplicationException("Não é possível excluir! O cartão selecionado substituiu outro já inativo!");
 		}
 		Conta conta = getContaRepository().findByCartaoCredito(entity);
 		
@@ -165,7 +165,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 			FaturaCartao faturaAberta = faturaCartaoRepository.findFaturaCartaoAberta(conta);
 			
 			if (getRepository().existsLinkages(entity)) {
-				throw new BusinessException("Não é possível excluir! Existe vínculo com lançamentos e/ou faturas cadastradas!");
+				throw new ApplicationException("Não é possível excluir! Existe vínculo com lançamentos e/ou faturas cadastradas!");
 			} else {
 				// Exclui a fatura aberta caso exista
 				if (faturaAberta != null) getFaturaCartaoRepository().delete(faturaAberta);
@@ -178,32 +178,32 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
 	@Override
-	public List<CartaoCredito> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<CartaoCredito> buscarPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findByUsuario(usuario);
 	}
 	
 	@Override
-	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario) throws BusinessException {
+	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findOnlyCartaoTipoCreditoByUsuario(usuario);
 	}
 	
 	@Override
-	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario) throws BusinessException {
+	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findEnabledOnlyCartaoTipoCreditoByUsuario(usuario);
 	}
 	
 	@Override
-	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo) throws BusinessException {
+	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo) throws ApplicationException {
 		return getRepository().findDescricaoOrTipoCartaoOrAtivoByUsuario(descricao, tipoCartao, usuario, ativo);
 	}
 	
 	@Override
-	public void desativarCartoes() throws BusinessException {
+	public void desativarCartoes() throws ApplicationException {
 		// Retorna os cartões que a data de expiração é igual ou menor que a data atual
 		List<CartaoCredito> cartoes = getRepository().findByDataValidade(new Date());
 		
@@ -221,7 +221,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public void substituirCartao(CartaoCredito entity) throws BusinessException {
+	public void substituirCartao(CartaoCredito entity) throws ApplicationException {
 		// Desativa o cartão antigo
 		entity.setAtivo(false);
 		getRepository().save(entity.getCartaoSubstituto());
@@ -235,7 +235,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public void ativarCartao(CartaoCredito entity) throws BusinessException {
+	public void ativarCartao(CartaoCredito entity) throws ApplicationException {
 		entity.setAtivo(true);
 		getRepository().update(entity);
 		
@@ -245,7 +245,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public void desativarCartao(CartaoCredito entity) throws BusinessException {
+	public void desativarCartao(CartaoCredito entity) throws ApplicationException {
 		entity.setAtivo(false);
 		getRepository().update(entity);
 		
@@ -255,7 +255,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 	}
 	
 	@Override
-	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito) throws BusinessException {
+	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito) throws ApplicationException {
 		// Traz a conta do cartão selecionado
 		Conta conta = getContaRepository().findByCartaoCredito(cartaoCredito);
 		
@@ -286,11 +286,11 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		existeFaturaAberta = getFaturaCartaoRepository().findFaturaCartaoAberta(conta) != null ? true : false;
 		
 		if (!existeFaturas) {
-			throw new BusinessException("Não foi possível criar uma fatura para o cartão selecionado!");
+			throw new ApplicationException("Não foi possível criar uma fatura para o cartão selecionado!");
 		}
 		
 		if (!existeFaturaAberta) {
-			throw new BusinessException("Não foi possível criar uma fatura aberta para o cartão selecionado!");
+			throw new ApplicationException("Não foi possível criar uma fatura aberta para o cartão selecionado!");
 		}
 	}
 }

@@ -59,7 +59,7 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.InfoOFX;
@@ -119,7 +119,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 		try {
 			listEntity = getService().buscarLancamentoImportadoPorConta(contaSelecionada);
 			Collections.sort(listEntity, new LancamentoImportadoComparator());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -152,7 +152,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			selecionarTodosLancamentos = false;
 			
 			return "/pages/ImportacaoLancamento/confirmarImportacao";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -206,7 +206,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			getService().excluirLancamentoImportado(entity);
 			infoMessage("Lançamento excluído com sucesso!");
 			find();		
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -216,7 +216,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			getService().apagarLancamentosImportados(contaSelecionada);
 			infoMessage("Lançamentos excluídos com sucesso!");
 			find();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -227,7 +227,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			getService().importarLancamento(entity);
 			infoMessage("Lançamento importado com sucesso!");
 			find();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -239,7 +239,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			initializeEntity();
 			
 			return goToListPage();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -279,7 +279,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 			} else {
 				return result;
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

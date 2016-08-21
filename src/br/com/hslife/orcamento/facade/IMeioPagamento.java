@@ -50,7 +50,7 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
 	
@@ -58,15 +58,15 @@ public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
 	 * Buscar um meio de pagamento a partir dos parâmetros informados.
 	 * Caso não encontre, o meio de pagamento padrão é retornado.
 	 */
-	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario) throws BusinessException;
+	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario) throws ApplicationException;
 	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	public List<MeioPagamento> buscarPorUsuario(Usuario usuario) throws ApplicationException;
 	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
+	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException;
 
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario) throws ApplicationException;
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
+	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws ApplicationException;
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException;
+	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws ApplicationException;
 }

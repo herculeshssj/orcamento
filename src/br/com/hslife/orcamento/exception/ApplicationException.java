@@ -51,37 +51,46 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.hslife.orcamento.util.Util;
 
-public class BusinessException extends Exception {
+/**
+ * Exceção verificada que indica erros de execução interna dentro
+ * do sistema. Deve ser usada sempre para encapsular outra exceção
+ * e lançar para a camada acima, ou indicar que uma determinada
+ * operação corre o risco de falhar.
+ * 
+ * @author herculeshssj
+ *
+ */
+public class ApplicationException extends Exception {
 	
 	private static final long serialVersionUID = -6615643150827475837L;
 	
-	private static final Logger logger = LogManager.getLogger(BusinessException.class);
+	private static final Logger logger = LogManager.getLogger(ApplicationException.class);
 
-	public BusinessException() {
+	public ApplicationException() {
 		super();
 	}
 
-	public BusinessException(String message) {
+	public ApplicationException(String message) {
 		super(message);
 		logger.catching(this);
 	}
 	
-	public BusinessException(Exception exception) {
+	public ApplicationException(Exception exception) {
 		super(exception);
 		logger.catching(exception);
 	}
 	
-	public BusinessException(String message, Exception exception) {
+	public ApplicationException(String message, Exception exception) {
 		super(message, exception);
 		logger.catching(exception);
 	}
 	
-	public BusinessException(String[] messages) {
+	public ApplicationException(String[] messages) {
 		super(Util.montarString(messages));
 		logger.catching(this);
 	}
 	
-	public BusinessException(String[] messages, Exception exception) {
+	public ApplicationException(String[] messages, Exception exception) {
 		super(Util.montarString(messages), exception);
 		logger.catching(exception);
 	}

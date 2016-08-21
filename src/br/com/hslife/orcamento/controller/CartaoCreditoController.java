@@ -58,7 +58,7 @@ import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -103,7 +103,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	public void find() {
 		try {			
 			listEntity = getService().buscarDescricaoOuTipoCartaoOuAtivoPorUsuario("", tipoCartao, getUsuarioLogado(), somenteAtivos);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -145,7 +145,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 				return "";
 			}
 			actionTitle = " - Ativar";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}		
 		return "/pages/CartaoCredito/ativarDesativarCartao";
@@ -157,7 +157,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			infoMessage("Cartão ativado com sucesso!");
 			initializeEntity();
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -167,7 +167,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		try {
 			entity = getService().buscarPorID(idEntity);
 			actionTitle = " - Desativar";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}		
 		return "/pages/CartaoCredito/ativarDesativarCartao";
@@ -179,7 +179,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			infoMessage("Cartão desativado com sucesso!");
 			initializeEntity();
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -190,7 +190,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			novoCartao = new CartaoCredito();
 			entity = getService().buscarPorID(idEntity);
 			actionTitle = " - Substituir";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}		
 		return "/pages/CartaoCredito/substituirCartao";
@@ -219,7 +219,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			getService().substituirCartao(entity);
 			infoMessage("Substituição efetuada com sucesso!");
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -234,7 +234,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 			getService().repararInconsistênciaFatura(entity);
 			infoMessage("Inconsistências reparadas com sucesso!");
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -251,7 +251,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 				}
 			}
 			return resultado;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -268,7 +268,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 				}
 			}
 			return resultado;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

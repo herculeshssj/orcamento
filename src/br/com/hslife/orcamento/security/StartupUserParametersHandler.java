@@ -60,7 +60,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 @Component("startupUserParametersHandler")
 public class StartupUserParametersHandler implements AuthenticationSuccessHandler {
@@ -80,7 +80,7 @@ public class StartupUserParametersHandler implements AuthenticationSuccessHandle
 		try {
 			// Carrega as opções do sistema do usuário autenticado
 			getOpcaoSistemaComponent().atualizarCacheOpcoesSistema();			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		} catch (Exception e) {
 			logger.catching(e);

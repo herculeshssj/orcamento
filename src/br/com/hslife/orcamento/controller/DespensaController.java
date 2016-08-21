@@ -54,7 +54,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Despensa;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IDespensa;
 
 @Component("despensaMB")
@@ -86,7 +86,7 @@ public class DespensaController extends AbstractCRUDController<Despensa> {
 	public void find() {
 		try {
 			listEntity = getService().buscarPorDescricaoEUsuario(descricaoDespensa, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}

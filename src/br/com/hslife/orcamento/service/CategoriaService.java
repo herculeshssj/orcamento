@@ -55,7 +55,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.repository.CategoriaRepository;
 
@@ -71,7 +71,7 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 
 	@Override
-	public void cadastrar(Categoria entity) throws BusinessException {		
+	public void cadastrar(Categoria entity) throws ApplicationException {		
 		if (entity.isPadrao()) {
 			getRepository().updateAllToNotDefault(entity.getTipoCategoria(), entity.getUsuario());
 		}
@@ -79,7 +79,7 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
-	public void alterar(Categoria entity) throws BusinessException {
+	public void alterar(Categoria entity) throws ApplicationException {
 		if (!entity.isPadrao()) {
 			if (entity.equals(getRepository().findDefaultByTipoCategoriaAndUsuario(entity.getUsuario(), entity.getTipoCategoria()))) {
 				entity.setPadrao(true);
@@ -92,48 +92,48 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
-	public void excluir(Categoria entity) throws BusinessException {
+	public void excluir(Categoria entity) throws ApplicationException {
 		try {
 			super.excluir(entity);
 		} catch (DataIntegrityViolationException dive) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
+			throw new ApplicationException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
 		} catch (Exception e) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
+			throw new ApplicationException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
 		}
 	}
 
 	@Override
-	public List<Categoria> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findEnabledByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 
 	@Override
-	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws ApplicationException {
 		return getRepository().findByTipoCategoriaAndUsuario(tipoCategoria, usuario);
 	}
 	
 	@Override
-	public void validar(Categoria entity) throws BusinessException {
+	public void validar(Categoria entity) throws ApplicationException {
 		
 	}
 
 	@Override
-	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException {
+	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws ApplicationException {
 		return getRepository().findByDescricaoUsuarioAndAtivo(descricao, usuario, ativo);
 	}
 	
 	@Override
-	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws ApplicationException {
 		return getRepository().findActiveByTipoCategoriaAndUsuario(tipoCategoria, usuario);
 	}
 	
@@ -143,7 +143,7 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
-	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {		
+	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws ApplicationException {		
 		// Verifica se a categoria informada existe na base de dados
 		List<Categoria> categorias = getRepository().findTipoCategoriaAndDescricaoAndAtivoByUsuario(tipoCategoria, descricaoCategoria, null, usuario);
 		Categoria categoriaEncontrada = null;

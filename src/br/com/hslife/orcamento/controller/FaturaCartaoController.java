@@ -84,7 +84,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -180,7 +180,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		// Pega a moeda padrão do usuário
 		try {
 			moedaPadrao = moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return super.startUp();
@@ -249,7 +249,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				
 			}
 
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -269,7 +269,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			operation = "edit";
 			actionTitle = " - Editar";
 			return goToFormPage;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -289,7 +289,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return super.save();
 	}
 	
-	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws BusinessException {
+	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws ApplicationException {
 
 		/* Pegando os totais para mostrar na fatura */
 		moedas = moedaService.buscarPorUsuario(getUsuarioLogado());
@@ -386,7 +386,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			detalhesFaturaCartao.clear();
 			detalhesFaturaCartao.addAll(lancamentosAdicionados);
 			this.calcularSaldoCompraSaqueParceladoPorMoeda();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -401,7 +401,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			detalhesFaturaCartao.clear();
 			detalhesFaturaCartao.addAll(lancamentosAdicionados);
 			this.calcularSaldoCompraSaqueParceladoPorMoeda();			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -413,7 +413,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			lancamentosEncontrados.clear();
 			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			lancamentosEncontrados.removeAll(lancamentosAdicionados);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -447,7 +447,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 					return faturaSelecionada.getSaldoDevedor() + getService().saldoDevedorUltimaFatura(cartaoSelecionado);
 				else
 					return getService().saldoDevedorUltimaFatura(cartaoSelecionado);			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return 0.0;
@@ -476,7 +476,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			this.calculaValorConversao();
 			actionTitle = " - Fechar fatura";
 			return "/pages/FaturaCartao/fecharFatura";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		
@@ -491,7 +491,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			this.reprocessarBusca();
 			
 			return "/pages/FaturaCartao/listFaturaCartao";			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -508,7 +508,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			
 			this.reprocessarBusca();
 			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -531,7 +531,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			}
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -546,7 +546,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				lancamentosEncontrados.clear();
 				lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -588,7 +588,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				case DEBITO : getService().quitarFaturaDebitoConta(faturaSelecionada, contaSelecionada, valorAQuitar, dataPagamento); break;
 				case PARCELAMENTO : getService().quitarFaturaParcelamento(faturaSelecionada, quantParcelas, dataParcelamento); break;
 				case LANCAMENTO : getService().quitarFaturaLancamentoSelecionado(faturaSelecionada, lancamento); break;
-				default : throw new BusinessException("Opção inválida!");
+				default : throw new ApplicationException("Opção inválida!");
 			}			
 			infoMessage("Fatura quitada com sucesso!");
 
@@ -597,7 +597,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			prontoParaQuitar = false;
 			actionTitle = "";
 			return "/pages/FaturaCartao/listFaturaCartao";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -638,7 +638,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			this.calculaValorConversao();
 			actionTitle = " - Detalhes";
 			return "/pages/FaturaCartao/detalheFatura";			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -662,7 +662,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			} else {
 				return cartaoCreditoService.buscarAtivosSomenteCreditoPorUsuario(getUsuarioLogado());
 			}			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -671,7 +671,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
@@ -680,7 +680,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<Categoria> getListaCategoria() {
 		try {
 			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		} 
 		return new ArrayList<Categoria>();
@@ -689,7 +689,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -698,7 +698,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<MeioPagamento> getListaMeioPagamento() {
 		try {
 			return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

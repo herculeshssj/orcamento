@@ -59,7 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -116,9 +116,9 @@ public class Pessoal extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		if (this.genero != 'M' && this.genero != 'F') {
-			throw new BusinessException("Gênero inexistente!");
+			throw new ApplicationException("Gênero inexistente!");
 		}
 		
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Etnia", this.etnia, 50);
@@ -131,7 +131,7 @@ public class Pessoal extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Estado Civil", this.estadoCivil, 50);
 		
 		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+			throw new ApplicationException("Informe o usuário!");
 		}
 	}
 	

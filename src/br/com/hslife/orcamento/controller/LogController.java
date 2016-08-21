@@ -54,7 +54,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Logs;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.model.CriterioLog;
 
@@ -94,7 +94,7 @@ public class LogController extends AbstractController {
 	public void find() {
 		try {
 			listEntity = getService().buscarPorCriterios(criterioBusca);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -108,7 +108,7 @@ public class LogController extends AbstractController {
 		try {
 			entity = getService().buscarPorID(idEntity);
 			return "/pages/Logs/viewLogs";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -120,7 +120,7 @@ public class LogController extends AbstractController {
 			getService().excluir(entity);
 			infoMessage("Registro excluído com sucesso!");
 			initializeEntity();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -138,7 +138,7 @@ public class LogController extends AbstractController {
 			}
 			infoMessage("Registros excluídos com sucesso!");
 			initializeEntity();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -148,7 +148,7 @@ public class LogController extends AbstractController {
 			List<String> result = getService().buscarTodosNiveis();
 			if (result == null) result = new ArrayList<>();
 			return result;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -159,7 +159,7 @@ public class LogController extends AbstractController {
 			List<String> result = getService().buscarTodosLoggers();
 			if (result == null) result = new ArrayList<>();
 			return result;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

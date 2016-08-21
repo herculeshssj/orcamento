@@ -52,7 +52,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public class ItemDespensaTest {
 
@@ -69,7 +69,7 @@ public class ItemDespensaTest {
 		try {
 			entity.setMarca("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Marca favorita' aceita no máximo 50 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {

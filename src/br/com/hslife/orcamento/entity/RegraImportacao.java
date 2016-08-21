@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -97,7 +97,7 @@ public class RegraImportacao extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Texto a pesquisar", this.texto, 100);
 		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 	}

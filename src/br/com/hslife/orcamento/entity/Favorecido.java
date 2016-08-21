@@ -64,7 +64,7 @@ import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -120,13 +120,13 @@ public class Favorecido extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		if (this.getNome() == null || this.getNome().trim().isEmpty()) {
-			throw new BusinessException("Informe um nome!");
+			throw new ApplicationException("Informe um nome!");
 		}
 		
 		if (this.getUsuario() == null) {
-			throw new BusinessException("Informe o usuário!");
+			throw new ApplicationException("Informe o usuário!");
 		}
 		
 		EntityPersistenceUtil.validaCampoNulo("Tipo de pessoa", this.tipoPessoa);
@@ -143,7 +143,7 @@ public class Favorecido extends EntityPersistence {
 			}			
 			
 		} catch (InvalidStateException ise) {
-			throw new BusinessException(ise);
+			throw new ApplicationException(ise);
 		}		
 	}
 	

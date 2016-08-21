@@ -54,7 +54,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.repository.MoedaRepository;
 
@@ -70,7 +70,7 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	}
 	
 	@Override
-	public void cadastrar(Moeda entity) throws BusinessException {
+	public void cadastrar(Moeda entity) throws ApplicationException {
 		if (entity.isPadrao()) {
 			Moeda moeda = getRepository().findDefaultByUsuario(entity.getUsuario());
 			if (moeda != null && !moeda.equals(entity)) {
@@ -82,7 +82,7 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	}
 	
 	@Override
-	public void alterar(Moeda entity) throws BusinessException {
+	public void alterar(Moeda entity) throws ApplicationException {
 		if (entity.isPadrao()) {
 			Moeda moeda = getRepository().findDefaultByUsuario(entity.getUsuario());
 			if (moeda != null && !moeda.equals(entity)) {
@@ -94,47 +94,47 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	}
 	
 	@Override
-	public void excluir(Moeda entity) throws BusinessException {
+	public void excluir(Moeda entity) throws ApplicationException {
 		try {
 			super.excluir(entity);
 		} catch (DataIntegrityViolationException dive) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
+			throw new ApplicationException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
 		} catch (Exception e) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
+			throw new ApplicationException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
 		}
 	}
 
 	@Override
-	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException {
+	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario) throws ApplicationException {
 		return getRepository().findByNomeAndUsuario(nome, usuario);
 	}
 
 	@Override
-	public List<Moeda> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Moeda> buscarPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findByUsuario(usuario);
 	}	
 	
 	@Override
-	public Moeda buscarPadraoPorUsuario(Usuario usuario) throws BusinessException {
+	public Moeda buscarPadraoPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findDefaultByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario,	boolean ativo) throws BusinessException {
+	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario,	boolean ativo) throws ApplicationException {
 		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
 	
 	@Override
-	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findActiveByUsuario(usuario);
 	}
 	
 	@Override
-	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) throws BusinessException {
+	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findAllCodigoMonetarioByUsuario(usuario);
 	}
 	
-	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario) throws BusinessException {
+	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario) throws ApplicationException {
 		return getRepository().findCodigoMoedaByUsuario(codigoMonetario, usuario);
 	}
 }

@@ -51,16 +51,16 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IOrcamento extends ICRUDService<Orcamento>{
 	
-	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario) throws ApplicationException;
 	
-	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) throws BusinessException;
+	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) throws ApplicationException;
 	
-	public void atualizarValores(Orcamento entity) throws BusinessException;
+	public void atualizarValores(Orcamento entity) throws ApplicationException;
 	
-	public void gerarOrcamento(Orcamento entity) throws BusinessException;
+	public void gerarOrcamento(Orcamento entity) throws ApplicationException;
 	
 }

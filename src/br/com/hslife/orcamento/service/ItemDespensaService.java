@@ -59,7 +59,7 @@ import br.com.hslife.orcamento.entity.ItemDespensa;
 import br.com.hslife.orcamento.entity.MovimentoItemDespensa;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.OperacaoDespensa;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IItemDespensa;
 import br.com.hslife.orcamento.repository.ItemDespensaRepository;
 
@@ -75,9 +75,9 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa) throws BusinessException {
+	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa) throws ApplicationException {
 		if (movimentoItemDespensa.getOperacaoDespensa().equals(OperacaoDespensa.CONSUMO) && (entity.getQuantidadeAtual() - movimentoItemDespensa.getQuantidade()) < 0) {
-			throw new BusinessException("Quantidade informada ultrapassa estoque disponível!");
+			throw new ApplicationException("Quantidade informada ultrapassa estoque disponível!");
 		}
 		entity.getMovimentacao().add(movimentoItemDespensa);
 		entity.setQuantidadeAtual(0);
@@ -92,15 +92,15 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void desfazerRegistroCompraConsumo(ItemDespensa entity) throws BusinessException {
+	public void desfazerRegistroCompraConsumo(ItemDespensa entity) throws ApplicationException {
 		if (entity.getMovimentacao() != null && entity.getMovimentacao().size() > 0) {
 			Collections.reverse(entity.getMovimentacao());
 		} else {
-			throw new BusinessException("Impossível desfazer! Item de despensa sem movimentação!");
+			throw new ApplicationException("Impossível desfazer! Item de despensa sem movimentação!");
 		}
 		MovimentoItemDespensa movimentoItemDespensa = entity.getMovimentacao().get(0);
 		if (movimentoItemDespensa.getOperacaoDespensa().equals(OperacaoDespensa.COMPRA) && (entity.getQuantidadeAtual() - movimentoItemDespensa.getQuantidade()) < 0) {
-			throw new BusinessException("Impossível desfazer! Quantidade informada ultrapassa estoque disponível!");
+			throw new ApplicationException("Impossível desfazer! Quantidade informada ultrapassa estoque disponível!");
 		}
 		entity.getMovimentacao().remove(movimentoItemDespensa);
 		entity.setQuantidadeAtual(0);
@@ -115,7 +115,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void arquivarItemDespensa(ItemDespensa entity) throws BusinessException {
+	public void arquivarItemDespensa(ItemDespensa entity) throws ApplicationException {
 		if (!entity.isArquivado()) {
 			entity.setArquivado(true);
 			getRepository().update(entity);
@@ -123,7 +123,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void desarquivarItemDespensa(ItemDespensa entity) throws BusinessException {
+	public void desarquivarItemDespensa(ItemDespensa entity) throws ApplicationException {
 		if (entity.isArquivado()) {
 			entity.setArquivado(false);
 			getRepository().update(entity);
@@ -131,7 +131,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws BusinessException {
+	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws ApplicationException {
 		List<ItemDespensa> listaDespensas = new ArrayList<ItemDespensa>();
 		for (ItemDespensa item : getRepository().findByUsuarioAndArquivado(usuario, false)) {
 			if (item.getQuantidadeAtual() <= item.getQuantidadeVermelho()) {
@@ -148,16 +148,16 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public List<ItemDespensa> buscarPorDespensaUsuarioEArquivado(Despensa despensa, Usuario usuario, boolean arquivado) throws BusinessException {
+	public List<ItemDespensa> buscarPorDespensaUsuarioEArquivado(Despensa despensa, Usuario usuario, boolean arquivado) throws ApplicationException {
 		return getRepository().findByDespensaUsuarioAndArquivado(despensa, usuario, arquivado);
 	}
 	
 	@Override
-	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado) throws BusinessException {
+	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado) throws ApplicationException {
 		return getRepository().findByUsuarioAndArquivado(usuario, arquivado);
 	}
 	
-	public void apagarHistorico(ItemDespensa entity) throws BusinessException {
+	public void apagarHistorico(ItemDespensa entity) throws ApplicationException {
 		entity.getMovimentacao().clear();
 		entity.setQuantidadeAtual(0);
 		entity.setValidade(null);

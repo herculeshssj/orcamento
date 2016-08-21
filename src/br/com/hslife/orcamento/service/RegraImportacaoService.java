@@ -57,7 +57,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.RegraImportacao;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
@@ -97,25 +97,25 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	}
 	
 	@Override
-	public void validar(RegraImportacao entity) throws BusinessException {
+	public void validar(RegraImportacao entity) throws ApplicationException {
 		RegraImportacao regra = getRepository().findEqualEntity(entity);
 		if (regra != null && !regra.equals(entity)) {
-			throw new BusinessException("Existe uma regra com os mesmo parâmetros informados!");
+			throw new ApplicationException("Existe uma regra com os mesmo parâmetros informados!");
 		}
 	}
 
 	@Override
-	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws BusinessException {
+	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws ApplicationException {
 		return getRepository().findAllByConta(conta);
 	}
 	
-	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws BusinessException {
+	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws ApplicationException {
 		List<LancamentoConta> lancamentos = new ArrayList<>();
 		lancamentos.add(lancamento);
 		return this.processarRegras(conta, lancamentos).get(0);
 	}
 	
-	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException {
+	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws ApplicationException {
 		Set<LancamentoConta> lancamentosProcessados = new HashSet<LancamentoConta>();
 		
 		List<RegraImportacao> regras = this.buscarTodosPorConta(conta);

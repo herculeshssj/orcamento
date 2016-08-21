@@ -49,7 +49,7 @@ package br.com.hslife.orcamento.controller;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICRUDService;
 
 @SuppressWarnings({"rawtypes","unchecked"})
@@ -81,7 +81,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	
 	protected abstract ICRUDService getService();
 	
-	protected void validate(String action) throws BusinessException {
+	protected void validate(String action) throws ApplicationException {
 		entity.validate();
 		getService().validar(entity);
 	}
@@ -127,7 +127,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 				infoMessage("Registro cadastrado com sucesso!");
 			}
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -139,7 +139,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 			operation = "delete";
 			actionTitle = " - Excluir";
 			return goToViewPage;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -151,7 +151,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 			operation = "edit";
 			actionTitle = " - Editar";
 			return goToFormPage;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -163,7 +163,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 			getService().excluir(entity);
 			infoMessage("Registro excluído com sucesso!");						
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";

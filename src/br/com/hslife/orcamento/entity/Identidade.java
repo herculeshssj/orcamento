@@ -64,7 +64,7 @@ import javax.persistence.TemporalType;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -148,7 +148,7 @@ public class Identidade extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		switch (this.tipoIdentidade) {
 			case CARTEIRA_TRABALHO : validCarteiraTrabalho(); break;
 			case CERTIDAO_NASCIMENTO : validCertidaoNascimento(); break;
@@ -162,53 +162,53 @@ public class Identidade extends EntityPersistence {
 		}
 	}
 
-	private void validTituloEleitor() throws BusinessException {
+	private void validTituloEleitor() throws ApplicationException {
 		// Verifica se todos os campos foram preenchidos no Título de Eleitor
 		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf()) && Util.eVazio(this.getZona()) && Util.eVazio(this.getSecao()) && this.getDataExpedicao() == null;
 		
 		if (!resultado) {
 			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf()) && !Util.eVazio(this.getZona()) && !Util.eVazio(this.getSecao()) && this.getDataExpedicao() != null;
 			if (!resultado){
-				throw new BusinessException("Todos os campos do título de eleitor são obrigatórios!");
+				throw new ApplicationException("Todos os campos do título de eleitor são obrigatórios!");
 			}
 		}
 	}
 
-	private void validRg() throws BusinessException {
+	private void validRg() throws ApplicationException {
 		// Verifica se todos os campos foram preenchidos no RG
 		if ( (Util.eVazio(this.getNumero()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getUf()) && this.getDataExpedicao() == null)
 					|| (!Util.eVazio(this.getNumero()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getUf()) && this.getDataExpedicao() != null)) {
 				// Nada a fazer. Pode gravar sem problemas
 			} else {
-				throw new BusinessException("Todos os campos do RG são obrigatórios!");
+				throw new ApplicationException("Todos os campos do RG são obrigatórios!");
 			}		
 	}
 
-	private void validPassaporte() throws BusinessException {
+	private void validPassaporte() throws ApplicationException {
 		// Verifica se todos os campos foram preenchidos no passaporte
 		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getPais()) && Util.eVazio(this.getOrgaoExpedidor()) && this.getDataExpedicao() == null && this.getDataValidade() == null;
 		
 		if (!resultado) {
 			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getPais()) && !Util.eVazio(this.getOrgaoExpedidor()) && this.getDataExpedicao() != null && this.getDataValidade() != null;
 			if (!resultado) {
-				throw new BusinessException("Todos os campos do passaporte são obrigatórios!");
+				throw new ApplicationException("Todos os campos do passaporte são obrigatórios!");
 			}
 		}
 	}
 
-	private void validDocMilitar() throws BusinessException {
+	private void validDocMilitar() throws ApplicationException {
 		// Verifica se todos os campos foram preenchidos no certificado de reservista
 		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getSerie()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf());
 		
 		if (!resultado) {
 			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getSerie()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf());
 			if (!resultado) {
-				throw new BusinessException("Todos os campos do certificado de reservista são obrigatórios!");
+				throw new ApplicationException("Todos os campos do certificado de reservista são obrigatórios!");
 			}
 		}
 	}
 
-	private void validCpf() throws BusinessException {
+	private void validCpf() throws ApplicationException {
 		// Verifica se a identidade passada é um CPF válido
 		CPFValidator validator = new CPFValidator();
 		try {
@@ -216,42 +216,42 @@ public class Identidade extends EntityPersistence {
 				validator.assertValid(this.getNumero());
 			}
 		} catch (InvalidStateException ise) {
-			throw new BusinessException(ise.getMessage());
+			throw new ApplicationException(ise.getMessage());
 		}
 				
 	}
 
-	private void validCnh() throws BusinessException {
+	private void validCnh() throws ApplicationException {
 		// Verifica se todos os campos foram preenchidos na carteira de motorista
 		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getCategoria()) && Util.eVazio(this.getMunicipio()) && Util.eVazio(this.getUf()) && this.getDataExpedicao() == null && this.getDataPrimeiraHabilitacao() ==  null && this.getDataValidade() == null;
 		
 		if (!resultado) {
 			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getCategoria()) && !Util.eVazio(this.getMunicipio()) && !Util.eVazio(this.getUf()) && this.getDataExpedicao() != null && this.getDataPrimeiraHabilitacao() !=  null && this.getDataValidade() != null;
 			if (!resultado)
-				throw new BusinessException("Todos os campos da carteira de motorista são obrigatórios!");
+				throw new ApplicationException("Todos os campos da carteira de motorista são obrigatórios!");
 		}
 	}
 
-	private void validCertidaoNascimento() throws BusinessException {
+	private void validCertidaoNascimento() throws ApplicationException {
 		// Verifica se todos os campos foram preenchidos na certidão de nascimento
 		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getLivro()) && Util.eVazio(this.getFolha()) && this.getDataExpedicao() == null;
 		
 		if (!resultado) {
 			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getLivro()) && !Util.eVazio(this.getFolha()) && this.getDataExpedicao() != null;
 			if (!resultado) {
-				throw new BusinessException("Todos os campos da certidão de nascimento são obrigatórios!");
+				throw new ApplicationException("Todos os campos da certidão de nascimento são obrigatórios!");
 			}
 		}
 	}
 
-	private void validCarteiraTrabalho() throws BusinessException {
+	private void validCarteiraTrabalho() throws ApplicationException {
 		// Verifica se todos os campos foram preenchidos na carteira de trabalho
 		boolean resultado = Util.eVazio(this.getNumero()) && Util.eVazio(this.getSerie()) && Util.eVazio(this.getOrgaoExpedidor()) && Util.eVazio(this.getUf()) && this.getDataExpedicao() == null;
 		
 		if (!resultado) {
 			resultado = !Util.eVazio(this.getNumero()) && !Util.eVazio(this.getSerie()) && !Util.eVazio(this.getOrgaoExpedidor()) && !Util.eVazio(this.getUf()) && this.getDataExpedicao() != null;
 			if (!resultado) {
-				throw new BusinessException("Todos os campos da carteira de trabalho são obrigatórios!");
+				throw new ApplicationException("Todos os campos da carteira de trabalho são obrigatórios!");
 			}
 		}
 	}

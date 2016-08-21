@@ -65,7 +65,7 @@ import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
@@ -75,7 +75,7 @@ import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Service
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class FechamentoPeriodoService implements IFechamentoPeriodo {
 	
 	@Autowired
@@ -105,28 +105,28 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 		return lancamentoPeriodicoRepository;
 	}
 
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) throws BusinessException {
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) throws ApplicationException {
 		return getRepository().findUltimoFechamentoByConta(conta);
 	}
 
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws BusinessException {
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws ApplicationException {
 		return getRepository().findByContaAndOperacaoConta(conta, operacaoConta);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta) throws ApplicationException {
 		this.fecharPeriodo(dataFechamento, conta, null, null);
 	}
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws ApplicationException {
 		this.fecharPeriodo(dataFechamento, conta, null, lancamentosPeriodicos);
 	}
 	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws BusinessException {
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws ApplicationException {
 		this.fecharPeriodo(fechamentoPeriodo.getData(), fechamentoPeriodo.getConta(), fechamentoPeriodo, lancamentosPeriodicos);
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  throws BusinessException {
+	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  throws ApplicationException {
 		// Obtém-se o último fechamento realizado
 		FechamentoPeriodo fechamentoAnterior;
 		if (fechamentoReaberto == null)
@@ -166,7 +166,7 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			List<FechamentoPeriodo> fechamentosReabertos = getRepository().findByContaAndOperacaoConta(conta, OperacaoConta.REABERTURA);
 			if (fechamentosReabertos != null && !fechamentosReabertos.isEmpty()) {
 				// TODO refatorara para uma especificação que valide a possibilidade de fechamento
-				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
+				throw new ApplicationException("Não é possível fechar! Existem períodos anteriores reabertos!");
 			}
 			
 			novoFechamento.setConta(conta);
@@ -188,7 +188,7 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			List<FechamentoPeriodo> fechamentosAnterioresReabertos = getRepository().findFechamentosAnterioresReabertos(fechamentoReaberto);
 			if (fechamentosAnterioresReabertos != null && !fechamentosAnterioresReabertos.isEmpty()) {
 				// TODO refatorar para uma especificação que valide a possibilidade de fechamento
-				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
+				throw new ApplicationException("Não é possível fechar! Existem períodos anteriores reabertos!");
 			}
 			
 			// Altera os dados do fechamento já existente
@@ -285,26 +285,26 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 	}
 
 	@Override
-	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
+	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws ApplicationException {
 		return getRepository().findFechamentoPeriodoAnterior(fechamentoPeriodo);
 	}
 	
 	@Override
-	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws BusinessException {
+	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws ApplicationException {
 		return getRepository().findUltimoFechamentoByConta(conta);
 	}
 	
 	@Override
-	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws BusinessException {
+	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws ApplicationException {
 		return getRepository().findAllByConta(conta);
 	}
 	
 	@Override
-	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws BusinessException {
+	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws ApplicationException {
 		return getRepository().findById(id);
 	}
 	
-	public double saldoUltimoFechamento(Conta conta) throws BusinessException {
+	public double saldoUltimoFechamento(Conta conta) throws ApplicationException {
 		FechamentoPeriodo ultimoFechamento = getRepository().findUltimoFechamentoByConta(conta);
 		if (ultimoFechamento == null) {
 			return conta.getSaldoInicial();
@@ -314,7 +314,7 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 	}
 	
 	@Override
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao) throws BusinessException {
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao) throws ApplicationException {
 		return getRepository().findLastFechamentoPeriodoBeforeDateByContaAndOperacao(conta, data, operacao);
 	}
 }

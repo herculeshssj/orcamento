@@ -79,7 +79,7 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -152,7 +152,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		try {
 			listEntity = getService().buscarPorTipoLancamentoContaEStatusLancamento(tipoLancamentoPeriodico, contaSelecionada, statusLancamento);
 			this.carregarMoedaPadrao();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -200,7 +200,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			}
 			
 			return list();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -228,7 +228,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			actionTitle = " - Registrar pagamento";
 			gerarLancamento = false;
 			return "/pages/LancamentoPeriodico/registrarPagamento";
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -239,7 +239,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			getService().registrarPagamento(pagamentoPeriodo);
 			infoMessage("Pagamento registrado com sucesso!");
 			pagamentoPeriodo = new LancamentoConta();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -275,7 +275,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 					return "";
 				}
 			} else {
-				throw new BusinessException("Opção inválida!");
+				throw new ApplicationException("Opção inválida!");
 			}
 			
 			if (this.tipoSelecao.equals("single")) {
@@ -283,10 +283,10 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			} else if (this.tipoSelecao.equals("multiple")) {
 				getService().vincularLancamentos(entity, Arrays.asList(lancamentosSelecionados));
 			} else {
-				throw new BusinessException("Opção inválida!");
+				throw new ApplicationException("Opção inválida!");
 			}
 			infoMessage("Vínculo realizado com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return super.edit();
@@ -308,7 +308,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				getService().removerLancamentos(Arrays.asList(lancamentosSelecionados));
 			}
 			infoMessage("Vínculos removidos com sucesso!");
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return super.edit();
@@ -331,7 +331,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				}
 			}
 			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -341,7 +341,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			if (moedaPadrao == null) {
 				moedaPadrao = moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -410,7 +410,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	public List<LancamentoConta> getListaPagamentoPeriodo() {
 		try {
 			return lancamentoContaService.buscarPagamentosNaoPagosPorLancamentoPeriodico(entity);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -447,7 +447,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			} else {
 				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
@@ -467,7 +467,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				}
 				return resultado;
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		} 
 		return new ArrayList<Categoria>();
@@ -484,7 +484,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				}
 			}
 			return resultado;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -501,7 +501,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				}
 			}
 			return resultado;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -518,7 +518,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 				}
 			}
 			return resultado;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

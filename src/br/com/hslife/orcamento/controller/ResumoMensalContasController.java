@@ -69,7 +69,7 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
@@ -169,7 +169,7 @@ public class ResumoMensalContasController extends AbstractController {
 				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
 			this.gerarGraficoCreditoDebito();
 			this.gerarGraficoComparativo();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -311,7 +311,7 @@ public class ResumoMensalContasController extends AbstractController {
 			} else {
 				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
@@ -328,7 +328,7 @@ public class ResumoMensalContasController extends AbstractController {
 					}
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return fechamentos;
@@ -346,7 +346,7 @@ public class ResumoMensalContasController extends AbstractController {
 					}
 				}
 			}
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		

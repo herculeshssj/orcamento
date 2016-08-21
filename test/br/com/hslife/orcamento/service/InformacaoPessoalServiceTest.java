@@ -62,7 +62,7 @@ import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IInformacaoPessoal;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.util.Util;
@@ -78,7 +78,7 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 	private IUsuario usuarioService;
 	
 	@Before
-	public void initializeTestEnvironment() throws BusinessException {
+	public void initializeTestEnvironment() throws ApplicationException {
 		// Cria um novo usuário		
 		usuario.setEmail("contato@hslife.com.br");
 		usuario.setLogin("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA));
@@ -90,7 +90,7 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 	
 	@Test
 	@SuppressWarnings("deprecation")
-	public void testSalvarDadosPessoais() throws BusinessException {
+	public void testSalvarDadosPessoais() throws ApplicationException {
 		// Cria uma nova informação pessoal
 		Pessoal pessoal = new Pessoal();
 		pessoal.setUsuario(usuario);
@@ -135,7 +135,7 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 	}
 
 	@Test
-	public void testSalvarEnderecos() throws BusinessException {
+	public void testSalvarEnderecos() throws ApplicationException {
 		List<Endereco> listaEndereco = new ArrayList<Endereco>();
 		Endereco endereco = new Endereco();
 		
@@ -191,7 +191,7 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 	}
 
 	@Test
-	public void testSalvarTelefones() throws BusinessException {
+	public void testSalvarTelefones() throws ApplicationException {
 		List<Telefone> listaTelefone = new ArrayList<Telefone>();
 		Telefone telefone = new Telefone();
 		
@@ -233,7 +233,7 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 
 	@Test
 	@SuppressWarnings("deprecation")
-	public void testBuscarDadosPessoais() throws BusinessException {
+	public void testBuscarDadosPessoais() throws ApplicationException {
 		// Cria uma nova informação pessoal
 		Pessoal pessoal = new Pessoal();
 		pessoal.setUsuario(usuario);
@@ -256,7 +256,7 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 	}
 
 	@Test
-	public void testBuscarEnderecos() throws BusinessException {
+	public void testBuscarEnderecos() throws ApplicationException {
 		List<Endereco> listaEndereco = new ArrayList<Endereco>();
 		Endereco endereco = new Endereco();
 		
@@ -285,7 +285,7 @@ public class InformacaoPessoalServiceTest extends AbstractTestServices {
 	}
 
 	@Test
-	public void testBuscarTelefones() throws BusinessException {
+	public void testBuscarTelefones() throws ApplicationException {
 		List<Telefone> listaTelefone = new ArrayList<Telefone>();
 		Telefone telefone = new Telefone();
 		

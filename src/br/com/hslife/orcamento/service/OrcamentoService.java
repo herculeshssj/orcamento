@@ -60,7 +60,7 @@ import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IOrcamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
@@ -88,7 +88,7 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	}
 
 	@Override
-	public void cadastrar(Orcamento entity) throws BusinessException {
+	public void cadastrar(Orcamento entity) throws ApplicationException {
 		// Trata os IDs dos detalhes antes de prosseguir com o cadastro
 		for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 			if (detalhe.isIdChanged()) detalhe.setId(null);
@@ -97,7 +97,7 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	}
 	
 	@Override
-	public void alterar(Orcamento entity) throws BusinessException {
+	public void alterar(Orcamento entity) throws ApplicationException {
 		// Trata os IDs dos detalhes antes de prosseguir com o cadastro
 		for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 			if (detalhe.isIdChanged()) detalhe.setId(null);
@@ -106,22 +106,22 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	}
 	
 	@Override
-	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario) throws ApplicationException {
 		return getRepository().findAllByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) throws BusinessException {
+	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) throws ApplicationException {
 		return getRepository().findAbrangenciaByUsuario(abrangencia, usuario);
 	}
 	
 	@Override
-	public void gerarOrcamento(Orcamento entity) throws BusinessException {
+	public void gerarOrcamento(Orcamento entity) throws ApplicationException {
 		getRepository().save(entity.gerarOrcamento());
 	}
 	
 	@Override
-	public void atualizarValores(Orcamento entity) throws BusinessException {
+	public void atualizarValores(Orcamento entity) throws ApplicationException {
 		// Busca todos os lançamentos no período indicado no orçamento
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		criterioBusca.setDataInicio(entity.getInicio());

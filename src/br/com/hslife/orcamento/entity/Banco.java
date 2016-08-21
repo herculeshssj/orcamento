@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 @Entity
 @Table(name="banco")
@@ -95,17 +95,17 @@ public class Banco extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		if (this.nome == null || this.nome.trim().isEmpty()) {
-			throw new BusinessException("Informe um nome!");
+			throw new ApplicationException("Informe um nome!");
 		}
 		
 		if (this.numero == null || this.numero.trim().isEmpty()) {
-			throw new BusinessException("Informe um numero!");
+			throw new ApplicationException("Informe um numero!");
 		}
 		
 		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+			throw new ApplicationException("Informe o usuário!");
 		}
 	}
 	

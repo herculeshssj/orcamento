@@ -74,7 +74,7 @@ import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoDado;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -103,7 +103,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	private Usuario usuario;
 	
 	@Before
-	public void initializeTestEnvironment() throws BusinessException {
+	public void initializeTestEnvironment() throws ApplicationException {
 		usuario = EntityInitializerFactory.createUsuario();
 		usuarioService.cadastrar(usuario);
 		
@@ -111,14 +111,14 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testCadastrar() throws BusinessException {
+	public void testCadastrar() throws ApplicationException {
 		relatorioCustomizadoService.cadastrar(relatorio);
 		
 		assertNotNull(relatorio.getId());
 	}
 	
 	@Test
-	public void testAlterar() throws BusinessException {
+	public void testAlterar() throws ApplicationException {
 		relatorioCustomizadoService.cadastrar(relatorio);
 		
 		relatorio.setNome("Relatório de teste alterado");
@@ -192,7 +192,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testExcluir() throws BusinessException {
+	public void testExcluir() throws ApplicationException {
 		relatorioCustomizadoService.cadastrar(relatorio);
 		
 		// Testa o método em questão
@@ -203,7 +203,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarPorID() throws BusinessException {
+	public void testBuscarPorID() throws ApplicationException {
 		relatorioCustomizadoService.cadastrar(relatorio);
 		
 		// Testa o método em questão
@@ -213,7 +213,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testValidar() throws BusinessException {
+	public void testValidar() throws ApplicationException {
 		// Verifica se a entidade está consistente para ser persistida
 		relatorioCustomizadoService.validar(relatorio);
 		
@@ -224,7 +224,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarNome() throws BusinessException {
+	public void testBuscarNome() throws ApplicationException {
 		relatorioCustomizadoService.cadastrar(relatorio);
 		
 		List<RelatorioCustomizado> listaRelatorios = relatorioCustomizadoService.buscarNomePorUsuario("teste", relatorio.getUsuario());
@@ -239,7 +239,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testProcessarRelatorioCustomizado() throws BusinessException {
+	public void testProcessarRelatorioCustomizado() throws ApplicationException {
 		// Instancia as colunas
 		SortedSet<RelatorioColuna> colunas = new TreeSet<>();
 		

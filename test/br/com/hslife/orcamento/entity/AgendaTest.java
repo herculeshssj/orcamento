@@ -56,7 +56,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.Util;
 
 public class AgendaTest {
@@ -95,7 +95,7 @@ public class AgendaTest {
 		try {
 			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo aceita no máximo 200 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -109,7 +109,7 @@ public class AgendaTest {
 		try {
 			entity.setLocalAgendamento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo aceita no máximo 200 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -123,7 +123,7 @@ public class AgendaTest {
 		try {
 			entity.setTipoAgendamento(null);
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Informe o tipo de agendamento!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -141,7 +141,7 @@ public class AgendaTest {
 			temp.add(Calendar.DAY_OF_MONTH, -5);
 			entity.setFim(temp.getTime());
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Data de término não pode ser anterior a data de início!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -155,7 +155,7 @@ public class AgendaTest {
 		try {
 			entity.setUsuario(null);
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Informe o usuário!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -219,7 +219,7 @@ public class AgendaTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void testComporTextoAgendamentoPrevisao() throws BusinessException {
+	public void testComporTextoAgendamentoPrevisao() throws ApplicationException {
 		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
 		// Testando o tipo PREVISAO
@@ -230,7 +230,7 @@ public class AgendaTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void testComporTextoAgendamentoCompromisso() throws BusinessException {
+	public void testComporTextoAgendamentoCompromisso() throws ApplicationException {
 		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
 		// Testando o tipo COMPROMISSO
@@ -239,7 +239,7 @@ public class AgendaTest {
 		entity.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
 		try {
 			entity.comporTextoAgendamento();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			if (!be.getMessage().equals("Informe a data de início!")) {
 				throw be;
 			}			
@@ -263,7 +263,7 @@ public class AgendaTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void testComporTextoAgendamentoTarefa() throws BusinessException {
+	public void testComporTextoAgendamentoTarefa() throws ApplicationException {
 		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
 		// Testando o tipo COMPROMISSO
@@ -272,7 +272,7 @@ public class AgendaTest {
 		entity.setTipoAgendamento(TipoAgendamento.TAREFA);
 		try {
 			entity.comporTextoAgendamento();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			if (!be.getMessage().equals("Informe a data de início!")) {
 				throw be;
 			}			

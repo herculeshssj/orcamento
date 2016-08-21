@@ -80,7 +80,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
@@ -151,7 +151,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	/*** Implementação dos métodos da interface ***/
 	
-	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) throws BusinessException {
+	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) throws ApplicationException {
 		// Declaração dos objetos
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
@@ -238,7 +238,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws BusinessException {
+	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) throws ApplicationException {
 		
 		// Pega a data atual
 		Calendar hoje = Calendar.getInstance();
@@ -464,7 +464,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	}
 	
 	@Override
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FaturaCartao faturaCartao) throws BusinessException {
+	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FaturaCartao faturaCartao) throws ApplicationException {
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
 		List<LancamentoConta> lancamentos = new ArrayList<>();
 		
@@ -516,7 +516,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return resumoMensal;
 	}
 	
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, Date dataInicio, Date dataFim) throws BusinessException {
+	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, Date dataInicio, Date dataFim) throws ApplicationException {
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		
@@ -544,7 +544,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	}
 	
 	@Override
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws BusinessException {
+	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) throws ApplicationException {
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		FechamentoPeriodo fechamentoAnterior = null;
@@ -599,7 +599,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws BusinessException {		
+	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) throws ApplicationException {		
 		// Busca todas as contas existentes
 		List<Conta> contasExistentes = getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuarioComponent.getUsuarioLogado(), null); // resolvendo a ambiguidade do método
 		

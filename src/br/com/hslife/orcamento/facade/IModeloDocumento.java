@@ -50,10 +50,10 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IModeloDocumento extends ICRUDService<ModeloDocumento> {
 	
-	public List<ModeloDocumento> buscarDescricaoOuAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException;
+	public List<ModeloDocumento> buscarDescricaoOuAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws ApplicationException;
 
 }

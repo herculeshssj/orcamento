@@ -53,30 +53,30 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.model.InfoOFX;
 
 public interface IImportacaoLancamento {
 	
-	public LancamentoImportado buscarPorID(Long id) throws BusinessException;
+	public LancamentoImportado buscarPorID(Long id) throws ApplicationException;
 
-	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws BusinessException;
+	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws ApplicationException;
 
-	public void atualizarLancamentoImportado(LancamentoImportado entity) throws BusinessException;
+	public void atualizarLancamentoImportado(LancamentoImportado entity) throws ApplicationException;
 	
-	public void excluirLancamentoImportado(LancamentoImportado entity) throws BusinessException;
+	public void excluirLancamentoImportado(LancamentoImportado entity) throws ApplicationException;
 	
-	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException;
+	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
 	
-	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws BusinessException, IOException; 
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException, IOException; 
 	
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException;
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws ApplicationException;
 	
-	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException;
+	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos) throws ApplicationException;
 	
-	public void importarLancamento(LancamentoImportado entity) throws BusinessException;
+	public void importarLancamento(LancamentoImportado entity) throws ApplicationException;
 	
-	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException;
+	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
 	
-	public void apagarLancamentosImportados(Conta conta) throws BusinessException;
+	public void apagarLancamentosImportados(Conta conta) throws ApplicationException;
 }

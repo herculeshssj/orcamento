@@ -54,7 +54,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.ModeloDocumento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IModeloDocumento;
 import br.com.hslife.orcamento.util.Util;
 
@@ -96,7 +96,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 	public void find() {
 		try {			
 			listEntity = getService().buscarDescricaoOuAtivoPorUsuario(descricaoModeloPesquisa, somenteAtivos, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -149,7 +149,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 			}
 			statusSalvamento = "Modelo de documento salvo automaticamente em " + new Date().toString();
 		}
-		catch (BusinessException be) {
+		catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -161,7 +161,7 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 			getService().cadastrar(modeloClonado);
 			infoMessage("Modelo clonado com sucesso!");
 			initializeEntity();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}

@@ -52,7 +52,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public class RegraImportacaoTest {
 
@@ -70,7 +70,7 @@ public class RegraImportacaoTest {
 		try {
 			entity.setTexto("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Texto a pesquisar' aceita no máximo 100 caracteres!", be.getMessage());
 			return;
 		} catch (Throwable t) {
@@ -84,7 +84,7 @@ public class RegraImportacaoTest {
 		try {
 			entity.setConta(null);
 			entity.validate();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			assertEquals("Campo 'Conta' não pode ser nulo.", be.getMessage());
 			return;
 		} catch (Throwable t) {

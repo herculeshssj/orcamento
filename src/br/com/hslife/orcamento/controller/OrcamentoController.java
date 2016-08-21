@@ -72,7 +72,7 @@ import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -150,7 +150,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	public List<Orcamento> getListEntity() {
 		try {
 			return getService().buscarTodosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		mostrarInformacao = false;
@@ -235,7 +235,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 				initializeEntity();
 			}
 			
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -252,7 +252,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 			}
 			
 			return goToListPage;
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		
@@ -333,7 +333,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 						}
 						break;
 				}
-			} catch (BusinessException be) {
+			} catch (ApplicationException be) {
 				errorMessage(be.getMessage());
 			}
 		}
@@ -420,7 +420,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	public Moeda getMoedaPadrao() {
 		try {
 			return moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return null;
@@ -429,7 +429,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -438,7 +438,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	public List<Orcamento> getListaOrcamentoCategoria() {
 		try {
 			return getService().buscarAbrangeciaPorUsuario(AbrangenciaOrcamento.CATEGORIA, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Orcamento>();

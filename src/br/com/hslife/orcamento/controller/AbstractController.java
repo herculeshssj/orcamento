@@ -60,7 +60,7 @@ import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public abstract class AbstractController implements Serializable {	
 	
@@ -114,7 +114,7 @@ public abstract class AbstractController implements Serializable {
 	public Moeda getMoedaPadrao() {
 		try {
 		return getOpcoesSistema().getMoedaPadrao();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			logger.catching(be);
 		}
 		return null;

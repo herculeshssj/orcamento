@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 @Entity
 @Table(name="unidademedida")
@@ -86,17 +86,17 @@ public class UnidadeMedida extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
+			throw new ApplicationException("Informe uma descrição!");
 		}
 		
 		if (this.sigla == null || this.sigla.trim().isEmpty()) {
-			throw new BusinessException("Informe uma sigla!");
+			throw new ApplicationException("Informe uma sigla!");
 		}
 		
 		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+			throw new ApplicationException("Informe o usuário!");
 		}
 	}
 

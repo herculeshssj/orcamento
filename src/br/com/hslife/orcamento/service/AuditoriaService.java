@@ -55,13 +55,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Auditoria;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IAuditoria;
 import br.com.hslife.orcamento.model.CriterioAuditoria;
 import br.com.hslife.orcamento.repository.AuditoriaRepository;
 
 @Service("auditoriaService")
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class AuditoriaService implements IAuditoria {
 	
 	@Autowired
@@ -75,19 +75,19 @@ public class AuditoriaService implements IAuditoria {
 		return repository;
 	}
 
-	public Auditoria buscarPorId(Long id) throws BusinessException {
+	public Auditoria buscarPorId(Long id) throws ApplicationException {
 		return getRepository().findById(id);
 	}
 	
-	public List<Auditoria> buscarPorCriterios(CriterioAuditoria criterio) throws BusinessException {
+	public List<Auditoria> buscarPorCriterios(CriterioAuditoria criterio) throws ApplicationException {
 		return getRepository().findByCriteriosAuditoria(criterio);
 	}
 	
-	public List<String> buscarClasses() throws BusinessException {
+	public List<String> buscarClasses() throws ApplicationException {
 		return getRepository().findClasses();
 	}
 	
-	public void excluir(Auditoria auditoria) throws BusinessException {
+	public void excluir(Auditoria auditoria) throws ApplicationException {
 		getRepository().delete(auditoria);
 	}
 }

@@ -66,7 +66,7 @@ import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
@@ -101,7 +101,7 @@ public class AgendaServiceTest extends AbstractTestServices {
 	private ILancamentoConta lancamentoContaService;
 	
 	@Before
-	public void initializeTestEnvironment() throws BusinessException {
+	public void initializeTestEnvironment() throws ApplicationException {
 		
 		// Cria um novo usuário		
 		usuario.setEmail("contato@hslife.com.br");
@@ -157,7 +157,7 @@ public class AgendaServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarAgendamentosLancamentosAgendados() throws BusinessException {
+	public void testBuscarAgendamentosLancamentosAgendados() throws ApplicationException {
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
 		int contador = 0;
@@ -173,7 +173,7 @@ public class AgendaServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarPorCriterioAgendamento() throws BusinessException {
+	public void testBuscarPorCriterioAgendamento() throws ApplicationException {
 		CriterioAgendamento criterioBusca = new CriterioAgendamento();
 		criterioBusca.setDescricao("Compromisso de teste");
 		//criterioBusca.setInicio(new Date());

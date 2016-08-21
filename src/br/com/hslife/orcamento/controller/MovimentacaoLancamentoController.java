@@ -70,7 +70,7 @@ import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -176,7 +176,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().moverLancamentos(lancamentosSelecionados, contaSelecionada);
 			infoMessage("Lançamentos movidos com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -202,7 +202,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().duplicarLancamentos(lancamentosSelecionados, contaSelecionada, quantADuplicar, incremento);			
 			infoMessage("Lançamentos duplicados com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -238,7 +238,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().excluirLancamentos(lancamentosSelecionados);
 			infoMessage("Lançamentos excluídos com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return ""; 
@@ -263,7 +263,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().removerVinculos(lancamentosSelecionados);
 			infoMessage("Vínculos removidos com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -292,7 +292,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().transferirLancamentos(lancamentoATransferir, parametros);
 			infoMessage("Valor transferido com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return ""; 
@@ -319,7 +319,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().alterarPropriedades(lancamentosSelecionados, parametros);
 			infoMessage("Propriedades alteradas com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return ""; 
@@ -378,7 +378,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().mesclarLancamento(lancamentosSelecionados, parametros);
 			infoMessage("Lançamentos mesclados com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -410,7 +410,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().dividirLancamento(lancamentoSelecionado, quantADuplicar);
 			infoMessage("Lançamento dividido com sucesso!");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -438,7 +438,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			getService().salvarDetalhamentoLancamento(lancamentoSelecionado);
 			infoMessage("Detalhamento salvo com sucesso.");
 			return cancel();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -472,7 +472,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		try {
 			if (tipoCategoriaSelecionada != null)
 				return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(tipoCategoriaSelecionada, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		} 
 		return new ArrayList<Categoria>();
@@ -481,7 +481,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	public List<Categoria> getListaCategoriaCredito() {
 		try {
 			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -490,7 +490,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	public List<Categoria> getListaCategoriaDebito() {
 		try {
 			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -499,7 +499,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -508,7 +508,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	public List<MeioPagamento> getListaMeioPagamento() {
 		try {
 			return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -517,7 +517,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	public List<Conta> getListaContaAtivo() {
 		try {
 			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();

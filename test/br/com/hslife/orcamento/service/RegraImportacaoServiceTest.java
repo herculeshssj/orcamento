@@ -61,7 +61,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IRegraImportacao;
@@ -87,7 +87,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	private IConta contaService;
 	
 	@Before
-	public void initializeTestEnvironment() throws BusinessException {
+	public void initializeTestEnvironment() throws ApplicationException {
 		Usuario usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioService.cadastrar(usuario);
 		
@@ -107,7 +107,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testCadastrar() throws BusinessException {
+	public void testCadastrar() throws ApplicationException {
 		// Realiza o cadastro da regra
 		regraImportacaoService.cadastrar(regra);
 		
@@ -116,7 +116,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testAlterar() throws BusinessException {
+	public void testAlterar() throws ApplicationException {
 		// Realiza o cadastro da regra
 		regraImportacaoService.cadastrar(regra);
 		
@@ -139,7 +139,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testExcluir() throws BusinessException {
+	public void testExcluir() throws ApplicationException {
 		// Realiza o cadastro da regra
 		regraImportacaoService.cadastrar(regra);
 		
@@ -152,7 +152,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarPorID() throws BusinessException {
+	public void testBuscarPorID() throws ApplicationException {
 		// Realiza o cadastro da regra
 		regraImportacaoService.cadastrar(regra);
 		
@@ -162,8 +162,8 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 		assertNotNull(regraTest);
 	}
 	
-	@Test(expected=BusinessException.class)
-	public void testValidar() throws BusinessException {
+	@Test(expected=ApplicationException.class)
+	public void testValidar() throws ApplicationException {
 		// Verifica se a entidade está consistente para ser persistida
 		regraImportacaoService.validar(regra);
 		
@@ -175,7 +175,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testBuscarTodosPorConta() throws BusinessException {
+	public void testBuscarTodosPorConta() throws ApplicationException {
 		Conta conta = null;
 		// Salva as regras
 		for (int i=0; i<3; i++) {

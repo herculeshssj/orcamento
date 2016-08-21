@@ -56,7 +56,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoDado;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -97,7 +97,7 @@ public class RelatorioColuna extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome da coluna", this.nomeColuna, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Texto de exibição", this.textoExibicao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de dado", this.tipoDado);

@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 @Entity
 @Table(name="telefone")
@@ -106,25 +106,25 @@ public class Telefone extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() throws ApplicationException {
 		if (this.descricao.trim().length() > 50) {
-			throw new BusinessException("Campo 'Descrição' aceita no máximo 50 caracteres!");
+			throw new ApplicationException("Campo 'Descrição' aceita no máximo 50 caracteres!");
 		}
 		
 		if (this.ddd != null && this.ddd.trim().length() > 5) {
-			throw new BusinessException("Campo 'DDD' aceita no máximo 5 caracteres!");
+			throw new ApplicationException("Campo 'DDD' aceita no máximo 5 caracteres!");
 		}
 		
 		if (this.numero.trim().length() > 50) {
-			throw new BusinessException("Campo 'Número' aceita no máximo 15 caracteres!");
+			throw new ApplicationException("Campo 'Número' aceita no máximo 15 caracteres!");
 		}
 		
 		if (this.ramal != null && this.ramal.trim().length() > 5) {
-			throw new BusinessException("Campo 'Ramal' aceita no máximo 5 caracteres!");
+			throw new ApplicationException("Campo 'Ramal' aceita no máximo 5 caracteres!");
 		}
 		
 		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+			throw new ApplicationException("Informe o usuário!");
 		}
 	}
 	

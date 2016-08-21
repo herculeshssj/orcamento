@@ -51,13 +51,13 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.RegraImportacao;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IRegraImportacao extends ICRUDService<RegraImportacao>{
 
-	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws BusinessException;
+	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws ApplicationException;
 	
-	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws BusinessException;
+	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws ApplicationException;
 
-	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException;
+	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws ApplicationException;
 }

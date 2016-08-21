@@ -52,11 +52,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.repository.AbstractCRUDRepository;
 
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor={
-		BusinessException.class, 
+		ApplicationException.class, 
 		RuntimeException.class, 
 		Exception.class})
 public abstract class AbstractCRUDService<E extends EntityPersistence> {
@@ -66,23 +66,23 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	
 	protected abstract AbstractCRUDRepository<E> getRepository();
 	
-	public void cadastrar(E entity) throws BusinessException{
+	public void cadastrar(E entity) throws ApplicationException{
 		getRepository().save(entity);		
 	}
 
-	public void alterar(E entity) throws BusinessException{
+	public void alterar(E entity) throws ApplicationException{
 		getRepository().update(entity);		
 	}
 
-	public void excluir(E entity) throws BusinessException{
+	public void excluir(E entity) throws ApplicationException{
 		getRepository().delete(entity);		
 	}
 
-	public E buscarPorID(Long id) throws BusinessException{
+	public E buscarPorID(Long id) throws ApplicationException{
 		return getRepository().findById(id);
 	}
 	
-	public void validar(E entity) throws BusinessException{
+	public void validar(E entity) throws ApplicationException{
 		entity.validate();
 	}
 }
