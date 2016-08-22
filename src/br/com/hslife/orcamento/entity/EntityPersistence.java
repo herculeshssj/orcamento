@@ -57,8 +57,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-import br.com.hslife.orcamento.exception.ApplicationException;
-
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class EntityPersistence implements Comparable<EntityPersistence>, Serializable {
@@ -69,7 +67,7 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	
 	public abstract String getLabel();
 	
-	public abstract void validate() throws ApplicationException;
+	public abstract void validate();
 
 	@Override
 	public int hashCode() {
