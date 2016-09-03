@@ -126,7 +126,7 @@ public class LancamentoImportado extends EntityPersistence {
 		return Util.formataDataHora(this.data, Util.DATA) + " - " + this.moeda + " " + this.valor + " - " + this.historico;
 	}
 	
-	public String hashForCSV(int i) {
+	public String hashForCSV(long i) {
 		return new StringBuilder()
 				.append(this.data.toString())
 				.append(this.historico)
@@ -140,6 +140,27 @@ public class LancamentoImportado extends EntityPersistence {
 				.append(this.tipo)
 				.append("[" + i + "]")
 				.toString();
+	}
+	
+	public String hashForCSV() {
+		return this.hashForCSV(new Date().getTime());
+	}
+	
+	public LancamentoImportado clonarLancamento() {
+		LancamentoImportado li = new LancamentoImportado();
+		li.setCategoria(this.categoria);
+		li.setConta(this.conta);
+		li.setData(this.data);
+		li.setDocumento(this.documento);
+		li.setFavorecido(this.favorecido);
+		li.setHash(Util.MD5(this.hashForCSV()));
+		li.setHistorico(this.historico);
+		li.setMeiopagamento(this.meiopagamento);
+		li.setMoeda(this.moeda);
+		li.setObservacao(this.observacao);
+		li.setTipo(this.tipo);
+		li.setValor(this.valor);
+		return li;
 	}
 
 	@Override

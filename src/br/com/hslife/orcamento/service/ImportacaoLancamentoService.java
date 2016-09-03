@@ -649,9 +649,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 								
 				// Insere o lançamento importado X vezes de acordo com o campo QUANTIDADE
 				for (int i = 1; i <= quantidade; i++) {
-					lancamentoImportado.setHash(Util.MD5(lancamentoImportado.hashForCSV(i)));
-					getRepository().save(lancamentoImportado);
-					lancamentoImportado.setId(null);
+					getRepository().save(lancamentoImportado.clonarLancamento());
 				}
 			}
 		
