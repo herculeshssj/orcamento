@@ -230,4 +230,8 @@ public class CriterioBuscaLancamentoConta {
 	public void setLimiteResultado(Integer limiteResultado) {
 		this.limiteResultado = limiteResultado;
 	}
+
+	public int quantCriteriosDefinidos() {
+		return hibernateCriterions.size();
+	}
 }
