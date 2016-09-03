@@ -170,7 +170,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		
 		// Altera o status da fatura atualmente fechada para VENCIDA		
 		FaturaCartao faturaVencida = getRepository().lastFaturaCartaoFechada(entity.getConta());
-		if (faturaVencida != null && faturaVencida.getStatusFaturaCartao().equals(StatusFaturaCartao.FECHADA)) {
+		if (faturaVencida != null && !faturaVencida.getId().equals(faturaCartao.getId()) && faturaVencida.getStatusFaturaCartao().equals(StatusFaturaCartao.FECHADA)) {
 			faturaVencida.setStatusFaturaCartao(StatusFaturaCartao.VENCIDA);			
 			// Seta as informações de pagamento da fatura
 			faturaVencida.setDataPagamento(entity.getDataFechamento());
