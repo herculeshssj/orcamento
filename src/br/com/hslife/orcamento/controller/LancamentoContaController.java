@@ -544,7 +544,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		initializeEntity();
 		return movimentacaoLancamentoMB.moverView();		
 	}
@@ -554,7 +554,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		initializeEntity();
 		return movimentacaoLancamentoMB.duplicarView();
 	}
@@ -564,7 +564,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.excluirView();
@@ -575,7 +575,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.alterarPropriedadesView();
@@ -586,7 +586,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.mesclarView();
@@ -597,7 +597,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.dividirView();
@@ -608,7 +608,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.detalharView();
@@ -624,7 +624,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			warnMessage("Nenhum lançamento selecionado!");
 			return "";
 		}
-		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(listEntity));
+		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
 		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.removerVinculosView();

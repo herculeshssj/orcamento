@@ -67,6 +67,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Conta;
@@ -131,6 +132,9 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
+	
+	@Autowired
+	private OpcaoSistemaComponent opcaoSistemaComponent;
 
 	public LancamentoImportadoRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
@@ -164,6 +168,10 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 
 	public UsuarioComponent getUsuarioComponent() {
 		return usuarioComponent;
+	}
+
+	public OpcaoSistemaComponent getOpcaoSistemaComponent() {
+		return opcaoSistemaComponent;
 	}
 
 	@Override
@@ -255,6 +263,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					lc.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 				}
 				
+				// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
+				if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+					lc.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
+				}
+				
 				lancamentos.add(lc);
 			} else {
 				lc.setSelecionado(false);
@@ -264,6 +277,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					lc.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
 				} else if (lc.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
 					lc.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+				}
+				
+				// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
+				if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+					lc.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 				}
 				
 				lancamentos.add(lc);
@@ -324,6 +342,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 			}
 			
+			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
+			if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
+			}
+			
 			l.setFavorecido(getFavorecidoService().buscarFavorecido(entity.getFavorecido(), usuarioLogado));
 			l.setMeioPagamento(getMeioPagamentoService().buscarMeioPagamento(entity.getMeiopagamento(), usuarioLogado));
 			
@@ -363,6 +386,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
 			} else if (l.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			}
+			
+			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
+			if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+				l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 			}
 			
 			getLancamentoContaRepository().update(l);
