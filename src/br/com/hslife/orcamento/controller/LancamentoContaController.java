@@ -707,6 +707,10 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return simboloMonetario;
 	}
 	
+	public void atualizarListaPesquisaAgrupamento() {
+		this.getListaPesquisaAgrupamento();
+	}
+	
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
 		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
 		try {			
@@ -756,6 +760,36 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public void atualizaListaFechamentoPeriodo() {
 		this.getListaFechamentoPeriodo();
+	}
+	
+	public List<SelectItem> getListaPesquisaAgrupamento() {
+		List<SelectItem> resultado = new ArrayList<SelectItem>();
+		if (criterioBusca.getCadastro() != null) {
+			switch (criterioBusca.getCadastro()) {
+				case CATEGORIA :
+					for (Categoria c : this.getListaCategoriaSemTipoCategoria()) {
+						resultado.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao()));
+					}
+					break;
+				case FAVORECIDO :
+					for (Favorecido f : this.getListaFavorecido()) {
+						resultado.add(new SelectItem(f.getId(), f.getNome()));
+					}
+					break;
+				case MEIOPAGAMENTO : 
+					for (MeioPagamento m : this.getListaMeioPagamento()) {
+						resultado.add(new SelectItem(m.getId(), m.getDescricao()));
+					}
+					break;
+				case MOEDA :
+					for (Moeda m : this.getListaMoeda()) {
+						resultado.add(new SelectItem(m.getId(), m.getLabel()));
+					}
+					break;
+				default :
+			}
+		}
+		return resultado;
 	}
 	
 	public void atualizaComboCategorias() {
