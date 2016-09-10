@@ -170,7 +170,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	@Override
 	protected void initializeEntity() {
 		entity = new LancamentoConta();
-		listEntity.clear();
+		
+		if (listEntity == null)
+			listEntity = new ArrayList<>();
+		else
+			listEntity.clear();
 		
 		selecionarTodosLancamentos = false;
 		dataFechamento = null;
