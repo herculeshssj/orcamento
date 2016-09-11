@@ -61,7 +61,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -120,6 +119,7 @@ public class Usuario extends EntityPersistence {
 		this.email = builder.email;
 		this.tipoUsuario = builder.tipoUsuario;
 		this.ativo = builder.ativo;
+		this.tokenID = builder.tokenID;
 	}
 	
 	@Override
@@ -128,7 +128,7 @@ public class Usuario extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws ApplicationException {
+	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Login", this.login, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("E-Mail", this.email, 40);
@@ -142,6 +142,7 @@ public class Usuario extends EntityPersistence {
 		private String email;
 		private TipoUsuario tipoUsuario = TipoUsuario.ROLE_USER;
 		private boolean ativo = true;
+		private String tokenID;
 		
 		public Builder nome(String nome) {
 			this.nome = nome;
@@ -175,6 +176,11 @@ public class Usuario extends EntityPersistence {
 		
 		public Builder ativo(boolean ativo) {
 			this.ativo = ativo;
+			return this;
+		}
+		
+		public Builder tokenID(String tokenID) {
+			this.tokenID = tokenID;
 			return this;
 		}
 		

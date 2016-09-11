@@ -65,6 +65,7 @@ import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Telefone;
+import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -85,7 +86,26 @@ public class EntityInitializerFactory {
 			.login("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA))
 			.nome("Usuário de Teste - " + Util.formataDataHora(new Date(), Util.DATAHORA))
 			.senha(Util.SHA256("teste"))
+			.tokenID(Util.SHA256(new Date().toString()))
 			.build();
+	}
+	
+	public static UnidadeMedida createUnidadeMedida(Usuario usuario) {
+		return new UnidadeMedida.Builder()
+				.descricao("Unidade de Medida de teste")
+				.sigla("UMT")
+				.usuario(usuario)
+				.build();
+	}
+	
+	public static Telefone createTelefone(Usuario usuario) {
+		return new Telefone.Builder()
+				.descricao("Telefone de teste")
+				.ddd("021")
+				.numero("1234-5678")
+				.ramal("901")
+				.usuario(usuario)
+				.build();
 	}
 	
 	// Cria uma nova instância de RelatorioCustomizado
@@ -130,6 +150,7 @@ public class EntityInitializerFactory {
 		return entity;
 	}
 	
+	@Deprecated
 	public static Usuario initializeUsuario() {
 		Usuario usuario = new Usuario();
 		usuario.setEmail("contato@hslife.com.br");
@@ -140,6 +161,7 @@ public class EntityInitializerFactory {
 		return usuario;
 	}
 	
+	@Deprecated
 	public static Telefone initializeTelefone(Usuario usuario) {
 		Telefone telefone = new Telefone();
 		telefone.setDdd("21");
@@ -174,6 +196,7 @@ public class EntityInitializerFactory {
 		return conta;
 	}
 	
+	@Deprecated
 	public static RegraImportacao initializeRegraImportacao(Conta conta) {
 		RegraImportacao regra = new RegraImportacao();
 		regra.setTexto("teste");

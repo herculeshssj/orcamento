@@ -46,107 +46,38 @@
 
 package br.com.hslife.orcamento.entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.hslife.orcamento.enumeration.TipoDado;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
 
 public class RelatorioParametroTest {
 
-	private RelatorioCustomizado entity = new RelatorioCustomizado();
-
+	private RelatorioParametro entity = new RelatorioParametro();
+	
 	@Before
-	public void setUp() throws Exception {
-		entity.setNome("Relatório de teste");
-		entity.setDescricao("Relatório customizado para testes");
-		entity.setConsultaSQL("SELECT * FROM lancamentoconta");
-		entity.setUsuario(new Usuario());
-		
-		SortedSet<RelatorioColuna> colunas = new TreeSet<>();
-		for (int i = 0; i < 3; i++) {
-			RelatorioColuna coluna = new RelatorioColuna();
-			coluna.setNomeColuna("coluna" + i);
-			coluna.setTextoExibicao("Coluna " + i);
-			coluna.setTipoDado(TipoDado.STRING);
-			colunas.add(coluna);
-		}
-		entity.setColunasRelatorio(colunas);
-		
-		Set<RelatorioParametro> parametros = new TreeSet<>();
-		for (int i = 0; i < 3; i++) {
-			RelatorioParametro parametro = new RelatorioParametro();
-			parametro.setNomeParametro("parametro" + i);
-			parametro.setTextoExibicao("Parâmetro " + i);
-			parametro.setTipoDado(TipoDado.STRING);
-			parametros.add(parametro);
-		}
-		entity.setParametrosRelatorio(parametros);
+	public void setUp() {
+		entity.setNomeParametro("parametroteste");
+		entity.setTextoExibicao("Coluna de Teste");
+		entity.setTipoDado(TipoDado.STRING);
 	}
 	
-	@Test
-	public void testLabel() {
-		assertEquals("Relatório de teste", entity.getLabel());
+	@Test(expected=ValidationException.class)
+	public void testValidateNomeParametro() {
+		entity.setNomeParametro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 	
-	@Test
-	public void testValidateNome() {
-		try {
-			entity.setNome("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo 'Nome' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
+	@Test(expected=ValidationException.class)
+	public void testValidateTextoExibicao() {
+		entity.setTextoExibicao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 	
-	@Test
-	public void testValidateDescricao() {
-		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo Descrição aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-	}
-	
-	@Test
-	public void testValidateConsultaSQL() {
-		try {
-			entity.setConsultaSQL(null);
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo 'Consulta SQL' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-	}
-	
-	@Test
-	public void testValidateUsuario() {
-		try {
-			entity.setUsuario(null);
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-	}
-	
-	
+	@Test(expected=ValidationException.class)
+	public void testValidateTipoDado() {
+		entity.setTipoDado(null);
+		entity.validate();
+	}	
 }

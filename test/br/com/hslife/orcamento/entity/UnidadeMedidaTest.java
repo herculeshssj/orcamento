@@ -51,9 +51,9 @@ import org.junit.Test;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
-public class TelefoneTest {
+public class UnidadeMedidaTest {
 	
-	private Telefone entity = EntityInitializerFactory.createTelefone(EntityInitializerFactory.createUsuario());
+	private UnidadeMedida entity = EntityInitializerFactory.createUnidadeMedida(EntityInitializerFactory.createUsuario());
 	
 	@Test(expected=ValidationException.class)
 	public void testValidateDescricao() {
@@ -62,20 +62,8 @@ public class TelefoneTest {
 	}
 	
 	@Test(expected=ValidationException.class)
-	public void testValidateDDD() {
-		entity.setDdd(entity.getDdd() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-		entity.validate();
-	}
-	
-	@Test(expected=ValidationException.class)
-	public void testValidateNumero() {
-		entity.setNumero(entity.getNumero() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-		entity.validate();
-	}
-	
-	@Test(expected=ValidationException.class)
-	public void testValidateRamal() {
-		entity.setRamal(entity.getRamal() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+	public void testValidateSigla() {
+		entity.setSigla(entity.getSigla() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ       ");
 		entity.validate();
 	}
 }

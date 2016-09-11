@@ -51,31 +51,25 @@ import org.junit.Test;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
-public class TelefoneTest {
+public class UsuarioTest {
 	
-	private Telefone entity = EntityInitializerFactory.createTelefone(EntityInitializerFactory.createUsuario());
-	
+	private Usuario entity = EntityInitializerFactory.createUsuario();
+
 	@Test(expected=ValidationException.class)
-	public void testValidateDescricao() {
-		entity.setDescricao(entity.getDescricao() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+	public void testValidateNome() {
+		entity.setNome(entity.getNome() + "      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
+	}
+
+	@Test(expected=ValidationException.class)
+	public void testValidateLogin() {
+		entity.setLogin(entity.getLogin() + "      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 		entity.validate();
 	}
 	
 	@Test(expected=ValidationException.class)
-	public void testValidateDDD() {
-		entity.setDdd(entity.getDdd() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-		entity.validate();
-	}
-	
-	@Test(expected=ValidationException.class)
-	public void testValidateNumero() {
-		entity.setNumero(entity.getNumero() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-		entity.validate();
-	}
-	
-	@Test(expected=ValidationException.class)
-	public void testValidateRamal() {
-		entity.setRamal(entity.getRamal() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+	public void testValidateEmail() {
+		entity.setEmail(entity.getEmail() + "      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 		entity.validate();
 	}
 }
