@@ -54,9 +54,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -81,6 +83,13 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
+	
+	@Autowired
+	private OpcaoSistemaComponent opcaoSistemaComponent;
+
+	public OpcaoSistemaComponent getOpcaoSistemaComponent() {
+		return opcaoSistemaComponent;
+	}
 
 	public LancamentoContaRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
@@ -121,9 +130,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		
 		if (entity.getLancamentoImportado() != null) {
 			// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
-			entity.setMoeda(getMoedaService().buscarCodigoMonetarioPorUsuario(entity.getLancamentoImportado().getMoeda(), entity.getConta().getUsuario()) == null 
-					? getMoedaService().buscarPadraoPorUsuario(entity.getConta().getUsuario()) 
-					: getMoedaService().buscarCodigoMonetarioPorUsuario(entity.getLancamentoImportado().getMoeda(), entity.getConta().getUsuario()));
+			Moeda moedaLancamento = getMoedaService().buscarCodigoMonetarioPorUsuario(entity.getLancamentoImportado().getMoeda(), entity.getConta().getUsuario());
+			
+			entity.setMoeda(moedaLancamento == null ? getOpcaoSistemaComponent().getMoedaPadrao() : moedaLancamento);
 			
 			// Caso o lançamento seja uma parcela, a data de pagamento não será atualizada
 			if (entity.getLancamentoPeriodico() != null && entity.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
@@ -144,6 +153,11 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			}
 						
 			getLancamentoImportadoRepository().delete(entity.getLancamentoImportado());
+			
+			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
+			if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+				entity.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
+			}
 		}
 		
 		// Define o status do lançamento da conta
