@@ -69,7 +69,6 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -129,7 +128,7 @@ public class DividaTerceiro extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws ApplicationException {
+	public void validate() {
 		EntityPersistenceUtil.validaCampoNulo("Data da negociação", this.dataNegociacao);
 		EntityPersistenceUtil.validaCampoNulo("Justificativa", this.justificativa);
 		EntityPersistenceUtil.validaCampoNulo("Categoria da dívida", this.tipoCategoria);

@@ -46,50 +46,24 @@
 
 package br.com.hslife.orcamento.entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
 public class RegraImportacaoTest {
-
-	private RegraImportacao entity = new RegraImportacao();
-
-	@Before
-	public void setUp() throws Exception {
-		
-		entity.setTexto("LANCAMENTO");
-		entity.setConta(new Conta());
-	}
-
-	@Test
+	
+	private RegraImportacao entity = EntityInitializerFactory.createRegraImportacao(new Conta(), "texto");
+	
+	@Test(expected=ValidationException.class)
 	public void testValidateTexto() {
-		try {
-			entity.setTexto("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo 'Texto a pesquisar' aceita no máximo 100 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setTexto(entity.getTexto() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateConta() {
-		try {
-			entity.setConta(null);
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo 'Conta' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setConta(null);
+		entity.validate();
 	}
 }

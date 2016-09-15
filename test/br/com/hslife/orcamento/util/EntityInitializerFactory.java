@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
+import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
@@ -79,7 +80,6 @@ public class EntityInitializerFactory {
 		// Classe não pode ser inicializada.
 	}
 	
-	// Cria uma nova instância de Usuário a partir do Builder da classe
 	public static Usuario createUsuario() {
 		return new Usuario.Builder()
 			.email("contato@hslife.com.br")
@@ -104,6 +104,33 @@ public class EntityInitializerFactory {
 				.ddd("021")
 				.numero("1234-5678")
 				.ramal("901")
+				.usuario(usuario)
+				.build();
+	}
+	
+	public static RegraImportacao createRegraImportacao(Conta conta, String texto) {
+		return new RegraImportacao.Builder()
+				.texto(texto)
+				.idCategoria(1l)
+				.idFavorecido(1l)
+				.idMeioPagamento(1l)
+				.conta(conta)
+				.build();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static Pessoal createPessoal(Usuario usuario) {
+		return new Pessoal.Builder()
+				.dataNascimento(new Date(1980-1900, 1, 1))
+				.escolaridade("Superior")
+				.estadoCivil("Casado")
+				.etnia("Afrobrasileira")
+				.filiacaoMae("Mãe do usuário")
+				.filiacaoPai("Pai do usuário")
+				.genero('M')
+				.nacionalidade("Brasileira")
+				.naturalidade("Rio de Janeiro")
+				.tipoSanguineo("O+")
 				.usuario(usuario)
 				.build();
 	}
