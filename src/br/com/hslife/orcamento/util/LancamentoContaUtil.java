@@ -1,6 +1,6 @@
 /***
   
-  	Copyright (c) 2012 - 2016 Hércules S. S. José
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
 
     Este arquivo é parte do programa Orçamento Doméstico.
     
@@ -57,7 +57,6 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.AgrupamentoLancamento;
 
 public final class LancamentoContaUtil {
