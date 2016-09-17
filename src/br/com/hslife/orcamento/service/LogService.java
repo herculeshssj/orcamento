@@ -55,13 +55,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Logs;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.model.CriterioLog;
 import br.com.hslife.orcamento.repository.LogRepository;
 
 @Service("logService")
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class LogService implements ILog {
 	
 	@Autowired
@@ -76,27 +76,27 @@ public class LogService implements ILog {
 	}
 
 	@Override
-	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) throws BusinessException {
+	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) {
 		return getRepository().findByCriteriosLog(criterioBusca);
 	}
 	
 	@Override
-	public List<String> buscarTodosLoggers() throws BusinessException {
+	public List<String> buscarTodosLoggers() {
 		return getRepository().findAllLogger();
 	}
 	
 	@Override
-	public List<String> buscarTodosNiveis() throws BusinessException {
+	public List<String> buscarTodosNiveis() {
 		return getRepository().findAllLevel();
 	}
 	
 	@Override
-	public Logs buscarPorID(Long id) throws BusinessException {
+	public Logs buscarPorID(Long id) {
 		return getRepository().findByID(id);
 	}
 	
 	@Override
-	public void excluir(Logs logs) throws BusinessException {
+	public void excluir(Logs logs) {
 		getRepository().delete(logs);
 	}
 }

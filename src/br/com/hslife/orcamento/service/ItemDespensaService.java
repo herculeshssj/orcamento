@@ -75,7 +75,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa) throws BusinessException {
+	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa) {
 		if (movimentoItemDespensa.getOperacaoDespensa().equals(OperacaoDespensa.CONSUMO) && (entity.getQuantidadeAtual() - movimentoItemDespensa.getQuantidade()) < 0) {
 			throw new BusinessException("Quantidade informada ultrapassa estoque disponível!");
 		}
@@ -92,7 +92,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void desfazerRegistroCompraConsumo(ItemDespensa entity) throws BusinessException {
+	public void desfazerRegistroCompraConsumo(ItemDespensa entity) {
 		if (entity.getMovimentacao() != null && entity.getMovimentacao().size() > 0) {
 			Collections.reverse(entity.getMovimentacao());
 		} else {
@@ -115,7 +115,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void arquivarItemDespensa(ItemDespensa entity) throws BusinessException {
+	public void arquivarItemDespensa(ItemDespensa entity) {
 		if (!entity.isArquivado()) {
 			entity.setArquivado(true);
 			getRepository().update(entity);
@@ -123,7 +123,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public void desarquivarItemDespensa(ItemDespensa entity) throws BusinessException {
+	public void desarquivarItemDespensa(ItemDespensa entity) {
 		if (entity.isArquivado()) {
 			entity.setArquivado(false);
 			getRepository().update(entity);
@@ -131,7 +131,7 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws BusinessException {
+	public List<ItemDespensa> gerarListaCompras(Usuario usuario) {
 		List<ItemDespensa> listaDespensas = new ArrayList<ItemDespensa>();
 		for (ItemDespensa item : getRepository().findByUsuarioAndArquivado(usuario, false)) {
 			if (item.getQuantidadeAtual() <= item.getQuantidadeVermelho()) {
@@ -148,16 +148,16 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	}
 	
 	@Override
-	public List<ItemDespensa> buscarPorDespensaUsuarioEArquivado(Despensa despensa, Usuario usuario, boolean arquivado) throws BusinessException {
+	public List<ItemDespensa> buscarPorDespensaUsuarioEArquivado(Despensa despensa, Usuario usuario, boolean arquivado) {
 		return getRepository().findByDespensaUsuarioAndArquivado(despensa, usuario, arquivado);
 	}
 	
 	@Override
-	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado) throws BusinessException {
+	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado) {
 		return getRepository().findByUsuarioAndArquivado(usuario, arquivado);
 	}
 	
-	public void apagarHistorico(ItemDespensa entity) throws BusinessException {
+	public void apagarHistorico(ItemDespensa entity) {
 		entity.getMovimentacao().clear();
 		entity.setQuantidadeAtual(0);
 		entity.setValidade(null);

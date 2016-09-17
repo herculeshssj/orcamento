@@ -46,109 +46,36 @@
 
 package br.com.hslife.orcamento.entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
 public class TelefoneTest {
 	
-	private Telefone entity;
-
-	@Before
-	public void setUp() throws Exception {
-		
-		Usuario usuario = new Usuario();
-		usuario.setNome("Usuário de teste");
-		
-		entity = new Telefone();
-		entity.setDdd("21");
-		entity.setDescricao("Comercial");
-		entity.setNumero("32936010");
-		entity.setRamal("6010");
-		entity.setUsuario(usuario);
-		
-	}
-
-	@Test
-	public void testGetLabel() {
-		assertEquals("Comercial: (21) 32936010, Ramal: 6010", entity.getLabel());
-	}
+	private Telefone entity = EntityInitializerFactory.createTelefone(EntityInitializerFactory.createUsuario());
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateDescricao() {
-		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setDescricao(entity.getDescricao() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
-
-	@Test	
+	
+	@Test(expected=ValidationException.class)
 	public void testValidateDDD() {
-		try {
-			entity.setDdd(null);
-			entity.validate();
-			entity.setDdd("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'DDD' aceita no máximo 5 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setDdd(entity.getDdd() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateNumero() {
-		try {			
-			entity.setNumero("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Número' aceita no máximo 15 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setNumero(entity.getNumero() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateRamal() {
-		try {
-			entity.setRamal(null);
-			entity.validate();
-			entity.setRamal("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Ramal' aceita no máximo 5 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
-	}
-	
-	@Test
-	public void testValidateUsuario() {
-		try {
-			entity.setUsuario(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Informe o usuário!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setRamal(entity.getRamal() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 }

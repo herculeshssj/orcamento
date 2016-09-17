@@ -49,24 +49,24 @@ package br.com.hslife.orcamento.facade;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 
 public interface IUsuario extends ICRUDService<Usuario> {
 	
-	public List<Usuario> getListaUsuarios() throws BusinessException;
+	public List<Usuario> getListaUsuarios();
 	
-	public Usuario buscarPorLogin(String login) throws BusinessException;
+	public Usuario buscarPorLogin(String login);
 	
-	public List<Usuario> buscarTodosPorLogin(String login) throws BusinessException;
+	public List<Usuario> buscarTodosPorLogin(String login);
 	
-	public void efetuarRegistro(Usuario entity) throws BusinessException;
+	public void efetuarRegistro(Usuario entity) throws ApplicationException;
 	
-	public void recuperarSenha(Usuario entity) throws BusinessException;
+	public void recuperarSenha(Usuario entity) throws ApplicationException;
 	
-	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws BusinessException;	
+	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException;	
 	
-	public Usuario buscarPorTokenID(String token) throws BusinessException;
+	public Usuario buscarPorTokenID(String token);
 	
-	public void gerarTokenID(Usuario usuario) throws BusinessException;
+	public void gerarTokenID(Usuario usuario);
 }

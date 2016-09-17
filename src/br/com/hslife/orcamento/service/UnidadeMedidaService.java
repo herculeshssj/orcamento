@@ -78,7 +78,7 @@ public class UnidadeMedidaService extends AbstractCRUDService<UnidadeMedida> imp
 	}
 
 	@Override
-	public void excluir(UnidadeMedida entity) throws BusinessException {
+	public void excluir(UnidadeMedida entity) {
 		if (itemDespensaRepository.findByUnidadeMedida(entity).size() > 0) {
 			throw new BusinessException("Não é possível excluir! Existem itens de despensa vinculados!");
 		} else {
@@ -87,12 +87,12 @@ public class UnidadeMedidaService extends AbstractCRUDService<UnidadeMedida> imp
 	}
 	
 	@Override
-	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
 	@Override
-	public List<UnidadeMedida> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<UnidadeMedida> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 }

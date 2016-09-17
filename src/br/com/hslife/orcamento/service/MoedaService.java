@@ -70,7 +70,7 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	}
 	
 	@Override
-	public void cadastrar(Moeda entity) throws BusinessException {
+	public void cadastrar(Moeda entity) {
 		if (entity.isPadrao()) {
 			Moeda moeda = getRepository().findDefaultByUsuario(entity.getUsuario());
 			if (moeda != null && !moeda.equals(entity)) {
@@ -82,7 +82,7 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	}
 	
 	@Override
-	public void alterar(Moeda entity) throws BusinessException {
+	public void alterar(Moeda entity) {
 		if (entity.isPadrao()) {
 			Moeda moeda = getRepository().findDefaultByUsuario(entity.getUsuario());
 			if (moeda != null && !moeda.equals(entity)) {
@@ -94,7 +94,7 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	}
 	
 	@Override
-	public void excluir(Moeda entity) throws BusinessException {
+	public void excluir(Moeda entity) {
 		try {
 			super.excluir(entity);
 		} catch (DataIntegrityViolationException dive) {
@@ -105,36 +105,36 @@ public class MoedaService extends AbstractCRUDService<Moeda> implements IMoeda {
 	}
 
 	@Override
-	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException {
+	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario) {
 		return getRepository().findByNomeAndUsuario(nome, usuario);
 	}
 
 	@Override
-	public List<Moeda> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Moeda> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}	
 	
 	@Override
-	public Moeda buscarPadraoPorUsuario(Usuario usuario) throws BusinessException {
+	public Moeda buscarPadraoPorUsuario(Usuario usuario) {
 		return getRepository().findDefaultByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario,	boolean ativo) throws BusinessException {
+	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario,	boolean ativo) {
 		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
 	
 	@Override
-	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findActiveByUsuario(usuario);
 	}
 	
 	@Override
-	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) throws BusinessException {
+	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) {
 		return getRepository().findAllCodigoMonetarioByUsuario(usuario);
 	}
 	
-	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario) throws BusinessException {
+	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario) {
 		return getRepository().findCodigoMoedaByUsuario(codigoMonetario, usuario);
 	}
 }

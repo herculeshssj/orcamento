@@ -57,7 +57,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -89,7 +88,7 @@ public class DetalheLancamento extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Data", this.data);
 	}

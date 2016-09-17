@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="telefone")
@@ -84,6 +84,14 @@ public class Telefone extends EntityPersistence {
 	
 	public Telefone() {
 	}
+	
+	private Telefone(Builder builder) {
+		this.descricao = builder.descricao;
+		this.ddd = builder.ddd;
+		this.numero = builder.numero;
+		this.ramal = builder.ramal;
+		this.usuario = builder.usuario;		
+	}
 
 	@Override
 	public String getLabel() {		
@@ -106,25 +114,47 @@ public class Telefone extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		if (this.descricao.trim().length() > 50) {
-			throw new BusinessException("Campo 'Descrição' aceita no máximo 50 caracteres!");
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("DDD", this.ddd, 5);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Ramal", this.ramal, 5);
+	}
+	
+	public static class Builder {
+		private String descricao;
+		private String ddd;
+		private String numero;
+		private String ramal;
+		private Usuario usuario;
+		
+		public Builder descricao(String descricao) {
+			this.descricao = descricao;
+			return this;
 		}
 		
-		if (this.ddd != null && this.ddd.trim().length() > 5) {
-			throw new BusinessException("Campo 'DDD' aceita no máximo 5 caracteres!");
+		public Builder ddd(String ddd) {
+			this.ddd = ddd;
+			return this;
 		}
 		
-		if (this.numero.trim().length() > 50) {
-			throw new BusinessException("Campo 'Número' aceita no máximo 15 caracteres!");
+		public Builder numero(String numero) {
+			this.numero = numero;
+			return this;
 		}
 		
-		if (this.ramal != null && this.ramal.trim().length() > 5) {
-			throw new BusinessException("Campo 'Ramal' aceita no máximo 5 caracteres!");
+		public Builder ramal(String ramal) {
+			this.ramal = ramal;
+			return this;
 		}
 		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+		public Builder usuario(Usuario usuario) {
+			this.usuario = usuario;
+			return this;
+		}
+		
+		public Telefone build() {
+			return new Telefone(this);
 		}
 	}
 	

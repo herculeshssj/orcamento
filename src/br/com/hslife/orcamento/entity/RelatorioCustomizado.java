@@ -66,7 +66,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.RelatorioColunaComparator;
 
@@ -110,11 +109,10 @@ public class RelatorioCustomizado extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
 		EntityPersistenceUtil.validaCampoNulo("Consulta SQL", this.consultaSQL);
-		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
 	}
 
 	public Long getId() {

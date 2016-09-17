@@ -58,14 +58,14 @@ import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IInformacaoPessoal;
 import br.com.hslife.orcamento.repository.EnderecoRepository;
 import br.com.hslife.orcamento.repository.PessoalRepository;
 import br.com.hslife.orcamento.repository.TelefoneRepository;
 
 @Service
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class InformacaoPessoalService implements IInformacaoPessoal {
 	
 	@Autowired
@@ -96,7 +96,7 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 
 	@Override
-	public void salvarDadosPessoais(Pessoal pessoal) throws BusinessException {
+	public void salvarDadosPessoais(Pessoal pessoal) {
 		pessoal.validate();
 		
 		// Se a entidade não possuir ID, grava um novo registro, caso contrário atualiza
@@ -108,22 +108,22 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 	
 	@Override
-	public Pessoal buscarDadosPessoais(Usuario usuario) throws BusinessException {
+	public Pessoal buscarDadosPessoais(Usuario usuario) {
 		return getPessoalRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Endereco> buscarEnderecos(Usuario usuario) throws BusinessException {
+	public List<Endereco> buscarEnderecos(Usuario usuario) {
 		return getEnderecoRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Telefone> buscarTelefones(Usuario usuario) throws BusinessException {
+	public List<Telefone> buscarTelefones(Usuario usuario) {
 		return getTelefoneRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public void salvarEndereco(Endereco entity) throws BusinessException {
+	public void salvarEndereco(Endereco entity) {
 		entity.validate();
 		if (entity.getId() == null) {
 			getEnderecoRepository().save(entity);
@@ -133,12 +133,12 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 
 	@Override
-	public void excluirEndereco(Endereco entity) throws BusinessException {
+	public void excluirEndereco(Endereco entity) {
 		getEnderecoRepository().delete(entity);		
 	}
 
 	@Override
-	public void salvarTelefone(Telefone entity) throws BusinessException {
+	public void salvarTelefone(Telefone entity) {
 		entity.validate();
 		if (entity.getId() == null) {
 			getTelefoneRepository().save(entity);
@@ -148,7 +148,7 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 
 	@Override
-	public void excluirTelefone(Telefone entity) throws BusinessException {
+	public void excluirTelefone(Telefone entity) {
 		getTelefoneRepository().delete(entity);		
 	}	
 }

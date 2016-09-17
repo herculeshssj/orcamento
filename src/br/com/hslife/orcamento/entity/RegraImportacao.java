@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -90,6 +89,14 @@ public class RegraImportacao extends EntityPersistence {
 	public RegraImportacao() {
 		
 	}
+	
+	private RegraImportacao(Builder builder) {
+		this.texto = builder.texto;
+		this.idCategoria = builder.idCategoria;
+		this.idFavorecido = builder.idFavorecido;
+		this.idMeioPagamento = builder.idMeioPagamento;
+		this.conta = builder.conta;
+	}
 
 	@Override
 	public String getLabel() {
@@ -97,9 +104,46 @@ public class RegraImportacao extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Texto a pesquisar", this.texto, 100);
 		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
+	}
+	
+	public static class Builder {
+		private String texto;
+		private Long idCategoria;
+		private Long idFavorecido;
+		private Long idMeioPagamento;
+		private Conta conta;
+		
+		public Builder texto(String texto) {
+			this.texto = texto;
+			return this;
+		}
+		
+		public Builder idCategoria(Long idCategoria) {
+			this.idCategoria = idCategoria;
+			return this;
+		}
+		
+		public Builder idFavorecido(Long idFavorecido) {
+			this.idFavorecido = idFavorecido;
+			return this;
+		}
+		
+		public Builder idMeioPagamento(Long idMeioPagamento) {
+			this.idMeioPagamento = idMeioPagamento;
+			return this;
+		}
+		
+		public Builder conta(Conta conta) {
+			this.conta = conta;
+			return this;
+		}
+		
+		public RegraImportacao build() {
+			return new RegraImportacao(this);
+		}
 	}
 
 	public Long getId() {

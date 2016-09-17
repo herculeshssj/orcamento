@@ -53,7 +53,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IModeloDocumento;
 import br.com.hslife.orcamento.repository.ModeloDocumentoRepository;
 
@@ -69,7 +68,7 @@ public class ModeloDocumentoService extends AbstractCRUDService<ModeloDocumento>
 	}
 
 	@Override
-	public List<ModeloDocumento> buscarDescricaoOuAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) throws BusinessException {
+	public List<ModeloDocumento> buscarDescricaoOuAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) {
 		return getRepository().findDescricaoOrAtivoByUsuario(descricao, ativo, usuario);
 	}
 }

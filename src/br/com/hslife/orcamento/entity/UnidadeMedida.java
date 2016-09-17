@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="unidademedida")
@@ -80,23 +80,45 @@ public class UnidadeMedida extends EntityPersistence {
 		
 	}
 	
+	private UnidadeMedida(Builder builder) {
+		this.descricao = builder.descricao;
+		this.sigla = builder.sigla;
+		this.usuario = builder.usuario;
+	}
+	
 	@Override
 	public String getLabel() {
 		return this.descricao + " (" + sigla + ")";
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Sigla", this.sigla, 10);
+	}
+	
+	public static class Builder {
+		private String descricao;
+		private String sigla;
+		private Usuario usuario;
+		
+		public Builder descricao(String descricao) {
+			this.descricao = descricao;
+			return this;
 		}
 		
-		if (this.sigla == null || this.sigla.trim().isEmpty()) {
-			throw new BusinessException("Informe uma sigla!");
+		public Builder sigla(String sigla) {
+			this.sigla = sigla;
+			return this;
 		}
 		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+		public Builder usuario(Usuario usuario) {
+			this.usuario = usuario;
+			return this;
+		}
+		
+		public UnidadeMedida build() {
+			return new UnidadeMedida(this);
 		}
 	}
 

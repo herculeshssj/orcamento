@@ -1,6 +1,6 @@
 /***
   
-  	Copyright (c) 2012 - 2020 Hércules S. S. José
+  	Copyright (c) 2012 - 2016 Hércules S. S. José
 
     Este arquivo é parte do programa Orçamento Doméstico.
     
@@ -51,19 +51,25 @@ import org.junit.Test;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
-public class RegraImportacaoTest {
+public class UsuarioTest {
 	
-	private RegraImportacao entity = EntityInitializerFactory.createRegraImportacao(new Conta(), "texto");
-	
+	private Usuario entity = EntityInitializerFactory.createUsuario();
+
 	@Test(expected=ValidationException.class)
-	public void testValidateTexto() {
-		entity.setTexto(entity.getTexto() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+	public void testValidateNome() {
+		entity.setNome(entity.getNome() + "      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
+	}
+
+	@Test(expected=ValidationException.class)
+	public void testValidateLogin() {
+		entity.setLogin(entity.getLogin() + "      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 		entity.validate();
 	}
 	
 	@Test(expected=ValidationException.class)
-	public void testValidateConta() {
-		entity.setConta(null);
+	public void testValidateEmail() {
+		entity.setEmail(entity.getEmail() + "      ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 		entity.validate();
 	}
 }

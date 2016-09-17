@@ -65,6 +65,7 @@ import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IDividaTerceiro;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IModeloDocumento;
@@ -123,7 +124,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	public void find() {
 		try {
 			listEntity = getService().buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, tipoCategoria, statusDivida, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -139,7 +140,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			getService().vigorarDividaTerceiro(entity);
 			infoMessage("Registro salvo com sucesso. Termo/contrato da dívida entrou em vigor.");
 			return super.list();			
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -156,7 +157,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			getService().renegociarDividaTerceiro(entity, novaJustificativa);
 			infoMessage("Registro salvo com sucesso. Dívida renegociada.");
 			return super.list();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";	
@@ -172,7 +173,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			getService().encerrarDividaTerceiro(entity, novaJustificativa);
 			infoMessage("Registro salvo com sucesso. Dívida encerrada.");
 			return super.list();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";	
@@ -201,7 +202,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 				infoMessage("Pagamento registrado com sucesso.");
 			}
 			return super.list();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";	
@@ -277,7 +278,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 					valor += divida.getTotalAPagar() * divida.getMoeda().getValorConversao();
 			}
 			return valor;
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return 0.0;
@@ -294,7 +295,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 					valor += divida.getTotalAPagar() * divida.getMoeda().getValorConversao();
 			}
 			return valor;
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return 0.0;
@@ -303,7 +304,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -312,7 +313,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	public List<ModeloDocumento> getListaModeloDocumento() {
 		try {
 			return modeloDocumentoService.buscarDescricaoOuAtivoPorUsuario(null, true, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -321,7 +322,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	public List<Moeda> getListaMoeda() {
 		try {
 			return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -330,7 +331,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	public Moeda getMoedaPadrao() {
 		try {
 			return moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return null;

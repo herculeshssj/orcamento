@@ -58,6 +58,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
@@ -106,7 +107,7 @@ public class SaldoAtualContasController extends AbstractController {
 		listEntity = getService().gerarSaldoAtualContas(lancamentoAgendado, getUsuarioLogado());
 		if (listEntity == null || listEntity.isEmpty())
 			listEntity = new ArrayList<>();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -154,7 +155,7 @@ public class SaldoAtualContasController extends AbstractController {
 	public Moeda getMoedaPadrao() {
 		try {
 			return moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new Moeda();

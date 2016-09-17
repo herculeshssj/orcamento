@@ -58,7 +58,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -112,14 +112,8 @@ public class MeioPagamento extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
-		}
-		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
-		}
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 	}
 
 	public Long getId() {

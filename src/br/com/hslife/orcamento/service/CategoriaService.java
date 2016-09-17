@@ -71,7 +71,7 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 
 	@Override
-	public void cadastrar(Categoria entity) throws BusinessException {		
+	public void cadastrar(Categoria entity) {		
 		if (entity.isPadrao()) {
 			getRepository().updateAllToNotDefault(entity.getTipoCategoria(), entity.getUsuario());
 		}
@@ -79,7 +79,7 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
-	public void alterar(Categoria entity) throws BusinessException {
+	public void alterar(Categoria entity) {
 		if (!entity.isPadrao()) {
 			if (entity.equals(getRepository().findDefaultByTipoCategoriaAndUsuario(entity.getUsuario(), entity.getTipoCategoria()))) {
 				entity.setPadrao(true);
@@ -92,7 +92,7 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
-	public void excluir(Categoria entity) throws BusinessException {
+	public void excluir(Categoria entity) {
 		try {
 			super.excluir(entity);
 		} catch (DataIntegrityViolationException dive) {
@@ -103,37 +103,32 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 
 	@Override
-	public List<Categoria> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findEnabledByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 
 	@Override
-	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) {
 		return getRepository().findByTipoCategoriaAndUsuario(tipoCategoria, usuario);
-	}
-	
-	@Override
-	public void validar(Categoria entity) throws BusinessException {
-		
 	}
 
 	@Override
-	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException {
+	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) {
 		return getRepository().findByDescricaoUsuarioAndAtivo(descricao, usuario, ativo);
 	}
 	
 	@Override
-	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {
+	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) {
 		return getRepository().findActiveByTipoCategoriaAndUsuario(tipoCategoria, usuario);
 	}
 	
@@ -143,7 +138,7 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
-	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException {		
+	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) {		
 		// Verifica se a categoria informada existe na base de dados
 		List<Categoria> categorias = getRepository().findTipoCategoriaAndDescricaoAndAtivoByUsuario(tipoCategoria, descricaoCategoria, null, usuario);
 		Categoria categoriaEncontrada = null;

@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.entity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -55,7 +54,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 
 public class DividaTerceiroTest {
 
@@ -96,105 +95,43 @@ public class DividaTerceiroTest {
 		}
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateDataNegociacao() {
-		try {
-			entity.setDataNegociacao(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Data da negociação' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setDataNegociacao(null);
+		entity.validate();
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateJustificativa() {
-		try {
-			entity.setJustificativa(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Justificativa' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setJustificativa(null);
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateTamanhoJustificativa() {
-		try {
-			StringBuilder s = new StringBuilder(10000);
-			for (int i = 0; i < 10000; ++i) 
-				s.append("a");
-			entity.setJustificativa(s.toString());
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Justificativa' aceita no máximo 4000 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		StringBuilder s = new StringBuilder(10000);
+		for (int i = 0; i < 10000; ++i) 
+			s.append("a");
+		entity.setJustificativa(s.toString());
+		entity.validate();
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateCategoria() {
-		try {
-			entity.setTipoCategoria(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Categoria da dívida' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setTipoCategoria(null);
+		entity.validate();
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateFavorecido() {
-		try {
-			entity.setFavorecido(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Favorecido' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setFavorecido(null);
+		entity.validate();
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateMoeda() {
-		try {
-			entity.setMoeda(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Moeda' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
-	}
-
-	@Test
-	public void testValidateUsuario() {
-		try {
-			entity.setUsuario(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setMoeda(null);
+		entity.validate();
 	}
 
 	@Test
@@ -212,17 +149,11 @@ public class DividaTerceiroTest {
 		assertEquals(700.0, entity.getTotalAPagar(), 0);
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateDataPagamento() {
-		for (PagamentoDividaTerceiro pagamento : entity.getPagamentos()) 
-		try {
+		for (PagamentoDividaTerceiro pagamento : entity.getPagamentos()) { 
 			pagamento.setDataPagamento(null);
 			pagamento.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Data do pagamento' não pode ser nulo.", be.getMessage());
-			continue;
-		} catch (Throwable t) {
-			fail(t.getMessage());
 		}		
 	}
 }

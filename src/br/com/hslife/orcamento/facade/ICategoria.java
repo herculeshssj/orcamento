@@ -51,7 +51,6 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface ICategoria extends ICRUDService<Categoria> {
 	
@@ -59,19 +58,19 @@ public interface ICategoria extends ICRUDService<Categoria> {
 	 * Buscar uma categoria a partir dos parâmetros informados.
 	 * Caso não encontre, a categoria padrão é retornada.
 	 */
-	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException;
+	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario);
 	
-	public List<Categoria> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Categoria> buscarPorUsuario(Usuario usuario);
 	
-	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
+	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException;
+	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario);
 	
-	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws BusinessException;
+	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
 	
-	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws BusinessException;
+	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario);
 	
-	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, Usuario usuario) throws BusinessException;
+	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, Usuario usuario);
 }

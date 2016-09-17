@@ -60,11 +60,13 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
+import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Telefone;
+import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -78,14 +80,59 @@ public class EntityInitializerFactory {
 		// Classe não pode ser inicializada.
 	}
 	
-	// Cria uma nova instância de Usuário a partir do Builder da classe
 	public static Usuario createUsuario() {
 		return new Usuario.Builder()
 			.email("contato@hslife.com.br")
 			.login("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA))
 			.nome("Usuário de Teste - " + Util.formataDataHora(new Date(), Util.DATAHORA))
 			.senha(Util.SHA256("teste"))
+			.tokenID(Util.SHA256(new Date().toString()))
 			.build();
+	}
+	
+	public static UnidadeMedida createUnidadeMedida(Usuario usuario) {
+		return new UnidadeMedida.Builder()
+				.descricao("Unidade de Medida de teste")
+				.sigla("UMT")
+				.usuario(usuario)
+				.build();
+	}
+	
+	public static Telefone createTelefone(Usuario usuario) {
+		return new Telefone.Builder()
+				.descricao("Telefone de teste")
+				.ddd("021")
+				.numero("1234-5678")
+				.ramal("901")
+				.usuario(usuario)
+				.build();
+	}
+	
+	public static RegraImportacao createRegraImportacao(Conta conta, String texto) {
+		return new RegraImportacao.Builder()
+				.texto(texto)
+				.idCategoria(1l)
+				.idFavorecido(1l)
+				.idMeioPagamento(1l)
+				.conta(conta)
+				.build();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static Pessoal createPessoal(Usuario usuario) {
+		return new Pessoal.Builder()
+				.dataNascimento(new Date(1980-1900, 1, 1))
+				.escolaridade("Superior")
+				.estadoCivil("Casado")
+				.etnia("Afrobrasileira")
+				.filiacaoMae("Mãe do usuário")
+				.filiacaoPai("Pai do usuário")
+				.genero('M')
+				.nacionalidade("Brasileira")
+				.naturalidade("Rio de Janeiro")
+				.tipoSanguineo("O+")
+				.usuario(usuario)
+				.build();
 	}
 	
 	// Cria uma nova instância de RelatorioCustomizado
@@ -130,6 +177,7 @@ public class EntityInitializerFactory {
 		return entity;
 	}
 	
+	@Deprecated
 	public static Usuario initializeUsuario() {
 		Usuario usuario = new Usuario();
 		usuario.setEmail("contato@hslife.com.br");
@@ -140,6 +188,7 @@ public class EntityInitializerFactory {
 		return usuario;
 	}
 	
+	@Deprecated
 	public static Telefone initializeTelefone(Usuario usuario) {
 		Telefone telefone = new Telefone();
 		telefone.setDdd("21");
@@ -174,6 +223,7 @@ public class EntityInitializerFactory {
 		return conta;
 	}
 	
+	@Deprecated
 	public static RegraImportacao initializeRegraImportacao(Conta conta) {
 		RegraImportacao regra = new RegraImportacao();
 		regra.setTexto("teste");

@@ -54,6 +54,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 
 @Component("categoriaDocumentoMB")
@@ -86,7 +87,7 @@ public class CategoriaDocumentoController extends AbstractCRUDController<Categor
 	public void find() {
 		try {
 			listEntity = getService().buscarPorDescricaoEUsuario(descricaoCategoria, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

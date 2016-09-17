@@ -58,6 +58,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IFavorecido;
 
 @Component("favorecidoMB")
@@ -90,7 +91,7 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	public void find() {
 		try {
 			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeFavorecido, getUsuarioLogado(), somenteAtivos);
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

@@ -62,6 +62,7 @@ import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.enumeration.Container;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IArquivo;
 import br.com.hslife.orcamento.model.AnexoEntidade;
@@ -73,7 +74,7 @@ import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 
 @Service("arquivoService")
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class ArquivoService implements IArquivo {
 	
 	@Autowired
@@ -127,12 +128,12 @@ public class ArquivoService implements IArquivo {
 	}
 
 	@Override
-	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) throws BusinessException {
+	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) {
 		return getRepository().findByCriterioArquivo(criterio);
 	}
 	
 	@Override
-	public void excluir(Arquivo arquivo) throws BusinessException {
+	public void excluir(Arquivo arquivo) {
 		switch (arquivo.getContainer()) {
 			case DOCUMENTOS :
 				if (getRepository().deleteFromDocumento(arquivo)) {
@@ -166,7 +167,7 @@ public class ArquivoService implements IArquivo {
 	}
 	
 	@Override
-	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container) throws BusinessException {
+	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container) {
 		List<AnexoEntidade> listaAnexos = new ArrayList<>();
 		AnexoEntidade anexo;
 		switch (container) {
@@ -213,7 +214,7 @@ public class ArquivoService implements IArquivo {
 	}
 	
 	@Override
-	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) throws BusinessException {
+	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) {
 		switch (container) {
 			case DOCUMENTOS:
 				Documento d = getDocumentoRepository().findById(idEntity);

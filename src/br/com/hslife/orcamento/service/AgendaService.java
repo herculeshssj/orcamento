@@ -58,7 +58,6 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
@@ -150,7 +149,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 	}
 	
 	@Override
-	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta) throws BusinessException {
+	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta) {
 		return getRepository().findAgendamentoByOrDataInicioOrDataFimAndAlerta(inicio, fim, emiteAlerta);
 	}
 }

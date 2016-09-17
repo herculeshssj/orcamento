@@ -1,6 +1,6 @@
 /***
   
-  	Copyright (c) 2012 - 2020 Hércules S. S. José
+  	Copyright (c) 2012 - 2016 Hércules S. S. José
 
     Este arquivo é parte do programa Orçamento Doméstico.
     
@@ -46,41 +46,52 @@
 
 package br.com.hslife.orcamento.exception;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import br.com.hslife.orcamento.util.Util;
 
 /**
- * Exceção não verificada que indica erros de validação a nível de 
- * regras de negócio. Deve ser usada sempre que uma operação indicar
- * que está violando uma regra de negócio.
+ * Exceção verificada que indica erros de execução interna dentro
+ * do sistema. Deve ser usada sempre para encapsular outra exceção
+ * e lançar para a camada acima, ou indicar que uma determinada
+ * operação corre o risco de falhar.
  * 
  * @author herculeshssj
  *
  */
-public class BusinessException extends RuntimeException {
+public class ApplicationException extends Exception {
 	
 	private static final long serialVersionUID = -6615643150827475837L;
+	
+	private static final Logger logger = LogManager.getLogger(ApplicationException.class);
 
-	public BusinessException() {
+	public ApplicationException() {
 		super();
 	}
 
-	public BusinessException(String message) {
+	public ApplicationException(String message) {
 		super(message);
+		logger.catching(this);
 	}
 	
-	public BusinessException(Exception exception) {
+	public ApplicationException(Exception exception) {
 		super(exception);
+		logger.catching(exception);
 	}
 	
-	public BusinessException(String message, Exception exception) {
+	public ApplicationException(String message, Exception exception) {
 		super(message, exception);
+		logger.catching(exception);
 	}
 	
-	public BusinessException(String[] messages) {
+	public ApplicationException(String[] messages) {
 		super(Util.montarString(messages));
+		logger.catching(this);
 	}
 	
-	public BusinessException(String[] messages, Exception exception) {
+	public ApplicationException(String[] messages, Exception exception) {
 		super(Util.montarString(messages), exception);
+		logger.catching(exception);
 	}
 }

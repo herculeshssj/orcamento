@@ -77,6 +77,7 @@ public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
 	@Autowired
 	private ModeloDocumentoRepository modeloDocumentoRepository;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeEntities() {
 		usuarioRepository.setSessionFactory(this.sessionFactory);

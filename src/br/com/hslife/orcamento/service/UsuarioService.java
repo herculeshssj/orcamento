@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.repository.UsuarioRepository;
@@ -100,7 +101,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 
 	@Override
-	public void cadastrar(Usuario entity) throws BusinessException{		
+	public void cadastrar(Usuario entity){		
 		// Verifica se o login informado já consta na base
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		if (u != null) {
@@ -112,7 +113,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public void efetuarRegistro(Usuario entity) throws BusinessException {
+	public void efetuarRegistro(Usuario entity) throws ApplicationException {
 		// Gera hash da data atual para poder gerar a senha aleatório do usuário
 		String hash = Util.MD5(new Date().toString());
 		String senha = hash.substring(0, 16);
@@ -138,12 +139,12 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		} catch (Exception e) {
 			logger.catching(e);
 			e.printStackTrace();
-			throw new BusinessException(e);
+			throw new ApplicationException(e);
 		}
 	}
 	
 	@Override
-	public void recuperarSenha(Usuario entity) throws BusinessException {
+	public void recuperarSenha(Usuario entity) throws ApplicationException {
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		
 		// Verifica se o usuário informado existe, se não é o usuário admin, e se o e-mail informado coincide com o 
@@ -172,7 +173,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			} catch (Exception e) {
 				logger.catching(e);
 				e.printStackTrace();
-				throw new BusinessException(e);
+				throw new ApplicationException(e);
 			}
 			return;
 		}
@@ -205,11 +206,11 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			getEmailComponent().enviarEmail();
 		} catch (Exception e) {
 			logger.catching(e);
-			throw new BusinessException(e);
+			throw new ApplicationException(e);
 		}		
 	}
 	
-	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws BusinessException {
+	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException{
 		try {
 			Usuario admin = getRepository().findByLogin("admin");
 			getEmailComponent().setRemetente(getComponent().getUsuarioLogado().getNome());
@@ -221,7 +222,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 			getEmailComponent().enviarEmail();
 		} catch (Exception e) {
 			logger.catching(e);
-			throw new BusinessException("Erro ao enviar e-mail:", e);
+			throw new ApplicationException("Erro ao enviar e-mail:", e);
 		}
 	}
 	

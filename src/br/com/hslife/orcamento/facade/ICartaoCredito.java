@@ -51,27 +51,26 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface ICartaoCredito extends ICRUDService<CartaoCredito> {
 	
-	public List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException;
+	public List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<CartaoCredito> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	public List<CartaoCredito> buscarPorUsuario(Usuario usuario);
 	
-	public void desativarCartoes() throws BusinessException;
+	public void desativarCartoes();
 	
-	public void substituirCartao(CartaoCredito entity) throws BusinessException;
+	public void substituirCartao(CartaoCredito entity);
 	
-	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario) throws BusinessException;
+	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario);
 	
-	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario) throws BusinessException;
+	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario);
 	
-	public void ativarCartao(CartaoCredito entity) throws BusinessException;
+	public void ativarCartao(CartaoCredito entity);
 	
-	public void desativarCartao(CartaoCredito entity) throws BusinessException;
+	public void desativarCartao(CartaoCredito entity);
 	
-	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo) throws BusinessException;
+	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo);
 	
-	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito) throws BusinessException;
+	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito);
 }

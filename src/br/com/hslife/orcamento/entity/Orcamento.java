@@ -72,7 +72,8 @@ import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -154,7 +155,7 @@ public class Orcamento extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() {
 		
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
 		
@@ -167,7 +168,7 @@ public class Orcamento extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Usuário", usuario);
 		
 		if (detalhes == null || detalhes.isEmpty()) {
-			throw new BusinessException("Entre com pelo menos um item nos detalhes!");
+			throw new ValidationException("Entre com pelo menos um item nos detalhes!");
 		}
 		
 		for (DetalheOrcamento detalhe : detalhes) {
@@ -204,9 +205,9 @@ public class Orcamento extends EntityPersistence {
 	 * gerar um.
 	 * 
 	 * @return o novo orçamento gerado
-	 * @throws BusinessException
+	 * @throws ApplicationException
 	 */
-	public Orcamento gerarOrcamento() throws BusinessException {
+	public Orcamento gerarOrcamento() {
 		Orcamento novoOrcamento = new Orcamento();
 		
 		// Valida a entidade para saber se não tem inconsistências

@@ -60,7 +60,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -98,7 +97,7 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() {
 		EntityPersistenceUtil.validaCampoNulo("Data do pagamento", this.dataPagamento);
 	}
 

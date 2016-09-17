@@ -47,12 +47,11 @@
 package br.com.hslife.orcamento.entity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 
 public class EnderecoTest {
 	
@@ -83,149 +82,63 @@ public class EnderecoTest {
 		assertEquals("Residencial: Avenida Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt. 404 - Marco II - Nova Iguaçu, RJ - CEP: 26261220", entity.getLabel());
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateTipoLogradouro() {
-		try {
-			entity.setTipoLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Tipo de logradouro' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setTipoLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateLogradouro() {
-		try {
-			entity.setLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Logradouro' aceita no máximo 150 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setLogradouro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateNumero() {
-		try {
-			entity.setNumero(null);
-			entity.validate();
-			entity.setNumero("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Número' aceita no máximo 10 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setNumero(null);
+		entity.validate();
+		entity.setNumero("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateComplemento() {
-		try {
-			entity.setComplemento(null);
-			entity.validate();
-			entity.setComplemento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Complemento' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setComplemento(null);
+		entity.validate();
+		entity.setComplemento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateBairro() {
-		try {
-			entity.setBairro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Bairro' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setBairro("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateCidade() {
-		try {
-			entity.setCidade("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Cidade' aceita no máximo 100 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setCidade("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ           ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateEstado() {
-		try {
-			entity.setEstado("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Estado' aceita exatamente 2 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setEstado("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateCep() {
-		try {
-			entity.setCep(null);
-			entity.validate();
-			entity.setCep("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'CEP' aceita exatamente 8 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setCep(null);
+		entity.validate();
+		entity.setCep("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ    ");
+		entity.validate();
 	}
 	
-	@Test
-	public void testValidateUsuario() {
-		try {
-			entity.setUsuario(null);
-			entity.validate();			
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
-	}
-	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateDescricao() {
-		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
+		entity.validate();
 	}
 }

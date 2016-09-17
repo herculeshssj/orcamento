@@ -62,6 +62,7 @@ import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IAgenda;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 
@@ -125,7 +126,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 			criterioBusca.setUsuario(getUsuarioLogado());
 			
 			listEntity = getService().buscarPorCriterioAgendamento(criterioBusca);
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -165,7 +166,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 			operation = "edit";
 			actionTitle = " - Editar";
 			return goToFormPage;
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -174,7 +175,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	public Long getAgendamentosDeHoje() {
 		try {
 			return getService().contarAgendamentosDeHojeComAlerta();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return 0l;
@@ -187,7 +188,7 @@ public class AgendaController extends AbstractCRUDController<Agenda> {
 	public List<Agenda> getAgendamentosDoDia() {
 		try {
 			return getService().buscarAgendamentosDoDia();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

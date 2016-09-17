@@ -52,25 +52,24 @@ import java.util.Map;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IMovimentacaoLancamento {
 	
-	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta) throws BusinessException;
+	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta);
 	
-	public void excluirLancamentos(List<LancamentoConta> lancamentos) throws BusinessException;
+	public void excluirLancamentos(List<LancamentoConta> lancamentos);
 	
-	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento) throws BusinessException;
+	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento);
 	
-	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros) throws BusinessException;
+	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros);
 	
-	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
+	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
 	
-	public void removerVinculos(List<LancamentoConta> lancamentos) throws BusinessException;
+	public void removerVinculos(List<LancamentoConta> lancamentos);
 	
-	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws BusinessException;
+	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
 	
-	public void dividirLancamento(LancamentoConta lancamento, int quantidade) throws BusinessException;
+	public void dividirLancamento(LancamentoConta lancamento, int quantidade);
 	
-	public void salvarDetalhamentoLancamento(LancamentoConta lancamento) throws BusinessException;
+	public void salvarDetalhamentoLancamento(LancamentoConta lancamento);
 }

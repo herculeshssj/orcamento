@@ -51,7 +51,6 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IFavorecido extends ICRUDService<Favorecido> {
 	
@@ -59,15 +58,15 @@ public interface IFavorecido extends ICRUDService<Favorecido> {
 	 * Buscar um favorecido a partir dos parâmetros informados.
 	 * Caso não encontre, o favorecido padrão é retornado.
 	 */
-	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario) throws BusinessException;
+	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario);
 	
-	public List<Favorecido> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Favorecido> buscarPorUsuario(Usuario usuario);
 	
-	public List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException;
+	public List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario);
 	
-	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException;
+	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
 	
-	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario) throws BusinessException;
+	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario);
 }

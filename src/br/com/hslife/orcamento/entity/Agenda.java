@@ -65,7 +65,9 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -139,29 +141,14 @@ public class Agenda extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		if (this.descricao != null && this.descricao.trim().length() > 200) {
-			throw new BusinessException("Campo aceita no máximo 200 caracteres!");
-		}
-		
-		if (this.localAgendamento != null && this.localAgendamento.trim().length() > 200) {
-			throw new BusinessException("Campo aceita no máximo 200 caracteres!");
-		}
-		
-		if (this.tipoAgendamento == null) {
-			throw new BusinessException("Informe o tipo de agendamento!");
-		}
-		
-		if (this.inicio == null) {
-			throw new BusinessException("Informe a data de início!");
-		}
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Local", this.localAgendamento, 200);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de agendamento", this.tipoAgendamento);
+		EntityPersistenceUtil.validaCampoNulo("Data de início", this.inicio);
 		
 		if (this.fim != null && this.fim.before(this.inicio)) {
-			throw new BusinessException("Data de término não pode ser anterior a data de início!");
-		}
-		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+			throw new ValidationException("Data de término não pode ser anterior a data de início!");
 		}
 	}
 
@@ -173,7 +160,7 @@ public class Agenda extends EntityPersistence {
 	public String getDateLabel() {
 		try {
 			return comporTextoAgendamento();
-		} catch (BusinessException be) {
+		} catch (ApplicationException be) {
 			return "";
 		}
 	}
@@ -202,11 +189,11 @@ public class Agenda extends EntityPersistence {
 		
 	}
 	
-	public String comporTextoAgendamento() throws BusinessException {
+	public String comporTextoAgendamento() throws ApplicationException {
 		return this.comporTextoAgendamento(this.inicio, this.fim, this.diaInteiro, this.tipoAgendamento);
 	}
 	
-	public String comporTextoAgendamento(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+	public String comporTextoAgendamento(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws ApplicationException {
 		switch (tipoAgendamento) {
 			case PREVISAO : return this.comporTextoAgendamentoPrevisao(inicio, fim, diaInteiro, tipoAgendamento);
 			case TAREFA : return this.comporTextoAgendamentoTarefa(inicio, fim, diaInteiro, tipoAgendamento);
@@ -215,17 +202,17 @@ public class Agenda extends EntityPersistence {
 		return "";
 	}
 	
-	private String comporTextoAgendamentoPrevisao(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+	private String comporTextoAgendamentoPrevisao(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) {
 		if (inicio == null) {
-			throw new BusinessException("Informe a data de início!");
+			throw new ValidationException("Informe a data de início!");
 		} else {
 			return Util.formataDataHora(inicio, Util.DATA);
 		}
 	}
 	
-	private String comporTextoAgendamentoTarefa(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+	private String comporTextoAgendamentoTarefa(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) {
 		if (inicio == null) {
-			throw new BusinessException("Informe a data de início!");
+			throw new ValidationException("Informe a data de início!");
 		}
 		if (fim == null) {
 			if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0) {
@@ -242,9 +229,9 @@ public class Agenda extends EntityPersistence {
 		}				
 	}
 	
-	private String comporTextoAgendamentoCompromisso(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws BusinessException {
+	private String comporTextoAgendamentoCompromisso(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) {
 		if (inicio == null) {
-			throw new BusinessException("Informe a data de início!");
+			throw new ValidationException("Informe a data de início!");
 		}
 		if (diaInteiro) {
 			if (fim == null) {

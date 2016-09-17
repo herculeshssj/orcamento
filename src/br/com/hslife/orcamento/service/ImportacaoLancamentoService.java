@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.service;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.text.SimpleDateFormat;
@@ -79,6 +78,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -103,7 +103,7 @@ import net.sf.ofx4j.domain.data.signon.SignonResponse;
 import net.sf.ofx4j.io.AggregateUnmarshaller;
 
 @Service("importacaoLancamentoService")
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Autowired
@@ -194,7 +194,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
+	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException {
 		switch (conta.getTipoConta()) {
 			case CORRENTE : this.processarArquivoImportadoContaCorrente(arquivo, conta); break;
 			case POUPANCA : this.processarArquivoImportadoContaPoupanca(arquivo, conta); break;
@@ -204,7 +204,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 
 	@Override
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws BusinessException {
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
@@ -316,7 +316,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void importarLancamento(LancamentoImportado entity) throws BusinessException {
+	public void importarLancamento(LancamentoImportado entity) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
@@ -402,7 +402,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Override
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws BusinessException {
+	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException {
 		InfoOFX info = new InfoOFX();
 		try {
 			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
@@ -441,13 +441,13 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				} 
 			}
 		}catch (Exception e) {
-			throw new BusinessException("Erro ao ler o arquivo OFX:" + e.getMessage(), e);
+			throw new ApplicationException("Erro ao ler o arquivo OFX:" + e.getMessage(), e);
 		}
 		return info;
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) throws BusinessException {
+	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
 			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
 			
@@ -469,16 +469,16 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			        /* Aqui começa meu código de validação de conta */
 			        
 			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
-			        	throw new BusinessException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
+			        	throw new ApplicationException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
 			        }
 			        if (!conta.getAgencia().equals(b.getMessage().getAccount().getBranchId())) {		        	
-			        	throw new BusinessException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
+			        	throw new ApplicationException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
 			        }		        
 			        if (!conta.getContaCorrente().equals(b.getMessage().getAccount().getAccountNumber())) {
-			        	throw new BusinessException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
+			        	throw new ApplicationException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
 			        }
 			        if (!conta.getTipoConta().equals(TipoConta.CORRENTE)) {
-			        	throw new BusinessException("Somente contas correntes são aceitas!");
+			        	throw new ApplicationException("Somente contas correntes são aceitas!");
 			        }
 			        
 			        /* Término do código do meu código de validação de conta */
@@ -520,12 +520,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			   }
 			} 
 		}catch (Exception e) {
-			throw new BusinessException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
+			throw new ApplicationException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
-	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) throws BusinessException {
+	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
 			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
 			
@@ -547,16 +547,16 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			        /* Aqui começa meu código de validação de conta */
 			        
 			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
-			        	throw new BusinessException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
+			        	throw new ApplicationException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
 			        }
 			        if (!conta.getAgencia().equals(b.getMessage().getAccount().getBranchId())) {		        	
-			        	throw new BusinessException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
+			        	throw new ApplicationException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
 			        }		        
 			        if (!conta.getContaCorrente().equals(b.getMessage().getAccount().getAccountNumber())) {
-			        	throw new BusinessException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
+			        	throw new ApplicationException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
 			        }
 			        if (!conta.getTipoConta().equals(TipoConta.POUPANCA)) {
-			        	throw new BusinessException("Somente contas correntes são aceitas!");
+			        	throw new ApplicationException("Somente contas correntes são aceitas!");
 			        }
 			        
 			        /* Término do código do meu código de validação de conta */
@@ -598,12 +598,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			   }
 			} 
 		}catch (Exception e) {
-			throw new BusinessException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
+			throw new ApplicationException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) throws BusinessException {
+	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
 			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
 			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
@@ -614,7 +614,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					
 					// Valida o número do cartão de crédito
 					if (conta.getCartaoCredito().getNumeroCartao() == null || !conta.getCartaoCredito().getNumeroCartao().equals(Util.SHA1(c.getMessage().getAccount().getAccountNumber()))) {
-			        	throw new BusinessException("Número do cartão informado não confere com do arquivo!");
+			        	throw new ApplicationException("Número do cartão informado não confere com do arquivo!");
 			        }
 					
 					List<Transaction> list = c.getMessage().getTransactionList().getTransactions();
@@ -645,20 +645,19 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				}				
 			} 
 		} catch (Exception e) {
-			throw new BusinessException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
+			throw new ApplicationException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
 	}
 	
 	@Override
-	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws BusinessException, IOException {
-		// Declaração e leitura dos dados do CSV
-		final Reader reader = new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "UTF-8");
-		final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
-		
-		// Declaração das variáveis
-		LancamentoImportado lancamentoImportado = new LancamentoImportado();
-		
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
+			// Declaração e leitura dos dados do CSV
+			final Reader reader = new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "UTF-8");
+			final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
+			
+			// Declaração das variáveis
+			LancamentoImportado lancamentoImportado = new LancamentoImportado();
 		
 			for (CSVRecord record : parser) {
 				
@@ -680,16 +679,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					getRepository().save(lancamentoImportado.clonarLancamento());
 				}
 			}
-		
-		} catch (Exception e) {
-			throw new BusinessException(e);
-		} finally {
-		
+			
 			// Fecha os streams
 			parser.close();
 			reader.close();
-		}
 		
+		} catch (Exception e) {
+			throw new ApplicationException(e);
+		}		
 	}
 	
 	@Override

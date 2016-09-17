@@ -56,6 +56,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Auditoria;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IAuditoria;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.model.CriterioAuditoria;
@@ -101,7 +102,7 @@ public class AuditoriaController extends AbstractController {
 	public void find() {
 		try {
 			listEntity = getService().buscarPorCriterios(criterio);
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -110,7 +111,7 @@ public class AuditoriaController extends AbstractController {
 		try {
 			entity = getService().buscarPorId(idEntity);
 			return "/pages/Auditoria/viewAuditoria";
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -122,7 +123,7 @@ public class AuditoriaController extends AbstractController {
 			getService().excluir(entity);
 			infoMessage("Registro excluído com sucesso!");
 			initializeEntity();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -138,7 +139,7 @@ public class AuditoriaController extends AbstractController {
 				}				
 				infoMessage("Registros excluídos com sucesso!");
 				initializeEntity();
-			} catch (BusinessException be) {
+			} catch (ValidationException | BusinessException be) {
 				errorMessage(be.getMessage());
 			}			
 		}
@@ -153,7 +154,7 @@ public class AuditoriaController extends AbstractController {
 	public List<Usuario> getListaUsuarios() {
 		try {
 			return usuarioService.getListaUsuarios();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Usuario>();
@@ -162,7 +163,7 @@ public class AuditoriaController extends AbstractController {
 	public List<String> getListaClasses() {
 		try {
 			return getService().buscarClasses();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<String>();

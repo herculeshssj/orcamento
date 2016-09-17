@@ -71,7 +71,7 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	}
 	
 	@Override
-	public void cadastrar(Favorecido entity) throws BusinessException {		
+	public void cadastrar(Favorecido entity) {		
 		if (entity.isPadrao()) {
 			getRepository().updateAllToNotDefault(entity.getUsuario());
 		}
@@ -79,7 +79,7 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	}
 	
 	@Override
-	public void alterar(Favorecido entity) throws BusinessException {
+	public void alterar(Favorecido entity) {
 		if (!entity.isPadrao()) {
 			if (entity.equals(getRepository().findDefaultByUsuario(entity.getUsuario()))) {
 				entity.setPadrao(true);
@@ -92,7 +92,7 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	}
 	
 	@Override
-	public void excluir(Favorecido entity) throws BusinessException {
+	public void excluir(Favorecido entity) {
 		try {
 			super.excluir(entity);
 		} catch (DataIntegrityViolationException dive) {
@@ -103,29 +103,29 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	}
 	
 	@Override
-	public List<Favorecido> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Favorecido> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException {
+	public List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario) {
 		return getRepository().findByNomeAndUsuario(nome, usuario);
 	}
 	
-	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findEnabledByUsuario(usuario);
 	}
 
 	@Override
-	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException {
+	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) {
 		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
 	
-	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario) throws BusinessException {
+	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario) {
 		return getRepository().findTipoPessoaAndNomeAndAtivoByUsuario(tipoPessoa, nome, ativo, usuario);
 	}
 	
-	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario) throws BusinessException {		
+	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario) {		
 		// Verifica se o favorecido informado existe na base de dados
 		List<Favorecido> favorecidos = getRepository().findByNomeAndUsuario(nomeFavorecido, usuario);
 		Favorecido favorecidoEncontrado = null;

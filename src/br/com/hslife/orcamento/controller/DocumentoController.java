@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Documento;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.IDocumento;
 
@@ -100,7 +101,7 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 	public void find() {		
 		try {
 			listEntity = getService().buscarPorNomeECategoriaDocumentoPorUsuario(nomeDocumento, categoriaSelecionada, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -147,7 +148,7 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 	public List<CategoriaDocumento> getListaCategoriaDocumento() {
 		try {
 			return categoriaDocumentoService.buscarPorDescricaoEUsuario("", getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<CategoriaDocumento>();

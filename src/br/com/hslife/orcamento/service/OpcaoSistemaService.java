@@ -59,13 +59,13 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 import br.com.hslife.orcamento.repository.OpcaoSistemaRepository;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Service
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={BusinessException.class})
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class OpcaoSistemaService implements IOpcaoSistema {
 	
 	@Autowired
@@ -90,7 +90,7 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 //	}
 //}
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws BusinessException {
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) {
 		OpcaoSistema opcao = new OpcaoSistema();
 		for (String chave : opcoesSistema.keySet()) {
 			opcao = getRepository().findOpcaoGlobalAdminByChave(chave);
@@ -112,7 +112,7 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		}
 	}
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws BusinessException {
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) {
 		OpcaoSistema opcao;
 		for (String chave : opcoesSistema.keySet()) {			
 			opcao = getRepository().findOpcaoUserByChave(chave, usuario);
@@ -155,13 +155,13 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		}
 	}
 	
-	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) throws BusinessException {
+	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) {
 		if (opcao.isRequired()) {
 			EntityPersistenceUtil.validaCampoNulo(opcao.getChave(), valor);
 		}
 	}
 	
-	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() throws BusinessException {
+	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() {
 		return getRepository().findOpcoesGlobalAdmin();
 	}
 	
@@ -203,7 +203,7 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		return parametros;
 	}
 	
-	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) throws BusinessException {
+	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) {
 		List<OpcaoSistema> opcoesSistema = getRepository().findOpcoesGlobalAdminByCDU(cdu);
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		
@@ -223,12 +223,12 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 	}
 	
 	@Override
-	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws BusinessException {
+	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) {
 		return getRepository().findOpcaoUserByChave(chave, usuario);
 	}
 	
 	@Override
-	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws BusinessException {
+	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) {
 		return getRepository().findOpcoesUserByCasoUso(casoDeUso, usuario);
 	}
 }

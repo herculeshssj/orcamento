@@ -65,7 +65,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
@@ -154,23 +153,9 @@ public class Conta extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
-		}
-		
-		if (this.descricao.length() > 50) {
-			throw new BusinessException("Descrição deve ter no máximo 50 caracteres!");
-		}
-		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
-		}
-		
-		if (this.moeda == null) {
-			throw new BusinessException("Informe a moeda!");
-		}
-		
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de conta", this.tipoConta);
 		EntityPersistenceUtil.validaCampoNulo("Data de abertura", this.dataAbertura);
 	}

@@ -47,12 +47,11 @@
 package br.com.hslife.orcamento.entity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 
 public class ModeloDocumentoTest {
 
@@ -66,45 +65,16 @@ public class ModeloDocumentoTest {
 		entity.setUsuario(new Usuario());
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateDescricao() {
-		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Descrição' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
+		entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 	
-	@Test
-	public void testValidateUsuario() {
-		try {
-			entity.setUsuario(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Usuário' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
-	}
-	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateConteudo() {
-		try {
-			entity.setConteudo(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Conteúdo' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setConteudo(null);
+		entity.validate();
 	}
 	
 	@Test

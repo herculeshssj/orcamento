@@ -50,15 +50,14 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IBanco extends ICRUDService<Banco>{
 	
-	public List<Banco> buscarPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Banco> buscarPorUsuario(Usuario usuario);
 	
-	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException; 
+	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario); 
 	
-	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException;
+	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
 
-	public List<Banco> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException;
+	public List<Banco> buscarAtivosPorUsuario(Usuario usuario);
 }

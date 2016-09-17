@@ -55,6 +55,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 
 @Component("categoriaMB")
@@ -87,7 +88,7 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 	public void find() {
 		try {
 			listEntity = getService().buscarTipoCategoriaEDescricaoEAtivoPorUsuario(tipoCategoria, null, somenteAtivos, getUsuarioLogado());
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

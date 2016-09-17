@@ -108,7 +108,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 
 	@Override
-	public void validar(FaturaCartao entity) throws BusinessException {
+	public void validar(FaturaCartao entity) {
 		// Impede que haja mais de uma fatura com a mesma data de vencimento para o cartão selecionado
 		List<FaturaCartao> faturas = getRepository().findByContaAndDataVencimento(entity.getConta(), entity.getDataVencimento());
 		if (faturas != null && !faturas.isEmpty()) {
@@ -118,7 +118,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		}
 	}
 	
-	public double saldoDevedorUltimaFatura(CartaoCredito cartao) throws BusinessException {
+	public double saldoDevedorUltimaFatura(CartaoCredito cartao) {
 		FaturaCartao fatura = getRepository().lastFaturaCartaoFechada(cartao.getConta());
 		if (fatura != null && !fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.QUITADA)) {
 			return fatura.getValorFatura() + fatura.getSaldoDevedor();
@@ -129,7 +129,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void fecharFatura(FaturaCartao entity, List<Moeda> conversoes) throws BusinessException {
+	public void fecharFatura(FaturaCartao entity, List<Moeda> conversoes) {
 		// Busca a fatura que será fechada
 		FaturaCartao faturaCartao = this.buscarPorID(entity.getId());		
 		
@@ -227,7 +227,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
-	public void reabrirFatura(FaturaCartao entity) throws BusinessException {
+	public void reabrirFatura(FaturaCartao entity) {
 		// Busca a fatura atualmente aberta e muda seu status para FUTURA
 		FaturaCartao faturaAtual = getRepository().findFaturaCartaoAberta(entity.getConta());
 		if (faturaAtual != null) {
@@ -255,7 +255,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
-	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta contaCorrente,	double valorAQuitar, Date dataPagamento) throws BusinessException {		
+	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta contaCorrente,	double valorAQuitar, Date dataPagamento) {		
 		if (Math.abs(Util.arredondar(valorAQuitar)) < Math.abs(Util.arredondar(faturaCartao.getValorMinimo()))) {
 			throw new BusinessException("Valor de pagamento não pode ser menor que o valor mínimo da fatura!");
 		}
@@ -307,7 +307,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
-	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento) throws BusinessException {
+	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento) {
 		
 		/* Efetua a quitação da fatura */
 		FaturaCartao fatura = getRepository().findById(faturaCartao.getId());
@@ -356,7 +356,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 	
 	@Override
-	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) throws BusinessException {
+	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) {
 		// Verifica se o lançamento selecionado já foi vinculado com outra fatura
 		if (getLancamentoContaRepository().existsLinkagePagamentoFaturaCartao(lancamentoConta)) {
 			throw new BusinessException("Lançamento selecionado já foi usado para quitar outra fatura!");
@@ -393,27 +393,27 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 
 	@Override
-	public List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta) throws BusinessException {
+	public List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta) {
 		return getRepository().findAllByCartaoCredito(conta);
 	}
 	
 	@Override
-	public List<FaturaCartao> buscarTodos() throws BusinessException {
+	public List<FaturaCartao> buscarTodos() {
 		return getRepository().findAll();
 	}
 	
 	@Override
-	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario) {
 		return getRepository().findAllByUsuario(usuario);
 	}
 	
 	@Override
-	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura) throws BusinessException {
+	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura) {
 		return getRepository().findByContaAndStatusFatura(cartao.getConta(), statusFatura);
 	}
 	
 	@Override
-	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta) throws BusinessException {
+	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta) {
 		return getRepository().findAllByContaOrderedByMesAndAno(conta);
 	}
 }

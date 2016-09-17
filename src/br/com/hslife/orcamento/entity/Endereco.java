@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -148,7 +147,7 @@ public class Endereco extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {		
+	public void validate() {		
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Tipo de logradouro", this.tipoLogradouro, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Logradouro", this.logradouro, 150);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Número", this.numero, 10);

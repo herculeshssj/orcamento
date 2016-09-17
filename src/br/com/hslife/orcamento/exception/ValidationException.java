@@ -1,6 +1,6 @@
 /***
   
-  	Copyright (c) 2012 - 2020 Hércules S. S. José
+  	Copyright (c) 2012 - 2016 Hércules S. S. José
 
     Este arquivo é parte do programa Orçamento Doméstico.
     
@@ -44,26 +44,44 @@
   
 ***/
 
-package br.com.hslife.orcamento.entity;
+package br.com.hslife.orcamento.exception;
 
-import org.junit.Test;
+import br.com.hslife.orcamento.util.Util;
 
-import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
-
-public class RegraImportacaoTest {
+/**
+ * Exceção não verificada que indica erros de validação a nível de 
+ * consistência de dados de entidade. Deve ser usada sempre para 
+ * indicar que um atributo não está de acordo com os requisitos
+ * da entidade.
+ * 
+ * @author herculeshssj
+ *
+ */
+public class ValidationException extends RuntimeException {
 	
-	private RegraImportacao entity = EntityInitializerFactory.createRegraImportacao(new Conta(), "texto");
-	
-	@Test(expected=ValidationException.class)
-	public void testValidateTexto() {
-		entity.setTexto(entity.getTexto() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-		entity.validate();
+	private static final long serialVersionUID = -6615643150827475837L;
+
+	public ValidationException() {
+		super();
+	}
+
+	public ValidationException(String message) {
+		super(message);
 	}
 	
-	@Test(expected=ValidationException.class)
-	public void testValidateConta() {
-		entity.setConta(null);
-		entity.validate();
+	public ValidationException(Exception exception) {
+		super(exception);
+	}
+	
+	public ValidationException(String message, Exception exception) {
+		super(message, exception);
+	}
+	
+	public ValidationException(String[] messages) {
+		super(Util.montarString(messages));
+	}
+	
+	public ValidationException(String[] messages, Exception exception) {
+		super(Util.montarString(messages), exception);
 	}
 }

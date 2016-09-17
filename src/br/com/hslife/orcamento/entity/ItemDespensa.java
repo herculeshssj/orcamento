@@ -65,7 +65,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -133,23 +133,14 @@ public class ItemDespensa extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
-		}
-		
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Marca favorita", marca, 50);
-		
-		if (this.despensa == null) {
-			throw new BusinessException("Informe a despensa!");
-		}
-		
-		if (this.unidadeMedida == null) {
-			throw new BusinessException("Informe a unidade de medida!");
-		}
+		EntityPersistenceUtil.validaCampoNulo("Despensa", this.despensa);
+		EntityPersistenceUtil.validaCampoNulo("Unidade de medida", this.unidadeMedida);
 		
 		if (this.quantidadeVerde < 0 || this.quantidadeAmarelo < 0 || this.quantidadeVermelho < 0) {
-			throw new BusinessException("Quantidade 'Verde', 'Amarelo' ou 'Vermelho' não pode ser menor que 0!");
+			throw new ValidationException("Quantidade 'Verde', 'Amarelo' ou 'Vermelho' não pode ser menor que 0!");
 		}
 	}
 

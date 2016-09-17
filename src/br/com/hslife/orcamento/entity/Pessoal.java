@@ -59,7 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -109,6 +109,20 @@ public class Pessoal extends EntityPersistence {
 	public Pessoal() {
 		genero = 'M';
 	}
+	
+	private Pessoal(Builder builder) {
+		this.genero = builder.genero;
+		this.etnia = builder.etnia;
+		this.tipoSanguineo = builder.tipoSanguineo;
+		this.dataNascimento = builder.dataNascimento;
+		this.nacionalidade = builder.nacionalidade;
+		this.naturalidade = builder.naturalidade;
+		this.escolaridade = builder.escolaridade;
+		this.filiacaoPai = builder.filiacaoPai;
+		this.filiacaoMae = builder.filiacaoMae;
+		this.estadoCivil = builder.estadoCivil;
+		this.usuario = builder.usuario;
+	}
 
 	@Override
 	public String getLabel() {		
@@ -116,9 +130,9 @@ public class Pessoal extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
+	public void validate() {
 		if (this.genero != 'M' && this.genero != 'F') {
-			throw new BusinessException("Gênero inexistente!");
+			throw new ValidationException("Gênero inexistente!");
 		}
 		
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Etnia", this.etnia, 50);
@@ -129,9 +143,79 @@ public class Pessoal extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Filiação Pai", this.filiacaoPai, 100);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Filiação Mãe", this.filiacaoMae, 100);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Estado Civil", this.estadoCivil, 50);
+		EntityPersistenceUtil.validaCampoNulo("Data de Nascimento", this.dataNascimento);
+	}
+	
+	public static class Builder {
+		private char genero;
+		private String etnia;
+		private String tipoSanguineo;
+		private Date dataNascimento;	
+		private String nacionalidade;
+		private String naturalidade;
+		private String escolaridade;
+		private String filiacaoPai;
+		private String filiacaoMae;
+		private String estadoCivil;
+		private Usuario usuario;
 		
-		if (this.usuario == null) {
-			throw new BusinessException("Informe o usuário!");
+		public Builder genero(char genero) {
+			this.genero = genero;
+			return this;
+		}
+		
+		public Builder etnia(String etnia) {
+			this.etnia = etnia;
+			return this;
+		}
+		
+		public Builder tipoSanguineo(String tipoSanguineo) {
+			this.tipoSanguineo = tipoSanguineo;
+			return this;
+		}
+		
+		public Builder dataNascimento(Date dataNascimento) {
+			this.dataNascimento = dataNascimento;
+			return this;
+		}
+		
+		public Builder nacionalidade(String nacionalidade) {
+			this.nacionalidade = nacionalidade;
+			return this;
+		}
+		
+		public Builder naturalidade(String naturalidade) {
+			this.naturalidade = naturalidade;
+			return this;
+		}
+		
+		public Builder escolaridade(String escolaridade) {
+			this.escolaridade = escolaridade;
+			return this;
+		}
+		
+		public Builder filiacaoPai(String filiacaoPai) {
+			this.filiacaoPai = filiacaoPai;
+			return this;
+		}
+		
+		public Builder filiacaoMae(String filiacaoMae) {
+			this.filiacaoMae = filiacaoMae;
+			return this;
+		}
+		
+		public Builder estadoCivil(String estadoCivil) {
+			this.estadoCivil = estadoCivil;
+			return this;
+		}
+		
+		public Builder usuario(Usuario usuario) {
+			this.usuario = usuario;
+			return this;
+		}
+		
+		public Pessoal build() {
+			return new Pessoal(this);
 		}
 	}
 	

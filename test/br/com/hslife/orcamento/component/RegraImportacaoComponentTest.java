@@ -68,7 +68,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
@@ -106,8 +106,9 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
 
+	@SuppressWarnings("deprecation")
 	@Before
-	public void initializeTestEnvironment() throws BusinessException {
+	public void initializeTestEnvironment() throws ApplicationException {
 		Usuario usuario = EntityInitializerFactory.initializeUsuario();
 		usuarioService.cadastrar(usuario);
 		
@@ -135,8 +136,9 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 		meioPagamentoService.cadastrar(meioPagamento);
 	}
 		
+	@SuppressWarnings("deprecation")
 	@Test
-	public void testProcessarRegras() throws BusinessException {			
+	public void testProcessarRegras() throws ApplicationException {			
 		List<LancamentoConta> lancamentosAProcessar = new ArrayList<LancamentoConta>();
 		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
 		
@@ -176,7 +178,7 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 	}
 	
 	@Test
-	public void testProcessarRegrasSemRegrasCadastradas() throws BusinessException {
+	public void testProcessarRegrasSemRegrasCadastradas() throws ApplicationException {
 		List<LancamentoConta> lancamentosAProcessar = new ArrayList<LancamentoConta>();
 		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
 		

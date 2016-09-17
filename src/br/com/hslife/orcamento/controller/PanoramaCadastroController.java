@@ -62,6 +62,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
@@ -124,7 +125,7 @@ public class PanoramaCadastroController extends AbstractController {
 		
 		try {
 			contas = resumoEstatisticaService.gerarRelatorioPanoramaCadastro(cadastroSelecionado, idRegistro);
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -168,7 +169,7 @@ public class PanoramaCadastroController extends AbstractController {
 					}
 					break;
 			}
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		

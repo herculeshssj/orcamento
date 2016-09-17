@@ -1,6 +1,6 @@
 /***
   
-  	Copyright (c) 2012 - 2020 Hércules S. S. José
+  	Copyright (c) 2012 - 2016 Hércules S. S. José
 
     Este arquivo é parte do programa Orçamento Doméstico.
     
@@ -51,19 +51,19 @@ import org.junit.Test;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
-public class RegraImportacaoTest {
+public class UnidadeMedidaTest {
 	
-	private RegraImportacao entity = EntityInitializerFactory.createRegraImportacao(new Conta(), "texto");
+	private UnidadeMedida entity = EntityInitializerFactory.createUnidadeMedida(EntityInitializerFactory.createUsuario());
 	
 	@Test(expected=ValidationException.class)
-	public void testValidateTexto() {
-		entity.setTexto(entity.getTexto() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+	public void testValidateDescricao() {
+		entity.setDescricao(entity.getDescricao() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ      ");
 		entity.validate();
 	}
 	
 	@Test(expected=ValidationException.class)
-	public void testValidateConta() {
-		entity.setConta(null);
+	public void testValidateSigla() {
+		entity.setSigla(entity.getSigla() + "     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ       ");
 		entity.validate();
 	}
 }

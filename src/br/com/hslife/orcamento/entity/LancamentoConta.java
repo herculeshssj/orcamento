@@ -77,7 +77,6 @@ import org.hibernate.annotations.SortType;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.util.DetalheLancamentoComparator;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
@@ -215,23 +214,10 @@ public class LancamentoConta extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws BusinessException {
-		if (this.descricao == null || this.descricao.trim().isEmpty()) {
-			throw new BusinessException("Informe uma descrição!");
-		}
-		
-		if (this.descricao.length() > 100) {
-			throw new BusinessException("Descrição do lançamento deve ser menor que 100 caracteres!");
-		}
-		
-		if (this.tipoLancamento == null) {
-			throw new BusinessException("Informe o tipo de lançamento!");
-		}
-		
-		if (this.conta == null) {
-			throw new BusinessException("Informe a conta!");
-		}
-		
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 100);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de lançamento", this.tipoLancamento);
+		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		EntityPersistenceUtil.validaCampoNulo("Data de pagamento", this.dataPagamento);
 	}
 

@@ -113,7 +113,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 
 	@Override
-	public void validar(Conta entity) throws BusinessException {
+	public void validar(Conta entity) {
 		if (entity.getDataFechamento() != null) {
 			if (entity.getDataAbertura().after(entity.getDataFechamento()) && entity.getDataFechamento().before(entity.getDataAbertura())) {
 				throw new BusinessException("Data de abertura (" + Util.formataDataHora(entity.getDataAbertura(), Util.DATA) + ") e data de fechamento (" +  Util.formataDataHora(entity.getDataFechamento(), Util.DATA)+") incorretos!");
@@ -122,13 +122,13 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void cadastrar(Conta entity) throws BusinessException {
+	public void cadastrar(Conta entity) {
 		// Cadastra a conta e já realiza a abertura da mesma
 		getRepository().save(entity);
 	}
 	
 	@Override
-	public void ativarConta(Conta conta) throws BusinessException {	
+	public void ativarConta(Conta conta) {	
 		// Seta a conta como ativa
 		conta.setAtivo(true);
 		
@@ -141,7 +141,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void desativarConta(Conta conta, String situacaoLancamentos) throws BusinessException {
+	public void desativarConta(Conta conta, String situacaoLancamentos) {
 		
 		if (situacaoLancamentos.equals("QUITAR")) {			
 			// Busca o último lançamento cadastrado, caso não exista cria um novo lançamento e define a data de 
@@ -190,7 +190,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void excluir(Conta entity) throws BusinessException {
+	public void excluir(Conta entity) {
 		if (getRepository().existsLinkages(entity)) {
 			throw new BusinessException("Não é possível excluir! Existem registros relacionamentos com a conta!");
 		} else {
@@ -213,67 +213,67 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public List<Conta> buscarTodos() throws BusinessException {
+	public List<Conta> buscarTodos() {
 		return getRepository().findAll();
 	}
 	
 	@Override
-	public List<Conta> buscarPorDescricao(String descricao) throws BusinessException {
+	public List<Conta> buscarPorDescricao(String descricao) {
 		return getRepository().findByDescricao(descricao);
 	}
 	
 	@Override
-	public List<Conta> buscarPorUsuario(Usuario usuario)	throws BusinessException {
+	public List<Conta> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarTodosAtivos() throws BusinessException {
+	public List<Conta> buscarTodosAtivos() {
 		return getRepository().findAllAtivos();
 	}
 	
 	@Override
-	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findAllAtivosByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) throws BusinessException {
+	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) {
 		return getRepository().findByTipoContaAndUsuario(tipoConta, usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Conta> buscarAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findEnabledByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findOnlyTipoCartaoEnabledByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario) {
 		return getRepository().findOnlyTipoCartaoByUsuario(usuario);
 	}
 	
 	@Override
-	public Conta buscarPorCartaoCredito(CartaoCredito cartao) throws BusinessException {
+	public Conta buscarPorCartaoCredito(CartaoCredito cartao) {
 		return getRepository().findByCartaoCredito(cartao);
 	}
 	
 	@Override
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) throws BusinessException {
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) {
 		return getRepository().findDescricaoOrTipoContaOrAtivoByUsuario(descricao, tipoConta, usuario, ativo);
 	}
 	
 	@Override
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) throws BusinessException {
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) {
 		return getRepository().findDescricaoOrTipoContaOrAtivoByUsuario(descricao, tipoConta, usuario, ativo);
 	}
 }

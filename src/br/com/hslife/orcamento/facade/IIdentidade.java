@@ -51,12 +51,11 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IIdentidade extends ICRUDService<Identidade> {
 
-	public void salvarDocumentos(List<Identidade> documentos) throws BusinessException;
+	public void salvarDocumentos(List<Identidade> documentos);
 	
-	public Identidade buscarPorUsuarioETipoIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) throws BusinessException;
+	public Identidade buscarPorUsuarioETipoIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade);
 	
 }

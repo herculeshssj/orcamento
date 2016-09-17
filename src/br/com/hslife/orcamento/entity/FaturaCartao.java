@@ -72,7 +72,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 @Entity
 @Table(name="faturacartao")
@@ -167,8 +166,8 @@ public class FaturaCartao extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws BusinessException {
-		//TODO implementar as validações da entidade
+	public void validate() {
+	
 	}
 	
 	public void adicionarTodosLancamentos(Collection<LancamentoConta> lancamentos) {

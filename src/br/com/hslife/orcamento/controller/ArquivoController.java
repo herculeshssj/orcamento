@@ -65,6 +65,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IArquivo;
 import br.com.hslife.orcamento.model.AnexoEntidade;
 import br.com.hslife.orcamento.model.CriterioArquivo;
@@ -158,7 +159,7 @@ public class ArquivoController extends AbstractController {
 			if (quantDescartar != 0) {
 				warnMessage(quantDescartar + " arquivo(s) pode(m) ser descartado(s), liberando " + new DecimalFormat("#,##0.##").format(bytesALiberar) + " bytes no disco.");
 			}
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		
@@ -172,7 +173,7 @@ public class ArquivoController extends AbstractController {
 	public void findEntity() {
 		try {
 			listContainer = getService().buscarEntidadesPorDescricao(descricao, container);
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -193,7 +194,7 @@ public class ArquivoController extends AbstractController {
 			
 			infoMessage("Anexo salvo com sucesso!");
 			initializeEntity();
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -216,7 +217,7 @@ public class ArquivoController extends AbstractController {
 			} else 
 				initializeEntity();
 			return "/pages/Arquivo/listArquivo"; 
-		} catch (BusinessException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";

@@ -70,7 +70,7 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	}
 	
 	@Override
-	public void cadastrar(Banco entity) throws BusinessException {
+	public void cadastrar(Banco entity) {
 		if (entity.isPadrao()) {
 			getRepository().updateAllToNotDefault(entity.getUsuario());
 		}
@@ -78,7 +78,7 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	}
 	
 	@Override
-	public void alterar(Banco entity) throws BusinessException {
+	public void alterar(Banco entity) {
 		if (entity.isPadrao()) {
 			getRepository().updateAllToNotDefault(entity.getUsuario());
 		}
@@ -86,7 +86,7 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	}
 	
 	@Override
-	public void excluir(Banco entity) throws BusinessException {
+	public void excluir(Banco entity) {
 		try {
 			super.excluir(entity);
 		} catch (DataIntegrityViolationException dive) {
@@ -97,22 +97,22 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	}
 
 	@Override
-	public List<Banco> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Banco> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario) throws BusinessException {
+	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario) {
 		return getRepository().findByNomeAndUsuario(nome, usuario);
 	}
 	
 	@Override
-	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws BusinessException {
+	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) {
 		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
 	}
 	
 	@Override
-	public List<Banco> buscarAtivosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Banco> buscarAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findActiveByUsuario(usuario);
 	}
 }

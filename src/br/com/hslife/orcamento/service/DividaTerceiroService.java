@@ -76,12 +76,12 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	
 	@Override
 	public List<DividaTerceiro> buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(Favorecido favorecido, 
-			TipoCategoria tipoCategoria, StatusDivida statusDivida, Usuario usuario) throws BusinessException {
+			TipoCategoria tipoCategoria, StatusDivida statusDivida, Usuario usuario) {
 		return getRepository().findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(favorecido, tipoCategoria, statusDivida, usuario);
 	}
 	
 	@Override
-	public void vigorarDividaTerceiro(DividaTerceiro entity) throws BusinessException {
+	public void vigorarDividaTerceiro(DividaTerceiro entity) {
 		if (entity.getModeloDocumento() == null) {
 			throw new BusinessException("Selecione um modelo de termo/contrato!");
 		}		
@@ -92,7 +92,7 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	}
 	
 	@Override
-	public void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException {
+	public void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa) {
 		if (justificativa == null || justificativa.isEmpty()) {
 			throw new BusinessException("Informe a justificativa para renegociar a dívida!");
 		}
@@ -121,7 +121,7 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		getRepository().save(novaDivida);
 	}
 	
-	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) throws BusinessException {
+	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) {
 		if (pagamento.getModeloDocumento() == null) {
 			throw new BusinessException("Selecione um modelo de comprovante de pagamento!");
 		}
@@ -143,7 +143,7 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		getRepository().update(divida);
 	}
 	
-	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa) throws BusinessException {
+	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa) {
 		if (justificativa == null || justificativa.isEmpty()) {
 			throw new BusinessException("Informe a justificativa para encerrar a dívida!");
 		}

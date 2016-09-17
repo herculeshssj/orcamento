@@ -97,7 +97,7 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	}
 	
 	@Override
-	public void validar(RegraImportacao entity) throws BusinessException {
+	public void validar(RegraImportacao entity) {
 		RegraImportacao regra = getRepository().findEqualEntity(entity);
 		if (regra != null && !regra.equals(entity)) {
 			throw new BusinessException("Existe uma regra com os mesmo parâmetros informados!");
@@ -105,17 +105,17 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	}
 
 	@Override
-	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws BusinessException {
+	public List<RegraImportacao> buscarTodosPorConta(Conta conta) {
 		return getRepository().findAllByConta(conta);
 	}
 	
-	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws BusinessException {
+	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) {
 		List<LancamentoConta> lancamentos = new ArrayList<>();
 		lancamentos.add(lancamento);
 		return this.processarRegras(conta, lancamentos).get(0);
 	}
 	
-	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws BusinessException {
+	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) {
 		Set<LancamentoConta> lancamentosProcessados = new HashSet<LancamentoConta>();
 		
 		List<RegraImportacao> regras = this.buscarTodosPorConta(conta);

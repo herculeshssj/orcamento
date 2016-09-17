@@ -78,7 +78,7 @@ public class DespensaService extends AbstractCRUDService<Despensa> implements ID
 	}
 
 	@Override
-	public void excluir(Despensa entity) throws BusinessException {
+	public void excluir(Despensa entity) {
 		if (getItemDespensaRepository().findByDespensa(entity) != null
 				&& !getItemDespensaRepository().findByDespensa(entity).isEmpty()) {
 			throw new BusinessException("Não é possível excluir! Existem itens vinculados a esta despensa!");
@@ -87,12 +87,12 @@ public class DespensaService extends AbstractCRUDService<Despensa> implements ID
 	}
 	
 	@Override
-	public List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 
 	@Override
-	public List<Despensa> buscarTodosPorUsuario(Usuario usuario) throws BusinessException {
+	public List<Despensa> buscarTodosPorUsuario(Usuario usuario) {
 		return getRepository().findAllByUsuario(usuario);
 	}
 }

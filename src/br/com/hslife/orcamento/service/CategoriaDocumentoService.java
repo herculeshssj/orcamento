@@ -69,7 +69,7 @@ public class CategoriaDocumentoService extends AbstractCRUDService<CategoriaDocu
 	}
 
 	@Override
-	public void excluir(CategoriaDocumento entity) throws BusinessException {
+	public void excluir(CategoriaDocumento entity) {
 		if (getRepository().existsLinkages(entity)) {
 			throw new BusinessException("Existem documentos cadastrados para esta categoria!");
 		} else {
@@ -78,17 +78,17 @@ public class CategoriaDocumentoService extends AbstractCRUDService<CategoriaDocu
 	}
 	
 	@Override
-	public List<CategoriaDocumento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws BusinessException {
+	public List<CategoriaDocumento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
 	@Override
-	public List<CategoriaDocumento> buscarPorDescricao(String descricao) throws BusinessException {
+	public List<CategoriaDocumento> buscarPorDescricao(String descricao) {
 		return getRepository().findByDescricao(descricao);
 	}
 	
 	@Override
-	public List<CategoriaDocumento> buscarPorUsuario(Usuario usuario) throws BusinessException {
+	public List<CategoriaDocumento> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 }

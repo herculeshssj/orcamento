@@ -47,13 +47,12 @@
 package br.com.hslife.orcamento.entity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.hslife.orcamento.enumeration.TipoDado;
-import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 
 public class RelatorioColunaTest {
 
@@ -71,69 +70,34 @@ public class RelatorioColunaTest {
 		assertEquals("Coluna de Teste (colunateste)", entity.getLabel());
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateNomeColuna() {
-		try {
-			entity.setNomeColuna("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Nome da coluna' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
+		entity.setNomeColuna("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateTextoExibicao() {
-		try {
-			entity.setTextoExibicao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Texto de exibição' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
+		entity.setTextoExibicao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateTipoDado() {
-		try {
-			entity.setTipoDado(null);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Tipo de dado' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
+		entity.setTipoDado(null);
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateMascaraFormatacaoPreenchido() {
-		try {
-			entity.setFormatar(true);
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Máscara de formatação' não pode ser nulo.", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
+		entity.setFormatar(true);
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateMascaraFormatacaoTamanho() {
-		try {
-			entity.setFormatar(true);
-			entity.setMascaraFormatacao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (BusinessException be) {
-			assertEquals("Campo 'Máscara de formatação' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
+		entity.setFormatar(true);
+		entity.setMascaraFormatacao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 }

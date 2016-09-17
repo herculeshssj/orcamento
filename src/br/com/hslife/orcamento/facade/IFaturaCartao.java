@@ -56,29 +56,28 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IFaturaCartao extends ICRUDService<FaturaCartao>{ 	
 	
-	public List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta) throws BusinessException;
+	public List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta);
 	
-	public List<FaturaCartao> buscarTodos() throws BusinessException;
+	public List<FaturaCartao> buscarTodos();
 	
-	public void fecharFatura(FaturaCartao fatura, List<Moeda> conversoes) throws BusinessException;
+	public void fecharFatura(FaturaCartao fatura, List<Moeda> conversoes);
 	
-	public void reabrirFatura(FaturaCartao faturaCartao) throws BusinessException;
+	public void reabrirFatura(FaturaCartao faturaCartao);
 	
-	public double saldoDevedorUltimaFatura(CartaoCredito cartao) throws BusinessException;
+	public double saldoDevedorUltimaFatura(CartaoCredito cartao);
 	
-	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta conta, double valorAQuitar, Date dataPagamento) throws BusinessException;
+	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta conta, double valorAQuitar, Date dataPagamento);
 	
-	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento) throws BusinessException;
+	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento);
 	
-	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) throws BusinessException;
+	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta);
 	
-	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario) throws BusinessException;
+	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario);
 	
-	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura) throws BusinessException;
+	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura);
 	
-	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta) throws BusinessException;
+	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta);
 }
