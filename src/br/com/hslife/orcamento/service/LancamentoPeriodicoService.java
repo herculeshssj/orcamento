@@ -62,6 +62,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
@@ -94,10 +95,10 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	}
 
 	@Override
-	public void validar(LancamentoPeriodico entity) throws ApplicationException {
+	public void validar(LancamentoPeriodico entity) {
 		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
 			if (!entity.getMoeda().equals(entity.getConta().getMoeda())) {
-				throw new ApplicationException("A moeda do lançamento deve ser igual a moeda da conta!");
+				throw new BusinessException("A moeda do lançamento deve ser igual a moeda da conta!");
 			}
 		}
 	}

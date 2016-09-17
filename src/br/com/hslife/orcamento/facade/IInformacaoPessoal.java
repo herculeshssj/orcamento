@@ -52,23 +52,22 @@ import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IInformacaoPessoal {
 	
-	public void salvarDadosPessoais(Pessoal pessoal) throws ApplicationException; 
+	public void salvarDadosPessoais(Pessoal pessoal); 
 	
-	public void salvarEndereco(Endereco entity) throws ApplicationException;
+	public void salvarEndereco(Endereco entity);
 	
-	public void excluirEndereco(Endereco entity) throws ApplicationException;
+	public void excluirEndereco(Endereco entity);
 	
-	public void salvarTelefone(Telefone entity) throws ApplicationException;
+	public void salvarTelefone(Telefone entity);
 	
-	public void excluirTelefone(Telefone entity) throws ApplicationException;
+	public void excluirTelefone(Telefone entity);
 	
-	public Pessoal buscarDadosPessoais(Usuario usuario) throws ApplicationException;
+	public Pessoal buscarDadosPessoais(Usuario usuario);
 	
-	public List<Endereco> buscarEnderecos(Usuario usuario) throws ApplicationException;
+	public List<Endereco> buscarEnderecos(Usuario usuario);
 	
-	public List<Telefone> buscarTelefones(Usuario usuario) throws ApplicationException;
+	public List<Telefone> buscarTelefones(Usuario usuario);
 }

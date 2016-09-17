@@ -164,7 +164,7 @@ public class AgendaTest {
 	}
 	
 	@SuppressWarnings("deprecation")
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testComporTextoAgendamentoCompromisso() throws ApplicationException {
 		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
@@ -172,13 +172,7 @@ public class AgendaTest {
 		entity.setFim(null);
 		entity.setInicio(null);
 		entity.setTipoAgendamento(TipoAgendamento.COMPROMISSO);
-		try {
-			entity.comporTextoAgendamento();
-		} catch (ApplicationException be) {
-			if (!be.getMessage().equals("Informe a data de início!")) {
-				throw be;
-			}			
-		}
+		entity.comporTextoAgendamento();
 		
 		entity.setInicio(dataTest);
 		entity.setDiaInteiro(true);
@@ -197,7 +191,7 @@ public class AgendaTest {
 	}
 	
 	@SuppressWarnings("deprecation")
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testComporTextoAgendamentoTarefa() throws ApplicationException {
 		Date dataTest = new Date(2005-1900,2,1,15,30,45);
 		
@@ -205,14 +199,8 @@ public class AgendaTest {
 		entity.setFim(null);
 		entity.setInicio(null);
 		entity.setTipoAgendamento(TipoAgendamento.TAREFA);
-		try {
-			entity.comporTextoAgendamento();
-		} catch (ApplicationException be) {
-			if (!be.getMessage().equals("Informe a data de início!")) {
-				throw be;
-			}			
-		}
-		
+		entity.comporTextoAgendamento();
+				
 		entity.setInicio(dataTest);
 		assertEquals("01/03/2005 15:30", entity.comporTextoAgendamento());
 		

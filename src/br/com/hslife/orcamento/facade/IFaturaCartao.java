@@ -56,29 +56,28 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IFaturaCartao extends ICRUDService<FaturaCartao>{ 	
 	
-	public List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta) throws ApplicationException;
+	public List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta);
 	
-	public List<FaturaCartao> buscarTodos() throws ApplicationException;
+	public List<FaturaCartao> buscarTodos();
 	
-	public void fecharFatura(FaturaCartao fatura, List<Moeda> conversoes) throws ApplicationException;
+	public void fecharFatura(FaturaCartao fatura, List<Moeda> conversoes);
 	
-	public void reabrirFatura(FaturaCartao faturaCartao) throws ApplicationException;
+	public void reabrirFatura(FaturaCartao faturaCartao);
 	
-	public double saldoDevedorUltimaFatura(CartaoCredito cartao) throws ApplicationException;
+	public double saldoDevedorUltimaFatura(CartaoCredito cartao);
 	
-	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta conta, double valorAQuitar, Date dataPagamento) throws ApplicationException;
+	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta conta, double valorAQuitar, Date dataPagamento);
 	
-	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento) throws ApplicationException;
+	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento);
 	
-	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta) throws ApplicationException;
+	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta);
 	
-	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario);
 	
-	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura) throws ApplicationException;
+	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura);
 	
-	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta) throws ApplicationException;
+	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta);
 }

@@ -70,11 +70,6 @@ public class IdentidadeService extends AbstractCRUDService<Identidade> implement
 	}
 
 	@Override
-	public void validar(Identidade entity) throws ApplicationException {
-		
-	}
-
-	@Override
 	public void salvarDocumentos(List<Identidade> documentos) throws ApplicationException {
 		for (Identidade identidade : documentos) {
 			if (identidade.getId() == null || getRepository().findById(identidade.getId()) == null) {

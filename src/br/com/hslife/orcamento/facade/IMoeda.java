@@ -50,21 +50,20 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IMoeda extends ICRUDService<Moeda>{
 	
-	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario) throws ApplicationException;
+	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario);
 	
-	public List<Moeda> buscarPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Moeda> buscarPorUsuario(Usuario usuario);
 	
-	public Moeda buscarPadraoPorUsuario(Usuario usuario) throws ApplicationException;
+	public Moeda buscarPadraoPorUsuario(Usuario usuario);
 	
-	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) throws ApplicationException;
+	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
 
-	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario);
 	
-	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario) throws ApplicationException;
+	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario);
 }

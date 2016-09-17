@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.service;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.text.SimpleDateFormat;
@@ -79,6 +78,7 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
@@ -191,12 +191,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			case CORRENTE : this.processarArquivoImportadoContaCorrente(arquivo, conta); break;
 			case POUPANCA : this.processarArquivoImportadoContaPoupanca(arquivo, conta); break;
 			case CARTAO : this.processarArquivoImportadoCartaoCredito(arquivo, conta); break;
-			default : throw new ApplicationException("Opção inválida para conta!");
+			default : throw new BusinessException("Opção inválida para conta!");
 		}
 	}
 
 	@Override
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws ApplicationException {
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
@@ -298,7 +298,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void importarLancamento(LancamentoImportado entity) throws ApplicationException {
+	public void importarLancamento(LancamentoImportado entity) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
@@ -622,15 +622,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException, IOException {
-		// Declaração e leitura dos dados do CSV
-		final Reader reader = new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "UTF-8");
-		final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
-		
-		// Declaração das variáveis
-		LancamentoImportado lancamentoImportado = new LancamentoImportado();
-		
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
+			// Declaração e leitura dos dados do CSV
+			final Reader reader = new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "UTF-8");
+			final CSVParser parser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
+			
+			// Declaração das variáveis
+			LancamentoImportado lancamentoImportado = new LancamentoImportado();
 		
 			for (CSVRecord record : parser) {
 				
@@ -654,16 +653,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					lancamentoImportado.setId(null);
 				}
 			}
-		
-		} catch (Exception e) {
-			throw new ApplicationException(e);
-		} finally {
-		
+			
 			// Fecha os streams
 			parser.close();
 			reader.close();
-		}
 		
+		} catch (Exception e) {
+			throw new ApplicationException(e);
+		}		
 	}
 	
 	@Override

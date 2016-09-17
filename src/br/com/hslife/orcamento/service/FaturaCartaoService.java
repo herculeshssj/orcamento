@@ -68,6 +68,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
@@ -108,13 +109,13 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	}
 
 	@Override
-	public void validar(FaturaCartao entity) throws ApplicationException {
+	public void validar(FaturaCartao entity) {
 		// Impede que haja mais de uma fatura com a mesma data de vencimento para o cartão selecionado
 		List<FaturaCartao> faturas = getRepository().findByContaAndDataVencimento(entity.getConta(), entity.getDataVencimento());
 		if (faturas != null && !faturas.isEmpty()) {
 			faturas.remove(entity);
 			if (faturas.size() != 0)
-				throw new ApplicationException("Data de vencimento já informada para uma fatura cadastrada!");
+				throw new BusinessException("Data de vencimento já informada para uma fatura cadastrada!");
 		}
 	}
 	

@@ -121,11 +121,6 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario) throws ApplicationException {
 		return getRepository().findByTipoCategoriaAndUsuario(tipoCategoria, usuario);
 	}
-	
-	@Override
-	public void validar(Categoria entity) throws ApplicationException {
-		
-	}
 
 	@Override
 	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo) throws ApplicationException {

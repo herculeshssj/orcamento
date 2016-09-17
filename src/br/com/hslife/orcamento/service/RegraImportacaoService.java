@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
@@ -97,10 +98,10 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	}
 	
 	@Override
-	public void validar(RegraImportacao entity) throws ApplicationException {
+	public void validar(RegraImportacao entity) {
 		RegraImportacao regra = getRepository().findEqualEntity(entity);
 		if (regra != null && !regra.equals(entity)) {
-			throw new ApplicationException("Existe uma regra com os mesmo parâmetros informados!");
+			throw new ValidationException("Existe uma regra com os mesmo parâmetros informados!");
 		}
 	}
 

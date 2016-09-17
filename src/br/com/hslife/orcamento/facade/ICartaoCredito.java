@@ -51,27 +51,26 @@ import java.util.List;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface ICartaoCredito extends ICRUDService<CartaoCredito> {
 	
-	public List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException;
+	public List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<CartaoCredito> buscarPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<CartaoCredito> buscarPorUsuario(Usuario usuario);
 	
-	public void desativarCartoes() throws ApplicationException;
+	public void desativarCartoes();
 	
-	public void substituirCartao(CartaoCredito entity) throws ApplicationException;
+	public void substituirCartao(CartaoCredito entity);
 	
-	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario);
 	
-	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario);
 	
-	public void ativarCartao(CartaoCredito entity) throws ApplicationException;
+	public void ativarCartao(CartaoCredito entity);
 	
-	public void desativarCartao(CartaoCredito entity) throws ApplicationException;
+	public void desativarCartao(CartaoCredito entity);
 	
-	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo) throws ApplicationException;
+	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo);
 	
-	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito) throws ApplicationException;
+	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito);
 }

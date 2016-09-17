@@ -55,25 +55,24 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> {
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento) throws ApplicationException;
+	public List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento);
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamento statusLancamento) throws ApplicationException;
+	public List<LancamentoPeriodico> buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamento statusLancamento);
 	
-	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus) throws ApplicationException;
+	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus);
 	
-	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws ApplicationException;
+	public void registrarPagamento(LancamentoConta pagamentoPeriodo);
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario) throws ApplicationException;
+	public List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario);
 	
-	public void mesclarLancamentos(LancamentoConta pagamentoPeriodo, LancamentoConta lancamentoAMesclar) throws ApplicationException;
+	public void mesclarLancamentos(LancamentoConta pagamentoPeriodo, LancamentoConta lancamentoAMesclar);
 	
-	public void vincularLancamentos(LancamentoPeriodico lancamentoPeriodico, List<LancamentoConta> lancamentosAVincular) throws ApplicationException;
+	public void vincularLancamentos(LancamentoPeriodico lancamentoPeriodico, List<LancamentoConta> lancamentosAVincular);
 
-	public void removerLancamentos(List<LancamentoConta> lancamentosARemover) throws ApplicationException;
+	public void removerLancamentos(List<LancamentoConta> lancamentosARemover);
 		
-	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico) throws ApplicationException;
+	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico);
 }

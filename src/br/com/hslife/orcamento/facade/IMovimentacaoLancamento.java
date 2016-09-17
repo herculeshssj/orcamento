@@ -52,25 +52,24 @@ import java.util.Map;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IMovimentacaoLancamento {
 	
-	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta) throws ApplicationException;
+	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta);
 	
-	public void excluirLancamentos(List<LancamentoConta> lancamentos) throws ApplicationException;
+	public void excluirLancamentos(List<LancamentoConta> lancamentos);
 	
-	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento) throws ApplicationException;
+	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento);
 	
-	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros) throws ApplicationException;
+	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros);
 	
-	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws ApplicationException;
+	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
 	
-	public void removerVinculos(List<LancamentoConta> lancamentos) throws ApplicationException;
+	public void removerVinculos(List<LancamentoConta> lancamentos);
 	
-	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws ApplicationException;
+	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
 	
-	public void dividirLancamento(LancamentoConta lancamento, int quantidade) throws ApplicationException;
+	public void dividirLancamento(LancamentoConta lancamento, int quantidade);
 	
-	public void salvarDetalhamentoLancamento(LancamentoConta lancamento) throws ApplicationException;
+	public void salvarDetalhamentoLancamento(LancamentoConta lancamento);
 }

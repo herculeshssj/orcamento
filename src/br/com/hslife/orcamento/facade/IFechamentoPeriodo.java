@@ -54,35 +54,34 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IFechamentoPeriodo {
 	
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) throws ApplicationException;
+	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta);
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) throws ApplicationException;
+	public void fecharPeriodo(Date dataFechamento, Conta conta);
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) throws ApplicationException;
+	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos);
 	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) throws ApplicationException;
+	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos);
 	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  throws ApplicationException;
+	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos) ;
 	
-	public void reabrirPeriodo(FechamentoPeriodo entity) throws ApplicationException;
+	public void reabrirPeriodo(FechamentoPeriodo entity);
 	
-	public void registrarPagamento(LancamentoConta pagamentoPeriodo) throws ApplicationException;
+	public void registrarPagamento(LancamentoConta pagamentoPeriodo);
 	
-	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) throws ApplicationException;
+	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo);
 	
-	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) throws ApplicationException;
+	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta);
 	
-	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) throws ApplicationException;
+	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta);
 	
-	public FechamentoPeriodo buscarFechamentoPorID(Long id) throws ApplicationException;
+	public FechamentoPeriodo buscarFechamentoPorID(Long id);
 	
-	public double saldoUltimoFechamento(Conta conta) throws ApplicationException;
+	public double saldoUltimoFechamento(Conta conta);
 	
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao) throws ApplicationException;
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao);
 	
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) throws ApplicationException;
+	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta);
 }

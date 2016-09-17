@@ -319,19 +319,12 @@ public class OpcaoSistemaComponent {
 	}
 	
 	public Map<String, Integer> getOpcoesArquivosAnexados(Usuario usuario) {
-		try {
-			Map<String, Integer> opcoes = new HashMap<String, Integer>();
+		Map<String, Integer> opcoes = new HashMap<String, Integer>();
 			
-			for (OpcaoSistema opcao : getService().buscarOpcoesUserPorCasoUso("Arquivo", usuario)) {
-				opcoes.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
-			}
-			return opcoes;
-		} catch (ApplicationException be) {
-			logger.catching(be);
-		} catch (Exception e) {
-			logger.catching(e);
+		for (OpcaoSistema opcao : getService().buscarOpcoesUserPorCasoUso("Arquivo", usuario)) {
+			opcoes.put(opcao.getChave(), Integer.valueOf(opcao.getValor()));
 		}
-		return null;
+		return opcoes;
 	}
 	
 	public Moeda getMoedaPadrao() throws ApplicationException {

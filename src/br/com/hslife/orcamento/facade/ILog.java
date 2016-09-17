@@ -49,18 +49,17 @@ package br.com.hslife.orcamento.facade;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Logs;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.model.CriterioLog;
 
 public interface ILog {
 	
-	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) throws ApplicationException;
+	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca);
 
-	public List<String> buscarTodosNiveis() throws ApplicationException;
+	public List<String> buscarTodosNiveis();
 	
-	public List<String> buscarTodosLoggers() throws ApplicationException;
+	public List<String> buscarTodosLoggers();
 	
-	public Logs buscarPorID(Long id) throws ApplicationException;
+	public Logs buscarPorID(Long id);
 	
-	public void excluir(Logs logs) throws ApplicationException;
+	public void excluir(Logs logs);
 }

@@ -50,13 +50,12 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 
 public interface IUnidadeMedida extends ICRUDService<UnidadeMedida> {
 	
-	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException;
+	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<UnidadeMedida> buscarPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<UnidadeMedida> buscarPorUsuario(Usuario usuario);
 	
 }

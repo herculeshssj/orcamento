@@ -202,17 +202,17 @@ public class Agenda extends EntityPersistence {
 		return "";
 	}
 	
-	private String comporTextoAgendamentoPrevisao(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws ApplicationException {
+	private String comporTextoAgendamentoPrevisao(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) {
 		if (inicio == null) {
-			throw new ApplicationException("Informe a data de início!");
+			throw new ValidationException("Informe a data de início!");
 		} else {
 			return Util.formataDataHora(inicio, Util.DATA);
 		}
 	}
 	
-	private String comporTextoAgendamentoTarefa(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws ApplicationException {
+	private String comporTextoAgendamentoTarefa(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) {
 		if (inicio == null) {
-			throw new ApplicationException("Informe a data de início!");
+			throw new ValidationException("Informe a data de início!");
 		}
 		if (fim == null) {
 			if (this.extrairHora(inicio) == 0 && this.extrairMinuto(inicio) == 0) {
@@ -229,9 +229,9 @@ public class Agenda extends EntityPersistence {
 		}				
 	}
 	
-	private String comporTextoAgendamentoCompromisso(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) throws ApplicationException {
+	private String comporTextoAgendamentoCompromisso(Date inicio, Date fim, boolean diaInteiro, TipoAgendamento tipoAgendamento) {
 		if (inicio == null) {
-			throw new ApplicationException("Informe a data de início!");
+			throw new ValidationException("Informe a data de início!");
 		}
 		if (diaInteiro) {
 			if (fim == null) {

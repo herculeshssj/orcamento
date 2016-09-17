@@ -82,7 +82,7 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 		return getRepository().findById(id);
 	}
 	
-	public void validar(E entity) throws ApplicationException{
+	public void validar(E entity) {
 		entity.validate();
 	}
 }

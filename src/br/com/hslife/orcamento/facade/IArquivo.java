@@ -50,18 +50,17 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.enumeration.Container;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.model.AnexoEntidade;
 import br.com.hslife.orcamento.model.CriterioArquivo;
 
 
 public interface IArquivo {
 	
-	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) throws ApplicationException;
+	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio);
 	
-	public void excluir(Arquivo arquivo) throws ApplicationException;
+	public void excluir(Arquivo arquivo);
 
-	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container) throws ApplicationException;
+	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container);
 	
-	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) throws ApplicationException;
+	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo);
 }

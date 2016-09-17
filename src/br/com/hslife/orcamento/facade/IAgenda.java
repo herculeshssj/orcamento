@@ -51,18 +51,17 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.model.CriterioAgendamento;
 
 public interface IAgenda extends ICRUDService<Agenda> {
 	
-	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim) throws ApplicationException;
+	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim);
 	
-	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca) throws ApplicationException;
+	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca);
 	
-	public Long contarAgendamentosDeHojeComAlerta() throws ApplicationException;
+	public Long contarAgendamentosDeHojeComAlerta();
 	
-	public List<Agenda> buscarAgendamentosDoDia() throws ApplicationException;
+	public List<Agenda> buscarAgendamentosDoDia();
 	
-	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta) throws ApplicationException;
+	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta);
 }

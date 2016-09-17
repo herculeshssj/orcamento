@@ -51,25 +51,24 @@ import java.util.Map;
 
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IOpcaoSistema {
 	
-	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) throws ApplicationException;
+	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema);
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws ApplicationException;
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema);
 	
-	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() throws ApplicationException;
+	public List<OpcaoSistema> buscarOpcoesGlobalAdmin();
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws ApplicationException;
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario);
 	
-	public Map<String, Object> buscarMapOpcoesGlobalAdmin() throws ApplicationException;
+	public Map<String, Object> buscarMapOpcoesGlobalAdmin();
 	
-	public Map<String, Object> buscarMapOpcoesUser(Usuario usuario) throws ApplicationException;
+	public Map<String, Object> buscarMapOpcoesUser(Usuario usuario);
 
-	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) throws ApplicationException;
+	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu);
 	
-	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws ApplicationException;
+	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario);
 	
-	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws ApplicationException; 
+	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario); 
 }

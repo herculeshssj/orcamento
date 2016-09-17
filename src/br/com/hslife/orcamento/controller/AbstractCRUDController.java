@@ -81,7 +81,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	
 	protected abstract ICRUDService getService();
 	
-	protected void validate(String action) throws ApplicationException {
+	protected void validate(String action) {
 		entity.validate();
 		getService().validar(entity);
 	}

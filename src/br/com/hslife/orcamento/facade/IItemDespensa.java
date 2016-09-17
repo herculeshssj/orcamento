@@ -52,23 +52,22 @@ import br.com.hslife.orcamento.entity.Despensa;
 import br.com.hslife.orcamento.entity.ItemDespensa;
 import br.com.hslife.orcamento.entity.MovimentoItemDespensa;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IItemDespensa extends ICRUDService<ItemDespensa> {
 	
-	public List<ItemDespensa> buscarPorDespensaUsuarioEArquivado(Despensa despensa, Usuario usuario, boolean arquivado) throws ApplicationException;
+	public List<ItemDespensa> buscarPorDespensaUsuarioEArquivado(Despensa despensa, Usuario usuario, boolean arquivado);
 	
-	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado) throws ApplicationException;
+	public List<ItemDespensa> buscarPorUsuarioEArquivado(Usuario usuario, boolean arquivado);
 	
-	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa) throws ApplicationException;
+	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa);
 	
-	public void arquivarItemDespensa(ItemDespensa entity) throws ApplicationException;
+	public void arquivarItemDespensa(ItemDespensa entity);
 	
-	public void desarquivarItemDespensa(ItemDespensa entity) throws ApplicationException;
+	public void desarquivarItemDespensa(ItemDespensa entity);
 	
-	public List<ItemDespensa> gerarListaCompras(Usuario usuario) throws ApplicationException;
+	public List<ItemDespensa> gerarListaCompras(Usuario usuario);
 	
-	public void desfazerRegistroCompraConsumo(ItemDespensa entity) throws ApplicationException;
+	public void desfazerRegistroCompraConsumo(ItemDespensa entity);
 	
-	public void apagarHistorico(ItemDespensa entity) throws ApplicationException;
+	public void apagarHistorico(ItemDespensa entity);
 }

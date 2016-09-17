@@ -46,7 +46,6 @@
 
 package br.com.hslife.orcamento.facade;
 
-import java.io.IOException;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Arquivo;
@@ -58,25 +57,25 @@ import br.com.hslife.orcamento.model.InfoOFX;
 
 public interface IImportacaoLancamento {
 	
-	public LancamentoImportado buscarPorID(Long id) throws ApplicationException;
+	public LancamentoImportado buscarPorID(Long id);
 
-	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta) throws ApplicationException;
+	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta);
 
-	public void atualizarLancamentoImportado(LancamentoImportado entity) throws ApplicationException;
+	public void atualizarLancamentoImportado(LancamentoImportado entity);
 	
-	public void excluirLancamentoImportado(LancamentoImportado entity) throws ApplicationException;
+	public void excluirLancamentoImportado(LancamentoImportado entity);
 	
 	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
 	
-	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException, IOException; 
+	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException; 
 	
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) throws ApplicationException;
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados);
 	
-	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos) throws ApplicationException;
+	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos);
 	
-	public void importarLancamento(LancamentoImportado entity) throws ApplicationException;
+	public void importarLancamento(LancamentoImportado entity);
 	
 	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
 	
-	public void apagarLancamentosImportados(Conta conta) throws ApplicationException;
+	public void apagarLancamentosImportados(Conta conta);
 }

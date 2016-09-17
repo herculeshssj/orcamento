@@ -52,38 +52,37 @@ import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IConta extends ICRUDService<Conta> {
 	
-	public List<Conta> buscarTodos() throws ApplicationException;
+	public List<Conta> buscarTodos();
 	
-	public List<Conta> buscarPorDescricao(String descricao) throws ApplicationException;
+	public List<Conta> buscarPorDescricao(String descricao);
 	
-	public List<Conta> buscarTodosAtivos() throws ApplicationException;
+	public List<Conta> buscarTodosAtivos();
 	
-	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario);
 	
-	public List<Conta> buscarPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Conta> buscarPorUsuario(Usuario usuario);
 	
-	public List<Conta> buscarAtivosPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Conta> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public void ativarConta(Conta conta) throws ApplicationException;
+	public void ativarConta(Conta conta);
 	
-	public void desativarConta(Conta conta, String situacaoLancamentos) throws ApplicationException;
+	public void desativarConta(Conta conta, String situacaoLancamentos);
 	
-	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException;
+	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) throws ApplicationException;
+	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario);
 	
-	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario);
 	
-	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario);
 	
-	public Conta buscarPorCartaoCredito(CartaoCredito cartao) throws ApplicationException;
+	public Conta buscarPorCartaoCredito(CartaoCredito cartao);
 	
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) throws ApplicationException;
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo);
 	
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) throws ApplicationException;
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo);
 	
 }

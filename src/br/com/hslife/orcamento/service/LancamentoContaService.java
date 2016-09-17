@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
@@ -172,16 +173,16 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	}
 
 	@Override
-	public void validar(LancamentoConta entity) throws ApplicationException {
+	public void validar(LancamentoConta entity) {
 		if (entity.getDataPagamento() == null)
-			throw new ApplicationException("Informe a data de pagamento!");
+			throw new BusinessException("Informe a data de pagamento!");
 		
 		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
 			if (entity.getDataPagamento().before(entity.getConta().getDataAbertura())) {
-				throw new ApplicationException("Data de lançamento deve ser posterior a data de abertura da conta!");
+				throw new BusinessException("Data de lançamento deve ser posterior a data de abertura da conta!");
 			}
 			if (entity.getConta().getDataFechamento() != null && entity.getDataPagamento().after(entity.getConta().getDataFechamento())) {
-				throw new ApplicationException("Data de lançamento deve ser anterior a data de fechamento da conta!");
+				throw new BusinessException("Data de lançamento deve ser anterior a data de fechamento da conta!");
 			}
 		}
 		
@@ -190,7 +191,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			if (entity.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
 				lancamento = getRepository().findLancamentoByParcelaAndLancamentoPeriodico(entity.getParcela(), entity.getLancamentoPeriodico());
 				if (lancamento != null && !lancamento.equals(entity)) {
-					throw new ApplicationException("Já existe lançamento com a parcela informada!");
+					throw new BusinessException("Já existe lançamento com a parcela informada!");
 				}
 			}
 		}

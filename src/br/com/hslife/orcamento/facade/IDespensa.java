@@ -50,12 +50,11 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Despensa;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IDespensa extends ICRUDService<Despensa> {
 	
-	public List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException;
+	public List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<Despensa> buscarTodosPorUsuario(Usuario usuario) throws ApplicationException;
+	public List<Despensa> buscarTodosPorUsuario(Usuario usuario);
 
 }
