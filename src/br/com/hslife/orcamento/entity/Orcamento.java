@@ -207,7 +207,7 @@ public class Orcamento extends EntityPersistence {
 	 * @return o novo orçamento gerado
 	 * @throws ApplicationException
 	 */
-	public Orcamento gerarOrcamento() throws ApplicationException {
+	public Orcamento gerarOrcamento() {
 		Orcamento novoOrcamento = new Orcamento();
 		
 		// Valida a entidade para saber se não tem inconsistências

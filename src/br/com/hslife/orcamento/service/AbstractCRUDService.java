@@ -66,19 +66,19 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	
 	protected abstract AbstractCRUDRepository<E> getRepository();
 	
-	public void cadastrar(E entity) throws ApplicationException{
+	public void cadastrar(E entity) {
 		getRepository().save(entity);		
 	}
 
-	public void alterar(E entity) throws ApplicationException{
+	public void alterar(E entity) {
 		getRepository().update(entity);		
 	}
 
-	public void excluir(E entity) throws ApplicationException{
+	public void excluir(E entity) {
 		getRepository().delete(entity);		
 	}
 
-	public E buscarPorID(Long id) throws ApplicationException{
+	public E buscarPorID(Long id) {
 		return getRepository().findById(id);
 	}
 	

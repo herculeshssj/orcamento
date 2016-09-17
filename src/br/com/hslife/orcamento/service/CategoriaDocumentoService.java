@@ -53,7 +53,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.repository.CategoriaDocumentoRepository;
 
@@ -69,26 +69,26 @@ public class CategoriaDocumentoService extends AbstractCRUDService<CategoriaDocu
 	}
 
 	@Override
-	public void excluir(CategoriaDocumento entity) throws ApplicationException {
+	public void excluir(CategoriaDocumento entity) {
 		if (getRepository().existsLinkages(entity)) {
-			throw new ApplicationException("Existem documentos cadastrados para esta categoria!");
+			throw new BusinessException("Existem documentos cadastrados para esta categoria!");
 		} else {
 			super.excluir(entity);
 		}		
 	}
 	
 	@Override
-	public List<CategoriaDocumento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException {
+	public List<CategoriaDocumento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
 	@Override
-	public List<CategoriaDocumento> buscarPorDescricao(String descricao) throws ApplicationException {
+	public List<CategoriaDocumento> buscarPorDescricao(String descricao) {
 		return getRepository().findByDescricao(descricao);
 	}
 	
 	@Override
-	public List<CategoriaDocumento> buscarPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<CategoriaDocumento> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 }

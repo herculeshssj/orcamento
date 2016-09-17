@@ -53,7 +53,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUnidadeMedida;
 import br.com.hslife.orcamento.repository.ItemDespensaRepository;
 import br.com.hslife.orcamento.repository.UnidadeMedidaRepository;
@@ -78,21 +78,21 @@ public class UnidadeMedidaService extends AbstractCRUDService<UnidadeMedida> imp
 	}
 
 	@Override
-	public void excluir(UnidadeMedida entity) throws ApplicationException {
+	public void excluir(UnidadeMedida entity) {
 		if (itemDespensaRepository.findByUnidadeMedida(entity).size() > 0) {
-			throw new ApplicationException("Não é possível excluir! Existem itens de despensa vinculados!");
+			throw new BusinessException("Não é possível excluir! Existem itens de despensa vinculados!");
 		} else {
 			super.excluir(entity);
 		}				
 	}
 	
 	@Override
-	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException {
+	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
 	@Override
-	public List<UnidadeMedida> buscarPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<UnidadeMedida> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 }

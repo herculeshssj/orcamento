@@ -61,7 +61,6 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
@@ -123,13 +122,13 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void cadastrar(Conta entity) throws ApplicationException {
+	public void cadastrar(Conta entity) {
 		// Cadastra a conta e já realiza a abertura da mesma
 		getRepository().save(entity);
 	}
 	
 	@Override
-	public void ativarConta(Conta conta) throws ApplicationException {	
+	public void ativarConta(Conta conta) {	
 		// Seta a conta como ativa
 		conta.setAtivo(true);
 		
@@ -142,7 +141,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void desativarConta(Conta conta, String situacaoLancamentos) throws ApplicationException {
+	public void desativarConta(Conta conta, String situacaoLancamentos) {
 		
 		if (situacaoLancamentos.equals("QUITAR")) {			
 			// Busca o último lançamento cadastrado, caso não exista cria um novo lançamento e define a data de 
@@ -191,9 +190,9 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void excluir(Conta entity) throws ApplicationException {
+	public void excluir(Conta entity) {
 		if (getRepository().existsLinkages(entity)) {
-			throw new ApplicationException("Não é possível excluir! Existem registros relacionamentos com a conta!");
+			throw new BusinessException("Não é possível excluir! Existem registros relacionamentos com a conta!");
 		} else {
 			
 			// Exclui os lançamentos importados
@@ -214,67 +213,67 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public List<Conta> buscarTodos() throws ApplicationException {
+	public List<Conta> buscarTodos() {
 		return getRepository().findAll();
 	}
 	
 	@Override
-	public List<Conta> buscarPorDescricao(String descricao) throws ApplicationException {
+	public List<Conta> buscarPorDescricao(String descricao) {
 		return getRepository().findByDescricao(descricao);
 	}
 	
 	@Override
-	public List<Conta> buscarPorUsuario(Usuario usuario)	throws ApplicationException {
+	public List<Conta> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarTodosAtivos() throws ApplicationException {
+	public List<Conta> buscarTodosAtivos() {
 		return getRepository().findAllAtivos();
 	}
 	
 	@Override
-	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findAllAtivosByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException {
+	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) throws ApplicationException {
+	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario) {
 		return getRepository().findByTipoContaAndUsuario(tipoConta, usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarAtivosPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<Conta> buscarAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findEnabledByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findOnlyTipoCartaoEnabledByUsuario(usuario);
 	}
 	
 	@Override
-	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario) {
 		return getRepository().findOnlyTipoCartaoByUsuario(usuario);
 	}
 	
 	@Override
-	public Conta buscarPorCartaoCredito(CartaoCredito cartao) throws ApplicationException {
+	public Conta buscarPorCartaoCredito(CartaoCredito cartao) {
 		return getRepository().findByCartaoCredito(cartao);
 	}
 	
 	@Override
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) throws ApplicationException {
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) {
 		return getRepository().findDescricaoOrTipoContaOrAtivoByUsuario(descricao, tipoConta, usuario, ativo);
 	}
 	
 	@Override
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) throws ApplicationException {
+	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) {
 		return getRepository().findDescricaoOrTipoContaOrAtivoByUsuario(descricao, tipoConta, usuario, ativo);
 	}
 }

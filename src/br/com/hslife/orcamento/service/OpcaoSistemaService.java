@@ -90,7 +90,7 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 //	}
 //}
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) throws ApplicationException {
+	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) {
 		OpcaoSistema opcao = new OpcaoSistema();
 		for (String chave : opcoesSistema.keySet()) {
 			opcao = getRepository().findOpcaoGlobalAdminByChave(chave);
@@ -112,7 +112,7 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		}
 	}
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) throws ApplicationException {
+	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario) {
 		OpcaoSistema opcao;
 		for (String chave : opcoesSistema.keySet()) {			
 			opcao = getRepository().findOpcaoUserByChave(chave, usuario);
@@ -155,13 +155,13 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		}
 	}
 	
-	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) throws ApplicationException {
+	private void validarValorOpcaoSistema(OpcaoSistema opcao, Object valor) {
 		if (opcao.isRequired()) {
 			EntityPersistenceUtil.validaCampoNulo(opcao.getChave(), valor);
 		}
 	}
 	
-	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() throws ApplicationException {
+	public List<OpcaoSistema> buscarOpcoesGlobalAdmin() {
 		return getRepository().findOpcoesGlobalAdmin();
 	}
 	
@@ -203,7 +203,7 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		return parametros;
 	}
 	
-	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) throws ApplicationException {
+	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu) {
 		List<OpcaoSistema> opcoesSistema = getRepository().findOpcoesGlobalAdminByCDU(cdu);
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		
@@ -223,12 +223,12 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 	}
 	
 	@Override
-	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) throws ApplicationException {
+	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario) {
 		return getRepository().findOpcaoUserByChave(chave, usuario);
 	}
 	
 	@Override
-	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) throws ApplicationException {
+	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) {
 		return getRepository().findOpcoesUserByCasoUso(casoDeUso, usuario);
 	}
 }

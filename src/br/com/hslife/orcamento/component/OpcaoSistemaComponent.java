@@ -99,7 +99,7 @@ public class OpcaoSistemaComponent {
 	
 	// Método foi deixado no componente para poder centralizar a manutenção de cada parâmetro
 	// O Service não conhece os parâmetros existentes, o Component sim.
-	public void setarOpcoesPadraoUsuario(Usuario entity) throws ApplicationException {
+	public void setarOpcoesPadraoUsuario(Usuario entity) {
 		// Seta as opções do sistema que são individuais para cada usuário
 		Map<String, Object> opcoesUsuario = new HashMap<String, Object>();
 		opcoesUsuario.put("GERAL_EXIBIR_BUSCAS_REALIZADAS", Boolean.FALSE);

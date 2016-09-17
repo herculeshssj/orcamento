@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IArquivo;
 import br.com.hslife.orcamento.model.AnexoEntidade;
 import br.com.hslife.orcamento.model.CriterioArquivo;
@@ -127,46 +128,46 @@ public class ArquivoService implements IArquivo {
 	}
 
 	@Override
-	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) throws ApplicationException {
+	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio) {
 		return getRepository().findByCriterioArquivo(criterio);
 	}
 	
 	@Override
-	public void excluir(Arquivo arquivo) throws ApplicationException {
+	public void excluir(Arquivo arquivo) {
 		switch (arquivo.getContainer()) {
 			case DOCUMENTOS :
 				if (getRepository().deleteFromDocumento(arquivo)) {
 					// Nada a fazer
 				} else {
-					throw new ApplicationException("Não foi possível excluir o arquivo.");
+					throw new BusinessException("Não foi possível excluir o arquivo.");
 				}
 				break;
 			case FATURACARTAO :
 				if (getRepository().deleteFromFaturaCartao(arquivo)) {
 					// Nada a fazer
 				} else {
-					throw new ApplicationException("Não foi possível excluir o arquivo.");
+					throw new BusinessException("Não foi possível excluir o arquivo.");
 				}
 				break;
 			case LANCAMENTOCONTA : 
 				if (getRepository().deleteFromLancamentoConta(arquivo)) {
 					// Nada a fazer
 				} else {
-					throw new ApplicationException("Não foi possível excluir o arquivo.");
+					throw new BusinessException("Não foi possível excluir o arquivo.");
 				}
 				break;
 			case LANCAMENTOPERIODICO :
 				if (getRepository().deleteFromLancamentoPeriodico(arquivo)) {
 					// Nada a fazer
 				} else {
-					throw new ApplicationException("Não foi possível excluir o arquivo.");
+					throw new BusinessException("Não foi possível excluir o arquivo.");
 				}
 				break;
 		}
 	}
 	
 	@Override
-	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container) throws ApplicationException {
+	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container) {
 		List<AnexoEntidade> listaAnexos = new ArrayList<>();
 		AnexoEntidade anexo;
 		switch (container) {
@@ -213,7 +214,7 @@ public class ArquivoService implements IArquivo {
 	}
 	
 	@Override
-	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) throws ApplicationException {
+	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo) {
 		switch (container) {
 			case DOCUMENTOS:
 				Documento d = getDocumentoRepository().findById(idEntity);

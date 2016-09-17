@@ -61,6 +61,7 @@ import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IUsuario;
 import br.com.hslife.orcamento.repository.UsuarioRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -100,11 +101,11 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 
 	@Override
-	public void cadastrar(Usuario entity) throws ApplicationException{		
+	public void cadastrar(Usuario entity){		
 		// Verifica se o login informado já consta na base
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		if (u != null) {
-			throw new ApplicationException("Login já cadastrado para outro usuário!");
+			throw new BusinessException("Login já cadastrado para outro usuário!");
 		}
 		
 		getRepository().save(entity);
@@ -149,7 +150,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		// Verifica se o usuário informado existe, se não é o usuário admin, e se o e-mail informado coincide com o 
 		// cadastrado
 		if (u == null || u.getLogin().equals("admin") || !u.getEmail().equals(entity.getEmail())) {
-			throw new ApplicationException("Login não encontrado!");
+			throw new BusinessException("Login não encontrado!");
 		}
 		
 		// Verifica se o usuário encontra-se ativo no sistema
@@ -209,7 +210,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		}		
 	}
 	
-	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException {
+	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException{
 		try {
 			Usuario admin = getRepository().findByLogin("admin");
 			getEmailComponent().setRemetente(getComponent().getUsuarioLogado().getNome());

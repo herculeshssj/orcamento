@@ -53,7 +53,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Despensa;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IDespensa;
 import br.com.hslife.orcamento.repository.DespensaRepository;
 import br.com.hslife.orcamento.repository.ItemDespensaRepository;
@@ -78,21 +78,21 @@ public class DespensaService extends AbstractCRUDService<Despensa> implements ID
 	}
 
 	@Override
-	public void excluir(Despensa entity) throws ApplicationException {
+	public void excluir(Despensa entity) {
 		if (getItemDespensaRepository().findByDespensa(entity) != null
 				&& !getItemDespensaRepository().findByDespensa(entity).isEmpty()) {
-			throw new ApplicationException("Não é possível excluir! Existem itens vinculados a esta despensa!");
+			throw new BusinessException("Não é possível excluir! Existem itens vinculados a esta despensa!");
 		}
 		super.excluir(entity);
 	}
 	
 	@Override
-	public List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) throws ApplicationException {
+	public List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario) {
 		return getRepository().findByDescricaoAndUsuario(descricao, usuario);
 	}
 
 	@Override
-	public List<Despensa> buscarTodosPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<Despensa> buscarTodosPorUsuario(Usuario usuario) {
 		return getRepository().findAllByUsuario(usuario);
 	}
 }

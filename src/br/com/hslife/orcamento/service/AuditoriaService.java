@@ -75,19 +75,19 @@ public class AuditoriaService implements IAuditoria {
 		return repository;
 	}
 
-	public Auditoria buscarPorId(Long id) throws ApplicationException {
+	public Auditoria buscarPorId(Long id) {
 		return getRepository().findById(id);
 	}
 	
-	public List<Auditoria> buscarPorCriterios(CriterioAuditoria criterio) throws ApplicationException {
+	public List<Auditoria> buscarPorCriterios(CriterioAuditoria criterio) {
 		return getRepository().findByCriteriosAuditoria(criterio);
 	}
 	
-	public List<String> buscarClasses() throws ApplicationException {
+	public List<String> buscarClasses() {
 		return getRepository().findClasses();
 	}
 	
-	public void excluir(Auditoria auditoria) throws ApplicationException {
+	public void excluir(Auditoria auditoria) {
 		getRepository().delete(auditoria);
 	}
 }

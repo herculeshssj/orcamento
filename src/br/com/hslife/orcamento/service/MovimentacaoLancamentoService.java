@@ -66,6 +66,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IMovimentacaoLancamento;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.util.LancamentoContaUtil;
@@ -87,7 +88,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	}
 
 	@Override
-	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta) throws ApplicationException {
+	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta) {
 		for (LancamentoConta l : lancamentos) {
 			l.setConta(conta);
 			getRepository().update(l);
@@ -95,14 +96,14 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	}
 	
 	@Override
-	public void excluirLancamentos(List<LancamentoConta> lancamentos) throws ApplicationException {
+	public void excluirLancamentos(List<LancamentoConta> lancamentos) {
 		for (LancamentoConta l : lancamentos) {			
 			getRepository().delete(l);
 		}		
 	}
 	
 	@Override
-	public void removerVinculos(List<LancamentoConta> lancamentos) throws ApplicationException {
+	public void removerVinculos(List<LancamentoConta> lancamentos) {
 		for (LancamentoConta l : lancamentos) {
 			l.setHashImportacao(null);
 			getRepository().update(l);
@@ -110,7 +111,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		
 	}
 	
-	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento) throws ApplicationException {
+	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento) {
 		for (LancamentoConta lancamentoOrigem : lancamentos) {
 			for (LancamentoConta lancamentoCopiado : lancamentoOrigem.clonarLancamentos(quantidade, incremento)) {
 				lancamentoCopiado.setConta(conta);
@@ -119,7 +120,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		}
 	}
 	
-	public void dividirLancamento(LancamentoConta lancamento, int quantidade) throws ApplicationException {
+	public void dividirLancamento(LancamentoConta lancamento, int quantidade) {
 		double valorDividido = Util.arredondar(lancamento.getValorPago() / quantidade);
 		List<LancamentoConta> lancamentosDivididos = lancamento.clonarLancamentos(quantidade, IncrementoClonagemLancamento.NENHUM);
 		for (LancamentoConta l : lancamentosDivididos) {
@@ -130,7 +131,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	}
 	
 	@Override
-	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws ApplicationException {
+	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros) {
 		for (LancamentoConta lancamento : lancamentos) {
 			if (parametros.get("DESCRICAO_DESTINO") != null && !((String)parametros.get("DESCRICAO_DESTINO")).trim().isEmpty()) {
 				lancamento.setDescricao((String)parametros.get("DESCRICAO_DESTINO"));
@@ -157,7 +158,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	}
 	
 	@Override
-	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros) throws ApplicationException {
+	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros) {
 		LancamentoConta lancamentoMesclado = new LancamentoConta();
 		lancamentoMesclado.setConta((Conta)parametros.get("CONTA_DESTINO"));
 		lancamentoMesclado.setTipoLancamento((TipoLancamento)parametros.get("TIPO_LANCAMENTO"));
@@ -188,16 +189,16 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	}
 	
 	@Override
-	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros) throws ApplicationException {
+	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros) {
 		Conta contaOrigem = (Conta)parametros.get("CONTA_ORIGEM");
 		Conta contaDestino = (Conta)parametros.get("CONTA_DESTINO");
 				
 		if (contaOrigem != null && contaDestino != null) {
 			if (contaOrigem.equals(contaDestino)) {
-				throw new ApplicationException("Conta de destino não pode ser igual a conta de origem!");
+				throw new BusinessException("Conta de destino não pode ser igual a conta de origem!");
 			}
 		} else {
-			throw new ApplicationException("Conta de origem e/ou destino não informada(s)!");
+			throw new BusinessException("Conta de origem e/ou destino não informada(s)!");
 		}
 		
 		LancamentoConta lancamentoOrigem = new LancamentoConta(lancamentoATransferir);
@@ -222,7 +223,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 	}
 	
 	@Override
-	public void salvarDetalhamentoLancamento(LancamentoConta lancamento) throws ApplicationException {
+	public void salvarDetalhamentoLancamento(LancamentoConta lancamento) {
 		getRepository().update(lancamento);		
 	}
 }

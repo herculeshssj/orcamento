@@ -54,7 +54,6 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IIdentidade;
 import br.com.hslife.orcamento.repository.IdentidadeRepository;
 
@@ -70,7 +69,7 @@ public class IdentidadeService extends AbstractCRUDService<Identidade> implement
 	}
 
 	@Override
-	public void salvarDocumentos(List<Identidade> documentos) throws ApplicationException {
+	public void salvarDocumentos(List<Identidade> documentos) {
 		for (Identidade identidade : documentos) {
 			if (identidade.getId() == null || getRepository().findById(identidade.getId()) == null) {
 				getRepository().save(identidade);
@@ -81,7 +80,7 @@ public class IdentidadeService extends AbstractCRUDService<Identidade> implement
 	}
 
 	@Override
-	public Identidade buscarPorUsuarioETipoIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) throws ApplicationException {
+	public Identidade buscarPorUsuarioETipoIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade) {
 		return getRepository().findByUsuarioAndTipoIdentidade(usuario, tipoIdentidade);
 	}	
 }

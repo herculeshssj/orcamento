@@ -76,27 +76,27 @@ public class LogService implements ILog {
 	}
 
 	@Override
-	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) throws ApplicationException {
+	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca) {
 		return getRepository().findByCriteriosLog(criterioBusca);
 	}
 	
 	@Override
-	public List<String> buscarTodosLoggers() throws ApplicationException {
+	public List<String> buscarTodosLoggers() {
 		return getRepository().findAllLogger();
 	}
 	
 	@Override
-	public List<String> buscarTodosNiveis() throws ApplicationException {
+	public List<String> buscarTodosNiveis() {
 		return getRepository().findAllLevel();
 	}
 	
 	@Override
-	public Logs buscarPorID(Long id) throws ApplicationException {
+	public Logs buscarPorID(Long id) {
 		return getRepository().findByID(id);
 	}
 	
 	@Override
-	public void excluir(Logs logs) throws ApplicationException {
+	public void excluir(Logs logs) {
 		getRepository().delete(logs);
 	}
 }

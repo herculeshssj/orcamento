@@ -150,7 +150,7 @@ public class AgendaService extends AbstractCRUDService<Agenda> implements IAgend
 	}
 	
 	@Override
-	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta) throws ApplicationException {
+	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta) {
 		return getRepository().findAgendamentoByOrDataInicioOrDataFimAndAlerta(inicio, fim, emiteAlerta);
 	}
 }

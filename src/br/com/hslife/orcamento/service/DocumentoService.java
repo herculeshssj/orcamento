@@ -54,7 +54,6 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Documento;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IDocumento;
 import br.com.hslife.orcamento.repository.DocumentoRepository;
 
@@ -70,26 +69,26 @@ public class DocumentoService extends AbstractCRUDService<Documento> implements 
 	}
 	
 	@Override
-	public List<Documento> buscarPorNomeEUsuario(String nome, Usuario usuario) throws ApplicationException {
+	public List<Documento> buscarPorNomeEUsuario(String nome, Usuario usuario) {
 		return getRepository().findByNomeAndUsuario(nome, usuario);
 	}
 
 	@Override
-	public List<Documento> buscarPorCategoriaDocumento(CategoriaDocumento categoriaDocumento) throws ApplicationException {
+	public List<Documento> buscarPorCategoriaDocumento(CategoriaDocumento categoriaDocumento) {
 		return getRepository().findByCategoriaDocumento(categoriaDocumento);
 	}
 	
 	@Override
-	public List<Documento> buscarPorCategoriaDocumentoEUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) throws ApplicationException {
+	public List<Documento> buscarPorCategoriaDocumentoEUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario) {
 		return getRepository().findByCategoriaDocumentoAndUsuario(categoriaDocumento, usuario);
 	}
 	
 	@Override
-	public List<Documento> buscarPorUsuario(Usuario usuario) throws ApplicationException {
+	public List<Documento> buscarPorUsuario(Usuario usuario) {
 		return getRepository().findByUsuario(usuario);
 	}
 	
-	public List<Documento> buscarPorNomeECategoriaDocumentoPorUsuario(String nome, CategoriaDocumento categoria, Usuario usuario) throws ApplicationException {
+	public List<Documento> buscarPorNomeECategoriaDocumentoPorUsuario(String nome, CategoriaDocumento categoria, Usuario usuario) {
 		return getRepository().findByNomeAndCategoriaDocumentoByUsuario(nome, categoria, usuario);
 	}
 }

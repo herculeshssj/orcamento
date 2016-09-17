@@ -96,7 +96,7 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 
 	@Override
-	public void salvarDadosPessoais(Pessoal pessoal) throws ApplicationException {
+	public void salvarDadosPessoais(Pessoal pessoal) {
 		pessoal.validate();
 		
 		// Se a entidade não possuir ID, grava um novo registro, caso contrário atualiza
@@ -108,22 +108,22 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 	
 	@Override
-	public Pessoal buscarDadosPessoais(Usuario usuario) throws ApplicationException {
+	public Pessoal buscarDadosPessoais(Usuario usuario) {
 		return getPessoalRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Endereco> buscarEnderecos(Usuario usuario) throws ApplicationException {
+	public List<Endereco> buscarEnderecos(Usuario usuario) {
 		return getEnderecoRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public List<Telefone> buscarTelefones(Usuario usuario) throws ApplicationException {
+	public List<Telefone> buscarTelefones(Usuario usuario) {
 		return getTelefoneRepository().findByUsuario(usuario);
 	}
 
 	@Override
-	public void salvarEndereco(Endereco entity) throws ApplicationException {
+	public void salvarEndereco(Endereco entity) {
 		entity.validate();
 		if (entity.getId() == null) {
 			getEnderecoRepository().save(entity);
@@ -133,12 +133,12 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 
 	@Override
-	public void excluirEndereco(Endereco entity) throws ApplicationException {
+	public void excluirEndereco(Endereco entity) {
 		getEnderecoRepository().delete(entity);		
 	}
 
 	@Override
-	public void salvarTelefone(Telefone entity) throws ApplicationException {
+	public void salvarTelefone(Telefone entity) {
 		entity.validate();
 		if (entity.getId() == null) {
 			getTelefoneRepository().save(entity);
@@ -148,7 +148,7 @@ public class InformacaoPessoalService implements IInformacaoPessoal {
 	}
 
 	@Override
-	public void excluirTelefone(Telefone entity) throws ApplicationException {
+	public void excluirTelefone(Telefone entity) {
 		getTelefoneRepository().delete(entity);		
 	}	
 }

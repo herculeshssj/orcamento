@@ -57,8 +57,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.RegraImportacao;
-import br.com.hslife.orcamento.exception.ApplicationException;
-import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
@@ -101,22 +100,22 @@ public class RegraImportacaoService extends AbstractCRUDService<RegraImportacao>
 	public void validar(RegraImportacao entity) {
 		RegraImportacao regra = getRepository().findEqualEntity(entity);
 		if (regra != null && !regra.equals(entity)) {
-			throw new ValidationException("Existe uma regra com os mesmo parâmetros informados!");
+			throw new BusinessException("Existe uma regra com os mesmo parâmetros informados!");
 		}
 	}
 
 	@Override
-	public List<RegraImportacao> buscarTodosPorConta(Conta conta) throws ApplicationException {
+	public List<RegraImportacao> buscarTodosPorConta(Conta conta) {
 		return getRepository().findAllByConta(conta);
 	}
 	
-	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) throws ApplicationException {
+	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento) {
 		List<LancamentoConta> lancamentos = new ArrayList<>();
 		lancamentos.add(lancamento);
 		return this.processarRegras(conta, lancamentos).get(0);
 	}
 	
-	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) throws ApplicationException {
+	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos) {
 		Set<LancamentoConta> lancamentosProcessados = new HashSet<LancamentoConta>();
 		
 		List<RegraImportacao> regras = this.buscarTodosPorConta(conta);
