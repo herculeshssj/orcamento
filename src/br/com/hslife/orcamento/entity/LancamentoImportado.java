@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -143,7 +142,7 @@ public class LancamentoImportado extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws ApplicationException {
+	public void validate() {
 				
 	}
 

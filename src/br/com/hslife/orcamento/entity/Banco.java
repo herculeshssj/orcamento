@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="banco")
@@ -95,18 +95,9 @@ public class Banco extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws ApplicationException {
-		if (this.nome == null || this.nome.trim().isEmpty()) {
-			throw new ApplicationException("Informe um nome!");
-		}
-		
-		if (this.numero == null || this.numero.trim().isEmpty()) {
-			throw new ApplicationException("Informe um numero!");
-		}
-		
-		if (this.usuario == null) {
-			throw new ApplicationException("Informe o usuário!");
-		}
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
 	}
 	
 	public void setId(Long id) {

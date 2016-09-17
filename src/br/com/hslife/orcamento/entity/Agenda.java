@@ -66,6 +66,8 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -139,29 +141,14 @@ public class Agenda extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws ApplicationException {
-		if (this.descricao != null && this.descricao.trim().length() > 200) {
-			throw new ApplicationException("Campo aceita no máximo 200 caracteres!");
-		}
-		
-		if (this.localAgendamento != null && this.localAgendamento.trim().length() > 200) {
-			throw new ApplicationException("Campo aceita no máximo 200 caracteres!");
-		}
-		
-		if (this.tipoAgendamento == null) {
-			throw new ApplicationException("Informe o tipo de agendamento!");
-		}
-		
-		if (this.inicio == null) {
-			throw new ApplicationException("Informe a data de início!");
-		}
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Local", this.localAgendamento, 200);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de agendamento", this.tipoAgendamento);
+		EntityPersistenceUtil.validaCampoNulo("Data de início", this.inicio);
 		
 		if (this.fim != null && this.fim.before(this.inicio)) {
-			throw new ApplicationException("Data de término não pode ser anterior a data de início!");
-		}
-		
-		if (this.usuario == null) {
-			throw new ApplicationException("Informe o usuário!");
+			throw new ValidationException("Data de término não pode ser anterior a data de início!");
 		}
 	}
 

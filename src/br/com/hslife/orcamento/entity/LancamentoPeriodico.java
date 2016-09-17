@@ -75,7 +75,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="lancamentoperiodico")
@@ -177,9 +177,8 @@ public class LancamentoPeriodico extends EntityPersistence {
 	}
 
 	@Override
-	public void validate() throws ApplicationException {
-		if (this.tipoLancamentoPeriodico == null)
-			throw new ApplicationException("Informe o tipo de despesa!");
+	public void validate() {
+		EntityPersistenceUtil.validaCampoNulo("Tipo de despesa", this.tipoLancamentoPeriodico);
 	}
 	
 	public boolean podeEncerrar() {

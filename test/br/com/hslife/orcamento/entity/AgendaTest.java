@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.entity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -57,6 +56,7 @@ import org.junit.Test;
 
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.Util;
 
 public class AgendaTest {
@@ -90,91 +90,33 @@ public class AgendaTest {
 		assertEquals(Util.formataDataHora(new Date(), Util.DATAHORA), entity.getDateLabel());
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateDescricao() {
-		try {
-			entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo aceita no máximo 200 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ        ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateLocalAgendamento() {
-		try {
-			entity.setLocalAgendamento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo aceita no máximo 200 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setLocalAgendamento("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ   ");
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateTipoAgendamento() {
-		try {
-			entity.setTipoAgendamento(null);
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Informe o tipo de agendamento!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setTipoAgendamento(null);
+		entity.validate();
 	}
 	
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateFimBeforeInicio() {
-		try {
-			entity.setFim(null);
-			entity.validate();
-			Calendar temp = Calendar.getInstance();
-			temp.add(Calendar.DAY_OF_MONTH, -5);
-			entity.setFim(temp.getTime());
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Data de término não pode ser anterior a data de início!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setFim(null);
+		entity.validate();
+		Calendar temp = Calendar.getInstance();
+		temp.add(Calendar.DAY_OF_MONTH, -5);
+		entity.setFim(temp.getTime());
+		entity.validate();
 	}
-	
-	@Test
-	public void testValidateUsuario() {
-		try {
-			entity.setUsuario(null);
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Informe o usuário!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
-	}
-	
-//	@Test
-//	public void textExtrairData() {		
-//		Calendar dataTest = Calendar.getInstance();
-//		Date dataAtual = dataTest.getTime();
-//		dataTest.set(Calendar.HOUR, 0);
-//		dataTest.set(Calendar.MINUTE, 0);
-//		dataTest.set(Calendar.SECOND, 0);
-//		dataTest.set(Calendar.MILLISECOND, 0);
-//		
-//		assertEquals(dataTest.getTime(), entity.extrairData(dataAtual));
-//	}
 	
 	@Test
 	public void testExtrairHora() {
@@ -189,13 +131,6 @@ public class AgendaTest {
 		
 		assertEquals(data.get(Calendar.MINUTE), entity.extrairMinuto(data.getTime()));
 	}
-	
-//	@Test
-//	public void testExtrairSegundo() {
-//		Calendar data = Calendar.getInstance();
-//		
-//		assertEquals(data.get(Calendar.SECOND), entity.extrairSegundo(data.getTime()));
-//	}
 	
 	@SuppressWarnings("deprecation")
 	@Test

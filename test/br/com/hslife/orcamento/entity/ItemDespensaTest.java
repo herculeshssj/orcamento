@@ -46,13 +46,10 @@
 
 package br.com.hslife.orcamento.entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
 
 public class ItemDespensaTest {
 
@@ -64,17 +61,9 @@ public class ItemDespensaTest {
 		entity.setDescricao("Item de despensa de teste");
 	}
 
-	@Test
+	@Test(expected=ValidationException.class)
 	public void testValidateMarca() {
-		try {
-			entity.setMarca("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
-			entity.validate();
-		} catch (ApplicationException be) {
-			assertEquals("Campo 'Marca favorita' aceita no máximo 50 caracteres!", be.getMessage());
-			return;
-		} catch (Throwable t) {
-			fail(t.getMessage());
-		}
-		fail("Falha no teste!");
+		entity.setMarca("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
 	}
 }

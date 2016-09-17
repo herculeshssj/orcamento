@@ -67,7 +67,7 @@ import br.com.hslife.orcamento.enumeration.Abrangencia;
 import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -159,7 +159,7 @@ public class CartaoCredito extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws ApplicationException {
+	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de Cartão", this.tipoCartao);
 		EntityPersistenceUtil.validaCampoNulo("Abrangência", this.abrangencia);
@@ -168,8 +168,8 @@ public class CartaoCredito extends EntityPersistence {
 			EntityPersistenceUtil.validaCampoInteiroZerado("Dia de vencimento da fatura", this.diaVencimentoFatura);
 			EntityPersistenceUtil.validaCampoInteiroZerado("Dia de fechamento da fatura", this.diaFechamentoFatura);
 			
-			if (diaVencimentoFatura < 1 || diaVencimentoFatura > 31) throw new ApplicationException("Dia de vencimento deve estar entre 1 e 31!");
-			if (diaFechamentoFatura < 1 || diaFechamentoFatura > 31) throw new ApplicationException("Dia de fechamento deve estar entre 1 e 31!");
+			if (diaVencimentoFatura < 1 || diaVencimentoFatura > 31) throw new ValidationException("Dia de vencimento deve estar entre 1 e 31!");
+			if (diaFechamentoFatura < 1 || diaFechamentoFatura > 31) throw new ValidationException("Dia de fechamento deve estar entre 1 e 31!");
 		}
 	}
 	

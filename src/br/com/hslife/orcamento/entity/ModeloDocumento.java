@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -67,7 +66,7 @@ public class ModeloDocumento extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=50, nullable=false)
+	@Column(length=200, nullable=false)
 	private String descricao;
 	
 	@Column(columnDefinition="text", nullable=false)
@@ -94,7 +93,7 @@ public class ModeloDocumento extends EntityPersistence {
 	}
 	
 	@Override
-	public void validate() throws ApplicationException {
+	public void validate() {
 		EntityPersistenceUtil.validaCampoNulo("Conteúdo", this.conteudo);
 		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
