@@ -62,7 +62,7 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.RegraImportacao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.ApplicationException;
-import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IRegraImportacao;
@@ -165,7 +165,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 	}
 	
 	@SuppressWarnings("deprecation")
-	@Test(expected=ValidationException.class)
+	@Test(expected=BusinessException.class)
 	public void testValidar() throws ApplicationException {
 		// Verifica se a entidade está consistente para ser persistida
 		regraImportacaoService.validar(regra);
