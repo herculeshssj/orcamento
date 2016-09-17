@@ -90,7 +90,8 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
@@ -185,7 +186,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 				listEntity = getService().buscarPorCriterioBusca(criterioBusca);
 			}
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -232,7 +233,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
 			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -273,7 +274,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 			}
 			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -296,7 +297,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 			
 			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -467,7 +468,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				dataFechamento = fechamentoPeriodo.getData();				
 			}
 			return "/pages/LancamentoConta/fecharPeriodo";
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -493,7 +494,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				fechamentoPeriodoService.fecharPeriodo(dataFechamento, criterioBusca.getConta(), new ArrayList<>(lancamentosPeriodicos));
 			
 			infoMessage("Período fechado com sucesso.");
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return list();
@@ -518,7 +519,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			Collections.sort(fechamentoPeriodo.getLancamentos(), new LancamentoContaComparator());
 			actionTitle = " - Reabrir período";
 			return "/pages/LancamentoConta/reabrirPeriodo";
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -528,7 +529,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		try {
 			fechamentoPeriodoService.reabrirPeriodo(fechamentoPeriodo);
 			infoMessage("Período reaberto com sucesso.");
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return list();
@@ -637,7 +638,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				criterioBusca.setConta(contas.get(0));
 			}
 			return contas;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
@@ -646,7 +647,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public List<Conta> getListaContaAtivo() {
 		try {
 			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
@@ -658,7 +659,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			for (LancamentoImportado importado : importacaoLancamentoService.buscarLancamentoImportadoPorConta(entity.getConta())) {
 				listagem.add(new SelectItem(importado, Util.formataDataHora(importado.getData(), Util.DATA) + " - " + importado.getMoeda() + " "+ importado.getValor() + " - " + importado.getHistorico()));
 			}
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return listagem;
@@ -717,7 +718,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 					}
 				}
 			}
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return fechamentos;
@@ -735,7 +736,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 					}
 				}
 			}
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		
@@ -811,7 +812,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 				return resultado;
 			}
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		} 
 		return new ArrayList<Categoria>();
@@ -828,7 +829,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 			}
 			return resultado;			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		} 
 		return new ArrayList<Categoria>();
@@ -845,7 +846,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 			}
 			return resultado;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -862,7 +863,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 			}
 			return resultado;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
@@ -879,7 +880,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 			}
 			return resultado;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

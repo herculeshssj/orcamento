@@ -53,7 +53,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 
 @Component("meioPagamentoMB")
@@ -86,7 +87,7 @@ public class MeioPagamentoController extends AbstractCRUDController<MeioPagament
 	public void find() {
 		try {
 			listEntity = getService().buscarPorDescricaoUsuarioEAtivo(descricaoMeioPagamento, getUsuarioLogado(), somenteAtivos);
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

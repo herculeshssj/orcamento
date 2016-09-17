@@ -85,6 +85,8 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
@@ -180,7 +182,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		// Pega a moeda padrão do usuário
 		try {
 			moedaPadrao = moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return super.startUp();
@@ -413,7 +415,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			lancamentosEncontrados.clear();
 			lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			lancamentosEncontrados.removeAll(lancamentosAdicionados);
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -447,7 +449,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 					return faturaSelecionada.getSaldoDevedor() + getService().saldoDevedorUltimaFatura(cartaoSelecionado);
 				else
 					return getService().saldoDevedorUltimaFatura(cartaoSelecionado);			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return 0.0;
@@ -491,7 +493,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			this.reprocessarBusca();
 			
 			return "/pages/FaturaCartao/listFaturaCartao";			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -508,7 +510,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			
 			this.reprocessarBusca();
 			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -531,7 +533,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			}
 			actionTitle = " - Quitar Fatura";
 			return "/pages/FaturaCartao/quitarFatura";
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -546,7 +548,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				lancamentosEncontrados.clear();
 				lancamentosEncontrados.addAll(lancamentoContaService.buscarPorCriterioBusca(criterioBusca));
 			}
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -662,7 +664,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			} else {
 				return cartaoCreditoService.buscarAtivosSomenteCreditoPorUsuario(getUsuarioLogado());
 			}			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -671,7 +673,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
@@ -680,7 +682,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<Categoria> getListaCategoria() {
 		try {
 			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		} 
 		return new ArrayList<Categoria>();
@@ -689,7 +691,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -698,7 +700,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public List<MeioPagamento> getListaMeioPagamento() {
 		try {
 			return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

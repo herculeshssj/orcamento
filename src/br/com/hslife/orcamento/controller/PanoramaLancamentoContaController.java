@@ -56,7 +56,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
@@ -119,8 +120,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 				} else {
 					infoMessage("Relatório " + ano + " gerado com sucesso!");
 				}
-			}
-			catch (ApplicationException be) {
+			} catch (ValidationException | BusinessException be) {
 				errorMessage(be.getMessage());
 			}
 		}
@@ -139,7 +139,7 @@ public class PanoramaLancamentoContaController extends AbstractController {
 	public List<Conta> getListaContaAtiva() {
 		try {
 			return contaService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();

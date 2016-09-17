@@ -75,6 +75,8 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
@@ -290,7 +292,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 			if (moedaPadrao == null) {
 				moedaPadrao = moedaService.buscarPadraoPorUsuario(getUsuarioLogado());
 			}
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -503,7 +505,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 	public List<LancamentoPeriodico> getListaLancamentoPeriodico() {
 		try {
 			return lancamentoPeriodicoService.buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico.FIXO, StatusLancamento.ATIVO, getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -512,7 +514,7 @@ public class PanoramaDespesaFixaController extends AbstractController {
 	public List<Conta> getListaConta() {
 		try {
 			return contaService.buscarTodosAtivosPorUsuario(getUsuarioLogado());						
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();

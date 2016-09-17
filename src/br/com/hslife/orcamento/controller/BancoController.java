@@ -53,7 +53,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Banco;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IBanco;
 
 @Component("bancoMB")
@@ -86,7 +87,7 @@ public class BancoController extends AbstractCRUDController<Banco> {
 	public void find() {
 		try {
 			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeBanco, getUsuarioLogado(), somenteAtivos);
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

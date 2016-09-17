@@ -327,7 +327,7 @@ public class OpcaoSistemaComponent {
 		return opcoes;
 	}
 	
-	public Moeda getMoedaPadrao() throws ApplicationException {
+	public Moeda getMoedaPadrao() {
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
 		// Verifica se o valor existe no cache

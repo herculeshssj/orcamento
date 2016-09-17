@@ -53,7 +53,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Moeda;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("moedaMB")
@@ -86,7 +87,7 @@ public class MoedaController extends AbstractCRUDController<Moeda> {
 	public void find() {
 		try {
 			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeMoeda, getUsuarioLogado(), somenteAtivos);
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

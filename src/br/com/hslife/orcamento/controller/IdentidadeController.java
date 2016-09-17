@@ -59,6 +59,8 @@ import br.com.hslife.orcamento.entity.Identidade;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IIdentidade;
 
 @Component("identidadeMB")
@@ -147,7 +149,7 @@ public class IdentidadeController extends AbstractController {
 			getService().salvarDocumentos(documentos);
 			
 			infoMessage("Documentos salvos com sucesso!");
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

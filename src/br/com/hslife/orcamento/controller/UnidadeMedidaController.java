@@ -53,7 +53,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.UnidadeMedida;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IUnidadeMedida;
 
 @Component("unidadeMedidaMB")
@@ -85,7 +86,7 @@ public class UnidadeMedidaController extends AbstractCRUDController<UnidadeMedid
 	public void find() {
 		try {
 			listEntity = getService().buscarPorDescricaoEUsuario(descricaoUnidade, getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

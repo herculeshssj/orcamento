@@ -63,7 +63,8 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
 import br.com.hslife.orcamento.util.RelatorioColunaComparator;
 import br.com.hslife.orcamento.util.RelatorioCustomizadoUtil;
@@ -113,7 +114,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 	public void find() {
 		try {
 			listEntity = getService().buscarNomePorUsuario(nomeRelatorio, getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -151,7 +152,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 			
 			actionTitle = " - " + entity.getNome();
 			return "/pages/RelatorioCustomizado/gerarRelatorio";
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -178,7 +179,7 @@ public class RelatorioCustomizadoController extends AbstractCRUDController<Relat
 			// Processa o relatório customizado passando os valores informados para os parâmetros
 			queryResult = getService().processarRelatorioCustomizado(entity, parameterValues);
 			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		

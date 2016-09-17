@@ -66,7 +66,8 @@ import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IOrcamento;
 import br.com.hslife.orcamento.util.DetalheOrcamentoComparator;
 
@@ -254,7 +255,7 @@ public class PanoramaOrcamentoController extends AbstractController {
 				initializeEntity();
 			}
 			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -262,7 +263,7 @@ public class PanoramaOrcamentoController extends AbstractController {
 	public List<Orcamento> getListaOrcamentoCategoria() {
 		try {
 			return orcamentoService.buscarAbrangeciaPorUsuario(AbrangenciaOrcamento.CATEGORIA, getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Orcamento>();

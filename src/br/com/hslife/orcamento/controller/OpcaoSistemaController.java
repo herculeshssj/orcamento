@@ -56,6 +56,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 
 @Component("opcaoSistemaMB")
@@ -105,7 +107,7 @@ public class OpcaoSistemaController extends AbstractController {
 	private void carregarOpcoesUser() {
 		try {
 			opcoesUser = getService().buscarMapOpcoesUser(getUsuarioLogado());
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -113,7 +115,7 @@ public class OpcaoSistemaController extends AbstractController {
 	private void carregarOpcoesGlobalAdmin() {
 		try {
 			opcoesGlobalAdmin = getService().buscarMapOpcoesGlobalAdmin();
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

@@ -49,7 +49,8 @@ package br.com.hslife.orcamento.controller;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
-import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICRUDService;
 
 @SuppressWarnings({"rawtypes","unchecked"})
@@ -127,7 +128,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 				infoMessage("Registro cadastrado com sucesso!");
 			}
 			return list();
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -139,7 +140,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 			operation = "delete";
 			actionTitle = " - Excluir";
 			return goToViewPage;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -151,7 +152,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 			operation = "edit";
 			actionTitle = " - Editar";
 			return goToFormPage;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -163,7 +164,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 			getService().excluir(entity);
 			infoMessage("Registro excluído com sucesso!");						
 			return list();
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";

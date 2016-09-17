@@ -60,6 +60,8 @@ import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -103,7 +105,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	public void find() {
 		try {
 			listEntity = getService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, tipoSelecionado, getUsuarioLogado(), somenteAtivos);			
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}
@@ -119,7 +121,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 			actionTitle = " - Ativar";
 			entity = getService().buscarPorID(idEntity);
 			return "/pages/Conta/ativarDesativarConta";
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -159,7 +161,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 			entity = getService().buscarPorID(idEntity);
 			entity.setDataFechamento(new Date());
 			return "/pages/Conta/ativarDesativarConta";
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return "";
@@ -203,7 +205,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 				}
 			}
 			return resultado;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
@@ -220,7 +222,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 				}
 			}
 			return resultado;
-		} catch (ApplicationException be) {
+		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
