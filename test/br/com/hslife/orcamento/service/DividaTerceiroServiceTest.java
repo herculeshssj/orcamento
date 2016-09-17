@@ -91,6 +91,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 	@Autowired
 	private IDividaTerceiro dividaTerceiroService;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeTestEnvironment() throws ApplicationException {
 		usuario = EntityInitializerFactory.initializeUsuario();

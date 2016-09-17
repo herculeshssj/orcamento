@@ -106,6 +106,7 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
 
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeTestEnvironment() throws ApplicationException {
 		Usuario usuario = EntityInitializerFactory.initializeUsuario();
@@ -135,6 +136,7 @@ public class RegraImportacaoComponentTest extends AbstractTestComponents {
 		meioPagamentoService.cadastrar(meioPagamento);
 	}
 		
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testProcessarRegras() throws ApplicationException {			
 		List<LancamentoConta> lancamentosAProcessar = new ArrayList<LancamentoConta>();

@@ -75,6 +75,7 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeEntities() {
 		enderecoRepository.setSessionFactory(sessionFactory);

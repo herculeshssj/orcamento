@@ -83,6 +83,7 @@ public class RegraImportacaoRepositoryTest extends AbstractTestRepositories {
 	@Autowired
 	private RegraImportacaoRepository regraImportacaoRepository;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeEntities() {
 		usuarioRepository.setSessionFactory(sessionFactory);

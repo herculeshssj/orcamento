@@ -78,6 +78,7 @@ public class TelefoneRepositoryTest extends AbstractTestRepositories {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeEntities() {
 		telefoneRepository.setSessionFactory(sessionFactory);

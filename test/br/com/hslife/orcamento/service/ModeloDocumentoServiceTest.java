@@ -76,6 +76,7 @@ public class ModeloDocumentoServiceTest extends AbstractTestServices {
 	@Autowired
 	private IModeloDocumento modeloDocumentoService;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeTestEnvironment() throws ApplicationException {
 		usuario = EntityInitializerFactory.initializeUsuario();

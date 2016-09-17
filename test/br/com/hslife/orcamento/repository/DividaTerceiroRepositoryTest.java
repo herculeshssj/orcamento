@@ -90,6 +90,7 @@ public class DividaTerceiroRepositoryTest extends AbstractTestRepositories {
 	@Autowired
 	private DividaTerceiroRepository dividaTerceiroRepository;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void initializeEntities() {
 		usuarioRepository.setSessionFactory(sessionFactory);
