@@ -44,43 +44,36 @@
   
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.CartaoCredito;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoConta;
+import org.springframework.stereotype.Repository;
 
-public interface IConta extends ICRUDService<Conta> {
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
+import br.com.hslife.orcamento.entity.Usuario;
+
+@Repository
+public class ContaCompartilhadaRepository extends AbstractRepository {
 	
-	public List<Conta> buscarTodos();
+	public void save(final ContaCompartilhada entity) {
+		getSession().persist(entity);
+	}
 	
-	public List<Conta> buscarPorDescricao(String descricao);
+	public void update(final ContaCompartilhada entity) {
+		getSession().merge(entity);
+	}
 	
-	public List<Conta> buscarTodosAtivos();
+	public ContaCompartilhada findByHash(String hash) {
+		return (ContaCompartilhada)getSession().createQuery("FROM ContaCompartilhada c WHERE c.hashAutorizacao = :hash")
+				.setString("hash", hash)
+				.uniqueResult();
+	}
 	
-	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarAtivosPorUsuario(Usuario usuario);
-	
-	public void ativarConta(Conta conta);
-	
-	public void desativarConta(Conta conta, String situacaoLancamentos);
-	
-	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
-	
-	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario);
-	
-	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario);
-	
-	public Conta buscarPorCartaoCredito(CartaoCredito cartao);
-	
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo);
-	
+	@SuppressWarnings("unchecked")
+	public List<ContaCompartilhada> findAllByUsuarioLogado(Usuario usuarioLogado) {
+		return getSession().createQuery("FROM ContaCompartilhada c WHERE c.conta.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuarioLogado.getId())
+				.list();
+	}
 }

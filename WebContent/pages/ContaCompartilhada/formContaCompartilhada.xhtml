@@ -1,4 +1,4 @@
-/***
+<!--
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -42,45 +42,40 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-***/
+  -->
 
-package br.com.hslife.orcamento.facade;
 
-import java.util.List;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-import br.com.hslife.orcamento.entity.CartaoCredito;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoConta;
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
-public interface IConta extends ICRUDService<Conta> {
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{contaCompartilhadaMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">				
+			
+			<label for="frmFormEntity:txtConta">Conta:</label>
+			<h:selectOneMenu id="txtConta" value="#{managedBean.entity.conta}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+			
+			<label for="frmFormEntity:txtLogin">Login do usuário:</label>
+			<h:inputText id="txtLogin" value="#{managedBean.entity.loginUsuario}"/>
+			
+			<label for="frmFormEntity:txtEmail">E-Mail do usuário:</label>
+			<h:inputText id="txtEmail" value="#{managedBean.entity.emailUsuario}"/>
+			
+		</h:panelGrid>
+		
+	</ui:define>
 	
-	public List<Conta> buscarTodos();
-	
-	public List<Conta> buscarPorDescricao(String descricao);
-	
-	public List<Conta> buscarTodosAtivos();
-	
-	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarAtivosPorUsuario(Usuario usuario);
-	
-	public void ativarConta(Conta conta);
-	
-	public void desativarConta(Conta conta, String situacaoLancamentos);
-	
-	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
-	
-	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario);
-	
-	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario);
-	
-	public Conta buscarPorCartaoCredito(CartaoCredito cartao);
-	
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo);
-	
-}
+</ui:composition>
+</html>

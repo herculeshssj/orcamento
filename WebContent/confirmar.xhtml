@@ -1,4 +1,4 @@
-/***
+<!--
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -42,45 +42,35 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-***/
+  -->
 
-package br.com.hslife.orcamento.facade;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-import java.util.List;
+<f:metadata>
+	<f:viewParam name="operacao" value="#{confirmacaoMB.operacao}"></f:viewParam>
+	<f:viewParam name="hash" value="#{confirmacaoMB.hash}"></f:viewParam>
+</f:metadata>
 
-import br.com.hslife.orcamento.entity.CartaoCredito;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoConta;
+<h:head>
+	<title>Orçamento Doméstico - Confirmação</title>
+</h:head>
 
-public interface IConta extends ICRUDService<Conta> {
-	
-	public List<Conta> buscarTodos();
-	
-	public List<Conta> buscarPorDescricao(String descricao);
-	
-	public List<Conta> buscarTodosAtivos();
-	
-	public List<Conta> buscarTodosAtivosPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarAtivosPorUsuario(Usuario usuario);
-	
-	public void ativarConta(Conta conta);
-	
-	public void desativarConta(Conta conta, String situacaoLancamentos);
-	
-	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
-	
-	public List<Conta> buscarPorTipoContaEUsuario(TipoConta tipoConta, Usuario usuario);
-	
-	public List<Conta> buscarSomenteTipoCartaoPorUsuario(Usuario usuario);
-	
-	public List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario);
-	
-	public Conta buscarPorCartaoCredito(CartaoCredito cartao);
-	
-	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo);
-	
-}
+<h:body>
+
+	<h:form>
+		
+		<h4><h:outputText value="#{confirmacaoMB.mensagemAviso}"/></h4>
+		<br/><br/>
+		<a href="#{request.contextPath}/login.faces">Logar no sistema</a>
+		
+	</h:form>
+
+</h:body>
+
+</html>

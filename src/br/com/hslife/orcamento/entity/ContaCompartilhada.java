@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -59,7 +60,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -90,6 +94,12 @@ public class ContaCompartilhada implements Serializable {
 	@Column(nullable=true)
 	private Date dataGeracaoHash;
 	
+	@Transient
+	private String loginUsuario;
+	
+	@Transient
+	private String emailUsuario; 
+	
 	public ContaCompartilhada() {
 		
 	}
@@ -102,6 +112,33 @@ public class ContaCompartilhada implements Serializable {
 	public void gerarHash() {
 		dataGeracaoHash = new Date();
 		hashAutorizacao = Util.SHA256(dataGeracaoHash.toString());
+	}
+	
+	public boolean isHashExpirado() {
+		// Se não houver hash e nem data definida significa que o
+		// compartilhamento é válido
+		if (this.dataGeracaoHash == null && this.hashAutorizacao == null) {
+			return false;
+		}
+		
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(this.dataGeracaoHash);
+		temp.add(Calendar.DAY_OF_YEAR, 1);
+		
+		if (temp.getTime().before(new Date())) 
+			return true;
+		else
+			return false;
+	}
+	
+	public void validate() {
+		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Login do usuário", this.loginUsuario, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("E-Mail do usuário", this.emailUsuario, 30);
+		
+		if (!Util.validaEmail(this.emailUsuario)) {
+			throw new ValidationException("E-Mail informado é inválido!");
+		}
 	}
 
 	public Long getId() {
@@ -142,5 +179,21 @@ public class ContaCompartilhada implements Serializable {
 
 	public void setDataGeracaoHash(Date dataGeracaoHash) {
 		this.dataGeracaoHash = dataGeracaoHash;
+	}
+
+	public String getLoginUsuario() {
+		return loginUsuario;
+	}
+
+	public void setLoginUsuario(String loginUsuario) {
+		this.loginUsuario = loginUsuario;
+	}
+
+	public String getEmailUsuario() {
+		return emailUsuario;
+	}
+
+	public void setEmailUsuario(String emailUsuario) {
+		this.emailUsuario = emailUsuario;
 	}
 }

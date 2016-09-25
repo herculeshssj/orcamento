@@ -154,9 +154,9 @@ public class EntityComboUtil {
 	public List<Conta> getListaContaCartao() {
 		try {
 			if (opcaoSistemaComponent.getExibirContasInativas())
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), null);
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{TipoConta.CARTAO}, usuarioComponent.getUsuarioLogado(), null);
 			else
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, usuarioComponent.getUsuarioLogado(), true);
+				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{TipoConta.CARTAO}, usuarioComponent.getUsuarioLogado(), true);
 		} catch (BusinessException | ValidationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
