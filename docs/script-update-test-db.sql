@@ -91,8 +91,18 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Lançamento rápido - TokenID do usuário
-	alter table usuario add column tokenid varchar(128) null;
+	-- Contas compartilhadas
+	create table contacompartilhada (
+		id bigint not null auto_increment,
+		idConta bigint not null,
+		idUsuario bigint not null,
+	    hashAutorizacao varchar(64) null,
+	    dataGeracaoHash date null,
+		primary key (id)
+	) Engine=InnoDB;
+	
+	alter table contacompartilhada add constraint fk_contacompartilhada_conta foreign key (idConta) references conta (id);
+	alter table contacompartilhada add constraint fk_contacompartilhada_usuario foreign key (idUsuario) references usuario (id);
 	
     /*** Fim do bloco de atualizações da base ***/
     
