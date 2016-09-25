@@ -54,14 +54,10 @@ import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.Usuario;
 
 @Repository
-public class ContaCompartilhadaRepository extends AbstractRepository {
+public class ContaCompartilhadaRepository extends AbstractCRUDRepository<ContaCompartilhada> {
 	
-	public void save(final ContaCompartilhada entity) {
-		getSession().persist(entity);
-	}
-	
-	public void update(final ContaCompartilhada entity) {
-		getSession().merge(entity);
+	public ContaCompartilhadaRepository() {
+		super(new ContaCompartilhada());
 	}
 	
 	public ContaCompartilhada findByHash(String hash) {

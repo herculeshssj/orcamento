@@ -46,7 +46,6 @@
 
 package br.com.hslife.orcamento.entity;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -68,7 +67,7 @@ import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="contacompartilhada")
-public class ContaCompartilhada implements Serializable {
+public class ContaCompartilhada extends EntityPersistence {
 
 	/**
 	 * 
@@ -139,6 +138,11 @@ public class ContaCompartilhada implements Serializable {
 		if (!Util.validaEmail(this.emailUsuario)) {
 			throw new ValidationException("E-Mail informado é inválido!");
 		}
+	}
+	
+	@Override
+	public String getLabel() {
+		return "";
 	}
 
 	public Long getId() {

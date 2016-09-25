@@ -101,6 +101,17 @@ public class ContaCompartilhadaController extends AbstractController {
 		return "/pages/ContaCompartilhada/formContaCompartilhada";
 	}
 	
+	public void edit() {
+		try {
+			getService().reenviarConvite(entity);
+			infoMessage("Convite enviado com sucesso!");
+			initializeEntity();
+			find();
+		} catch (ApplicationException e) {
+			errorMessage(e.getMessage());
+		}
+	}
+	
 	private void find() {
 		listEntity = getService().buscarTodosPorUsuarioLogado(getUsuarioLogado());
 	}
@@ -119,7 +130,10 @@ public class ContaCompartilhadaController extends AbstractController {
 	}
 	
 	public void delete() {
-		
+		getService().excluirCompartilhamento(entity);
+		infoMessage("Compartilhamento excluído com sucesso!");
+		initializeEntity();
+		find();
 	}
 	
 	public String cancel() {

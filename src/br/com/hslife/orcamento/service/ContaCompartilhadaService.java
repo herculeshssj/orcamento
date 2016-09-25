@@ -165,4 +165,46 @@ public class ContaCompartilhadaService implements IContaCompartilhada {
 	public List<ContaCompartilhada> buscarTodosPorUsuarioLogado(Usuario usuarioLogado) {
 		return getRepository().findAllByUsuarioLogado(usuarioLogado);
 	}
+	
+	@Override
+	public void reenviarConvite(ContaCompartilhada conta) throws ApplicationException {
+		ContaCompartilhada contaCompartilhada = getRepository().findById(conta.getId());
+		Usuario u = getUsuarioService().buscarPorID(contaCompartilhada.getUsuario().getId());
+		
+		// Gera o novo hash para o compartilhamento
+		contaCompartilhada.gerarHash();
+		
+		// Salva na base
+		getRepository().update(contaCompartilhada);
+		
+		// Envia e-mail para o usuário informado do compartilhamento
+
+		StringBuilder mensagemEmail = new StringBuilder();
+		
+		mensagemEmail.append("Prezado " + u.getNome() + "\n\n");
+		mensagemEmail.append("O usuário " + conta.getConta().getUsuario().getNome() +  " compartilhou as informações da seguinte conta:\n\n");
+		mensagemEmail.append(conta.getConta().getLabel() + " \n\n");
+		mensagemEmail.append("Para confirmar a operação, acesse o link abaixo em um navegador Web de sua preferência: \n\n");
+		mensagemEmail.append("https://hslife.com.br/confirmar.faces?operacao=compartilhamento&hash=" + conta.getHashAutorizacao() + "\n\n");
+		mensagemEmail.append("Caso não deseje acessar os dados desta conta, ignore esta mensagem.\n\n\n");
+		mensagemEmail.append("Administrador do Sistema");
+		
+		try {
+			getEmailComponent().setDestinatario(u.getNome());
+			getEmailComponent().setEmailDestinatario(u.getEmail());
+			getEmailComponent().setAssunto("Orçamento Doméstico - Compartilhamento de Conta");
+			getEmailComponent().setMensagem(mensagemEmail.toString());
+			getEmailComponent().enviarEmail();
+		} catch (Exception e) {
+			logger.catching(e);
+			e.printStackTrace();
+			throw new ApplicationException(e);
+		}		
+	}
+	
+	@Override
+	public void excluirCompartilhamento(ContaCompartilhada conta) {
+		ContaCompartilhada contaCompartilhada = getRepository().findById(conta.getId());
+		getRepository().delete(contaCompartilhada);
+	}
 }
