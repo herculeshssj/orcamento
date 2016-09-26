@@ -49,8 +49,10 @@ package br.com.hslife.orcamento.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -61,6 +63,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
@@ -72,6 +75,7 @@ import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IContaCompartilhada;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
@@ -95,6 +99,9 @@ public class ResumoMensalContasController extends AbstractController {
 	
 	@Autowired
 	private IConta contaService;
+	
+	@Autowired
+	private IContaCompartilhada contaCompartilhadaService;
 	
 	@Autowired
 	private OrcamentoController orcamentoMB;
@@ -276,6 +283,12 @@ public class ResumoMensalContasController extends AbstractController {
 			return;
 		}
 		
+		// Impede a criação de um orçamento no caso de conta compartilhada
+		if (!contaSelecionada.getUsuario().equals(getUsuarioLogado())) {
+			warnMessage("Usuário da conta difere do usuário atualmente logado!");
+			return;
+		}
+		
 		// Instancia um novo objeto Orcamento
 		Orcamento orcamentoAGerar = new Orcamento();
 		
@@ -306,16 +319,25 @@ public class ResumoMensalContasController extends AbstractController {
 	}
 	
 	public List<Conta> getListaConta() {
-		try {
+		Set<Conta> contas = new HashSet<>();
+		try {			
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null);
+				contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null));				
 			} else {
-				return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true);
+				contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true));
+			}
+			
+			// Traz as contas compartilhadas para com o usuário atualmente logado
+			List<ContaCompartilhada> contasCompartilhadas = getContaCompartilhadaService().buscarTodosPorUsuario(getUsuarioLogado());
+						
+			// Acrescenta no Set as contas compartilhadas dos demais usuários
+			for (ContaCompartilhada contaCompartilhada : contasCompartilhadas) {
+				contas.add(contaCompartilhada.getConta());
 			}
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<Conta>();
+		return new ArrayList<Conta>(contas);
 	}
 	
 	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
@@ -505,5 +527,9 @@ public class ResumoMensalContasController extends AbstractController {
 
 	public void setMesAno(String mesAno) {
 		this.mesAno = mesAno;
+	}
+
+	public IContaCompartilhada getContaCompartilhadaService() {
+		return contaCompartilhadaService;
 	}
 }

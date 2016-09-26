@@ -166,6 +166,10 @@ public class ContaCompartilhadaService implements IContaCompartilhada {
 		return getRepository().findAllByUsuarioLogado(usuarioLogado);
 	}
 	
+	public List<ContaCompartilhada> buscarTodosPorUsuario(Usuario usuario) {
+		return getRepository().findAllByUsuario(usuario);
+	}
+	
 	@Override
 	public void reenviarConvite(ContaCompartilhada conta) throws ApplicationException {
 		ContaCompartilhada contaCompartilhada = getRepository().findById(conta.getId());

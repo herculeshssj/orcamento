@@ -60,6 +60,8 @@ public interface IContaCompartilhada {
 	
 	public List<ContaCompartilhada> buscarTodosPorUsuarioLogado(Usuario usuarioLogado);
 	
+	public List<ContaCompartilhada> buscarTodosPorUsuario(Usuario usuario);
+	
 	public void reenviarConvite(ContaCompartilhada conta) throws ApplicationException;
 	
 	public void excluirCompartilhamento(ContaCompartilhada conta);

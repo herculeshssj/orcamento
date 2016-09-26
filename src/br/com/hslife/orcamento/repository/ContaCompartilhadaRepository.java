@@ -72,4 +72,11 @@ public class ContaCompartilhadaRepository extends AbstractCRUDRepository<ContaCo
 				.setLong("idUsuario", usuarioLogado.getId())
 				.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ContaCompartilhada> findAllByUsuario(Usuario usuario) {
+		return getSession().createQuery("FROM ContaCompartilhada c WHERE c.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
 }

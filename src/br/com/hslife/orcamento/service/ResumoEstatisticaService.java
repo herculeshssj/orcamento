@@ -50,11 +50,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
@@ -81,6 +84,7 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IContaCompartilhada;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
@@ -115,6 +119,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Autowired
 	private IFaturaCartao faturaCartaoService;
 	
+	@Autowired
+	private IContaCompartilhada contaCompartilhadaService;
+	
 	/*** Declaração dos Getters dos serviços ***/
 	
 	public IFechamentoPeriodo getFechamentoPeriodoService() {
@@ -137,6 +144,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return faturaCartaoService;
 	}
 
+	public IContaCompartilhada getContaCompartilhadaService() {
+		return contaCompartilhadaService;
+	}
+
 	/*** Declaração dos componentes ***/
 	
 	@Autowired
@@ -155,8 +166,19 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
 		
+		// Resgata todas as contas do usuário
+		Set<Conta> contas = new HashSet<>(getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuario, null));
+		
+		// Traz as contas compartilhadas para com o usuário atualmente logado
+		List<ContaCompartilhada> contasCompartilhadas = getContaCompartilhadaService().buscarTodosPorUsuario(usuario);
+		
+		// Acrescenta no Set as contas compartilhadas dos demais usuários
+		for (ContaCompartilhada contaCompartilhada : contasCompartilhadas) {
+			contas.add(contaCompartilhada.getConta());
+		}
+		
 		// Itera todas as contas do usuário
-		for (Conta conta : getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuario, null)) { // resolvendo a ambiguidade do método
+		for (Conta conta : contas) {
 			
 			// FIXME decidir como irei tratar o saldo atual dos cartões de débito
 			// Caso seja cartão de débito, passa adiante
