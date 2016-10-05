@@ -47,7 +47,9 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
@@ -57,13 +59,16 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IContaCompartilhada;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
@@ -92,6 +97,9 @@ public class PanoramaCadastroController extends AbstractController {
 	
 	@Autowired
 	private IResumoEstatistica resumoEstatisticaService;
+	
+	@Autowired
+	private IContaCompartilhada contaCompartilhadaService;
 	
 	public CadastroSistema cadastroSelecionado;
 	public Long idRegistro;
@@ -142,25 +150,55 @@ public class PanoramaCadastroController extends AbstractController {
 	public List<SelectItem> getListaRegistro() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		
+		// Declara Set de usuários para armazenar os proprietários das contas
+		Set<Usuario> usuarios = new HashSet<>();
+		
+		// Traz as contas compartilhadas para com o usuário atualmente logado
+		List<ContaCompartilhada> contasCompartilhadas = getContaCompartilhadaService().buscarTodosPorUsuario(getUsuarioLogado());
+					
+		// Acrescenta no Set os usuários das contas compartilhadas dos demais usuários
+		for (ContaCompartilhada contaCompartilhada : contasCompartilhadas) {
+			usuarios.add(contaCompartilhada.getConta().getUsuario());
+		}
+		
+		// Acrescenta o usuário logado
+		usuarios.add(getUsuarioLogado());
+		
 		try {
 		
 			switch (cadastroSelecionado) {
 				case CATEGORIA : 
-					for (Categoria c : categoriaService.buscarTipoCategoriaEDescricaoEAtivoPorUsuario(null, null, null, getUsuarioLogado())) {
-						listaSelectItem.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao() 
-								+ (c.isAtivo() ? "" : " [INATIVO]")));
+					for (Categoria c : categoriaService.buscarTipoCategoriaEDescricaoEAtivoPorUsuario(null, null, null, new ArrayList<>(usuarios))) {
+						if (c.getUsuario().equals(getUsuarioLogado())) {
+							listaSelectItem.add(new SelectItem(c.getId(), c.getTipoCategoria() + " - " + c.getDescricao() 
+							+ (c.isAtivo() ? "" : " [INATIVO]")));
+						} else {
+							listaSelectItem.add(new SelectItem(c.getId(), c.getUsuario().getLogin() + " - " + c.getTipoCategoria() + " - " + c.getDescricao() 
+							+ (c.isAtivo() ? "" : " [INATIVO]")));
+						}
+						
 					}
 					break;
 				case FAVORECIDO : 
-					for (Favorecido f : favorecidoService.buscarTipoPessoaENomeEAtivoPorUsuario(null, null, null, getUsuarioLogado())) {
-						listaSelectItem.add(new SelectItem(f.getId(), f.getTipoPessoa() + " - " + f.getNome()
-								+ (f.isAtivo() ? "" : " [INATIVO]")));
+					for (Favorecido f : favorecidoService.buscarTipoPessoaENomeEAtivoPorUsuario(null, null, null, new ArrayList<>(usuarios))) {
+						if (f.getUsuario().equals(getUsuarioLogado())) {
+							listaSelectItem.add(new SelectItem(f.getId(), f.getTipoPessoa() + " - " + f.getNome()
+							+ (f.isAtivo() ? "" : " [INATIVO]")));
+						} else {
+							listaSelectItem.add(new SelectItem(f.getId(), f.getUsuario().getLogin() + " - " + f.getTipoPessoa() + " - " + f.getNome()
+							+ (f.isAtivo() ? "" : " [INATIVO]")));
+						}
 					}
 					break;
 				case MEIOPAGAMENTO : 
-					for (MeioPagamento m : meioPagamentoService.buscarDescricaoEAtivoPorUsuario(null, null, getUsuarioLogado())) {
-						listaSelectItem.add(new SelectItem(m.getId(), m.getDescricao()
-								+ (m.isAtivo() ? "" : " [INATIVO]")));
+					for (MeioPagamento m : meioPagamentoService.buscarDescricaoEAtivoPorUsuario(null, null, new ArrayList<>(usuarios))) {
+						if (m.getUsuario().equals(getUsuarioLogado())) {
+							listaSelectItem.add(new SelectItem(m.getId(), m.getDescricao()
+									+ (m.isAtivo() ? "" : " [INATIVO]")));
+						} else {
+							listaSelectItem.add(new SelectItem(m.getId(), m.getUsuario().getLogin() + " - " + m.getDescricao()
+									+ (m.isAtivo() ? "" : " [INATIVO]")));
+						}
 					}
 					break;
 				case MOEDA : 
@@ -198,5 +236,9 @@ public class PanoramaCadastroController extends AbstractController {
 
 	public void setContas(List<Conta> contas) {
 		this.contas = contas;
+	}
+
+	public IContaCompartilhada getContaCompartilhadaService() {
+		return contaCompartilhadaService;
 	}
 }

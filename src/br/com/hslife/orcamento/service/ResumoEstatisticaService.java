@@ -622,7 +622,16 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Override
 	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro) {		
 		// Busca todas as contas existentes
-		List<Conta> contasExistentes = getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuarioComponent.getUsuarioLogado(), null); // resolvendo a ambiguidade do método
+		List<Conta> contasExistentes = getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, null, getUsuarioComponent().getUsuarioLogado(), null);
+		
+		// Traz as contas compartilhadas com o usuário
+		// Traz as contas compartilhadas para com o usuário atualmente logado
+		List<ContaCompartilhada> contasCompartilhadas = getContaCompartilhadaService().buscarTodosPorUsuario(getUsuarioComponent().getUsuarioLogado());
+		
+		// Acrescenta no Set as contas compartilhadas dos demais usuários
+		for (ContaCompartilhada contaCompartilhada : contasCompartilhadas) {
+			contasExistentes.add(contaCompartilhada.getConta());
+		}
 		
 		// Declara a lista de contas que será retornada
 		List<Conta> contasProcessadas = new ArrayList<Conta>();

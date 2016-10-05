@@ -68,4 +68,6 @@ public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
 	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
 	
 	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
+	
+	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios);
 }

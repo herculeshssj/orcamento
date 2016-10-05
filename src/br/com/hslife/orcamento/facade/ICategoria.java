@@ -73,4 +73,6 @@ public interface ICategoria extends ICRUDService<Categoria> {
 	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario);
 	
 	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, Usuario usuario);
+	
+	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, List<Usuario> usuarios);
 }

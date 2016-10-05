@@ -332,7 +332,13 @@ public class ResumoMensalContasController extends AbstractController {
 						
 			// Acrescenta no Set as contas compartilhadas dos demais usuários
 			for (ContaCompartilhada contaCompartilhada : contasCompartilhadas) {
-				contas.add(contaCompartilhada.getConta());
+				if (!contaCompartilhada.getConta().isAtivo() && getOpcoesSistema().getExibirContasInativas()) {
+					contas.add(contaCompartilhada.getConta());
+				} else if (contaCompartilhada.getConta().isAtivo()) {
+					contas.add(contaCompartilhada.getConta());
+				} else {
+					continue;
+				}
 			}
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());

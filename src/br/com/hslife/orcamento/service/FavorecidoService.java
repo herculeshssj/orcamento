@@ -125,6 +125,11 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 		return getRepository().findTipoPessoaAndNomeAndAtivoByUsuario(tipoPessoa, nome, ativo, usuario);
 	}
 	
+	@Override
+	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, List<Usuario> usuarios) {
+		return getRepository().findTipoPessoaAndNomeAndAtivoByUsuario(tipoPessoa, nome, ativo, usuarios);
+	}
+	
 	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario) {		
 		// Verifica se o favorecido informado existe na base de dados
 		List<Favorecido> favorecidos = getRepository().findByNomeAndUsuario(nomeFavorecido, usuario);

@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -138,6 +139,41 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 		}
 		
 		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MeioPagamento> findDescricaoAndAtivoByUsuario(String descricao, Boolean ativo, List<Usuario> usuarios) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM MeioPagamento meioPagamento WHERE ");
+		
+		if (descricao != null && !descricao.isEmpty()) {
+			hql.append("meioPagamento.descricao LIKE '%");
+			hql.append(descricao);
+			hql.append("%' AND ");
+		}
+		if (ativo != null) {
+			hql.append("meioPagamento.ativo = :ativo AND ");
+		}
+		
+		hql.append("meioPagamento.usuario.id IN (:idUsuario) ORDER BY meioPagamento.descricao ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		
+		if (ativo != null) {
+			hqlQuery.setParameter("ativo", ativo);
+		}
+		
+		// Resgata os IDs dos usuários
+		List<Long> idsUsuarios = new ArrayList<>();
+		for (Usuario u : usuarios) {
+			if (u != null && u.getId() != null) {
+				idsUsuarios.add(u.getId());
+			}
+		}
+		
+		hqlQuery.setParameterList("idUsuario", idsUsuarios);
 		
 		return hqlQuery.list();
 	}
