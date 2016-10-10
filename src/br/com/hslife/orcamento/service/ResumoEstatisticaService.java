@@ -80,6 +80,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
@@ -88,6 +89,7 @@ import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
+import br.com.hslife.orcamento.model.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
@@ -235,6 +237,91 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return saldoAtualContas;
 	}
 	
+	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano) {
+		// Declara o Map de previsão de lançamentos do cartao
+		Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoCartao>();
+		
+		// Pega a data atual
+		Calendar hoje = Calendar.getInstance();
+		
+		// Declaração do List de faturas
+		List<FaturaCartao> faturasCartao = new ArrayList<>();
+		
+		if (ano <= hoje.get(Calendar.YEAR)) {
+			// Traz todas as faturas do ano selecionado
+			faturasCartao = getFaturaCartaoService().buscarTodosPorContaEAnoOrdenadosPorMesAno(criterioBusca.getConta(), ano);
+		} else {
+			// Verifica se realmente não existem faturas para o ano seleciona. Se existirem, segue com o fluxo normal do método
+			faturasCartao = getFaturaCartaoService().buscarTodosPorContaEAnoOrdenadosPorMesAno(criterioBusca.getConta(), ano);
+			
+			if (faturasCartao == null || faturasCartao.isEmpty()) {
+				// Anos posteriores é realizado a estimativa baseado no ano informado e os lançamentos periódicos ativos da conta
+				// Todos os lançamentos gerados são incluídos em faturas correspondentes aos meses do ano informado 
+				
+				// TODO criar previsão de faturas e dos seus respectivos lançamentos fixos e parcelados
+			}
+		}
+				
+		// Traz os lançamentos de cada fatura e classifica-os em suas respectivas categorias
+		for (FaturaCartao fatura : faturasCartao) {
+			List<Categoria> categorias = LancamentoContaUtil.organizarLancamentosPorCategoria(new ArrayList<>(fatura.getDetalheFatura()));
+			
+			for (Categoria categoria : categorias) {
+				String oid = Util.MD5(categoria.getDescricao());
+				
+				if (mapPanoramaLancamentos.get(oid) == null) {				
+					PanoramaLancamentoCartao panorama = new PanoramaLancamentoCartao();
+					panorama.setConta(criterioBusca.getConta());
+					panorama.setDescricao(categoria.getDescricao());
+					panorama.setAno(ano);
+					panorama.setOid(oid);								
+					panorama.setIndice(mapPanoramaLancamentos.values().size() + 1);
+					mapPanoramaLancamentos.put(oid, panorama);				
+				}
+					
+				// Rotina de inserção dos valores dos lançamentos no panorama
+				for (LancamentoConta lancamento : categoria.getLancamentos()) {
+					mapPanoramaLancamentos.get(oid).setarMes(fatura.getMes() - 1, lancamento);
+				}
+			}
+		}
+		
+		// Linha 'Saldo Total'
+		PanoramaLancamentoCartao valorTotal = new PanoramaLancamentoCartao();
+		valorTotal.setConta(criterioBusca.getConta());
+		valorTotal.setAno(ano);
+		valorTotal.setOid(Util.MD5("Saldo Total"));
+		valorTotal.setDescricao("Saldo Total");
+		valorTotal.setIndice(mapPanoramaLancamentos.values().size() + 1);
+		
+		// Itera as faturas do cartão para preencher o campo 'Valor da fatura'
+		for (FaturaCartao fatura : faturasCartao) {
+			switch (fatura.getMes()) {
+				case 1 : valorTotal.setJaneiro(fatura.getValorFatura()); continue;
+				case 2 : valorTotal.setFevereiro(fatura.getValorFatura()); continue;
+				case 3 : valorTotal.setMarco(fatura.getValorFatura()); continue;
+				case 4 : valorTotal.setAbril(fatura.getValorFatura()); continue;
+				case 5 : valorTotal.setMaio(fatura.getValorFatura()); continue;
+				case 6 : valorTotal.setJunho(fatura.getValorFatura()); continue;
+				case 7 : valorTotal.setJulho(fatura.getValorFatura()); continue;
+				case 8 : valorTotal.setAgosto(fatura.getValorFatura()); continue;
+				case 9 : valorTotal.setSetembro(fatura.getValorFatura()); continue;
+				case 10 : valorTotal.setOutubro(fatura.getValorFatura()); continue;
+				case 11 : valorTotal.setNovembro(fatura.getValorFatura()); continue;
+				case 12 : valorTotal.setDezembro(fatura.getValorFatura()); continue;
+				default : throw new BusinessException("Opção de mês inválido!");
+			}
+		}
+		
+		// Adiciona no Map do panorama de lançamentos
+		mapPanoramaLancamentos.put(valorTotal.getOid(), valorTotal);
+		
+		// Salva o resultado em um List e depois retorna os valores adicionados
+		List<PanoramaLancamentoCartao> resultado = new LinkedList<>(mapPanoramaLancamentos.values());
+
+		return resultado; 
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano) {
@@ -271,7 +358,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
 					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);					
 			
-			// Itera os lançamentos parcelados a adiciona suas parcelas caso esteja no mesmo ano que o relatório
+			// Itera os lançamentos parcelados adicionando suas parcelas caso estejam no mesmo ano que o relatório
 			for (LancamentoPeriodico parcelamento : parcelamentos) {
 				List<LancamentoConta> parcelasLancamento = getLancamentoContaService().buscarPorLancamentoPeriodico(parcelamento);
 				

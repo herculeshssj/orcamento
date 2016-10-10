@@ -416,4 +416,9 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta) {
 		return getRepository().findAllByContaOrderedByMesAndAno(conta);
 	}
+	
+	@Override
+	public List<FaturaCartao> buscarTodosPorContaEAnoOrdenadosPorMesAno(Conta conta, int ano) {
+		return getRepository().findAllByContaAndAnoOrderedByMesAndAno(conta, ano);
+	}
 }
