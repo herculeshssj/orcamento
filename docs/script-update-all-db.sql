@@ -2466,3 +2466,46 @@ create table logs (
 
 -- Lançamento rápido - TokenID do usuário
 alter table usuario add column tokenid varchar(128) null;
+
+-- Taxa de conversao global
+create table taxaconversao (
+	id bigint not null auto_increment,
+    idMoedaOrigem bigint not null,
+    valorMoedaOrigem decimal(18,2) not null,
+    taxaConversao decimal(18,4) default 1.00,
+    idMoedaDestino bigint null,
+    valorMoedaDestino decimal(18,2) null,
+    dataConversao datetime not null,
+    primary key (id)
+) Engine=InnoDB;
+
+alter table lancamentoconta add column idTaxaConversao bigint null;
+
+alter table lancamentoconta add constraint fk_lancamentoconta_taxaconversao foreign key (idTaxaConversao) references taxaconversao(id);
+
+-- Migração dos dados
+insert into taxaconversao (
+	id,
+    idMoedaOrigem,
+    valorMoedaOrigem,
+    taxaconversao,
+    idMoedaDestino,
+    valorMoedaDestino,
+    dataConversao
+) select
+	lc.id,
+    lc.idMoeda,
+    lc.valorPago,
+    (select distinct cm.taxaConversao from conversaomoeda cm where cm.idFaturaCartao = lc.idFaturaCartao and cm.idMoeda = lc.idMoeda),
+	c.idMoeda,
+    0.00,
+    lc.dataPagamento
+from lancamentoconta lc
+inner join conta c on c.id = lc.idConta
+where lc.idMoeda <> c.idMoeda;
+
+alter table taxaconversao auto_increment=10000;
+
+update taxaconversao set valorMoedaDestino = (valorMoedaOrigem * taxaConversao);
+
+update lancamentoconta set idTaxaConversao = id where id in (select id from taxaconversao);

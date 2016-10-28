@@ -157,6 +157,10 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=false)
 	private Moeda moeda;
 	
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name="idTaxaConversao", nullable=true)
+	private TaxaConversao taxaConversao;
+	
 	@Column
 	private int parcela;
 		
