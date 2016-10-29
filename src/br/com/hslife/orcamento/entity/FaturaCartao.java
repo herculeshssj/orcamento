@@ -292,6 +292,36 @@ public class FaturaCartao extends EntityPersistence {
 			this.adicionarLancamento(lancamento);
 		}
 	}
+	
+	/**
+	 * Converte o valor de todos os lançamentos para a moeda da conta.
+	 */
+	public void converterValorTodosLancamentos() {
+		for (LancamentoConta l : this.detalheFatura) {
+			if (l.getMoeda().equals(this.conta.getMoeda())) {
+				continue;
+			} else {
+				l.getTaxaConversao().atualizaTaxaConversao(l.getValorPago(), obterTaxaConversao(l.getMoeda()));
+				l.setValorPago(l.getTaxaConversao().getValorMoedaDestino());
+			}
+		}
+	}
+	
+	/**
+	 * Obtém a taxa de conversão da moeda passada a partir das conversões de moeda
+	 * existentes. Caso a taxa de conversão da moeda não esteja presente na lista
+	 * de conversões, o valor de conversão da própria moeda passada será retornada.
+	 * @param moeda
+	 * @return
+	 */
+	private double obterTaxaConversao(Moeda moeda) {
+		for (ConversaoMoeda conversao : this.conversoesMoeda) {
+			if (conversao.getMoeda().equals(moeda)) {
+				return conversao.getTaxaConversao();
+			}
+		}
+		return moeda.getValorConversao();
+	}
 
 	public Long getId() {
 		return id;

@@ -375,6 +375,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				
 		// Traz os lançamentos de cada fatura e classifica-os em suas respectivas categorias
 		for (FaturaCartao fatura : faturasCartao) {
+			fatura.converterValorTodosLancamentos();
 			List<Categoria> categorias = LancamentoContaUtil.organizarLancamentosPorCategoria(new ArrayList<>(fatura.getDetalheFatura()));
 			
 			for (Categoria categoria : categorias) {
@@ -408,18 +409,18 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		// Itera as faturas do cartão para preencher o campo 'Valor da fatura'
 		for (FaturaCartao fatura : faturasCartao) {
 			switch (fatura.getMes()) {
-				case 1 : valorTotal.setJaneiro(fatura.getValorFatura()); continue;
-				case 2 : valorTotal.setFevereiro(fatura.getValorFatura()); continue;
-				case 3 : valorTotal.setMarco(fatura.getValorFatura()); continue;
-				case 4 : valorTotal.setAbril(fatura.getValorFatura()); continue;
-				case 5 : valorTotal.setMaio(fatura.getValorFatura()); continue;
-				case 6 : valorTotal.setJunho(fatura.getValorFatura()); continue;
-				case 7 : valorTotal.setJulho(fatura.getValorFatura()); continue;
-				case 8 : valorTotal.setAgosto(fatura.getValorFatura()); continue;
-				case 9 : valorTotal.setSetembro(fatura.getValorFatura()); continue;
-				case 10 : valorTotal.setOutubro(fatura.getValorFatura()); continue;
-				case 11 : valorTotal.setNovembro(fatura.getValorFatura()); continue;
-				case 12 : valorTotal.setDezembro(fatura.getValorFatura()); continue;
+				case 1 : valorTotal.setJaneiro(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 2 : valorTotal.setFevereiro(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 3 : valorTotal.setMarco(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 4 : valorTotal.setAbril(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 5 : valorTotal.setMaio(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 6 : valorTotal.setJunho(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 7 : valorTotal.setJulho(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 8 : valorTotal.setAgosto(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 9 : valorTotal.setSetembro(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 10 : valorTotal.setOutubro(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 11 : valorTotal.setNovembro(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
+				case 12 : valorTotal.setDezembro(Math.abs(LancamentoContaUtil.calcularSaldoLancamentos(new ArrayList<>(fatura.getDetalheFatura())))); continue;
 				default : throw new BusinessException("Opção de mês inválido!");
 			}
 		}
