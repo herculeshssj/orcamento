@@ -273,6 +273,11 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			// Define a descrição definitiva do lançamento a ser criado
 			proximaMensalidade.setDescricao(proximaMensalidade.getLancamentoPeriodico().getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
 			
+			// Atualiza a taxa de conversão
+			if (proximaMensalidade.getTaxaConversao() != null) {
+				proximaMensalidade.getTaxaConversao().atualizaTaxaConversao(proximaMensalidade.getValorPago());
+			}
+			
 			getLancamentoContaRepository().save(proximaMensalidade);
 			
 		} else {

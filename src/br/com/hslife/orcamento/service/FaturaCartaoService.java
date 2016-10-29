@@ -192,6 +192,10 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		// Quita todos os lançamentos vinculados à fatura
 		for (LancamentoConta lancamento : faturaCartao.getDetalheFatura()) {
 			LancamentoConta l = getLancamentoContaRepository().findById(lancamento.getId());
+			
+			// Atualiza a taxa de conversão para registrar corretamente os valores
+			l.getTaxaConversao().atualizaTaxaConversao(l.getValorPago(), faturaCartao.getConversoesMoeda().get(faturaCartao.getConversoesMoeda().indexOf(l.getMoeda())).getTaxaConversao());
+			
 			if (l.getLancamentoPeriodico() != null) {
 				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
 				getFechamentoPeriodoService().registrarPagamento(l);

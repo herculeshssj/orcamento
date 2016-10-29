@@ -209,7 +209,15 @@ public class LancamentoConta extends EntityPersistence {
 			statusLancamentoConta = StatusLancamentoConta.REGISTRADO;
 		} else {
 			statusLancamentoConta = StatusLancamentoConta.AGENDADO;
-		}		
+		}
+		
+		// Taxa de conversao
+		if (lancamento.getTaxaConversao() != null) {
+			taxaConversao = new TaxaConversao(lancamento.getMoeda(), 
+					lancamento.getValorPago(), 
+					lancamento.getTaxaConversao().getMoedaDestino(), 
+					lancamento.getTaxaConversao().getTaxaConversao());
+		}
 	}
 
 	@Override
@@ -512,5 +520,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setDetalhes(SortedSet<DetalheLancamento> detalhes) {
 		this.detalhes = detalhes;
+	}
+
+	public TaxaConversao getTaxaConversao() {
+		return taxaConversao;
+	}
+
+	public void setTaxaConversao(TaxaConversao taxaConversao) {
+		this.taxaConversao = taxaConversao;
 	}
 }

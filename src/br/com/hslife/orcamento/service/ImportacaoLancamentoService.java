@@ -73,6 +73,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -263,6 +264,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					lc.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 				}
 				
+				// Define a taxa de conversão
+				if (lc.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+					lc.setTaxaConversao(new TaxaConversao(lc.getMoeda(), lc.getValorPago(), lc.getConta().getMoeda(), lc.getMoeda().getValorConversao()));
+				}
+				
 				// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
 				if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
 					lc.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
@@ -362,6 +368,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					? moedaPadrao 
 					: getMoedaService().buscarCodigoMonetarioPorUsuario(entity.getMoeda(), usuarioLogado));
 			
+			// Define a taxa de conversão
+			if (l.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+				l.setTaxaConversao(new TaxaConversao(l.getMoeda(), l.getValorPago(), l.getConta().getMoeda(), l.getMoeda().getValorConversao()));
+			}
+			
 			// Salva o lançamento
 			getLancamentoContaRepository().save(getRegraImportacaoService().processarRegras(entity.getConta(), l));
 			
@@ -386,6 +397,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				l.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
 			} else if (l.getStatusLancamentoConta().equals(StatusLancamentoConta.AGENDADO)) {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			}
+			
+			// Define a taxa de conversão
+			if (l.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+				l.setTaxaConversao(new TaxaConversao(l.getMoeda(), l.getValorPago(), l.getConta().getMoeda(), l.getMoeda().getValorConversao()));
 			}
 			
 			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true

@@ -61,6 +61,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -125,6 +126,10 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		List<LancamentoConta> lancamentosDivididos = lancamento.clonarLancamentos(quantidade, IncrementoClonagemLancamento.NENHUM);
 		for (LancamentoConta l : lancamentosDivididos) {
 			l.setValorPago(valorDividido);
+			// Atualiza a taxa de conversão
+			if (l.getTaxaConversao() != null) {
+				l.getTaxaConversao().atualizaTaxaConversao(valorDividido);
+			}
 			getRepository().save(l);
 		}
 		getRepository().delete(lancamento);
@@ -181,6 +186,8 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		
 		lancamentoMesclado.setValorPago(valorPago);
 		
+		lancamentoMesclado.setTaxaConversao(new TaxaConversao(lancamentoMesclado.getMoeda(), valorPago, lancamentoMesclado.getConta().getMoeda(), lancamentoMesclado.getMoeda().getValorConversao()));
+				
 		getRepository().save(lancamentoMesclado);
 		
 		for (LancamentoConta l : lancamentos) {

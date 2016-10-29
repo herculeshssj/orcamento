@@ -56,6 +56,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -181,6 +182,14 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		// Define a descrição definitiva do lançamento a ser criado
 		proximaMensalidade.setDescricao(lancamentoPeriodico.getDescricao() + " - Período " + proximaMensalidade.getPeriodo() + " / " + proximaMensalidade.getAno() + ", vencimento para " + Util.formataDataHora(proximaMensalidade.getDataVencimento(), Util.DATA));
 		
+		// Define a taxa de conversão
+		if (proximaMensalidade.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+			proximaMensalidade.setTaxaConversao(new TaxaConversao(proximaMensalidade.getMoeda(), 
+					proximaMensalidade.getValorPago(), 
+					proximaMensalidade.getConta().getMoeda(), 
+					proximaMensalidade.getMoeda().getValorConversao()));
+		}
+		
 		lancamentoContaRepository.save(proximaMensalidade);		
 		
 	}
@@ -267,7 +276,15 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 				parcela.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);
 			
 			// Define a descrição definitiva do lançamento a ser criado
-			parcela.setDescricao(lancamentoPeriodico.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA)); 
+			parcela.setDescricao(lancamentoPeriodico.getDescricao() + " - Parcela " + parcela.getParcela() + " / " + lancamentoPeriodico.getTotalParcela() + ", vencimento para " + Util.formataDataHora(parcela.getDataVencimento(), Util.DATA));
+			
+			// Define a taxa de conversão
+			if (parcela.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+				parcela.setTaxaConversao(new TaxaConversao(parcela.getMoeda(), 
+						parcela.getValorPago(), 
+						parcela.getConta().getMoeda(), 
+						parcela.getMoeda().getValorConversao()));
+			}
 			
 			getLancamentoContaRepository().save(parcela);
 			dataVencimento.add(Calendar.MONTH, 1);

@@ -59,6 +59,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -107,9 +108,12 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 
 	@Override
 	public void cadastrar(LancamentoConta entity) {
-		// Salva a informação da moeda no lançamento da conta
-		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO))
+		// Salva a informação da moeda da conta no lançamento
+		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
 			entity.setMoeda(entity.getConta().getMoeda());
+		} else {
+			entity.setTaxaConversao(new TaxaConversao(entity.getMoeda(), entity.getValorPago(), entity.getConta().getMoeda(), entity.getMoeda().getValorConversao()));
+		}
 		
 		// Define o status do lançamento da conta
 		if (!entity.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
@@ -124,10 +128,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 
 	@Override
 	public void alterar(LancamentoConta entity) {
-		// Salva a informação da moeda no lançamento da conta
-		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO))
-			entity.setMoeda(entity.getConta().getMoeda());
-		
+		// Trata o lançamento importado vinculado ao lançamento da conta
 		if (entity.getLancamentoImportado() != null) {
 			// Seta a moeda a partir do código monetário. Caso não encontre, seta a moeda padrão.
 			Moeda moedaLancamento = getMoedaService().buscarCodigoMonetarioPorUsuario(entity.getLancamentoImportado().getMoeda(), entity.getConta().getUsuario());
@@ -155,8 +156,20 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			getLancamentoImportadoRepository().delete(entity.getLancamentoImportado());
 			
 			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
+			// FIXME mover para a importação de lançamentos como uma opção na confirmação da importação
 			if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
 				entity.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
+			}
+		}
+		
+		// Salva a informação da moeda no lançamento da conta
+		if (!entity.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+			entity.setMoeda(entity.getConta().getMoeda());
+		} else {
+			if (entity.getTaxaConversao() == null) {
+				entity.setTaxaConversao(new TaxaConversao(entity.getMoeda(), entity.getValorPago(), entity.getConta().getMoeda(), entity.getMoeda().getValorConversao()));
+			} else {
+				entity.getTaxaConversao().atualizaTaxaConversao(entity.getMoeda(), entity.getValorPago(), entity.getConta().getMoeda(), entity.getMoeda().getValorConversao());
 			}
 		}
 		
@@ -282,7 +295,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 					}
 				}
 				
-				LancamentoConta proximaMensalidade = new LancamentoConta();
+				LancamentoConta proximaMensalidade = new LancamentoConta(ultimaMensalidade);
 				proximaMensalidade.setLancamentoPeriodico(lancamentoPeriodico);
 				dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
 				proximaMensalidade.setConta(lancamentoPeriodico.getConta());

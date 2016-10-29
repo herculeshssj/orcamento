@@ -59,6 +59,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.hslife.orcamento.util.Util;
+
 @Entity
 @Table(name="taxaconversao")
 public class TaxaConversao extends EntityPersistence {
@@ -73,20 +75,20 @@ public class TaxaConversao extends EntityPersistence {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="idMoeda", nullable=false)
+	@JoinColumn(name="idMoedaOrigem", nullable=false)
 	private Moeda moedaOrigem;
 	
-	@Column(precision=18, scale=2)
+	@Column(nullable=false, precision=18, scale=2)
 	private double valorMoedaOrigem;
 	
-	@Column(precision=18, scale=4)
+	@Column(nullable=false, precision=18, scale=4)
 	private double taxaConversao;
 	
 	@ManyToOne
-	@JoinColumn(name="idMoeda", nullable=false)
+	@JoinColumn(name="idMoedaDestino", nullable=false)
 	private Moeda moedaDestino;
 	
-	@Column(precision=18, scale=2)
+	@Column(nullable=false, precision=18, scale=2)
 	private double valorMoedaDestino;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -96,6 +98,37 @@ public class TaxaConversao extends EntityPersistence {
 	public TaxaConversao() {
 		taxaConversao = 1.0000;
 		dataConversao = new Date();
+	}
+	
+	public TaxaConversao(Moeda moedaOrigem, double valorMoedaOrigem, Moeda moedaDestino, double taxaConversao) {
+		this.moedaOrigem = moedaOrigem;
+		this.valorMoedaOrigem = valorMoedaOrigem;
+		this.taxaConversao = taxaConversao;
+		this.moedaDestino = moedaDestino;
+		this.valorMoedaDestino = Util.arredondar(valorMoedaOrigem * taxaConversao);
+		this.dataConversao = new Date();
+	}
+	
+	public void atualizaTaxaConversao(double valorMoedaOrigem) {
+		this.valorMoedaOrigem = valorMoedaOrigem;
+		this.valorMoedaDestino = Util.arredondar(valorMoedaOrigem * taxaConversao);
+		this.dataConversao = new Date();
+	}
+	
+	public void atualizaTaxaConversao(double valorMoedaOrigem, double taxaConversao) {
+		this.valorMoedaOrigem = valorMoedaOrigem;
+		this.taxaConversao = taxaConversao;
+		this.valorMoedaDestino = Util.arredondar(valorMoedaOrigem * taxaConversao);
+		this.dataConversao = new Date();
+	}
+	
+	public void atualizaTaxaConversao(Moeda moedaOrigem, double valorMoedaOrigem, Moeda moedaDestino, double taxaConversao) {
+		this.moedaOrigem = moedaOrigem;
+		this.valorMoedaOrigem = valorMoedaOrigem;
+		this.taxaConversao = taxaConversao;
+		this.moedaDestino = moedaDestino;
+		this.valorMoedaDestino = Util.arredondar(valorMoedaOrigem * taxaConversao);
+		this.dataConversao = new Date();
 	}
 	
 	@Override

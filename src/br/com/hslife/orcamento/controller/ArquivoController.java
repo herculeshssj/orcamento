@@ -116,7 +116,8 @@ public class ArquivoController extends AbstractController {
 		listEntity = null;
 		listEntity = new ArrayList<Arquivo>();
 		
-		listContainer.clear();
+		if (listContainer != null && !listContainer.isEmpty()) 
+			listContainer.clear();
 	}
 	
 	@Override
