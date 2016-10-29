@@ -82,16 +82,20 @@ public final class LancamentoContaUtil {
 	public static double calcularSaldoLancamentosComConversao(final List<LancamentoConta> lancamentos) {		
 		double total = 0.0;
 		for (LancamentoConta l : lancamentos) {
-			if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
-				if (l.getMoeda().isPadrao())
-					total += l.getValorPago();
-				else
-					total += l.getValorPago() * l.getMoeda().getValorConversao();
+			if (l.getTaxaConversao() != null) {
+				// Usa a taxa de conversão para calcular no lugar do valor pago do lançamento
+				if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+					total += l.getTaxaConversao().getValorMoedaDestino();
+				} else {
+					total -= l.getTaxaConversao().getValorMoedaDestino();
+				}
 			} else {
-				if (l.getMoeda().isPadrao())
+				// Usa o valor pago do lançamento
+				if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+					total += l.getValorPago();
+				} else {
 					total -= l.getValorPago();
-				else
-					total -= l.getValorPago() * l.getMoeda().getValorConversao();
+				}
 			}
 		}
 		return Util.arredondar(total);

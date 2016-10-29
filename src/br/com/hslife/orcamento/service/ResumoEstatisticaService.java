@@ -868,21 +868,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	/*** Implementação dos métodos privados ***/
 	
 	private double getValorPagoConvertido(LancamentoConta lancamento) {
-		double taxaConversao = lancamento.getMoeda().getValorConversao();
-		if (lancamento.getMoeda().equals(lancamento.getConta().getMoeda())) {
-			return lancamento.getValorPago();
+		if (lancamento.getTaxaConversao() != null) {
+			return lancamento.getTaxaConversao().getValorMoedaDestino();
 		} else {
-			if (lancamento.getFaturaCartao() == null) {
-				return Util.arredondar(lancamento.getValorPago() * taxaConversao);
-			} else {
-				
-				for (ConversaoMoeda conversao : lancamento.getFaturaCartao().getConversoesMoeda()) {
-					if (conversao.getMoeda().equals(lancamento.getMoeda())) {
-						return Util.arredondar(lancamento.getValorPago() * conversao.getTaxaConversao());
-					}
-				}
-				return lancamento.getValorPago() * taxaConversao;
-			}
+			return lancamento.getValorPago();
 		}
 	}	
 }

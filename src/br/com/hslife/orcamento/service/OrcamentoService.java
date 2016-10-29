@@ -134,7 +134,7 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 		ResumoMensalContas resumoMensal = new ResumoMensalContas();
 		switch (entity.getAbrangenciaOrcamento()) {
 			case CATEGORIA : 
-				resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), 0, LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
+				resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), 0, LancamentoContaUtil.calcularSaldoLancamentosComConversao(lancamentos));
 				
 				for (DetalheOrcamento detalhe : entity.getDetalhes()) {
 					detalhe.setRealizado(0); // Apaga o valor registrado anteriormente
