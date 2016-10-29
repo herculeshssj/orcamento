@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.entity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -153,6 +154,35 @@ public class FaturaCartao extends EntityPersistence {
 		statusFaturaCartao = StatusFaturaCartao.ABERTA;
 	}
 	
+	/**
+	 * Construtor usado para criar novas instâncias de fatura da conta
+	 * informada. Todas as faturas criadas são faturas futuras, uma vez
+	 * que só pode existir uma fatura aberta por conta.
+	 * 
+	 * @param conta
+	 * @param mes
+	 * @param ano
+	 */
+	public FaturaCartao(Conta conta, int mes, int ano) {
+		this.conta = conta;
+		this.mes = mes;
+		this.ano = ano;
+		
+		conversoesMoeda = new ArrayList<ConversaoMoeda>();
+		detalheFatura = new HashSet<LancamentoConta>();
+		statusFaturaCartao = StatusFaturaCartao.FUTURA;
+		
+		// Seta a data de vencimento da fatura
+		Calendar dataVencimento = Calendar.getInstance();
+		dataVencimento.set(ano, mes - 1, conta.getCartaoCredito().getDiaVencimentoFatura());
+		this.dataVencimento = dataVencimento.getTime();
+		
+		// Seta a data de fechamento da fatura
+		Calendar dataFechamento = Calendar.getInstance();
+		dataFechamento.set(ano, mes - 1, conta.getCartaoCredito().getDiaFechamentoFatura());
+		this.dataFechamento = dataFechamento.getTime();
+	}
+	
 	@Override
 	public String getLabel() {
 		switch (this.statusFaturaCartao) {
@@ -198,6 +228,69 @@ public class FaturaCartao extends EntityPersistence {
 	
 	public boolean isPossuiAnexo() {
 		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
+	}
+	
+	/**
+	 * Adiciona o lançamento informado à fatura.
+	 * 
+	 * A data do lançamento deve ser anterior ou igual a data de 
+	 * fechamento da fatura, caso contrário o lançamento não é
+	 * adicionado.
+	 * 
+	 * @param lancamento
+	 */
+	@SuppressWarnings("deprecation")
+	public void adicionarLancamento(LancamentoConta lancamento) {
+		// Verifica se o lançamento informado pertence a conta da
+		// fatura
+		if (this.conta.equals(lancamento.getConta())) {
+			
+			Calendar temp = Calendar.getInstance();
+			temp.setTime(this.dataFechamento);
+			temp.add(Calendar.MONTH, -1);
+			Date dataFechamentoAnterior = temp.getTime();
+			
+			if (lancamento.getDataPagamento().before(this.dataFechamento) && lancamento.getDataPagamento().after(dataFechamentoAnterior)) {
+				this.detalheFatura.add(lancamento);
+				
+				// Atualiza o valor da fatura
+				this.valorFatura = this.valorFatura + lancamento.getValorPago();				
+			} else {
+				// Seta a hora para 00:00 do lançamento e da data de fechamento para
+				// poder verificar se são iguais.
+				Date dataLancamento = new Date(lancamento.getDataPagamento().getTime());
+				Date dataFechamento = new Date(this.dataFechamento.getTime());
+				
+				dataLancamento.setHours(0);
+				dataLancamento.setMinutes(0);
+				dataLancamento.setSeconds(0);
+				
+				dataFechamento.setHours(0);
+				dataFechamento.setMinutes(0);
+				dataFechamento.setSeconds(0);
+				
+				// Verifica se as duas datas são iguais
+				if (dataLancamento.equals(dataFechamento)) {
+					this.detalheFatura.add(lancamento);
+					
+					// Atualiza o valor da fatura
+					this.valorFatura = this.valorFatura + lancamento.getValorPago();
+				}
+			}
+			
+		}
+	}
+	
+	/**
+	 * Adiciona todos os lançamentos passados na fatura seguindo a lógica de 
+	 * inserção do método adicionarLancamento().
+	 * 
+	 * @param lancamentos
+	 */
+	public void adicionarLancamentos(Collection<LancamentoConta> lancamentos) {
+		for (LancamentoConta lancamento : lancamentos) {
+			this.adicionarLancamento(lancamento);
+		}
 	}
 
 	public Long getId() {

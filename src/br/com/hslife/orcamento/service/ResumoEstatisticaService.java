@@ -237,6 +237,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return saldoAtualContas;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano) {
 		// Declara o Map de previsão de lançamentos do cartao
 		Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoCartao>();
@@ -258,7 +259,117 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				// Anos posteriores é realizado a estimativa baseado no ano informado e os lançamentos periódicos ativos da conta
 				// Todos os lançamentos gerados são incluídos em faturas correspondentes aos meses do ano informado 
 				
-				// TODO criar previsão de faturas e dos seus respectivos lançamentos fixos e parcelados
+				/*** Parcelamentos ***/
+				// Busca todos os parcelamentos ativos da conta selecionada
+				List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
+						buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+				
+				// Itera todos os parcelamentos para trazer todas as parcelas existentes
+				List<LancamentoConta> todasParcelas = new ArrayList<>();
+				for (LancamentoPeriodico parcelamento : parcelamentos) {
+					List<LancamentoConta> parcelasLancamento = getLancamentoContaService().buscarPorLancamentoPeriodico(parcelamento);
+					
+					for (LancamentoConta parcela : parcelasLancamento) {
+						int anoParcela = parcela.getDataPagamento().getYear() + 1900;
+						if (anoParcela == ano) {
+							todasParcelas.add(parcela);
+						}
+					}				
+				}
+				
+				/*** Despesas fixas ***/
+				// Traz todos os lançamentos fixos ativos da conta selecionada
+				List<LancamentoPeriodico> despesasFixas = getLancamentoPeriodicoService().
+						buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
+				
+				// Itera os lançamentos fixos
+				List<LancamentoConta> todasMensalidades = new ArrayList<>();
+				for (LancamentoPeriodico despesaFixa : despesasFixas) {
+					
+					// Busca a última mensalidade paga
+					LancamentoConta ultimaMensalidade = getLancamentoContaService().buscarUltimoPagamentoPeriodoGerado(despesaFixa);
+					
+					// Verifica se a despesa fixa é mensal
+					if (despesaFixa.getPeriodoLancamento().equals(PeriodoLancamento.MENSAL)) {
+						// Seta o mês da data de pagamento da mensalidade para Janeiro e duplica os lançamentos
+						Calendar temp = Calendar.getInstance();
+						temp.setTime(ultimaMensalidade.getDataPagamento());
+						temp.set(Calendar.DAY_OF_MONTH, despesaFixa.getDiaVencimento());
+						temp.set(Calendar.MONTH, Calendar.JANUARY);
+						temp.set(Calendar.YEAR, ano);
+						ultimaMensalidade.setDataPagamento(temp.getTime());
+						
+						// Seta o valor definido na despesa fixa
+						ultimaMensalidade.setValorPago(despesaFixa.getValorParcela());
+						
+						todasMensalidades.add(ultimaMensalidade);
+						todasMensalidades.addAll(ultimaMensalidade.clonarLancamentos(11, IncrementoClonagemLancamento.MES));
+					} else {
+						
+						// Gera mais 12 mensalidades e inclui na lista de acordo com o período da despesa fixa
+						switch (despesaFixa.getPeriodoLancamento()) {
+							case BIMESTRAL : 
+								for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.BIMESTRE)) {
+									if ((l.getDataPagamento().getYear() + 1900) == ano)  
+										todasMensalidades.add(l);
+								}							
+								break;
+							case TRIMESTRAL : 
+								for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.TRIMESTRE)) {
+									if ((l.getDataPagamento().getYear() + 1900) == ano)  
+										todasMensalidades.add(l);
+								}							
+								break;
+							case QUADRIMESTRAL : 
+								for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.QUADRIMESTRE)) {
+									if ((l.getDataPagamento().getYear() + 1900) == ano)  
+										todasMensalidades.add(l);
+								}							
+								break;
+							case SEMESTRAL : 
+								for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.SEMESTRE)) {
+									if ((l.getDataPagamento().getYear() + 1900) == ano)  
+										todasMensalidades.add(l);
+								}							
+								break;
+							case ANUAL : 
+								for (LancamentoConta l : ultimaMensalidade.clonarLancamentos(12, IncrementoClonagemLancamento.ANO)) {
+									if ((l.getDataPagamento().getYear() + 1900) == ano)  
+										todasMensalidades.add(l);
+								}							
+								break;
+							default : // não faz nada
+						}
+						
+					}
+					
+				}
+				
+				/*** Lançamentos avulsos ***/
+				// Traz os lançamentos avulsos existente no ano do relatório
+				List<LancamentoConta> todosAvulsos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
+				
+				// Itera os lançamentos avulsos para remover as mensalidades e parcelas
+				for (Iterator<LancamentoConta> iterator = todosAvulsos.iterator(); iterator.hasNext(); ) {
+					if (iterator.next().getLancamentoPeriodico() != null) {
+						iterator.remove();
+					}
+				}	
+				
+				// Cria as doze faturas para o ano selecionado
+				for (int i = 1; i <= 12; i++) {
+					FaturaCartao fatura = new FaturaCartao(criterioBusca.getConta(), i, ano);
+					// Adiciona as mensalidades e parcelas na fatura
+					fatura.adicionarLancamentos(todasMensalidades);
+					fatura.adicionarLancamentos(todasParcelas);
+					
+					// Adiciona os lançamentos avulsos
+					fatura.adicionarLancamentos(todosAvulsos);
+					
+					// Adiciona a fatura na lista de faturas
+					faturasCartao.add(fatura);
+				}
+				
 			}
 		}
 				
