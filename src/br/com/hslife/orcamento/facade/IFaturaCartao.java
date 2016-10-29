@@ -80,4 +80,6 @@ public interface IFaturaCartao extends ICRUDService<FaturaCartao>{
 	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura);
 	
 	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta);
+	
+	public List<FaturaCartao> buscarTodosPorContaEAnoOrdenadosPorMesAno(Conta conta, int ano);
 }

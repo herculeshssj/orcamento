@@ -55,6 +55,7 @@ import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.model.SaldoAtualConta;
@@ -65,6 +66,8 @@ public interface IResumoEstatistica {
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario);
 	
 	public List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano);
+	
+	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano);
 	
 	public List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro);
 	
