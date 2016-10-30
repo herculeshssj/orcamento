@@ -105,6 +105,7 @@ import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.util.DetalheFaturaComparator;
 import br.com.hslife.orcamento.util.LancamentoContaComparator;
+import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("lancamentoContaMB")
@@ -679,7 +680,10 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		if (listEntity != null) {
 			for (LancamentoConta lancamento : listEntity) {
 				if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA))
-					total += lancamento.getValorPago();
+					if (lancamento.getTaxaConversao() == null)
+						total += lancamento.getValorPago();
+					else
+						total += lancamento.getTaxaConversao().getValorMoedaDestino();
 			}
 		}
 		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.00").format(Util.arredondar(total));
@@ -690,14 +694,17 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		if (listEntity != null) {
 			for (LancamentoConta lancamento : listEntity) {
 				if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA))
-					total += lancamento.getValorPago();
+					if (lancamento.getTaxaConversao() == null)
+						total += lancamento.getValorPago();
+					else
+						total += lancamento.getTaxaConversao().getValorMoedaDestino();
 			}
 		}
 		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.00").format(Util.arredondar(total));
 	}
 	
 	public String getSaldoTotal() {
-		double total = getService().calcularSaldoLancamentos(listEntity);		
+		double total = LancamentoContaUtil.calcularSaldoLancamentosComConversao(listEntity);		
 		return this.retornaSimboloMonetario() + " " + new DecimalFormat("#,##0.00").format(Util.arredondar(total));
 	}
 	

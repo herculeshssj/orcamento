@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
@@ -63,7 +64,7 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	
 	protected E entity;
 	protected Long idEntity;
-	protected List<E> listEntity;
+	protected List<E> listEntity = new ArrayList<>();
 	
 	protected String goToListPage;
 	protected String goToFormPage;

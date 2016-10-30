@@ -146,6 +146,21 @@
 					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 				</h:selectOneMenu>
 				
+				<h:outputText value="Taxa de conversão:" rendered="#{managedBean.entity.taxaConversao != null}"/>
+				<h:panelGrid columns="7" rendered="#{managedBean.entity.taxaConversao != null}">
+					<h:outputText value="#{managedBean.entity.taxaConversao.moedaOrigem.simboloMonetario}"/>
+					<h:outputText value="--->"/>
+					<h:outputText value="#{managedBean.entity.taxaConversao.moedaDestino.simboloMonetario}"/>
+					<h:outputText value="Taxa:"/>
+					<h:outputText value="#{managedBean.entity.taxaConversao.taxaConversao}">
+						<f:convertNumber minFractionDigits="4" maxFractionDigits="4" />
+					</h:outputText>
+					<h:outputText value="Valor:"/>
+					<h:outputText value="#{managedBean.entity.taxaConversao.valorMoedaDestino}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:panelGrid>
+				
 			</h:panelGrid>
 			
 		</p:outputPanel>
