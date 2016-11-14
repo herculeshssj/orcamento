@@ -630,7 +630,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					
 					// Valida o número do cartão de crédito
 					if (conta.getCartaoCredito().getNumeroCartao() == null || !conta.getCartaoCredito().getNumeroCartao().equals(Util.SHA1(c.getMessage().getAccount().getAccountNumber()))) {
-			        	throw new ApplicationException("Número do cartão informado não confere com do arquivo!");
+			        	throw new BusinessException("Número do cartão informado não confere com do arquivo!");
 			        }
 					
 					List<Transaction> list = c.getMessage().getTransactionList().getTransactions();
@@ -661,7 +661,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				}				
 			} 
 		} catch (Exception e) {
-			throw new ApplicationException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
+			throw new ApplicationException("Erro ao processar o arquivo OFX: " + e.getMessage(), e);
 		}
 	}
 	
