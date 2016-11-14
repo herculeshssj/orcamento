@@ -97,12 +97,18 @@ public class CriterioLog {
 		return inicio;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setInicio(Date inicio) {
 		this.inicio = inicio;
 		
 		hibernateCriterions.remove("inicio");
 		
 		if (inicio != null) {
+			// Seta a data de início para 00:00:00 do dia
+			inicio.setHours(0);
+			inicio.setMinutes(0);
+			inicio.setSeconds(0);
+			
 			hibernateCriterions.put("inicio", Restrictions.ge("logDate", inicio));
 		}
 	}
@@ -111,12 +117,18 @@ public class CriterioLog {
 		return fim;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setFim(Date fim) {
 		this.fim = fim;
 		
 		hibernateCriterions.remove("fim");
 		
 		if (fim != null) {
+			// Seta a data de fim para 23:59:59
+			fim.setHours(23);
+			fim.setMinutes(59);
+			fim.setSeconds(59);
+			
 			hibernateCriterions.put("fim", Restrictions.le("logDate", fim));
 		}
 	}	
