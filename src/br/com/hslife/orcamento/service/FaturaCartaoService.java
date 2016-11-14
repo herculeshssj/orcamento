@@ -193,8 +193,17 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		for (LancamentoConta lancamento : faturaCartao.getDetalheFatura()) {
 			LancamentoConta l = getLancamentoContaRepository().findById(lancamento.getId());
 			
+			// Procura a taxa de conversão para a moeda do lançamento
+			double taxaConversao = 1.0000;
+			for (ConversaoMoeda conversao : faturaCartao.getConversoesMoeda()) {
+				if (conversao.getMoeda().equals(l.getMoeda())) {
+					taxaConversao = conversao.getTaxaConversao();
+					break;
+				}
+			}
+			
 			// Atualiza a taxa de conversão para registrar corretamente os valores
-			l.getTaxaConversao().atualizaTaxaConversao(l.getValorPago(), faturaCartao.getConversoesMoeda().get(faturaCartao.getConversoesMoeda().indexOf(l.getMoeda())).getTaxaConversao());
+			l.getTaxaConversao().atualizaTaxaConversao(l.getValorPago(), taxaConversao);
 			
 			if (l.getLancamentoPeriodico() != null) {
 				// Delega a quitação do lançamento para a rotina de registro de pagamento de lançamentos periódicos
