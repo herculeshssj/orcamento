@@ -121,6 +121,8 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	
 	private boolean mostrarInformacao;
 	
+	private boolean exibirAtivos = true;
+	
 	public OrcamentoController() {
 		super(new Orcamento());
 		moduleTitle = "Orçamento do Período";
@@ -150,7 +152,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	@Override
 	public List<Orcamento> getListEntity() {
 		try {
-			return getService().buscarTodosPorUsuario(getUsuarioLogado());
+			return getService().buscarTodosAtivosInativosPorUsuario(exibirAtivos, getUsuarioLogado());
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -227,6 +229,13 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	
 	public void atualizarValores() {
 		try {
+			// Não permite atualizar os valores caso o orçamento esteja
+			// arquivado
+			if (!orcamentoSelecionado.isAtivo()) {
+				warnMessage("Orçamento arquivado! Não é possível atualizar os valores!");
+				return;
+			}
+			
 			getService().atualizarValores(orcamentoSelecionado);
 			infoMessage("Valores do orçamento atualizados com sucesso!");
 			
@@ -260,6 +269,42 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 		return "";
 	}
 	
+	public String arquivar() {
+		try {
+			entity.setAtivo(false);
+			getService().alterar(entity);
+			infoMessage("Orçamento arquivado com sucesso!");
+			
+			if (getOpcoesSistema().getExibirBuscasRealizadas()) {
+				find();
+			} else {
+				initializeEntity();
+			}
+			return goToListPage;
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public String desarquivar() {
+		try {
+			entity.setAtivo(true);
+			getService().alterar(entity);
+			infoMessage("Orçamento desarquivado com sucesso!");
+			
+			if (getOpcoesSistema().getExibirBuscasRealizadas()) {
+				find();
+			} else {
+				initializeEntity();
+			}
+			return goToListPage;
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
 	public void atualizaCampoContaTipoConta() {
 		entity.setTipoConta(null);
 		entity.setConta(null);
@@ -268,6 +313,10 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	public void atualizaListaItens() {
 		listaItemDetalheOrcamento.clear();
 		this.getListaItensDetalheOrcamento();
+	}
+	
+	public void atualizaListaOrcamento() {
+		this.getListEntity();
 	}
 	
 	public void adicionarItem() {
@@ -549,5 +598,13 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 
 	public void setOrcamentoSelecionado(Orcamento orcamentoSelecionado) {
 		this.orcamentoSelecionado = orcamentoSelecionado;
+	}
+
+	public boolean isExibirAtivos() {
+		return exibirAtivos;
+	}
+
+	public void setExibirAtivos(boolean exibirAtivos) {
+		this.exibirAtivos = exibirAtivos;
 	}
 }

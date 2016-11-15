@@ -56,6 +56,8 @@ public interface IOrcamento extends ICRUDService<Orcamento>{
 	
 	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario);
 	
+	public List<Orcamento> buscarTodosAtivosInativosPorUsuario(boolean ativo, Usuario usuario);
+	
 	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario);
 	
 	public void atualizarValores(Orcamento entity);

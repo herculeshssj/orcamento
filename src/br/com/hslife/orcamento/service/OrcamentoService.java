@@ -110,6 +110,11 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 	}
 	
 	@Override
+	public List<Orcamento> buscarTodosAtivosInativosPorUsuario(boolean ativo, Usuario usuario) {
+		return getRepository().findAllEnableDisableByUsuario(ativo, usuario);
+	}
+	
+	@Override
 	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) {
 		return getRepository().findAbrangenciaByUsuario(abrangencia, usuario);
 	}

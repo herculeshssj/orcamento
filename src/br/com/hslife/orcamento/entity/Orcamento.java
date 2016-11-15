@@ -241,7 +241,7 @@ public class Orcamento extends EntityPersistence {
 		/* Realiza a clonagem das informações */
 		novoOrcamento.setAbrangenciaOrcamento(this.abrangenciaOrcamento);
 		novoOrcamento.setArquivar(this.arquivar);
-		novoOrcamento.setAtivo(this.ativo);
+		novoOrcamento.setAtivo(true);
 		novoOrcamento.setAutomatico(this.automatico);
 		novoOrcamento.setConta(this.conta);
 		novoOrcamento.setDescricao(this.descricao + " - " + Util.formataDataHora(novoOrcamento.getInicio(), Util.DATA));

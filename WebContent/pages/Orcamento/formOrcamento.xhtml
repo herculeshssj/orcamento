@@ -60,32 +60,32 @@
 	<ui:define name="campos">
 	
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50"/>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{not managedBean.entity.ativo}"/>
 		
 		<label>Tipo de orçamento:</label>
-		<h:selectOneMenu value="#{managedBean.entity.tipoOrcamento}">
+		<h:selectOneMenu value="#{managedBean.entity.tipoOrcamento}" disabled="#{not managedBean.entity.ativo}">
 			<f:selectItems value="#{managedBean.listaTipoOrcamento}" />
 			<p:ajax event="change" update="pnlContaTipoConta" listener="#{managedBean.atualizaCampoContaTipoConta}"/>
 		</h:selectOneMenu>	
 		
 		<p:outputPanel id="pnlContaTipoConta">			
 			<label><h:outputText value="Conta / Tipo de Conta" rendered="#{managedBean.entity.tipoOrcamento != 'SEMDISTINCAO'}"/></label>
-			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{managedBean.entity.tipoOrcamento == 'CONTA'}">
+			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" rendered="#{managedBean.entity.tipoOrcamento == 'CONTA'}" disabled="#{not managedBean.entity.ativo}">
 				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>	
 			</h:selectOneMenu>
-			<h:selectOneMenu value="#{managedBean.entity.tipoConta}" rendered="#{managedBean.entity.tipoOrcamento == 'TIPOCONTA'}">
+			<h:selectOneMenu value="#{managedBean.entity.tipoConta}" rendered="#{managedBean.entity.tipoOrcamento == 'TIPOCONTA'}" disabled="#{not managedBean.entity.ativo}">
 				<f:selectItems value="#{managedBean.listaTipoConta}" />
 			</h:selectOneMenu>
 		</p:outputPanel>		
 		
 		<label>Tipo de período:</label>
-		<h:selectOneMenu value="#{managedBean.entity.periodoLancamento}">
+		<h:selectOneMenu value="#{managedBean.entity.periodoLancamento}" disabled="#{not managedBean.entity.ativo}">
 			<f:selectItems value="#{managedBean.listaPeriodoLancamento}" />
 			<p:ajax event="change" update="pnlLabelFim,pnlFieldFim"/>
 		</h:selectOneMenu>
 		
 		<label for="frmFormEntity:txtInicio">Início:</label>			 
-		<p:inputMask id="txtInicio" value="#{managedBean.entity.inicio}" mask="99/99/9999">
+		<p:inputMask id="txtInicio" value="#{managedBean.entity.inicio}" mask="99/99/9999" disabled="#{not managedBean.entity.ativo}">
 			<f:converter converterId="dateConverter"/>
 		</p:inputMask>
 		
@@ -93,15 +93,16 @@
 			<label for="frmFormEntity:txtFim"><h:outputText value="Fim:" rendered="#{managedBean.entity.periodoLancamento == 'FIXO'}"/></label>
 		</p:outputPanel>
 		<p:outputPanel id="pnlFieldFim">
-			<p:inputMask id="txtFim" value="#{managedBean.entity.fim}" mask="99/99/9999" rendered="#{managedBean.entity.periodoLancamento == 'FIXO'}">
+			<p:inputMask id="txtFim" value="#{managedBean.entity.fim}" mask="99/99/9999" rendered="#{managedBean.entity.periodoLancamento == 'FIXO'}" disabled="#{not managedBean.entity.ativo}">
 				<f:converter converterId="dateConverter"/>
 			</p:inputMask>
 		</p:outputPanel>
 		
-		<label>Moeda padrão: <h:outputText value="#{managedBean.moedaPadrao.label}" /></label>		
+		<label>Moeda padrão:</label>
+		<h:outputText value="#{managedBean.moedaPadrao.label}" />		
 		
 		<label>Abrangência:</label>
-		<h:selectOneMenu value="#{managedBean.entity.abrangenciaOrcamento}">
+		<h:selectOneMenu value="#{managedBean.entity.abrangenciaOrcamento}" disabled="#{not managedBean.entity.ativo}">
 			<f:selectItems value="#{managedBean.listaAbrangenciaOrcamento}" />
 			<p:ajax update="pnlItens,tableItens" listener="#{managedBean.atualizaListaItens}"/>
 		</h:selectOneMenu>
@@ -111,41 +112,41 @@
 			<h:panelGrid columns="4" rendered="#{managedBean.entity.abrangenciaOrcamento == 'CATEGORIA'}">
 				<label>Item:</label>
 				
-				<h:selectOneMenu id="txtItensCategoria" value="#{managedBean.detalheOrcamento}" converter="entityConverter">
+				<h:selectOneMenu id="txtItensCategoria" value="#{managedBean.detalheOrcamento}" converter="entityConverter" disabled="#{not managedBean.entity.ativo}">
 					<f:selectItems value="#{managedBean.listaItensDetalheOrcamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>	
 				</h:selectOneMenu>
 				
 				<label for="frmFormEntity:txtValor">Valor:</label>
-				<h:inputText id="txtValor" value="#{managedBean.previsao}" size="5" rendered="#{managedBean.entity.abrangenciaOrcamento == 'CATEGORIA'}">
+				<h:inputText id="txtValor" value="#{managedBean.previsao}" size="5" rendered="#{managedBean.entity.abrangenciaOrcamento == 'CATEGORIA'}" disabled="#{not managedBean.entity.ativo}">
 					<f:convertNumber type="currency" pattern="###.##"/>
 				</h:inputText>				
 			</h:panelGrid>
 			<h:panelGrid columns="6" rendered="#{managedBean.entity.abrangenciaOrcamento != 'CATEGORIA'}">
 				<label>Item:</label>
 				
-				<h:selectOneMenu id="txtItensOutros" value="#{managedBean.detalheOrcamento}" converter="entityConverter">
+				<h:selectOneMenu id="txtItensOutros" value="#{managedBean.detalheOrcamento}" converter="entityConverter" disabled="#{not managedBean.entity.ativo}">
 					<f:selectItems value="#{managedBean.listaItensDetalheOrcamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>	
 				</h:selectOneMenu>
 				
 				<label for="frmFormEntity:txtCredito">Crédito:</label>
-				<h:inputText id="txtCredito" value="#{managedBean.previsaoCredito}" size="5">
+				<h:inputText id="txtCredito" value="#{managedBean.previsaoCredito}" size="5" disabled="#{not managedBean.entity.ativo}">
 					<f:convertNumber type="currency" pattern="###.##"/>
 				</h:inputText>
 				
 				<label for="frmFormEntity:txtDebito">Débito:</label>
-				<p:inputText id="txtDebito" value="#{managedBean.previsaoDebito}" size="5">
+				<p:inputText id="txtDebito" value="#{managedBean.previsaoDebito}" size="5" disabled="#{not managedBean.entity.ativo}">
 					<f:convertNumber type="currency" pattern="###.##"/>
 				</p:inputText>
 			</h:panelGrid>
 		</p:outputPanel>
-		<p:commandLink value="Adicionar item" actionListener="#{managedBean.adicionarItem}" update="tableItens, pnlItens"/>
+		<p:commandLink value="Adicionar item" actionListener="#{managedBean.adicionarItem}" update="tableItens, pnlItens" disabled="#{not managedBean.entity.ativo}"/>
 		
 		<h:dataTable id="tableItens" value="#{managedBean.listaItemDetalheOrcamento}" var="item">
 			<h:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
 					<h:outputText value=""/>
 				</f:facet>
-				<h:selectBooleanCheckbox value="#{item.selecionado}"/>					
+				<h:selectBooleanCheckbox value="#{item.selecionado}" disabled="#{not managedBean.entity.ativo}"/>					
 			</h:column>
 			<h:column style="text-align: center; vertical-align: middle;" >
 				<f:facet name="header">
@@ -181,7 +182,7 @@
 			    </h:outputText>					
 			</h:column>
 		</h:dataTable>
-		<p:commandLink value="Remover itens" actionListener="#{managedBean.removerItem}" update="tableItens, pnlItens"/>
+		<p:commandLink value="Remover itens" actionListener="#{managedBean.removerItem}" update="tableItens, pnlItens" disabled="#{not managedBean.entity.ativo}"/>
 	</ui:define>
 	
 	<ui:define name="acoes">
@@ -195,7 +196,16 @@
 		<p:spacer width="20" />
 		<h:commandLink id="lnkDuplicate" title="Gerar novo orçamento" action="#{managedBean.gerarNovoOrcamento}" rendered="#{managedBean.operation == 'edit'}">
 			<h:graphicImage id="imgDuplicate" height="48" width="48" value="/resources/images/svg/gallery.svg"/>
-		</h:commandLink>     			
+		</h:commandLink> 
+		<p:spacer width="20" rendered="#{managedBean.operation == 'edit' and managedBean.entity.ativo == false}"/>
+		<h:commandLink title="Desarquivar" action="#{managedBean.desarquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.ativo == false}">
+			<h:graphicImage id="imgEnable" height="48" width="48" value="/resources/images/svg/checkmark.svg"/>
+			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+		</h:commandLink>		
+		<p:spacer width="20" rendered="#{managedBean.operation == 'edit' and managedBean.entity.ativo == true}"/>			
+		<h:commandLink title="Arquivar" action="#{managedBean.arquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.ativo == true}">
+			<h:graphicImage id="imgDisable" height="48" width="48" value="/resources/images/svg/cancel.svg"/>
+		</h:commandLink>    			
 	</ui:define>
 
 </ui:composition>
