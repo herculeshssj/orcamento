@@ -132,7 +132,7 @@ public class PanoramaLancamentoCartaoController extends AbstractController {
 	
 	public List<Conta> getListaContaAtiva() {
 		try {
-			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, TipoConta.CARTAO, getUsuarioLogado(), true);
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{TipoConta.CARTAO}, getUsuarioLogado(), true);
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}

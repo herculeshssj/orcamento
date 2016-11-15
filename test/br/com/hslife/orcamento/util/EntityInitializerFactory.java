@@ -54,6 +54,7 @@ import java.util.TreeSet;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
@@ -177,6 +178,37 @@ public class EntityInitializerFactory {
 		return entity;
 	}
 	
+	public static Conta createConta(Usuario usuario, Moeda moeda) {
+		Conta conta = new Conta();
+		conta.setDescricao("Conta de teste");
+		conta.setDataAbertura(new Date());
+		conta.setSaldoInicial(100);
+		conta.setTipoConta(TipoConta.CORRENTE);
+		conta.setUsuario(usuario);
+		conta.setMoeda(moeda);
+		return conta;
+	}
+	
+	public static Moeda createMoeda(Usuario usuario) {
+		Moeda moeda = new Moeda();
+		moeda.setAtivo(true);
+		moeda.setCodigoMonetario("BRL");
+		moeda.setNome("Real");
+		moeda.setPadrao(true);
+		moeda.setPais("Brasil");
+		moeda.setSiglaPais("BR");
+		moeda.setUsuario(usuario);
+		moeda.setSimboloMonetario("R$");
+		return moeda;
+	}
+	
+	public static ContaCompartilhada createContaCompartilhada(Conta conta, Usuario usuario) {
+		ContaCompartilhada contaCompartilhada = new ContaCompartilhada();
+		contaCompartilhada.setConta(conta);
+		contaCompartilhada.setUsuario(usuario);
+		return contaCompartilhada;
+	}
+	
 	@Deprecated
 	public static Usuario initializeUsuario() {
 		Usuario usuario = new Usuario();
@@ -199,6 +231,7 @@ public class EntityInitializerFactory {
 		return telefone;
 	}
 	
+	@Deprecated
 	public static Moeda initializeMoeda(Usuario usuario) {
 		Moeda moeda = new Moeda();
 		moeda.setAtivo(true);
@@ -212,6 +245,7 @@ public class EntityInitializerFactory {
 		return moeda;
 	}
 	
+	@Deprecated
 	public static Conta initializeConta(Usuario usuario, Moeda moeda) {
 		Conta conta = new Conta();
 		conta.setDescricao("Conta de teste - Calendario de atividades");

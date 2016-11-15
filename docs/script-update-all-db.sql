@@ -2513,3 +2513,16 @@ update taxaconversao set valorMoedaDestino = (valorMoedaOrigem * taxaConversao) 
 alter table taxaconversao change `taxaConversao` `taxaConversao` decimal(18,4) not null default 1.0000;
 alter table taxaconversao change `idMoedaDestino` `idMoedaDestino` bigint not null;
 alter table taxaconversao change `valorMoedaDestino` `valorMoedaDestino` decimal(18,2) not null;
+
+-- Contas compartilhadas - Github Issue #222
+create table contacompartilhada (
+	id bigint not null auto_increment,
+	idConta bigint not null,
+	idUsuario bigint not null,
+    hashAutorizacao varchar(64) null,
+    dataGeracaoHash date null,
+	primary key (id)
+) Engine=InnoDB;
+
+alter table contacompartilhada add constraint fk_contacompartilhada_conta foreign key (idConta) references conta (id);
+alter table contacompartilhada add constraint fk_contacompartilhada_usuario foreign key (idUsuario) references usuario (id);

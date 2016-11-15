@@ -104,7 +104,10 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, tipoSelecionado, getUsuarioLogado(), somenteAtivos);			
+			if (this.tipoSelecionado == null)
+				listEntity = getService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, null, getUsuarioLogado(), somenteAtivos);
+			else
+				listEntity = getService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{tipoSelecionado}, getUsuarioLogado(), somenteAtivos);
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}

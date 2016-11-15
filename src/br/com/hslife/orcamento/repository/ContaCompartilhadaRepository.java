@@ -44,30 +44,39 @@
   
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
+import org.springframework.stereotype.Repository;
+
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.Usuario;
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
+@Repository
+public class ContaCompartilhadaRepository extends AbstractCRUDRepository<ContaCompartilhada> {
 	
-	/**
-	 * Buscar um meio de pagamento a partir dos parâmetros informados.
-	 * Caso não encontre, o meio de pagamento padrão é retornado.
-	 */
-	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario);
+	public ContaCompartilhadaRepository() {
+		super(new ContaCompartilhada());
+	}
 	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario);
+	public ContaCompartilhada findByHash(String hash) {
+		return (ContaCompartilhada)getSession().createQuery("FROM ContaCompartilhada c WHERE c.hashAutorizacao = :hash")
+				.setString("hash", hash)
+				.uniqueResult();
+	}
 	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
-
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario);
+	@SuppressWarnings("unchecked")
+	public List<ContaCompartilhada> findAllByUsuarioLogado(Usuario usuarioLogado) {
+		return getSession().createQuery("FROM ContaCompartilhada c WHERE c.conta.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuarioLogado.getId())
+				.list();
+	}
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios);
+	@SuppressWarnings("unchecked")
+	public List<ContaCompartilhada> findAllByUsuario(Usuario usuario) {
+		return getSession().createQuery("FROM ContaCompartilhada c WHERE c.usuario.id = :idUsuario")
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
 }

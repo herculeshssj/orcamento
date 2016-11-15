@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -143,6 +144,45 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 		}
 		
 		hqlQuery.setParameter("idUsuario", usuario.getId());
+		
+		return hqlQuery.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Favorecido> findTipoPessoaAndNomeAndAtivoByUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, List<Usuario> usuarios) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("FROM Favorecido favorecido WHERE ");
+		if (tipoPessoa != null) {
+			hql.append("favorecido.tipoPessoa = :tipo AND ");
+		}
+		if (nome != null && !nome.isEmpty()) {
+			hql.append("favorecido.nome LIKE '%");
+			hql.append(nome);
+			hql.append("%' AND ");
+		}
+		if (ativo != null) {
+			hql.append("favorecido.ativo = :ativo AND ");
+		}
+		
+		hql.append("favorecido.usuario.id IN (:idUsuario) ORDER BY favorecido.nome ASC");
+		
+		Query hqlQuery = getQuery(hql.toString());
+		if (tipoPessoa != null) {
+			hqlQuery.setParameter("tipo", tipoPessoa);
+		}
+		if (ativo != null) {
+			hqlQuery.setParameter("ativo", ativo);
+		}
+		
+		// Resgata os IDs dos usuários
+		List<Long> idsUsuarios = new ArrayList<>();
+		for (Usuario u : usuarios) {
+			if (u != null && u.getId() != null) {
+				idsUsuarios.add(u.getId());
+			}
+		}
+		
+		hqlQuery.setParameterList("idUsuario", idsUsuarios);
 		
 		return hqlQuery.list();
 	}

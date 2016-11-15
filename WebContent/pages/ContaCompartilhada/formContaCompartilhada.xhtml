@@ -1,4 +1,4 @@
-/***
+<!--
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -42,32 +42,40 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-***/
+  -->
 
-package br.com.hslife.orcamento.facade;
 
-import java.util.List;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Usuario;
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
-	
-	/**
-	 * Buscar um meio de pagamento a partir dos parâmetros informados.
-	 * Caso não encontre, o meio de pagamento padrão é retornado.
-	 */
-	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario);
-	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario);
-	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+<ui:composition template="/templates/formulario.xhtml">
 
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario);
+	<ui:param name="managedBean" value="#{contaCompartilhadaMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">				
+			
+			<label for="frmFormEntity:txtConta">Conta:</label>
+			<h:selectOneMenu id="txtConta" value="#{managedBean.entity.conta}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+			
+			<label for="frmFormEntity:txtLogin">Login do usuário:</label>
+			<h:inputText id="txtLogin" value="#{managedBean.entity.loginUsuario}"/>
+			
+			<label for="frmFormEntity:txtEmail">E-Mail do usuário:</label>
+			<h:inputText id="txtEmail" value="#{managedBean.entity.emailUsuario}"/>
+			
+		</h:panelGrid>
+		
+	</ui:define>
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios);
-}
+</ui:composition>
+</html>

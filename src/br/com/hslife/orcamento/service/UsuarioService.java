@@ -109,7 +109,10 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		}
 		
 		getRepository().save(entity);
+		
+		// Inicializa os valores padrão para o usuário recém cadastrado
 		getOpcaoSistemaComponent().setarOpcoesPadraoUsuario(entity);
+		getComponent().initializeMoedaPadrao(entity);		
 	}
 	
 	@Override

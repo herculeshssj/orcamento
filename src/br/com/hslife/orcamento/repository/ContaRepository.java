@@ -213,38 +213,6 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Conta> findDescricaoOrTipoContaOrAtivoByUsuario(String descricao, TipoConta tipoConta, Usuario usuario, Boolean ativo) {
-		StringBuilder hql = new StringBuilder();
-		hql.append("FROM Conta conta WHERE ");
-		if (descricao != null) {
-			hql.append("conta.descricao LIKE '%");
-			hql.append(descricao);
-			hql.append("%' AND ");
-		}
-		if (tipoConta != null) {
-			hql.append("conta.tipoConta = :tipo AND ");
-		}
-		if (ativo != null) {
-			hql.append("conta.ativo = :ativo AND ");
-		}
-		
-		hql.append("conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC");
-		
-		Query hqlQuery = getQuery(hql.toString());
-		
-		if (tipoConta != null) {
-			hqlQuery.setParameter("tipo", tipoConta);
-		}
-		if (ativo != null) {
-			hqlQuery.setBoolean("ativo", ativo);
-		}
-		
-		hqlQuery.setLong("idUsuario", usuario.getId());
-		
-		return hqlQuery.list();
-	}
-	
-	@SuppressWarnings("unchecked")
 	public List<Conta> findDescricaoOrTipoContaOrAtivoByUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("FROM Conta conta WHERE ");

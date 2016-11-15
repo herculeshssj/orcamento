@@ -1,4 +1,4 @@
-/***
+<!--
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -42,32 +42,35 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-***/
+  -->
 
-package br.com.hslife.orcamento.facade;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-import java.util.List;
+<f:metadata>
+	<f:viewParam name="operacao" value="#{confirmacaoMB.operacao}"></f:viewParam>
+	<f:viewParam name="hash" value="#{confirmacaoMB.hash}"></f:viewParam>
+</f:metadata>
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Usuario;
+<h:head>
+	<title>Orçamento Doméstico - Confirmação</title>
+</h:head>
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
-	
-	/**
-	 * Buscar um meio de pagamento a partir dos parâmetros informados.
-	 * Caso não encontre, o meio de pagamento padrão é retornado.
-	 */
-	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario);
-	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario);
-	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+<h:body>
 
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario);
-	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
-	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios);
-}
+	<h:form>
+		
+		<h4><h:outputText value="#{confirmacaoMB.mensagemAviso}"/></h4>
+		<br/><br/>
+		<a href="#{request.contextPath}/login.faces">Logar no sistema</a>
+		
+	</h:form>
+
+</h:body>
+
+</html>

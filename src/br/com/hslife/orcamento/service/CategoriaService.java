@@ -138,6 +138,11 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 	}
 	
 	@Override
+	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, List<Usuario> usuarios) {
+		return getRepository().findTipoCategoriaAndDescricaoAndAtivoByUsuario(tipoCategoria, descricao, ativo, usuarios);
+	}
+	
+	@Override
 	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario) {		
 		// Verifica se a categoria informada existe na base de dados
 		List<Categoria> categorias = getRepository().findTipoCategoriaAndDescricaoAndAtivoByUsuario(tipoCategoria, descricaoCategoria, null, usuario);

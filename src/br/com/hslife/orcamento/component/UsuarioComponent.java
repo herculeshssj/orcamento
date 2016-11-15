@@ -55,7 +55,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IUsuario;
 
 @Component
@@ -66,10 +68,17 @@ public class UsuarioComponent {
 	@Autowired
 	private IUsuario usuarioService;
 	
+	@Autowired
+	private IMoeda moedaService;
+	
 	private IUsuario getService() {
 		return this.usuarioService;
 	}
 	
+	public IMoeda getMoedaService() {
+		return moedaService;
+	}
+
 	public Usuario getUsuarioLogado() {
 		try {
 			String login = "";
@@ -85,5 +94,20 @@ public class UsuarioComponent {
         	logger.catching(t);
         	throw new RuntimeException(t);
         }
+	}
+	
+	/**
+	 * Inicializa uma moeda padrão para o usuário recém cadastrado
+	 */
+	public void initializeMoedaPadrao(Usuario usuario) {
+		Moeda moedaPadrao = new Moeda();
+		moedaPadrao.setCodigoMonetario("BRL");
+		moedaPadrao.setNome("Real");
+		moedaPadrao.setPadrao(true);
+		moedaPadrao.setPais("Brasil");
+		moedaPadrao.setSiglaPais("BR");
+		moedaPadrao.setSimboloMonetario("R$");
+		moedaPadrao.setUsuario(usuario);
+		getMoedaService().cadastrar(moedaPadrao);
 	}
 }

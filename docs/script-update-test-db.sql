@@ -91,52 +91,18 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Taxa de conversao global
-	create table taxaconversao (
+	-- Contas compartilhadas - Github Issue #222
+	create table contacompartilhada (
 		id bigint not null auto_increment,
-	    idMoedaOrigem bigint not null,
-	    valorMoedaOrigem decimal(18,2) not null,
-	    taxaConversao decimal(18,4) default 1.0000,
-	    idMoedaDestino bigint null,
-	    valorMoedaDestino decimal(18,2) null,
-	    dataConversao datetime not null,
-	    primary key (id)
+		idConta bigint not null,
+		idUsuario bigint not null,
+	    hashAutorizacao varchar(64) null,
+	    dataGeracaoHash date null,
+		primary key (id)
 	) Engine=InnoDB;
-	
-	alter table lancamentoconta add column idTaxaConversao bigint null unique;
-	alter table lancamentoconta add constraint fk_lancamentoconta_taxaconversao foreign key (idTaxaConversao) references taxaconversao(id);
-	
-	-- Migração dos dados
-	insert into taxaconversao (
-		id,
-	    idMoedaOrigem,
-	    valorMoedaOrigem,
-	    taxaconversao,
-	    idMoedaDestino,
-	    valorMoedaDestino,
-	    dataConversao
-	) select
-		lc.id,
-	    lc.idMoeda,
-	    lc.valorPago,
-	    (select distinct cm.taxaConversao from conversaomoeda cm where cm.idFaturaCartao = lc.idFaturaCartao and cm.idMoeda = lc.idMoeda),
-		c.idMoeda,
-	    0.00,
-	    lc.dataPagamento
-	from lancamentoconta lc
-	inner join conta c on c.id = lc.idConta
-	where lc.idMoeda <> c.idMoeda;
-	
-	alter table taxaconversao auto_increment=10000;
-	
-	update taxaconversao set valorMoedaDestino = (valorMoedaOrigem * taxaConversao);
-	update lancamentoconta set idTaxaConversao = id where id in (select id from taxaconversao);
-	update taxaconversao t set t.taxaConversao = (select valorConversao from moeda m where m.id = t.idMoedaOrigem) where t.taxaConversao is null;
-	update taxaconversao set valorMoedaDestino = (valorMoedaOrigem * taxaConversao) where valorMoedaDestino is null;
-	
-	alter table taxaconversao change `taxaConversao` `taxaConversao` decimal(18,4) not null default 1.0000;
-	alter table taxaconversao change `idMoedaDestino` `idMoedaDestino` bigint not null;
-	alter table taxaconversao change `valorMoedaDestino` `valorMoedaDestino` decimal(18,2) not null;
+
+	alter table contacompartilhada add constraint fk_contacompartilhada_conta foreign key (idConta) references conta (id);
+	alter table contacompartilhada add constraint fk_contacompartilhada_usuario foreign key (idUsuario) references usuario (id);
 	
     /*** Fim do bloco de atualizações da base ***/
     

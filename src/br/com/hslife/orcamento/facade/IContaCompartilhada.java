@@ -48,26 +48,21 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
-public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
+public interface IContaCompartilhada {
 	
-	/**
-	 * Buscar um meio de pagamento a partir dos parâmetros informados.
-	 * Caso não encontre, o meio de pagamento padrão é retornado.
-	 */
-	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario);
-	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario);
-	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+	public void compartilharConta(ContaCompartilhada conta) throws ApplicationException;
 
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario);
+	public void habilitarCompartilhamento(String hash);
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
+	public List<ContaCompartilhada> buscarTodosPorUsuarioLogado(Usuario usuarioLogado);
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
+	public List<ContaCompartilhada> buscarTodosPorUsuario(Usuario usuario);
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios);
+	public void reenviarConvite(ContaCompartilhada conta) throws ApplicationException;
+	
+	public void excluirCompartilhamento(ContaCompartilhada conta);
 }

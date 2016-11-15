@@ -124,6 +124,11 @@ public class MeioPagamentoService extends AbstractCRUDService<MeioPagamento> imp
 		return getRepository().findDescricaoAndAtivoByUsuario(descricao, ativo, usuario);
 	}
 	
+	@Override
+	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios) {
+		return getRepository().findDescricaoAndAtivoByUsuario(descricao, ativo, usuarios);
+	}
+	
 	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario) {
 		// Verifica se o meio de pagamento informado existe na base de dados
 		List<MeioPagamento> meiosPagamento = getRepository().findByDescricaoAndUsuario(descricaoMeioPagamento, usuario);
