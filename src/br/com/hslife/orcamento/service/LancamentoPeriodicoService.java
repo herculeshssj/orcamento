@@ -140,7 +140,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		getFechamentoPeriodoService().registrarPagamento(pagamentoPeriodo);
 	}
 	
-	private void gerarMensalidade(LancamentoPeriodico entity) {
+	public void gerarMensalidade(LancamentoPeriodico entity) {
 		LancamentoConta proximaMensalidade = new LancamentoConta();
 		LancamentoPeriodico lancamentoPeriodico = getRepository().findById(entity.getId());
 		proximaMensalidade.setLancamentoPeriodico(lancamentoPeriodico);

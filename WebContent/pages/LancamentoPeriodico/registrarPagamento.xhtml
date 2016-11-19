@@ -172,6 +172,10 @@
 		<h:commandLink id="lnkOk" title="Registrar pagamento" action="#{managedBean.registrarPagamento}">
      		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
      	</h:commandLink>
+     	<p:spacer width="20" />
+		<h:commandLink id="lnkAdicionarRegistro" title="Gerar mensalidade" action="#{managedBean.gerarMensalidade}" immediate="true" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
+     		<h:graphicImage id="imgAdicionarRegistro" height="48" width="48" value="/resources/images/svg/add_database.svg"/>
+     	</h:commandLink>
 	</ui:define>
 	
 </ui:composition>

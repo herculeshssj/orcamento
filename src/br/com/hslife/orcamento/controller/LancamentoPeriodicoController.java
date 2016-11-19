@@ -247,6 +247,15 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return "";
 	}
 	
+	public void gerarMensalidade() {
+		try {
+			getService().gerarMensalidade(entity);
+			infoMessage("Mensalidade gerada com sucesso!");
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
 	public String vincularLancamentoView() {
 		lancamentosEncontrados = new ArrayList<LancamentoConta>();
 		criterioBusca = new CriterioBuscaLancamentoConta();

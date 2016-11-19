@@ -75,4 +75,6 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	public void removerLancamentos(List<LancamentoConta> lancamentosARemover);
 		
 	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico);
+	
+	public void gerarMensalidade(LancamentoPeriodico entity);
 }
