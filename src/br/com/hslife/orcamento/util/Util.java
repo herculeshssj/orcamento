@@ -178,6 +178,26 @@ public class Util {
     }
     
     /*
+     * Retorna o último dia do mês atual
+     */
+    public static Date ultimoDiaMesAtual() {
+    	// Pega a data atual
+    	Calendar dataAtual = Calendar.getInstance();
+    	
+    	// Seta para primeiro dia do mês 
+    	dataAtual.set(Calendar.DAY_OF_MONTH, 1);
+    	
+    	// "Rola" para o mês seguinte
+    	dataAtual.add(Calendar.MONTH, 1);
+    	
+    	// "Rola" para o dia anterior do ano
+    	dataAtual.add(Calendar.DAY_OF_YEAR, -1);
+    	
+    	// Retorna o resultado
+    	return dataAtual.getTime();
+    }
+    
+    /*
      * Retorna o primeiro dia do mês atual
      */
     public static Date primeiroDiaMesAtual() {
@@ -185,7 +205,7 @@ public class Util {
     	Calendar dataAtual = Calendar.getInstance();
     	
     	// Seta para primeiro dia do mês 
-    	dataAtual.add(Calendar.DAY_OF_MONTH, 1);
+    	dataAtual.set(Calendar.DAY_OF_MONTH, 1);
     	
     	// Retorna o resultado
     	return dataAtual.getTime();

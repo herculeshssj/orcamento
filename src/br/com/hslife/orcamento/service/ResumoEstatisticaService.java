@@ -183,11 +183,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		// Itera todas as contas do usuário
 		for (Conta conta : contas) {
 			
-			// FIXME decidir como irei tratar o saldo atual dos cartões de débito
-			// Caso seja cartão de débito, passa adiante
-			if (conta.getTipoConta().equals(TipoConta.CARTAO) && conta.getCartaoCredito().getTipoCartao().equals(TipoCartao.DEBITO))
-				continue;
-			
 			// Define a descrição da conta
 			saldoAtual.setDescricaoConta(conta.getDescricao());
 			saldoAtual.setMoedaConta(conta.getMoeda());
@@ -241,6 +236,12 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					temp.add(Calendar.DAY_OF_YEAR, 1);
 					criterio.setDataInicio(temp.getTime());
 				}
+			}
+			
+			// Para os cartões de débito, traz somente os lançamentos do mês corrente
+			if (conta.getTipoConta().equals(TipoConta.CARTAO) && conta.getCartaoCredito().getTipoCartao().equals(TipoCartao.DEBITO)) {
+				criterio.setDataInicio(Util.primeiroDiaMesAtual());
+				criterio.setDataFim(Util.ultimoDiaMesAtual());
 			}
 			
 			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterio);
