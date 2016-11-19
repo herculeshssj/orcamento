@@ -161,6 +161,12 @@ public class LancamentoImportado extends EntityPersistence {
 		li.setValor(this.valor);
 		return li;
 	}
+	
+	public LancamentoImportado clonarLancamento(long i) {
+		LancamentoImportado li = this.clonarLancamento();
+		li.setHash(Util.MD5(li.hashForCSV(i)));
+		return li;
+	}
 
 	@Override
 	public void validate() {

@@ -689,10 +689,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				lancamentoImportado.setCategoria(record.get("CATEGORIA"));
 				lancamentoImportado.setFavorecido(record.get("FAVORECIDO"));
 				lancamentoImportado.setMeiopagamento(record.get("MEIOPAGAMENTO"));
+				lancamentoImportado.setHash(lancamentoImportado.getFullLabel());
 								
 				// Insere o lançamento importado X vezes de acordo com o campo QUANTIDADE
 				for (int i = 1; i <= quantidade; i++) {
-					getRepository().save(lancamentoImportado.clonarLancamento());
+					getRepository().save(lancamentoImportado.clonarLancamento(i));
 				}
 			}
 			
