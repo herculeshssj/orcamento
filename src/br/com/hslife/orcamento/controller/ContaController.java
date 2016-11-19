@@ -86,6 +86,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	
 	private TipoConta tipoSelecionado;
 	private boolean somenteAtivos = true;
+	private boolean fecharPeriodo = true;
 	
 	private String opcaoLancamentos;
 
@@ -173,7 +174,7 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	public String desativarConta() {
 		try {
 			validate(operation);
-			getService().desativarConta(entity, opcaoLancamentos);
+			getService().desativarConta(entity, opcaoLancamentos, fecharPeriodo);
 			infoMessage("Conta desativada com sucesso!");
 			// Verifica se a listagem de resultados está nula ou não para poder efetuar novamente a busca
 			if (listEntity != null && !listEntity.isEmpty()) {
@@ -261,5 +262,13 @@ public class ContaController extends AbstractCRUDController<Conta> {
 
 	public void setTipoSelecionado(TipoConta tipoSelecionado) {
 		this.tipoSelecionado = tipoSelecionado;
+	}
+
+	public boolean isFecharPeriodo() {
+		return fecharPeriodo;
+	}
+
+	public void setFecharPeriodo(boolean fecharPeriodo) {
+		this.fecharPeriodo = fecharPeriodo;
 	}
 }

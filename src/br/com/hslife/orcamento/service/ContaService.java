@@ -141,7 +141,7 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void desativarConta(Conta conta, String situacaoLancamentos) {
+	public void desativarConta(Conta conta, String situacaoLancamentos, boolean fecharPeriodo) {
 		
 		if (situacaoLancamentos.equals("QUITAR")) {			
 			// Busca o último lançamento cadastrado, caso não exista cria um novo lançamento e define a data de 
@@ -159,8 +159,9 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 				ultimoLancamento.setTipoLancamento(TipoLancamento.DESPESA);
 			}				
 			
-			// Realiza o fechamento do período
-			getFechamentoPeriodoService().fecharPeriodo(ultimoLancamento.getDataPagamento(), conta);
+			// Realiza o fechamento do período, caso o usuário tenha optado em fazê-lo
+			if (fecharPeriodo)
+				getFechamentoPeriodoService().fecharPeriodo(ultimoLancamento.getDataPagamento(), conta);
 			
 			// Seta a data de fechamento da conta com a data de pagamento do último lançamento
 			conta.setDataFechamento(ultimoLancamento.getDataPagamento());
@@ -172,8 +173,9 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			conta.setSaldoFinal(getFechamentoPeriodoService().buscarUltimoFechamentoPeriodoPorConta(conta).getSaldo());
 			
 		} else if (situacaoLancamentos.equals("EXCLUIR")) {						
-			// Realiza o fechamento do período
-			getFechamentoPeriodoService().fecharPeriodo(conta.getDataFechamento(), conta);
+			// Realiza o fechamento do período, caso o usuário tenha optado em fazê-lo
+			if (fecharPeriodo)
+				getFechamentoPeriodoService().fecharPeriodo(conta.getDataFechamento(), conta);
 						
 			// Exclui todos os lançamentos existentes após a data de fechamento da conta
 			getLancamentoContaRepository().deleteAllLancamentoContaAfterDateByConta(conta.getDataFechamento(), conta);

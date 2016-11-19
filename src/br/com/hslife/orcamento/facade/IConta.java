@@ -69,7 +69,7 @@ public interface IConta extends ICRUDService<Conta> {
 	
 	public void ativarConta(Conta conta);
 	
-	public void desativarConta(Conta conta, String situacaoLancamentos);
+	public void desativarConta(Conta conta, String situacaoLancamentos, boolean fecharPeriodo);
 	
 	public List<Conta> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
