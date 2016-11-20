@@ -48,18 +48,22 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.IContaCompartilhada;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaLancamentoCartao;
@@ -78,6 +82,9 @@ public class PanoramaLancamentoCartaoController extends AbstractController {
 	
 	@Autowired
 	private IConta contaService;
+	
+	@Autowired
+	private IContaCompartilhada contaCompartilhadaService;
 	
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	private int ano = Calendar.getInstance().get(Calendar.YEAR);
@@ -131,12 +138,30 @@ public class PanoramaLancamentoCartaoController extends AbstractController {
 	}
 	
 	public List<Conta> getListaContaAtiva() {
+		Set<Conta> contas = new HashSet<>();
 		try {
-			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{TipoConta.CARTAO}, getUsuarioLogado(), true);
+			contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{TipoConta.CARTAO}, getUsuarioLogado(), true));
+			
+			// Traz as contas compartilhadas para com o usuário atualmente logado
+			List<ContaCompartilhada> contasCompartilhadas = contaCompartilhadaService.buscarTodosPorUsuario(getUsuarioLogado());
+									
+			// Acrescenta no Set as contas compartilhadas dos demais usuários
+			for (ContaCompartilhada contaCompartilhada : contasCompartilhadas) {
+				if (!contaCompartilhada.getConta().isAtivo() 
+						&& getOpcoesSistema().getExibirContasInativas() 
+						&& contaCompartilhada.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+					contas.add(contaCompartilhada.getConta());
+				} else if (contaCompartilhada.getConta().isAtivo() 
+						&& contaCompartilhada.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+					contas.add(contaCompartilhada.getConta());
+				} else {
+					continue;
+				}
+			}
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<Conta>();
+		return new ArrayList<Conta>(contas);
 	}
 	
 	public List<Integer> getListaAno() {
