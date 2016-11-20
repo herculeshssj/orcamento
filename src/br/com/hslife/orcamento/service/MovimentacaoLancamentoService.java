@@ -61,6 +61,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -175,6 +176,7 @@ public class MovimentacaoLancamentoService implements IMovimentacaoLancamento {
 		lancamentoMesclado.setFavorecido(parametros.get("FAVORECIDO_DESTINO") == null ? null : (Favorecido)parametros.get("FAVORECIDO_DESTINO"));
 		lancamentoMesclado.setMeioPagamento(parametros.get("MEIOPAGAMENTO_DESTINO") == null ? null : (MeioPagamento)parametros.get("MEIOPAGAMENTO_DESTINO"));
 		lancamentoMesclado.setObservacao(parametros.get("OBSERVACAO_DESTINO") == null ? null : (String)parametros.get("OBSERVACAO_DESTINO"));
+		lancamentoMesclado.setMoeda((Moeda)parametros.get("MOEDA_DESTINO"));
 		
 		if (lancamentoMesclado.getDataPagamento().after(new Date())) {
 			lancamentoMesclado.setStatusLancamentoConta(StatusLancamentoConta.AGENDADO);

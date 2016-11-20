@@ -53,9 +53,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -66,6 +63,7 @@ import br.com.hslife.orcamento.entity.DetalheLancamento;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -76,6 +74,7 @@ import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IMovimentacaoLancamento;
 
 @Component("movimentacaoLancamentoMB")
@@ -102,6 +101,9 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
 	
+	@Autowired
+	private IMoeda moedaService;
+	
 	private int quantADuplicar = 1;
 	private LancamentoConta lancamentoATransferir;
 	private IncrementoClonagemLancamento incremento;
@@ -118,6 +120,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	private Categoria categoriaDestino;	
 	private Favorecido favorecidoSelecionado;	
 	private MeioPagamento meioPagamentoSelecionado;
+	private Moeda moedaSelecionada;
 	
 	private String goToListContaPage = "/pages/LancamentoConta/listLancamentoConta";
 	
@@ -139,7 +142,12 @@ public class MovimentacaoLancamentoController extends AbstractController {
 	
 	@Override
 	protected void initializeEntity() {
-		lancamentosSelecionados = new ArrayList<LancamentoConta>();		
+		lancamentosSelecionados = new ArrayList<LancamentoConta>();
+		this.descricao = "";
+		this.dataPagamento = null;
+		this.tipoCategoriaSelecionada = null;
+		this.favorecidoSelecionado = null;
+		this.meioPagamentoSelecionado = null;
 	}
 		
 	public String cancel() {
@@ -371,12 +379,14 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			parametros.put("CATEGORIA_DESTINO", categoriaSelecionada);
 			parametros.put("FAVORECIDO_DESTINO", favorecidoSelecionado);
 			parametros.put("MEIOPAGAMENTO_DESTINO", meioPagamentoSelecionado);
+			parametros.put("MOEDA_DESTINO", moedaSelecionada);
 			if (tipoCategoriaSelecionada.equals(TipoCategoria.CREDITO))
 				parametros.put("TIPO_LANCAMENTO", TipoLancamento.RECEITA);
 			else
 				parametros.put("TIPO_LANCAMENTO", TipoLancamento.DESPESA);						
 			getService().mesclarLancamento(lancamentosSelecionados, parametros);
 			infoMessage("Lançamentos mesclados com sucesso!");
+			initializeEntity();
 			return cancel();
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
@@ -482,7 +492,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		try {
 			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.CREDITO, getUsuarioLogado());
 		} catch (ValidationException | BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
 	}
@@ -491,7 +501,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		try {
 			return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());
 		} catch (ValidationException | BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
 	}
@@ -500,7 +510,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
 		} catch (ValidationException | BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
 	}
@@ -509,7 +519,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		try {
 			return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
 		} catch (ValidationException | BusinessException be) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
+			errorMessage(be.getMessage());
 		}
 		return new ArrayList<>();
 	}
@@ -521,6 +531,15 @@ public class MovimentacaoLancamentoController extends AbstractController {
 			errorMessage(be.getMessage());
 		}
 		return new ArrayList<Conta>();
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public IMovimentacaoLancamento getService() {
@@ -666,5 +685,13 @@ public class MovimentacaoLancamentoController extends AbstractController {
 
 	public void setDetalheLancamento(DetalheLancamento detalheLancamento) {
 		this.detalheLancamento = detalheLancamento;
+	}
+
+	public Moeda getMoedaSelecionada() {
+		return moedaSelecionada;
+	}
+
+	public void setMoedaSelecionada(Moeda moedaSelecionada) {
+		this.moedaSelecionada = moedaSelecionada;
 	}
 }
