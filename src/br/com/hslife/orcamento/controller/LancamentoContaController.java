@@ -327,6 +327,12 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	@Override
 	public String edit() {
+		// Evita problemas com definição de IDs inválidos
+		// vindos de outros módulos
+		if (idEntity == null || idEntity <= 0) {
+			warnMessage("Lançamento informado é inválido!");
+			return goToListPage;
+		}
 		String goToPage = super.edit();
 		if (goToPage.equals(goToFormPage)) {
 			atualizaComboCategorias();

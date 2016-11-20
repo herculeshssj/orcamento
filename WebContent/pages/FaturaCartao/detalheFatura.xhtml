@@ -133,17 +133,23 @@
 		
 	</h:panelGrid>
 	
-	<h:panelGrid columns="2">
+	<h:panelGrid columns="3">
 	
 		Conta:
 		<h:outputText value="#{managedBean.entity.lancamentoPagamento == null ? '-' : managedBean.entity.lancamentoPagamento.conta.label}"/>
-		
-		Lançamento vinculado:
+		<h:outputText/>
+				
+		Lançamento vinculado:		
 		<h:outputText value="#{managedBean.entity.lancamentoPagamento == null ? '-' : managedBean.entity.lancamentoPagamento.label}"/>
-		
+		<h:commandLink id="btnSearch" title="Visualizar lançamento" action="#{lancamentoContaMB.edit}">
+			<h:graphicImage id="imgSearch" height="40" width="40" value="/resources/images/svg/search.svg"/>
+			<f:setPropertyActionListener value="#{managedBean.entity.lancamentoPagamento == null ? 0 : managedBean.entity.lancamentoPagamento.id}" target="#{lancamentoContaMB.idEntity}"/>
+		</h:commandLink>
+				
 		Status atual da fatura:
 		<h:outputText value="#{managedBean.entity.statusFaturaCartao}" style="font-weight: bold;"/>
-	
+		<h:outputText/>
+				
 	</h:panelGrid>	
 	
 	<hr />
