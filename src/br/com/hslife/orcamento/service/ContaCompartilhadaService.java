@@ -124,6 +124,12 @@ public class ContaCompartilhadaService implements IContaCompartilhada {
 		mensagemEmail.append("Prezado " + u.getNome() + "\n\n");
 		mensagemEmail.append("O usuário " + conta.getConta().getUsuario().getNome() +  " compartilhou as informações da seguinte conta:\n\n");
 		mensagemEmail.append(conta.getConta().getLabel() + " \n\n");
+		mensagemEmail.append("Este compartilhamento dá acesso a visualizar os dados da referida conta nas seguintes funcionalidades: \n\n");
+		mensagemEmail.append("- Panorama dos Cadastros;\n\n");
+		mensagemEmail.append("- Panorama dos Lançamentos da Conta;\n\n");
+		mensagemEmail.append("- Panorama dos Lançamentos do Cartão;\n\n");
+		mensagemEmail.append("- Resumo Mensal das Contas;\n\n");
+		mensagemEmail.append("- Saldo Atual das Contas.\n\n");
 		mensagemEmail.append("Para confirmar a operação, acesse o link abaixo em um navegador Web de sua preferência: \n\n");
 		mensagemEmail.append("https://hslife.com.br/confirmar.faces?operacao=compartilhamento&hash=" + conta.getHashAutorizacao() + "\n\n");
 		mensagemEmail.append("Caso não deseje acessar os dados desta conta, ignore esta mensagem.\n\n\n");
@@ -188,6 +194,12 @@ public class ContaCompartilhadaService implements IContaCompartilhada {
 		mensagemEmail.append("Prezado " + u.getNome() + "\n\n");
 		mensagemEmail.append("O usuário " + conta.getConta().getUsuario().getNome() +  " compartilhou as informações da seguinte conta:\n\n");
 		mensagemEmail.append(conta.getConta().getLabel() + " \n\n");
+		mensagemEmail.append("Este compartilhamento dá acesso a visualizar os dados da referida conta nas seguintes funcionalidades: \n\n");
+		mensagemEmail.append("- Panorama dos Cadastros;\n\n");
+		mensagemEmail.append("- Panorama dos Lançamentos da Conta;\n\n");
+		mensagemEmail.append("- Panorama dos Lançamentos do Cartão;\n\n");
+		mensagemEmail.append("- Resumo Mensal das Contas;\n\n");
+		mensagemEmail.append("- Saldo Atual das Contas.\n\n");
 		mensagemEmail.append("Para confirmar a operação, acesse o link abaixo em um navegador Web de sua preferência: \n\n");
 		mensagemEmail.append("https://hslife.com.br/confirmar.faces?operacao=compartilhamento&hash=" + conta.getHashAutorizacao() + "\n\n");
 		mensagemEmail.append("Caso não deseje acessar os dados desta conta, ignore esta mensagem.\n\n\n");
