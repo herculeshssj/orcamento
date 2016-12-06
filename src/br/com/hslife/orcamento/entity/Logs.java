@@ -81,6 +81,9 @@ public class Logs {
 	@Column(name="throwable", columnDefinition="text", nullable=true)
 	private String logException;
 	
+	@Column
+	private boolean sendToAdmin;
+	
 	public Logs() {		
 		
 	}
@@ -131,5 +134,13 @@ public class Logs {
 
 	public void setLogException(String logException) {
 		this.logException = logException;
+	}
+
+	public boolean isSendToAdmin() {
+		return sendToAdmin;
+	}
+
+	public void setSendToAdmin(boolean sendToAdmin) {
+		this.sendToAdmin = sendToAdmin;
 	}
 }

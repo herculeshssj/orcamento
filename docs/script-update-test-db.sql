@@ -91,18 +91,7 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Contas compartilhadas - Github Issue #222
-	create table contacompartilhada (
-		id bigint not null auto_increment,
-		idConta bigint not null,
-		idUsuario bigint not null,
-	    hashAutorizacao varchar(64) null,
-	    dataGeracaoHash date null,
-		primary key (id)
-	) Engine=InnoDB;
-
-	alter table contacompartilhada add constraint fk_contacompartilhada_conta foreign key (idConta) references conta (id);
-	alter table contacompartilhada add constraint fk_contacompartilhada_usuario foreign key (idUsuario) references usuario (id);
+	alter table logs add column sendToAdmin boolean default false;
 	
     /*** Fim do bloco de atualizações da base ***/
     

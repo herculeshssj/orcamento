@@ -229,6 +229,22 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 		}
 	}
 	
+	public void enviarMensagemParaAdmin(String rementente, String emailRemetente, String assuntoMensagem, String mensagem) throws ApplicationException{
+		try {
+			Usuario admin = getRepository().findByLogin("admin");
+			getEmailComponent().setRemetente(rementente);
+			getEmailComponent().setEmailRemetente(emailRemetente);
+			getEmailComponent().setDestinatario(admin.getNome());
+			getEmailComponent().setEmailDestinatario(admin.getEmail());
+			getEmailComponent().setAssunto(assuntoMensagem);
+			getEmailComponent().setMensagem(mensagem.toString());
+			getEmailComponent().enviarEmail();
+		} catch (Exception e) {
+			logger.catching(e);
+			throw new ApplicationException("Erro ao enviar e-mail:", e);
+		}
+	}
+	
 	@Override
 	public List<Usuario> getListaUsuarios() {
 		List<Usuario> usuarios = new ArrayList<Usuario>();

@@ -66,6 +66,8 @@ public interface IUsuario extends ICRUDService<Usuario> {
 	
 	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException;	
 	
+	public void enviarMensagemParaAdmin(String rementente, String emailRemetente, String assuntoMensagem, String mensagem) throws ApplicationException;
+	
 	public Usuario buscarPorTokenID(String token);
 	
 	public void gerarTokenID(Usuario usuario);

@@ -89,4 +89,12 @@ public class LogRepository extends AbstractRepository {
 	public void delete(Logs entity) {
 		getSession().delete(entity);
 	}
+	
+	public void update(Logs entity) {
+		getSession().update(entity);
+	}
+	
+	public Logs findMostRecentException() {
+		return (Logs)getQuery("FROM Logs log WHERE log.logLevel = 'ERROR' AND log.sendToAdmin = false ORDER BY log.logDate DESC").setMaxResults(1).uniqueResult();
+	}
 }

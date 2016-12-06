@@ -62,4 +62,8 @@ public interface ILog {
 	public Logs buscarPorID(Long id);
 	
 	public void excluir(Logs logs);
+	
+	public void alterar(Logs logs);
+	
+	public Logs buscarExcecaoMaisRecente();
 }

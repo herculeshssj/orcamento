@@ -99,4 +99,15 @@ public class LogService implements ILog {
 	public void excluir(Logs logs) {
 		getRepository().delete(logs);
 	}
+	
+	@Override
+	public void alterar(Logs logs) {
+		getRepository().update(logs);
+	}
+	
+	@Override
+	public Logs buscarExcecaoMaisRecente() {
+		// Traz o log de exceção mais recente que não tenha sido enviado ainda para o Admininstrador do Sistema
+		return getRepository().findMostRecentException();
+	}
 }

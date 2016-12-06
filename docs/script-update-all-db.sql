@@ -2526,3 +2526,6 @@ create table contacompartilhada (
 
 alter table contacompartilhada add constraint fk_contacompartilhada_conta foreign key (idConta) references conta (id);
 alter table contacompartilhada add constraint fk_contacompartilhada_usuario foreign key (idUsuario) references usuario (id);
+
+-- Enviar exceção para usuário Admin - Github Issue #212
+alter table logs add column sendToAdmin boolean default false;
