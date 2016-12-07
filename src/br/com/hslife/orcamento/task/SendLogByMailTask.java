@@ -93,7 +93,7 @@ public class SendLogByMailTask {
 				mensagem.append(logs.getLogException() + "\n\n\n");
 				mensagem.append("Verifique os logs do sistema e do servidor de aplicação para saber a origem do comportamento inesperado.");
 				
-				getUsuarioService().enviarMensagemParaAdmin("HSlife Serviços de TI", "postmaster@mail.hslife.com.br", "Erro no sistema", mensagem.toString());
+				getUsuarioService().enviarMensagemParaAdmin("HSlife Serviços de TI", "postmaster@mail.hslife.com.br", "Orçamento Doméstico - Erro no sistema", mensagem.toString());
 				
 				// Seta o log como enviado para o admin e salva as alterações
 				logs.setSendToAdmin(true);

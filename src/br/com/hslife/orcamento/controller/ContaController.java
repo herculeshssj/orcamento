@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ContaConjunta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.TipoConta;
@@ -89,6 +91,8 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	private boolean fecharPeriodo = true;
 	
 	private String opcaoLancamentos;
+	
+	private ContaConjunta contaConjunta = new ContaConjunta();
 
 	public ContaController() {
 		super(new Conta());
@@ -117,6 +121,14 @@ public class ContaController extends AbstractCRUDController<Conta> {
 	@Override
 	public String save() {
 		entity.setUsuario(getUsuarioLogado());
+		// Caso a operação seja 'edit' e a conta não seja conjunta,
+		// apaga todos os registros existentes
+		if (operation.equals("edit") && !entity.isContaConjunta()) {
+			for (Iterator<ContaConjunta> i = entity.getContasConjunta().iterator(); i.hasNext(); ) {
+				if (i.next() != null)
+					i.remove();
+			}
+		}
 		return super.save();
 	}
 
@@ -198,6 +210,33 @@ public class ContaController extends AbstractCRUDController<Conta> {
 		return "";
 	}
 	
+	public void adicionarContaConjunta() {
+		try {
+			contaConjunta.setConta(entity);
+			contaConjunta.validate();
+			contaConjunta.setOrdem(entity.getContasConjunta().size() + 1);
+			if (contaConjunta.isTitular())
+				for (ContaConjunta cj : entity.getContasConjunta()) 
+					cj.setTitular(false);
+			entity.getContasConjunta().add(contaConjunta);
+			contaConjunta = new ContaConjunta();
+		} catch (ValidationException be) {
+			warnMessage(be.getMessage());
+		}		
+	}
+	
+	public void removerContaConjunta() {
+		entity.getContasConjunta().remove(contaConjunta);
+		contaConjunta = new ContaConjunta();
+		
+		// Renumera a ordem das contas conjuntas
+		int i = 1;
+		for (ContaConjunta cj : entity.getContasConjunta()) {
+			cj.setOrdem(i);
+			i++;
+		}
+	}
+	
 	public List<Banco> getListaBanco() {
 		try {
 			List<Banco> resultado = bancoService.buscarAtivosPorUsuario(getUsuarioLogado());
@@ -270,5 +309,13 @@ public class ContaController extends AbstractCRUDController<Conta> {
 
 	public void setFecharPeriodo(boolean fecharPeriodo) {
 		this.fecharPeriodo = fecharPeriodo;
+	}
+
+	public ContaConjunta getContaConjunta() {
+		return contaConjunta;
+	}
+
+	public void setContaConjunta(ContaConjunta contaConjunta) {
+		this.contaConjunta = contaConjunta;
 	}
 }

@@ -48,16 +48,21 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -115,6 +120,9 @@ public class Conta extends EntityPersistence {
 	@Enumerated(EnumType.STRING)
 	private TipoConta tipoConta;
 	
+	@Column
+	private boolean contaConjunta;
+	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
@@ -130,6 +138,9 @@ public class Conta extends EntityPersistence {
 	@OneToOne
 	@JoinColumn(name="idCartao", nullable=true)
 	private CartaoCredito cartaoCredito;
+	
+	@OneToMany(mappedBy="conta", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	private Set<ContaConjunta> contasConjunta = new TreeSet<>();
 	
 	@Transient
 	private List<PanoramaCadastro> panoramasCadastro;
@@ -294,5 +305,21 @@ public class Conta extends EntityPersistence {
 
 	public void setPanoramasCadastro(List<PanoramaCadastro> panoramasCadastro) {
 		this.panoramasCadastro = panoramasCadastro;
+	}
+
+	public boolean isContaConjunta() {
+		return contaConjunta;
+	}
+
+	public void setContaConjunta(boolean contaConjunta) {
+		this.contaConjunta = contaConjunta;
+	}
+
+	public Set<ContaConjunta> getContasConjunta() {
+		return contasConjunta;
+	}
+
+	public void setContasConjunta(Set<ContaConjunta> contasConjunta) {
+		this.contasConjunta = contasConjunta;
 	}
 }

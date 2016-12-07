@@ -82,8 +82,11 @@
 		<label for="frmFormEntity:txtContaPoupanca">Conta poupança:</label>
 		<h:inputText id="txtContaPoupanca" value="#{managedBean.entity.contaPoupanca}" disabled="#{!managedBean.entity.ativo}"/>
 		
-		<label for="frmFormEntity:txtVariacao">Variação:</label>
+		<label for="frmFormEntity:txtVariacao">Variação/Operação:</label>
 		<h:inputText id="txtVariacao" value="#{managedBean.entity.variacao}" disabled="#{!managedBean.entity.ativo}"/>
+		
+		<h:selectBooleanCheckbox value="#{managedBean.entity.contaConjunta}"/>
+		<label>Conta conjunta</label>
 		
 		<label>Moeda:</label>
 		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.operation != 'create'}">
@@ -91,6 +94,9 @@
 		</h:selectOneMenu>
 		
 		<h:panelGrid columns="2" rendered="#{managedBean.operation == 'create'}">
+			<f:facet name="header">
+					<h:outputText value="Saldo e data de abertura" />
+				</f:facet>
 			 
 			 <h:panelGroup>
 			 	<label for="frmFormEntity:txtSaldoInicial">Saldo inicial:</label>
@@ -112,6 +118,9 @@
 		</h:panelGrid>
 		
 		<h:panelGrid columns="4" rendered="#{managedBean.operation != 'create'}">
+			<f:facet name="header">
+				<h:outputText value="Saldos e datas" />
+			</f:facet>
 			
 			Data de abertura:
 			<h:outputText value="#{managedBean.entity.dataAbertura}">
@@ -140,6 +149,60 @@
 			</h:panelGroup>
 			
 		</h:panelGrid>
+		
+		<h:panelGrid id="pnlContaConjunta" columns="4" rendered="#{managedBean.entity.contaConjunta}">
+			<f:facet name="header">
+				<h:outputText value="Conta Conjunta" />
+			</f:facet>
+			 
+			 <h:panelGroup>
+			 	<label for="frmFormEntity:txtNomeContaConjunta">Nome:</label>
+			 	<h:inputText id="txtNomeContaConjunta" value="#{managedBean.contaConjunta.nome}"/>					
+			 </h:panelGroup>
+			 
+			 <h:panelGroup>
+			 	<label for="frmFormEntity:txtCPFContaConjunta">CPF:</label>
+			 	<h:inputText id="txtCPFContaConjunta" value="#{managedBean.contaConjunta.cpf}"/>					
+			 </h:panelGroup>
+			 
+			 <h:panelGroup>			 	
+			 	<h:selectBooleanCheckbox id="txtTitularContaConjunta" value="#{managedBean.contaConjunta.titular}"/>
+	    		<label for="frmFormEntity:txtTitularContaConjunta">Titular</label>
+			 </h:panelGroup>
+			 
+			 <p:commandLink value="Adicionar" actionListener="#{managedBean.adicionarContaConjunta}" update="msgFormEntity,pnlContaConjunta,tableContaConjunta"/>
+			 
+		</h:panelGrid>
+		
+		<h:dataTable id="tableContaConjunta" value="#{managedBean.entity.contasConjunta}" var="item" rendered="#{managedBean.entity.contaConjunta}">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Ordem"/>
+				</f:facet>					
+				<h:outputText value="#{item.ordem}" style="#{item.titular ? 'font-weight: bold' : 'font-weight: normal'}"/>
+				<h:outputText value="º Titular" style="#{item.titular ? 'font-weight: bold' : 'font-weight: normal'}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Nome"/>
+				</f:facet>
+				<h:outputText value="#{item.nome}" style="#{item.titular ? 'font-weight: bold' : 'font-weight: normal'}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="CPF"/>
+				</f:facet>
+				<h:outputText value="#{item.cpf}" style="#{item.titular ? 'font-weight: bold' : 'font-weight: normal'}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Ação"/>
+				</f:facet>
+				<h:commandLink value="Remover" action="#{managedBean.removerContaConjunta}">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.contaConjunta}"/>
+				</h:commandLink>
+			</h:column>
+		</h:dataTable>
 		
 	</ui:define>
 	
