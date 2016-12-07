@@ -91,6 +91,9 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
+	-- Enviar exceção para usuário Admin - Github Issue #212
+	alter table logs add column sendToAdmin boolean default false;
+	
 	-- Conta Conjunta - Github Issue #234
 	create table contaconjunta (
 		id bigint not null auto_increment,
