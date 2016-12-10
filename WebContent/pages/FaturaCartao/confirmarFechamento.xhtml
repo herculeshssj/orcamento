@@ -65,14 +65,14 @@
 			<h:outputText value="#{managedBean.faturaSelecionada.conta.cartaoCredito.label}"/>
 			
 			Data de vencimento:
-			<p:inputMask value="#{managedBean.faturaSelecionada.dataVencimento}" size="10" required="true" requiredMessage="Informe a data de vencimento da fatura!" mask="99/99/9999">
+			<h:outputText value="#{managedBean.faturaSelecionada.dataVencimento}">
 				<f:converter converterId="dateConverter"/>
-			</p:inputMask>
+			</h:outputText>
 			
 			Data de fechamento:
-			<p:inputMask value="#{managedBean.faturaSelecionada.dataFechamento}" size="10" required="true" requiredMessage="Informe a data de fechamento da fatura!" mask="99/99/9999">
+			<h:outputText value="#{managedBean.faturaSelecionada.dataFechamento}">
 				<f:converter converterId="dateConverter"/>
-			</p:inputMask>
+			</h:outputText>
 			
 		</h:panelGrid>
 		
@@ -96,9 +96,9 @@
 					<h:outputText value="Taxa:" rendered="#{moeda.id != managedBean.moedaPadrao.id}"/>
 				</h:column>
 				<h:column>			
-					<h:inputText size="5" value="#{moeda.taxaConversao}" rendered="#{moeda.id != managedBean.moedaPadrao.id}">
+					<h:outputText size="5" value="#{moeda.taxaConversao}" rendered="#{moeda.id != managedBean.moedaPadrao.id}">
 						<f:convertNumber maxFractionDigits="4"/>
-					</h:inputText>
+					</h:outputText>
 				</h:column>
 				<h:column>	
 					Convertido:			
@@ -138,10 +138,8 @@
 					<h:outputText value="#{managedBean.totalFatura + managedBean.saldoDevedor}">
 						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>				
-				</h:panelGroup>
-				<p:commandLink update="pnlFechamentoFatura" actionListener="#{managedBean.calculaValorConversao}" title="Atualizar valores">
-		    		<h:graphicImage id="imgUpdate" height="48" width="48" value="/resources/images/svg/synchronize.svg"/>
-		    	</p:commandLink>		    	
+				</h:panelGroup>	
+				<h:outputText />	    	
 			</h:panelGrid>
 		
 		</p:outputPanel>
@@ -149,11 +147,11 @@
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.fecharFaturaView}" immediate="true">
 			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
 		</h:commandLink>				
 		<p:spacer width="20" />
-		<h:commandLink title="Fechar fatura" action="#{managedBean.confirmarFechamento}">
+		<h:commandLink title="Fechar fatura" action="#{managedBean.fecharFatura}">
 			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
 		</h:commandLink>
 	</ui:define>

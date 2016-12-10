@@ -151,6 +151,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	private boolean selecionarTodosLancamentosAdicionados;
 	private FormaPagamentoFatura formaPagamento;
 	private boolean prontoParaQuitar = false;
+	private String idFecharFatura;
 	
 	private List<LancamentoConta> detalhesFaturaCartao = new ArrayList<>();
 	private List<Moeda> moedas = new ArrayList<Moeda>();
@@ -459,8 +460,10 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		try {
 			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 			String idFatura = fParams.get("idFecharFatura");
+			if (idFatura != null && !idFatura.equals(idFecharFatura)) 
+				idFecharFatura = idFatura;
 			
-			faturaSelecionada = getService().buscarPorID(Long.parseLong(idFatura));
+			faturaSelecionada = getService().buscarPorID(Long.parseLong(idFecharFatura));
 			detalhesFaturaCartao.clear();
 			detalhesFaturaCartao.addAll(faturaSelecionada.getDetalheFatura());
 			this.calcularSaldoCompraSaqueParceladoPorMoeda();
@@ -485,13 +488,18 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		return "";
 	}
 	
+	public String confirmarFechamento() {
+		actionTitle = " - Confirmar fechamento";
+		return "/pages/FaturaCartao/confirmarFechamento";
+	}
+	
 	public String fecharFatura() {
 		try {
 			getService().fecharFatura(faturaSelecionada, moedas);
 			infoMessage("Fatura fechada com sucesso!");
 			
 			this.reprocessarBusca();
-			
+			actionTitle = "";
 			return "/pages/FaturaCartao/listFaturaCartao";			
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
