@@ -2544,3 +2544,6 @@ create table contaconjunta (
 alter table contaconjunta add constraint fk_contaconjunta_conta foreign key (idConta) references conta(id);
 
 alter table conta add column contaConjunta boolean default false;
+
+-- Removido a opção de sistema que define quitação automática de lançamentos - Github Issue #219
+delete from opcaosistema where chave = 'QUITAR_LANCAMENTO_AUTOMATICAMENTE';

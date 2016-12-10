@@ -154,12 +154,6 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			}
 						
 			getLancamentoImportadoRepository().delete(entity.getLancamentoImportado());
-			
-			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
-			// FIXME mover para a importação de lançamentos como uma opção na confirmação da importação
-			if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
-				entity.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
-			}
 		}
 		
 		// Salva a informação da moeda no lançamento da conta

@@ -91,23 +91,8 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Enviar exceção para usuário Admin - Github Issue #212
-	alter table logs add column sendToAdmin boolean default false;
-	
-	-- Conta Conjunta - Github Issue #234
-	create table contaconjunta (
-		id bigint not null auto_increment,
-	    idConta bigint not null,
-	    nome varchar(100) not null,
-	    cpf varchar(14) not null,
-	    titular boolean,
-	    ordem int,
-	    primary key (id)
-	) Engine=InnoDB;
-	
-	alter table contaconjunta add constraint fk_contaconjunta_conta foreign key (idConta) references conta(id);
-	
-	alter table conta add column contaConjunta boolean default false;
+	-- Removido a opção de sistema que define quitação automática de lançamentos - Github Issue #219
+	delete from opcaosistema where chave = 'QUITAR_LANCAMENTO_AUTOMATICAMENTE';
 	
     /*** Fim do bloco de atualizações da base ***/
     

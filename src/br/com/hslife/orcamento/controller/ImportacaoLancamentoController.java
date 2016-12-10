@@ -94,6 +94,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	private Long idEntity;
 	
 	private boolean selecionarTodosLancamentos;
+	private boolean quitarAutomaticamente = false;
 
 	private String goToListPage = "";
 	
@@ -147,7 +148,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 				}
 			}
 			
-			lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(contaSelecionada, getService().buscarLancamentoImportadoPorConta(contaSelecionada));
+			lancamentoContaACriarAtualizar = getService().buscarLancamentoContaACriarAtualizar(contaSelecionada, getService().buscarLancamentoImportadoPorConta(contaSelecionada), quitarAutomaticamente);
 			Collections.sort(lancamentoContaACriarAtualizar, new LancamentoContaComparator());
 			actionTitle = " - Confirmar";
 			selecionarTodosLancamentos = false;
@@ -225,7 +226,7 @@ public class ImportacaoLancamentoController extends AbstractController {
 	public void importarLancamento() {
 		try {
 			entity = getService().buscarPorID(idEntity);
-			getService().importarLancamento(entity);
+			getService().importarLancamento(entity, quitarAutomaticamente);
 			infoMessage("Lançamento importado com sucesso!");
 			find();
 		} catch (ValidationException | BusinessException be) {
@@ -380,5 +381,13 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setTipoArquivo(String tipoArquivo) {
 		this.tipoArquivo = tipoArquivo;
+	}
+
+	public boolean isQuitarAutomaticamente() {
+		return quitarAutomaticamente;
+	}
+
+	public void setQuitarAutomaticamente(boolean quitarAutomaticamente) {
+		this.quitarAutomaticamente = quitarAutomaticamente;
 	}
 }

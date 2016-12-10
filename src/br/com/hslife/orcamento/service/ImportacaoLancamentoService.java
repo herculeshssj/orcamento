@@ -206,6 +206,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 
 	@Override
 	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados) {
+		return this.buscarLancamentoContaACriarAtualizar(conta, lancamentosImportados, false);
+	}
+	
+	@Override
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados, boolean quitarAutomaticamente) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
@@ -270,7 +275,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				}
 				
 				// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
-				if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+				if (quitarAutomaticamente) {
 					lc.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 				}
 				
@@ -286,7 +291,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				}
 				
 				// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
-				if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+				if (quitarAutomaticamente) {
 					lc.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 				}
 				
@@ -323,6 +328,11 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	
 	@Override
 	public void importarLancamento(LancamentoImportado entity) {
+		this.importarLancamento(entity, false);
+	}
+	
+	@Override
+	public void importarLancamento(LancamentoImportado entity, boolean quitarAutomaticamente) {
 		// Armazena o usuário logado para diminuir o acesso a base
 		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
 		
@@ -349,7 +359,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			}
 			
 			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
-			if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+			if (quitarAutomaticamente) {
 				l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 			}
 			
@@ -405,7 +415,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			}
 			
 			// Seta o lançamento como quitado caso a opção do sistema correspondente seja true
-			if (getOpcaoSistemaComponent().getQuitarLancamentoAutomaticamente()) {
+			if (quitarAutomaticamente) {
 				l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
 			}
 			

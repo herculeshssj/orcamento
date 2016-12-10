@@ -71,9 +71,13 @@ public interface IImportacaoLancamento {
 	
 	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados);
 	
+	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados, boolean quitarAutomaticamente);
+	
 	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos);
 	
 	public void importarLancamento(LancamentoImportado entity);
+	
+	public void importarLancamento(LancamentoImportado entity, boolean quitarAutomaticamente);
 	
 	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
 	

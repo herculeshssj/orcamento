@@ -114,7 +114,6 @@ public class OpcaoSistemaComponent {
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS", Integer.valueOf(1));
 		opcoesUsuario.put("CONTROLAR_ESTOQUE_DESPENSA", Boolean.TRUE);
-		opcoesUsuario.put("QUITAR_LANCAMENTO_AUTOMATICAMENTE", Boolean.FALSE);
 		getService().salvarOpcoesUser(opcoesUsuario, entity);
 	}
 	
@@ -137,7 +136,6 @@ public class OpcaoSistemaComponent {
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", this.getLimiteQuantidadeFechamentos());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", this.getFormaAgrupamentoPagamento());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTROLAR_ESTOQUE_DESPENSA", this.getControlarEstoqueItemDespensa());
-		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("QUITAR_LANCAMENTO_AUTOMATICAMENTE", this.getQuitarLancamentoAutomaticamente());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("MOEDA_PADRAO", moedaPadrao);
 	}
 
@@ -361,26 +359,5 @@ public class OpcaoSistemaComponent {
 			logger.catching(e);
 		}
 		return true;
-	}
-	
-	public Boolean getQuitarLancamentoAutomaticamente() {
-		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
-		try {
-			// Verifica se o valor existe no cache
-			if (recuperaParametroCacheUsuario(usuarioLogado, "QUITAR_LANCAMENTO_AUTOMATICAMENTE") != null) {
-				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "QUITAR_LANCAMENTO_AUTOMATICAMENTE"));
-			} else {
-				OpcaoSistema opcao = buscarPorChaveEUsuario("QUITAR_LANCAMENTO_AUTOMATICAMENTE", usuarioLogado);
-				if (opcao != null) {
-					setarParametroCacheUsuario(usuarioLogado, "QUITAR_LANCAMENTO_AUTOMATICAMENTE", Boolean.valueOf(opcao.getValor()));
-					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "QUITAR_LANCAMENTO_AUTOMATICAMENTE"));
-				}
-			}
-		} catch (ApplicationException be) {
-			logger.catching(be);
-		} catch (Exception e) {
-			logger.catching(e);
-		}
-		return false;
 	}
 }
