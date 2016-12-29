@@ -113,14 +113,17 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 		
 		String sqlFatura = "select count(id) from faturacartao where idConta = " + cartaoCredito.getConta().getId() + " and statusFaturaCartao <> 'ABERTA'";
 		String sqlLancamento = "select count(*) from lancamentoconta l inner join conta cc on cc.id = l.idConta inner join cartaocredito c on c.id = cc.idCartao where c.id = " + cartaoCredito.getId();
+		String sqlContaCompartilhada = "select count(*) from contacompartilhada cc inner join conta c on c.id = cc.idConta where c.id = " + cartaoCredito.getConta().getId();
 		
 		Query queryFatura = getSession().createSQLQuery(sqlFatura);
 		Query queryLancamento = getSession().createSQLQuery(sqlLancamento);
+		Query queryContaCompartilhada = getSession().createSQLQuery(sqlContaCompartilhada);
 		
 		BigInteger queryResultFatura = (BigInteger)queryFatura.uniqueResult();
 		BigInteger queryResultLancamento = (BigInteger)queryLancamento.uniqueResult();
+		BigInteger queryResultContaCompartilhada = (BigInteger)queryContaCompartilhada.uniqueResult();
 		
-		if (queryResultFatura.longValue() == 0 && queryResultLancamento.longValue() == 0) {
+		if (queryResultFatura.longValue() == 0 && queryResultLancamento.longValue() == 0 && queryResultContaCompartilhada.longValue() == 0) {
 			return false;
 		}
 		

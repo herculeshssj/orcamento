@@ -156,20 +156,20 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		if (getRepository().isSubstituto(entity)) {
 			throw new BusinessException("Não é possível excluir! O cartão selecionado substituiu outro já inativo!");
 		}
-		Conta conta = getContaRepository().findByCartaoCredito(entity);
+		//Conta conta = getContaRepository().findByCartaoCredito(entity);
 		
 		// Feito um pequeno ajuste para viabilizar a exclusão de um cartão de crédito
 		// cadastrado e sem conta vinculada. O erro foi reportado na tarefa #1108
-		if (conta != null) {
+		if (entity.getConta() != null) {
 			// Procura uma fatura aberta para a conta do cartão selecionado
-			FaturaCartao faturaAberta = faturaCartaoRepository.findFaturaCartaoAberta(conta);
+			FaturaCartao faturaAberta = getFaturaCartaoRepository().findFaturaCartaoAberta(entity.getConta());
 			
 			if (getRepository().existsLinkages(entity)) {
-				throw new BusinessException("Não é possível excluir! Existe vínculo com lançamentos e/ou faturas cadastradas!");
+				throw new BusinessException("Não é possível excluir! Existe vínculo com lançamentos e/ou faturas cadastradas, ou encontra-se compartilhado!");
 			} else {
 				// Exclui a fatura aberta caso exista
 				if (faturaAberta != null) getFaturaCartaoRepository().delete(faturaAberta);
-				getContaRepository().delete(conta);
+				getContaRepository().delete(entity.getConta());
 				super.excluir(entity);
 			}
 		} else {
