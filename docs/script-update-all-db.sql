@@ -2547,3 +2547,65 @@ alter table conta add column contaConjunta boolean default false;
 
 -- Removido a opção de sistema que define quitação automática de lançamentos - Github Issue #219
 delete from opcaosistema where chave = 'QUITAR_LANCAMENTO_AUTOMATICAMENTE';
+
+-- Investimento - Github Issue #237
+create table investimento (
+	id bigint not null auto_increment,
+	idBanco bigint not null,
+	tipoInvestimento varchar(25) not null,
+	descricao varchar(100) not null,
+	cnpj varchar(14) not null,
+	idUsuario bigint not null,
+	primary key(id)
+) Engine=InnoDB;
+
+alter table investimento add constraint fk_banco_investimento foreign key(idBanco) references banco(id);
+
+alter table investimento add constraint fk_usuario_investimento foreign key(idUsuario) references usuario(id);
+
+create table resumoinvestimento (
+	id bigint not null auto_increment,
+	mes int not null,
+	ano int not null,
+	aplicacao decimal(18,2) not null default 0.00,
+	resgate decimal(18,2) not null default 0.00,
+	rendimentoBruto decimal(18,2) not null default 0.00,
+	impostoRenda decimal(18,2) not null default 0.00,
+	iof decimal(18,2) not null default 0.00,
+	rendimentoLiquido decimal not null default 0.00,
+	primary key(id)	
+) Engine=InnoDB;
+
+create table movimentacaoinvestimento (
+	id bigint not null auto_increment,
+	tipoLancamento varchar(10),
+	data date not null,
+	historico varchar(50) not null,
+	documento varchar(50) null,
+	valor decimal(18,2) not null default 0.00,
+	impostoRenda decimal(18,2) not null default 0.00,
+	iof decimal(18,2) not null default 0.00,
+	compensacaoIR decimal(18,2) not null default 0.00,
+	cotas decimal(18,6) not null default 0.000000,
+	valorCota decimal(18,9) not null default 0.000000000,
+	saldoCotas decimal(18,9) not null default 0.000000000,
+	primary key (id)
+) Engine=InnoDB;
+
+create table investimento_resumoinvestimento (
+	investimento_id bigint not null,
+	resumosInvestimento_id bigint not null,
+	unique(resumosInvestimento_id)
+) Engine=InnoDB;
+
+alter table investimento_resumoinvestimento add constraint fk_resumoinvestimento_investimento foreign key (investimento_id) references investimento(id);
+alter table investimento_resumoinvestimento add constraint fk_resumoinvestimento foreign key(resumosInvestimento_id) references resumoinvestimento(id);
+
+create table investimento_movimentacaoinvestimento (
+	investimento_id bigint not null,
+	movimentacoesInvestimento_id bigint not null,
+	unique(movimentacoesInvestimento_id)
+) Engine=InnoDB;
+
+alter table investimento_resumoinvestimento add constraint fk_movimentacaoinvestimento_investimento foreign key (investimento_id) references investimento(id);
+alter table investimento_movimentacaoinvestimento add constraint fk_movimentacaoinvestimento foreign key(movimentacoesInvestimento_id) references movimentacaoinvestimento(id);
