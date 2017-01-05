@@ -46,7 +46,10 @@
 
 package br.com.hslife.orcamento.entity;
 
-import java.util.SortedSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,16 +65,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
-
 import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
-import br.com.hslife.orcamento.util.MovimentacaoInvestimentoComparator;
-import br.com.hslife.orcamento.util.ResumoInvestimentoComparator;
 
 @Entity
 @Table(name="investimento")
@@ -97,19 +95,18 @@ public class Investimento extends EntityPersistence {
 	private String cnpj;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
-	@Sort(type=SortType.COMPARATOR, comparator=ResumoInvestimentoComparator.class)
-	private SortedSet<ResumoInvestimento> resumosInvestimento;
+	private List<ResumoInvestimento> resumosInvestimento;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
-	@Sort(type=SortType.COMPARATOR, comparator=MovimentacaoInvestimentoComparator.class)
-	private SortedSet<MovimentacaoInvestimento> movimentacoesInvestimento;
+	private Set<MovimentacaoInvestimento> movimentacoesInvestimento;
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
 	public Investimento() {
-		
+		resumosInvestimento = new LinkedList<>();
+		movimentacoesInvestimento = new LinkedHashSet<>();
 	}
 	
 	@Override
@@ -176,27 +173,27 @@ public class Investimento extends EntityPersistence {
 		this.cnpj = cnpj;
 	}
 
-	public SortedSet<ResumoInvestimento> getResumosInvestimento() {
-		return resumosInvestimento;
-	}
-
-	public void setResumosInvestimento(SortedSet<ResumoInvestimento> resumosInvestimento) {
-		this.resumosInvestimento = resumosInvestimento;
-	}
-
-	public SortedSet<MovimentacaoInvestimento> getMovimentacoesInvestimento() {
-		return movimentacoesInvestimento;
-	}
-
-	public void setMovimentacoesInvestimento(SortedSet<MovimentacaoInvestimento> movimentacoesInvestimento) {
-		this.movimentacoesInvestimento = movimentacoesInvestimento;
-	}
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Set<MovimentacaoInvestimento> getMovimentacoesInvestimento() {
+		return movimentacoesInvestimento;
+	}
+
+	public void setMovimentacoesInvestimento(Set<MovimentacaoInvestimento> movimentacoesInvestimento) {
+		this.movimentacoesInvestimento = movimentacoesInvestimento;
+	}
+
+	public List<ResumoInvestimento> getResumosInvestimento() {
+		return resumosInvestimento;
+	}
+
+	public void setResumosInvestimento(List<ResumoInvestimento> resumosInvestimento) {
+		this.resumosInvestimento = resumosInvestimento;
 	}
 }
