@@ -52,11 +52,13 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
@@ -72,6 +74,8 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoDado;
+import br.com.hslife.orcamento.enumeration.TipoInvestimento;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 
@@ -79,6 +83,16 @@ public class EntityInitializerFactory {
 
 	private EntityInitializerFactory() {
 		// Classe não pode ser inicializada.
+	}
+	
+	public static Banco createBanco(Usuario usuario) {
+		return new Banco.Builder()
+				.ativo(true)
+				.nome("Banco de teste")
+				.numero("000")
+				.padrao(false)
+				.usuario(usuario)
+				.build();
 	}
 	
 	public static Usuario createUsuario() {
@@ -328,5 +342,21 @@ public class EntityInitializerFactory {
 		}
 		
 		return divida;
+	}
+	
+	public static Investimento createInvestimento(Banco banco, Usuario usuario) {
+		Investimento investimento = new Investimento();
+		
+		investimento.setBanco(banco);
+		investimento.setCnpj("84202625000126");
+		investimento.setDescricao("Investimento de teste");
+		investimento.setTipoInvestimento(TipoInvestimento.FUNDO_INVESTIMENTO);
+		investimento.setUsuario(usuario);
+		
+		investimento.movimentarInvestimento(TipoLancamento.RECEITA, "Aplicação", new Date(), 100);
+		investimento.movimentarInvestimento(TipoLancamento.RECEITA, "Rendimento", new Date(), 50);
+		investimento.movimentarInvestimento(TipoLancamento.DESPESA, "Resgate", new Date(), 30);
+		
+		return investimento;
 	}
 }

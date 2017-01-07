@@ -75,7 +75,8 @@ public class Banco extends EntityPersistence {
 	@Column
 	private boolean padrao;
 	
-	@Column boolean ativo;
+	@Column 
+	private boolean ativo;
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
@@ -83,6 +84,51 @@ public class Banco extends EntityPersistence {
 	
 	public Banco() {
 		ativo = true;
+	}
+	
+	private Banco(Builder builder) {
+		this.nome = builder.nome;
+		this.numero = builder.numero;
+		this.padrao = builder.padrao;
+		this.ativo = builder.ativo;
+		this.usuario = builder.usuario;
+	}
+	
+	public static class Builder {
+		private String nome;
+		private String numero;
+		private boolean padrao;
+		private boolean ativo;
+		private Usuario usuario;
+		
+		public Builder nome(String nome) {
+			this.nome = nome;
+			return this;
+		}
+		
+		public Builder numero(String numero) {
+			this.numero = numero;
+			return this;
+		}
+		
+		public Builder padrao(boolean padrao) {
+			this.padrao = padrao;
+			return this;
+		}
+		
+		public Builder ativo(boolean ativo) {
+			this.ativo = ativo;
+			return this;
+		}
+		
+		public Builder usuario(Usuario usuario) {
+			this.usuario = usuario;
+			return this;
+		}
+		
+		public Banco build() {
+			return new Banco(this);
+		}
 	}
 
 	public Long getId() {

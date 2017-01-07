@@ -59,6 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -72,7 +73,7 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 	
 	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
-	private String tipoLancamento;
+	private TipoLancamento tipoLancamento;
 	
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)
@@ -108,6 +109,13 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 	public MovimentacaoInvestimento() {
 		
 	}
+	
+	public MovimentacaoInvestimento(TipoLancamento tipo, String historico, Date data, double valor) {
+		this.tipoLancamento = tipo;
+		this.historico = historico;
+		this.data = data;
+		this.valor = valor;
+	}
 
 	@Override
 	public String getLabel() {
@@ -127,14 +135,6 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getTipoLancamento() {
-		return tipoLancamento;
-	}
-
-	public void setTipoLancamento(String tipoLancamento) {
-		this.tipoLancamento = tipoLancamento;
 	}
 
 	public Date getData() {
@@ -215,5 +215,13 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 
 	public void setSaldoCotas(double saldoCotas) {
 		this.saldoCotas = saldoCotas;
+	}
+
+	public TipoLancamento getTipoLancamento() {
+		return tipoLancamento;
+	}
+
+	public void setTipoLancamento(TipoLancamento tipoLancamento) {
+		this.tipoLancamento = tipoLancamento;
 	}
 }

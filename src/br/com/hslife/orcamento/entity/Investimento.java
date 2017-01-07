@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,6 +69,7 @@ import javax.persistence.Table;
 import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
@@ -133,6 +135,25 @@ public class Investimento extends EntityPersistence {
 		}
 	}
 
+	public void atualizarInvestimento() {
+		
+	}
+	
+	public void movimentarInvestimento(MovimentacaoInvestimento movimentacao) {
+		// Valida a movimentação para se certificar que está válida
+		movimentacao.validate();
+		
+		
+	}
+	
+	public void movimentarInvestimento(TipoLancamento tipo, String historico, Date data, double valor) {
+		// Cria uma nova movimentação, popula os campos e faz a validação
+		MovimentacaoInvestimento movimentacao = new MovimentacaoInvestimento(tipo, historico, data, valor);
+		movimentacao.validate();
+		
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}
