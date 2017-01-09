@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoInvestimento {
-	POUPANCA("Poupança"), 
 	CAPITALIZACAO("Capitalização"),
 	PREVIDENCIA("Previdência"), 
 	FUNDO_INVESTIMENTO("Fundo de Investimento"), 

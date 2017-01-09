@@ -97,6 +97,12 @@ public class InvestimentoTest {
 	}
 	
 	@Test(expected=ValidationException.class)
+	public void testValidateInicioInvestimentoNull() {
+		entity.setInicioInvestimento(null);
+		entity.validate();
+	}
+	
+	@Test(expected=ValidationException.class)
 	public void testMovimentarInvestimentoParametroTipoNulo() {
 		entity.movimentarInvestimento(null, "teste", new Date(), 0);
 	}

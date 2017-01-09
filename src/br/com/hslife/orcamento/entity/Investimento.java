@@ -65,6 +65,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
@@ -96,15 +98,23 @@ public class Investimento extends EntityPersistence {
 	@Column(length=14, nullable=false)
 	private String cnpj;
 	
+	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date inicioInvestimento;
+	
+	@Column(nullable=true)
+	@Temporal(TemporalType.DATE)
+	private Date terminoInvestimento;
+	
+	@ManyToOne
+	@JoinColumn(name="idUsuario", nullable=false)
+	private Usuario usuario;
+	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	private List<ResumoInvestimento> resumosInvestimento;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento;
-	
-	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
 	
 	public Investimento() {
 		resumosInvestimento = new LinkedList<>();
@@ -122,6 +132,7 @@ public class Investimento extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Tipo de investimento", this.tipoInvestimento);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("CNPJ", this.cnpj, 14);
+		EntityPersistenceUtil.validaCampoNulo("Início do investimento", this.inicioInvestimento);
 		
 		try {
 			CNPJValidator validatorCnpj = new CNPJValidator();
@@ -216,5 +227,21 @@ public class Investimento extends EntityPersistence {
 
 	public void setResumosInvestimento(List<ResumoInvestimento> resumosInvestimento) {
 		this.resumosInvestimento = resumosInvestimento;
+	}
+
+	public Date getInicioInvestimento() {
+		return inicioInvestimento;
+	}
+
+	public void setInicioInvestimento(Date inicioInvestimento) {
+		this.inicioInvestimento = inicioInvestimento;
+	}
+
+	public Date getTerminoInvestimento() {
+		return terminoInvestimento;
+	}
+
+	public void setTerminoInvestimento(Date terminoInvestimento) {
+		this.terminoInvestimento = terminoInvestimento;
 	}
 }

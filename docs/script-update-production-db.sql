@@ -98,6 +98,8 @@ begin
 		tipoInvestimento varchar(25) not null,
 		descricao varchar(100) not null,
 		cnpj varchar(14) not null,
+		inicioInvestimento date not null,
+		terminoInvestimento date null,
 		idUsuario bigint not null,
 		primary key(id)
 	) Engine=InnoDB;
