@@ -87,7 +87,17 @@ public class ResumoInvestimento extends EntityPersistence {
 	private double rendimentoLiquido;
 	
 	public ResumoInvestimento() {
-		
+		this.aplicacao = 0.0;
+		this.resgate = 0.0;
+		this.rendimentoBruto = 0.0;
+		this.impostoRenda = 0.0;
+		this.iof = 0.0;
+		this.rendimentoLiquido = 0.0;
+	}
+	
+	public ResumoInvestimento(int mes, int ano) {
+		this.mes = mes;
+		this.ano = ano;
 	}
 	
 	@Override

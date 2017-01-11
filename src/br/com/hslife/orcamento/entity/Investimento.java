@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -72,6 +73,7 @@ import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
@@ -118,7 +120,7 @@ public class Investimento extends EntityPersistence {
 	
 	public Investimento() {
 		resumosInvestimento = new LinkedList<>();
-		movimentacoesInvestimento = new LinkedHashSet<>();
+		movimentacoesInvestimento = new LinkedHashSet<>();		
 	}
 	
 	@Override
@@ -145,24 +147,58 @@ public class Investimento extends EntityPersistence {
 			throw new ValidationException(ise);
 		}
 	}
-
-	public void atualizarInvestimento() {
-		
-	}
 	
 	public void movimentarInvestimento(MovimentacaoInvestimento movimentacao) {
 		// Valida a movimentação para se certificar que está válida
 		movimentacao.validate();
 		
-		
+		// Insere a movimentação no Set
+		this.movimentacoesInvestimento.add(movimentacao);
 	}
-	
+
 	public void movimentarInvestimento(TipoLancamento tipo, String historico, Date data, double valor) {
 		// Cria uma nova movimentação, popula os campos e faz a validação
 		MovimentacaoInvestimento movimentacao = new MovimentacaoInvestimento(tipo, historico, data, valor);
 		movimentacao.validate();
 		
+		// Insere a movimentação no Set
+		this.movimentacoesInvestimento.add(movimentacao);
 		
+	}
+	
+	public void criaResumoInvestimento(Date data) {
+		// A partir de um objeto Calendar, pega o mês e ano do Date para
+		// passar ao método em questão
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(data);
+		
+		// Chama o método propriamente dito
+		this.criaResumoInvestimento(temp.get(Calendar.MONTH) + 1, temp.get(Calendar.YEAR));
+	}
+	
+	public void criaResumoInvestimento(int mes, int ano) {
+		// Verifica se existe resumo de investimento para o mês e ano informado
+		if (existeResumoInvestimento(mes, ano)) {
+			// Lança um BusinessException, pois não se pode criar um resumo com
+			// mês/ano informados
+			throw new BusinessException("Não é possível criar! Já existe resumo com o mês/ano informados!");
+		}
+		
+		// Cria um novo resumo
+		ResumoInvestimento resumo = new ResumoInvestimento(mes, ano);
+		
+		// Insere o resumo no List
+		this.resumosInvestimento.add(resumo);
+	}
+	
+	private boolean existeResumoInvestimento(int mes, int ano) {
+		boolean encontrou = false;
+		// Varre o List de resumos a procura de um resumo com o mês/ano informados
+		for (ResumoInvestimento resumo : this.resumosInvestimento) {
+			if (resumo.getMes() == mes & resumo.getAno() == ano)
+				return true; // encontrou
+		}
+		return encontrou;
 	}
 	
 	public Long getId() {

@@ -351,7 +351,10 @@ public class EntityInitializerFactory {
 		investimento.setCnpj("84202625000126");
 		investimento.setDescricao("Investimento de teste");
 		investimento.setTipoInvestimento(TipoInvestimento.FUNDO_INVESTIMENTO);
+		investimento.setInicioInvestimento(new Date());
 		investimento.setUsuario(usuario);
+		
+		investimento.criaResumoInvestimento(new Date());
 		
 		investimento.movimentarInvestimento(TipoLancamento.RECEITA, "Aplicação", new Date(), 100);
 		investimento.movimentarInvestimento(TipoLancamento.RECEITA, "Rendimento", new Date(), 50);
