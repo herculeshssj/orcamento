@@ -249,22 +249,6 @@ public class Investimento extends EntityPersistence {
 		this.usuario = usuario;
 	}
 
-	public Set<MovimentacaoInvestimento> getMovimentacoesInvestimento() {
-		return movimentacoesInvestimento;
-	}
-
-	public void setMovimentacoesInvestimento(Set<MovimentacaoInvestimento> movimentacoesInvestimento) {
-		this.movimentacoesInvestimento = movimentacoesInvestimento;
-	}
-
-	public List<ResumoInvestimento> getResumosInvestimento() {
-		return resumosInvestimento;
-	}
-
-	public void setResumosInvestimento(List<ResumoInvestimento> resumosInvestimento) {
-		this.resumosInvestimento = resumosInvestimento;
-	}
-
 	public Date getInicioInvestimento() {
 		return inicioInvestimento;
 	}
@@ -279,5 +263,21 @@ public class Investimento extends EntityPersistence {
 
 	public void setTerminoInvestimento(Date terminoInvestimento) {
 		this.terminoInvestimento = terminoInvestimento;
+	}
+
+	public Set<MovimentacaoInvestimento> getMovimentacoesInvestimento() {
+		return movimentacoesInvestimento;
+	}
+
+	public void setMovimentacoesInvestimento(Set<MovimentacaoInvestimento> movimentacoesInvestimento) {
+		this.movimentacoesInvestimento = movimentacoesInvestimento;
+	}
+
+	public List<ResumoInvestimento> getResumosInvestimento() {
+		return resumosInvestimento;
+	}
+
+	public void setResumosInvestimento(List<ResumoInvestimento> resumosInvestimento) {
+		this.resumosInvestimento = resumosInvestimento;
 	}
 }

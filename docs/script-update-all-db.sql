@@ -2587,7 +2587,7 @@ create table movimentacaoinvestimento (
 	valor decimal(18,2) not null default 0.00,
 	impostoRenda decimal(18,2) not null default 0.00,
 	iof decimal(18,2) not null default 0.00,
-	compensacaoIR decimal(18,2) not null default 0.00,
+	compensacaoImpostoRenda decimal(18,2) not null default 0.00,
 	cotas decimal(18,6) not null default 0.000000,
 	valorCota decimal(18,9) not null default 0.000000000,
 	saldoCotas decimal(18,9) not null default 0.000000000,
@@ -2609,5 +2609,5 @@ create table investimento_movimentacaoinvestimento (
 	unique(movimentacoesInvestimento_id)
 ) Engine=InnoDB;
 
-alter table investimento_resumoinvestimento add constraint fk_movimentacaoinvestimento_investimento foreign key (investimento_id) references investimento(id);
+alter table investimento_movimentacaoinvestimento add constraint fk_movimentacaoinvestimento_investimento foreign key (investimento_id) references investimento(id);
 alter table investimento_movimentacaoinvestimento add constraint fk_movimentacaoinvestimento foreign key(movimentacoesInvestimento_id) references movimentacaoinvestimento(id);

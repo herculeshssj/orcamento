@@ -63,7 +63,7 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="investimento")
+@Table(name="movimentacaoinvestimento")
 @SuppressWarnings("serial")
 public class MovimentacaoInvestimento extends EntityPersistence {
 
@@ -95,7 +95,7 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 	private double iof;
 	
 	@Column(nullable=false, precision=18, scale=2)
-	private double compensacaoIR;
+	private double compensacaoImpostoRenda;
 	
 	@Column(nullable=false, precision=18, scale=6)
 	private double cotas;
@@ -185,22 +185,6 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 		this.iof = iof;
 	}
 
-	public double getCompensacaoIR() {
-		return compensacaoIR;
-	}
-
-	public void setCompensacaoIR(double compensacaoIR) {
-		this.compensacaoIR = compensacaoIR;
-	}
-
-	public double getCotas() {
-		return cotas;
-	}
-
-	public void setCotas(double cotas) {
-		this.cotas = cotas;
-	}
-
 	public double getValorCota() {
 		return valorCota;
 	}
@@ -223,5 +207,21 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 
 	public void setTipoLancamento(TipoLancamento tipoLancamento) {
 		this.tipoLancamento = tipoLancamento;
+	}
+
+	public double getCompensacaoImpostoRenda() {
+		return compensacaoImpostoRenda;
+	}
+
+	public void setCompensacaoImpostoRenda(double compensacaoImpostoRenda) {
+		this.compensacaoImpostoRenda = compensacaoImpostoRenda;
+	}
+
+	public double getCotas() {
+		return cotas;
+	}
+
+	public void setCotas(double cotas) {
+		this.cotas = cotas;
 	}
 }
