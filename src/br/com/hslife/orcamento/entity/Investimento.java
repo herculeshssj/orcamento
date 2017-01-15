@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -128,7 +129,7 @@ public class Investimento extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return this.descricao;
+		return this.descricao + (this.isAtivo() ? "" : " - INATIVO");
 	}
 
 	@Override
@@ -169,6 +170,16 @@ public class Investimento extends EntityPersistence {
 		
 	}
 	
+	public void excluirMovimentacao(MovimentacaoInvestimento movimentacao) {
+		for (Iterator<MovimentacaoInvestimento> i = movimentacoesInvestimento.iterator(); i.hasNext(); ) {
+			MovimentacaoInvestimento m = i.next();
+			if (m.equals(movimentacao)) {
+				i.remove();
+				break;
+			}
+		}
+	}
+	
 	public void criaResumoInvestimento(Date data) {
 		// A partir de um objeto Calendar, pega o mês e ano do Date para
 		// passar ao método em questão
@@ -180,15 +191,18 @@ public class Investimento extends EntityPersistence {
 	}
 	
 	public void criaResumoInvestimento(int mes, int ano) {
+		// Cria um novo resumo
+		ResumoInvestimento resumo = new ResumoInvestimento(mes, ano);
+		this.criarResumoInvestimento(resumo);
+	}
+	
+	public void criarResumoInvestimento(ResumoInvestimento resumo) {
 		// Verifica se existe resumo de investimento para o mês e ano informado
-		if (existeResumoInvestimento(mes, ano)) {
+		if (existeResumoInvestimento(resumo.getMes(), resumo.getAno())) {
 			// Lança um BusinessException, pois não se pode criar um resumo com
 			// mês/ano informados
 			throw new BusinessException("Não é possível criar! Já existe resumo com o mês/ano informados!");
 		}
-		
-		// Cria um novo resumo
-		ResumoInvestimento resumo = new ResumoInvestimento(mes, ano);
 		
 		// Insere o resumo no List
 		this.resumosInvestimento.add(resumo);

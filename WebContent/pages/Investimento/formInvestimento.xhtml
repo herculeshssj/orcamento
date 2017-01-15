@@ -80,8 +80,10 @@
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>
 	    
-	    <label for="frmFormEntity:txtInvestimentoInicial">Investimento inicial:</label>
-    	<h:inputText id="txtValorPago" value="#{managedBean.investimentoInicial}">
+	    <h:panelGroup rendered="#{managedBean.operation == 'create'}">
+	    	<label for="frmFormEntity:txtInvestimentoInicial">Investimento inicial:</label>
+	    </h:panelGroup>
+    	<h:inputText id="txtValorPago" value="#{managedBean.investimentoInicial}" rendered="#{managedBean.operation == 'create'}">
 			<f:convertNumber type="currency" pattern="###.##"/>
 		</h:inputText>
 	    

@@ -94,6 +94,12 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private int mesMovimentacao;
 	private int anoMovimentacao;
 	
+	private OperacaoInvestimento operacaoInvestimento;
+	
+	public enum OperacaoInvestimento {
+		SALVAR_RESUMO, EDITAR_RESUMO, SALVAR_MOVIMENTACAO, EDITAR_MOVIMENTACAO, EXCLUIR_MOVIMENTACAO;
+	}
+	
 	public InvestimentoController() {
 		super(new Investimento());
 		moduleTitle = "Investimentos";
@@ -103,6 +109,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	protected void initializeEntity() {
 		entity = new Investimento();
 		listEntity = new ArrayList<Investimento>();		
+		tipoSelecionado = null;
 	}
 	
 	@Override
@@ -122,11 +129,37 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	}
 	
 	@Override
+	public String edit() {
+		// Verifica se o investimento foi encerrado
+		String retorno = super.edit();
+		if (!entity.isAtivo()) {
+			warnMessage("Não é possível editar! Investimento encerrado.");
+			return "";
+		} else {
+			return retorno;
+		}
+	}
+	
+	@Override
+	public String view() {
+		// Verifica se o investimento foi encerrado
+		String retorno = super.view();
+		if (!entity.isAtivo()) {
+			warnMessage("Não é possível excluir/encerrar! Investimento encerrado.");
+			return "";
+		} else {
+			return retorno;
+		}
+	}
+	
+	@Override
 	public String save() {
 		try {
 			
 			entity.setUsuario(getUsuarioLogado());
-			entity.investimentoInicial(entity.getInicioInvestimento(), investimentoInicial);
+			// Verifica se a operação atual é de criação
+			if (this.operation.equals("create"))
+				entity.investimentoInicial(entity.getInicioInvestimento(), investimentoInicial);
 			
 			return super.save();
 		} catch (ValidationException | BusinessException be) {
@@ -136,6 +169,26 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		return "";
 	}
 	
+	public String encerrarInvestimento() {
+		// Verifica se o atributo terminoINvestimento contém algum valor
+		if (entity.getTerminoInvestimento() == null) {
+			warnMessage("Informe a data de encerramento do investimento!");
+			return null;
+		}
+		
+		try {
+			// Ao atribuir a data de término, o investimento ganha o status de encerrado
+			String retorno = super.save();
+			
+			infoMessage("O investimento foi encerrado.");
+			
+			return retorno;
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return null;
+	}
+	
 	public void selecionarResumoInvestimento() {
 		resumo = entity.buscarResumoInvestimento(mesResumo, anoResumo);
 	}
@@ -143,7 +196,70 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	public void selecionarMovimentacoesInvestimento() {
 		movimentacoesInvestimento = entity.buscarMovimentacoesInvestimento(mesMovimentacao, anoMovimentacao);
 	}
+	
+	public String voltarInvestimento() {
+		actionTitle = "";
+		return "/pages/Investimento/listInvestimento";
+	}
+	
+	public String novoResumo() {
+		resumo = new ResumoInvestimento();
+		resumo.setMes(mesResumo);
+		resumo.setAno(anoResumo);
+		actionTitle = " - Novo resumo";
+		operacaoInvestimento = OperacaoInvestimento.SALVAR_RESUMO;
+		return "/pages/Investimento/formResumoInvestimento";		
+	}
+	
+	public String editarResumo() {
+		actionTitle = " - Editar resumo";
+		operacaoInvestimento = OperacaoInvestimento.EDITAR_RESUMO;
+		return "/pages/Investimento/formResumoInvestimento";
+	}
+	
+	public String novaMovimentacao() {
+		movimentacao = new MovimentacaoInvestimento();
+		actionTitle = " - Nova movimentação";
+		operacaoInvestimento = OperacaoInvestimento.SALVAR_MOVIMENTACAO;
+		return "/pages/Investimento/formMovimentacaoInvestimento";
+	}
+	
+	public String editarMovimentacao() {
+		actionTitle = " - Editar movimentação";
+		operacaoInvestimento = OperacaoInvestimento.EDITAR_MOVIMENTACAO;
+		return "/pages/Investimento/formMovimentacaoInvestimento";
+	}
+	
+	public String excluirMovimentacao() {
+		operacaoInvestimento = OperacaoInvestimento.EXCLUIR_MOVIMENTACAO;
+		return this.salvarDadosInvestimento();
+	}
 
+	public String salvarDadosInvestimento() {
+		try {
+			switch (operacaoInvestimento) {
+				case SALVAR_RESUMO : entity.criarResumoInvestimento(resumo); break;
+				case SALVAR_MOVIMENTACAO : entity.movimentarInvestimento(movimentacao); break;
+				case EXCLUIR_MOVIMENTACAO : 
+					entity.excluirMovimentacao(movimentacao);
+					movimentacoesInvestimento.clear();
+					this.selecionarMovimentacoesInvestimento();
+				case EDITAR_MOVIMENTACAO : 
+				case EDITAR_RESUMO : // Sempre estou trabalhando com a mesma referência do resumo selecionado do List
+									// Isso faz que seja desnecessário fazer qualquer operação. Basta alterar os valores
+									// e pedir para salvar o investimento como um todo.
+				default : 
+			}
+			getService().alterar(entity);
+			infoMessage("Dados do investimento salvos com sucesso!");
+			return this.voltarInvestimento();
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
+		return "";
+	}
+	
 	public void atualizaListaInvestimento() {
 		listEntity = getService().buscarPorTipoInvestimentoEUsuario(tipoSelecionado, getUsuarioLogado());
 	}

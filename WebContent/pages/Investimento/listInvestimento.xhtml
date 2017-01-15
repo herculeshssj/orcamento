@@ -101,7 +101,7 @@
 			</f:facet>
 			
 			<label>Descrição:</label>
-			<h:outputText value="#{managedBean.entity.descricao}"/>
+			<h:outputText value="#{managedBean.entity.label}"/>
 			
 			<label>Banco:</label>
 			<h:outputText value="#{managedBean.entity.banco.label}"/>
@@ -135,13 +135,21 @@
 					</h:selectOneMenu>
 					<h:selectOneMenu value="#{managedBean.anoResumo}">
 						<f:selectItems value="#{managedBean.listaAnos}"/>
-					</h:selectOneMenu>
-					<h:commandLink title="Pesquisar" action="#{managedBean.selecionarResumoInvestimento}">
-						<h:graphicImage id="imgSearchResumo" height="48" width="48" value="/resources/images/svg/search.svg"/>
-					</h:commandLink>				
+					</h:selectOneMenu>					
+					<h:panelGroup>
+						<p:commandLink title="Pesquisar" actionListener="#{managedBean.selecionarResumoInvestimento}" update="gridResumo">
+							<h:graphicImage id="imgSearchResumo" height="48" width="48" value="/resources/images/svg/search.svg"/>
+						</p:commandLink>
+						<h:commandLink title="Novo resumo" action="#{managedBean.novoResumo}">
+	     					<h:graphicImage id="imgNewResumo" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+	     				</h:commandLink>
+						<h:commandLink title="Editar resumo" action="#{managedBean.editarResumo}">
+							<h:graphicImage id="imgEditResumo" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>						
+						</h:commandLink>					
+					</h:panelGroup>				
 				</h:panelGrid>
 				
-				<h:panelGrid columns="2">
+				<h:panelGrid id="gridResumo" columns="2">
 					<label>Período:</label>
 					<h:panelGroup>
 						<h:outputText value="#{managedBean.resumo.mes}" />
@@ -190,12 +198,17 @@
 					<h:selectOneMenu value="#{managedBean.anoMovimentacao}">
 						<f:selectItems value="#{managedBean.listaAnos}"/>
 					</h:selectOneMenu>
-					<h:commandLink title="Pesquisar" action="#{managedBean.selecionarMovimentacoesInvestimento}">
-						<h:graphicImage id="imgSearchMovimentacao" height="48" width="48" value="/resources/images/svg/search.svg"/>
-					</h:commandLink>				
+					<h:panelGroup>
+						<p:commandLink title="Pesquisar" actionListener="#{managedBean.selecionarMovimentacoesInvestimento}" update="tableMovimentacao">
+							<h:graphicImage id="imgSearchMovimentacao" height="48" width="48" value="/resources/images/svg/search.svg"/>
+						</p:commandLink>
+						<h:commandLink title="Nova movimentação" action="#{managedBean.novaMovimentacao}">
+	     					<h:graphicImage id="imgNewMovimentacao" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+	     				</h:commandLink>
+     				</h:panelGroup>				
 				</h:panelGrid>
 				
-				<h:dataTable value="#{managedBean.movimentacoesInvestimento}" var="item">
+				<h:dataTable id="tableMovimentacao" value="#{managedBean.movimentacoesInvestimento}" var="item">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Data"/>
@@ -208,7 +221,9 @@
 						<f:facet name="header">
 							<h:outputText value="Histórico"/>
 						</f:facet>
-						<h:outputText value="#{item.historico}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>							
+						<h:commandLink value="#{item.historico}" action="#{managedBean.editarMovimentacao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+							<f:setPropertyActionListener value="#{item}" target="#{managedBean.movimentacao}"/>
+						</h:commandLink>													
 					</h:column>
 					<h:column>
 						<f:facet name="header">
