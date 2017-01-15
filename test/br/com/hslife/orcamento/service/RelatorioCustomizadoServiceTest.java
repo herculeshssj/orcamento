@@ -308,10 +308,10 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 		relatorio = EntityInitializerFactory.createRelatorioCustomizado(usuario, "select c.descricao as nomeConta, l.tipoLancamento, l.descricao, l.dataPagamento, l.valorPago from lancamentoconta l inner join conta c on c.id = l.idConta where l.dataPagamento >= :dataInicio and l.dataPagamento <= :dataFim and c.idUsuario = " + usuario.getId(), colunas, parametros);
 		relatorioCustomizadoService.cadastrar(relatorio);
 		
-		Moeda moeda = EntityInitializerFactory.initializeMoeda(usuario);
+		Moeda moeda = EntityInitializerFactory.createMoeda(usuario);
 		moedaService.cadastrar(moeda);
 		
-		Conta conta = EntityInitializerFactory.initializeConta(usuario, moeda);
+		Conta conta = EntityInitializerFactory.createConta(usuario, moeda);
 		contaService.cadastrar(conta);
 		
 		for (int i = 1; i <= 5; i++) {

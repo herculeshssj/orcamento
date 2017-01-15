@@ -108,6 +108,9 @@ public class Investimento extends EntityPersistence {
 	@Temporal(TemporalType.DATE)
 	private Date terminoInvestimento;
 	
+	@Column(columnDefinition="text", nullable=true)
+	private String observacao;
+	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
@@ -191,14 +194,66 @@ public class Investimento extends EntityPersistence {
 		this.resumosInvestimento.add(resumo);
 	}
 	
-	private boolean existeResumoInvestimento(int mes, int ano) {
-		boolean encontrou = false;
-		// Varre o List de resumos a procura de um resumo com o mês/ano informados
+	public void investimentoInicial(Date inicioInvestimento, double valorInicial) {
+		// Verifica se a data não é nula e o valor inicial é maior que zero.
+		if (inicioInvestimento == null) 
+			throw new ValidationException("Não é possível continuar! Data informada é inválida!");
+		
+		if (valorInicial <= 0) 
+			throw new ValidationException("Valor inicial deve ser maior que zero!");
+		
+		// Por se tratar de um investimento inicial, o List e o Set são reiniciados
+		resumosInvestimento = new LinkedList<>();
+		movimentacoesInvestimento = new LinkedHashSet<>();
+		
+		// Cria um novo resumo
+		this.criaResumoInvestimento(inicioInvestimento);
+		
+		// Cria uma nova movimentação
+		this.movimentarInvestimento(TipoLancamento.RECEITA, "APLICAÇÃO", inicioInvestimento, valorInicial);
+	}
+	
+	private boolean existeResumoInvestimento(int mes, int ano) {		
+		if (this.buscarResumoInvestimento(mes, ano) != null)
+			return true;
+		
+		return false;
+	}
+	
+	public ResumoInvestimento buscarResumoInvestimento(int mes, int ano) {
+		// Itera todo o list de resumo, retornando aquele que tem o mês e ano selecionados
+		// Caso não encontre, retorna nulo
 		for (ResumoInvestimento resumo : this.resumosInvestimento) {
 			if (resumo.getMes() == mes & resumo.getAno() == ano)
-				return true; // encontrou
+				return resumo;
 		}
-		return encontrou;
+		return null;
+	}
+	
+	public Set<MovimentacaoInvestimento> buscarMovimentacoesInvestimento(int mes, int ano) {
+		Set<MovimentacaoInvestimento> movimentacoes = new LinkedHashSet<>();
+		
+		// Itera o set de movimentações, adicionando as movimentações cuja data pertence ao mês/ano informados
+		Calendar temp = Calendar.getInstance();
+		for (MovimentacaoInvestimento movimentacao : this.movimentacoesInvestimento) {
+			temp.setTime(movimentacao.getData());
+			
+			if ((temp.get(Calendar.MONTH) + 1) == mes && temp.get(Calendar.YEAR) == ano) 
+				movimentacoes.add(movimentacao);
+		}
+		
+		return movimentacoes;
+	}
+	
+	/**
+	 * Atributo usado pela interface para dizer se o investimento está
+	 * ativo ou não a partir da data de término do investimento. 
+	 */
+	public boolean isAtivo() {
+		if (this.terminoInvestimento != null)
+			return false;
+		
+		return true;
 	}
 	
 	public Long getId() {
@@ -279,5 +334,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setResumosInvestimento(List<ResumoInvestimento> resumosInvestimento) {
 		this.resumosInvestimento = resumosInvestimento;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 }

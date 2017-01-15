@@ -216,4 +216,21 @@ public class InvestimentoRepositoryTest extends AbstractTestRepositories {
 			fail("Objeto não encontrado!");
 		}
 	}
+	
+	@Test
+	public void testFindByTipoInvestimentoAndUsuario() {
+		investimentoRepository.save(investimento);
+		
+		List<Investimento> investimentoTest = investimentoRepository.findByTipoInvestimentoAndUsuario(investimento.getTipoInvestimento(), investimento.getUsuario());
+		
+		assertNotNull(investimentoTest);
+		
+		if (investimentoTest.isEmpty()) {
+			fail("List vazia!");
+		}
+		
+		if (!investimentoTest.contains(investimento)) {
+			fail("Objeto não encontrado!");
+		}
+	}
 }

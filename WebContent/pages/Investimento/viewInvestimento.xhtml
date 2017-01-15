@@ -1,4 +1,4 @@
-/***
+<!--
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -42,20 +42,41 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-***/
+  -->
 
-package br.com.hslife.orcamento.facade;
 
-import java.util.List;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-import br.com.hslife.orcamento.entity.Investimento;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoInvestimento;
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
-public interface IInvestimento extends ICRUDService<Investimento>{
+<ui:composition template="/templates/visualizar.xhtml">
+
+	<ui:param name="managedBean" value="#{bancoMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Banco:
+			<h:outputText id="txtNome" value="#{managedBean.entity.nome}" />				
+			
+			Número:
+			<h:outputText id="txtNumero" value="#{managedBean.entity.numero}" />				
+			
+			Padrão:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
+			
+			Ativo:
+			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+			
+		</h:panelGrid>
+		
+	</ui:define>
 	
-	public List<Investimento> buscarPorUsuario(Usuario usuario);
-	
-	public List<Investimento> buscarPorTipoInvestimentoEUsuario(TipoInvestimento tipoInvestimento, Usuario usuario);
-	
-}
+</ui:composition>
+</html>

@@ -2557,6 +2557,7 @@ create table investimento (
 	cnpj varchar(14) not null,
 	inicioInvestimento date not null,
 	terminoInvestimento date null,
+	observacao text null,
 	idUsuario bigint not null,
 	primary key(id)
 ) Engine=InnoDB;

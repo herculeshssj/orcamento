@@ -197,10 +197,27 @@ public class InvestimentoServiceTest extends AbstractTestServices {
 	}
 	
 	@Test
-	public void testFindByUsuario() {
+	public void testBuscarPorUsuario() {
 		investimentoService.cadastrar(investimento);
 		
 		List<Investimento> investimentoTest = investimentoService.buscarPorUsuario(usuario);
+		
+		assertNotNull(investimentoTest);
+		
+		if (investimentoTest.isEmpty()) {
+			fail("List vazia!");
+		}
+		
+		if (!investimentoTest.contains(investimento)) {
+			fail("Objeto não encontrado!");
+		}
+	}
+	
+	@Test
+	public void testBuscarPorTipoInvestimentoEUsuario() {
+		investimentoService.cadastrar(investimento);
+		
+		List<Investimento> investimentoTest = investimentoService.buscarPorTipoInvestimentoEUsuario(investimento.getTipoInvestimento(), investimento.getUsuario());
 		
 		assertNotNull(investimentoTest);
 		

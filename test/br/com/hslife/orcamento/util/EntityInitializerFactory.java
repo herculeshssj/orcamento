@@ -352,6 +352,7 @@ public class EntityInitializerFactory {
 		investimento.setDescricao("Investimento de teste");
 		investimento.setTipoInvestimento(TipoInvestimento.FUNDO_INVESTIMENTO);
 		investimento.setInicioInvestimento(new Date());
+		investimento.setObservacao("Observação sobre o investimento de teste");
 		investimento.setUsuario(usuario);
 		
 		investimento.criaResumoInvestimento(new Date());
