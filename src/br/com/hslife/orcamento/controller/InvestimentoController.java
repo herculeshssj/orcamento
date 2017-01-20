@@ -123,6 +123,17 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		movimentacao = null;
 		resumo = null;
 		movimentacoesInvestimento = null;
+		
+		// Pega o mês/ano atual
+		Calendar temp = Calendar.getInstance();
+		int mes = temp.get(Calendar.MONTH) + 1;
+		int ano = temp.get(Calendar.YEAR);
+		
+		// Já deixa marcado o mês/ano atual no resumo e na movimentação
+		mesResumo = mes;
+		anoResumo = ano;
+		mesMovimentacao = mes;
+		anoMovimentacao = ano;
 	}
 	
 	@Override
