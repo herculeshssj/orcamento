@@ -110,16 +110,19 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		entity = new Investimento();
 		listEntity = new ArrayList<Investimento>();		
 		tipoSelecionado = null;
+		movimentacao = null;
+		resumo = null;
+		movimentacoesInvestimento = null;
+		investimentoInicial = 0;
 	}
 	
 	@Override
 	public void find() {
-		// Método em stand-by
-//		try {
-//			listEntity = getService().buscarPorTipoInvestimentoEUsuario(tipoSelecionado, getUsuarioLogado());
-//		} catch (ValidationException | BusinessException be) {
-//			errorMessage(be.getMessage());
-//		}
+		// Limpa as variáveis usadas para os dados do resumo e 
+		// movimentação
+		movimentacao = null;
+		resumo = null;
+		movimentacoesInvestimento = null;
 	}
 	
 	@Override
@@ -154,6 +157,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Override
 	public String save() {
+		String retorno = null;
 		try {
 			
 			entity.setUsuario(getUsuarioLogado());
@@ -161,12 +165,13 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 			if (this.operation.equals("create"))
 				entity.investimentoInicial(entity.getInicioInvestimento(), investimentoInicial);
 			
-			return super.save();
+			retorno = super.save();
+			initializeEntity();
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		
-		return "";
+		return retorno;
 	}
 	
 	public String encerrarInvestimento() {
@@ -239,7 +244,11 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		try {
 			switch (operacaoInvestimento) {
 				case SALVAR_RESUMO : entity.criarResumoInvestimento(resumo); break;
-				case SALVAR_MOVIMENTACAO : entity.movimentarInvestimento(movimentacao); break;
+				case SALVAR_MOVIMENTACAO : 
+					entity.movimentarInvestimento(movimentacao);
+					movimentacoesInvestimento.clear();
+					this.selecionarMovimentacoesInvestimento();
+					break;
 				case EXCLUIR_MOVIMENTACAO : 
 					entity.excluirMovimentacao(movimentacao);
 					movimentacoesInvestimento.clear();
