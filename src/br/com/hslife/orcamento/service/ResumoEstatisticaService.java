@@ -72,8 +72,10 @@ import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
+import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.ResumoInvestimento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
@@ -89,8 +91,10 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IContaCompartilhada;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
@@ -125,6 +129,12 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Autowired
 	private IContaCompartilhada contaCompartilhadaService;
 	
+	@Autowired
+	private IInvestimento investimentoService;
+	
+	@Autowired
+	private IMoeda moedaService; //FIXME remover pois o investimento possui moeda
+	
 	/*** Declaração dos Getters dos serviços ***/
 	
 	public IFechamentoPeriodo getFechamentoPeriodoService() {
@@ -149,6 +159,14 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 
 	public IContaCompartilhada getContaCompartilhadaService() {
 		return contaCompartilhadaService;
+	}
+
+	public IInvestimento getInvestimentoService() {
+		return investimentoService;
+	}
+
+	public IMoeda getMoedaService() {
+		return moedaService;
 	}
 
 	/*** Declaração dos componentes ***/
@@ -258,7 +276,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		}
 		
 		// Retorna a lista de saldos atuais
-		return saldoAtualContas;
+		return this.incorporarInvestimentos(saldoAtualContas);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -980,5 +998,41 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		} else {
 			return lancamento.getValorPago();
 		}
-	}	
+	}
+	
+	/*
+	 * Incorpora os investimentos para compor o saldo atual das contas, de modo que o valor total
+	 * represente o patrimônio ativo do usuário.
+	 */
+	private List<SaldoAtualConta> incorporarInvestimentos(List<SaldoAtualConta> saldosAtualContas) {
+		// Traz todos os investimento do usuário
+		List<Investimento> investimentos = getInvestimentoService().buscarPorUsuario(getUsuarioComponent().getUsuarioLogado());
+		
+		// Pega o mês/ano atual
+		Calendar temp = Calendar.getInstance();
+		int mes = temp.get(Calendar.MONTH) + 1;
+		int ano = temp.get(Calendar.YEAR);
+		
+		// Itera os investimentos
+		for (Investimento investimento : investimentos) {
+			
+			ResumoInvestimento resumo = investimento.buscarResumoInvestimento(mes, ano);
+			if (resumo == null)
+				resumo = new ResumoInvestimento(mes, ano);
+			
+			SaldoAtualConta saldo = new SaldoAtualConta();
+			saldo.setAtivo(investimento.isAtivo());
+			saldo.setDescricaoConta(investimento.getLabel());
+			saldo.setMoedaConta(getMoedaService().buscarPadraoPorUsuario(investimento.getUsuario()));
+			saldo.setTipoConta(TipoConta.OUTROS);			
+			saldo.setSaldoPeriodo(resumo.getAplicacao() - resumo.getResgate());
+			saldo.setSaldoRegistrado(resumo.getRendimentoBruto() - (resumo.getImpostoRenda() + resumo.getIof()));
+			saldo.setSaldoAtual(saldo.getSaldoPeriodo() + saldo.getSaldoRegistrado());
+			
+			// Inclui o saldo no List
+			saldosAtualContas.add(saldo);
+		}
+		
+		return saldosAtualContas;
+	}
 }
