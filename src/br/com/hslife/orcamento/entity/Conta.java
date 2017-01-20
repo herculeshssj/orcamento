@@ -72,6 +72,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="conta")
@@ -142,8 +143,28 @@ public class Conta extends EntityPersistence {
 	@OneToMany(mappedBy="conta", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
 	private Set<ContaConjunta> contasConjunta = new TreeSet<>();
 	
+	/*** Atributos usado pelo Panorama dos Cadastros ***/
 	@Transient
 	private List<PanoramaCadastro> panoramasCadastro;
+	
+	@Transient
+	private int quantPanoramaCadastro;
+	
+	@Transient
+	private double totalPanoramaCadastro;
+	
+	@Transient
+	private int quantDebitoPanoramaCadastro;
+	
+	@Transient
+	private int quantCreditoPanoramaCadastro;
+	
+	@Transient
+	private double totalDebitoPanoramaCadastro;
+	
+	@Transient
+	private double totalCreditoPanoramaCadastro;
+	/*** Atributos usado pelo Panorama dos Cadastros ***/
 	
 	public Conta() {
 		ativo = true;
@@ -169,6 +190,18 @@ public class Conta extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de conta", this.tipoConta);
 		EntityPersistenceUtil.validaCampoNulo("Data de abertura", this.dataAbertura);
+	}
+	
+	public String getStringTotalPanoramaCadastro() { //FIXME usar o símbolo monetário da moeda padrão
+		return "R$ " + Util.arredondar(this.totalPanoramaCadastro);
+	}
+	
+	public String getStringTotalCreditoPanoramaCadastro() { //FIXME usar o símbolo monetário da moeda padrão
+		return "R$ " + Util.arredondar(this.totalCreditoPanoramaCadastro);
+	}
+	
+	public String getStringTotalDebitoPanoramaCadastro() { //FIXME usar o símbolo monetário da moeda padrão
+		return "R$ " + Util.arredondar(this.totalDebitoPanoramaCadastro);
 	}
 
 	public Banco getBanco() {
@@ -321,5 +354,53 @@ public class Conta extends EntityPersistence {
 
 	public void setContasConjunta(Set<ContaConjunta> contasConjunta) {
 		this.contasConjunta = contasConjunta;
+	}
+
+	public int getQuantPanoramaCadastro() {
+		return quantPanoramaCadastro;
+	}
+
+	public void setQuantPanoramaCadastro(int quantPanoramaCadastro) {
+		this.quantPanoramaCadastro = quantPanoramaCadastro;
+	}
+
+	public double getTotalPanoramaCadastro() {
+		return totalPanoramaCadastro;
+	}
+
+	public void setTotalPanoramaCadastro(double totalPanoramaCadastro) {
+		this.totalPanoramaCadastro = totalPanoramaCadastro;
+	}
+
+	public int getQuantDebitoPanoramaCadastro() {
+		return quantDebitoPanoramaCadastro;
+	}
+
+	public void setQuantDebitoPanoramaCadastro(int quantDebitoPanoramaCadastro) {
+		this.quantDebitoPanoramaCadastro = quantDebitoPanoramaCadastro;
+	}
+
+	public int getQuantCreditoPanoramaCadastro() {
+		return quantCreditoPanoramaCadastro;
+	}
+
+	public void setQuantCreditoPanoramaCadastro(int quantCreditoPanoramaCadastro) {
+		this.quantCreditoPanoramaCadastro = quantCreditoPanoramaCadastro;
+	}
+
+	public double getTotalDebitoPanoramaCadastro() {
+		return totalDebitoPanoramaCadastro;
+	}
+
+	public void setTotalDebitoPanoramaCadastro(double totalDebitoPanoramaCadastro) {
+		this.totalDebitoPanoramaCadastro = totalDebitoPanoramaCadastro;
+	}
+
+	public double getTotalCreditoPanoramaCadastro() {
+		return totalCreditoPanoramaCadastro;
+	}
+
+	public void setTotalCreditoPanoramaCadastro(double totalCreditoPanoramaCadastro) {
+		this.totalCreditoPanoramaCadastro = totalCreditoPanoramaCadastro;
 	}
 }

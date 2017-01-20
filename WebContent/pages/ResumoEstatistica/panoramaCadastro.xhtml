@@ -133,7 +133,21 @@
 					<h:outputText value="#{item.valorDebito}">
 						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
-				</p:column>
+				</p:column>				
+				<p:columnGroup type="footer">
+					<p:row rendered="#{managedBean.cadastroSelecionado == 'CATEGORIA'}">
+						<p:column footerText="Total" style="text-align:right"/>
+						<p:column footerText="#{conta.quantPanoramaCadastro}" style="text-align:center"/>
+						<p:column footerText="#{conta.stringTotalPanoramaCadastro}" style="text-align:center"/>							
+					</p:row>
+					<p:row rendered="#{managedBean.cadastroSelecionado != 'CATEGORIA'}">
+						<p:column footerText="Total" style="text-align:right;"/>
+						<p:column footerText="#{conta.quantCreditoPanoramaCadastro}" style="text-align: center; vertical-align: middle; color: #0000FF;"/>
+						<p:column footerText="#{conta.stringTotalCreditoPanoramaCadastro}" style="text-align: center; vertical-align: middle; color: #0000FF;"/>
+						<p:column footerText="#{conta.quantDebitoPanoramaCadastro}" style="text-align: center; vertical-align: middle; color: #FF0000;"/>
+						<p:column footerText="#{conta.stringTotalDebitoPanoramaCadastro}" style="text-align: center; vertical-align: middle; color: #FF0000;"/>
+					</p:row>
+			</p:columnGroup>
 			</p:subTable>
 		</p:dataTable>
 	
