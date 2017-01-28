@@ -2612,3 +2612,6 @@ create table investimento_movimentacaoinvestimento (
 
 alter table investimento_movimentacaoinvestimento add constraint fk_movimentacaoinvestimento_investimento foreign key (investimento_id) references investimento(id);
 alter table investimento_movimentacaoinvestimento add constraint fk_movimentacaoinvestimento foreign key(movimentacoesInvestimento_id) references movimentacaoinvestimento(id);
+
+-- Correção das casas decimais no campo rendimentoLiquido da tabela resumoinvestimento - Github Issue #246
+alter table resumoinvestimento change column `rendimentoLiquido` `rendimentoLiquido` decimal(18,2) not null default 0.00;
