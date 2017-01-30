@@ -961,15 +961,21 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				if (cadastro.equals(CadastroSistema.CATEGORIA)) {
 					panoramas.get(ano).setQuantidade(panoramas.get(ano).getQuantidade() + 1);
 					panoramas.get(ano).setValor(panoramas.get(ano).getValor() + this.getValorPagoConvertido(lancamento));
+					conta.setQuantPanoramaCadastro(conta.getQuantPanoramaCadastro() + 1);
+					conta.setTotalPanoramaCadastro(conta.getTotalPanoramaCadastro() + this.getValorPagoConvertido(lancamento));
 				} else {
 					switch (lancamento.getTipoLancamento()) {
 						case RECEITA :
 							panoramas.get(ano).setQuantidadeCredito(panoramas.get(ano).getQuantidadeCredito() + 1);
 							panoramas.get(ano).setValorCredito(panoramas.get(ano).getValorCredito() + this.getValorPagoConvertido(lancamento));
+							conta.setQuantCreditoPanoramaCadastro(conta.getQuantCreditoPanoramaCadastro() + 1);
+							conta.setTotalCreditoPanoramaCadastro(conta.getTotalCreditoPanoramaCadastro() + this.getValorPagoConvertido(lancamento));
 							break;
 						case DESPESA : 
 							panoramas.get(ano).setQuantidadeDebito(panoramas.get(ano).getQuantidadeDebito() + 1);
 							panoramas.get(ano).setValorDebito(panoramas.get(ano).getValorDebito() + this.getValorPagoConvertido(lancamento));
+							conta.setQuantDebitoPanoramaCadastro(conta.getQuantDebitoPanoramaCadastro() + 1);
+							conta.setTotalDebitoPanoramaCadastro(conta.getTotalDebitoPanoramaCadastro() + this.getValorPagoConvertido(lancamento));
 							break;
 					}
 				}
