@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -192,16 +193,16 @@ public class Conta extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Data de abertura", this.dataAbertura);
 	}
 	
-	public String getStringTotalPanoramaCadastro() { //FIXME usar o símbolo monetário da moeda padrão
-		return "R$ " + Util.arredondar(this.totalPanoramaCadastro);
+	public String getStringTotalPanoramaCadastro() { 
+		return this.moeda.getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(this.totalPanoramaCadastro));
 	}
 	
-	public String getStringTotalCreditoPanoramaCadastro() { //FIXME usar o símbolo monetário da moeda padrão
-		return "R$ " + Util.arredondar(this.totalCreditoPanoramaCadastro);
+	public String getStringTotalCreditoPanoramaCadastro() { 
+		return this.moeda.getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(this.totalCreditoPanoramaCadastro));
 	}
 	
-	public String getStringTotalDebitoPanoramaCadastro() { //FIXME usar o símbolo monetário da moeda padrão
-		return "R$ " + Util.arredondar(this.totalDebitoPanoramaCadastro);
+	public String getStringTotalDebitoPanoramaCadastro() { 
+		return this.moeda.getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(this.totalDebitoPanoramaCadastro));
 	}
 
 	public Banco getBanco() {
