@@ -47,13 +47,12 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum TipoInvestimento {
-	CAPITALIZACAO("Capitalização"),
-	PREVIDENCIA("Previdência"), 
-	FUNDO_INVESTIMENTO("Fundo de Investimento"), 
-	CDB_CDI("CDB/CDI"), 
-	LCI_LCA("LCI/LCA"), 
-	TESOURO_DIRETO("Tesouro Direto"), 
-	ACOES("Ações");
+	ACOES("Ações"),
+	CDB_CDI("CDB/CDI"),
+	FUNDO_INVESTIMENTO("Fundo de Investimento"),
+	LCI_LCA("LCI/LCA"),
+	PREVIDENCIA("Previdência"),
+	TESOURO_DIRETO("Tesouro Direto");
 	
 	private String descricao;
 	

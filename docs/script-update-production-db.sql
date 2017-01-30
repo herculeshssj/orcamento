@@ -91,8 +91,8 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Correção das casas decimais no campo rendimentoLiquido da tabela resumoinvestimento - Github Issue #246
-	alter table resumoinvestimento change column `rendimentoLiquido` `rendimentoLiquido` decimal(18,2) not null default 0.00;
+	-- Extinguindo com a capitalização - Github Issue #247
+	update investimento set tipoInvestimento = 'FUNDO_INVESTIMENTO' where tipoInvestimento = 'CAPITALIZACAO';
 	
     /*** Fim do bloco de atualizações da base ***/
     
