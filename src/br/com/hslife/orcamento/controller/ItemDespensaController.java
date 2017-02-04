@@ -357,6 +357,15 @@ public class ItemDespensaController extends AbstractCRUDController<ItemDespensa>
 		}
 	}
 	
+	public List<ItemDespensa> getItemDespensaVencido() {
+		try {
+			return getService().buscarItensDespesaVencidos();
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
 	public List<Despensa> getListaDespensa() {
 		try {
 			return despensaService.buscarTodosPorUsuario(getUsuarioLogado());

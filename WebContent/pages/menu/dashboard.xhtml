@@ -144,28 +144,30 @@
 		  		</h:dataTable>
 	  		</h:panelGroup>
 	  		
-	  		<h5>Itens de despensa vencidos</h5>
-			
-			<h:dataTable value="#{agendaMB.agendamentosDoDia}" var="item">
-				<h:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Descrição"/>
-					</f:facet>
-					<h:outputText value="#{item.descricao}" />
-		  		</h:column>
-		  		<h:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Tipo"/>
-					</f:facet>
-					<h:outputText value="#{item.tipoAgendamento}" />
-		  		</h:column>  			
-		  		<h:column style="text-align: center; vertical-align: middle;">
-					<f:facet name="header">
-						<h:outputText value="Data"/>
-					</f:facet>
-					<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
-		  		</h:column>
-	  		</h:dataTable>
+	  		<h:panelGroup rendered="#{not empty itemDespensaMB.itemDespensaVencido}">
+		  		<h5>Itens de despensa vencidos</h5>
+				
+				<h:dataTable value="#{itemDespensaMB.itemDespensaVencido}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>
+						</f:facet>
+						<h:outputText value="#{item.descricao}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Unidade de Medida"/>
+						</f:facet>
+						<h:outputText value="#{item.unidadeMedida.descricao}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Despensa"/>
+						</f:facet>
+						<h:outputText value="#{item.despensa.descricao}" />
+			  		</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
   		
   		</h:form>
      

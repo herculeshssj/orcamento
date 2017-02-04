@@ -54,6 +54,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Despensa;
 import br.com.hslife.orcamento.entity.ItemDespensa;
 import br.com.hslife.orcamento.entity.MovimentoItemDespensa;
@@ -68,12 +70,26 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 	
 	@Autowired
 	private ItemDespensaRepository repository;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
+	
+	@Autowired
+	public OpcaoSistemaComponent opcaoSistemaComponent;
 
 	public ItemDespensaRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 	
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
+	}
+
+	public OpcaoSistemaComponent getOpcaoSistemaComponent() {
+		return opcaoSistemaComponent;
+	}
+
 	@Override
 	public void registrarCompraConsumo(ItemDespensa entity, MovimentoItemDespensa movimentoItemDespensa) {
 		if (movimentoItemDespensa.getOperacaoDespensa().equals(OperacaoDespensa.CONSUMO) && (entity.getQuantidadeAtual() - movimentoItemDespensa.getQuantidade()) < 0) {
@@ -163,5 +179,27 @@ public class ItemDespensaService extends AbstractCRUDService<ItemDespensa> imple
 		entity.setValidade(null);
 		entity.setValor(0);
 		getRepository().update(entity);
+	}
+	
+	@Override
+	public List<ItemDespensa> buscarItensDespesaVencidos() {
+		// Retorna todos os itens de despensa do usuário que são perecíveis e não estão arquivados
+		List<ItemDespensa> itens = getRepository().findAllPerecivelByUsuario(getUsuarioComponent().getUsuarioLogado());
+		
+		// Se a opção de estoque estiver ativada, verifica se o item já venceu pela data de validade
+		if (getOpcaoSistemaComponent().getControlarEstoqueItemDespensa()) {
+			
+			List<ItemDespensa> itensVencidos = new ArrayList<>();
+			
+			for (ItemDespensa item : itens) {
+				if (item.getValidade() != null && item.getValidade().before(new Date())) {
+					itensVencidos.add(item);
+				}
+			}
+			return itensVencidos;
+		}
+		
+		
+		return new ArrayList<>();
 	}
 }

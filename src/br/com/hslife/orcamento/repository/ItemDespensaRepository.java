@@ -93,6 +93,16 @@ public class ItemDespensaRepository extends AbstractCRUDRepository<ItemDespensa>
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<ItemDespensa> findAllPerecivelByUsuario(Usuario usuario) {
+		String hql = "select item from ItemDespensa as item inner join item.despensa as des where des.usuario.id = :idUsuario and item.perecivel = :perecivel and item.arquivado = :arquivado order by item.descricao asc";
+		Query query = getSession().createQuery(hql);
+		query.setLong("idUsuario", usuario.getId());
+		query.setBoolean("perecivel", true);
+		query.setBoolean("arquivado", false);
+		return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<ItemDespensa> findByDespensa(Despensa despensa) {
 		Criteria criteria = getSession().createCriteria(ItemDespensa.class);
 		criteria.add(Restrictions.eq("despensa.id", despensa.getId()));

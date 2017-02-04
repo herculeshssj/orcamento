@@ -70,4 +70,6 @@ public interface IItemDespensa extends ICRUDService<ItemDespensa> {
 	public void desfazerRegistroCompraConsumo(ItemDespensa entity);
 	
 	public void apagarHistorico(ItemDespensa entity);
+	
+	public List<ItemDespensa> buscarItensDespesaVencidos();
 }
