@@ -67,4 +67,6 @@ public interface IDividaTerceiro extends ICRUDService<DividaTerceiro>{
 	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento);
 	
 	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa);
+	
+	public List<DividaTerceiro> buscarDividaTerceiroAtrasado(int dias);
 }

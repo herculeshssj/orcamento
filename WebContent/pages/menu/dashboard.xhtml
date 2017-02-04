@@ -64,7 +64,87 @@
 	
 		<h:form id="frmDashboard">
 		
-			<h5>Agenda do dia</h5>
+			<h:panelGroup rendered="#{not empty agendaMB.agendamentosDoDia}">
+				<h5>Agenda do dia</h5>
+				
+				<h:dataTable value="#{agendaMB.agendamentosDoDia}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>
+						</f:facet>
+						<h:outputText value="#{item.descricao}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Tipo"/>
+						</f:facet>
+						<h:outputText value="#{item.tipoAgendamento}" />
+			  		</h:column>  			
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Data"/>
+						</f:facet>
+						<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
+			  		</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
+	  		
+	  		
+	  		<h:panelGroup rendered="#{not empty dividaTerceiroMB.dividaTerceiroAtrasado}">
+		  		<h5>Dívidas de favorecidos</h5>
+				
+				<h:dataTable value="#{dividaTerceiroMB.dividaTerceiroAtrasado}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Favorecido" />
+						</f:facet>
+						<h:outputText value="#{item.favorecido.nome}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Valor"/>
+						</f:facet>
+						<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+						<h:outputText value="#{item.valorDivida}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:convertNumber type="currency" pattern="###.##"/>
+						</h:outputText>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Pago"/>
+						</f:facet>
+						<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+						<h:outputText value="#{item.totalPago}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:convertNumber type="currency" pattern="###.##"/>
+						</h:outputText>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="À pagar"/>
+						</f:facet>
+						<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+						<h:outputText value="#{item.totalAPagar}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:convertNumber type="currency" pattern="###.##"/>
+						</h:outputText>
+					</h:column>
+					<p:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Último pagamento realizado" />
+						</f:facet>
+						<h:outputText value="#{item.ultimoPagamentoEfetuado}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:converter converterId="dateConverter"/>
+						</h:outputText>
+					</p:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Dias em atraso" />
+						</f:facet>
+						<h:outputText value="#{item.quantidadeDiasUltimoPagamento}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+					</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
+	  		
+	  		<h5>Itens de despensa vencidos</h5>
 			
 			<h:dataTable value="#{agendaMB.agendamentosDoDia}" var="item">
 				<h:column style="text-align: center; vertical-align: middle;">

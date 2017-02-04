@@ -267,6 +267,16 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		return "/pages/DividaTerceiro/visualizarDocumento";
 	}
 	
+	public List<DividaTerceiro> getDividaTerceiroAtrasado() {
+		try {
+			// Busca todas as dívidas que não receberam pagamento a mais de 30 dias
+			return getService().buscarDividaTerceiroAtrasado(30);
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
 	public double getCreditoAReceber() {
 		try {
 			List<DividaTerceiro> dividas = getService().buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(null, TipoCategoria.CREDITO, StatusDivida.VIGENTE, getUsuarioLogado());

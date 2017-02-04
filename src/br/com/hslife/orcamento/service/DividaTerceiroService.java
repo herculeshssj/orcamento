@@ -46,12 +46,14 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
@@ -68,12 +70,19 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	
 	@Autowired
 	private DividaTerceiroRepository repository;
+	
+	@Autowired
+	private UsuarioComponent usuarioComponent;
 
 	public DividaTerceiroRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
 	
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
+	}
+
 	@Override
 	public List<DividaTerceiro> buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(Favorecido favorecido, 
 			TipoCategoria tipoCategoria, StatusDivida statusDivida, Usuario usuario) {
@@ -163,5 +172,18 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		entity.setJustificativa(j.toString());
 		entity.setStatusDivida(StatusDivida.ENCERRADO);
 		getRepository().update(entity);
+	}
+	
+	@Override
+	public List<DividaTerceiro> buscarDividaTerceiroAtrasado(int dias) {
+		List<DividaTerceiro> dividasAtivas = new ArrayList<>();
+		
+		for (DividaTerceiro divida : getRepository().findFavorecidoOrTipoCategoriaOrStatusDividaByUsuario(null, null, StatusDivida.VIGENTE, getUsuarioComponent().getUsuarioLogado())) {
+			if (divida.getQuantidadeDiasUltimoPagamento() > dias) {
+				dividasAtivas.add(divida);
+			}
+		}
+		
+		return dividasAtivas;
 	}
 }

@@ -409,4 +409,20 @@ public class Util {
     	return obj == null || obj.trim().isEmpty();
     }
     
+    // Calcula a quantidade de dias entre duas datas
+    public static int quantidadeDias(Date inicio, Date fim) {
+    	Calendar dataInicial = Calendar.getInstance();
+    	dataInicial.setTime(inicio);
+    	
+    	Calendar dataFinal = Calendar.getInstance();
+    	dataFinal.setTime(fim);
+    	
+    	int contador = 0;
+    	while (dataInicial.before(dataFinal)) {
+    		dataInicial.add(Calendar.DAY_OF_YEAR, 1);
+    		contador++;
+    	}
+    	
+    	return contador;
+    }
 }

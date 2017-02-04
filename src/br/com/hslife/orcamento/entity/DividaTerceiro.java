@@ -175,6 +175,36 @@ public class DividaTerceiro extends EntityPersistence {
 		
 		return Util.arredondar(this.valorDivida - total);
 	}
+	
+	/*
+	 * Retorna a quantidade de dias desde o último pagamento realizado
+	 */
+	public int getQuantidadeDiasUltimoPagamento() {
+		int quantDias = 0;
+		
+		// Pega o último pagamento efetuado caso exista
+		if (this.pagamentos != null && !this.pagamentos.isEmpty()) {
+			PagamentoDividaTerceiro pagamento = this.pagamentos.get(this.pagamentos.size() - 1);
+			quantDias = Util.quantidadeDias(pagamento.getDataPagamento(), new Date());
+		} else {
+			// Calcula em cima da data de negociação
+			quantDias = Util.quantidadeDias(this.dataNegociacao, new Date());
+		}
+		
+		return quantDias;
+	}
+	
+	/*
+	 * Retorna a data do último pagamento efetuado. Se nenhum pagamento foi realizado
+	 * retorna data da negociação
+	 */
+	public Date getUltimoPagamentoEfetuado() {
+		if (this.pagamentos != null && !this.pagamentos.isEmpty()) {
+			return pagamentos.get(this.pagamentos.size() - 1).getDataPagamento();
+		} else {
+			return this.dataNegociacao;
+		}
+	}
 
 	public Long getId() {
 		return id;
