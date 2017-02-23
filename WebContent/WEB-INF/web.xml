@@ -58,6 +58,7 @@
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -86,6 +87,17 @@
 	    <param-name>primefaces.THEME</param-name>  
 	    <param-value>bootstrap</param-value>  
 	</context-param> 
+	
+	<!-- Configuração do Spring MVC para trabalhar com RESTful -->
+	<servlet>
+		<servlet-name>rest</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>rest</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
     
     <listener>
     	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
