@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="769" measuredWidth="940" measuredHeight="769"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Resumos,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="27">
+    <items x="5" y="0" width="40" height="27" text="Início"/>
+    <items x="45" y="0" width="52" height="27" text="Agenda"/>
+    <items x="97" y="0" width="63" height="27" text="Cadastros"/>
+    <items x="160" y="0" width="82" height="27" text="Lançamentos"/>
+    <items x="242" y="0" width="59" height="27" text="Resumos"/>
+    <items x="301" y="0" width="61" height="27" text="Despensa"/>
+    <items x="362" y="0" width="79" height="27" text="Documentos"/>
+    <items x="441" y="0" width="51" height="27" text="Opções"/>
+    <items x="492" y="0" width="42" height="27" text="Ajuda"/>
+    <items x="534" y="0" width="30" height="27" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Patrimônio" measuredWidth="122" measuredHeight="40">
+    <font size="18pt"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:SVGImage" id="113" x="80" y="357" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/add_image.svg"/>
+  <widgets xsi:type="model:Accordion" id="127" x="80" y="416" width="889" height="401" text="Imóvel&#xA;Veículo&#xA;Lancha&#xA;Cavalo de corrida" measuredWidth="889" measuredHeight="401" selection="0">
+    <items x="0" y="2" width="889" height="25" text="Imóvel"/>
+    <items x="0" y="326" width="889" height="25" text="Veículo"/>
+    <items x="0" y="351" width="889" height="25" text="Lancha"/>
+    <items x="0" y="376" width="889" height="25" text="Cavalo de corrida"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="128" x="99" y="464" text="Descrição:" measuredWidth="60" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="129" x="240" y="464" text="Imóvel" measuredWidth="42" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="130" x="99" y="528" text="Detalhes da aquisição:" measuredWidth="123" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="132" x="240" y="528" width="719" height="49" text="Aqui entra os detalhes da aquisição do bem patrimonial" measuredWidth="719" measuredHeight="49">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="133" x="99" y="592" text="Detalhes da saída:" measuredWidth="100" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="134" x="240" y="592" width="719" height="49" text="Aqui entra os detalhes da saída/venda/doação do bem patrimonial" measuredWidth="719" measuredHeight="49">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="135" x="944" y="544" width="121" height="65" text="Só aparece quando o bem foi vendido" measuredWidth="121" measuredHeight="65">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="136" x="99" y="496" text="Valor:" measuredWidth="36" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="137" x="240" y="496" text="R$ 100.000,00" measuredWidth="76" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="139" x="237" y="656" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/edit_image.svg"/>
+  <widgets xsi:type="model:SVGImage" id="140" x="304" y="656" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/remove_image.svg"/>
+  <widgets xsi:type="model:Tooltip" id="142" x="328" y="624" text="Só aparece quando está inativo." measuredWidth="178" measuredHeight="40">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="143" x="376" y="656" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/automotive.svg"/>
+  <widgets xsi:type="model:Note" id="144" x="360" y="703" text="Benfeitorias" measuredWidth="79" measuredHeight="29">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="145" x="458" y="656" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/area_chart.svg"/>
+  <widgets xsi:type="model:Note" id="146" x="452" y="703" text="Balanço" measuredWidth="59" measuredHeight="29">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
