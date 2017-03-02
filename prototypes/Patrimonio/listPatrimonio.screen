@@ -62,8 +62,8 @@
   <widgets xsi:type="model:Note" id="144" x="360" y="703" text="Benfeitorias" measuredWidth="79" measuredHeight="29">
     <font/>
   </widgets>
-  <widgets xsi:type="model:SVGImage" id="145" x="458" y="656" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/area_chart.svg"/>
-  <widgets xsi:type="model:Note" id="146" x="452" y="703" text="Balanço" measuredWidth="59" measuredHeight="29">
+  <widgets xsi:type="model:SVGImage" id="145" x="472" y="656" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/area_chart.svg"/>
+  <widgets xsi:type="model:Note" id="146" x="452" y="703" text="Lançamentos" measuredWidth="88" measuredHeight="29">
     <font/>
   </widgets>
   <hRuler/>

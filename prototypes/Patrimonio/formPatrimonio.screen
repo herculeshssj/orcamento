@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
-  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="1073" measuredWidth="940" measuredHeight="1073"/>
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="1089" measuredWidth="940" measuredHeight="1089"/>
   <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
   <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Resumos,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="27">
     <items x="5" y="0" width="40" height="27" text="Início"/>
@@ -21,16 +21,16 @@
   <widgets xsi:type="model:Label" id="126" x="80" y="376" text="Descrição:" measuredWidth="60" measuredHeight="23">
     <font/>
   </widgets>
-  <widgets xsi:type="model:Label" id="127" x="74" y="880" text="Detalhes da aquisição:" measuredWidth="123" measuredHeight="23">
+  <widgets xsi:type="model:Label" id="127" x="74" y="920" text="Detalhes da aquisição:" measuredWidth="123" measuredHeight="23">
     <font/>
   </widgets>
-  <widgets xsi:type="model:TextArea" id="128" x="235" y="880" width="719" height="49" text="Aqui entra os detalhes da aquisição do bem patrimonial" measuredWidth="719" measuredHeight="49">
+  <widgets xsi:type="model:TextArea" id="128" x="235" y="920" width="719" height="49" text="Aqui entra os detalhes da aquisição do bem patrimonial" measuredWidth="719" measuredHeight="49">
     <font/>
   </widgets>
-  <widgets xsi:type="model:Label" id="129" x="70" y="979" text="Detalhes da saída:" measuredWidth="100" measuredHeight="23">
+  <widgets xsi:type="model:Label" id="129" x="70" y="1019" text="Detalhes da saída:" measuredWidth="100" measuredHeight="23">
     <font/>
   </widgets>
-  <widgets xsi:type="model:TextArea" id="130" x="235" y="979" width="719" height="49" text="Aqui entra os detalhes da saída/venda/doação do bem patrimonial" measuredWidth="719" measuredHeight="49">
+  <widgets xsi:type="model:TextArea" id="130" x="235" y="1019" width="719" height="49" text="Aqui entra os detalhes da saída/venda/doação do bem patrimonial" measuredWidth="719" measuredHeight="49">
     <font/>
   </widgets>
   <widgets xsi:type="model:Label" id="131" x="80" y="416" text="Valor:" measuredWidth="36" measuredHeight="23">
@@ -114,14 +114,20 @@
   <widgets xsi:type="model:TextField" id="161" x="235" y="792" width="112" measuredWidth="112" measuredHeight="23">
     <font/>
   </widgets>
-  <widgets xsi:type="model:Label" id="162" x="74" y="944" text="Data de saída:" measuredWidth="79" measuredHeight="23">
+  <widgets xsi:type="model:Label" id="162" x="74" y="984" text="Data de saída:" measuredWidth="79" measuredHeight="23">
     <font/>
   </widgets>
-  <widgets xsi:type="model:DateField" id="163" x="235" y="944" width="137" text="  /  /  " measuredWidth="137" measuredHeight="23"/>
-  <widgets xsi:type="model:SVGImage" id="164" x="77" y="1048" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/undo.svg"/>
-  <widgets xsi:type="model:SVGImage" id="165" x="140" y="1048" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/ok.svg"/>
-  <widgets xsi:type="model:SVGImage" id="166" x="215" y="1048" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/checkmark.svg"/>
-  <widgets xsi:type="model:Note" id="167" x="271" y="1057" text="Ao clicar em Confirmar Inclusão de Patrimônio, ir para uma tela de confirmação." measuredWidth="442" measuredHeight="29">
+  <widgets xsi:type="model:DateField" id="163" x="235" y="984" width="137" text="  /  /  " measuredWidth="137" measuredHeight="23"/>
+  <widgets xsi:type="model:SVGImage" id="164" x="77" y="1088" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/undo.svg"/>
+  <widgets xsi:type="model:SVGImage" id="165" x="140" y="1088" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/ok.svg"/>
+  <widgets xsi:type="model:SVGImage" id="166" x="215" y="1088" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/checkmark.svg"/>
+  <widgets xsi:type="model:Note" id="167" x="271" y="1097" text="Ao clicar em Confirmar Inclusão de Patrimônio, ir para uma tela de confirmação." measuredWidth="442" measuredHeight="29">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="168" x="74" y="880" text="Moeda:" measuredWidth="46" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="169" x="235" y="880" width="272" text="Selecione uma moeda" measuredWidth="272" measuredHeight="23">
     <font/>
   </widgets>
   <hRuler/>

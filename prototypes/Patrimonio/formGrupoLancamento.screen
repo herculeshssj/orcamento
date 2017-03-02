@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="1153" measuredWidth="940" measuredHeight="1153"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Resumos,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="27">
+    <items x="5" y="0" width="40" height="27" text="Início"/>
+    <items x="45" y="0" width="52" height="27" text="Agenda"/>
+    <items x="97" y="0" width="63" height="27" text="Cadastros"/>
+    <items x="160" y="0" width="82" height="27" text="Lançamentos"/>
+    <items x="242" y="0" width="59" height="27" text="Resumos"/>
+    <items x="301" y="0" width="61" height="27" text="Despensa"/>
+    <items x="362" y="0" width="79" height="27" text="Documentos"/>
+    <items x="441" y="0" width="51" height="27" text="Opções"/>
+    <items x="492" y="0" width="42" height="27" text="Ajuda"/>
+    <items x="534" y="0" width="30" height="27" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Patrimônio - Grupo de Lançamentos" measuredWidth="393" measuredHeight="40">
+    <font size="18pt"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:SVGImage" id="164" x="77" y="1152" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/undo.svg"/>
+  <widgets xsi:type="model:Label" id="170" x="80" y="376" text="Descrição:" measuredWidth="60" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="171" x="144" y="376" width="145" measuredWidth="145" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="172" x="296" y="376" text="Início:" measuredWidth="38" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="173" x="333" y="376" width="96" text="  /  /  " measuredWidth="96" measuredHeight="23"/>
+  <widgets xsi:type="model:Label" id="174" x="443" y="376" text="Fim:" measuredWidth="29" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="175" x="470" y="376" width="96" text="  /  /  " measuredWidth="96" measuredHeight="23"/>
+  <widgets xsi:type="model:Combo" id="176" x="592" y="376" text="Selecione o tipo:" measuredWidth="114" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="177" x="672" y="312" text="Lançamento da Conta&#xD;&#xA;Lançamento Periódico" measuredWidth="130" measuredHeight="55">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="178" x="720" y="364" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/search.svg"/>
+  <widgets xsi:type="model:Table" id="179" x="77" y="416" width="884" height="137" text="Selecionar,Descrição, Data, Valor&#xD;&#xA;(), Lançamento 1, 10/01/2017, R$ 100&#xD;&#xA;(), Lançamento 1, 10/01/2017, R$ 100&#xD;&#xA;(), Lançamento 1, 10/01/2017, R$ 100&#xD;&#xA;(), Lançamento 1, 10/01/2017, R$ 100&#xD;&#xA;(), Lançamento 1, 10/01/2017, R$ 100" measuredWidth="884" measuredHeight="137" alternative="#eee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="181" x="80" y="591" text="Incluir lançamento" measuredWidth="102" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="182" x="168" y="552" text="Só pode selecionar um deles" measuredWidth="161" measuredHeight="40">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Accordion" id="183" x="83" y="689" width="414" height="328" text="2017&#xA;2016&#xA;2015&#xA;2014" measuredWidth="414" measuredHeight="328" selection="0">
+    <items x="0" y="2" width="414" height="25" text="2017"/>
+    <items x="0" y="253" width="414" height="25" text="2016"/>
+    <items x="0" y="278" width="414" height="25" text="2015"/>
+    <items x="0" y="303" width="414" height="25" text="2014"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Accordion" id="185" x="555" y="690" width="406" height="327" text="2017&#xA;2016&#xA;2015&#xA;2014" measuredWidth="406" measuredHeight="327" selection="0">
+    <items x="0" y="2" width="406" height="25" text="2017"/>
+    <items x="0" y="252" width="406" height="25" text="2016"/>
+    <items x="0" y="277" width="406" height="25" text="2015"/>
+    <items x="0" y="302" width="406" height="25" text="2014"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:VLine" id="186" x="520" y="689" height="328" measuredWidth="6" measuredHeight="328"/>
+  <widgets xsi:type="model:Label" id="187" x="224" y="624" text="Receitas" measuredWidth="161" measuredHeight="67">
+    <font size="43px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="188" x="680" y="624" text="Despesas" measuredWidth="181" measuredHeight="67">
+    <font size="43px"/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="190" x="93" y="725" width="394" height="188" text="Descrição, Data, Valor, Ações&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}" measuredWidth="394" measuredHeight="188" alternative="#eee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="191" x="561" y="725" width="394" height="188" text="Descrição, Data, Valor, Ações&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}&#xD;&#xA;Item, 01/01/2017, R$ 100, {delete}" measuredWidth="394" measuredHeight="188" alternative="#eee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="192" x="182" y="588" text="Caso o lançamento conta/periódico estiver presente, ele não pode mais ser adicionado." measuredWidth="477" measuredHeight="29">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="193" x="80" y="1112" text="Atualizar receitas/despesas" measuredWidth="144" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="194" x="237" y="1102" text="Atualiza os dados constantes no Grupo de Lançamento. Caso acha alguma mudança em um lançamento de conta ou &#xD;&#xA;lançamento periódicos, esta mudança é aplicada e os valores para receita e despesa do Grupo são atualizados." measuredWidth="639" measuredHeight="44" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="196" x="197" y="1024" text="R$ 120.000" measuredWidth="160" measuredHeight="53">
+    <font size="32px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="197" x="691" y="1032" text="R$ 100.000" measuredWidth="160" measuredHeight="53">
+    <font size="32px"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
