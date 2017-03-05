@@ -2618,3 +2618,78 @@ alter table resumoinvestimento change column `rendimentoLiquido` `rendimentoLiqu
 
 -- Extinguindo com a capitalização - Github Issue #247
 update investimento set tipoInvestimento = 'FUNDO_INVESTIMENTO' where tipoInvestimento = 'CAPITALIZACAO';
+
+-- Grupo de Lançamentos - Github Issue #252
+create table grupolancamento (
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	totalReceita decimal(18,2) not null,
+	totalDespesa decimal(18,2) not null,
+	idMoeda bigint not null,
+	primary key(id)
+) Engine=InnoDB;
+
+create table itemgrupolancamento (
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	tipoLancamento varchar(10) not null,
+	valor decimal(18,2) not null default 0.00,
+	idGrupoLancamento bigint not null,
+	idLancamentoConta bigint null,
+	idLancamentoPeriodico bigint null,
+	primary key(id)
+) Engine=InnoDB;
+
+alter table grupolancamento add constraint fk_moeda_grupolancamento foreign key (idMoeda) references moeda(id);
+
+alter table itemgrupolancamento add constraint fk_grupolancamento_itemgrupolancamento foreign key (idGrupoLancamento) references grupolancamento(id);
+alter table itemgrupolancamento add constraint fk_lancamentoconta_itemgrupolancamento foreign key (idLancamentoConta) references lancamentoconta(id);
+alter table itemgrupolancamento add constraint fk_lancamentoperiodico_itemgrupolancamento foreign key (idLancamentoPeriodico) references lancamentoperiodico(id);
+
+-- Patrimônio - Github Issue #252
+create table patrimonio (
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	detalheEntradaPatrimonio text not null,
+	valorPatrimonio decimal(18,2) not null default 0.00,
+	dataEntrada date not null,
+	formaAquisicao varchar(50) null,
+	localAquisicao varchar(50) null,
+	marca varchar(50) null,
+	numeroRegistro varchar(50) null,
+	tipo varchar(50) null,
+	garantia integer null,
+	dataSaida date null,
+	detalheSaidaPatrimonio text null,
+	ativo boolean,
+	idUsuario bigint not null,
+	idCategoriaDocumento bigint null,
+	idFavorecido bigint not null,
+	idGrupoLancamento bigint not null,
+	idMoeda bigint not null,
+	primary key(id)
+) Engine=InnoDB;
+
+alter table patrimonio add constraint fk_usuario_patrimonio foreign key (idUsuario) references usuario(id);
+alter table patrimonio add constraint fk_categoriadocumento_patrimonio foreign key (idCategoriaDocumento) references categoriadocumento(id);
+alter table patrimonio add constraint fk_favorecido_patrimonio foreign key (idFavorecido) references favorecido(id);
+alter table patrimonio add constraint fk_grupolancamento_patrimonio foreign key (idGrupoLancamento) references grupolancamento(id);
+alter table patrimonio add constraint fk_moeda_patrimonio foreign key (idMoeda) references moeda(id);
+
+-- Benfeitoria - Github Issue #252
+create table benfeitoria (
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	detalheBenfeitoria text not null,
+	valorBenfeitoria decimal(18,2) not null,
+	dataInicio date not null,
+	dateFim date null,
+	idCategoriaDocumento bigint null,
+	idPatrimonio bigint not null,
+	idGrupoLancamento bigint not null,
+	primary key(id)
+) Engine=InnoDB;
+
+alter table benfeitoria add constraint fk_patrimonio_benfetoria foreign key (idPatrimonio) references patrimonio(id);
+alter table benfeitoria add constraint fk_categoriadocumento_benfetoria foreign key (idCategoriaDocumento) references categoriadocumento(id);
+alter table benfeitoria add constraint fk_grupolancamento_benfetoria foreign key (idGrupoLancamento) references grupolancamento(id);
