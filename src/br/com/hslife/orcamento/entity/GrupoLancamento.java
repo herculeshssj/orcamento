@@ -46,6 +46,9 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,12 +56,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="banco")
+@Table(name="grupolancamento")
 @SuppressWarnings("serial")
 public class GrupoLancamento extends EntityPersistence {
 
@@ -66,112 +70,73 @@ public class GrupoLancamento extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=100, nullable=false)
-	private String nome;
+	@Column(length=50, nullable=false)
+	private String descricao;
 	
-	@Column(length=5, nullable=false)
-	private String numero;
+	@Column(nullable=false, precision=18, scale=2)
+	private double totalReceita;
+	
+	@Column(nullable=false, precision=18, scale=2)
+	private double totalDespesa;
 	
 	@Column
-	private boolean padrao;
-	
-	@Column 
 	private boolean ativo;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
+	@JoinColumn(name="idMoeda", nullable=false)
+	private Moeda moeda;
+	
+	@ManyToOne
+	@JoinColumn(name="idMoeda", nullable=false)
 	private Usuario usuario;
+	
+	@OneToMany(mappedBy="grupoLancamento")
+	private List<ItemGrupoLancamento> itens = new ArrayList<>(); 
 	
 	public GrupoLancamento() {
 		ativo = true;
 	}
 	
-	private GrupoLancamento(Builder builder) {
-		this.nome = builder.nome;
-		this.numero = builder.numero;
-		this.padrao = builder.padrao;
-		this.ativo = builder.ativo;
-		this.usuario = builder.usuario;
+	@Override
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 	}
-	
-	public static class Builder {
-		private String nome;
-		private String numero;
-		private boolean padrao;
-		private boolean ativo;
-		private Usuario usuario;
-		
-		public Builder nome(String nome) {
-			this.nome = nome;
-			return this;
-		}
-		
-		public Builder numero(String numero) {
-			this.numero = numero;
-			return this;
-		}
-		
-		public Builder padrao(boolean padrao) {
-			this.padrao = padrao;
-			return this;
-		}
-		
-		public Builder ativo(boolean ativo) {
-			this.ativo = ativo;
-			return this;
-		}
-		
-		public Builder usuario(Usuario usuario) {
-			this.usuario = usuario;
-			return this;
-		}
-		
-		public GrupoLancamento build() {
-			return new GrupoLancamento(this);
-		}
+
+	@Override
+	public String getLabel() {
+		return this.descricao;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	@Override
-	public String getLabel() {
-		return this.nome;
-	}
-	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
-	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	public String getNumero() {
-		return numero;
+	public double getTotalReceita() {
+		return totalReceita;
 	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setTotalReceita(double totalReceita) {
+		this.totalReceita = totalReceita;
 	}
 
-	public boolean isPadrao() {
-		return padrao;
+	public double getTotalDespesa() {
+		return totalDespesa;
 	}
 
-	public void setPadrao(boolean padrao) {
-		this.padrao = padrao;
+	public void setTotalDespesa(double totalDespesa) {
+		this.totalDespesa = totalDespesa;
 	}
 
 	public boolean isAtivo() {
@@ -182,6 +147,14 @@ public class GrupoLancamento extends EntityPersistence {
 		this.ativo = ativo;
 	}
 
+	public Moeda getMoeda() {
+		return moeda;
+	}
+
+	public void setMoeda(Moeda moeda) {
+		this.moeda = moeda;
+	}
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -189,4 +162,12 @@ public class GrupoLancamento extends EntityPersistence {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+
+	public List<ItemGrupoLancamento> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemGrupoLancamento> itens) {
+		this.itens = itens;
+	}	
 }

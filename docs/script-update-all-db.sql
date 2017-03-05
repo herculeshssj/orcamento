@@ -2625,7 +2625,9 @@ create table grupolancamento (
 	descricao varchar(50) not null,
 	totalReceita decimal(18,2) not null,
 	totalDespesa decimal(18,2) not null,
+	ativo boolean,
 	idMoeda bigint not null,
+	idUsuario bigint not null,
 	primary key(id)
 ) Engine=InnoDB;
 
@@ -2641,6 +2643,7 @@ create table itemgrupolancamento (
 ) Engine=InnoDB;
 
 alter table grupolancamento add constraint fk_moeda_grupolancamento foreign key (idMoeda) references moeda(id);
+alter table grupolancamento add constraint fk_usuario_grupolancamento foreign key (idUsuario) references usuario(id);
 
 alter table itemgrupolancamento add constraint fk_grupolancamento_itemgrupolancamento foreign key (idGrupoLancamento) references grupolancamento(id);
 alter table itemgrupolancamento add constraint fk_lancamentoconta_itemgrupolancamento foreign key (idLancamentoConta) references lancamentoconta(id);

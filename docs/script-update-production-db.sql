@@ -91,8 +91,35 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Extinguindo com a capitalização - Github Issue #247
-	update investimento set tipoInvestimento = 'FUNDO_INVESTIMENTO' where tipoInvestimento = 'CAPITALIZACAO';
+	-- Grupo de Lançamentos - Github Issue #252
+	create table grupolancamento (
+		id bigint not null auto_increment,
+		descricao varchar(50) not null,
+		totalReceita decimal(18,2) not null,
+		totalDespesa decimal(18,2) not null,
+		ativo boolean,
+		idMoeda bigint not null,
+		idUsuario bigint not null,
+		primary key(id)
+	) Engine=InnoDB;
+	
+	create table itemgrupolancamento (
+		id bigint not null auto_increment,
+		descricao varchar(50) not null,
+		tipoLancamento varchar(10) not null,
+		valor decimal(18,2) not null default 0.00,
+		idGrupoLancamento bigint not null,
+		idLancamentoConta bigint null,
+		idLancamentoPeriodico bigint null,
+		primary key(id)
+	) Engine=InnoDB;
+	
+	alter table grupolancamento add constraint fk_moeda_grupolancamento foreign key (idMoeda) references moeda(id);
+	alter table grupolancamento add constraint fk_usuario_grupolancamento foreign key (idUsuario) references usuario(id);
+	
+	alter table itemgrupolancamento add constraint fk_grupolancamento_itemgrupolancamento foreign key (idGrupoLancamento) references grupolancamento(id);
+	alter table itemgrupolancamento add constraint fk_lancamentoconta_itemgrupolancamento foreign key (idLancamentoConta) references lancamentoconta(id);
+	alter table itemgrupolancamento add constraint fk_lancamentoperiodico_itemgrupolancamento foreign key (idLancamentoPeriodico) references lancamentoperiodico(id);
 	
     /*** Fim do bloco de atualizações da base ***/
     

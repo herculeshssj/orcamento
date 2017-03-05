@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,11 +56,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="banco")
+@Table(name="patrimonio")
 @SuppressWarnings("serial")
 public class Patrimonio extends EntityPersistence {
 
@@ -66,112 +70,190 @@ public class Patrimonio extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=100, nullable=false)
-	private String nome;
+	@Column(length=50, nullable=false)
+	private String descricao;
 	
-	@Column(length=5, nullable=false)
-	private String numero;
+	@Column(columnDefinition="text", nullable=false)
+	private String detalheEntradaPatrimonio;
+	
+	@Column(nullable=false, precision=18, scale=2)
+	private double valorPatrimonio;
+	
+	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)	
+	private Date dataEntrada;
+	
+	@Column(length=50, nullable=true)
+	private String formaAquisicao;
+	
+	@Column(length=50, nullable=true)
+	private String localAquisicao;
+	
+	@Column(length=50, nullable=true)
+	private String marca;
+	
+	@Column(length=50, nullable=true)
+	private String tipo;
+	
+	@Column(length=50, nullable=true)
+	private String numeroRegistro;
+	
+	@Column(nullable=true)
+	private int garantia;
+	
+	@Column(nullable=true)
+	@Temporal(TemporalType.DATE)
+	private Date dataSaida;
+	
+	@Column(columnDefinition="text", nullable=true)
+	private String detalheSaidaPatrimonio;
 	
 	@Column
-	private boolean padrao;
-	
-	@Column 
 	private boolean ativo;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
+	@JoinColumn(name="idUsuario")
 	private Usuario usuario;
 	
+	@ManyToOne
+	@JoinColumn(name="idCategoriaDocumento")
+	private CategoriaDocumento categoriaDocumento;
+	
+	@ManyToOne
+	@JoinColumn(name="idFavorecido")
+	private Favorecido favorecido;
+	
+	@ManyToOne
+	@JoinColumn(name="idGrupoLancamento")
+	private GrupoLancamento grupoLancamento;
+	
+	@ManyToOne
+	@JoinColumn(name="idMoeda")
+	private Moeda moeda;
+	
 	public Patrimonio() {
-		ativo = true;
+		ativo = false;
+	}
+
+	@Override
+	public String getLabel() {
+		return this.descricao;
 	}
 	
-	private Patrimonio(Builder builder) {
-		this.nome = builder.nome;
-		this.numero = builder.numero;
-		this.padrao = builder.padrao;
-		this.ativo = builder.ativo;
-		this.usuario = builder.usuario;
-	}
-	
-	public static class Builder {
-		private String nome;
-		private String numero;
-		private boolean padrao;
-		private boolean ativo;
-		private Usuario usuario;
-		
-		public Builder nome(String nome) {
-			this.nome = nome;
-			return this;
-		}
-		
-		public Builder numero(String numero) {
-			this.numero = numero;
-			return this;
-		}
-		
-		public Builder padrao(boolean padrao) {
-			this.padrao = padrao;
-			return this;
-		}
-		
-		public Builder ativo(boolean ativo) {
-			this.ativo = ativo;
-			return this;
-		}
-		
-		public Builder usuario(Usuario usuario) {
-			this.usuario = usuario;
-			return this;
-		}
-		
-		public Patrimonio build() {
-			return new Patrimonio(this);
-		}
+	@Override
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Detalhes da aquisição", this.detalheEntradaPatrimonio);
+		EntityPersistenceUtil.validaCampoNulo("Data de aquisição", this.dataEntrada);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Forma de aquisição", this.formaAquisicao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Local de aquisição", this.localAquisicao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Marca", this.marca, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Número de registro", this.numeroRegistro, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Tipo", this.tipo, 50);
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	@Override
-	public String getLabel() {
-		return this.nome;
-	}
-	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
-	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	public String getNumero() {
-		return numero;
+	public String getDetalheEntradaPatrimonio() {
+		return detalheEntradaPatrimonio;
 	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setDetalheEntradaPatrimonio(String detalheEntradaPatrimonio) {
+		this.detalheEntradaPatrimonio = detalheEntradaPatrimonio;
 	}
 
-	public boolean isPadrao() {
-		return padrao;
+	public double getValorPatrimonio() {
+		return valorPatrimonio;
 	}
 
-	public void setPadrao(boolean padrao) {
-		this.padrao = padrao;
+	public void setValorPatrimonio(double valorPatrimonio) {
+		this.valorPatrimonio = valorPatrimonio;
+	}
+
+	public Date getDataEntrada() {
+		return dataEntrada;
+	}
+
+	public void setDataEntrada(Date dataEntrada) {
+		this.dataEntrada = dataEntrada;
+	}
+
+	public String getFormaAquisicao() {
+		return formaAquisicao;
+	}
+
+	public void setFormaAquisicao(String formaAquisicao) {
+		this.formaAquisicao = formaAquisicao;
+	}
+
+	public String getLocalAquisicao() {
+		return localAquisicao;
+	}
+
+	public void setLocalAquisicao(String localAquisicao) {
+		this.localAquisicao = localAquisicao;
+	}
+
+	public String getMarca() {
+		return marca;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getNumeroRegistro() {
+		return numeroRegistro;
+	}
+
+	public void setNumeroRegistro(String numeroRegistro) {
+		this.numeroRegistro = numeroRegistro;
+	}
+
+	public int getGarantia() {
+		return garantia;
+	}
+
+	public void setGarantia(int garantia) {
+		this.garantia = garantia;
+	}
+
+	public Date getDataSaida() {
+		return dataSaida;
+	}
+
+	public void setDataSaida(Date dataSaida) {
+		this.dataSaida = dataSaida;
+	}
+
+	public String getDetalheSaidaPatrimonio() {
+		return detalheSaidaPatrimonio;
+	}
+
+	public void setDetalheSaidaPatrimonio(String detalheSaidaPatrimonio) {
+		this.detalheSaidaPatrimonio = detalheSaidaPatrimonio;
 	}
 
 	public boolean isAtivo() {
@@ -188,5 +270,37 @@ public class Patrimonio extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public CategoriaDocumento getCategoriaDocumento() {
+		return categoriaDocumento;
+	}
+
+	public void setCategoriaDocumento(CategoriaDocumento categoriaDocumento) {
+		this.categoriaDocumento = categoriaDocumento;
+	}
+
+	public Favorecido getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(Favorecido favorecido) {
+		this.favorecido = favorecido;
+	}
+
+	public GrupoLancamento getGrupoLancamento() {
+		return grupoLancamento;
+	}
+
+	public void setGrupoLancamento(GrupoLancamento grupoLancamento) {
+		this.grupoLancamento = grupoLancamento;
+	}
+
+	public Moeda getMoeda() {
+		return moeda;
+	}
+
+	public void setMoeda(Moeda moeda) {
+		this.moeda = moeda;
 	}
 }

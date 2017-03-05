@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,11 +56,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="banco")
+@Table(name="benfeitoria")
 @SuppressWarnings("serial")
 public class Benfeitoria extends EntityPersistence {
 
@@ -66,127 +70,120 @@ public class Benfeitoria extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=100, nullable=false)
-	private String nome;
+	@Column(length=50, nullable=false)
+	private String descricao;
 	
-	@Column(length=5, nullable=false)
-	private String numero;
+	@Column(columnDefinition="text", nullable=false)
+	private String detalheBenfeitoria;
 	
-	@Column
-	private boolean padrao;
+	@Column(nullable=false, precision=18, scale=2)
+	private double valorBenfeitoria;
 	
-	@Column 
-	private boolean ativo;
+	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date dataInicio;
+	
+	@Column(nullable=true)
+	@Temporal(TemporalType.DATE)
+	private Date dataFim;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
+	@JoinColumn(name="idCategoriaDocumento", nullable=true)
+	private CategoriaDocumento categoriaDocumento;
+	
+	@ManyToOne
+	@JoinColumn(name="idPatrimonio", nullable=false)
+	private Patrimonio patrimonio;
+	
+	@ManyToOne
+	@JoinColumn(name="idGrupoLancamento", nullable=false)
+	private GrupoLancamento grupoLancamento;
 	
 	public Benfeitoria() {
-		ativo = true;
+		
 	}
 	
-	private Benfeitoria(Builder builder) {
-		this.nome = builder.nome;
-		this.numero = builder.numero;
-		this.padrao = builder.padrao;
-		this.ativo = builder.ativo;
-		this.usuario = builder.usuario;
+	@Override
+	public String getLabel() {
+		return this.descricao;
 	}
 	
-	public static class Builder {
-		private String nome;
-		private String numero;
-		private boolean padrao;
-		private boolean ativo;
-		private Usuario usuario;
-		
-		public Builder nome(String nome) {
-			this.nome = nome;
-			return this;
-		}
-		
-		public Builder numero(String numero) {
-			this.numero = numero;
-			return this;
-		}
-		
-		public Builder padrao(boolean padrao) {
-			this.padrao = padrao;
-			return this;
-		}
-		
-		public Builder ativo(boolean ativo) {
-			this.ativo = ativo;
-			return this;
-		}
-		
-		public Builder usuario(Usuario usuario) {
-			this.usuario = usuario;
-			return this;
-		}
-		
-		public Benfeitoria build() {
-			return new Benfeitoria(this);
-		}
+	@Override
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Detalhes da benfeitoria", this.detalheBenfeitoria);
+		EntityPersistenceUtil.validaCampoNulo("Data de início", this.dataInicio);
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	@Override
-	public String getLabel() {
-		return this.nome;
-	}
-	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
-	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	public String getNumero() {
-		return numero;
+	public String getDetalheBenfeitoria() {
+		return detalheBenfeitoria;
 	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setDetalheBenfeitoria(String detalheBenfeitoria) {
+		this.detalheBenfeitoria = detalheBenfeitoria;
 	}
 
-	public boolean isPadrao() {
-		return padrao;
+	public double getValorBenfeitoria() {
+		return valorBenfeitoria;
 	}
 
-	public void setPadrao(boolean padrao) {
-		this.padrao = padrao;
+	public void setValorBenfeitoria(double valorBenfeitoria) {
+		this.valorBenfeitoria = valorBenfeitoria;
 	}
 
-	public boolean isAtivo() {
-		return ativo;
+	public Date getDataInicio() {
+		return dataInicio;
 	}
 
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Date getDataFim() {
+		return dataFim;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
+	}
+
+	public CategoriaDocumento getCategoriaDocumento() {
+		return categoriaDocumento;
+	}
+
+	public void setCategoriaDocumento(CategoriaDocumento categoriaDocumento) {
+		this.categoriaDocumento = categoriaDocumento;
+	}
+
+	public Patrimonio getPatrimonio() {
+		return patrimonio;
+	}
+
+	public void setPatrimonio(Patrimonio patrimonio) {
+		this.patrimonio = patrimonio;
+	}
+
+	public GrupoLancamento getGrupoLancamento() {
+		return grupoLancamento;
+	}
+
+	public void setGrupoLancamento(GrupoLancamento grupoLancamento) {
+		this.grupoLancamento = grupoLancamento;
 	}
 }
