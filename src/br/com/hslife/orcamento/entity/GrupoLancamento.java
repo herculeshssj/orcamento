@@ -87,7 +87,7 @@ public class GrupoLancamento extends EntityPersistence {
 	private Moeda moeda;
 	
 	@ManyToOne
-	@JoinColumn(name="idMoeda", nullable=false)
+	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
 	@OneToMany(mappedBy="grupoLancamento")
