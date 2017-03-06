@@ -2635,6 +2635,7 @@ create table itemgrupolancamento (
 	id bigint not null auto_increment,
 	descricao varchar(50) not null,
 	tipoLancamento varchar(10) not null,
+	data date not null,
 	valor decimal(18,2) not null default 0.00,
 	idGrupoLancamento bigint not null,
 	idLancamentoConta bigint null,

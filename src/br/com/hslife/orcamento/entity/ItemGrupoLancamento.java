@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -56,6 +58,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -76,6 +81,10 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipoLancamento;
 	
+	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date data;
+	
 	@Column(nullable=false, precision=18, scale=2)
 	private double valor;
 	
@@ -91,8 +100,19 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	@JoinColumn(name="idLancamentoPeriodico")
 	private LancamentoPeriodico lancamentoPeriodico;
 	
+	@Transient
+	private Long idLancamento; // ID do lançamento conta/periódico selecionado
+	
 	public ItemGrupoLancamento() {
 		
+	}
+	
+	public ItemGrupoLancamento(Long idLancamento, String descricao, TipoLancamento tipo, Date data, double valor) {
+		this.idLancamento = idLancamento;
+		this.descricao = descricao;
+		this.tipoLancamento = tipo;
+		this.data = data;
+		this.valor = valor;
 	}
 	
 	@Override
@@ -159,5 +179,21 @@ public class ItemGrupoLancamento extends EntityPersistence {
 
 	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
 		this.lancamentoPeriodico = lancamentoPeriodico;
+	}
+
+	public Long getIdLancamento() {
+		return idLancamento;
+	}
+
+	public void setIdLancamento(Long idLancamento) {
+		this.idLancamento = idLancamento;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
 	}
 }

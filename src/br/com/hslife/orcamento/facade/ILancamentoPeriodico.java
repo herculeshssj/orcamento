@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Conta;
@@ -77,4 +78,6 @@ public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> 
 	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico);
 	
 	public void gerarMensalidade(LancamentoPeriodico entity);
+	
+	public List<LancamentoPeriodico> buscarDescricaoEDataAquisicaoPorUsuario(String descricao, Date dataInicio, Date dataFim, Usuario usuario);
 }

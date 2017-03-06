@@ -58,19 +58,62 @@
 	<ui:param name="managedBean" value="#{grupoLancamentoController}" />
 	
 	<ui:define name="campos">
+	
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+		
+		<label>Moeda:</label>
+		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
+			<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+		</h:selectOneMenu>
+	
+		<hr/>
 				
-		<label for="frmFormEntity:txtNome">Banco:</label>
-		<h:inputText id="txtNome" value="#{managedBean.entity.nome}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
+		<h:panelGrid columns="5">
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDescricaoBusca">Descrição</label>
+				<h:inputText id="txtDescricaoBusca" value="#{managedBean.criterioBusca.descricao}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDataInicio">De</label>
+				<p:inputMask id="txtDataInicio" value="#{managedBean.criterioBusca.dataInicio}" size="10" mask="99/99/9999">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDataFim">À</label>
+				<p:inputMask id="txtDataFim" value="#{managedBean.criterioBusca.dataFim}" size="10" mask="99/99/9999">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label>Tipo</label>
+				<h:selectOneMenu value="#{managedBean.selecaoLancamento}">
+					<f:selectItem itemLabel="Lançamento de Conta/Cartão" itemValue="LANCAMENTO_CONTA"/>
+					<f:selectItem itemLabel="Lançamento Periódico" itemValue="LANCAMENTO_PERIODICO"/>
+				</h:selectOneMenu>
+			</h:panelGroup>
+			<h:commandLink title="Pesquisar" action="#{managedBean.buscarLancamentos}">
+     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+     		</h:commandLink>
+		</h:panelGrid>
 		
-		<label for="frmFormEntity:txtNumero">Número:</label>
-		<h:inputText id="txtNumero" value="#{managedBean.entity.numero}" size="5" maxlength="5" disabled="#{!managedBean.entity.ativo}"/>				
-		
-		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-		<label>Padrão:</label>
-		
-		<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
-		<label>Ativo:</label>
-				
+		<p:dataTable id="tableLancamentos" var="item" value="#{managedBean.itensEncontrados}" selection="#{managedBean.itemSelecionado}" rowKey="#{item.idLancamento}">
+			<p:column selectionMode="single"/>
+			<p:column headerText="Descrição">
+				<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			</p:column>
+			<p:column headerText="Data">
+				<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Valor">
+				<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>				
 		
 	</ui:define>
 

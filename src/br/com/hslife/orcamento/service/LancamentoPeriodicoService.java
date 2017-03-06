@@ -291,4 +291,9 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			dataVencimento.set(Calendar.DAY_OF_MONTH, lancamentoPeriodico.getDiaVencimento());
 		}
 	}
+	
+	@Override
+	public List<LancamentoPeriodico> buscarDescricaoEDataAquisicaoPorUsuario(String descricao, Date dataInicio,	Date dataFim, Usuario usuario) {
+		return getRepository().findDescricaoAndDataAquisicaoByUsuario(descricao, dataInicio, dataFim, usuario);
+	}
 }

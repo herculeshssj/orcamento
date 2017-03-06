@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -134,5 +135,30 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 		return getQuery("FROM LancamentoPeriodico lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
 				.setLong("idUsuario", usuarioLogado.getId())
 				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoPeriodico> findDescricaoAndDataAquisicaoByUsuario(String descricao, Date dataInicio, Date dataFim, Usuario usuario) {
+		StringBuilder hql = new StringBuilder().append("FROM LancamentoPeriodico lancamento WHERE 1=1");
+		
+		if (descricao != null && !descricao.isEmpty()) {
+			hql.append(" AND lancamento.descricao LIKE :descricao");
+			hqlParameters.put("descricao", "'%"+descricao+"%'");
+		}
+		
+		if (dataInicio != null) {
+			hql.append(" AND lancamento.dataAquisicao >= :dataInicial");
+			hqlParameters.put("dataInicial", dataInicio);
+		}
+		
+		if (dataFim != null) {
+			hql.append(" AND lancamento.dataAquisicao <= :dataFinal");
+			hqlParameters.put("dataFinal", dataInicio);
+		}
+		
+		hql.append(" AND lancamento.usuario.id = :idUsuario");
+		hqlParameters.put("idUsuario", usuario.getId());
+		
+		return getQueryApplyingParameters(hql.toString()).list();
 	}
 }

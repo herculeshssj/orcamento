@@ -47,15 +47,25 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.GrupoLancamento;
+import br.com.hslife.orcamento.entity.ItemGrupoLancamento;
+import br.com.hslife.orcamento.entity.LancamentoConta;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
+import br.com.hslife.orcamento.facade.ILancamentoConta;
+import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
+import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 
 @Component
 @Scope("session")
@@ -69,8 +79,21 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 	@Autowired
 	private IGrupoLancamento service; 
 	
+	@Autowired
+	private ILancamentoConta lancamentoContaService;
+	
+	@Autowired
+	private ILancamentoPeriodico lancamentoPeriodicoService;
+	
+	@Autowired
+	private IMoeda moedaService;
+	
 	private String descricao;
 	private boolean somenteAtivos;
+	private String selecaoLancamento;
+	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+	private List<ItemGrupoLancamento> itensEncontrados = new ArrayList<>();
+	private ItemGrupoLancamento itemSelecionado = new ItemGrupoLancamento();
 	
 	public GrupoLancamentoController() {
 		super(new GrupoLancamento());
@@ -80,7 +103,9 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 	@Override
 	protected void initializeEntity() {
 		entity = new GrupoLancamento();
-		listEntity = new ArrayList<>();		
+		listEntity = new ArrayList<>();
+		itemSelecionado = new ItemGrupoLancamento();
+		criterioBusca = new CriterioBuscaLancamentoConta();
 	}
 	
 	@Override
@@ -90,6 +115,69 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 		} catch (ValidationException | BusinessException e) {
 			errorMessage(e.getMessage());
 		}
+	}
+	
+	public void buscarLancamentos() {
+		itensEncontrados = new ArrayList<>();
+		List<LancamentoConta> listaLancamentoConta = null;
+		List<LancamentoPeriodico> listaLancamentoPeriodico = null;
+		
+		if (criterioBusca.quantCriteriosDefinidos() == 0) {
+			warnMessage("Refine sua busca!");
+			return;
+		}
+		
+		try {
+			
+			switch (selecaoLancamento) {
+				case "LANCAMENTO_CONTA" :
+					criterioBusca.setCadastro(CadastroSistema.MOEDA);
+					criterioBusca.setIdAgrupamento(entity.getMoeda().getId());
+					listaLancamentoConta = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
+					break;
+				case "LANCAMENTO_PERIODICO" :
+					listaLancamentoPeriodico = getLancamentoPeriodicoService()
+						.buscarDescricaoEDataAquisicaoPorUsuario(criterioBusca.getDescricao(), 
+								criterioBusca.getDataInicio(), 
+								criterioBusca.getDataFim(), 
+								getUsuarioLogado());
+					break;
+			}
+			
+			if (listaLancamentoConta != null && !listaLancamentoConta.isEmpty()) {
+				for (LancamentoConta lancamento : listaLancamentoConta) {
+					itensEncontrados.add(new ItemGrupoLancamento(
+							lancamento.getId(), 
+							lancamento.getDescricao(), 
+							lancamento.getTipoLancamento(), 
+							lancamento.getDataPagamento(),
+							lancamento.getValorPago()));
+				}
+			}
+			
+			if (listaLancamentoPeriodico != null && !listaLancamentoPeriodico.isEmpty()) {
+				for (LancamentoPeriodico lancamento : listaLancamentoPeriodico) {
+					itensEncontrados.add(new ItemGrupoLancamento(
+							lancamento.getId(), 
+							lancamento.getDescricao(), 
+							lancamento.getTipoLancamento(), 
+							lancamento.getDataAquisicao(),
+							getLancamentoContaService().buscarUltimoPagamentoPeriodoGerado(lancamento).getValorPago()));
+				}
+			}
+			
+		} catch (ValidationException | BusinessException e) {
+			errorMessage(e.getMessage());
+		}
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 
 	public IGrupoLancamento getService() {
@@ -110,5 +198,49 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 
 	public void setSomenteAtivos(boolean somenteAtivos) {
 		this.somenteAtivos = somenteAtivos;
+	}
+
+	public CriterioBuscaLancamentoConta getCriterioBusca() {
+		return criterioBusca;
+	}
+
+	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
+		this.criterioBusca = criterioBusca;
+	}
+
+	public String getSelecaoLancamento() {
+		return selecaoLancamento;
+	}
+
+	public void setSelecaoLancamento(String selecaoLancamento) {
+		this.selecaoLancamento = selecaoLancamento;
+	}
+
+	public List<ItemGrupoLancamento> getItensEncontrados() {
+		return itensEncontrados;
+	}
+
+	public void setItensEncontrados(List<ItemGrupoLancamento> itensEncontrados) {
+		this.itensEncontrados = itensEncontrados;
+	}
+
+	public ItemGrupoLancamento getItemSelecionado() {
+		return itemSelecionado;
+	}
+
+	public void setItemSelecionado(ItemGrupoLancamento itemSelecionado) {
+		this.itemSelecionado = itemSelecionado;
+	}
+
+	public ILancamentoConta getLancamentoContaService() {
+		return lancamentoContaService;
+	}
+
+	public ILancamentoPeriodico getLancamentoPeriodicoService() {
+		return lancamentoPeriodicoService;
+	}
+
+	public IMoeda getMoedaService() {
+		return moedaService;
 	}
 }
