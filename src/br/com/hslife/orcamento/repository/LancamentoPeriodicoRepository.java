@@ -143,7 +143,7 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 		
 		if (descricao != null && !descricao.isEmpty()) {
 			hql.append(" AND lancamento.descricao LIKE :descricao");
-			hqlParameters.put("descricao", "'%"+descricao+"%'");
+			hqlParameters.put("descricao", "%"+descricao.toLowerCase()+"%");
 		}
 		
 		if (dataInicio != null) {

@@ -104,12 +104,11 @@ begin
 	
 	create table itemgrupolancamento (
 		id bigint not null auto_increment,
-		descricao varchar(50) not null,
+		descricao varchar(200) not null,
 		tipoLancamento varchar(10) not null,
 		valor decimal(18,2) not null default 0.00,
 		idGrupoLancamento bigint not null,
 		idLancamentoConta bigint null,
-		idLancamentoPeriodico bigint null,
 		primary key(id)
 	) Engine=InnoDB;
 	
@@ -118,7 +117,6 @@ begin
 	
 	alter table itemgrupolancamento add constraint fk_grupolancamento_itemgrupolancamento foreign key (idGrupoLancamento) references grupolancamento(id);
 	alter table itemgrupolancamento add constraint fk_lancamentoconta_itemgrupolancamento foreign key (idLancamentoConta) references lancamentoconta(id);
-	alter table itemgrupolancamento add constraint fk_lancamentoperiodico_itemgrupolancamento foreign key (idLancamentoPeriodico) references lancamentoperiodico(id);
 	
     /*** Fim do bloco de atualizações da base ***/
     

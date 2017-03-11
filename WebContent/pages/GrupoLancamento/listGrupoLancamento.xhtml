@@ -63,10 +63,6 @@
 		<h:panelGroup>
 			<label for="frmListEntity:txtDescricao">Descrição:</label>
 		    <h:inputText id="txtDescricao" value="#{managedBean.descricao}"/>
-	    </h:panelGroup>
-	    <h:panelGroup>
-	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
-	    	<label>Somente ativos</label>
 	    </h:panelGroup>	    	    
 	</ui:define>
 	
@@ -94,7 +90,7 @@
 			<f:facet name="header">
 				<h:outputText value="Despesa" />
 			</f:facet>
-			<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #0000FF;"/>
+			<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #FF0000;"/>
 			<h:outputText value="#{item.totalDespesa}" style="color: #FF0000;">
 				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>

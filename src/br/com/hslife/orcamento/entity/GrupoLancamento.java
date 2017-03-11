@@ -49,8 +49,10 @@ package br.com.hslife.orcamento.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,6 +61,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -90,11 +93,12 @@ public class GrupoLancamento extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy="grupoLancamento")
-	private List<ItemGrupoLancamento> itens = new ArrayList<>(); 
+	@OneToMany(mappedBy="grupoLancamento", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	private List<ItemGrupoLancamento> itens; 
 	
 	public GrupoLancamento() {
 		ativo = true;
+		itens = new ArrayList<>();
 	}
 	
 	@Override
@@ -107,6 +111,19 @@ public class GrupoLancamento extends EntityPersistence {
 		return this.descricao;
 	}
 
+	public void recalculaTotais() {
+		this.totalReceita = 0.0;
+		this.totalDespesa = 0.0;
+		
+		for (ItemGrupoLancamento item : this.itens) {
+			if (item.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+				this.totalReceita += item.getValor();
+			} else {
+				this.totalDespesa += item.getValor();
+			}
+		}
+	}
+	
 	public Long getId() {
 		return id;
 	}

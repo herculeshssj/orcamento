@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,14 +57,12 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.GrupoLancamento;
 import br.com.hslife.orcamento.entity.ItemGrupoLancamento;
 import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
-import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 
@@ -83,17 +82,17 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 	private ILancamentoConta lancamentoContaService;
 	
 	@Autowired
-	private ILancamentoPeriodico lancamentoPeriodicoService;
-	
-	@Autowired
 	private IMoeda moedaService;
 	
 	private String descricao;
-	private boolean somenteAtivos;
-	private String selecaoLancamento;
+	private Long idLancamento;
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	private List<ItemGrupoLancamento> itensEncontrados = new ArrayList<>();
 	private ItemGrupoLancamento itemSelecionado = new ItemGrupoLancamento();
+	
+	//FIXME mover para o resumo
+	//private Map<Integer, List<ItemGrupoLancamento>> grupoReceita = new HashMap<>();
+	//private Map<Integer, List<ItemGrupoLancamento>> grupoDespesa = new HashMap<>();
 	
 	public GrupoLancamentoController() {
 		super(new GrupoLancamento());
@@ -106,21 +105,35 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 		listEntity = new ArrayList<>();
 		itemSelecionado = new ItemGrupoLancamento();
 		criterioBusca = new CriterioBuscaLancamentoConta();
+		itensEncontrados = new ArrayList<>();
+		// grupoReceita = new HashMap<>(); mover para o resumo
+		// grupoDespesa = new HashMap<>(); mover para o resumo
 	}
 	
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarTodosDescricaoEAtivoPorUsuario(descricao, somenteAtivos, getUsuarioLogado());
+			listEntity = getService().buscarTodosDescricaoEAtivoPorUsuario(descricao, true, getUsuarioLogado());
 		} catch (ValidationException | BusinessException e) {
 			errorMessage(e.getMessage());
 		}
 	}
 	
+	@Override
+	public String save() {
+		// Verifica se o grupo possui pelo menos um lançamento adicionado
+		if (entity.getItens().isEmpty()) {
+			warnMessage("Inclua pelo menos um lançamento no grupo!");
+			return "";
+		}
+		
+		entity.setUsuario(getUsuarioLogado());
+		return super.save();
+	}
+	
 	public void buscarLancamentos() {
 		itensEncontrados = new ArrayList<>();
 		List<LancamentoConta> listaLancamentoConta = null;
-		List<LancamentoPeriodico> listaLancamentoPeriodico = null;
 		
 		if (criterioBusca.quantCriteriosDefinidos() == 0) {
 			warnMessage("Refine sua busca!");
@@ -128,26 +141,15 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 		}
 		
 		try {
-			
-			switch (selecaoLancamento) {
-				case "LANCAMENTO_CONTA" :
-					criterioBusca.setCadastro(CadastroSistema.MOEDA);
-					criterioBusca.setIdAgrupamento(entity.getMoeda().getId());
-					listaLancamentoConta = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
-					break;
-				case "LANCAMENTO_PERIODICO" :
-					listaLancamentoPeriodico = getLancamentoPeriodicoService()
-						.buscarDescricaoEDataAquisicaoPorUsuario(criterioBusca.getDescricao(), 
-								criterioBusca.getDataInicio(), 
-								criterioBusca.getDataFim(), 
-								getUsuarioLogado());
-					break;
-			}
+		
+			criterioBusca.setCadastro(CadastroSistema.MOEDA);
+			criterioBusca.setIdAgrupamento(entity.getMoeda().getId());
+			listaLancamentoConta = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 			
 			if (listaLancamentoConta != null && !listaLancamentoConta.isEmpty()) {
 				for (LancamentoConta lancamento : listaLancamentoConta) {
 					itensEncontrados.add(new ItemGrupoLancamento(
-							lancamento.getId(), 
+							lancamento, 
 							lancamento.getDescricao(), 
 							lancamento.getTipoLancamento(), 
 							lancamento.getDataPagamento(),
@@ -155,20 +157,95 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 				}
 			}
 			
-			if (listaLancamentoPeriodico != null && !listaLancamentoPeriodico.isEmpty()) {
-				for (LancamentoPeriodico lancamento : listaLancamentoPeriodico) {
-					itensEncontrados.add(new ItemGrupoLancamento(
-							lancamento.getId(), 
-							lancamento.getDescricao(), 
-							lancamento.getTipoLancamento(), 
-							lancamento.getDataAquisicao(),
-							getLancamentoContaService().buscarUltimoPagamentoPeriodoGerado(lancamento).getValorPago()));
-				}
-			}
-			
 		} catch (ValidationException | BusinessException e) {
 			errorMessage(e.getMessage());
 		}
+	}
+	
+	public void excluirLancamento() {
+		// Verifica se o lançamento já existe
+		for (Iterator<ItemGrupoLancamento> i = entity.getItens().iterator(); i.hasNext(); ) {
+			ItemGrupoLancamento item = i.next();
+			if (item.getLancamentoConta().equals(itemSelecionado.getLancamentoConta()))
+				i.remove();
+		}
+		
+		entity.recalculaTotais();
+		
+		itemSelecionado = null;
+	}
+	
+	public void incluirLancamento() {
+		// Verifica se um item foi selecionado
+		if (itemSelecionado == null) {
+			warnMessage("Selecione um item para adicionar!");
+			return;
+		}
+		
+		// Verifica se o lançamento já existe
+		for (ItemGrupoLancamento item : entity.getItens()) {
+			if (item.getLancamentoConta().equals(itemSelecionado.getLancamentoConta())) {
+				warnMessage("Lançamento já incluído no grupo!");
+				return;
+			}
+		}
+		
+		// Adiciona o item
+		itemSelecionado.setGrupoLancamento(entity);
+		entity.getItens().add(itemSelecionado);
+		
+		entity.recalculaTotais();
+		
+		itemSelecionado = null;
+		
+		// FIXME mover para o resumo
+		/*
+		// Verifica se um item foi selecionado
+		if (itemSelecionado == null) {
+			warnMessage("Selecione um item para adicionar!");
+			return;
+		}
+		
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(itemSelecionado.getData());
+		int ano = temp.get(Calendar.YEAR);
+		
+		// Verifica se o item já está incluído nos Maps
+		if (itemExisteNoGrupo(grupoReceita.get(ano)) || itemExisteNoGrupo(grupoDespesa.get(ano))) {
+			warnMessage("Lançamento já foi incluído no grupo!");
+			return;
+		}
+		
+		// Adiciona o item no Map
+		if (itemSelecionado.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+			// Verifica se o ano existe no Map
+			if (!grupoReceita.containsKey(ano)) {
+				// Adiciona o ano no Map
+				grupoReceita.put(ano, new ArrayList<>());
+			}
+			// Adiciona o item
+			grupoReceita.get(ano).add(itemSelecionado);
+		} else {
+			// Verifica se o ano existe no Map
+			if (!grupoDespesa.containsKey(ano)) {
+				// Adiciona o ano no Map
+				grupoDespesa.put(ano, new ArrayList<>());
+			}
+			// Adiciona o item
+			grupoDespesa.get(ano).add(itemSelecionado);
+		}
+		
+		itemSelecionado = null;
+		*/
+	}
+	
+	// FIXME mover para o resumo
+	private boolean itemExisteNoGrupo(List<ItemGrupoLancamento> itens) {
+		for (ItemGrupoLancamento item : itens) {
+			if (item.getLancamentoConta().getId().equals(itemSelecionado.getId()))
+				return true;
+		}
+		return false;
 	}
 	
 	public List<Moeda> getListaMoeda() {
@@ -192,28 +269,12 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 		this.descricao = descricao;
 	}
 
-	public boolean isSomenteAtivos() {
-		return somenteAtivos;
-	}
-
-	public void setSomenteAtivos(boolean somenteAtivos) {
-		this.somenteAtivos = somenteAtivos;
-	}
-
 	public CriterioBuscaLancamentoConta getCriterioBusca() {
 		return criterioBusca;
 	}
 
 	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
 		this.criterioBusca = criterioBusca;
-	}
-
-	public String getSelecaoLancamento() {
-		return selecaoLancamento;
-	}
-
-	public void setSelecaoLancamento(String selecaoLancamento) {
-		this.selecaoLancamento = selecaoLancamento;
 	}
 
 	public List<ItemGrupoLancamento> getItensEncontrados() {
@@ -236,11 +297,15 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 		return lancamentoContaService;
 	}
 
-	public ILancamentoPeriodico getLancamentoPeriodicoService() {
-		return lancamentoPeriodicoService;
-	}
-
 	public IMoeda getMoedaService() {
 		return moedaService;
+	}
+
+	public Long getIdLancamento() {
+		return idLancamento;
+	}
+
+	public void setIdLancamento(Long idLancamento) {
+		this.idLancamento = idLancamento;
 	}
 }

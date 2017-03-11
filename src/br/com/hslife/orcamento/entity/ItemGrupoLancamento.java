@@ -60,7 +60,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -74,7 +73,7 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=50, nullable=false)
+	@Column(length=200, nullable=false)
 	private String descricao;
 	
 	@Column(length=10, nullable=false)
@@ -96,19 +95,12 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	@JoinColumn(name="idLancamentoConta")
 	private LancamentoConta lancamentoConta;
 	
-	@ManyToOne
-	@JoinColumn(name="idLancamentoPeriodico")
-	private LancamentoPeriodico lancamentoPeriodico;
-	
-	@Transient
-	private Long idLancamento; // ID do lançamento conta/periódico selecionado
-	
 	public ItemGrupoLancamento() {
 		
 	}
 	
-	public ItemGrupoLancamento(Long idLancamento, String descricao, TipoLancamento tipo, Date data, double valor) {
-		this.idLancamento = idLancamento;
+	public ItemGrupoLancamento(LancamentoConta lancamento, String descricao, TipoLancamento tipo, Date data, double valor) {
+		this.lancamentoConta = lancamento;
 		this.descricao = descricao;
 		this.tipoLancamento = tipo;
 		this.data = data;
@@ -122,9 +114,9 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	
 	@Override
 	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -171,22 +163,6 @@ public class ItemGrupoLancamento extends EntityPersistence {
 
 	public void setLancamentoConta(LancamentoConta lancamentoConta) {
 		this.lancamentoConta = lancamentoConta;
-	}
-
-	public LancamentoPeriodico getLancamentoPeriodico() {
-		return lancamentoPeriodico;
-	}
-
-	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
-		this.lancamentoPeriodico = lancamentoPeriodico;
-	}
-
-	public Long getIdLancamento() {
-		return idLancamento;
-	}
-
-	public void setIdLancamento(Long idLancamento) {
-		this.idLancamento = idLancamento;
 	}
 
 	public Date getData() {

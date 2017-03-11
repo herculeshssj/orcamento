@@ -56,25 +56,47 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{bancoMB}" />
+	<ui:param name="managedBean" value="#{grupoLancamentoController}" />
 
 	<ui:define name="campos">
 			
 		<h:panelGrid columns="2">
-			
-			Banco:
-			<h:outputText id="txtNome" value="#{managedBean.entity.nome}" />				
-			
-			Número:
-			<h:outputText id="txtNumero" value="#{managedBean.entity.numero}" />				
-			
-			Padrão:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
-			
-			Ativo:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
-			
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDescricao">Descrição:</label>
+				<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label>Moeda:</label>
+				<h:outputText id="txtMoeda" value="#{managedBean.entity.moeda.label}"/>
+			</h:panelGroup>
 		</h:panelGrid>
+	
+		<hr/>
+		
+		<h:dataTable id="tableItens" var="item" value="#{managedBean.entity.itens}">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Descrição" />
+				</f:facet>
+				<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Data" />
+				</f:facet>
+				<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Valor" />
+				</f:facet>
+				<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:column>
+		</h:dataTable>
 		
 	</ui:define>
 	

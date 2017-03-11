@@ -148,6 +148,7 @@ public class MovimentacaoLancamentoController extends AbstractController {
 		this.tipoCategoriaSelecionada = null;
 		this.favorecidoSelecionado = null;
 		this.meioPagamentoSelecionado = null;
+		this.observacao = null;
 	}
 		
 	public String cancel() {

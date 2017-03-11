@@ -2633,13 +2633,12 @@ create table grupolancamento (
 
 create table itemgrupolancamento (
 	id bigint not null auto_increment,
-	descricao varchar(50) not null,
+	descricao varchar(200) not null,
 	tipoLancamento varchar(10) not null,
 	data date not null,
 	valor decimal(18,2) not null default 0.00,
 	idGrupoLancamento bigint not null,
 	idLancamentoConta bigint null,
-	idLancamentoPeriodico bigint null,
 	primary key(id)
 ) Engine=InnoDB;
 
@@ -2648,7 +2647,6 @@ alter table grupolancamento add constraint fk_usuario_grupolancamento foreign ke
 
 alter table itemgrupolancamento add constraint fk_grupolancamento_itemgrupolancamento foreign key (idGrupoLancamento) references grupolancamento(id);
 alter table itemgrupolancamento add constraint fk_lancamentoconta_itemgrupolancamento foreign key (idLancamentoConta) references lancamentoconta(id);
-alter table itemgrupolancamento add constraint fk_lancamentoperiodico_itemgrupolancamento foreign key (idLancamentoPeriodico) references lancamentoperiodico(id);
 
 -- Patrimônio - Github Issue #252
 create table patrimonio (
