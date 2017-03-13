@@ -84,6 +84,15 @@
 			<h:outputText value="#{item.totalReceita}" style="color: #0000FF;">
 				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
+			<h:panelGroup rendered="#{item.previsaoReceita > 0}">
+				<h:outputText value=" / "/>
+				<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #0000FF;"/>
+				<h:outputText value="#{item.previsaoReceita}" style="color: #0000FF;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+				<br/>
+				<p:progressBar value="#{item.porcentagemReceita}" labelTemplate="{value} %" displayOnly="true"/>
+			</h:panelGroup>
 		</h:column>
 		
 		<h:column style="text-align: center; vertical-align: middle;">
@@ -94,7 +103,18 @@
 			<h:outputText value="#{item.totalDespesa}" style="color: #FF0000;">
 				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
+			<h:panelGroup rendered="#{item.previsaoDespesa > 0}">
+				<h:outputText value=" / "/>
+				<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #FF0000;"/>
+				<h:outputText value="#{item.previsaoDespesa}" style="color: #FF0000;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+				<br/>
+				<p:progressBar value="#{item.porcentagemDespesa}" labelTemplate="{value} %" displayOnly="true"/>
+			</h:panelGroup>
 		</h:column>
+		
+
 	</ui:define>
 
 </ui:composition>

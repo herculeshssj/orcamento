@@ -94,6 +94,12 @@ begin
 	-- Inclusão de campo faltando - Github Issue #256
 	alter table itemgrupolancamento add column data date not null;
 	
+	-- Inclusão de meta para os grupos de lançamentos
+	alter table grupolancamento add column meta varchar(50) null;
+	alter table grupolancamento add column detalhemeta text null;
+	alter table grupolancamento add column previsaoReceita decimal(18,2) not null default 0.00;
+	alter table grupolancamento add column previsaoDespesa decimal(18,2) not null default 0.00;
+	
     /*** Fim do bloco de atualizações da base ***/
     
     commit;

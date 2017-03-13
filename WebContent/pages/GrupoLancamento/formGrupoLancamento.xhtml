@@ -70,6 +70,26 @@
 					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 				</h:selectOneMenu>
 			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtPrevisaoReceita">Previsão de receita:</label>
+				<h:inputText id="txtPrevisaoReceita" value="#{managedBean.entity.previsaoReceita}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:inputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtPrevisaoDespesa">Previsão de despesa:</label>
+				<h:inputText id="txtPrevisaoDespesa" value="#{managedBean.entity.previsaoDespesa}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:inputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtMeta">Meta:</label>
+				<h:inputText id="txtMeta" value="#{managedBean.entity.meta}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDetalheMeta">Detalhes da meta:</label>
+				<h:inputTextarea id="txtDetalheMeta" value="#{managedBean.entity.detalheMeta}"/>
+			</h:panelGroup>
 		</h:panelGrid>
 	
 		<hr/>

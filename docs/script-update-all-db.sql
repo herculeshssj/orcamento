@@ -2650,6 +2650,12 @@ alter table itemgrupolancamento add constraint fk_lancamentoconta_itemgrupolanca
 -- Inclusão de campo faltando - Github Issue #256
 alter table itemgrupolancamento add column data date not null;
 
+-- Inclusão de meta para os grupos de lançamentos
+alter table grupolancamento add column meta varchar(50) null;
+alter table grupolancamento add column detalhemeta text null;
+alter table grupolancamento add column previsaoReceita decimal(18,2) not null default 0.00;
+alter table grupolancamento add column previsaoDespesa decimal(18,2) not null default 0.00;
+
 -- Patrimônio - Github Issue #252
 create table patrimonio (
 	id bigint not null auto_increment,

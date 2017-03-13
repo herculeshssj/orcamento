@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,7 @@ import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="grupolancamento")
@@ -81,6 +83,18 @@ public class GrupoLancamento extends EntityPersistence {
 	
 	@Column(nullable=false, precision=18, scale=2)
 	private double totalDespesa;
+	
+	@Column(nullable=false, precision=18, scale=2)
+	private double previsaoReceita;
+	
+	@Column(nullable=false, precision=18, scale=2)
+	private double previsaoDespesa;
+	
+	@Column(length=50, nullable=true)
+	private String meta;
+	
+	@Column(columnDefinition="text", nullable=true)
+	private String detalheMeta;
 	
 	@Column
 	private boolean ativo;
@@ -122,6 +136,34 @@ public class GrupoLancamento extends EntityPersistence {
 				this.totalDespesa += item.getValor();
 			}
 		}
+	}
+	
+	public int getPorcentagemReceita() {
+		int porcentagem = 0;
+		if (this.previsaoReceita > 0) {
+			porcentagem = new BigDecimal(Util.arredondar((this.totalReceita / this.previsaoReceita) * 100)).intValue();
+		}
+		
+		if (porcentagem > 100)
+			porcentagem = 100;
+		else if (porcentagem < 0)
+			porcentagem = 0;
+		
+		return porcentagem;
+	}
+	
+	public int getPorcentagemDespesa() {
+		int porcentagem = 0;
+		if (this.previsaoDespesa > 0) {
+			porcentagem = new BigDecimal(Util.arredondar((this.totalDespesa / this.previsaoDespesa) * 100)).intValue();
+		}
+		
+		if (porcentagem > 100)
+			porcentagem = 100;
+		else if (porcentagem < 0)
+			porcentagem = 0;
+		
+		return porcentagem;
 	}
 	
 	public Long getId() {
@@ -186,5 +228,37 @@ public class GrupoLancamento extends EntityPersistence {
 
 	public void setItens(List<ItemGrupoLancamento> itens) {
 		this.itens = itens;
+	}
+
+	public double getPrevisaoReceita() {
+		return previsaoReceita;
+	}
+
+	public void setPrevisaoReceita(double previsaoReceita) {
+		this.previsaoReceita = previsaoReceita;
+	}
+
+	public double getPrevisaoDespesa() {
+		return previsaoDespesa;
+	}
+
+	public void setPrevisaoDespesa(double previsaoDespesa) {
+		this.previsaoDespesa = previsaoDespesa;
+	}
+
+	public String getMeta() {
+		return meta;
+	}
+
+	public void setMeta(String meta) {
+		this.meta = meta;
+	}
+
+	public String getDetalheMeta() {
+		return detalheMeta;
+	}
+
+	public void setDetalheMeta(String detalheMeta) {
+		this.detalheMeta = detalheMeta;
 	}	
 }
