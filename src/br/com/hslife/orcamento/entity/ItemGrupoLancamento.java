@@ -60,6 +60,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -94,6 +95,9 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idLancamentoConta")
 	private LancamentoConta lancamentoConta;
+	
+	@Transient
+	private boolean selecionado;
 	
 	public ItemGrupoLancamento() {
 		
@@ -171,5 +175,13 @@ public class ItemGrupoLancamento extends EntityPersistence {
 
 	public void setData(Date data) {
 		this.data = data;
+	}
+
+	public boolean isSelecionado() {
+		return selecionado;
+	}
+
+	public void setSelecionado(boolean selecionado) {
+		this.selecionado = selecionado;
 	}
 }

@@ -90,10 +90,6 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 	private List<ItemGrupoLancamento> itensEncontrados = new ArrayList<>();
 	private ItemGrupoLancamento itemSelecionado = new ItemGrupoLancamento();
 	
-	//FIXME mover para o resumo
-	//private Map<Integer, List<ItemGrupoLancamento>> grupoReceita = new HashMap<>();
-	//private Map<Integer, List<ItemGrupoLancamento>> grupoDespesa = new HashMap<>();
-	
 	public GrupoLancamentoController() {
 		super(new GrupoLancamento());
 		moduleTitle = "Grupos de Lançamentos";
@@ -106,8 +102,6 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 		itemSelecionado = new ItemGrupoLancamento();
 		criterioBusca = new CriterioBuscaLancamentoConta();
 		itensEncontrados = new ArrayList<>();
-		// grupoReceita = new HashMap<>(); mover para o resumo
-		// grupoDespesa = new HashMap<>(); mover para o resumo
 	}
 	
 	@Override
@@ -176,76 +170,45 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 	}
 	
 	public void incluirLancamento() {
-		// Verifica se um item foi selecionado
-		if (itemSelecionado == null) {
+		// Verifica se existe algum item selecionado
+		boolean temSelecao = false;
+		for (ItemGrupoLancamento item : itensEncontrados) {
+			if (item.isSelecionado()) {
+				temSelecao = true;
+				break;
+			}
+		}
+		if (!temSelecao) {
 			warnMessage("Selecione um item para adicionar!");
 			return;
 		}
 		
-		// Verifica se o lançamento já existe
-		for (ItemGrupoLancamento item : entity.getItens()) {
-			if (item.getLancamentoConta().equals(itemSelecionado.getLancamentoConta())) {
-				warnMessage("Lançamento já incluído no grupo!");
-				return;
+		// Adiciona os itens que foram selecionados e que ainda não foram adicionados
+		for (ItemGrupoLancamento itemGrupo : itensEncontrados) {
+			if (itemGrupo.isSelecionado()) {
+				boolean itemPresente = false;
+				// Verifica se o lançamento já existe
+				for (ItemGrupoLancamento item : entity.getItens()) {
+					if (item.getLancamentoConta().equals(itemGrupo.getLancamentoConta())) {
+						itemPresente = true;
+						break;
+					}
+				}
+				if (!itemPresente) {
+					itemGrupo.setGrupoLancamento(entity);
+					entity.getItens().add(itemGrupo);
+				}	
 			}
 		}
-		
-		// Adiciona o item
-		itemSelecionado.setGrupoLancamento(entity);
-		entity.getItens().add(itemSelecionado);
 		
 		entity.recalculaTotais();
 		
-		itemSelecionado = null;
-		
-		// FIXME mover para o resumo
-		/*
-		// Verifica se um item foi selecionado
-		if (itemSelecionado == null) {
-			warnMessage("Selecione um item para adicionar!");
-			return;
+		// Exclui da busca os itens que já foram adicionados.
+		for (Iterator<ItemGrupoLancamento> iterator = itensEncontrados.iterator(); iterator.hasNext(); ) {
+			ItemGrupoLancamento item = iterator.next();
+			if (item.isSelecionado())
+				iterator.remove();
 		}
-		
-		Calendar temp = Calendar.getInstance();
-		temp.setTime(itemSelecionado.getData());
-		int ano = temp.get(Calendar.YEAR);
-		
-		// Verifica se o item já está incluído nos Maps
-		if (itemExisteNoGrupo(grupoReceita.get(ano)) || itemExisteNoGrupo(grupoDespesa.get(ano))) {
-			warnMessage("Lançamento já foi incluído no grupo!");
-			return;
-		}
-		
-		// Adiciona o item no Map
-		if (itemSelecionado.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
-			// Verifica se o ano existe no Map
-			if (!grupoReceita.containsKey(ano)) {
-				// Adiciona o ano no Map
-				grupoReceita.put(ano, new ArrayList<>());
-			}
-			// Adiciona o item
-			grupoReceita.get(ano).add(itemSelecionado);
-		} else {
-			// Verifica se o ano existe no Map
-			if (!grupoDespesa.containsKey(ano)) {
-				// Adiciona o ano no Map
-				grupoDespesa.put(ano, new ArrayList<>());
-			}
-			// Adiciona o item
-			grupoDespesa.get(ano).add(itemSelecionado);
-		}
-		
-		itemSelecionado = null;
-		*/
-	}
-	
-	// FIXME mover para o resumo
-	private boolean itemExisteNoGrupo(List<ItemGrupoLancamento> itens) {
-		for (ItemGrupoLancamento item : itens) {
-			if (item.getLancamentoConta().getId().equals(itemSelecionado.getId()))
-				return true;
-		}
-		return false;
 	}
 	
 	public List<Moeda> getListaMoeda() {

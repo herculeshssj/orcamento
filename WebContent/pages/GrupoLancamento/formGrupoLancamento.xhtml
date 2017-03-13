@@ -91,13 +91,15 @@
 					<f:converter converterId="dateConverter"/>
 				</p:inputMask>
 			</h:panelGroup>
-			<h:commandLink title="Pesquisar" action="#{managedBean.buscarLancamentos}">
+			<p:commandLink title="Pesquisar" action="#{managedBean.buscarLancamentos}" update="tableLancamentos">
      			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
-     		</h:commandLink>
+     		</p:commandLink>
 		</h:panelGrid>
 		
-		<p:dataTable id="tableLancamentos" var="item" value="#{managedBean.itensEncontrados}" selection="#{managedBean.itemSelecionado}" rowKey="#{item.lancamentoConta}">
-			<p:column selectionMode="single"/>
+		<p:dataTable id="tableLancamentos" var="item" value="#{managedBean.itensEncontrados}">
+			<p:column>
+				<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+			</p:column>
 			<p:column headerText="Descrição">
 				<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
 			</p:column>
@@ -113,7 +115,7 @@
 			</p:column>
 		</p:dataTable>	
 		
-		<h:commandLink value="Incluir lançamento" action="#{managedBean.incluirLancamento}"/>
+		<p:commandLink value="Incluir lançamento" action="#{managedBean.incluirLancamento}" update="tableLancamentos,tableItens"/>
 		
 		<hr/>
 		
