@@ -69,6 +69,26 @@
 				<label>Moeda:</label>
 				<h:outputText id="txtMoeda" value="#{managedBean.entity.moeda.label}"/>
 			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtPrevisaoReceita">Previsão de receita:</label>
+				<h:outputText id="txtPrevisaoReceita" value="#{managedBean.entity.previsaoReceita}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtPrevisaoDespesa">Previsão de despesa:</label>
+				<h:outputText id="txtPrevisaoDespesa" value="#{managedBean.entity.previsaoDespesa}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtMeta">Meta:</label>
+				<h:outputText id="txtMeta" value="#{managedBean.entity.meta}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDetalheMeta">Detalhes da meta:</label>
+				<h:outputText id="txtDetalheMeta" value="#{managedBean.entity.detalheMeta}"/>
+			</h:panelGroup>
 		</h:panelGrid>
 	
 		<hr/>

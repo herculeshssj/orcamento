@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -89,6 +90,7 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	private List<ItemGrupoLancamento> itensEncontrados = new ArrayList<>();
 	private ItemGrupoLancamento itemSelecionado = new ItemGrupoLancamento();
+	private ItemGrupoLancamento itemGrupoLancamento = new ItemGrupoLancamento();
 	
 	public GrupoLancamentoController() {
 		super(new GrupoLancamento());
@@ -160,8 +162,21 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 		// Verifica se o lançamento já existe
 		for (Iterator<ItemGrupoLancamento> i = entity.getItens().iterator(); i.hasNext(); ) {
 			ItemGrupoLancamento item = i.next();
-			if (item.getLancamentoConta().equals(itemSelecionado.getLancamentoConta()))
-				i.remove();
+			
+			// Remove pelo ID da entidade
+			if (item.getId() != null) 
+				if (item.getId().equals(itemSelecionado.getId()))
+					i.remove();
+		
+			// Remove pelo ID do lançamento da conta
+			if (item.getId() == null && item.getLancamentoConta() != null)
+				if (item.getLancamentoConta().equals(itemSelecionado.getLancamentoConta()))
+					i.remove();
+			
+			// Remove pelo UUID do item
+			if (item.getId() == null && item.getLancamentoConta() == null)
+				if (item.getUuid().equals(itemSelecionado.getUuid()))
+					i.remove();
 		}
 		
 		entity.recalculaTotais();
@@ -209,6 +224,24 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 			if (item.isSelecionado())
 				iterator.remove();
 		}
+	}
+	
+	public void adicionarItemGrupo() {
+		// Valida o preenchimento da entidade
+		try {
+			itemGrupoLancamento.validate();
+		} catch (ValidationException e) {
+			errorMessage(e.getMessage());
+			return;
+		}
+		
+		itemGrupoLancamento.setUuid(UUID.randomUUID().toString());
+		itemGrupoLancamento.setGrupoLancamento(entity);
+		entity.getItens().add(itemGrupoLancamento);
+		
+		entity.recalculaTotais();
+		
+		itemGrupoLancamento = new ItemGrupoLancamento();
 	}
 	
 	public List<Moeda> getListaMoeda() {
@@ -270,5 +303,13 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 
 	public void setIdLancamento(Long idLancamento) {
 		this.idLancamento = idLancamento;
+	}
+
+	public ItemGrupoLancamento getItemGrupoLancamento() {
+		return itemGrupoLancamento;
+	}
+
+	public void setItemGrupoLancamento(ItemGrupoLancamento itemGrupoLancamento) {
+		this.itemGrupoLancamento = itemGrupoLancamento;
 	}
 }

@@ -62,8 +62,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
+
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.ItemGrupoLancamentoComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -107,7 +111,8 @@ public class GrupoLancamento extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy="grupoLancamento", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="grupoLancamento", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	@Sort(type=SortType.COMPARATOR, comparator=ItemGrupoLancamentoComparator.class)
 	private List<ItemGrupoLancamento> itens; 
 	
 	public GrupoLancamento() {

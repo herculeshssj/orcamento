@@ -99,6 +99,9 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	@Transient
 	private boolean selecionado;
 	
+	@Transient
+	private String uuid;
+	
 	public ItemGrupoLancamento() {
 		
 	}
@@ -119,6 +122,8 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	@Override
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
+		EntityPersistenceUtil.validaCampoNulo("Data", this.data);
+		EntityPersistenceUtil.validaCampoNulo("Valor", this.valor);
 	}
 	
 	public Long getId() {
@@ -183,5 +188,13 @@ public class ItemGrupoLancamento extends EntityPersistence {
 
 	public void setSelecionado(boolean selecionado) {
 		this.selecionado = selecionado;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }

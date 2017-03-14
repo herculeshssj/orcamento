@@ -44,41 +44,26 @@
   
 ***/
 
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.util;
 
-import java.util.List;
+import java.util.Comparator;
 
-import org.springframework.stereotype.Repository;
+import br.com.hslife.orcamento.entity.ItemGrupoLancamento;
 
-import br.com.hslife.orcamento.entity.GrupoLancamento;
-import br.com.hslife.orcamento.entity.Usuario;
+public class ItemGrupoLancamentoComparator implements Comparator<ItemGrupoLancamento>{
 
-@Repository
-public class GrupoLancamentoRepository extends AbstractCRUDRepository<GrupoLancamento> {
-	
-	public GrupoLancamentoRepository() {
-		super(new GrupoLancamento());
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<GrupoLancamento> findAllDescricaoAndAtivoByUsuario(String descricao, Boolean ativo, Usuario usuario) {
-		hqlParameters.clear();
-		
-		StringBuilder hql = new StringBuilder().append("FROM GrupoLancamento grupo WHERE 1=1");
-		
-		if (descricao != null && !descricao.isEmpty()) {
-			hql.append(" AND grupo.descricao LIKE :descricao");
-			hqlParameters.put("descricao", "'%"+descricao.toLowerCase()+"%'");
+	@Override
+	public int compare(ItemGrupoLancamento oneEntity, ItemGrupoLancamento otherEntity) {
+		try {
+			
+			if (oneEntity != null && otherEntity != null) {
+				if (oneEntity.getDescricao() != null && otherEntity.getDescricao() != null) {
+					return oneEntity.getDescricao().compareTo(otherEntity.getDescricao());
+				}
+			}			
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
 		}
-		
-		if (ativo != null) {
-			hql.append(" AND grupo.ativo = :ativo");
-			hqlParameters.put("ativo", ativo);
-		}
-		
-		hql.append(" AND grupo.usuario.id = :idUsuario ORDER BY grupo.descricao ASC");
-		hqlParameters.put("idUsuario", usuario.getId());
-		
-		return getQueryApplyingParameters(hql.toString()).list();
+		return 0;
 	}
 }

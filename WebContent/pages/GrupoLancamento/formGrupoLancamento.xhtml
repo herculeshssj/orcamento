@@ -92,50 +92,88 @@
 			</h:panelGroup>
 		</h:panelGrid>
 	
-		<hr/>
+		<p:tabView>
+		
+			<p:tab title="Lançamentos de Conta/Cartão">
 				
-		<h:panelGrid columns="4">
-			<h:panelGroup>
-				<label for="frmFormEntity:txtDescricaoBusca">Descrição</label>
-				<h:inputText id="txtDescricaoBusca" value="#{managedBean.criterioBusca.descricao}"/>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtDataInicio">De</label>
-				<p:inputMask id="txtDataInicio" value="#{managedBean.criterioBusca.dataInicio}" size="10" mask="99/99/9999">
-					<f:converter converterId="dateConverter"/>
-				</p:inputMask>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtDataFim">À</label>
-				<p:inputMask id="txtDataFim" value="#{managedBean.criterioBusca.dataFim}" size="10" mask="99/99/9999">
-					<f:converter converterId="dateConverter"/>
-				</p:inputMask>
-			</h:panelGroup>
-			<p:commandLink title="Pesquisar" action="#{managedBean.buscarLancamentos}" update="tableLancamentos">
-     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
-     		</p:commandLink>
-		</h:panelGrid>
+				<h:panelGrid columns="4">
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDescricaoBusca">Descrição</label>
+						<h:inputText id="txtDescricaoBusca" value="#{managedBean.criterioBusca.descricao}"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDataInicio">De</label>
+						<p:inputMask id="txtDataInicio" value="#{managedBean.criterioBusca.dataInicio}" size="10" mask="99/99/9999">
+							<f:converter converterId="dateConverter"/>
+						</p:inputMask>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDataFim">À</label>
+						<p:inputMask id="txtDataFim" value="#{managedBean.criterioBusca.dataFim}" size="10" mask="99/99/9999">
+							<f:converter converterId="dateConverter"/>
+						</p:inputMask>
+					</h:panelGroup>
+					<p:commandLink title="Pesquisar" action="#{managedBean.buscarLancamentos}" update="tableLancamentos">
+		     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		     		</p:commandLink>
+				</h:panelGrid>
+				
+				<p:dataTable id="tableLancamentos" var="item" value="#{managedBean.itensEncontrados}">
+					<p:column>
+						<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+					</p:column>
+					<p:column headerText="Descrição">
+						<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+					</p:column>
+					<p:column headerText="Data">
+						<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+							<f:converter converterId="dateConverter"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Valor">
+						<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>	
+				
+				<p:commandLink value="Incluir lançamento" action="#{managedBean.incluirLancamento}" update="tableLancamentos,frmFormEntity:tableItens"/>
+				
+			</p:tab>
+			
+			<p:tab title="Itens de Grupos de Lançamentos">
+			
+				<h:panelGrid columns="5" id="pnlItemGrupo">
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDescricaoItem">Descrição</label>
+						<h:inputText id="txtDescricaoItem" value="#{managedBean.itemGrupoLancamento.descricao}"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtTipoItem">Tipo</label>
+						<h:selectOneMenu id="txtTipoItem" value="#{managedBean.itemGrupoLancamento.tipoLancamento}">
+							<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>				
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtData">Data</label>
+						<p:inputMask id="txtData" value="#{managedBean.itemGrupoLancamento.data}" size="10" mask="99/99/9999">
+							<f:converter converterId="dateConverter"/>
+						</p:inputMask>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtValor">Valor</label>
+						<h:inputText id="txtValor" value="#{managedBean.itemGrupoLancamento.valor}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:inputText>
+					</h:panelGroup>					
+					<h:commandLink id="lnkAddRow" title="Adicionar item no grupo" action="#{managedBean.adicionarItemGrupo}">
+		     			<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
+		     		</h:commandLink>
+				</h:panelGrid>
+				
+			</p:tab>
 		
-		<p:dataTable id="tableLancamentos" var="item" value="#{managedBean.itensEncontrados}">
-			<p:column>
-				<h:selectBooleanCheckbox value="#{item.selecionado}"/>
-			</p:column>
-			<p:column headerText="Descrição">
-				<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			</p:column>
-			<p:column headerText="Data">
-				<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-					<f:converter converterId="dateConverter"/>
-				</h:outputText>
-			</p:column>
-			<p:column headerText="Valor">
-				<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>
-			</p:column>
-		</p:dataTable>	
-		
-		<p:commandLink value="Incluir lançamento" action="#{managedBean.incluirLancamento}" update="tableLancamentos,tableItens"/>
+		</p:tabView>
 		
 		<hr/>
 		
