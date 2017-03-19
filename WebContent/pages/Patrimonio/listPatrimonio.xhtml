@@ -56,69 +56,58 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{grupoLancamentoController}" />
+	<ui:param name="managedBean" value="#{patrimonioController}" />
 	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="parametro_pesquisa">		
-		<h:panelGroup>
-			<label for="frmListEntity:txtDescricao">Descrição:</label>
-		    <h:inputText id="txtDescricao" value="#{managedBean.descricao}"/>
-	    </h:panelGroup>	    	    
-	</ui:define>
+	<ui:define name="botao_pesquisa" />
 	
-	<ui:define name="pesquisa_avancada"></ui:define>
+	<ui:define name="parametro_pesquisa" />		
 	
-	<ui:define name="colunas">
-		<h:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Descrição" />
-			</f:facet>
-			<h:outputText value="#{item.descricao} " />
-			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20" rendered="#{not empty item.meta}"/>
-			<p:tooltip for="imgInfo" rendered="#{not empty item.meta}">
-				<h:outputText value="Meta: #{item.meta}"/><br/>
-			</p:tooltip>
-		</h:column>
-
-		<h:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Receita" />
-			</f:facet>
-			<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #0000FF;"/>
-			<h:outputText value="#{item.totalReceita}" style="color: #0000FF;">
-				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-			</h:outputText>
-			<h:panelGroup rendered="#{item.previsaoReceita > 0}">
-				<h:outputText value=" / "/>
-				<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #0000FF;"/>
-				<h:outputText value="#{item.previsaoReceita}" style="color: #0000FF;">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>
-				<br/>
-				<p:progressBar value="#{item.porcentagemReceita}" labelTemplate="{value} %" displayOnly="true"/>
-			</h:panelGroup>
-		</h:column>
-		
-		<h:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Despesa" />
-			</f:facet>
-			<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #FF0000;"/>
-			<h:outputText value="#{item.totalDespesa}" style="color: #FF0000;">
-				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-			</h:outputText>
-			<h:panelGroup rendered="#{item.previsaoDespesa > 0}">
-				<h:outputText value=" / "/>
-				<h:outputText value="#{item.moeda.simboloMonetario} " style="color: #FF0000;"/>
-				<h:outputText value="#{item.previsaoDespesa}" style="color: #FF0000;">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>
-				<br/>
-				<p:progressBar value="#{item.porcentagemDespesa}" labelTemplate="{value} %" displayOnly="true"/>
-			</h:panelGroup>
-		</h:column>
-		
-
+	<ui:define name="pesquisa_avancada" />
+	
+	<ui:define name="tabela">
+	
+		<p:accordionPanel value="#{managedBean.listEntity}" var="patrimonio">
+			<p:tab title="#{patrimonio.descricao}">
+			
+				<p:panelGrid columns="2">
+			
+					<label>Data de aquisição:</label>
+					<h:outputText value="#{patrimonio.dataEntrada}">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+					
+					<label>Valor:</label>
+					<h:panelGroup>
+						<h:outputText value="#{patrimonio.moeda.simboloMonetario} " />
+						<h:outputText value="#{patrimonio.valorPatrimonio}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+					</h:panelGroup>
+					
+					<label>Detalhes da aquisição:</label>
+					<h:outputText value="#{patrimonio.detalheEntradaPatrimonio}"/>
+					
+					<label>Favorecido:</label>
+					<h:outputText value="#{patrimonio.favorecido.label}"/>						
+				
+				</p:panelGrid>
+				
+				<h:panelGroup>
+					<h:commandLink title="Editar" action="#{managedBean.edit}">
+						<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+						<f:setPropertyActionListener value="#{patrimonio.id}" target="#{managedBean.idEntity}"/>
+					</h:commandLink>								
+  					<p:spacer width="20"/>
+					<h:commandLink title="Excluir" action="#{managedBean.view}">
+						<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+						<f:setPropertyActionListener value="#{patrimonio.id}" target="#{managedBean.idEntity}"/>
+					</h:commandLink>
+				</h:panelGroup>
+				
+			</p:tab>
+		</p:accordionPanel>
+			
 	</ui:define>
 
 </ui:composition>

@@ -112,23 +112,23 @@ public class Patrimonio extends EntityPersistence {
 	private boolean ativo;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario")
+	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
 	@ManyToOne
-	@JoinColumn(name="idCategoriaDocumento")
+	@JoinColumn(name="idCategoriaDocumento", nullable=true)
 	private CategoriaDocumento categoriaDocumento;
 	
 	@ManyToOne
-	@JoinColumn(name="idFavorecido")
+	@JoinColumn(name="idFavorecido", nullable=false)
 	private Favorecido favorecido;
 	
 	@ManyToOne
-	@JoinColumn(name="idGrupoLancamento")
+	@JoinColumn(name="idGrupoLancamento", nullable=false)
 	private GrupoLancamento grupoLancamento;
 	
 	@ManyToOne
-	@JoinColumn(name="idMoeda")
+	@JoinColumn(name="idMoeda", nullable=false)
 	private Moeda moeda;
 	
 	public Patrimonio() {
@@ -150,6 +150,9 @@ public class Patrimonio extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Marca", this.marca, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Número de registro", this.numeroRegistro, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Tipo", this.tipo, 50);
+		EntityPersistenceUtil.validaCampoNulo("Grupo de lançamento", this.grupoLancamento);
+		EntityPersistenceUtil.validaCampoNulo("Favorecido", this.favorecido);
+		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
 	}
 
 	public Long getId() {

@@ -47,14 +47,23 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.CategoriaDocumento;
+import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.GrupoLancamento;
+import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.facade.ICategoriaDocumento;
+import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IGrupoLancamento;
+import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IPatrimonio;
 
 @Component
@@ -68,6 +77,18 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 	
 	@Autowired
 	private IPatrimonio service;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private ICategoriaDocumento categoriaDocumentoService;
+	
+	@Autowired
+	private IMoeda moedaService;
+	
+	@Autowired
+	private IGrupoLancamento grupoLancamentoService;
 	
 	public PatrimonioController() {
 		super(new Patrimonio());
@@ -94,9 +115,67 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 			errorMessage(e.getMessage());
 		}
 	}
+	
+	@Override
+	public String save() {
+		entity.setUsuario(getUsuarioLogado()); // TODO setar o usuário da entidade via Reflection, no AbstractCRUDController
+		return super.save();
+	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			return getFavorecidoService().buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<CategoriaDocumento> getListaCategoriaDocumento() {
+		try {
+			return getCategoriaDocumentoService().buscarPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<Moeda> getListaMoeda() {
+		try {
+			return getMoedaService().buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<GrupoLancamento> getListaGrupoLancamento() {
+		try {
+			return getGrupoLancamentoService().buscarTodosDescricaoEAtivoPorUsuario(null, true, getUsuarioLogado());
+		} catch (ValidationException | BusinessException e) {
+			errorMessage(e.getMessage());
+		}
+		return new ArrayList<>();
+	}
 
 	public IPatrimonio getService() {
 		return service;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
+	}
+
+	public ICategoriaDocumento getCategoriaDocumentoService() {
+		return categoriaDocumentoService;
+	}
+
+	public IMoeda getMoedaService() {
+		return moedaService;
+	}
+
+	public IGrupoLancamento getGrupoLancamentoService() {
+		return grupoLancamentoService;
 	}
 	
 	/**
@@ -272,14 +351,7 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 		itemGrupoLancamento = new ItemGrupoLancamento();
 	}
 	
-	public List<Moeda> getListaMoeda() {
-		try {
-			return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (ValidationException | BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
-	}
+	
 
 	public IGrupoLancamento getService() {
 		return service;

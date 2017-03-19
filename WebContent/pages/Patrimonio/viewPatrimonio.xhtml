@@ -56,67 +56,67 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{grupoLancamentoController}" />
+	<ui:param name="managedBean" value="#{patrimonioController}" />
 
 	<ui:define name="campos">
-			
-		<h:panelGrid columns="2">
-			<h:panelGroup>
-				<label for="frmFormEntity:txtDescricao">Descrição:</label>
-				<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label>Moeda:</label>
-				<h:outputText id="txtMoeda" value="#{managedBean.entity.moeda.label}"/>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtPrevisaoReceita">Previsão de receita:</label>
-				<h:outputText id="txtPrevisaoReceita" value="#{managedBean.entity.previsaoReceita}">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtPrevisaoDespesa">Previsão de despesa:</label>
-				<h:outputText id="txtPrevisaoDespesa" value="#{managedBean.entity.previsaoDespesa}">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtMeta">Meta:</label>
-				<h:outputText id="txtMeta" value="#{managedBean.entity.meta}"/>
-			</h:panelGroup>
-			<h:panelGroup>
-				<label for="frmFormEntity:txtDetalheMeta">Detalhes da meta:</label>
-				<h:outputText id="txtDetalheMeta" value="#{managedBean.entity.detalheMeta}"/>
-			</h:panelGroup>
-		</h:panelGrid>
 	
-		<hr/>
+		<h:panelGrid columns="2">
+			
+			<label for="frmFormEntity:txtDescricao">Descrição:</label>
+			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+			
+			<label for="frmFormEntity:txtValor">Valor:</label>
+			<h:outputText id="txtValor" value="#{managedBean.entity.valorPatrimonio}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
 		
-		<h:dataTable id="tableItens" var="item" value="#{managedBean.entity.itens}">
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="Descrição" />
-				</f:facet>
-				<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="Data" />
-				</f:facet>
-				<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-					<f:converter converterId="dateConverter"/>
-				</h:outputText>
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="Valor" />
-				</f:facet>
-				<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
-					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-				</h:outputText>
-			</h:column>
-		</h:dataTable>
+			<label for="frmFormEntity:txtDataEntrada">Data de entrada:</label>
+			<h:outputText id="txtDataEntrada" value="#{managedBean.entity.dataEntrada}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			<label for="frmFormEntity:txtDetalheAquisicao">Detalhes da aquisição:</label>
+			<h:outputText id="txtDetalheAquisicao" value="#{managedBean.entity.detalheEntradaPatrimonio}"/>
+			
+			<label for="frmFormEntity:txtFavorecido">Favorecido (Autorizada/Construtora/Fabricante/Fornecedor):</label>
+			<h:outputText value="#{managedBean.entity.favorecido.label}" />
+			
+			<label for="frmFormEntity:txtTipo">Tipo (Categoria/Origem/Tipo):</label>
+			<h:outputText id="txtTipo" value="#{managedBean.entity.tipo}"/>
+			
+			<label for="frmFormEntity:txtNumeroRegistro">Número de registro (Nº de matrícula/registro/série):</label>
+			<h:outputText id="txtNumeroRegistro" value="#{managedBean.entity.numeroRegistro}"/>
+			
+			<label for="frmFormEntity:txtMarca">Marca:</label>
+			<h:outputText id="txtMarca" value="#{managedBean.entity.marca}"/>
+			
+			<label for="frmFormEntity:txtLocalAquisicao">Local de aquisição (Local de aquisição/compra/registro):</label>
+			<h:outputText id="txtLocalAquisicao" value="#{managedBean.entity.localAquisicao}"/>
+			
+			<label for="frmFormEntity:txtFormaAquisicao">Forma de aquisição:</label>
+			<h:outputText id="txtFormaAquisicao" value="#{managedBean.entity.formaAquisicao}"/>
+			
+			<label for="frmFormEntity:txtGarantia">Garantia:</label>
+			<h:outputText id="txtGarantia" value="#{managedBean.entity.garantia}"/>
+			
+			<label for="frmFormEntity:txtCategoriaDocumento">Categoria de documento:</label>
+			<h:outputText value="#{managedBean.entity.categoriaDocumento.label}" />
+			
+			<label>Moeda:</label>
+			<h:outputText value="#{managedBean.entity.moeda.label}" />
+			
+			<label>Grupo de lançamento:</label>
+			<h:outputText value="#{managedBean.entity.grupoLancamento.label}" />
+				
+			<label for="frmFormEntity:txtDataSaida">Data de saída:</label>
+			<h:outputText id="txtDataSaida" value="#{managedBean.entity.dataSaida}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			<label for="frmFormEntity:txtDetalheSaida">Detalhes da saída:</label>
+			<h:outputText id="txtDetalheSaida" value="#{managedBean.entity.detalheSaidaPatrimonio}"/>
+		
+		</h:panelGrid>
 		
 	</ui:define>
 	
