@@ -59,6 +59,20 @@
 	
 	<ui:define name="campos">
 	
+		<p:dialog header="Importação via CSV" modal="true" widgetVar="dlgCSV" minHeight="40">
+			Abaixo segue o cabeçalho do arquivo CSV:<br/>
+			- HISTORICO<br/>
+			- DOCUMENTO<br/>
+			- DATA<br/>
+			- VALOR<br/>
+			- OBSERVACAO<br/>
+			- QUANTIDADE<br/>
+			- CATEGORIA<br/>
+			- FAVORECIDO<br/>
+			- MEIOPAGAMENTO<br/>
+			- MOEDA<br/>	
+		</p:dialog>
+	
 		<h:panelGrid columns="2">
 			
 			Conta:
@@ -67,10 +81,12 @@
 			</h:selectOneMenu>					
 			
 			Tipo de arquivo:
-			<h:selectOneRadio value="#{managedBean.tipoArquivo}">
-				<f:selectItem itemLabel="OFX" itemValue="OFX"/>
-				<f:selectItem itemLabel="CSV" itemValue="CSV"/>
-			</h:selectOneRadio>
+			<h:panelGroup>
+				<h:selectOneRadio value="#{managedBean.tipoArquivo}">
+					<f:selectItem itemLabel="OFX" itemValue="OFX"/>
+					<f:selectItem itemLabel="CSV" itemValue="CSV"/>
+				</h:selectOneRadio>
+			</h:panelGroup>
 			
 			Selecione o arquivo:
 			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>
@@ -79,7 +95,10 @@
 			<h:panelGroup>
 				<h:commandLink title="Processar Arquivo" action="#{managedBean.processarArquivo}">
 					<h:graphicImage id="imgProcess" height="48" width="48" value="/resources/images/svg/services.svg"/>					
-				</h:commandLink>				
+				</h:commandLink>
+				<p:commandLink title="Ajuda" onclick="PF('dlgCSV').show()">
+					<h:graphicImage id="imgHelpCSV" height="48" width="48" value="/resources/images/svg/about.svg"/>					
+				</p:commandLink>				
 			</h:panelGroup>						
 			
 		</h:panelGrid>
