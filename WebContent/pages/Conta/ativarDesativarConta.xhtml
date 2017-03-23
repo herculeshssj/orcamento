@@ -127,7 +127,7 @@
 	    	<h:outputText rendered="#{managedBean.entity.ativo}"/>
 	    	
 	    	<h:outputText value="Gerar fechamento de período" rendered="#{managedBean.entity.ativo}"/>
-	    	<h:selectBooleanCheckbox value="#{managedBean.fecharPeriodo}"/>
+	    	<h:selectBooleanCheckbox value="#{managedBean.fecharPeriodo}" rendered="#{managedBean.entity.ativo}"/>
 	    							
 		</h:panelGrid>
 		
