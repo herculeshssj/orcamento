@@ -68,7 +68,7 @@ public class GrupoLancamentoRepository extends AbstractCRUDRepository<GrupoLanca
 		
 		if (descricao != null && !descricao.isEmpty()) {
 			hql.append(" AND grupo.descricao LIKE :descricao");
-			hqlParameters.put("descricao", "'%"+descricao.toLowerCase()+"%'");
+			hqlParameters.put("descricao", "%"+descricao.toLowerCase()+"%");
 		}
 		
 		if (ativo != null) {
