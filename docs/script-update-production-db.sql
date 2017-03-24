@@ -91,35 +91,13 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Patrimônio - Github Issue #252
-	create table patrimonio (
-		id bigint not null auto_increment,
-		descricao varchar(50) not null,
-		detalheEntradaPatrimonio text not null,
-		valorPatrimonio decimal(18,2) not null default 0.00,
-		dataEntrada date not null,
-		formaAquisicao varchar(50) null,
-		localAquisicao varchar(50) null,
-		marca varchar(50) null,
-		numeroRegistro varchar(50) null,
-		tipo varchar(50) null,
-		garantia integer null,
-		dataSaida date null,
-		detalheSaidaPatrimonio text null,
-		ativo boolean,
-		idUsuario bigint not null,
-		idCategoriaDocumento bigint null,
-		idFavorecido bigint not null,
-		idGrupoLancamento bigint not null,
-		idMoeda bigint not null,
-		primary key(id)
-	) Engine=InnoDB;
-	
-	alter table patrimonio add constraint fk_usuario_patrimonio foreign key (idUsuario) references usuario(id);
-	alter table patrimonio add constraint fk_categoriadocumento_patrimonio foreign key (idCategoriaDocumento) references categoriadocumento(id);
-	alter table patrimonio add constraint fk_favorecido_patrimonio foreign key (idFavorecido) references favorecido(id);
-	alter table patrimonio add constraint fk_grupolancamento_patrimonio foreign key (idGrupoLancamento) references grupolancamento(id);
-	alter table patrimonio add constraint fk_moeda_patrimonio foreign key (idMoeda) references moeda(id);
+	-- Exclusão de campos desnecessários
+	alter table patrimonio drop column formaAquisicao;
+	alter table patrimonio drop column localAquisicao;
+	alter table patrimonio drop column marca;
+	alter table patrimonio drop column numeroRegistro;
+	alter table patrimonio drop column tipo;
+	alter table patrimonio drop column garantia;
 	
     /*** Fim do bloco de atualizações da base ***/
     

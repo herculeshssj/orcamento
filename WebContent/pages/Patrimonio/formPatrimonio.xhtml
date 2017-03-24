@@ -59,6 +59,11 @@
 	
 	<ui:define name="campos">
 	
+		<h:panelGroup rendered="#{managedBean.operation != 'create'}">
+			<label for="frmFormEntity:txtNumeroPatrimonio">Número de patrimônio:</label>
+			<h:outputText id="txtNumeroPatrimonio" value="#{managedBean.entity.id}"/>
+		</h:panelGroup>
+	
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 		
@@ -75,28 +80,10 @@
 		<label for="frmFormEntity:txtDetalheAquisicao">Detalhes da aquisição:</label>
 		<h:inputTextarea id="txtDetalheAquisicao" value="#{managedBean.entity.detalheEntradaPatrimonio}"/>
 		
-		<label for="frmFormEntity:txtFavorecido">Favorecido (Autorizada/Construtora/Fabricante/Fornecedor):</label>
+		<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
 		<h:selectOneMenu id="txtFavorecido" value="#{managedBean.entity.favorecido}" converter="entityConverter">
 			<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
-		
-		<label for="frmFormEntity:txtTipo">Tipo (Categoria/Origem/Tipo):</label>
-		<h:inputText id="txtTipo" value="#{managedBean.entity.tipo}"/>
-		
-		<label for="frmFormEntity:txtNumeroRegistro">Número de registro (Nº de matrícula/registro/série):</label>
-		<h:inputText id="txtNumeroRegistro" value="#{managedBean.entity.numeroRegistro}"/>
-		
-		<label for="frmFormEntity:txtMarca">Marca:</label>
-		<h:inputText id="txtMarca" value="#{managedBean.entity.marca}"/>
-		
-		<label for="frmFormEntity:txtLocalAquisicao">Local de aquisição (Local de aquisição/compra/registro):</label>
-		<h:inputText id="txtLocalAquisicao" value="#{managedBean.entity.localAquisicao}"/>
-		
-		<label for="frmFormEntity:txtFormaAquisicao">Forma de aquisição:</label>
-		<h:inputText id="txtFormaAquisicao" value="#{managedBean.entity.formaAquisicao}"/>
-		
-		<label for="frmFormEntity:txtGarantia">Garantia:</label>
-		<h:inputText id="txtGarantia" value="#{managedBean.entity.garantia}"/>
 		
 		<label for="frmFormEntity:txtCategoriaDocumento">Categoria de documento:</label>
 		<h:selectOneMenu id="txtCategoriaDocumento" value="#{managedBean.entity.categoriaDocumento}" converter="entityConverter">

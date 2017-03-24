@@ -2686,6 +2686,14 @@ alter table patrimonio add constraint fk_favorecido_patrimonio foreign key (idFa
 alter table patrimonio add constraint fk_grupolancamento_patrimonio foreign key (idGrupoLancamento) references grupolancamento(id);
 alter table patrimonio add constraint fk_moeda_patrimonio foreign key (idMoeda) references moeda(id);
 
+-- Exclusão de campos desnecessários
+alter table patrimonio drop column formaAquisicao;
+alter table patrimonio drop column localAquisicao;
+alter table patrimonio drop column marca;
+alter table patrimonio drop column numeroRegistro;
+alter table patrimonio drop column tipo;
+alter table patrimonio drop column garantia;
+
 -- Benfeitoria - Github Issue #252
 create table benfeitoria (
 	id bigint not null auto_increment,

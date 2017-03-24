@@ -83,24 +83,6 @@ public class Patrimonio extends EntityPersistence {
 	@Temporal(TemporalType.DATE)	
 	private Date dataEntrada;
 	
-	@Column(length=50, nullable=true)
-	private String formaAquisicao;
-	
-	@Column(length=50, nullable=true)
-	private String localAquisicao;
-	
-	@Column(length=50, nullable=true)
-	private String marca;
-	
-	@Column(length=50, nullable=true)
-	private String tipo;
-	
-	@Column(length=50, nullable=true)
-	private String numeroRegistro;
-	
-	@Column(nullable=true)
-	private int garantia;
-	
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)
 	private Date dataSaida;
@@ -145,11 +127,6 @@ public class Patrimonio extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Detalhes da aquisição", this.detalheEntradaPatrimonio);
 		EntityPersistenceUtil.validaCampoNulo("Data de aquisição", this.dataEntrada);
-		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Forma de aquisição", this.formaAquisicao, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Local de aquisição", this.localAquisicao, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Marca", this.marca, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Número de registro", this.numeroRegistro, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Tipo", this.tipo, 50);
 		EntityPersistenceUtil.validaCampoNulo("Grupo de lançamento", this.grupoLancamento);
 		EntityPersistenceUtil.validaCampoNulo("Favorecido", this.favorecido);
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
@@ -193,54 +170,6 @@ public class Patrimonio extends EntityPersistence {
 
 	public void setDataEntrada(Date dataEntrada) {
 		this.dataEntrada = dataEntrada;
-	}
-
-	public String getFormaAquisicao() {
-		return formaAquisicao;
-	}
-
-	public void setFormaAquisicao(String formaAquisicao) {
-		this.formaAquisicao = formaAquisicao;
-	}
-
-	public String getLocalAquisicao() {
-		return localAquisicao;
-	}
-
-	public void setLocalAquisicao(String localAquisicao) {
-		this.localAquisicao = localAquisicao;
-	}
-
-	public String getMarca() {
-		return marca;
-	}
-
-	public void setMarca(String marca) {
-		this.marca = marca;
-	}
-
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-
-	public String getNumeroRegistro() {
-		return numeroRegistro;
-	}
-
-	public void setNumeroRegistro(String numeroRegistro) {
-		this.numeroRegistro = numeroRegistro;
-	}
-
-	public int getGarantia() {
-		return garantia;
-	}
-
-	public void setGarantia(int garantia) {
-		this.garantia = garantia;
 	}
 
 	public Date getDataSaida() {
