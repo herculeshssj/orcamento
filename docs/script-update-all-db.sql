@@ -2701,7 +2701,7 @@ create table benfeitoria (
 	detalheBenfeitoria text not null,
 	valorBenfeitoria decimal(18,2) not null,
 	dataInicio date not null,
-	dateFim date null,
+	dataFim date null,
 	idCategoriaDocumento bigint null,
 	idPatrimonio bigint not null,
 	idGrupoLancamento bigint not null,

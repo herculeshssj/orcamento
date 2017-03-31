@@ -53,22 +53,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Benfeitoria;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.GrupoLancamento;
-import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.facade.IBenfeitoria;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
-import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IPatrimonio;
 
 @Component
 @Scope("session")
-public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
+public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 
 	/**
 	 * 
@@ -76,7 +76,10 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 	private static final long serialVersionUID = 5919353747340308697L;
 	
 	@Autowired
-	private IPatrimonio service;
+	private IBenfeitoria service;
+	
+	@Autowired
+	private IPatrimonio patrimonioService;
 	
 	@Autowired
 	private IFavorecido favorecidoService;
@@ -85,22 +88,18 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 	private ICategoriaDocumento categoriaDocumentoService;
 	
 	@Autowired
-	private IMoeda moedaService;
-	
-	@Autowired
 	private IGrupoLancamento grupoLancamentoService;
 	
-	@Autowired
-	private BenfeitoriaController benfeitoriaController;
+	private Patrimonio patrimonioSelecionado;
 	
-	public PatrimonioController() {
-		super(new Patrimonio());
-		moduleTitle = "Patrimônio";
+	public BenfeitoriaController() {
+		super(new Benfeitoria());
+		moduleTitle = "Patrimônio - Benfeitorias";
 	}
 	
 	@Override
 	protected void initializeEntity() {
-		entity = new Patrimonio();
+		entity = new Benfeitoria();
 		listEntity = new ArrayList<>();
 	}
 	
@@ -113,21 +112,16 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarTodosPorUsuario(getUsuarioLogado());
+			listEntity = getService().buscarTodosPorPatrimonioEBenfeitoria(patrimonioSelecionado, getUsuarioLogado());
 		} catch (ValidationException | BusinessException e) {
 			errorMessage(e.getMessage());
 		}
 	}
 	
-	public String benfeitoriaView() {
-		try {
-			Patrimonio patrimonio = getService().buscarPorID(idEntity);
-			getBenfeitoriaController().setPatrimonioSelecionado(patrimonio);			
-			return getBenfeitoriaController().startUp();
-		} catch (BusinessException e) {
-			errorMessage(e.getMessage());
-		}
-		return "";
+	@Override
+	public String save() {
+		//entity.setUsuario(getUsuarioLogado()); // TODO setar o usuário da entidade via Reflection, no AbstractCRUDController
+		return super.save();
 	}
 	
 	public List<Favorecido> getListaFavorecido() {
@@ -148,15 +142,6 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 		return new ArrayList<>();
 	}
 	
-	public List<Moeda> getListaMoeda() {
-		try {
-			return getMoedaService().buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (ValidationException | BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
-	}
-	
 	public List<GrupoLancamento> getListaGrupoLancamento() {
 		try {
 			return getGrupoLancamentoService().buscarTodosDescricaoEAtivoPorUsuario(null, true, getUsuarioLogado());
@@ -166,8 +151,12 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 		return new ArrayList<>();
 	}
 
-	public IPatrimonio getService() {
+	public IBenfeitoria getService() {
 		return service;
+	}
+
+	public IPatrimonio getPatrimonioService() {
+		return patrimonioService;
 	}
 
 	public IFavorecido getFavorecidoService() {
@@ -178,15 +167,15 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 		return categoriaDocumentoService;
 	}
 
-	public IMoeda getMoedaService() {
-		return moedaService;
-	}
-
 	public IGrupoLancamento getGrupoLancamentoService() {
 		return grupoLancamentoService;
 	}
 
-	public BenfeitoriaController getBenfeitoriaController() {
-		return benfeitoriaController;
+	public Patrimonio getPatrimonioSelecionado() {
+		return patrimonioSelecionado;
+	}
+
+	public void setPatrimonioSelecionado(Patrimonio patrimonioSelecionado) {
+		this.patrimonioSelecionado = patrimonioSelecionado;
 	}
 }

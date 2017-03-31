@@ -56,7 +56,7 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{patrimonioController}" />
+	<ui:param name="managedBean" value="#{benfeitoriaController}" />
 	<ui:param name="colunaPesquisa" value="4" />
 	
 	<ui:define name="botao_pesquisa" />
@@ -67,29 +67,37 @@
 	
 	<ui:define name="tabela">
 	
-		<p:accordionPanel value="#{managedBean.listEntity}" var="patrimonio">
-			<p:tab title="#{patrimonio.descricao}">
+		<p:accordionPanel value="#{managedBean.listEntity}" var="benfeitoria">
+			<p:tab title="#{benfeitoria.descricao}">
 			
 				<p:panelGrid columns="2">
+				
+					<label>Patrimônio:</label>
+					<h:outputText value="#{benfeitoria.patrimonio.label}" />
 			
-					<label>Data de aquisição:</label>
-					<h:outputText value="#{patrimonio.dataEntrada}">
+					<label>Data de início:</label>
+					<h:outputText value="#{patrimonio.dataInicio}">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+					
+					<label>Data de término:</label>
+					<h:outputText value="#{patrimonio.dataFim}">
 						<f:converter converterId="dateConverter"/>
 					</h:outputText>
 					
 					<label>Valor:</label>
 					<h:panelGroup>
-						<h:outputText value="#{patrimonio.moeda.simboloMonetario} " />
-						<h:outputText value="#{patrimonio.valorPatrimonio}">
+						<h:outputText value="#{benfeitoria.patrimonio.moeda.simboloMonetario} " />
+						<h:outputText value="#{benfeitoria.valorBenfeitoria}">
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
 					</h:panelGroup>
 					
-					<label>Detalhes da aquisição:</label>
-					<h:outputText value="#{patrimonio.detalheEntradaPatrimonio}"/>
+					<label>Detalhes da benfeitoria:</label>
+					<h:outputText value="#{benfeitoria.detalheBenfeitoria}"/>
 					
 					<label>Favorecido:</label>
-					<h:outputText value="#{patrimonio.favorecido.label}"/>						
+					<h:outputText value="#{benfeitoria.favorecido.label}"/>						
 				
 				</p:panelGrid>
 				
@@ -103,16 +111,17 @@
 						<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 						<f:setPropertyActionListener value="#{patrimonio.id}" target="#{managedBean.idEntity}"/>
 					</h:commandLink>
-					<p:spacer width="20"/>
-					<h:commandLink title="Benfeitorias" action="#{managedBean.benfeitoriaView}">
-						<h:graphicImage id="imgImprove" height="48" width="48" value="/resources/images/svg/automotive.svg"/>
-						<f:setPropertyActionListener value="#{patrimonio.id}" target="#{managedBean.idEntity}"/>
-					</h:commandLink>
 				</h:panelGroup>
 				
 			</p:tab>
 		</p:accordionPanel>
 			
+	</ui:define>
+	
+	<ui:define name="outras_opcoes">
+		<h:commandLink id="lnkVoltar" title="Voltar para Patrimônio" action="#{patrimonioController.startUp}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+		</h:commandLink>
 	</ui:define>
 
 </ui:composition>

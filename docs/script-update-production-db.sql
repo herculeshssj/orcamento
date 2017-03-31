@@ -91,13 +91,23 @@ begin
     
     /*** Entre com as atualizações da base aqui ***/
     
-	-- Exclusão de campos desnecessários
-	alter table patrimonio drop column formaAquisicao;
-	alter table patrimonio drop column localAquisicao;
-	alter table patrimonio drop column marca;
-	alter table patrimonio drop column numeroRegistro;
-	alter table patrimonio drop column tipo;
-	alter table patrimonio drop column garantia;
+	-- Benfeitoria - Github Issue #252
+	create table benfeitoria (
+		id bigint not null auto_increment,
+		descricao varchar(50) not null,
+		detalheBenfeitoria text not null,
+		valorBenfeitoria decimal(18,2) not null,
+		dataInicio date not null,
+		dataFim date null,
+		idCategoriaDocumento bigint null,
+		idPatrimonio bigint not null,
+		idGrupoLancamento bigint not null,
+		primary key(id)
+	) Engine=InnoDB;
+	
+	alter table benfeitoria add constraint fk_patrimonio_benfetoria foreign key (idPatrimonio) references patrimonio(id);
+	alter table benfeitoria add constraint fk_categoriadocumento_benfetoria foreign key (idCategoriaDocumento) references categoriadocumento(id);
+	alter table benfeitoria add constraint fk_grupolancamento_benfetoria foreign key (idGrupoLancamento) references grupolancamento(id);
 	
     /*** Fim do bloco de atualizações da base ***/
     
