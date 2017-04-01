@@ -56,50 +56,44 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{patrimonioController}" />
+	<ui:param name="managedBean" value="#{benfeitoriaController}" />
 
 	<ui:define name="campos">
 	
 		<h:panelGrid columns="2">
 		
 			<label for="frmFormEntity:txtNumeroPatrimonio">Número de patrimônio:</label>
-			<h:outputText id="txtNumeroPatrimonio" value="#{managedBean.entity.id}"/>
+			<h:outputText id="txtNumeroPatrimonio" value="#{managedBean.patrimonioSelecionado.id}"/>
+		
+			<label for="frmFormEntity:txtPatrimonio">Patrimônio:</label>
+			<h:outputText id="txtPatrimonio" value="#{managedBean.patrimonioSelecionado.label}"/>
 			
 			<label for="frmFormEntity:txtDescricao">Descrição:</label>
 			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 			
 			<label for="frmFormEntity:txtValor">Valor:</label>
-			<h:outputText id="txtValor" value="#{managedBean.entity.valorPatrimonio}">
+			<h:outputText id="txtValor" value="#{managedBean.entity.valorBenfeitoria}">
 				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 		
-			<label for="frmFormEntity:txtDataEntrada">Data de entrada:</label>
-			<h:outputText id="txtDataEntrada" value="#{managedBean.entity.dataEntrada}">
+			<label for="frmFormEntity:txtDataInicio">Data de início:</label>
+			<h:outputText id="txtDataInicio" value="#{managedBean.entity.dataInicio}">
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			
-			<label for="frmFormEntity:txtDetalheAquisicao">Detalhes da aquisição:</label>
-			<h:outputText id="txtDetalheAquisicao" value="#{managedBean.entity.detalheEntradaPatrimonio}"/>
+			<label for="frmFormEntity:txtDataFim">Data de término:</label>
+			<h:outputText id="txtDataFim" value="#{managedBean.entity.dataFim}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
 			
-			<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
-			<h:outputText value="#{managedBean.entity.favorecido.label}" />
+			<label for="frmFormEntity:txtDetalheBenfeitoria">Detalhes da benfeitoria:</label>
+			<h:outputText id="txtDetalheBenfeitoria" value="#{managedBean.entity.detalheBenfeitoria}"/>
 			
 			<label for="frmFormEntity:txtCategoriaDocumento">Categoria de documento:</label>
 			<h:outputText value="#{managedBean.entity.categoriaDocumento.label}" />
 			
-			<label>Moeda:</label>
-			<h:outputText value="#{managedBean.entity.moeda.label}" />
-			
 			<label>Grupo de lançamento:</label>
 			<h:outputText value="#{managedBean.entity.grupoLancamento.label}" />
-				
-			<label for="frmFormEntity:txtDataSaida">Data de saída:</label>
-			<h:outputText id="txtDataSaida" value="#{managedBean.entity.dataSaida}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
-			<label for="frmFormEntity:txtDetalheSaida">Detalhes da saída:</label>
-			<h:outputText id="txtDetalheSaida" value="#{managedBean.entity.detalheSaidaPatrimonio}"/>
 		
 		</h:panelGrid>
 		

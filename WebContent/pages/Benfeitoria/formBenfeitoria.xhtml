@@ -55,35 +55,37 @@
 
 <ui:composition template="/templates/formulario.xhtml">
 
-	<ui:param name="managedBean" value="#{patrimonioController}" />
+	<ui:param name="managedBean" value="#{benfeitoriaController}" />
 	
 	<ui:define name="campos">
 	
-		<h:panelGroup rendered="#{managedBean.operation != 'create'}">
-			<label for="frmFormEntity:txtNumeroPatrimonio">Número de patrimônio:</label>
-			<h:outputText id="txtNumeroPatrimonio" value="#{managedBean.entity.id}"/>
-		</h:panelGroup>
+		
+		<label for="frmFormEntity:txtNumeroPatrimonio">Número de patrimônio:</label>
+		<h:outputText id="txtNumeroPatrimonio" value="#{managedBean.patrimonioSelecionado.id}"/>
+		
+		<label for="frmFormEntity:txtPatrimonio">Patrimônio:</label>
+		<h:outputText id="txtPatrimonio" value="#{managedBean.patrimonioSelecionado.label}"/>		
 	
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 		
 		<label for="frmFormEntity:txtValor">Valor:</label>
-		<h:inputText id="txtValor" value="#{managedBean.entity.valorPatrimonio}">
+		<h:inputText id="txtValor" value="#{managedBean.entity.valorBenfeitoria}">
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		</h:inputText>
 	
-		<label for="frmFormEntity:txtDataEntrada">Data de entrada:</label>
-		<p:inputMask id="txtDataEntrada" value="#{managedBean.entity.dataEntrada}" size="10" mask="99/99/9999">
+		<label for="frmFormEntity:txtDataInicio">Data de início:</label>
+		<p:inputMask id="txtDataInicio" value="#{managedBean.entity.dataInicio}" size="10" mask="99/99/9999">
 			<f:converter converterId="dateConverter"/>
 		</p:inputMask>
 		
-		<label for="frmFormEntity:txtDetalheAquisicao">Detalhes da aquisição:</label>
-		<h:inputTextarea id="txtDetalheAquisicao" value="#{managedBean.entity.detalheEntradaPatrimonio}"/>
+		<label for="frmFormEntity:txtDataFim">Data de términio:</label>
+		<p:inputMask id="txtDataFim" value="#{managedBean.entity.dataFim}" size="10" mask="99/99/9999">
+			<f:converter converterId="dateConverter"/>
+		</p:inputMask>
 		
-		<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
-		<h:selectOneMenu id="txtFavorecido" value="#{managedBean.entity.favorecido}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
-		</h:selectOneMenu>
+		<label for="frmFormEntity:txtDetalheBenfeitoria">Detalhes da benfeitoria:</label>
+		<h:inputTextarea id="txtDetalheBenfeitoria" value="#{managedBean.entity.detalheBenfeitoria}"/>
 		
 		<label for="frmFormEntity:txtCategoriaDocumento">Categoria de documento:</label>
 		<h:selectOneMenu id="txtCategoriaDocumento" value="#{managedBean.entity.categoriaDocumento}" converter="entityConverter">
@@ -91,23 +93,11 @@
 			<f:selectItems value="#{managedBean.listaCategoriaDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
 		
-		<label>Moeda:</label>
-		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
-		</h:selectOneMenu>
-		
 		<label>Grupo de lançamento:</label>
 		<h:selectOneMenu value="#{managedBean.entity.grupoLancamento}" converter="entityConverter">
+			<f:selectItem itemLabel="Selecione um grupo de lançamento" />
 			<f:selectItems value="#{managedBean.listaGrupoLancamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
-			
-		<label for="frmFormEntity:txtDataSaida">Data de saída:</label>
-		<p:inputMask id="txtDataSaida" value="#{managedBean.entity.dataSaida}" size="10" mask="99/99/9999">
-			<f:converter converterId="dateConverter"/>
-		</p:inputMask>
-		
-		<label for="frmFormEntity:txtDetalheSaida">Detalhes da saída:</label>
-		<h:inputTextarea id="txtDetalheSaida" value="#{managedBean.entity.detalheSaidaPatrimonio}"/>
 			
 	</ui:define>
 

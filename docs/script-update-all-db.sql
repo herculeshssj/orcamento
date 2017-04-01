@@ -2704,7 +2704,7 @@ create table benfeitoria (
 	dataFim date null,
 	idCategoriaDocumento bigint null,
 	idPatrimonio bigint not null,
-	idGrupoLancamento bigint not null,
+	idGrupoLancamento bigint null,
 	primary key(id)
 ) Engine=InnoDB;
 

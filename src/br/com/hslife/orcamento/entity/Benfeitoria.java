@@ -96,7 +96,7 @@ public class Benfeitoria extends EntityPersistence {
 	private Patrimonio patrimonio;
 	
 	@ManyToOne
-	@JoinColumn(name="idGrupoLancamento", nullable=false)
+	@JoinColumn(name="idGrupoLancamento", nullable=true)
 	private GrupoLancamento grupoLancamento;
 	
 	public Benfeitoria() {

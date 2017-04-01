@@ -78,7 +78,7 @@ public class BenfeitoriaRepository extends AbstractCRUDRepository<Benfeitoria> {
 		
 		StringBuilder hql = new StringBuilder().append("FROM Benfeitoria b WHERE b.patrimonio.id = :idPatrimonio AND b.patrimonio.usuario.id = :idUsuario");
 		
-		hqlParameters.put("idPatrimonio", usuario.getId());
+		hqlParameters.put("idPatrimonio", patrimonio.getId());
 		hqlParameters.put("idUsuario", usuario.getId());
 		
 		return getQueryApplyingParameters(hql.toString()).list();

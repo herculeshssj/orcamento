@@ -76,12 +76,12 @@
 					<h:outputText value="#{benfeitoria.patrimonio.label}" />
 			
 					<label>Data de início:</label>
-					<h:outputText value="#{patrimonio.dataInicio}">
+					<h:outputText value="#{benfeitoria.dataInicio}">
 						<f:converter converterId="dateConverter"/>
 					</h:outputText>
 					
 					<label>Data de término:</label>
-					<h:outputText value="#{patrimonio.dataFim}">
+					<h:outputText value="#{benfeitoria.dataFim}">
 						<f:converter converterId="dateConverter"/>
 					</h:outputText>
 					
@@ -96,20 +96,17 @@
 					<label>Detalhes da benfeitoria:</label>
 					<h:outputText value="#{benfeitoria.detalheBenfeitoria}"/>
 					
-					<label>Favorecido:</label>
-					<h:outputText value="#{benfeitoria.favorecido.label}"/>						
-				
 				</p:panelGrid>
 				
 				<h:panelGroup>
 					<h:commandLink title="Editar" action="#{managedBean.edit}">
 						<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
-						<f:setPropertyActionListener value="#{patrimonio.id}" target="#{managedBean.idEntity}"/>
+						<f:setPropertyActionListener value="#{benfeitoria.id}" target="#{managedBean.idEntity}"/>
 					</h:commandLink>								
   					<p:spacer width="20"/>
 					<h:commandLink title="Excluir" action="#{managedBean.view}">
 						<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
-						<f:setPropertyActionListener value="#{patrimonio.id}" target="#{managedBean.idEntity}"/>
+						<f:setPropertyActionListener value="#{benfeitoria.id}" target="#{managedBean.idEntity}"/>
 					</h:commandLink>
 				</h:panelGroup>
 				

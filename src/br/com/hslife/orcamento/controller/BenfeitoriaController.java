@@ -55,14 +55,12 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Benfeitoria;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
-import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.GrupoLancamento;
 import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IBenfeitoria;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
-import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
 import br.com.hslife.orcamento.facade.IPatrimonio;
 
@@ -80,9 +78,6 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	
 	@Autowired
 	private IPatrimonio patrimonioService;
-	
-	@Autowired
-	private IFavorecido favorecidoService;
 	
 	@Autowired
 	private ICategoriaDocumento categoriaDocumentoService;
@@ -120,17 +115,10 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	
 	@Override
 	public String save() {
-		//entity.setUsuario(getUsuarioLogado()); // TODO setar o usuário da entidade via Reflection, no AbstractCRUDController
-		return super.save();
-	}
-	
-	public List<Favorecido> getListaFavorecido() {
-		try {
-			return getFavorecidoService().buscarAtivosPorUsuario(getUsuarioLogado());
-		} catch (ValidationException | BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
+		entity.setPatrimonio(patrimonioSelecionado);
+		String retorno = super.save();
+		find(); // somente para forçar uma busca inicial
+		return retorno;
 	}
 	
 	public List<CategoriaDocumento> getListaCategoriaDocumento() {
@@ -157,10 +145,6 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 
 	public IPatrimonio getPatrimonioService() {
 		return patrimonioService;
-	}
-
-	public IFavorecido getFavorecidoService() {
-		return favorecidoService;
 	}
 
 	public ICategoriaDocumento getCategoriaDocumentoService() {
