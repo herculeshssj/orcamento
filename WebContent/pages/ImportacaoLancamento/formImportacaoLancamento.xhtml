@@ -59,7 +59,18 @@
 	
 	<ui:define name="campos">
 	
-		<p:dialog header="Importação via CSV" modal="true" widgetVar="dlgCSV" minHeight="40">
+		<p:dialog header="Importação de Lançamentos" modal="true" widgetVar="dlgImportacao" minHeight="40">
+			Importação via OFX<br/><br/>
+			
+			Processa todos os lançamentos contidos no arquivo OFX. <br/>
+			Valida banco, agência e conta do arquivo com o cadatro <br/>
+			do sistema para não haver fraude. Somente os lançamentos <br/> 
+			cuja data de pagamento for posterior a data de abertura <br/> 
+			da conta serão importados.
+			
+			<br/><br/>
+			
+			Importação via CSV<br/><br/>
 			Abaixo segue o cabeçalho do arquivo CSV:<br/>
 			- HISTORICO<br/>
 			- DOCUMENTO<br/>
@@ -96,8 +107,8 @@
 				<h:commandLink title="Processar Arquivo" action="#{managedBean.processarArquivo}">
 					<h:graphicImage id="imgProcess" height="48" width="48" value="/resources/images/svg/services.svg"/>					
 				</h:commandLink>
-				<p:commandLink title="Ajuda" onclick="PF('dlgCSV').show()">
-					<h:graphicImage id="imgHelpCSV" height="48" width="48" value="/resources/images/svg/about.svg"/>					
+				<p:commandLink title="Ajuda" onclick="PF('dlgImportacao').show()">
+					<h:graphicImage id="imgHelp" height="48" width="48" value="/resources/images/svg/about.svg"/>					
 				</p:commandLink>				
 			</h:panelGroup>						
 			
