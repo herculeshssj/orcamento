@@ -16,6 +16,7 @@ Destinado a controlar as despesas domésticas de uma família. Tem opções para
 * Tomcat 8.0.14 ou superior;
 * MySQL 5.5 ou superior;
 * astah Community 6 ou superior;
+* Pencil 2.0.6 ou superior;
 * Windows, Linux ou Mac, qualquer versão capaz de rodar os softwares acima.
 
 *Links de download:*
@@ -26,6 +27,7 @@ Destinado a controlar as despesas domésticas de uma família. Tem opções para
 * *Tomcat 8*: http://tomcat.apache.org/download-80.cgi
 * *MySQL 5.5*: http://dev.mysql.com/downloads/mysql/5.6.html
 * *astah Community*: http://astah.net/editions/community
+* *Pencil*: http://pencil.evolus.vn/Downloads.html
 
 ### Instalação do Java
 

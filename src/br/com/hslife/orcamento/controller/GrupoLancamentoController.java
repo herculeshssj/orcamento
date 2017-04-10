@@ -204,7 +204,7 @@ public class GrupoLancamentoController extends AbstractCRUDController<GrupoLanca
 				boolean itemPresente = false;
 				// Verifica se o lançamento já existe
 				for (ItemGrupoLancamento item : entity.getItens()) {
-					if (item.getLancamentoConta().equals(itemGrupo.getLancamentoConta())) {
+					if (item.getLancamentoConta() != null && item.getLancamentoConta().equals(itemGrupo.getLancamentoConta())) {
 						itemPresente = true;
 						break;
 					}
