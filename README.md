@@ -36,9 +36,7 @@ A instalação do Java no Windows e Mac OS X não tem mistério. Basta baixar o 
 Para o Ubuntu, utilize os seguintes comandos:
 
 ``
-sudo add-apt-repository ppa:webupd8team/java && sudo apt-get update
-
-sudo apt-get install oracle-java8-installer
+sudo add-apt-repository ppa:webupd8team/java && sudo apt-get update && sudo apt-get install oracle-java8-installer
 ``
 
 ### Instalação do Eclipse Luna
@@ -61,9 +59,9 @@ Para realizar a instalação do Git no Mac, pode-se instalar a ferramenta dispon
 
 A instalação do Tomcat não tem mistério, basta baixar e descompactar o arquivo zipado para o diretório desejado.
 
-Adicione no Eclipse pelo menu Window -> Preferences. Nas opções da lateral, vai em Server -> Runtime Environment. Clique em Add, selecione o Tomcat 8, selecione o diretório de instalação de Tomcat e clique em Finnish.
+Adicione no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral, vai em *Server -> Runtime Environment*. Clique em *Add*, selecione o Tomcat 8, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
 
-Depois clique na view Server e clique em New -> Server. Selecione o Tomcat 8 e clique em Finnish.
+Depois clique na view *Server* e clique em *New -> Server*. Selecione o Tomcat 8 e clique em *Finnish*.
 
 ### Instalação do MySQL
 
@@ -105,30 +103,27 @@ source /caminho/para/o/workspace/eclipse/orcamento/src/docs/script-update-all-db
 
 ### Configuração do projeto no Eclipse
 
-Efetue o clone tanto do projeto quanto do projeto Orçamento DB para um diretório de sua preferência usando o comando:
+Efetue o clone tanto do projeto quanto do projeto Orçamento quanto do Orçamento DB para um diretório de sua preferência usando o comando:
 
 ``
-git clone https://github.com/herculeshssj/orcamento-db
-
-git clone https://github.com/herculeshssj/orcamento-maven
+git clone https://github.com/herculeshssj/orcamento-db && git clone https://github.com/herculeshssj/orcamento-maven
 ``
 
-No Eclipse, abra a perspectiva Git. Clique em Add an existing Git repository. Selecione o diretório onde foi realizado o clone do repositório, e clique em Finnish. Faça isso com ambos os repositórios.
+No Eclipse, abra a perspectiva Git. Clique em *Add an existing Git repository*. Selecione o diretório onde foi realizado o clone do repositório, e clique em *Finnish*. Faça isso com ambos os repositórios.
 
-Após isso clique no repositório e selecione Import Projects from Git Repository. Clique em Next, e na próxima tela em Finnish. Faça isso para ambos os projetos.
+Após isso clique no repositório e selecione *Import Projects from Git Repository*. Clique em *Next*, e na próxima tela em *Finnish*. Faça isso para ambos os projetos.
 
-Os projetos Orçamento e Orçamento DB precisam ser compilados antes que possam ser executados. Para isso clique com o botão direito em cima do projeto, escolha Run As -> Maven Build. Na janela que se abre, digite "clean install" na linha "Goal", e depois clique em Run. Faça este procedimento para ambos os projetos.
+Os projetos Orçamento e Orçamento DB precisam ser compilados antes que possam ser executados. Para isso clique com o botão direito em cima do projeto, escolha *Run As -> Maven Build*. Na janela que se abre, digite "clean install" na linha "Goal", e depois clique em *Run*. Faça este procedimento para ambos os projetos.
 
-O projeto Orçamento DB contém as mudanças mais recentes nas bases de dados. Assim, é necessário atualizar as bases antes de executar o projeto Orçamento. Para atualizar a base de testes, basta clicar com o botão direito em cima da base, Run As -> Java Application. 
+O projeto Orçamento DB contém as mudanças mais recentes nas bases de dados. Assim, é necessário atualizar as bases antes de executar o projeto Orçamento. Para atualizar a base de testes, basta clicar com o botão direito em cima da base, *Run As -> Java Application*. 
 
-Atualizado a base de teste, é necessário efetuar a atualização da base de produção. Clique com botão direito em cima do projeto, selecione Run As -> Run Configurations. No lado esquerdo, selecione o "Migrar DB" no item Java Application. No lado direito, selecione a aba Arguments, e informe a palavra "producao" na seção "Program Arguments". Clique no botão Run para efetuar a atualização da base.
+Atualizado a base de teste, é necessário efetuar a atualização da base de produção. Clique com botão direito em cima do projeto, selecione *Run As -> Run Configurations*. No lado esquerdo, selecione o *Migrar DB* no item *Java Application*. No lado direito, selecione a aba *Arguments*, e informe a palavra "producao" na seção "Program Arguments". Clique no botão *Run* para efetuar a atualização da base.
 
-Atualizado as bases, clique com botão direito em cima do projeto, escolha Run As -> Run on Server. Na tela que se abre, selecione o Tomcat configurado e clique em Finnish.
+Atualizado as bases, clique com botão direito em cima do projeto, escolha *Run As -> Run on Server*. Na tela que se abre, selecione o Tomcat configurado e clique em *Finnish*.
 
 Acesse o sistema pela URL http://localhost:8080/orcamento/ usando as seguintes credenciais:
 
-*Usuário:* admin
-
-*Senha:* admin
+* *Usuário:* admin
+* *Senha:* admin
 
 **Observação:** todas as funcionalidades já estão disponíveis para o usuário comum, basta realizar o registro no sistema.
