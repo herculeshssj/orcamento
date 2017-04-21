@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="761" measuredWidth="940" measuredHeight="761"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Resumos,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="27">
+    <items x="5" y="0" width="39" height="27" text="Início"/>
+    <items x="44" y="0" width="51" height="27" text="Agenda"/>
+    <items x="95" y="0" width="62" height="27" text="Cadastros"/>
+    <items x="157" y="0" width="81" height="27" text="Lançamentos"/>
+    <items x="238" y="0" width="58" height="27" text="Resumos"/>
+    <items x="296" y="0" width="60" height="27" text="Despensa"/>
+    <items x="356" y="0" width="78" height="27" text="Documentos"/>
+    <items x="434" y="0" width="50" height="27" text="Opções"/>
+    <items x="484" y="0" width="41" height="27" text="Ajuda"/>
+    <items x="525" y="0" width="29" height="27" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Prestação de Serviços - Novo" measuredWidth="316" measuredHeight="40">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Label" id="119" x="80" y="376" text="Prestador de Serviço:" measuredWidth="115" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="120" x="203" y="376" text="Selecione o prestador de serviço" measuredWidth="193" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="121" x="761" y="296" text="Obs:&#xD;&#xA;Dados que devem constar&#xD;&#xA;no cadastro do serviço:&#xD;&#xA;- informações do empregador&#xD;&#xA;(dados pessoais, identificação,&#xD;&#xA;endereços e telefone do usuário);&#xD;&#xA;- cargo/serviço&#xD;&#xA;- nº de registro do cargo (CBO);&#xD;&#xA;- data de admissão&#xD;&#xA;- nº registro&#xD;&#xA;- folha/ficha&#xD;&#xA;- remuneração especificada&#xD;&#xA;- data de saída (dispensa)" measuredWidth="209" measuredHeight="205" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="122" x="761" y="528" text="Ocorrências do prestador de serviço&#xD;&#xA;- o quê?&#xD;&#xA;- quando?&#xD;&#xA;- porque?&#xD;&#xA;Ex:&#xD;&#xA;Aumento de salário&#xD;&#xA;- data do aumento;&#xD;&#xA;- novo valor;&#xD;&#xA;- motivo&#xD;&#xA;Férias&#xD;&#xA;- De ... À ...&#xD;&#xA;- Período (1º, 2º ou 3º)&#xD;&#xA;- Ano-exercício&#xD;&#xA;Anotações gerais&#xD;&#xA;- texto livre&#xD;&#xA;&#xD;&#xA;As ocorrências são anotadas na carteira&#xD;&#xA;de trabalho do empregado." measuredWidth="217" measuredHeight="280" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="1057" measuredWidth="940" measuredHeight="1057"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Cadastros,Contas,Cartão,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="108" y="0" width="47" height="23" text="Contas"/>
+    <items x="155" y="0" width="46" height="23" text="Cartão"/>
+    <items x="201" y="0" width="62" height="23" text="Despensa"/>
+    <items x="263" y="0" width="78" height="23" text="Documentos"/>
+    <items x="341" y="0" width="59" height="23" text="Resumos"/>
+    <items x="400" y="0" width="50" height="23" text="Opções"/>
+    <items x="450" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="491" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Fatura do Cartão - Editar lançamentos" measuredWidth="340" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="5" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Label" id="26" x="80" y="368" text="Cartão:" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="28" x="80" y="408" text="Data de vencimento:" measuredWidth="115" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" id="46" x="80" y="550" width="873" measuredWidth="873" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" id="57" x="80" y="448" text="Moeda da fatura:" measuredWidth="96" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tooltip" id="59" x="248" y="428" text="Indica qual moeda foi usada para quitar a fatura" measuredWidth="268" measuredHeight="38">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="62" x="80" y="574" text="Data de lançamento" measuredWidth="112" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="63" x="200" y="574" text="04 / 05 / 2014 " measuredWidth="114" measuredHeight="21"/>
+  <widgets xsi:type="model:Label" id="64" x="328" y="574" text="Descrição:" measuredWidth="61" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="65" x="400" y="574" width="145" measuredWidth="145" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="66" x="328" y="614" text="Valor:" measuredWidth="37" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="67" x="400" y="614" width="75" text="250" measuredWidth="75" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="68" x="80" y="614" text="Moeda:" measuredWidth="44" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="69" x="200" y="614" text="R$ - Real" measuredWidth="74" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="70" x="576" y="574" text="Parcela:" measuredWidth="47" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="71" x="640" y="574" width="145" measuredWidth="145" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="73" x="80" y="846" width="889" height="201" text="Data, Descrição,Valor,Ações&#xA;01/10/2014,Compra parcelado 1,R$ 100,{delete}&#xA;01/10/2014,Compra parcelado 2,R$ 100,{delete}&#xA;01/10/2014,Compra parcelado 3,R$ 100,{delete}&#xA;01/10/2014,Compra à vista 1,R$ 100,{delete}&#xA;01/10/2014,Compra à vista 2,R$ 100,{delete}&#xA;01/10/2014,Compra internacional 1,US$ 100,{delete} &#xA;01/10/2014,Compra internacional 2,US$ 100,{delete}" measuredWidth="889" measuredHeight="201" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="74" x="576" y="614" text="Tipo de lançamento:" measuredWidth="115" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="75" x="704" y="614" text="Receita" measuredWidth="59" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="76" x="784" y="614" text="Despesa" measuredWidth="65" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="100" x="200" y="448" text="R$ - Real" measuredWidth="55" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="101" x="200" y="408" text="24 / 05 / 2014 " measuredWidth="90" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="102" x="200" y="368" text="BB - Ourocard Visa Platinum International" measuredWidth="228" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="103" x="80" y="678" width="889" height="121" text="Data, Descrição,Valor,Ações&#xA;01/10/2014,Compra parcelado 1,R$ 100&#xA;01/10/2014,Compra à vista 1,R$ 100,{add}&#xA;01/10/2014,Compra internacional 1,US$ 100,{add} &#xA;01/10/2014,Compra internacional 2,US$ 100,{add}" measuredWidth="889" measuredHeight="121" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="104" x="80" y="654" text="Lançamentos encontrados:" measuredWidth="149" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="105" x="80" y="814" text="Lançamentos adicionados à fatura:" measuredWidth="191" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="106" x="817" y="569" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Image" id="107" x="880" y="569" measuredWidth="32" measuredHeight="32" src="../Imagens/adicionar.png"/>
+  <widgets xsi:type="model:Note" id="108" x="1000" y="507" text="A edição de lançamentos da fatura&#xA;permitirá que novos lançamentos sejam&#xA;criados na mesma tela e com os mesmos &#xA;parâmetros informados na busca. A criação&#xA;do lançamento fica condicionada ao preen-&#xA;chimento de todos os campos." measuredWidth="243" measuredHeight="88" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="111" x="144" y="1070" measuredWidth="32" measuredHeight="32" src="../Imagens/gravar.png"/>
+  <widgets xsi:type="model:Image" id="112" x="92" y="1070" measuredWidth="32" measuredHeight="32" src="../Imagens/voltar.png"/>
+  <widgets xsi:type="model:Note" id="113" x="1000" y="612" text="Não é possível adicionar lançamentos&#xA;quitados." measuredWidth="211" measuredHeight="36" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="114" x="80" y="487" text="Anexar fatura:" measuredWidth="82" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="115" x="200" y="487" width="165" measuredWidth="165" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="116" x="364" y="486" width="97" text="Selecione..." measuredWidth="97" measuredHeight="23" textAlignment="Left">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

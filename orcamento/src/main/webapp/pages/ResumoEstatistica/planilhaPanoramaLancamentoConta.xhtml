@@ -1,0 +1,203 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Orçamento Doméstico</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+</h:head>
+
+<h:body>
+
+	<ui:param name="managedBean" value="#{panoramaLancamentoContaMB}" />
+	
+	<h:form>
+	
+		<p:dataTable id="sheetTableListEntity" width="100%" border="1" value="#{managedBean.listEntity}" var="item">
+     			
+     		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Descrição"/>
+				</f:facet>						
+				<h:outputText value="#{item.descricao}" style="#{item.descricao == 'Saldo Total' or item.descricao == 'Saldo Anterior' ? 'font-weight: bold' : 'font-weight: normal'}"/>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Janeiro"/>
+				</f:facet>			
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.janeiro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>			
+				<h:outputText value="#{item.janeiro}" style="#{item.janeiro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Fevereiro"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.fevereiro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.fevereiro}" style="#{item.fevereiro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Março"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.marco > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.marco}" style="#{item.marco > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>	  						
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Abril"/>
+				</f:facet>	
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.abril > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>					
+				<h:outputText value="#{item.abril}" style="#{item.abril > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Maio"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.maio > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.maio}" style="#{item.maio > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Junho"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.junho > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.junho}" style="#{item.junho > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Julho"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.julho > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>	
+				<h:outputText value="#{item.julho}" style="#{item.julho > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>					
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Agosto"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.agosto > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.agosto}" style="#{item.agosto > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Setembro"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.setembro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.setembro}" style="#{item.setembro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Outubro"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.outubro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.outubro}" style="#{item.outubro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Novembro"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.novembro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.novembro}" style="#{item.novembro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Dezembro"/>
+				</f:facet>
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.dezembro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>						
+				<h:outputText value="#{item.dezembro}" style="#{item.dezembro > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+	  		<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Total"/>
+				</f:facet>	
+				<h:outputText value="#{managedBean.criterioBusca.conta.moeda.simboloMonetario} " style="#{item.total > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}" rendered="#{item.descricao != 'Saldo Total' and item.descricao != 'Saldo Anterior'}"/>						
+				<h:outputText value="#{item.total}" style="#{item.total > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}" rendered="#{item.descricao != 'Saldo Total' and item.descricao != 'Saldo Anterior'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+	  		</p:column>
+     		
+    	</p:dataTable>
+		<br/>	
+		<h:commandLink title="Exportar para MS-Excel">
+			<p:graphicImage value="/resources/images/svg/export.svg" width="48" height="48"/>
+			<p:dataExporter type="xls" target="sheetTableListEntity" fileName="PanoramaLancamentoConta" encoding="iso-8859-1"/> 
+		</h:commandLink>
+	
+	</h:form>
+	
+</h:body>
+</html>

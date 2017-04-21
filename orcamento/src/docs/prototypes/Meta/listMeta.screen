@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="497" measuredWidth="940" measuredHeight="497"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Contas,Cartão,Orçamento,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="51" height="23" text="Agenda"/>
+    <items x="95" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="159" y="0" width="47" height="23" text="Contas"/>
+    <items x="206" y="0" width="46" height="23" text="Cartão"/>
+    <items x="252" y="0" width="69" height="23" text="Orçamento"/>
+    <items x="321" y="0" width="62" height="23" text="Despensa"/>
+    <items x="383" y="0" width="78" height="23" text="Documentos"/>
+    <items x="461" y="0" width="59" height="23" text="Resumos"/>
+    <items x="520" y="0" width="50" height="23" text="Opções"/>
+    <items x="570" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="611" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Metas Financeiras" measuredWidth="161" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Table" id="37" x="72" y="401" width="897" height="112" text="Descrição,Saldo,Meta,Vencimento,Progresso,Ações&#xA;Viajar,R$ 1000, R$ 5000, 30/09/2014,,{edit} {delete}&#xA;Curso, R$ 300, R$ 3000, 31/07/2014,,{edit} {delete}&#xA;Mestrado, R$ 2500, R$ 30000, 31/12/2016,,{edit} {delete}" measuredWidth="897" measuredHeight="112" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="82" x="80" y="352" measuredWidth="32" measuredHeight="32" src="../Imagens/novo.png"/>
+  <widgets xsi:type="model:Label" id="83" x="120" y="357" text="Descrição:" measuredWidth="61" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="85" x="440" y="352" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:TextField" id="99" x="184" y="358" width="145" measuredWidth="145" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="100" x="72" y="520" text="Uma meta sempre ficará associada a uma conta corrente, poupança ou do tipo outros." measuredWidth="472" measuredHeight="23" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="102" x="352" y="358" text="Finalizadas" measuredWidth="81" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="103" x="560" y="520" text="Pode-se encerrar uma meta junto com a conta. Para estas situações,&#xA;o fluxo do caso de uso vai para o encerramento de contas." measuredWidth="377" measuredHeight="36" annotation="true" textAlignment="Left">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:ProgressBar" id="104" x="704" y="424" width="145" measuredWidth="145" measuredHeight="18"/>
+  <widgets xsi:type="model:ProgressBar" id="105" x="704" y="448" width="145" measuredWidth="145" measuredHeight="18"/>
+  <widgets xsi:type="model:ProgressBar" id="106" x="704" y="472" width="145" measuredWidth="145" measuredHeight="18"/>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

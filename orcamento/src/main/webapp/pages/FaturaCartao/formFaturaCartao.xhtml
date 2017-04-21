@@ -1,0 +1,125 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{faturaCartaoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+	
+			Cartão:
+			<h:selectOneMenu value="#{managedBean.cartaoSelecionado}" converter="entityConverter" rendered="#{managedBean.operation == 'create'}">
+				<f:selectItems value="#{managedBean.listaCartaoSoCredito}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>
+			<h:outputText value="#{managedBean.entity.conta.cartaoCredito.label}" rendered="#{managedBean.operation != 'create'}"/>
+			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			
+			Data de vencimento:
+			<h:outputText value="#{managedBean.entity.dataVencimento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Fatura:			
+			<h:panelGrid columns="3">
+				<h:inputText value="#{managedBean.entity.mes}"/>
+				/
+				<h:inputText value="#{managedBean.entity.ano}"/>
+			</h:panelGrid>			
+			
+			Saldo devedor faturas anteriores:
+			<p:inputText value="#{managedBean.entity.saldoDevedor}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</p:inputText>	
+			
+			Status atual da fatura:
+			<h:outputText value="#{managedBean.entity.statusFaturaCartao}" style="font-weight: bold;"/>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			Anexar fatura:
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" />
+			<h:panelGroup>
+				<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
+					<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+				</h:commandLink>
+				&nbsp;&nbsp;&nbsp;
+				<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
+					<h:graphicImage id="imgDeleteFile" value="/resources/images/svg/delete_row.svg" height="48" width="48"/>
+				</h:commandLink>								
+			</h:panelGroup>			
+		</h:panelGrid>
+		
+		<hr/>
+		
+		<p:tabView>
+			<p:ajax event="tabChange" update="tableLancamentosAdicionados, tableLancamentosEncontrados, tableSaldoCompraSaqueParcelados"/>
+			<p:tab title="Adicionados à fatura">
+				<ui:include src="lancamentosAdicionados.xhtml" />
+			</p:tab>
+			<p:tab title="Pesquisa">
+				<ui:include src="pesquisarLancamentos.xhtml" />
+			</p:tab>			
+		</p:tabView>
+		<br/>
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,202 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{itemDespensaMB}" />
+	
+	<ui:define name="campos">
+	
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{managedBean.entity.arquivado}"/>
+		
+		<label>Despensa:</label>
+		<h:selectOneMenu id="txtDespensa" value="#{managedBean.entity.despensa}" converter="entityConverter" disabled="#{managedBean.entity.arquivado}">
+    		<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+    	</h:selectOneMenu>
+    	    	
+    	<h:panelGroup rendered="#{empty managedBean.entity.movimentacao}">
+    		<label>Unidade de Medida:</label>
+	    	<h:selectOneMenu id="txtUnidadeMedida" value="#{managedBean.entity.unidadeMedida}" converter="entityConverter">
+	    		<f:selectItems value="#{managedBean.listaUnidadeMedida}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+	    	</h:selectOneMenu>
+    	</h:panelGroup>    	
+    	<h:panelGroup rendered="#{not empty managedBean.entity.movimentacao}">
+    		<label>
+    			Unidade de Medida: 
+    			<h:outputText value="#{managedBean.entity.unidadeMedida.descricao}" />&nbsp;(<h:outputText value="#{managedBean.entity.unidadeMedida.sigla}" />)
+    		</label>
+    		<p:spacer height="1"/>
+    	</h:panelGroup>
+    	
+    	<label for="frmFormEntity:txtMarca">Marca:</label>
+    	<h:inputText id="txtMarca" value="#{managedBean.entity.marca}" disabled="#{managedBean.entity.arquivado}"/>
+    	
+    	<!-- Mostra as opções de estoque se a opção do sistema estiver ativa -->
+    	<h:panelGroup rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+    	
+	    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+	    		<label>
+	    			<h:outputText value="Quantidade atual: " />
+					<h:outputText id="txtQuantidadeAtual" value="#{managedBean.entity.quantidadeAtual}"/>
+				</label>
+				<p:spacer height="1"/>
+			</h:panelGroup>
+	    	
+	    	<label for="frmFormEntity:txtQuantidadeVerde">Estoque (VERDE):</label>
+	    	<h:inputText id="txtQuantidadeVerde" value="#{managedBean.entity.quantidadeVerde}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+	    	
+	    	<label for="frmFormEntity:txtQuantidadeAmarelo">Estoque (AMARELO):</label>
+	    	<h:inputText id="txtQuantidadeAmarelo" value="#{managedBean.entity.quantidadeAmarelo}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+	    	
+	    	<label for="frmFormEntity:txtQuantidadeVermelho">Estoque (VERMELHO):</label>
+	    	<h:inputText id="txtQuantidadeVermelho" value="#{managedBean.entity.quantidadeVermelho}" size="10" disabled="#{managedBean.entity.arquivado}"/>
+	    	
+	    	<h:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="#{managedBean.entity.arquivado}"/>
+	    	<label>Perecível</label>
+	    	
+	    	<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+		    	<label>
+		    		<h:outputText value="Validade do estoque atual: " />
+		    		<h:outputText value="#{managedBean.entity.validade}">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+		    	</label>
+		    	<p:spacer height="1"/>						
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{managedBean.operation == 'edit'}">
+				<label>
+					<h:outputText value="Valor unitário do estoque: #{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " />
+					<h:outputText value="#{managedBean.entity.valor}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</label>
+				<p:spacer height="1"/>				
+			</h:panelGroup>
+		
+		</h:panelGroup>
+    	
+    	<label for="frmFormEntity:txtCaracteristicas">Características:</label>
+    	<h:inputTextarea id="txtCaracteristicas" value="#{managedBean.entity.caracteristicas}" disabled="#{managedBean.entity.arquivado}"/>
+		
+		<p:accordionPanel activeIndex="1" rendered="#{managedBean.operation == 'edit' and managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+			<p:tab title="Clique aqui para visualizar o histórico de movimentação">
+		
+				<h:dataTable value="#{managedBean.entity.movimentacao}" var="mov" rendered="#{managedBean.operation == 'edit'}">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Operação" />
+						</f:facet>
+						<h:outputText value="#{mov.operacaoDespensa}" />
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Data" />
+						</f:facet>
+						<h:outputText value="#{mov.dataOperacao}">
+							<f:converter converterId="dateConverter"/>
+						</h:outputText>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Quantidade" />
+						</f:facet>
+						<h:outputText value="#{mov.quantidade}" />
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Valor" />
+						</f:facet>
+						<h:outputText value="-" rendered="#{mov.operacaoDespensa == 'CONSUMO'}"/>
+						<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " rendered="#{mov.operacaoDespensa == 'COMPRA'}"/>
+						<h:outputText value="#{mov.valor}" rendered="#{mov.operacaoDespensa == 'COMPRA'}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+					</h:column>
+				</h:dataTable>
+						
+			</p:tab>
+		</p:accordionPanel>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+     		<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="10" />
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{!managedBean.entity.arquivado}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+     	<p:spacer width="10" />
+		<h:commandLink title="Desarquivar" action="#{managedBean.desarquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == true}">
+			<h:graphicImage id="imgEnable" height="48" width="48" value="/resources/images/svg/checkmark.svg"/>
+			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+		</h:commandLink>		
+		<p:spacer width="10" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == true}"/>			
+		<h:commandLink title="Arquivar" action="#{managedBean.arquivar}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
+			<h:graphicImage id="imgDisable" height="48" width="48" value="/resources/images/svg/cancel.svg"/>
+		</h:commandLink>
+		<h:panelGroup rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+			<p:spacer width="10" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}"/>
+			<h:commandLink title="Apagar histórico de movimentação" action="#{managedBean.apagarHistorico}" rendered="#{managedBean.operation == 'edit' and managedBean.entity.arquivado == false}">
+				<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
+			</h:commandLink>
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>
+</html>

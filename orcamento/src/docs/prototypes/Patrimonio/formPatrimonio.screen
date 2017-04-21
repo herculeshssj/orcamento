@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="1089" measuredWidth="940" measuredHeight="1089"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Resumos,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="27">
+    <items x="5" y="0" width="40" height="27" text="Início"/>
+    <items x="45" y="0" width="52" height="27" text="Agenda"/>
+    <items x="97" y="0" width="63" height="27" text="Cadastros"/>
+    <items x="160" y="0" width="82" height="27" text="Lançamentos"/>
+    <items x="242" y="0" width="59" height="27" text="Resumos"/>
+    <items x="301" y="0" width="61" height="27" text="Despensa"/>
+    <items x="362" y="0" width="79" height="27" text="Documentos"/>
+    <items x="441" y="0" width="51" height="27" text="Opções"/>
+    <items x="492" y="0" width="42" height="27" text="Ajuda"/>
+    <items x="534" y="0" width="30" height="27" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Patrimônio - Alterar" measuredWidth="216" measuredHeight="40">
+    <font size="18pt"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Label" id="126" x="80" y="376" text="Descrição:" measuredWidth="60" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="127" x="74" y="920" text="Detalhes da aquisição:" measuredWidth="123" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="128" x="235" y="920" width="719" height="49" text="Aqui entra os detalhes da aquisição do bem patrimonial" measuredWidth="719" measuredHeight="49">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="129" x="70" y="1019" text="Detalhes da saída:" measuredWidth="100" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="130" x="235" y="1019" width="719" height="49" text="Aqui entra os detalhes da saída/venda/doação do bem patrimonial" measuredWidth="719" measuredHeight="49">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="131" x="80" y="416" text="Valor:" measuredWidth="36" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="132" x="235" y="376" width="272" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="133" x="235" y="416" width="112" measuredWidth="112" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="134" x="74" y="456" text="Data de entrada:" measuredWidth="92" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="135" x="235" y="456" width="137" text="  /  /  " measuredWidth="137" measuredHeight="23"/>
+  <widgets xsi:type="model:Label" id="136" x="74" y="832" text="Categoria de Documento:" measuredWidth="142" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="137" x="235" y="832" width="272" text="Selecione uma categoria" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="138" x="74" y="496" text="Favorecido:" measuredWidth="67" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="139" x="235" y="496" width="294" text="Selecione um favorecido" measuredWidth="294" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="140" x="536" y="471" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/about.svg"/>
+  <widgets xsi:type="model:Note" id="141" x="592" y="438" text="- Fornecedor&#xD;&#xA;- Fabricante&#xD;&#xA;- Construtora&#xD;&#xA;- Autorizada" measuredWidth="104" measuredHeight="74">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="142" x="80" y="544" text="Tipo:" measuredWidth="33" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="143" x="235" y="544" width="272" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="144" x="520" y="532" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/about.svg"/>
+  <widgets xsi:type="model:Note" id="145" x="576" y="518" text="- Tipo&#xD;&#xA;- Origem&#xD;&#xA;- Categoria" measuredWidth="92" measuredHeight="59">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="146" x="80" y="600" text="Número de registro:" measuredWidth="112" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="147" x="235" y="600" width="272" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="148" x="520" y="588" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/about.svg"/>
+  <widgets xsi:type="model:Note" id="149" x="576" y="582" text="- Número de registro&#xD;&#xA;- Número de matrícula&#xD;&#xA;- Número de série" measuredWidth="154" measuredHeight="59">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="150" x="80" y="650" text="Marca:" measuredWidth="42" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="151" x="235" y="650" width="272" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="152" x="520" y="638" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/about.svg"/>
+  <widgets xsi:type="model:Note" id="153" x="576" y="650" text="- Marca" measuredWidth="74" measuredHeight="29">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="154" x="80" y="696" text="Local de aquisição:" measuredWidth="106" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="155" x="235" y="696" width="272" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="156" x="520" y="684" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/about.svg"/>
+  <widgets xsi:type="model:Note" id="157" x="575" y="685" text="- Local de aquisição&#xD;&#xA;- Local de registro&#xD;&#xA;- Local de compra" measuredWidth="138" measuredHeight="59">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="158" x="80" y="743" text="Forma de aquisição:" measuredWidth="112" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="159" x="235" y="743" width="272" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="160" x="79" y="792" text="Garantia:" measuredWidth="53" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="161" x="235" y="792" width="112" measuredWidth="112" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="162" x="74" y="984" text="Data de saída:" measuredWidth="79" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="163" x="235" y="984" width="137" text="  /  /  " measuredWidth="137" measuredHeight="23"/>
+  <widgets xsi:type="model:SVGImage" id="164" x="77" y="1088" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/undo.svg"/>
+  <widgets xsi:type="model:SVGImage" id="165" x="140" y="1088" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/ok.svg"/>
+  <widgets xsi:type="model:SVGImage" id="166" x="215" y="1088" measuredWidth="48" measuredHeight="48" src="../ImagensSVG/checkmark.svg"/>
+  <widgets xsi:type="model:Note" id="167" x="271" y="1097" text="Ao clicar em Confirmar Inclusão de Patrimônio, ir para uma tela de confirmação." measuredWidth="442" measuredHeight="29">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="168" x="74" y="880" text="Moeda:" measuredWidth="46" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="169" x="235" y="880" width="272" text="Selecione uma moeda" measuredWidth="272" measuredHeight="23">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

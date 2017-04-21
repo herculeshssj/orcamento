@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="37" x="24" y="72" width="940" height="569" measuredWidth="940" measuredHeight="569"/>
+  <widgets xsi:type="model:Image" id="1" x="24" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Image" id="38" x="24" y="72" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="39" x="24" y="269" width="940" text="Início,Agenda,Cadastros,Contas,Cartão,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="27">
+    <items x="5" y="0" width="39" height="27" text="Início"/>
+    <items x="44" y="0" width="51" height="27" text="Agenda"/>
+    <items x="95" y="0" width="62" height="27" text="Cadastros"/>
+    <items x="157" y="0" width="47" height="27" text="Contas"/>
+    <items x="204" y="0" width="45" height="27" text="Cartão"/>
+    <items x="249" y="0" width="60" height="27" text="Despensa"/>
+    <items x="309" y="0" width="78" height="27" text="Documentos"/>
+    <items x="387" y="0" width="58" height="27" text="Resumos"/>
+    <items x="445" y="0" width="50" height="27" text="Opções"/>
+    <items x="495" y="0" width="41" height="27" text="Ajuda"/>
+    <items x="536" y="0" width="29" height="27" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="41" x="64" y="328" text="Agendamentos" measuredWidth="167" measuredHeight="40">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="57" x="64" y="600" text="Ir para o modo normal >>>>" measuredWidth="157" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="59" x="64" y="376" measuredWidth="32" measuredHeight="32" src="../Imagens/novo.png"/>
+  <widgets xsi:type="model:Label" id="60" x="103" y="387" text="Descrição:" measuredWidth="59" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="61" x="168" y="387" width="134" measuredWidth="134" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="62" x="808" y="382" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Table" id="63" x="64" y="440" width="881" text="Descrição,Tipo,Data,Ações&#xA;Compromisso 1, Compromisso, Dia inteiro,{edit} {delete}&#xA;Compromisso 2, Compromisso, De 01/02/2014 à 28/02/2014,{edit} {delete}&#xA;Tarefa 1, Tarefa, termina em 28/02/2014,{edit} {delete}&#xA;Tarefa 2, Tarefa, 02/03/2014,{edit} {delete}&#xA;Receita do mês, Previsão, 03/02/2014,{edit}" measuredWidth="881" measuredHeight="135" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="64" x="344" y="387" width="113" text="Todos" measuredWidth="113" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="65" x="312" y="387" text="Tipo:" measuredWidth="32" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="66" x="344" y="356" text="Opções: Todos, Compromissos, Tarefas, Previsão" measuredWidth="269" measuredHeight="25" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="69" x="472" y="387" text="Início:" measuredWidth="37" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="70" x="509" y="387" width="121" text="  /  /  " measuredWidth="121" measuredHeight="23"/>
+  <widgets xsi:type="model:Label" id="71" x="640" y="387" text="Fim:" measuredWidth="28" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="72" x="667" y="387" width="121" text="  /  /  " measuredWidth="121" measuredHeight="23"/>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

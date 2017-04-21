@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Image" id="1" x="24" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Group" id="59" x="24" y="72" width="385" height="457" text="Incluir/Editar Agendamento" measuredWidth="385" measuredHeight="457">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="60" x="48" y="152" text="Descrição:" measuredWidth="59" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="61" x="104" y="152" width="273" measuredWidth="273" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="62" x="48" y="192" text="Local:" measuredWidth="36" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="63" x="104" y="192" width="273" measuredWidth="273" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="64" x="48" y="232" text="Dia inteiro:" measuredWidth="62" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="66" x="120" y="232" measuredWidth="21" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="67" x="48" y="272" text="Início:" measuredWidth="37" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="68" x="104" y="272" width="121" text="  /  /  " measuredWidth="121" measuredHeight="23"/>
+  <widgets xsi:type="model:Combo" id="69" x="248" y="272" text="Hora:" measuredWidth="53" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="70" x="312" y="272" text="Minuto:" measuredWidth="66" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="71" x="48" y="312" text="Fim:" measuredWidth="28" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="72" x="104" y="312" width="121" text="  /  /  " measuredWidth="121" measuredHeight="23"/>
+  <widgets xsi:type="model:Combo" id="73" x="248" y="312" text="Hora:" measuredWidth="53" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="74" x="312" y="312" text="Minuto:" measuredWidth="66" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="75" x="48" y="352" text="Emitir alerta:" measuredWidth="71" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="76" x="128" y="352" measuredWidth="21" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="77" x="48" y="384" text="Notas:" measuredWidth="39" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="78" x="104" y="392" width="273" height="65" measuredWidth="273" measuredHeight="65">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="79" x="48" y="104" text="Compromisso" measuredWidth="95" measuredHeight="23" selected="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="80" x="176" y="104" text="Tarefa" measuredWidth="53" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Group" id="83" x="464" y="72" width="385" height="457" text="Incluir/Alterar Tarefa" measuredWidth="385" measuredHeight="457">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="84" x="488" y="152" text="Descrição:" measuredWidth="59" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="85" x="544" y="152" width="273" measuredWidth="273" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="90" x="488" y="192" text="Início:" measuredWidth="37" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="91" x="544" y="192" width="121" text="  /  /  " measuredWidth="121" measuredHeight="23"/>
+  <widgets xsi:type="model:Combo" id="92" x="688" y="192" text="Hora:" measuredWidth="53" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="93" x="752" y="192" text="Minuto:" measuredWidth="66" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="94" x="488" y="232" text="Fim:" measuredWidth="28" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="95" x="544" y="232" width="121" text="  /  /  " measuredWidth="121" measuredHeight="23"/>
+  <widgets xsi:type="model:Combo" id="96" x="688" y="232" text="Hora:" measuredWidth="53" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="97" x="752" y="232" text="Minuto:" measuredWidth="66" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="100" x="488" y="384" text="Notas:" measuredWidth="39" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="101" x="544" y="392" width="273" height="65" measuredWidth="273" measuredHeight="65">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="102" x="488" y="104" text="Compromisso" measuredWidth="95" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:RadioButton" id="103" x="616" y="104" text="Tarefa" measuredWidth="53" measuredHeight="23" selected="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="106" x="482" y="264" text="Prioridade:" measuredWidth="62" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="107" x="482" y="304" text="Concluído:" measuredWidth="63" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="108" x="544" y="264" width="139" measuredWidth="139" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="110" x="482" y="344" text="Emitir alerta:" measuredWidth="71" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="111" x="562" y="344" measuredWidth="21" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="112" x="24" y="552" text="No modo normal, as páginas aparecem em caixas de diálogo. No modo clássico, as páginas aparecem em páginas individuais." measuredWidth="675" measuredHeight="25" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="113" x="864" y="112" text="Tipo de Agendamento: COMPROMISSO ou TAREFA" measuredWidth="283" measuredHeight="25" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="114" x="371" y="40" text="formAgendamento.xhtml" measuredWidth="145" measuredHeight="25" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="115" x="47" y="472" measuredWidth="32" measuredHeight="32" src="../Imagens/voltar.png"/>
+  <widgets xsi:type="model:Image" id="116" x="104" y="472" measuredWidth="32" measuredHeight="32" src="../Imagens/gravar.png"/>
+  <widgets xsi:type="model:Image" id="117" x="487" y="472" measuredWidth="32" measuredHeight="32" src="../Imagens/voltar.png"/>
+  <widgets xsi:type="model:Image" id="118" x="544" y="472" measuredWidth="32" measuredHeight="32" src="../Imagens/gravar.png"/>
+  <widgets xsi:type="model:Note" id="119" x="698" y="263" text="Prioridades: BAIXA, NORMAL, ALTA" measuredWidth="199" measuredHeight="25" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="120" x="562" y="304" measuredWidth="21" measuredHeight="23">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

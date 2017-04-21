@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="37" x="24" y="72" width="940" height="841" measuredWidth="940" measuredHeight="841"/>
+  <widgets xsi:type="model:Image" id="1" x="24" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Image" id="38" x="24" y="72" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="39" x="24" y="269" width="940" text="Início,Agenda,Cadastros,Contas,Cartão,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="27">
+    <items x="5" y="0" width="39" height="27" text="Início"/>
+    <items x="44" y="0" width="51" height="27" text="Agenda"/>
+    <items x="95" y="0" width="62" height="27" text="Cadastros"/>
+    <items x="157" y="0" width="47" height="27" text="Contas"/>
+    <items x="204" y="0" width="45" height="27" text="Cartão"/>
+    <items x="249" y="0" width="60" height="27" text="Despensa"/>
+    <items x="309" y="0" width="78" height="27" text="Documentos"/>
+    <items x="387" y="0" width="58" height="27" text="Resumos"/>
+    <items x="445" y="0" width="50" height="27" text="Opções"/>
+    <items x="495" y="0" width="41" height="27" text="Ajuda"/>
+    <items x="536" y="0" width="29" height="27" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="41" x="64" y="328" text="Calendário de Atividades" measuredWidth="270" measuredHeight="40">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Placeholder" id="53" x="64" y="368" width="857" height="465" text="Component Schedule do PrimeFaces" measuredWidth="857" measuredHeight="465"/>
+  <widgets xsi:type="model:Note" id="54" x="264" y="384" text="Ao acessar a agenda, todos os compromissos marcados para o período previamente&#xA;selecionado estarão disponíveis na tela. Ao se alternar entre os dias, meses e anos,&#xA;será mostrado os agendamentos existentes no período selecionado." measuredWidth="453" measuredHeight="55" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="55" x="88" y="537" text="Ao clicar em um evento na agenda, aparece&#xA;uma caixa de diálogo mostrando informações&#xA;a respeito do evento, com a opção de exibir&#xA;mais informações, editá-lo ou excluí-lo.&#xA;Eventos gerados a partir de agendamentos de&#xA;lançamentos e de faturas do cartão não podem&#xA;ser excluídos. A edição, nesse caso, leva direto&#xA;para o registro do lançamentos ou da fatura em&#xA;questão.&#xA;" measuredWidth="261" measuredHeight="145" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="57" x="64" y="864" text="Ir para o modo clássico >>>>" measuredWidth="160" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" id="58" x="240" y="857" text="Caso todos os recursos do Schedule não estejam disponíveis ou não funcionem,&#xA;o usuário pode ir para o modo clássico, que é idêntido às demais telas do sistema." measuredWidth="441" measuredHeight="40" annotation="true">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

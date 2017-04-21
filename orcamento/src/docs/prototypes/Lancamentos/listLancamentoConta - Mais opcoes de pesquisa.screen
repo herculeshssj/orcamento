@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="114" x="48" y="64" width="940" height="905" measuredWidth="940" measuredHeight="905"/>
+  <widgets xsi:type="model:Image" id="115" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="116" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Planejamento,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="30">
+    <items x="5" y="0" width="46" height="30" text="Início"/>
+    <items x="51" y="0" width="61" height="30" text="Agenda"/>
+    <items x="112" y="0" width="79" height="30" text="Cadastros"/>
+    <items x="191" y="0" width="100" height="30" text="Lançamentos"/>
+    <items x="291" y="0" width="103" height="30" text="Planejamento"/>
+    <items x="394" y="0" width="75" height="30" text="Despensa"/>
+    <items x="469" y="0" width="95" height="30" text="Documentos"/>
+    <items x="564" y="0" width="61" height="30" text="Opções"/>
+    <items x="625" y="0" width="49" height="30" text="Ajuda"/>
+    <items x="674" y="0" width="36" height="30" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="117" x="80" y="312" text="Lançamentos da Conta / Cartão" measuredWidth="351" measuredHeight="36">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="118" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Image" id="119" x="80" y="352" measuredWidth="32" measuredHeight="32" src="../Imagens/novo.png"/>
+  <widgets xsi:type="model:Image" id="120" x="680" y="354" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Label" id="121" x="128" y="357" text="Conta/Cartão:" measuredWidth="101" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="122" x="228" y="357" width="173" text="BB - Conta Corrente" measuredWidth="173" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="123" x="722" y="355" text="Mais opções de pesquisa" measuredWidth="170" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TabbedPane" id="124" x="80" y="408" width="889" height="481" text="Dezembro 2014,Novembro 2014,Outubro 2014,Setembro 2014,Agosto 2014,Julho 2014" measuredWidth="889" measuredHeight="481" selection="0">
+    <items x="10" y="0" width="125" height="30" text="Dezembro 2014"/>
+    <items x="135" y="0" width="127" height="30" text="Novembro 2014"/>
+    <items x="262" y="0" width="112" height="30" text="Outubro 2014"/>
+    <items x="374" y="0" width="122" height="30" text="Setembro 2014"/>
+    <items x="496" y="0" width="104" height="30" text="Agosto 2014"/>
+    <items x="600" y="0" width="91" height="30" text="Julho 2014"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="126" x="104" y="472" width="841" height="393" text="Selecionar,Histórico,Ações&#xA;[],Lançamento 1,{edit}{delete}&#xA;[],Lançamento 2,{edit}{delete}&#xA;[],Lançamento 3,{edit}{delete}&#xA;[],Lançamento 4,{edit}{delete}&#xA;[],Lançamento 5,{edit}{delete}" measuredWidth="841" measuredHeight="393" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Group" id="127" x="722" y="392" width="337" height="361" text="Mais opções de pesquisa" measuredWidth="337" measuredHeight="361">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="128" x="414" y="357" text="Agrupar por:" measuredWidth="91" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="129" x="518" y="357" text="Sem agrupamento" measuredWidth="147" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="130" x="738" y="504" text="Pesquisar nos agrupamentos" measuredWidth="215" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="131" x="738" y="536" text="&quot;carrega a lista correspondente&quot;" measuredWidth="241" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="132" x="738" y="584" text="Situação:" measuredWidth="67" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:List" id="134" x="738" y="608" text="[] Agendado&#xA;[x] Registrado&#xA;[] Confirmado&#xA;[] Quitado" measuredWidth="109" measuredHeight="96" border="false" alpha="0">
+    <font/>
+    <items x="0" y="2" width="109" height="23" text="[] Agendado"/>
+    <items x="0" y="25" width="109" height="23" text="[x] Registrado"/>
+    <items x="0" y="48" width="109" height="23" text="[] Confirmado"/>
+    <items x="0" y="71" width="109" height="23" text="[] Quitado"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="135" x="738" y="423" text="Descrição:" measuredWidth="75" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="136" x="818" y="423" width="147" measuredWidth="147" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="137" x="738" y="465" text="De" measuredWidth="23" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="138" x="770" y="465" text="01 / 12 / 2014 " measuredWidth="120" measuredHeight="25"/>
+  <widgets xsi:type="model:Label" id="139" x="898" y="465" text="À" measuredWidth="15" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="140" x="922" y="465" text="31 / 12 / 2014 " measuredWidth="120" measuredHeight="25"/>
+  <widgets xsi:type="model:Link" id="146" x="744" y="712" text="Salvar busca" measuredWidth="86" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="147" x="80" y="912" text="Buscas salvas:" measuredWidth="104" measuredHeight="25">
+    <font bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="148" x="190" y="912" width="251" text="Selecione uma busca salva..." measuredWidth="251" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="149" x="464" y="913" measuredWidth="24" measuredHeight="24" src="../Imagens/entrar.png"/>
+  <widgets xsi:type="model:Image" id="150" x="504" y="909" measuredWidth="32" measuredHeight="32" src="../Imagens/excluir.png"/>
+  <widgets xsi:type="model:Note" id="151" x="458" y="304" text="Tipos de agrupamentos: Sem agrupamento, tipo de despesa, categoria,&#xA;favorecido, meio de pagamento, moeda, fatura, crédito e débito." measuredWidth="487" measuredHeight="44" annotation="true">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

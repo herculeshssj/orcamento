@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="9" x="48" y="64" width="940" height="921" measuredWidth="940" measuredHeight="921"/>
+  <widgets xsi:type="model:Image" id="10" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="11" x="48" y="261" width="940" text="Início,Cadastros,Lançamentos,Planejamento,Resumos,Agenda,Opções,Sair" measuredWidth="940" measuredHeight="30">
+    <items x="5" y="0" width="46" height="30" text="Início"/>
+    <items x="51" y="0" width="79" height="30" text="Cadastros"/>
+    <items x="130" y="0" width="100" height="30" text="Lançamentos"/>
+    <items x="230" y="0" width="103" height="30" text="Planejamento"/>
+    <items x="333" y="0" width="71" height="30" text="Resumos"/>
+    <items x="404" y="0" width="62" height="30" text="Agenda"/>
+    <items x="466" y="0" width="61" height="30" text="Opções"/>
+    <items x="527" y="0" width="36" height="30" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="12" x="80" y="312" text="Resumos - Despensa" measuredWidth="232" measuredHeight="36">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:TabbedPane" id="13" x="80" y="360" width="889" height="601" text="Compra/Consumo por operação,Compra/Consumo por item" measuredWidth="889" measuredHeight="601" selection="1">
+    <items x="10" y="0" width="237" height="30" text="Compra/Consumo por operação"/>
+    <items x="247" y="0" width="204" height="30" text="Compra/Consumo por item"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="14" x="456" y="432" text="Início:" measuredWidth="45" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="15" x="512" y="432" width="129" text="01  / 10  / 2012 " measuredWidth="129" measuredHeight="25"/>
+  <widgets xsi:type="model:Label" id="16" x="656" y="432" text="Fim:" measuredWidth="34" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="17" x="704" y="432" width="129" text="31  / 10  / 2012 " measuredWidth="129" measuredHeight="25"/>
+  <widgets xsi:type="model:Chart" id="21" x="160" y="704" width="776" height="183" measuredWidth="776" measuredHeight="183" chartType="bar"/>
+  <widgets xsi:type="model:Table" id="22" x="104" y="496" width="832" height="145" text="Data,Operação,Quantidade&#xA;01/10/2012,COMPRA,10&#xA;15/10/2012,CONSUMO,3&#xA;25/10/2012,CONSUMO,2" measuredWidth="832" measuredHeight="145" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="23" x="104" y="656" text="Exportar:" measuredWidth="69" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="29" x="104" y="432" text="Item:" measuredWidth="40" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="30" x="156" y="432" width="285" text="Selecione um item" measuredWidth="285" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="31" x="184" y="653" width="32" height="32" measuredWidth="32" measuredHeight="32" src="../../Imagens/excel.png"/>
+  <widgets xsi:type="model:Image" id="35" x="864" y="429" width="32" height="32" measuredWidth="32" measuredHeight="32" src="../../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Image" id="36" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Label" id="37" x="126" y="704" text="Data" measuredWidth="38" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="38" x="869" y="896" text="Quantidade" measuredWidth="84" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="39" x="593" y="726" text="Compra" measuredWidth="59" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="40" x="688" y="848" text="Consumo" measuredWidth="68" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="41" x="817" y="816" text="Compra" measuredWidth="59" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="42" x="898" y="770" text="Consumo" measuredWidth="68" measuredHeight="25">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

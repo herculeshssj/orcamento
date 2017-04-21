@@ -1,0 +1,105 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{benfeitoriaController}" />
+	
+	<ui:define name="campos">
+	
+		
+		<label for="frmFormEntity:txtNumeroPatrimonio">Número de patrimônio:</label>
+		<h:outputText id="txtNumeroPatrimonio" value="#{managedBean.patrimonioSelecionado.id}"/>
+		
+		<label for="frmFormEntity:txtPatrimonio">Patrimônio:</label>
+		<h:outputText id="txtPatrimonio" value="#{managedBean.patrimonioSelecionado.label}"/>		
+	
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+		
+		<label for="frmFormEntity:txtValor">Valor:</label>
+		<h:inputText id="txtValor" value="#{managedBean.entity.valorBenfeitoria}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+	
+		<label for="frmFormEntity:txtDataInicio">Data de início:</label>
+		<p:inputMask id="txtDataInicio" value="#{managedBean.entity.dataInicio}" size="10" mask="99/99/9999">
+			<f:converter converterId="dateConverter"/>
+		</p:inputMask>
+		
+		<label for="frmFormEntity:txtDataFim">Data de términio:</label>
+		<p:inputMask id="txtDataFim" value="#{managedBean.entity.dataFim}" size="10" mask="99/99/9999">
+			<f:converter converterId="dateConverter"/>
+		</p:inputMask>
+		
+		<label for="frmFormEntity:txtDetalheBenfeitoria">Detalhes da benfeitoria:</label>
+		<h:inputTextarea id="txtDetalheBenfeitoria" value="#{managedBean.entity.detalheBenfeitoria}"/>
+		
+		<label for="frmFormEntity:txtCategoriaDocumento">Categoria de documento:</label>
+		<h:selectOneMenu id="txtCategoriaDocumento" value="#{managedBean.entity.categoriaDocumento}" converter="entityConverter">
+			<f:selectItem itemLabel="Selecione uma categoria de documento" />
+			<f:selectItems value="#{managedBean.listaCategoriaDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+		</h:selectOneMenu>
+		
+		<label>Grupo de lançamento:</label>
+		<h:selectOneMenu value="#{managedBean.entity.grupoLancamento}" converter="entityConverter">
+			<f:selectItem itemLabel="Selecione um grupo de lançamento" />
+			<f:selectItems value="#{managedBean.listaGrupoLancamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+		</h:selectOneMenu>
+			
+	</ui:define>
+
+</ui:composition>
+</html>

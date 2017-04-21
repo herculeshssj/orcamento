@@ -1,0 +1,394 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/TR/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Orçamento Doméstico</title>
+	
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/favicon.ico" />
+	<h:outputScript name="wp-emoji-release.js" library="js"/>
+	<h:outputStylesheet name="wp-smiley.css" library="css" />
+	<h:outputStylesheet name="css.css" library="css" />
+	<h:outputStylesheet name="genericons.css" library="css" />
+	<h:outputStylesheet name="normalize.css" library="css" />
+	<h:outputStylesheet name="foundation.css" library="css" />
+	<h:outputStylesheet name="style.css" library="css" />
+	<h:outputScript name="jquery.js" library="js"/>
+	<h:outputScript name="jquery-migrate.js" library="js"/>
+	<h:outputScript name="modernizr.js" library="js"/>
+	<h:outputStylesheet name="wpforge-customizer.css" library="css" />
+	<meta class="foundation-data-attribute-namespace"/>
+	<meta class="foundation-mq-xxlarge"/>
+	<meta class="foundation-mq-xlarge-only"/>
+	<meta class="foundation-mq-xlarge"/>
+	<meta class="foundation-mq-large-only"/>
+	<meta class="foundation-mq-large"/>
+	<meta class="foundation-mq-medium-only"/>
+	<meta class="foundation-mq-medium"/>
+	<meta class="foundation-mq-small-only"/>
+	<meta class="foundation-mq-small"/>
+	<meta class="foundation-mq-topbar"/>
+</h:head>
+
+<h:body class="home blog custom-background-white single-author">
+
+<div class="header_container">
+
+        <header id="header" class="header_wrap row" role="banner">
+
+            <div class="site-header medium-12 large-12 columns">
+
+				<div class="header-logo">
+					<a href="#">
+						<h:graphicImage styleClass="header-image" alt="Logo" name="header.jpg" width="990" height="175" library="images" />
+					</a>
+				</div>
+
+             </div><!-- .site-header -->
+
+        </header><!-- #header -->
+
+        </div><!-- end .header_container -->
+
+<div class="nav_container">
+
+<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+    <div class="nav_wrap row">
+        <nav class="top-bar" data-topbar="" data-options="scrolltop:false;mobile_show_parent_link:true;">
+            <ul class="title-area">
+                <li class="name">
+                    <a href="#{request.contextPath}/pages/menu/dashboard.faces" title="Dashboard" rel="home">Dashboard</a>                    
+                </li>
+                
+                    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+            </ul>
+            
+        <h:form id="frmMenu">
+        <section class="top-bar-section">
+        
+        <ul class="left">
+        	<li class="divider"></li>
+			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-agenda">
+				<a href="#{request.contextPath}/pages/Agenda/listAgenda.faces"><h:outputText value="#{agendaMB.agendaDoDia}" /></a>
+			</li>        	
+			<li class="divider"></li>
+			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-cadastros has-dropdown not-click">
+				<a href="#">Cadastros</a>
+				<ul class="dropdown">
+					<li id="menu-item-3184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Banco/listBanco.faces">Bancos</a>
+					</li>
+					<li id="menu-item-3190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/CartaoCredito/listCartaoCredito.faces">Cartão de Crédito</a>
+					</li>
+					<li id="menu-item-3185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Categoria/listCategoria.faces">Categorias</a>
+					</li>
+					<li id="menu-item-3189" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Conta/listConta.faces">Contas</a>
+					</li>
+					<li id="menu-item-3186" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Favorecido/listFavorecido.faces">Favorecido/Sacado</a>
+					</li>
+					<h:panelGroup rendered="#{usuarioMB.opcoesSistema.exibirMeioPagamento}">
+					<li id="menu-item-3187" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/MeioPagamento/listMeioPagamento.faces">Meios de Pagamento</a>
+					</li>
+					</h:panelGroup>
+					<li id="menu-item-3188" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Moeda/listMoeda.faces">Moedas</a>
+					</li>
+					<li id="menu-item-3189" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/RegraImportacao/listRegraImportacao.faces">Regras de Importação</a>
+					</li>
+				</ul>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11435" class="menu-item menu-item-main-menu menu-item-lancamentos has-dropdown not-click">
+				<a href="#">Lançamentos</a>
+				<ul class="dropdown">
+					<li id="menu-item-4184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/LancamentoPeriodico/listLancamentoPeriodico.faces">Despesas Fixas e Parceladas</a>
+					</li>
+					<li id="menu-item-4188" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/DividaTerceiro/listDividaTerceiro.faces">Dívida de Favorecidos</a>
+					</li>
+					<li id="menu-item-4190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/FaturaCartao/listFaturaCartao.faces">Fatura do Cartão</a>
+					</li>
+					<!-- Ocultado a pedido do Product Owner 
+					<li id="menu-item-4191" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Investimento/listInvestimento.faces">Investimentos</a>
+					</li>
+					 -->
+					<li id="menu-item-4186" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/LancamentoConta/listLancamentoConta.faces">Lançamentos da Conta/Cartão</a>
+					</li>
+					<li id="menu-item-4187" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Orcamento/listOrcamento.faces">Orçamento do Período</a>
+					</li>
+				</ul>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11436" class="menu-item menu-item-main-menu menu-item-resumos has-dropdown not-click">
+				<a href="#">Resumos</a>
+				<ul class="dropdown">
+					<li id="menu-item-5182" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/GrupoLancamento/listGrupoLancamento.faces">Grupos de Lançamentos</a>
+					</li>
+					<li id="menu-item-5183" class="menu-item menu-item-main-menu menu-item-resumos has-dropdown not-click">
+						<a href="#">Panoramas</a>
+						<ul class="dropdown">
+							<li id="menu-item-5183-1" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+								<a href="#{request.contextPath}/pages/ResumoEstatistica/panoramaCadastro.faces">Cadastros</a>
+							</li>
+							<li id="menu-item-5183-2" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+								<a href="#{request.contextPath}/pages/ResumoEstatistica/panoramaDespesaFixa.faces">Despesas Fixas</a>
+							</li>
+							<li id="menu-item-5183-3" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+								<a href="#{request.contextPath}/pages/ResumoEstatistica/panoramaLancamentoConta.faces">Lançamentos da Conta</a>
+							</li>
+							<li id="menu-item-5183-4" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+								<a href="#{request.contextPath}/pages/ResumoEstatistica/panoramaLancamentoCartao.faces">Lançamentos do Cartão</a>
+							</li>
+							<li id="menu-item-5183-5" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+								<a href="#{request.contextPath}/pages/ResumoEstatistica/panoramaOrcamento.faces">Orçamento</a>
+							</li>
+							<li id="menu-item-5183-6" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+								<a href="#{request.contextPath}/pages/ResumoEstatistica/panoramaParcelamento.faces">Parcelamentos</a>
+							</li>
+						</ul>
+					</li>
+					<li id="menu-item-5186" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/RelatorioCustomizado/listRelatorioCustomizado.faces">Relatórios Customizados</a>
+					</li>
+					<li id="menu-item-5186" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/ResumoEstatistica/resumoMensalContas.faces">Resumo Mensal das Contas</a>
+					</li>
+					<li id="menu-item-5187" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/ResumoEstatistica/saldoAtualContas.faces">Saldo Atual das Contas</a>
+					</li>
+				</ul>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11437" class="menu-item menu-item-main-menu menu-item-despensa has-dropdown not-click">
+				<a href="#">Despensa</a>
+				<ul class="dropdown">
+					<li id="menu-item-6184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Despensa/listDespensa.faces">Despensa</a>
+					</li>
+					<li id="menu-item-6190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/ItemDespensa/listItemDespensa.faces">Itens de Despensa</a>
+					</li>
+					<li id="menu-item-6185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/UnidadeMedida/listUnidadeMedida.faces">Unidades de Medida</a>
+					</li>					
+				</ul>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11438" class="menu-item menu-item-main-menu menu-item-documentos has-dropdown not-click">
+				<a href="#">Documentos</a>
+				<ul class="dropdown">
+					<li id="menu-item-7184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Arquivo/listArquivo.faces">Arquivos Anexados</a>
+					</li>
+					<li id="menu-item-7190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/CategoriaDocumento/listCategoriaDocumento.faces">Categoria de Documentos</a>
+					</li>
+					<li id="menu-item-7185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Documento/listDocumento.faces">Documentos</a>
+					</li>
+					<li id="menu-item-7185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Identidade/formIdentidade.faces">Documentos de Identidade</a>
+					</li>
+					<li id="menu-item-7185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Pessoal/formPessoal.faces">Informações pessoais</a>
+					</li>					
+					<li id="menu-item-7186" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/ModeloDocumento/listModeloDocumento.faces">Modelos de Documento</a>
+					</li>
+					<li id="menu-item-7187" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<h:commandLink value="Patrimônio" action="#{patrimonioController.startUp}" />
+					</li>
+				</ul>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11438" class="menu-item menu-item-main-menu menu-item-opcoes has-dropdown not-click">
+				<a href="#">Opções</a>
+				<ul class="dropdown">
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
+					<li id="menu-item-8184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Auditoria/listAuditoria.faces">Auditoria do Sistema</a>
+					</li>
+					<li id="menu-item-8191" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Logs/listLogs.faces">Logs do Sistema</a>
+					</li>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login != 'admin'}">
+					<li id="menu-item-8185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<h:commandLink value="Minha conta" action="#{usuarioMB.minhaConta}" />
+					</li>
+					<li id="menu-item-8185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<h:commandLink value="Alterar Senha" action="#{usuarioMB.alterarSenhaView}" />
+					</li>
+					</h:panelGroup>
+					<li id="menu-item-8190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/OpcaoSistema/formOpcaoSistema.faces">Opções do Sistema</a>
+					</li>
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
+					<li id="menu-item-8185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Usuario/listUsuario.faces">Usuários</a>
+					</li>
+					</h:panelGroup>					
+				</ul>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11440" class="menu-item menu-item-main-menu menu-item-sobre">
+				<a href="#{request.contextPath}/pages/menu/sobre.faces">Sobre</a>
+			</li>
+			<li class="divider"></li>
+			<li id="menu-item-11441" class="menu-item menu-item-main-menu menu-item-sair">
+				<a href="#{request.contextPath}/j_spring_security_logout">Sair</a>
+			</li>
+		</ul>
+		
+        </section>
+        </h:form>
+        </nav>   
+    </div><!-- .row -->
+
+</div><!-- end .nav_container -->
+
+        <div class="content_container">
+    
+        <section class="content_wrap row" role="document">
+	<div id="content" class="medium-12 large-12 columns" role="main">
+	
+	<ui:insert name="breadcrumb">
+	<!-- Por enquanto ficará comentado até que seja possível acessar as funcionalidades via URI -->
+	<!-- 
+		<p class="breadcrumbs">
+			<span xmlns:v="http://rdf.data-vocabulary.org/#">
+				<span typeof="v:Breadcrumb">
+				<a property="v:title" rel="v:url" href="http://themeawesome.com">Home</a>
+				/
+				<a property="v:title" rel="v:url" href="http://google.com">Principal</a>
+				/
+				<span class="breadcrumb_last">Contact Me</span>
+				</span>
+			</span>
+		</p>
+	-->
+	</ui:insert>
+    										
+	<article id="post-19" class="post-19 post type-post status-publish format-standard hentry category-uncategorized tag-boat tag-lake">
+		<header class="entry-header">							
+			<h4 class="entry-title">
+				<ui:insert name="titulo">
+					Início
+				</ui:insert>					
+			</h4>
+		</header><!-- .entry-header -->
+
+		<div class="entry-content">
+        
+			<ui:insert name="conteudo">
+				<p>Seja bem vindo</p>
+			</ui:insert>   
+					     
+        </div><!-- .entry-content -->
+
+	</article><!-- #post -->							
+	
+			</div><!-- #content -->
+
+		</section><!-- end .content-wrap -->
+
+    </div><!-- end .content_container -->
+
+	
+    <div class="footer_container">
+
+    	<footer id="footer" class="footer_wrap row" role="contentinfo">
+
+        <div id="ftxt" class="site-info medium-12 large-12 columns cntr">
+        
+            <p>Copyright © 2012-2020 - Todos os direitos reservados a <a href="mailto:herculeshssj@outlook.com">Hércules S. S. José</a>. </p>
+                            
+        </div><!-- .site-info -->
+
+    	</footer><!-- .row -->
+
+    </div><!-- end #footer_container -->
+
+
+    <div style="display: none;" id="backtotop" class="hvr-fade">
+
+        <span class="genericon genericon-collapse"></span>
+
+    </div><!-- #backtotop -->
+
+<script type="text/javascript">
+/* <![CDATA[ */
+var foundation_strings = {"nav_back":"Back"};
+/* ]]> */
+</script>
+<h:outputScript name="foundation.js" library="js"/>
+<h:outputScript name="wpforge-functions.js" library="js"/>
+<h:outputScript name="load-foundation.js" library="js"/>
+
+
+</h:body>
+
+</html>

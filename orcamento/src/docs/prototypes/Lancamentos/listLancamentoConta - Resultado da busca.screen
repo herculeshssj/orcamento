@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="921" measuredWidth="940" measuredHeight="921"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Planejamento,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="30">
+    <items x="5" y="0" width="46" height="30" text="Início"/>
+    <items x="51" y="0" width="61" height="30" text="Agenda"/>
+    <items x="112" y="0" width="79" height="30" text="Cadastros"/>
+    <items x="191" y="0" width="100" height="30" text="Lançamentos"/>
+    <items x="291" y="0" width="103" height="30" text="Planejamento"/>
+    <items x="394" y="0" width="75" height="30" text="Despensa"/>
+    <items x="469" y="0" width="95" height="30" text="Documentos"/>
+    <items x="564" y="0" width="61" height="30" text="Opções"/>
+    <items x="625" y="0" width="49" height="30" text="Ajuda"/>
+    <items x="674" y="0" width="36" height="30" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Lançamentos da Conta / Cartão" measuredWidth="351" measuredHeight="36">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Image" id="82" x="80" y="352" measuredWidth="32" measuredHeight="32" src="../Imagens/novo.png"/>
+  <widgets xsi:type="model:Image" id="85" x="680" y="352" measuredWidth="32" measuredHeight="32" src="../Imagens/pesquisar.png"/>
+  <widgets xsi:type="model:Label" id="87" x="128" y="357" text="Conta/Cartão:" measuredWidth="101" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="88" x="228" y="357" width="173" text="BB - Conta Corrente" measuredWidth="173" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="112" x="736" y="357" text="Mais opções de pesquisa" measuredWidth="170" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TabbedPane" id="113" x="80" y="430" width="889" height="481" text="Resultado da busca" measuredWidth="889" measuredHeight="481" selection="0">
+    <items x="10" y="0" width="150" height="30" text="Resultado da busca"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="118" x="414" y="357" text="Agrupar por:" measuredWidth="91" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="119" x="518" y="357" text="Sem agrupamento" measuredWidth="147" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="120" x="104" y="528" width="841" height="359" text="Selecionar,Histórico,Ações&#xA;[],Lançamento 1,{edit}{delete}&#xA;[],Lançamento 2,{edit}{delete}&#xA;[],Lançamento 3,{edit}{delete}&#xA;[],Lançamento 4,{edit}{delete}&#xA;[],Lançamento 5,{edit}{delete}" measuredWidth="841" measuredHeight="359" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="121" x="248" y="477" measuredWidth="32" measuredHeight="32" src="../Imagens/excluir.png"/>
+  <widgets xsi:type="model:Image" id="122" x="207" y="477" measuredWidth="32" measuredHeight="32" src="../Imagens/propriedades.png"/>
+  <widgets xsi:type="model:Image" id="123" x="159" y="477" measuredWidth="32" measuredHeight="32" src="../Imagens/copiar.png"/>
+  <widgets xsi:type="model:Image" id="124" x="111" y="477" measuredWidth="32" measuredHeight="32" src="../Imagens/mover.png"/>
+  <widgets xsi:type="model:Label" id="125" x="80" y="936" text="Buscas salvas:" measuredWidth="104" measuredHeight="25">
+    <font bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="126" x="190" y="936" width="251" text="Selecione uma busca salva..." measuredWidth="251" measuredHeight="25">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="127" x="464" y="937" measuredWidth="24" measuredHeight="24" src="../Imagens/entrar.png"/>
+  <widgets xsi:type="model:Image" id="128" x="504" y="933" measuredWidth="32" measuredHeight="32" src="../Imagens/excluir.png"/>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

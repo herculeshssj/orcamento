@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="905" measuredWidth="940" measuredHeight="905"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Lançamentos,Resumos,Despensa,Documentos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="51" height="23" text="Agenda"/>
+    <items x="95" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="159" y="0" width="81" height="23" text="Lançamentos"/>
+    <items x="240" y="0" width="59" height="23" text="Resumos"/>
+    <items x="299" y="0" width="62" height="23" text="Despensa"/>
+    <items x="361" y="0" width="78" height="23" text="Documentos"/>
+    <items x="439" y="0" width="50" height="23" text="Opções"/>
+    <items x="489" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="530" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Relatórios customizados - Novo" measuredWidth="286" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Note" id="126" x="365" y="315" text="Servirá também para edição do relatório" measuredWidth="225" measuredHeight="23" annotation="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="127" x="80" y="360" text="Nome:" measuredWidth="40" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="128" x="80" y="400" text="Descrição:" measuredWidth="61" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="129" x="152" y="360" width="214" measuredWidth="214" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="130" x="152" y="400" width="214" measuredWidth="214" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="131" x="80" y="440" text="SQL:" measuredWidth="29" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="132" x="152" y="440" width="817" height="65" measuredWidth="817" measuredHeight="65">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SVGImage" id="133" x="152" y="912" measuredWidth="42" measuredHeight="42" src="../ImagensSVG/ok.svg"/>
+  <widgets xsi:type="model:SVGImage" id="136" x="80" y="916" measuredWidth="36" measuredHeight="34" src="../ImagensSVG/undo.svg"/>
+  <widgets xsi:type="model:TabbedPane" id="137" x="80" y="528" width="889" height="369" text="Colunas,Parâmetros" measuredWidth="889" measuredHeight="369" selection="0">
+    <items x="10" y="0" width="63" height="23" text="Colunas"/>
+    <items x="73" y="0" width="81" height="23" text="Parâmetros"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="140" x="116" y="581" text="Nome da coluna:" measuredWidth="96" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="141" x="115" y="648" text="Tipo de dado:" measuredWidth="79" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="142" x="115" y="680" text="Formatar?" measuredWidth="58" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="143" x="115" y="712" text="Máscara Formatação:" measuredWidth="118" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="144" x="240" y="581" width="193" measuredWidth="193" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="145" x="240" y="712" width="193" measuredWidth="193" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="146" x="240" y="648" width="193" measuredWidth="193" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="147" x="240" y="680" measuredWidth="21" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="148" x="115" y="752" text="Adicionar coluna" measuredWidth="93" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="149" x="108" y="784" width="845" text="Ordem,Coluna,Texto de Exibição, Tipo, Formatar?, Máscara, Ações&#xA;1,name,Nome,String,Não,-,{asc} {desc} {delete}&#xA;2,cpf,CPF,String,Sim,999.999.999-99,{asc} {desc} {delete}&#xA;3,datanasc,Data de Nascimento,Date,Sim,99/99/9999,{asc} {desc} {delete}" measuredWidth="845" measuredHeight="93" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="150" x="116" y="616" text="Texto de exibição:" measuredWidth="104" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="151" x="240" y="616" width="193" measuredWidth="193" measuredHeight="21">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

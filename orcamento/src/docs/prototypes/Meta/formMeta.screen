@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="48" y="64" width="940" height="585" measuredWidth="940" measuredHeight="585"/>
+  <widgets xsi:type="model:Image" id="2" x="48" y="64" measuredWidth="940" measuredHeight="198" src="../Imagens/header.jpg"/>
+  <widgets xsi:type="model:Menu" id="3" x="48" y="261" width="940" text="Início,Agenda,Cadastros,Contas,Cartão,Orçamento,Despensa,Documentos,Resumos,Opções,Ajuda,Sair" measuredWidth="940" measuredHeight="23">
+    <items x="5" y="0" width="39" height="23" text="Início"/>
+    <items x="44" y="0" width="51" height="23" text="Agenda"/>
+    <items x="95" y="0" width="64" height="23" text="Cadastros"/>
+    <items x="159" y="0" width="47" height="23" text="Contas"/>
+    <items x="206" y="0" width="46" height="23" text="Cartão"/>
+    <items x="252" y="0" width="69" height="23" text="Orçamento"/>
+    <items x="321" y="0" width="62" height="23" text="Despensa"/>
+    <items x="383" y="0" width="78" height="23" text="Documentos"/>
+    <items x="461" y="0" width="59" height="23" text="Resumos"/>
+    <items x="520" y="0" width="50" height="23" text="Opções"/>
+    <items x="570" y="0" width="41" height="23" text="Ajuda"/>
+    <items x="611" y="0" width="30" height="23" text="Sair"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="4" x="80" y="312" text="Metas Financeiras - Novo" measuredWidth="227" measuredHeight="29">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="9" x="48" y="16" measuredWidth="88" measuredHeight="31" src="../Imagens/cc_88x31.png"/>
+  <widgets xsi:type="model:Label" id="93" x="80" y="368" text="Descrição:" measuredWidth="61" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="94" x="168" y="368" width="194" measuredWidth="194" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="97" x="80" y="400" text="Conta:" measuredWidth="40" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="98" x="168" y="400" width="194" text="Selecione a conta" measuredWidth="194" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="117" x="135" y="560" measuredWidth="32" measuredHeight="32" src="../Imagens/gravar.png"/>
+  <widgets xsi:type="model:Image" id="118" x="80" y="560" measuredWidth="32" measuredHeight="32" src="../Imagens/voltar.png"/>
+  <widgets xsi:type="model:Label" id="149" x="80" y="440" text="Meta:" measuredWidth="35" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="150" x="168" y="440" width="194" measuredWidth="194" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="151" x="80" y="480" text="Início:" measuredWidth="38" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="153" x="200" y="560" measuredWidth="32" measuredHeight="32" src="../Imagens/fechar.png"/>
+  <widgets xsi:type="model:Tooltip" id="154" x="216" y="591" text="Encerra a meta. Aparece na edição da meta financeira." measuredWidth="300" measuredHeight="38" position="topLeft">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Checkbox" id="155" x="256" y="565" text="Finalizar meta e encerrar conta" measuredWidth="187" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="156" x="80" y="520" text="Vencimento:" measuredWidth="72" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:DateField" id="158" x="168" y="480" width="113" text="  /  /  " measuredWidth="113" measuredHeight="21"/>
+  <widgets xsi:type="model:DateField" id="159" x="168" y="520" width="113" text="  /  /  " measuredWidth="113" measuredHeight="21"/>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

@@ -1,0 +1,191 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{importacaoLancamentoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+			
+			Conta:
+			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter" disabled="true">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>					
+				
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.contaSelecionada.tipoConta != 'CARTAO'}">
+			N° do banco: 
+			<h:outputText value="#{managedBean.infoArquivo.bancoID}"/>
+			
+			Agência:
+			<h:outputText value="#{managedBean.infoArquivo.agencia}"/>
+			
+			Conta:
+			<h:outputText value="#{managedBean.infoArquivo.conta}"/>
+			
+			Tipo de conta:
+			<h:outputText value="#{managedBean.infoArquivo.tipoConta}"/>
+			
+			Data do arquivo:
+			<h:outputText value="#{managedBean.infoArquivo.dataArquivo}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Balanço final:
+			<h:outputText value="#{managedBean.infoArquivo.balancoFinal}">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+			
+			Moeda padrão:
+			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
+			
+			Quantidade de transações:
+			<h:outputText value="#{managedBean.infoArquivo.quantidadeTransacao}"/>
+			
+			Período:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.infoArquivo.inicioTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+				à
+				<h:outputText value="#{managedBean.infoArquivo.fimTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+			</h:panelGroup>			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.contaSelecionada.tipoConta == 'CARTAO'}">			
+			Moeda padrão:
+			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
+			
+			Quantidade de transações:
+			<h:outputText value="#{managedBean.infoArquivo.quantidadeTransacao}"/>
+			
+			Período:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.infoArquivo.inicioTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+				à
+				<h:outputText value="#{managedBean.infoArquivo.fimTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+			</h:panelGroup>			
+		</h:panelGrid>
+	
+		<h5>Lançamentos da conta a serem criados/atualizados</h5>
+		
+		<h:dataTable id="tableLancamentoACriarAtualizar" width="100%" value="#{managedBean.lancamentoContaACriarAtualizar}" var="item" style="font-size: 16px;">
+			<h:column style="text-align: center; vertical-align: middle;">
+	   			<f:facet name="header">
+	   				<h:selectBooleanCheckbox value="#{managedBean.selecionarTodosLancamentos}">
+	   					<p:ajax update="tableLancamentoACriarAtualizar" listener="#{managedBean.selecionarTodos}" />
+	   				</h:selectBooleanCheckbox>
+	   			</f:facet>
+	   			<h:selectBooleanCheckbox value="#{item.selecionado}" />
+	   		</h:column>
+			<h:column style="vertical-align: middle;">
+				<f:facet name="header">
+	   				<h:outputText value="Data" />
+	   			</f:facet>
+     			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+     				<f:converter converterId="dateConverter"/>
+     			</h:outputText>     			
+     		</h:column>
+     		<h:column style="vertical-align: middle;">
+	     		<f:facet name="header">
+	   				<h:outputText value="Histórico" />
+	   			</f:facet>
+     			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+     			<h:outputText value=" - AGENDADO" rendered="#{item.statusLancamentoConta == 'AGENDADO'}" style="text-align: left"/>
+     			<br/>
+     			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20"/>
+     			<p:spacer width="5"/>
+     			<h:graphicImage id="imgLink" title="#{item.historico == null ? 'Lançamento importado' : item.historico}" value="/resources/images/svg/link.svg" height="20" width="20" rendered="#{item.id != null}"/>
+     			<p:spacer width="5" rendered="#{item.id != null}"/>
+     			<h:graphicImage id="imgAttachment" title="#{item.arquivo.nomeArquivo}" value="/resources/images/svg/image_file.svg" height="20" width="20" rendered="#{item.arquivo != null}"/>
+     			<p:tooltip for="imgInfo">
+					<h:outputText value="Categoria: #{item.categoria.descricao}" rendered="#{item.categoria != null}"/><br/>
+					<h:outputText value="Favorecido: #{item.favorecido.nome}" rendered="#{item.favorecido != null}"/><br/>
+					<h:outputText value="Meio de Pagamento: #{item.meioPagamento.descricao}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento and item.meioPagamento != null}"/>
+				</p:tooltip>
+     		</h:column>
+     		<h:column style="vertical-align: middle;">
+	     		<f:facet name="header">
+	   				<h:outputText value="Valor" />
+	   			</f:facet>
+     			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
+     			<h:outputText value="#{item.valorPago}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+     				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+     			</h:outputText>
+     		</h:column>     		  			
+  		</h:dataTable>
+	
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.create}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+		</h:commandLink>
+		<h:commandLink id="lnkOk" title="Confirmar importação" action="#{managedBean.processarLancamentos}">
+   			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+   		</h:commandLink>
+	</ui:define>
+		
+</ui:composition>
+</html>
