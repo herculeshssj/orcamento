@@ -37,6 +37,7 @@ Para o Ubuntu, utilize os seguintes comandos:
 
 ``
 sudo add-apt-repository ppa:webupd8team/java && sudo apt-get update
+
 sudo apt-get install oracle-java8-installer
 ``
 
@@ -108,6 +109,7 @@ Efetue o clone tanto do projeto quanto do projeto Orçamento DB para um diretór
 
 ``
 git clone https://github.com/herculeshssj/orcamento-db
+
 git clone https://github.com/herculeshssj/orcamento-maven
 ``
 
@@ -126,6 +128,7 @@ Atualizado as bases, clique com botão direito em cima do projeto, escolha Run A
 Acesse o sistema pela URL http://localhost:8080/orcamento/ usando as seguintes credenciais:
 
 *Usuário:* admin
+
 *Senha:* admin
 
 **Observação:** todas as funcionalidades já estão disponíveis para o usuário comum, basta realizar o registro no sistema.
