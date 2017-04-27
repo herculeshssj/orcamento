@@ -156,7 +156,7 @@ public class AgendaServiceTest extends AbstractTestServices {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testBuscarAgendamentosLancamentosAgendados() throws ApplicationException {
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO});
