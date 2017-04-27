@@ -79,7 +79,7 @@ public class ConnectionFactory {
         properties.setProperty("password", "d1nh31r0"); // or get properties from some configuration file
  
         DriverManagerConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-                "jdbc:mysql://192.168.1.101:3306/orcamento", properties
+                "jdbc:mysql://mysql.localhost:3306/orcamento", properties
         );
         
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
