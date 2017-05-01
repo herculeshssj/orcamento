@@ -50,14 +50,16 @@
   <groupId>br.com.hslife</groupId>
   <artifactId>orcamento</artifactId>
   <packaging>war</packaging>
-  <version>2017-RELEASE</version>
-  <name>orcamento Maven Webapp</name>
-  <url>http://maven.apache.org</url>
+  <version>2017</version>
+  <name>Orçamento Doméstico</name>
+  <url>https://github.com/herculeshssj/orcamento-maven</url>
+  
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -444,9 +446,10 @@
 	    <artifactId>spring-security-config</artifactId>
 	    <version>3.1.7.RELEASE</version>
 	</dependency>
-		    
   </dependencies>
+  
   <build>
     <finalName>orcamento</finalName>
   </build>
+  
 </project>
