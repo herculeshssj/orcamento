@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -89,6 +89,10 @@
 			<f:facet name="header">
 				<h:outputText value="Descrição"/>
 			</f:facet>
+			<h:graphicImage id="imgCalendar"  value="/resources/images/svg/planner.svg" height="20" width="20" rendered="#{item.tipoLancamentoPeriodico == 'FIXO'}"/>
+			<p:spacer width="5" rendered="#{item.tipoLancamentoPeriodico == 'FIXO'}"/>
+			<h:graphicImage id="imgParcel"  value="/resources/images/svg/doughnut_chart.svg" height="20" width="20" rendered="#{item.tipoLancamentoPeriodico == 'PARCELADO'}"/>
+     		<p:spacer width="5" rendered="#{item.tipoLancamentoPeriodico == 'PARCELADO'}"/>
 			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>
 			<p:spacer width="5"/>
 			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20"/>
