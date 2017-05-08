@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -66,8 +67,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OrderBy;
 
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
@@ -148,16 +147,15 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=true)
 	private Moeda moeda;
 	
-	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=true)
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name="idArquivo", nullable=true)
-	@Cascade(CascadeType.ALL)
 	private Arquivo arquivo;
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="lancamentoPeriodico", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=false)
 	@OrderBy(clause="dataVencimento")
 	private List<LancamentoConta> pagamentos;
 	

@@ -121,10 +121,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 				throw new BusinessException("Não é possível excluir! Existem pagamentos registrados!");
 			}
 		}
-		// Exclui os pagamentos e depois exclui o lançamento
-		for (LancamentoConta pagamento : lancamentoContaRepository.findByLancamentoPeriodico(entity)) {
-			lancamentoContaRepository.delete(pagamento);
-		}
+		// Exclui o lançamento e todos os seus pagamentos
 		super.excluir(entity);
 	}
 	
