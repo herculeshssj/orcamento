@@ -50,6 +50,7 @@ import java.util.List;
 
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.BusinessException;
 
 
 public interface IUsuario extends ICRUDService<Usuario> {
@@ -62,7 +63,7 @@ public interface IUsuario extends ICRUDService<Usuario> {
 	
 	public void efetuarRegistro(Usuario entity) throws ApplicationException;
 	
-	public void recuperarSenha(Usuario entity) throws ApplicationException;
+	public void recuperarSenha(Usuario entity) throws ApplicationException, BusinessException;
 	
 	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException;	
 	

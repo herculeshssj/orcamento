@@ -206,7 +206,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 			infoMessage("Senha alterada com sucesso!");
 			infoMessage("Senha de acesso foi envada para o e-mail cadastrado.");
 			initializeEntity();
-		} catch (ApplicationException be) {
+		} catch (ApplicationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 	}

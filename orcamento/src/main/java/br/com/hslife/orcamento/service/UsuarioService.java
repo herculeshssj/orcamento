@@ -147,7 +147,7 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	public void recuperarSenha(Usuario entity) throws ApplicationException {
+	public void recuperarSenha(Usuario entity) throws ApplicationException, BusinessException {
 		Usuario u = getRepository().findByLogin(entity.getLogin());
 		
 		// Verifica se o usuário informado existe, se não é o usuário admin, e se o e-mail informado coincide com o 
