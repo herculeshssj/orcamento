@@ -53,17 +53,21 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
+import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoTermoDividaTerceiro;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IDividaTerceiro;
@@ -101,6 +105,10 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	private Moeda moedaSelecionada;
 	private boolean dividaQuitada = false;
 	
+	private TipoTermoDividaTerceiro tipoTermoDivida;
+	private Arquivo arquivoAnexado;
+	private String conteudoEditorTexto;
+	
 	private enum VisualizacaoDocumento {
 		MODELO_DOCUMENTO, TERMO_DIVIDA, TERMO_QUITACAO, COMPROVANTE_PAGAMENTO, MODELO_COMPROVANTE;
 	}
@@ -133,6 +141,12 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	public String save() {
 		entity.setUsuario(getUsuarioLogado());		
 		return super.save();
+	}
+	
+	public String vigorarDividaTerceiroView() {
+		actionTitle = " - Vigorar dívida";
+		operation = "vigorar";
+		return "/pages/DividaTerceiro/vigorarDividaTerceiro";
 	}
 	
 	public String vigorarDividaTerceiro() {
@@ -311,6 +325,21 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		return 0.0;
 	}
 	
+	public void carregarArquivo(FileUploadEvent event) {
+		if (event.getFile() != null) {
+			if (entity.getArquivoTermoDivida() == null) entity.setArquivoTermoDivida(new Arquivo());
+			entity.getArquivoTermoDivida().setDados(event.getFile().getContents());
+			entity.getArquivoTermoDivida().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			entity.getArquivoTermoDivida().setContentType(event.getFile().getContentType());
+			entity.getArquivoTermoDivida().setTamanho(event.getFile().getSize());
+			entity.getArquivoTermoDivida().setContainer(Container.DIVIDATERCEIROS);
+			entity.getArquivoTermoDivida().setUsuario(getUsuarioLogado());
+			if (operation.equals("vigorar")) {
+				entity.getArquivoTermoDivida().setAttribute("arquivoTermoDivida");
+			}	
+		} 
+	}
+	
 	public List<Favorecido> getListaFavorecido() {
 		try {
 			return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
@@ -409,5 +438,29 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 
 	public void setDividaQuitada(boolean dividaQuitada) {
 		this.dividaQuitada = dividaQuitada;
+	}
+
+	public TipoTermoDividaTerceiro getTipoTermoDivida() {
+		return tipoTermoDivida;
+	}
+
+	public void setTipoTermoDivida(TipoTermoDividaTerceiro tipoTermoDivida) {
+		this.tipoTermoDivida = tipoTermoDivida;
+	}
+
+	public Arquivo getArquivoAnexado() {
+		return arquivoAnexado;
+	}
+
+	public void setArquivoAnexado(Arquivo arquivoAnexado) {
+		this.arquivoAnexado = arquivoAnexado;
+	}
+
+	public String getConteudoEditorTexto() {
+		return conteudoEditorTexto;
+	}
+
+	public void setConteudoEditorTexto(String conteudoEditorTexto) {
+		this.conteudoEditorTexto = conteudoEditorTexto;
 	}
 }

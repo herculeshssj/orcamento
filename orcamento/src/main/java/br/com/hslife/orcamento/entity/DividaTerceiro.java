@@ -62,6 +62,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -93,6 +94,10 @@ public class DividaTerceiro extends EntityPersistence {
 	
 	@Column(columnDefinition="text")
 	private String termoDivida;
+	
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name="idArquivoTermoDivida", nullable=true)
+	private Arquivo arquivoTermoDivida;
 	
 	@Column(columnDefinition="text")
 	private String termoQuitacao;
@@ -308,5 +313,13 @@ public class DividaTerceiro extends EntityPersistence {
 
 	public void setModeloDocumento(ModeloDocumento modeloDocumento) {
 		this.modeloDocumento = modeloDocumento;
+	}
+
+	public Arquivo getArquivoTermoDivida() {
+		return arquivoTermoDivida;
+	}
+
+	public void setArquivoTermoDivida(Arquivo arquivoTermoDivida) {
+		this.arquivoTermoDivida = arquivoTermoDivida;
 	}
 }

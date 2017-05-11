@@ -148,6 +148,12 @@
 			</h:commandLink>
 			<p:spacer width="20"  rendered="#{item.statusDivida == 'REGISTRADO'}"/>
 			
+	   		<h:commandLink id="lnkDebt" title="Vigorar termo/contrato" action="#{managedBean.vigorarDividaTerceiroView}" rendered="#{item.statusDivida == 'REGISTRADO'}">
+	   			<h:graphicImage id="imgDebt" height="48" width="48" value="/resources/images/svg/debt.svg"/>
+	   			<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+	   		</h:commandLink>
+	   		<p:spacer width="20"  rendered="#{item.statusDivida == 'REGISTRADO'}"/>
+			
 	  		<h:commandLink title="Visualizar" action="#{managedBean.detalheDividaTerceiro}">
      			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
      			<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>

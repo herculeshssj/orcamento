@@ -44,6 +44,7 @@
   
   -->
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -53,39 +54,47 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition template="/templates/visualizar.xhtml">
 
 	<ui:param name="managedBean" value="#{dividaTerceiroMB}" />
-	
+
 	<ui:define name="campos">
 			
-		<label>Favorecido:</label>
-		<h:selectOneMenu value="#{managedBean.entity.favorecido}" converter="entityConverter">									
-			<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		</h:selectOneMenu>			
-	     	
-	    <label>Tipo de dívida:</label>
-	    <h:selectOneRadio value="#{managedBean.entity.tipoCategoria}" layout="lineDirection">
-			<f:selectItems value="#{enumCombo.listaTipoCategoria}"/>								
-		</h:selectOneRadio>
-	     	
-	    <label for="frmFormEntity:txtDataNegociacao">Data da negociação:</label>
-	    <p:inputMask id="txtDataNegociacao" size="10" mask="99/99/9999" value="#{managedBean.entity.dataNegociacao}">
-			<f:converter converterId="dateConverter"/>
-		</p:inputMask>
-	     	
-	    <label for="frmFormEntity:txtValorDivida">Valor da dívida:</label>
-	    <h:inputText id="txtValorDivida" value="#{managedBean.entity.valorDivida}" size="10">
-			<f:convertNumber type="currency" pattern="###.##"/>
-		</h:inputText>
+		<h:panelGrid columns="2">
 			
-		<label>Moeda:</label>
-		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-		</h:selectOneMenu>
+			Favorecido:
+			<h:outputText value="#{managedBean.entity.favorecido.label}" />		
+	     	
+	     	Tipo de dívida:
+	     	<h:outputText value="#{managedBean.entity.tipoCategoria}" />
+	     	
+	     	Status da dívida:
+	     	<h:outputText value="#{managedBean.entity.statusDivida}" />	
+	     	
+	     	Data da negociação:
+	     	<h:outputText value="#{managedBean.entity.dataNegociacao}">
+	     		<f:converter converterId="dateConverter"/>
+	     	</h:outputText>
+	     	
+	     	Valor da dívida:
+	     	<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.valorDivida}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
 			
-		<label for="frmFormEntity:txtJustificativa">Justificativa:</label>
-		<h:inputTextarea id="txtJustificativa" value="#{managedBean.entity.justificativa}"/>
+			Moeda:
+			<h:outputText value="#{managedBean.entity.moeda.label}" />
+			
+		</h:panelGrid>
+				
+		<label>Justificativa:</label>
+		<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
+		
+		<hr />
+		
+		<ui:include src="selecaoTipoTermo.xhtml"/>
 		
 	</ui:define>
 	
@@ -94,10 +103,10 @@
    			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
    		</h:commandLink>				
 		<p:spacer width="20" />
-		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}">
-   			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		<h:commandLink id="lnkDebt" title="Vigorar termo/contrato" action="#{managedBean.vigorarDividaTerceiro}">
+   			<h:graphicImage id="imgDebt" height="48" width="48" value="/resources/images/svg/debt.svg"/>
    		</h:commandLink>
 	</ui:define>
-
+	
 </ui:composition>
 </html>

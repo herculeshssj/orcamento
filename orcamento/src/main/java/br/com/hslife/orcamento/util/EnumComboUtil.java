@@ -68,6 +68,7 @@ import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
+import br.com.hslife.orcamento.enumeration.TipoTermoDividaTerceiro;
 
 @Component("enumCombo")
 @Scope("application")
@@ -198,6 +199,14 @@ public class EnumComboUtil {
 	public List<SelectItem> getListaTipoInvestimento() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (TipoInvestimento enumeration : TipoInvestimento.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaTipoTermoDividaTerceiro() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (TipoTermoDividaTerceiro enumeration : TipoTermoDividaTerceiro.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;
