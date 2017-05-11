@@ -94,6 +94,9 @@ public class Arquivo extends EntityPersistence {
 	@Enumerated(EnumType.STRING)
 	private Container container;
 	
+	@Column(nullable=false, length=50)
+	private String attribute;
+	
 	@OneToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
@@ -134,6 +137,8 @@ public class Arquivo extends EntityPersistence {
 			case FATURACARTAO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_FATURACARTAO"));
 			case LANCAMENTOCONTA : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA"));
 			case LANCAMENTOPERIODICO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO"));
+			case DIVIDATERCEIROS : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DIVIDATERCEIRO"));
+			case PAGAMENTODIVIDATERCEIRO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_PAGAMENTODIVIDATERCEIRO"));
 		}
 		return false;
 	}
@@ -196,5 +201,13 @@ public class Arquivo extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getAttribute() {
+		return attribute;
+	}
+
+	public void setAttribute(String attribute) {
+		this.attribute = attribute;
 	}
 }

@@ -50,7 +50,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public enum Container {
-	DOCUMENTOS("Documentos"), LANCAMENTOCONTA("LancamentoConta"), LANCAMENTOPERIODICO("LancamentoPeriodico"), FATURACARTAO("FaturaCartao");
+	DOCUMENTOS("Documentos"), 
+	LANCAMENTOCONTA("LancamentoConta"), 
+	LANCAMENTOPERIODICO("LancamentoPeriodico"), 
+	FATURACARTAO("FaturaCartao"), 
+	DIVIDATERCEIROS("DividaTerceiro"),
+	PAGAMENTODIVIDATERCEIRO("PagamentoDividaTerceiro");
 	
 	private String descricao;
 	
