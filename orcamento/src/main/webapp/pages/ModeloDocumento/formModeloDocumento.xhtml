@@ -59,7 +59,7 @@
 	
 	<ui:define name="campos">
 	
-		<p:poll interval="60" listener="#{managedBean.autoSave}" update="txtDescricao,txtStatusSalvamento" />
+		<p:poll interval="60" listener="#{managedBean.autoSave}" update="txtStatusSalvamento" />
 			
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}"/>				

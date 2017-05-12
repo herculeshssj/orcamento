@@ -61,7 +61,7 @@
 	<label>Selecione o tipo de termo de dívida:</label>
 	<h:selectOneRadio layout="lineDirection" id="txtTipoTermoDivida" value="#{managedBean.tipoTermoDivida}" required="true" requiredMessage="Informe um tipo de termo de dívida!">
 		<f:selectItems value="#{enumCombo.listaTipoTermoDividaTerceiro}"/>
-		<p:ajax event="change" update="pnlTipoTermoDividaTerceiro" />
+		<p:ajax event="change" update="pnlTipoTermoDividaTerceiro"/>
 	</h:selectOneRadio>
 	
 	<p:outputPanel id="pnlTipoTermoDividaTerceiro">
@@ -85,7 +85,13 @@
 		
 		<h:panelGroup rendered="#{managedBean.tipoTermoDivida == 'EDITOR_TEXTO'}">
 			
-			<p:editor id="txtEditor" value="#{managedBean.conteudoEditorTexto}"/>
+			<p:poll interval="60" listener="#{managedBean.autoSave}" update="txtStatusSalvamento" />
+			
+			<label><h:outputText id="txtStatusSalvamento" value="#{managedBean.statusSalvamento}" /></label>
+			
+			<p:editor id="txtEditor" value="#{managedBean.entity.termoDivida}"/>
+			
+			<h:commandLink value="Visualizar termo" action="#{managedBean.visualizarTermoDivida}" target="_blank"/>
 		
 		</h:panelGroup>
 	

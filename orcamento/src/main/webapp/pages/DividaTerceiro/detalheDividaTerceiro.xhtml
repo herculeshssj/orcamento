@@ -136,11 +136,14 @@
    			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
    		</h:commandLink>				
 		<p:spacer width="20" />
-		<h:commandLink id="lnkContract" title="Visualizar termo/contrato gerado" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
+		<h:commandLink id="lnkContract" title="Visualizar termo/contrato gerado" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO' and managedBean.entity.arquivoTermoDivida == null}">
    			<h:graphicImage id="imgContract" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
    		</h:commandLink>
+   		<h:commandLink id="lnkContractFile" title="Visualizar termo/contrato anexado" action="#{managedBean.visualizarTermoDividaAnexado}" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO' and managedBean.entity.arquivoTermoDivida != null}">
+   			<h:graphicImage id="imgContractFile" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
+   		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
-		<h:commandLink title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO'}">
+		<h:commandLink id="lnkCertificate" title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO'}">
 			<h:graphicImage id="imgCertificate" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
 		</h:commandLink>
 	</ui:define>

@@ -90,12 +90,8 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	}
 	
 	@Override
-	public void vigorarDividaTerceiro(DividaTerceiro entity) {
-		if (entity.getModeloDocumento() == null) {
-			throw new BusinessException("Selecione um modelo de termo/contrato!");
-		}		
+	public void vigorarDividaTerceiro(DividaTerceiro entity) {		
 		entity.validate();
-		entity.setTermoDivida(entity.getModeloDocumento().getConteudo());
 		entity.setStatusDivida(StatusDivida.VIGENTE);
 		getRepository().update(entity);
 	}
