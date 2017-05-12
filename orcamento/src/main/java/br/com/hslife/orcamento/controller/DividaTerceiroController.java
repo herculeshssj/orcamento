@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     

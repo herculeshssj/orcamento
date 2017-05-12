@@ -1,4 +1,4 @@
-<!--
+/***
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -42,38 +42,44 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-  -->
+***/
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+package br.com.hslife.orcamento.component;
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-<ui:composition template="/templates/formulario.xhtml">
+import br.com.hslife.orcamento.entity.Autosalvamento;
+import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.repository.AutosalvamentoRepository;
 
-	<ui:param name="managedBean" value="#{modeloDocumentoMB}" />
+@Component
+@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
+public class AutosalvamentoComponent {
 	
-	<ui:define name="campos">
+	@Autowired
+	public SessionFactory sessionFactory;
 	
-		<p:poll interval="60" listener="#{managedBean.autoSave}" update="txtDescricao,txtStatusSalvamento" />
-			
-		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
-			
-		<label>Ativo:</label>
-		<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" />	
-		
-		<br/>
-			
-		<label><h:outputText id="txtStatusSalvamento" value="#{managedBean.statusSalvamento}" /></label>		
-		
-		<p:editor id="editor" value="#{managedBean.entity.conteudo}" disabled="#{!managedBean.entity.ativo}"/>
-		
-	</ui:define>
+	@Autowired
+	private AutosalvamentoRepository repository;
 	
-</ui:composition>
-</html>
+	public AutosalvamentoRepository getRepository() {
+		this.repository.setSessionFactory(sessionFactory);
+		return repository;
+	}
+	
+	public void salvar(Long idEntidade, String entidade, String atributo, String conteudo) {
+		getRepository().save(new Autosalvamento(
+				idEntidade,
+				entidade,
+				atributo,
+				conteudo));
+	}
+	
+	public Autosalvamento buscarUltimoSalvamento(Long idEntidade, String entidade, String atributo) {
+		return getRepository().findLastSalvamento(idEntidade, entidade, atributo);
+	}
+}

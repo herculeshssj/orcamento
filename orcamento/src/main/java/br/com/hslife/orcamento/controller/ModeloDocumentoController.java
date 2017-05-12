@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -47,17 +47,17 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.AutosalvamentoComponent;
+import br.com.hslife.orcamento.entity.Autosalvamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IModeloDocumento;
-import br.com.hslife.orcamento.util.Util;
 
 @Component("modeloDocumentoMB")
 @Scope("session")
@@ -69,13 +69,13 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 	private static final long serialVersionUID = -372533275028178301L;
 
 	@Autowired
+	private AutosalvamentoComponent autoSalvamentoComponent;
+	
+	@Autowired
 	private IModeloDocumento service;
 	
 	private String descricaoModeloPesquisa;
 	private boolean somenteAtivos = true;
-	private boolean modeloAtivo = true;
-	private String descricaoModelo;
-	private String conteudoModelo;
 	private String statusSalvamento;
 	
 	public ModeloDocumentoController() {
@@ -88,8 +88,6 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 	protected void initializeEntity() {
 		entity = new ModeloDocumento();
 		listEntity = new ArrayList<ModeloDocumento>();
-		conteudoModelo = "";
-		descricaoModelo = "";
 		statusSalvamento = "";
 	}
 
@@ -104,51 +102,17 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 	
 	@Override
 	public String save() {
-		/*
-		if (entity.getId() == null) {
-			entity.setUsuario(getUsuarioLogado());
-		} 
-		entity.setConteudo(conteudoModelo);
-		entity.setDescricao(descricaoModelo);
-		return super.save();*/
-		this.autoSave();
-		infoMessage("Registro salvo com sucesso.");
-		return list();
-	}
-	
-	@Override
-	public String edit() {
-		String retorno = super.edit();
-		conteudoModelo = entity.getConteudo();
-		descricaoModelo = entity.getDescricao();
-		modeloAtivo = entity.isAtivo();
-		return retorno;
+		entity.setUsuario(getUsuarioLogado());
+		return super.save();
 	}
 	
 	public void autoSave() {
 		try {
-			if (entity.getId() == null) {
-				
-				if (descricaoModelo !=  null && !descricaoModelo.isEmpty()) {
-					descricaoModelo = "Modelo salvo automaticamente em " + Util.formataDataHora(new Date(), Util.DATAHORA);
-				}
-				
-				entity.setUsuario(getUsuarioLogado());
-				entity.setConteudo(conteudoModelo);
-				entity.setDescricao(descricaoModelo);
-				entity.setAtivo(modeloAtivo);
-				getService().cadastrar(entity);
-				
-				// Tentando contornar a exceção org.hibernate.StaleObjectStateException
-				entity = getService().buscarPorID(entity.getId());
-			} else {
-				ModeloDocumento modelo = getService().buscarPorID(entity.getId());
-				modelo.setConteudo(conteudoModelo);
-				modelo.setDescricao(descricaoModelo);
-				modelo.setAtivo(modeloAtivo);
-				getService().alterar(modelo);
-			}
-			statusSalvamento = "Modelo de documento salvo automaticamente em " + new Date().toString();
+			getAutoSalvamentoComponent().salvar(idEntity, entity.getClass().getSimpleName(), "conteudo", entity.getConteudo());
+			
+			Autosalvamento auto = getAutoSalvamentoComponent().buscarUltimoSalvamento(idEntity, entity.getClass().getSimpleName(), "conteudo");
+			
+			statusSalvamento = "Conteúdo salvo automaticamente em " + auto.getDataCriacao().toString();
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -167,7 +131,6 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 	}
 	
 	public String visualizarModeloDocumento() {
-		conteudoModelo = entity.getConteudo();
 		return "/pages/ModeloDocumento/visualizarDocumento";
 	}
 
@@ -177,6 +140,10 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 
 	public void setService(IModeloDocumento service) {
 		this.service = service;
+	}
+
+	public AutosalvamentoComponent getAutoSalvamentoComponent() {
+		return autoSalvamentoComponent;
 	}
 
 	public String getDescricaoModeloPesquisa() {
@@ -195,35 +162,11 @@ public class ModeloDocumentoController extends AbstractCRUDController<ModeloDocu
 		this.somenteAtivos = somenteAtivos;
 	}
 
-	public String getDescricaoModelo() {
-		return descricaoModelo;
-	}
-
-	public void setDescricaoModelo(String descricaoModelo) {
-		this.descricaoModelo = descricaoModelo;
-	}
-
-	public String getConteudoModelo() {
-		return conteudoModelo;
-	}
-
-	public void setConteudoModelo(String conteudoModelo) {
-		this.conteudoModelo = conteudoModelo;
-	}
-
 	public String getStatusSalvamento() {
 		return statusSalvamento;
 	}
 
 	public void setStatusSalvamento(String statusSalvamento) {
 		this.statusSalvamento = statusSalvamento;
-	}
-
-	public boolean isModeloAtivo() {
-		return modeloAtivo;
-	}
-
-	public void setModeloAtivo(boolean modeloAtivo) {
-		this.modeloAtivo = modeloAtivo;
 	}
 }

@@ -1,4 +1,4 @@
-<!--
+/***
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -42,38 +42,39 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-  -->
+***/
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+package br.com.hslife.orcamento.repository;
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
-<ui:composition template="/templates/formulario.xhtml">
+import br.com.hslife.orcamento.entity.Autosalvamento;
 
-	<ui:param name="managedBean" value="#{modeloDocumentoMB}" />
+@Repository
+public class AutosalvamentoRepository extends AbstractRepository {
 	
-	<ui:define name="campos">
+	public void save(Autosalvamento entity) {
+		getSession().save(entity);
+	}
 	
-		<p:poll interval="60" listener="#{managedBean.autoSave}" update="txtDescricao,txtStatusSalvamento" />
-			
-		<label for="frmFormEntity:txtDescricao">Descrição:</label>
-		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" size="50" disabled="#{!managedBean.entity.ativo}"/>				
-			
-		<label>Ativo:</label>
-		<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" />	
+	public Autosalvamento findLastSalvamento(Long idEntidade, String entidade, String atributo) {
+		Criteria criteria = getSession().createCriteria(Autosalvamento.class);
 		
-		<br/>
-			
-		<label><h:outputText id="txtStatusSalvamento" value="#{managedBean.statusSalvamento}" /></label>		
+		// Resolvendo o problema com valor NULL em idEntidade
+		if (idEntidade == null) {
+			criteria.add(Restrictions.isNull("idEntidade"));
+		} else {
+			criteria.add(Restrictions.eq("idEntidade", idEntidade));
+		}
 		
-		<p:editor id="editor" value="#{managedBean.entity.conteudo}" disabled="#{!managedBean.entity.ativo}"/>
+		criteria.add(Restrictions.eq("entidade", entidade));
+		criteria.add(Restrictions.eq("atributo", atributo));
 		
-	</ui:define>
-	
-</ui:composition>
-</html>
+		criteria.addOrder(Order.desc("dataCriacao"));
+		
+		return (Autosalvamento)criteria.setMaxResults(1).uniqueResult();
+	}
+}
