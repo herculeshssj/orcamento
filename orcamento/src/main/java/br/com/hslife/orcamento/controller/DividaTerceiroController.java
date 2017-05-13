@@ -213,7 +213,12 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		}
 		
 		try {
+			// Vigora o termo
 			getService().vigorarDividaTerceiro(entity);
+			
+			// Exclui os autosalvamentos existentes
+			getAutoSalvamentoComponent().excluirTodosSalvamentos(entity.getId(), entity.getClass().getSimpleName(), "termoDivida");
+			
 			infoMessage("Registro salvo com sucesso. Termo/contrato da dívida entrou em vigor.");
 			return super.list();			
 		} catch (ValidationException | BusinessException be) {

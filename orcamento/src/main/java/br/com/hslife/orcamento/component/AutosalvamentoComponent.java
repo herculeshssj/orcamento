@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.component;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -81,5 +83,12 @@ public class AutosalvamentoComponent {
 	
 	public Autosalvamento buscarUltimoSalvamento(Long idEntidade, String entidade, String atributo) {
 		return getRepository().findLastSalvamento(idEntidade, entidade, atributo);
+	}
+	
+	public void excluirTodosSalvamentos(Long idEntidade, String entidade, String atributo) {
+		List<Autosalvamento> salvamentos = getRepository().findAll(idEntidade, entidade, atributo);
+		for (Autosalvamento s : salvamentos) {
+			getRepository().delete(s);
+		}
 	}
 }

@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -58,6 +60,10 @@ public class AutosalvamentoRepository extends AbstractRepository {
 	
 	public void save(Autosalvamento entity) {
 		getSession().save(entity);
+	}
+	
+	public void delete(Autosalvamento entity) {
+		getSession().delete(entity);
 	}
 	
 	public Autosalvamento findLastSalvamento(Long idEntidade, String entidade, String atributo) {
@@ -76,5 +82,24 @@ public class AutosalvamentoRepository extends AbstractRepository {
 		criteria.addOrder(Order.desc("dataCriacao"));
 		
 		return (Autosalvamento)criteria.setMaxResults(1).uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Autosalvamento> findAll(Long idEntidade, String entidade, String atributo) {
+		Criteria criteria = getSession().createCriteria(Autosalvamento.class);
+		
+		// Resolvendo o problema com valor NULL em idEntidade
+		if (idEntidade == null) {
+			criteria.add(Restrictions.isNull("idEntidade"));
+		} else {
+			criteria.add(Restrictions.eq("idEntidade", idEntidade));
+		}
+		
+		criteria.add(Restrictions.eq("entidade", entidade));
+		criteria.add(Restrictions.eq("atributo", atributo));
+		
+		criteria.addOrder(Order.desc("dataCriacao"));
+		
+		return criteria.list();
 	}
 }
