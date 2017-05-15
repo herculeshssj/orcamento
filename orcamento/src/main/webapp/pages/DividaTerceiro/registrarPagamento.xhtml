@@ -135,23 +135,9 @@
 		
 		</p:outputPanel>
 		
-		<label>Selecione um modelo de comprovante:</label>
-		<h:selectOneMenu value="#{managedBean.pagamentoDivida.modeloDocumento}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-		</h:selectOneMenu>
-		<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloComprovante}" target="_blank"/>
+		<hr />
 		
-		<h:panelGroup rendered="#{managedBean.dividaQuitada}">
-			
-			<br/><br/>
-			
-			Selecione um modelo de quitação:
-			<h:selectOneMenu value="#{managedBean.entity.modeloDocumento}" converter="entityConverter">
-				<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
-			</h:selectOneMenu>
-			<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloDocumento}" target="_blank"/>
-			
-		</h:panelGroup>
+		<ui:include src="selecaoTipoTermo.xhtml"/>
 		
 	</ui:define>
 	

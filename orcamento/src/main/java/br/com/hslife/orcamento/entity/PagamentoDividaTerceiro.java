@@ -48,13 +48,16 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -84,6 +87,10 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 	
 	@Column(columnDefinition="text")
 	private String comprovantePagamento;
+	
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name="idArquivoComprovante", nullable=true)
+	private Arquivo arquivoComprovante;
 	
 	@ManyToOne
 	@JoinColumn(name="idDivida", nullable=false)
@@ -169,5 +176,13 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 
 	public void setModeloDocumento(ModeloDocumento modeloDocumento) {
 		this.modeloDocumento = modeloDocumento;
+	}
+
+	public Arquivo getArquivoComprovante() {
+		return arquivoComprovante;
+	}
+
+	public void setArquivoComprovante(Arquivo arquivoComprovante) {
+		this.arquivoComprovante = arquivoComprovante;
 	}
 }

@@ -136,6 +136,12 @@
 			<f:facet name="header">
 				<h:outputText value="Ações"/>
 			</f:facet>
+			<h:commandLink title="Visualizar" action="#{managedBean.detalheDividaTerceiro}">
+     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+     			<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+     		</h:commandLink>								
+	  		<p:spacer width="20"/>
+			
 			<h:commandLink title="Editar" action="#{managedBean.edit}" rendered="#{item.statusDivida == 'REGISTRADO'}">
 				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
@@ -154,12 +160,6 @@
 	   		</h:commandLink>
 	   		<p:spacer width="20"  rendered="#{item.statusDivida == 'REGISTRADO'}"/>
 			
-	  		<h:commandLink title="Visualizar" action="#{managedBean.detalheDividaTerceiro}">
-     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
-     			<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
-     		</h:commandLink>								
-	  		<p:spacer width="20"/>
-	  		
 	  		<h:commandLink title="Registrar pagamento" action="#{managedBean.registrarPagamentoView}" rendered="#{item.statusDivida == 'VIGENTE'}">
 				<h:graphicImage id="imgPay" height="48" width="48" value="/resources/images/svg/donate.svg"/>
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
@@ -176,19 +176,7 @@
 				<h:graphicImage id="imgFinish" height="48" width="48" value="/resources/images/svg/disapprove.svg"/>
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
 			</h:commandLink>
-			<p:spacer width="20" rendered="#{item.statusDivida == 'VIGENTE'}"/>
-				
-			<h:commandLink title="Visualizar termo/contrato" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{item.statusDivida == 'VIGENTE'}">
-				<h:graphicImage id="imgContract" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
-				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
-			</h:commandLink>
-			<p:spacer width="20" rendered="#{item.statusDivida == 'VIGENTE'}"/>	
-			
-			<h:commandLink title="Visualizar termo de quitação" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{item.statusDivida == 'QUITADO'}">
-				<h:graphicImage id="imgCertificate" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
-				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
-			</h:commandLink>	
-			<p:spacer width="20" rendered="#{item.statusDivida == 'QUITADO'}"/>								
+			<p:spacer width="20" rendered="#{item.statusDivida == 'VIGENTE'}"/>								
 	  	</h:column>
 		
 	</ui:define>

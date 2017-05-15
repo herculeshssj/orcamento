@@ -69,7 +69,7 @@
 		<h:panelGroup rendered="#{managedBean.tipoTermoDivida == 'MODELO_DOCUMENTO'}">
 			
 			<label>Selecione um modelo:</label>
-			<h:selectOneMenu value="#{managedBean.entity.modeloDocumento}" converter="entityConverter">
+			<h:selectOneMenu value="#{managedBean.modeloDocumento}" converter="entityConverter">
 				<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 			</h:selectOneMenu>
 			<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloDocumento}" target="_blank"/>
@@ -89,9 +89,9 @@
 			
 			<label><h:outputText id="txtStatusSalvamento" value="#{managedBean.statusSalvamento}" /></label>
 			
-			<p:editor id="txtEditor" value="#{managedBean.entity.termoDivida}"/>
+			<p:editor id="txtEditor" value="#{managedBean.conteudoTexto}"/>
 			
-			<h:commandLink value="Visualizar termo" action="#{managedBean.visualizarTermoDivida}" target="_blank"/>
+			<h:commandLink value="Visualizar termo" action="#{managedBean.visualizarConteudoTexto}" target="_blank"/>
 		
 		</h:panelGroup>
 	

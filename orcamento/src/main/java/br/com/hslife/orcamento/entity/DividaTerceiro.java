@@ -102,6 +102,10 @@ public class DividaTerceiro extends EntityPersistence {
 	@Column(columnDefinition="text")
 	private String termoQuitacao;
 	
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name="idArquivoTermoQuitacao", nullable=true)
+	private Arquivo arquivoTermoQuitacao;
+	
 	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private StatusDivida statusDivida;
@@ -321,5 +325,13 @@ public class DividaTerceiro extends EntityPersistence {
 
 	public void setArquivoTermoDivida(Arquivo arquivoTermoDivida) {
 		this.arquivoTermoDivida = arquivoTermoDivida;
+	}
+
+	public Arquivo getArquivoTermoQuitacao() {
+		return arquivoTermoQuitacao;
+	}
+
+	public void setArquivoTermoQuitacao(Arquivo arquivoTermoQuitacao) {
+		this.arquivoTermoQuitacao = arquivoTermoQuitacao;
 	}
 }
