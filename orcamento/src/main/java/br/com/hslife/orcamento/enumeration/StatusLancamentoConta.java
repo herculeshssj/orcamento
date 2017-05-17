@@ -47,7 +47,7 @@
 package br.com.hslife.orcamento.enumeration;
 
 public enum StatusLancamentoConta {
-	AGENDADO("Agendado"), QUITADO("Quitado"), REGISTRADO("Registrado"), VALIDAR("À validar");
+	AGENDADO("Agendado"), QUITADO("Quitado"), REGISTRADO("Registrado");
 	
 	private String descricao;
 	
