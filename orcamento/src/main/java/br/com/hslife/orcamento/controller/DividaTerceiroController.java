@@ -234,21 +234,63 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	}
 	
 	public String renegociarDividaView() {
-		actionTitle = " - Renegociar dívida";
-		operation = "vigorar";
-		entity.setDataNegociacao(new Date());
-		return "/pages/DividaTerceiro/renegociarDivida";
-	}
-	
-	public String renegociarDivida() {
 		try {
-			getService().renegociarDividaTerceiro(entity, novaJustificativa);
-			infoMessage("Registro salvo com sucesso. Dívida renegociada.");
-			return super.list();
+			Autosalvamento auto = getAutoSalvamentoComponent().buscarUltimoSalvamento(entity.getId(), entity.getClass().getSimpleName(), "termoDivida");
+			if (auto != null)
+				setConteudoTexto(auto.getConteudoTexto());
+			actionTitle = " - Renegociar dívida";
+			operation = "vigorar";
+			entity.setDataNegociacao(new Date());
+			return "/pages/DividaTerceiro/renegociarDivida";
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return "";	
+		return "";
+	}
+	
+	public String renegociarDivida() {
+		if (tipoTermoDivida.equals(TipoTermoDividaTerceiro.MODELO_DOCUMENTO)) {
+			if (getModeloDocumento() == null) {
+				warnMessage("Selecione um modelo de documento!");
+				return "";
+			} else {
+				entity.setArquivoTermoDivida(null);
+				entity.setTermoDivida(getModeloDocumento().getConteudo());
+			}
+		} 
+		
+		if (tipoTermoDivida.equals(TipoTermoDividaTerceiro.ARQUIVO)) {
+			if (entity.getArquivoTermoDivida() == null) {
+				warnMessage("Selecione um arquivo");
+				return "";
+			} else {
+				entity.setTermoDivida("");
+			}
+		} 
+		
+		if (tipoTermoDivida.equals(TipoTermoDividaTerceiro.EDITOR_TEXTO)) {
+			if (this.conteudoTexto.isEmpty()) {
+				warnMessage("Entre com o texto do termo!");
+				return "";
+			} else {
+				entity.setArquivoTermoDivida(null);
+				entity.setTermoDivida(this.conteudoTexto);
+			}
+		}
+		
+		try {
+			// renegocia a dívida
+			getService().renegociarDividaTerceiro(entity, novaJustificativa);
+			
+			// Exclui os autosalvamentos existentes
+			getAutoSalvamentoComponent().excluirTodosSalvamentos(entity.getId(), entity.getClass().getSimpleName(), "termoDivida");
+			
+			infoMessage("Registro salvo com sucesso. Dívida renegociada.");
+			return super.list();			
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String encerrarDividaView() {
@@ -289,17 +331,17 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 				warnMessage("Selecione um modelo de documento!");
 				return "";
 			} else {
-				entity.setArquivoTermoDivida(null);
-				entity.setTermoDivida(getModeloDocumento().getConteudo());
+				pagamentoDivida.setArquivoComprovante(null);
+				pagamentoDivida.setComprovantePagamento(getModeloDocumento().getConteudo());
 			}
 		} 
 		
 		if (tipoTermoDivida.equals(TipoTermoDividaTerceiro.ARQUIVO)) {
-			if (entity.getArquivoTermoDivida() == null) {
+			if (pagamentoDivida.getArquivoComprovante() == null) {
 				warnMessage("Selecione um arquivo");
 				return "";
 			} else {
-				entity.setTermoDivida("");
+				pagamentoDivida.setComprovantePagamento("");
 			}
 		} 
 		
@@ -308,8 +350,8 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 				warnMessage("Entre com o texto do termo!");
 				return "";
 			} else {
-				entity.setArquivoTermoDivida(null);
-				entity.setTermoDivida(this.conteudoTexto);
+				pagamentoDivida.setArquivoComprovante(null);
+				pagamentoDivida.setComprovantePagamento(this.conteudoTexto);
 			}
 		}
 		
@@ -317,8 +359,15 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			getService().registrarPagamentoDivida(entity, pagamentoDivida);
 			infoMessage("Pagamento registrado com sucesso.");
 			
+			// Exclui os autosalvamentos existentes
+			getAutoSalvamentoComponent().excluirTodosSalvamentos(entity.getId(), entity.getClass().getSimpleName(), "comprovantePagamento");
+			
 			// Verifica se a dívida pode ser quitada
 			if (entity.getTotalPago() + pagamentoDivida.getValorPagoConvertido() >= entity.getValorDivida()) {
+				idEntity = entity.getId();
+				tipoTermoDivida = null;
+				conteudoTexto = null;
+				statusSalvamento = null;
 				warnMessage("Dívida prestes a ser quitada.");
 				return this.quitarDividaTerceiroView();
 			}
@@ -331,6 +380,8 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	
 	private String quitarDividaTerceiroView() {
 		try {
+			entity = getService().buscarPorID(idEntity);
+			
 			Autosalvamento auto = getAutoSalvamentoComponent().buscarUltimoSalvamento(entity.getId(), entity.getClass().getSimpleName(), "termoQuitacao");
 			if (auto != null)
 				setConteudoTexto(auto.getConteudoTexto());
@@ -355,7 +406,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		} 
 		
 		if (tipoTermoDivida.equals(TipoTermoDividaTerceiro.ARQUIVO)) {
-			if (entity.getArquivoTermoDivida() == null) {
+			if (entity.getArquivoTermoQuitacao() == null) {
 				warnMessage("Selecione um arquivo");
 				return "";
 			} else {
@@ -442,7 +493,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		return "/pages/DividaTerceiro/visualizarDocumento";
 	}
 	
-	public String visualizarModelo() {
+	public String visualizarModeloDocumento() {
 		conteudoDocumento = getModeloDocumento().getConteudo();
 		return "/pages/DividaTerceiro/visualizarDocumento";
 	}
@@ -485,7 +536,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 				case "quitar" : 
 					arquivoAnexado.setContainer(Container.DIVIDATERCEIROS);
 					arquivoAnexado.setAttribute("arquivoTermoQuitacao");
-					entity.setArquivoTermoDivida(arquivoAnexado);
+					entity.setArquivoTermoQuitacao(arquivoAnexado);
 					break;
 			}
 		}

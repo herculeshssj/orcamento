@@ -115,14 +115,6 @@
 				</f:facet>
 				<h:outputText value="#{item.label}"/>
 			</h:column>
-			<h:column style="text-align: center; vertical-align: middle;">
-				<f:facet name="header">
-					<h:outputText value="Ação" />
-				</f:facet>
-				<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovante}" target="_blank">
-					<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
-				</h:commandLink>
-			</h:column>
 		</h:dataTable>
 		
 		<hr />

@@ -124,7 +124,8 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		novaDivida.setJustificativa(j.toString());
 		novaDivida.setMoeda(entity.getMoeda());
 		novaDivida.setStatusDivida(StatusDivida.VIGENTE);
-		novaDivida.setTermoDivida(entity.getModeloDocumento().getConteudo());
+		novaDivida.setTermoDivida(entity.getTermoDivida());
+		novaDivida.setArquivoTermoDivida(entity.getArquivoTermoDivida());
 		novaDivida.setTipoCategoria(entity.getTipoCategoria());
 		novaDivida.setUsuario(entity.getUsuario());
 		novaDivida.setValorDivida(entity.getValorDivida());
@@ -132,6 +133,7 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	}
 	
 	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) {
+		pagamento.validate();
 		DividaTerceiro divida = getRepository().findById(entity.getId());
 		pagamento.setDividaTerceiro(divida);
 		divida.getPagamentos().add(pagamento);
