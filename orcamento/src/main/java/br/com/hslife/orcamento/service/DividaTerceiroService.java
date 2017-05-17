@@ -91,8 +91,13 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	
 	@Override
 	public void vigorarDividaTerceiro(DividaTerceiro entity) {		
-		entity.validate();
 		entity.setStatusDivida(StatusDivida.VIGENTE);
+		getRepository().update(entity);
+	}
+	
+	@Override
+	public void quitarDividaTerceiro(DividaTerceiro entity) {		
+		entity.setStatusDivida(StatusDivida.QUITADO);
 		getRepository().update(entity);
 	}
 	
@@ -127,23 +132,9 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 	}
 	
 	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento) {
-		if (pagamento.getModeloDocumento() == null) {
-			throw new BusinessException("Selecione um modelo de comprovante de pagamento!");
-		}
-		
-		if (entity.getTotalPago() + pagamento.getValorPagoConvertido() >= entity.getValorDivida() && entity.getModeloDocumento() == null) {
-			throw new BusinessException("Selecione um modelo de termo de quitação!");
-		}
-		
 		DividaTerceiro divida = getRepository().findById(entity.getId());
 		pagamento.setDividaTerceiro(divida);
-		pagamento.setComprovantePagamento(pagamento.getModeloDocumento().getConteudo());
 		divida.getPagamentos().add(pagamento);
-		
-		if (divida.getTotalPago() >= divida.getValorDivida()) {
-			divida.setStatusDivida(StatusDivida.QUITADO);
-			divida.setTermoQuitacao(entity.getModeloDocumento().getConteudo());
-		}
 		
 		getRepository().update(divida);
 	}

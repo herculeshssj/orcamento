@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -122,7 +122,10 @@
 					<f:facet name="header">
 						<h:outputText value="Ação" />
 					</f:facet>
-					<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovante}" target="_blank">
+					<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovante}" target="_blank" rendered="#{item.arquivoComprovante == null}">
+						<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
+					</h:commandLink>
+					<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovanteAnexado}" target="_blank" rendered="#{item.arquivoComprovante != null}">
 						<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
 					</h:commandLink>
 				</h:column>
@@ -143,8 +146,11 @@
    			<h:graphicImage id="imgContractFile" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
    		</h:commandLink>
 		&nbsp;&nbsp;&nbsp;
-		<h:commandLink id="lnkCertificate" title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO'}">
+		<h:commandLink id="lnkCertificate" title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO' and managedBean.entity.arquivoTermoQuitacao == null}">
 			<h:graphicImage id="imgCertificate" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
+		</h:commandLink>
+		<h:commandLink id="lnkCertificateFile" title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacaoAnexado}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO' and managedBean.entity.arquivoTermoQuitacao != null}">
+			<h:graphicImage id="imgCertificateFile" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
 		</h:commandLink>
 	</ui:define>
 	

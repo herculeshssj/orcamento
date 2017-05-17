@@ -87,10 +87,43 @@
 			Moeda:
 			<h:outputText value="#{managedBean.entity.moeda.label}" />
 			
+			Total pago:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalPago}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+			
+			Total a pagar:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalAPagar}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+			
 		</h:panelGrid>
 				
 		<label>Justificativa:</label>
 		<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
+		
+		<h:dataTable value="#{managedBean.entity.pagamentos}" var="item">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Descrição" />
+				</f:facet>
+				<h:outputText value="#{item.label}"/>
+			</h:column>
+			<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Ação" />
+				</f:facet>
+				<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovante}" target="_blank">
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
+				</h:commandLink>
+			</h:column>
+		</h:dataTable>
 		
 		<hr />
 		
@@ -99,11 +132,7 @@
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
-   			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
-   		</h:commandLink>				
-		<p:spacer width="20" />
-		<h:commandLink id="lnkOk" title="Vigorar termo/contrato" action="#{managedBean.vigorarDividaTerceiro}">
+		<h:commandLink id="lnkOk" title="Quitar dívida" action="#{managedBean.quitarDividaTerceiro}">
    			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
    		</h:commandLink>
 	</ui:define>
