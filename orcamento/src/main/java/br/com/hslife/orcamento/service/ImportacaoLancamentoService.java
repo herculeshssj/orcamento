@@ -427,7 +427,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	}
 	
 	@Override
-	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException {
 		InfoOFX info = new InfoOFX();
 		try {
@@ -435,9 +435,14 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
 				ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
 				CreditCardResponseMessageSet message = (CreditCardResponseMessageSet) re.getMessageSet(MessageSetType.creditcard);
+				SignonResponse sr = re.getSignonResponse();
 				if (message != null) {
 					List<CreditCardStatementResponseTransaction> creditcard = message.getStatementResponses();
 				    for (CreditCardStatementResponseTransaction c : creditcard) {
+				    	info.setIdioma(sr.getLanguage());
+				    	info.setNomeBanco(sr.getFinancialInstitution().getOrganization());
+				    	info.setBancoID(sr.getFinancialInstitution().getId());
+				    	info.setConta(c.getMessage().getAccount().getAccountNumber());
 				    	info.setQuantidadeTransacao(c.getMessage().getTransactionList().getTransactions().size());
 				    	info.setMoedaPadrao(c.getMessage().getCurrencyCode());
 				    	info.setInicioTransacoes(c.getMessage().getTransactionList().getStart());
@@ -453,6 +458,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				if (message != null) {
 					List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
 				    for (BankStatementResponseTransaction b : bank) {
+				    	info.setIdioma(sr.getLanguage());
+				    	info.setNomeBanco(sr.getFinancialInstitution().getOrganization());
 				    	info.setBancoID(b.getMessage().getAccount().getBankId());
 				    	info.setConta(b.getMessage().getAccount().getAccountNumber());
 				    	info.setAgencia(b.getMessage().getAccount().getBranchId());

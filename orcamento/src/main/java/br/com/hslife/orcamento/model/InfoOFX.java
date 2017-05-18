@@ -47,10 +47,18 @@
 package br.com.hslife.orcamento.model;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
 
 public class InfoOFX {
 	
 	private String bancoID;
+	
+	private String nomeBanco;
+	
+	private String idioma;
 	
 	private String agencia;
 	
@@ -70,8 +78,64 @@ public class InfoOFX {
 	
 	private Date fimTransacoes;
 	
-	public InfoOFX() {}
-
+	public InfoOFX() {
+		
+	}
+	
+	public void lerJson(String jsonData) {
+		JSONObject jsonRead = new JSONObject(jsonData);
+		Map<String, String> dados = new HashMap<>();
+		
+		// Preenche o Map com os dados do JSON
+		for (Object obj : jsonRead.keySet()) {
+			dados.put((String)obj, (String)jsonRead.get((String)obj));
+		}
+		
+		// Popula os campos de acordo com os dados encontrados
+		this.bancoID = dados.get("bancoid") == null ? null : dados.get("bancoid");
+		this.nomeBanco = dados.get("nomebanco") == null ? null : dados.get("nomebanco");
+		this.idioma = dados.get("idioma") == null ? null : dados.get("idioma");
+		this.agencia = dados.get("agencia") == null ? null : dados.get("agencia");
+		this.conta = dados.get("conta") == null ? null : dados.get("conta");
+		this.tipoConta = dados.get("tipoconta") == null ? null : dados.get("tipoconta");
+	}
+	
+	public String gerarJson() {
+		// Popula um Map para poder gerar o JSON
+		Map<String, String> dados = new HashMap<>();
+		dados.put("bancoid", this.bancoID != null && !this.bancoID.trim().isEmpty() ? this.bancoID : null);
+		dados.put("nomebanco", this.nomeBanco != null && !this.nomeBanco.trim().isEmpty() ? this.nomeBanco : null);
+		dados.put("idioma", this.idioma != null && !this.idioma.trim().isEmpty() ? this.idioma : null);
+		dados.put("agencia", this.agencia != null && !this.agencia.trim().isEmpty() ? this.agencia : null);
+		dados.put("conta", this.conta != null && !this.conta.trim().isEmpty() ? this.conta : null);
+		dados.put("tipoconta", this.tipoConta != null && !this.tipoConta.trim().isEmpty() ? this.tipoConta : null);
+		
+		// Gera o JSON em si
+		JSONObject json = new JSONObject();
+		for (String s : dados.keySet()) {
+			json.put(s, dados.get(s));
+		}
+		
+		return json.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof InfoOFX) {
+			
+			InfoOFX other = (InfoOFX)obj;
+			
+			return other.getBancoID().equalsIgnoreCase(this.bancoID)
+					&& other.getNomeBanco().equalsIgnoreCase(this.nomeBanco)
+					&& other.getIdioma().equalsIgnoreCase(this.idioma)
+					&& other.getAgencia().equalsIgnoreCase(this.agencia)
+					&& other.getConta().equalsIgnoreCase(this.conta)
+					&& other.getTipoConta().equalsIgnoreCase(this.tipoConta);
+			
+		}
+		return false;
+	}
+	
 	public String getBancoID() {
 		return bancoID;
 	}
@@ -150,5 +214,21 @@ public class InfoOFX {
 
 	public void setFimTransacoes(Date fimTransacoes) {
 		this.fimTransacoes = fimTransacoes;
+	}
+
+	public String getNomeBanco() {
+		return nomeBanco;
+	}
+
+	public void setNomeBanco(String nomeBanco) {
+		this.nomeBanco = nomeBanco;
+	}
+
+	public String getIdioma() {
+		return idioma;
+	}
+
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
 	}
 }

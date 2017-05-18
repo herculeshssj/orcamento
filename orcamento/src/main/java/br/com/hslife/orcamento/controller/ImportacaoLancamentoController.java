@@ -247,6 +247,14 @@ public class ImportacaoLancamentoController extends AbstractController {
 		return "";
 	}
 	
+	public String configurar() {
+		return "/pages/ImportacaoLancamento/configurarImportacao";
+	}
+	
+	public void salvarConfiguracao() {
+		infoMessage("Configurações de importação salvas com sucesso!");
+	}
+	
 	public void selecionarTodos() {
 		if (lancamentoContaACriarAtualizar != null && lancamentoContaACriarAtualizar.size() > 0)
 			for (LancamentoConta l : lancamentoContaACriarAtualizar) {
