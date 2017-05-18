@@ -82,12 +82,11 @@
     	<param-value>true</param-value>  
 	</context-param> 
 	
-	<!-- Aplicação do tema Bootstrap do PrimeFaces
+	<!-- Aplicação do tema Bootstrap do PrimeFaces -->
 	<context-param>  
 	    <param-name>primefaces.THEME</param-name>  
 	    <param-value>bootstrap</param-value>  
 	</context-param> 
-	-->
 	
 	<!-- Configuração do Spring MVC para trabalhar com RESTful -->
 	<servlet>

@@ -60,6 +60,15 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
+	<repositories>
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -103,13 +112,12 @@
 	    <version>1.8.10</version>
 	</dependency>
 	
-	<!-- https://mvnrepository.com/artifact/org.primefaces.themes/bootstrap
+	<!-- https://mvnrepository.com/artifact/org.primefaces.themes/bootstrap -->
 	<dependency>
     	<groupId>org.primefaces.themes</groupId>
     	<artifactId>bootstrap</artifactId>
     	<version>1.0.10</version>
 	</dependency>
-	-->
 	
 	<!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
 	<dependency>
