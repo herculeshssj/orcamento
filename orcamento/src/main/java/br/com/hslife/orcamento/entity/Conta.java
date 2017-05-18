@@ -125,6 +125,9 @@ public class Conta extends EntityPersistence {
 	@Column
 	private boolean contaConjunta;
 	
+	@Column(length=255, nullable=true)
+	private String dadosOFX;
+	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
@@ -403,5 +406,13 @@ public class Conta extends EntityPersistence {
 
 	public void setTotalCreditoPanoramaCadastro(double totalCreditoPanoramaCadastro) {
 		this.totalCreditoPanoramaCadastro = totalCreditoPanoramaCadastro;
+	}
+
+	public String getDadosOFX() {
+		return dadosOFX;
+	}
+
+	public void setDadosOFX(String dadosOFX) {
+		this.dadosOFX = dadosOFX;
 	}
 }

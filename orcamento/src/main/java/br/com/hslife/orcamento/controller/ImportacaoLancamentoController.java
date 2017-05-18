@@ -59,8 +59,10 @@ import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IImportacaoLancamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.InfoOFX;
@@ -82,10 +84,14 @@ public class ImportacaoLancamentoController extends AbstractController {
 	@Autowired
 	private IMoeda moedaService;
 	
+	@Autowired
+	private IConta contaService;
+	
 	private Conta contaSelecionada;
 	private Arquivo arquivoAnexado;	
 	private boolean exibirInfoArquivo;
 	private InfoOFX infoArquivo;
+	private InfoOFX infoArquivoConfiguracao;
 	private List<LancamentoConta> lancamentoContaACriarAtualizar;
 	private String tipoArquivo = "OFX";
 	
@@ -106,6 +112,10 @@ public class ImportacaoLancamentoController extends AbstractController {
 	protected void initializeEntity() {
 		entity = new LancamentoImportado();
 		listEntity = new ArrayList<LancamentoImportado>();
+		infoArquivo = new InfoOFX();
+		infoArquivoConfiguracao = new InfoOFX();
+		contaSelecionada = null;
+		exibirInfoArquivo = false;
 	}
 	
 	@Override
@@ -248,11 +258,49 @@ public class ImportacaoLancamentoController extends AbstractController {
 	}
 	
 	public String configurar() {
+		initializeEntity();
 		return "/pages/ImportacaoLancamento/configurarImportacao";
 	}
 	
 	public void salvarConfiguracao() {
-		infoMessage("Configurações de importação salvas com sucesso!");
+		try {
+			// Armazena as informações do arquivo OFX na conta
+			contaSelecionada.setDadosOFX(infoArquivoConfiguracao.gerarJson());
+			getContaService().alterar(contaSelecionada);
+			infoMessage("Configurações de importação salvas com sucesso!");
+			initializeEntity();
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}	
+	}
+	
+	public void processarInformacoesArquivo() {
+		if (arquivoAnexado == null || arquivoAnexado.getDados() == null || arquivoAnexado.getDados().length == 0) {
+			warnMessage("Carregue um arquivo OFX antes de processar!");
+			return;
+		}
+		if (contaSelecionada == null) {
+			warnMessage("Selecione uma conta!");
+			return;
+		}
+		
+		try {
+			infoArquivoConfiguracao = getService().obterInformacaoArquivoImportado(arquivoAnexado, contaSelecionada);
+			exibirInfoArquivo = true;
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}
+	}
+	
+	public void atualizaPanelInfoAtual() {
+		infoArquivo = new InfoOFX();
+		if (contaSelecionada != null) {
+			if (contaSelecionada.getDadosOFX() != null) {				
+				infoArquivo.lerJson(contaSelecionada.getDadosOFX());
+			}
+		} else {
+			warnMessage("Selecione uma conta!");
+		}
 	}
 	
 	public void selecionarTodos() {
@@ -270,6 +318,15 @@ public class ImportacaoLancamentoController extends AbstractController {
 		List<Conta> lista = new ArrayList<>();
 		lista.add(contaSelecionada);
 		return lista;
+	}
+	
+	public List<Conta> getListaContaAtivo() {
+		try {
+			return getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.CARTAO}, getUsuarioLogado(), true);
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<Conta>();
 	}
 	
 	public int getQuantRegistros() {
@@ -301,6 +358,10 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setService(IImportacaoLancamento service) {
 		this.service = service;
+	}
+
+	public IConta getContaService() {
+		return contaService;
 	}
 
 	public Conta getContaSelecionada() {
@@ -397,5 +458,13 @@ public class ImportacaoLancamentoController extends AbstractController {
 
 	public void setQuitarAutomaticamente(boolean quitarAutomaticamente) {
 		this.quitarAutomaticamente = quitarAutomaticamente;
+	}
+
+	public InfoOFX getInfoArquivoConfiguracao() {
+		return infoArquivoConfiguracao;
+	}
+
+	public void setInfoArquivoConfiguracao(InfoOFX infoArquivoConfiguracao) {
+		this.infoArquivoConfiguracao = infoArquivoConfiguracao;
 	}
 }

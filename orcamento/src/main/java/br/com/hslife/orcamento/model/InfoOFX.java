@@ -98,6 +98,7 @@ public class InfoOFX {
 		this.agencia = dados.get("agencia") == null ? null : dados.get("agencia");
 		this.conta = dados.get("conta") == null ? null : dados.get("conta");
 		this.tipoConta = dados.get("tipoconta") == null ? null : dados.get("tipoconta");
+		this.moedaPadrao = dados.get("moedapadrao") == null ? null : dados.get("moedapadrao");
 	}
 	
 	public String gerarJson() {
@@ -109,6 +110,7 @@ public class InfoOFX {
 		dados.put("agencia", this.agencia != null && !this.agencia.trim().isEmpty() ? this.agencia : null);
 		dados.put("conta", this.conta != null && !this.conta.trim().isEmpty() ? this.conta : null);
 		dados.put("tipoconta", this.tipoConta != null && !this.tipoConta.trim().isEmpty() ? this.tipoConta : null);
+		dados.put("moedapadrao", this.moedaPadrao != null && !this.moedaPadrao.trim().isEmpty() ? this.moedaPadrao : null);
 		
 		// Gera o JSON em si
 		JSONObject json = new JSONObject();
@@ -130,8 +132,8 @@ public class InfoOFX {
 					&& other.getIdioma().equalsIgnoreCase(this.idioma)
 					&& other.getAgencia().equalsIgnoreCase(this.agencia)
 					&& other.getConta().equalsIgnoreCase(this.conta)
-					&& other.getTipoConta().equalsIgnoreCase(this.tipoConta);
-			
+					&& other.getTipoConta().equalsIgnoreCase(this.tipoConta)
+					&& other.getMoedaPadrao().equalsIgnoreCase(this.moedaPadrao);
 		}
 		return false;
 	}

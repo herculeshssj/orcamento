@@ -440,13 +440,15 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					List<CreditCardStatementResponseTransaction> creditcard = message.getStatementResponses();
 				    for (CreditCardStatementResponseTransaction c : creditcard) {
 				    	info.setIdioma(sr.getLanguage());
-				    	info.setNomeBanco(sr.getFinancialInstitution().getOrganization());
+				    	info.setNomeBanco(sr.getFinancialInstitution() == null ? null : sr.getFinancialInstitution().getOrganization());
 				    	info.setBancoID(sr.getFinancialInstitution().getId());
 				    	info.setConta(c.getMessage().getAccount().getAccountNumber());
 				    	info.setQuantidadeTransacao(c.getMessage().getTransactionList().getTransactions().size());
 				    	info.setMoedaPadrao(c.getMessage().getCurrencyCode());
 				    	info.setInicioTransacoes(c.getMessage().getTransactionList().getStart());
 				    	info.setFimTransacoes(c.getMessage().getTransactionList().getEnd());
+				    	info.setDataArquivo(c.getMessage().getLedgerBalance().getAsOfDate());
+				    	info.setBalancoFinal(c.getMessage().getLedgerBalance().getAmount());
 				   }
 				}
 			} else {
@@ -459,7 +461,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 					List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
 				    for (BankStatementResponseTransaction b : bank) {
 				    	info.setIdioma(sr.getLanguage());
-				    	info.setNomeBanco(sr.getFinancialInstitution().getOrganization());
+				    	info.setNomeBanco(sr.getFinancialInstitution() == null ? null : sr.getFinancialInstitution().getOrganization());
 				    	info.setBancoID(b.getMessage().getAccount().getBankId());
 				    	info.setConta(b.getMessage().getAccount().getAccountNumber());
 				    	info.setAgencia(b.getMessage().getAccount().getBranchId());
