@@ -127,14 +127,15 @@ public class InfoOFX {
 			
 			InfoOFX other = (InfoOFX)obj;
 			
-			return other.getBancoID().equalsIgnoreCase(this.bancoID)
-					&& other.getNomeBanco().equalsIgnoreCase(this.nomeBanco)
-					&& other.getIdioma().equalsIgnoreCase(this.idioma)
-					&& other.getAgencia().equalsIgnoreCase(this.agencia)
-					&& other.getConta().equalsIgnoreCase(this.conta)
-					&& other.getTipoConta().equalsIgnoreCase(this.tipoConta)
-					&& other.getMoedaPadrao().equalsIgnoreCase(this.moedaPadrao);
+			return (other.getBancoID() != null ? other.getBancoID().equalsIgnoreCase(this.bancoID) : other.getBancoID() == this.bancoID)
+					&& (other.getNomeBanco() != null ? other.getNomeBanco().equalsIgnoreCase(this.nomeBanco) : other.getNomeBanco() == this.nomeBanco)
+					&& (other.getIdioma() != null ? other.getIdioma().equalsIgnoreCase(this.idioma) : other.getIdioma() == this.idioma)
+					&& (other.getAgencia() != null ? other.getAgencia().equalsIgnoreCase(this.agencia) : other.getAgencia() == this.agencia)
+					&& (other.getConta() != null ? other.getConta().equalsIgnoreCase(this.conta) : other.getConta() == this.conta)
+					&& (other.getTipoConta() != null ? other.getTipoConta().equalsIgnoreCase(this.tipoConta) : other.getTipoConta() == this.tipoConta)
+					&& (other.getMoedaPadrao() != null ? other.getMoedaPadrao().equalsIgnoreCase(this.moedaPadrao) : other.getMoedaPadrao() == this.moedaPadrao);
 		}
+		
 		return false;
 	}
 	

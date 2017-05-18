@@ -197,8 +197,8 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 	@Override
 	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException {
 		switch (conta.getTipoConta()) {
-			case CORRENTE : this.processarArquivoImportadoContaCorrente(arquivo, conta); break;
-			case POUPANCA : this.processarArquivoImportadoContaPoupanca(arquivo, conta); break;
+			case CORRENTE : 
+			case POUPANCA : this.processarArquivoImportadoContaCorrente(arquivo, conta); break;
 			case CARTAO : this.processarArquivoImportadoCartaoCredito(arquivo, conta); break;
 			default : throw new BusinessException("Opção inválida para conta!");
 		}
@@ -481,43 +481,30 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		return info;
 	}
 	
-	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void processarArquivoImportadoContaCorrente(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
-			// Incluindo o código do projeto OFXImport na forma que está. Futuramente este código sofrerá refatoração (assim espero... :/ )
+			// Antes de tentar realizar a leitura do arquivo OFX para realizar a importação, é verificado as informações
+			// do cabeçalho do arquivo com as informações contidas na conta. Caso haja alguma divergência, a importação
+			// não é realizada
+			InfoOFX dadosImportacao = new InfoOFX();
+			dadosImportacao.lerJson(conta.getDadosOFX());
 			
+			if (!dadosImportacao.equals(this.obterInformacaoArquivoImportado(arquivo, conta))) {
+				throw new BusinessException("As informações do arquivo não conferem com os dados de importação cadastrados!");
+			}
+			
+			// Leitura dos dados contidos no arquivo OFX
 			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
 			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
-				
-			//objeto contendo informações como instituição financeira, idioma, data da conta.
-			SignonResponse sr = re.getSignonResponse();
-	
-			//como não existe esse get "BankStatementResponse bsr = re.getBankStatementResponse();"
-			//fiz esse codigo para capturar a lista de transações
-			MessageSetType type = MessageSetType.banking;
-			ResponseMessageSet message = re.getMessageSet(type);
+			
+			// Define o tipo de arquivo que será trabalhado
+			ResponseMessageSet message = re.getMessageSet(MessageSetType.banking);
 	
 			if (message != null) {
 				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
 			    for (BankStatementResponseTransaction b : bank) {			    	
-			    				        
-			        /* Aqui começa meu código de validação de conta */
-			        
-			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
-			        	throw new ApplicationException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
-			        }
-			        if (!conta.getAgencia().equals(b.getMessage().getAccount().getBranchId())) {		        	
-			        	throw new ApplicationException("Número da agência " + conta.getAgencia() + " não confere com do arquivo (" + b.getMessage().getAccount().getBranchId() + ")!");
-			        }		        
-			        if (!conta.getContaCorrente().equals(b.getMessage().getAccount().getAccountNumber())) {
-			        	throw new ApplicationException("Número da conta " + conta.getContaCorrente() + " não confere com do arquivo (" + b.getMessage().getAccount().getAccountNumber() + ")!");
-			        }
-			        if (!conta.getTipoConta().equals(TipoConta.CORRENTE)) {
-			        	throw new ApplicationException("Somente contas correntes são aceitas!");
-			        }
-			        
-			        /* Término do código do meu código de validação de conta */
-			        
+			    	
 			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();			        
 			        for (Transaction transaction : list) {
 			        				            
@@ -555,10 +542,10 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			   }
 			} 
 		}catch (Exception e) {
-			throw new ApplicationException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
+			throw new ApplicationException("Erro ao processar o arquivo OFX: " + e.getMessage(), e);
 		}
 	}
-	
+	/*
 	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 	private void processarArquivoImportadoContaPoupanca(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
@@ -579,7 +566,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 				List<BankStatementResponseTransaction> bank = ((BankingResponseMessageSet) message).getStatementResponses();
 			    for (BankStatementResponseTransaction b : bank) {			    
 			        
-			        /* Aqui começa meu código de validação de conta */
+			        /* Aqui começa meu código de validação de conta *
 			        
 			        if (!conta.getBanco().getNumero().equals(b.getMessage().getAccount().getBankId())) {		        	
 			        	throw new ApplicationException("Número do banco " + conta.getBanco().getNumero() + " não confere com do arquivo (" + b.getMessage().getAccount().getBankId() + ")!");
@@ -594,12 +581,12 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			        	throw new ApplicationException("Somente contas correntes são aceitas!");
 			        }
 			        
-			        /* Término do código do meu código de validação de conta */
+			        /* Término do código do meu código de validação de conta *
 			        
 			        List<Transaction> list = b.getMessage().getTransactionList().getTransactions();			        
 			        for (Transaction transaction : list) {
 			        				            
-			            /* Aqui começa meu código */
+			            /* Aqui começa meu código *
 			            LancamentoImportado li = getRepository().findByHash(Util.MD5(transaction.getId()));
 			            if (li == null) {			            
 			            	// Cria os lançamentos se a data do movimento for posterior à data de abertura da conta
@@ -628,7 +615,7 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 		            		getRepository().update(li);
 			            }
 			            
-			            /* Fim do meu código */
+			            /* Fim do meu código *
 			       }
 			   }
 			} 
@@ -636,22 +623,26 @@ public class ImportacaoLancamentoService implements IImportacaoLancamento {
 			throw new ApplicationException("Erro ao processar o arquivo OFX:" + e.getMessage(), e);
 		}
 	}
-
+*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void processarArquivoImportadoCartaoCredito(Arquivo arquivo, Conta conta) throws ApplicationException {
 		try {
+			// Antes de tentar realizar a leitura do arquivo OFX para realizar a importação, é verificado as informações
+			// do cabeçalho do arquivo com as informações contidas na conta. Caso haja alguma divergência, a importação
+			// não é realizada
+			InfoOFX dadosImportacao = new InfoOFX();
+			dadosImportacao.lerJson(conta.getDadosOFX());
+			
+			if (!dadosImportacao.equals(this.obterInformacaoArquivoImportado(arquivo, conta))) {
+				throw new BusinessException("As informações do arquivo não conferem com os dados de importação cadastrados!");
+			}
+			
 			AggregateUnmarshaller a = new AggregateUnmarshaller(ResponseEnvelope.class);
 			ResponseEnvelope re = (ResponseEnvelope) a.unmarshal(new InputStreamReader(new ByteArrayInputStream(arquivo.getDados()), "ISO-8859-1"));
 			CreditCardResponseMessageSet message = (CreditCardResponseMessageSet) re.getMessageSet(MessageSetType.creditcard);
 			if (message != null) {
 				List<CreditCardStatementResponseTransaction> creditcard = message.getStatementResponses();
-				for (CreditCardStatementResponseTransaction c : creditcard) {
-					
-					// Valida o número do cartão de crédito
-					if (conta.getCartaoCredito().getNumeroCartao() == null || !conta.getCartaoCredito().getNumeroCartao().equals(Util.SHA1(c.getMessage().getAccount().getAccountNumber()))) {
-			        	throw new BusinessException("Número do cartão informado não confere com do arquivo!");
-			        }
-					
+				for (CreditCardStatementResponseTransaction c : creditcard) {					
 					List<Transaction> list = c.getMessage().getTransactionList().getTransactions();
 			        for (Transaction transaction : list) {			        	
 			        	LancamentoImportado li = getRepository().findByHash(Util.MD5(transaction.getId()));
