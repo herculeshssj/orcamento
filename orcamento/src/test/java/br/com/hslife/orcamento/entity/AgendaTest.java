@@ -144,7 +144,7 @@ public class AgendaTest {
 	}
 	
 	@SuppressWarnings("deprecation")
-	//@Test
+	@Test
 	public void testComporDataHoraMinutoSegundo() {
 		Calendar dataTest = Calendar.getInstance();
 		dataTest.set(new Date().getYear() + 1900, new Date().getMonth(), new Date().getDate(), 15, 30, 45);

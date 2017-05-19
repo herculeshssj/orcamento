@@ -194,24 +194,6 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 		
 	}
 	
-	public boolean existsLinkagesCartao(Conta conta) {
-		// FIXME implementar!!!!!!
-		boolean result = false;
-		/*
-		BigInteger resultFechamentoPeriodo = (BigInteger)getSession().createSQLQuery("select count(id) from fechamentoperiodo where operacao = 'FECHAMENTO' and idContaBancaria = " + conta.getId()).uniqueResult();
-		BigInteger resultLancamento = (BigInteger)getSession().createSQLQuery("select count(id) from lancamentoconta where idConta = " + conta.getId()).uniqueResult();
-		
-		if (resultFechamentoPeriodo.longValue() != 0) {
-			return true;
-		}
-		
-		if (resultLancamento.longValue() != 0) {
-			return true;
-		}
-		*/	
-		return result;		
-	}
-	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findDescricaoOrTipoContaOrAtivoByUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) {
 		StringBuilder hql = new StringBuilder();

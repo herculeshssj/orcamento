@@ -72,7 +72,6 @@ public class OpcaoSistemaController extends AbstractController {
 	@Autowired
 	private IOpcaoSistema service;
 	
-	private Map<String, Object> opcoesGlobal = new HashMap<String, Object>();
 	private Map<String, Object> opcoesGlobalAdmin = new HashMap<String, Object>();
 	private Map<String, Object> opcoesUser = new HashMap<String, Object>();
 
@@ -95,11 +94,9 @@ public class OpcaoSistemaController extends AbstractController {
 	
 	private void carregarOpcoesSistema() {
 		if (getUsuarioLogado().getLogin().equals("admin")) {
-			carregarOpcoesGlobal();
 			carregarOpcoesGlobalAdmin();
 			carregarOpcoesUser();
 		} else {
-			carregarOpcoesGlobal();
 			carregarOpcoesUser();
 		}
 	}
@@ -120,13 +117,8 @@ public class OpcaoSistemaController extends AbstractController {
 		}
 	}
 
-	private void carregarOpcoesGlobal() {
-		
-	}
-
 	public void save() {
 		try {
-			getService().salvarOpcoesGlobal(opcoesGlobal);
 			getService().salvarOpcoesGlobalAdmin(opcoesGlobalAdmin);
 			getService().salvarOpcoesUser(opcoesUser, getUsuarioLogado());
 			getOpcoesSistema().atualizarCacheOpcoesSistema();
@@ -142,14 +134,6 @@ public class OpcaoSistemaController extends AbstractController {
 
 	public void setService(IOpcaoSistema service) {
 		this.service = service;
-	}
-
-	public Map<String, Object> getOpcoesGlobal() {
-		return opcoesGlobal;
-	}
-
-	public void setOpcoesGlobal(Map<String, Object> opcoesGlobal) {
-		this.opcoesGlobal = opcoesGlobal;
 	}
 
 	public Map<String, Object> getOpcoesGlobalAdmin() {

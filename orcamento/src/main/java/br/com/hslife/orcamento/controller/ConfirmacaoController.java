@@ -74,7 +74,7 @@ public class ConfirmacaoController extends AbstractController {
 
 	@Override
 	protected void initializeEntity() {
-		// TODO Auto-generated method stub	
+			
 	}
 	
 	public String getMensagemAviso() {

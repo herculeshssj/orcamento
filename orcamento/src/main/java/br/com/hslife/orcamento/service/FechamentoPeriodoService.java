@@ -166,7 +166,6 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			// Antes de prosseguir, verifica se não existem períodos reabertos
 			List<FechamentoPeriodo> fechamentosReabertos = getRepository().findByContaAndOperacaoConta(conta, OperacaoConta.REABERTURA);
 			if (fechamentosReabertos != null && !fechamentosReabertos.isEmpty()) {
-				// TODO refatorara para uma especificação que valide a possibilidade de fechamento
 				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
 			}
 			
@@ -188,7 +187,6 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			// períodos reabertos anteriores
 			List<FechamentoPeriodo> fechamentosAnterioresReabertos = getRepository().findFechamentosAnterioresReabertos(fechamentoReaberto);
 			if (fechamentosAnterioresReabertos != null && !fechamentosAnterioresReabertos.isEmpty()) {
-				// TODO refatorar para uma especificação que valide a possibilidade de fechamento
 				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
 			}
 			

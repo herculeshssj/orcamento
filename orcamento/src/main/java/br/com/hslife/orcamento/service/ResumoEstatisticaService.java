@@ -92,7 +92,6 @@ import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
-import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
@@ -130,9 +129,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	@Autowired
 	private IInvestimento investimentoService;
 	
-	@Autowired
-	private IMoeda moedaService; //FIXME remover pois o investimento possui moeda
-	
 	/*** Declaração dos Getters dos serviços ***/
 	
 	public IFechamentoPeriodo getFechamentoPeriodoService() {
@@ -161,10 +157,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 
 	public IInvestimento getInvestimentoService() {
 		return investimentoService;
-	}
-
-	public IMoeda getMoedaService() {
-		return moedaService;
 	}
 
 	/*** Declaração dos componentes ***/

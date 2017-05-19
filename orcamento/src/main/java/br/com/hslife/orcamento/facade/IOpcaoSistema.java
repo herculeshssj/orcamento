@@ -54,8 +54,6 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IOpcaoSistema {
 	
-	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema);
-	
 	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema);
 	
 	public List<OpcaoSistema> buscarOpcoesGlobalAdmin();

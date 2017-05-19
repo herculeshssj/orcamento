@@ -133,7 +133,6 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	
 	@Override
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) {	
-		// FIXME definir melhor o conceito de registrar pagamento e realizar as refatorações necessárias
 		getFechamentoPeriodoService().registrarPagamento(pagamentoPeriodo);
 	}
 	

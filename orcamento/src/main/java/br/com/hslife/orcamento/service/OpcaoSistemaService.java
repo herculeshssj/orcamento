@@ -78,17 +78,6 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
 	}
-
-	public void salvarOpcoesGlobal(Map<String, Object> opcoesSistema) {
-		// TODO implementar
-	}
-	
-//	public void excluirOpcoesUsuario(Usuario usuario) {
-//	// Exclui as opções do sistema do usuário
-//	for (OpcaoSistema opcao : opcaoSistemaRepository.findByUsuario(usuario)) {
-//		opcaoSistemaRepository.delete(opcao);
-//	}
-//}
 	
 	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema) {
 		OpcaoSistema opcao = new OpcaoSistema();
