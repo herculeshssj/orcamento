@@ -72,10 +72,8 @@ import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.FechamentoPeriodo;
-import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
-import br.com.hslife.orcamento.entity.ResumoInvestimento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
@@ -1010,34 +1008,36 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	 * Incorpora os investimentos para compor o saldo atual das contas, de modo que o valor total
 	 * represente o patrimônio ativo do usuário.
 	 */
+	/* Desativado por enquanto */
+	@Deprecated
 	private List<SaldoAtualConta> incorporarInvestimentos(List<SaldoAtualConta> saldosAtualContas) {
-		// Traz todos os investimento do usuário
-		List<Investimento> investimentos = getInvestimentoService().buscarPorUsuario(getUsuarioComponent().getUsuarioLogado());
-		
-		// Pega o mês/ano atual
-		Calendar temp = Calendar.getInstance();
-		int mes = temp.get(Calendar.MONTH) + 1;
-		int ano = temp.get(Calendar.YEAR);
-		
-		// Itera os investimentos
-		for (Investimento investimento : investimentos) {
-			
-			ResumoInvestimento resumo = investimento.buscarResumoInvestimento(mes, ano);
-			if (resumo == null)
-				resumo = new ResumoInvestimento(mes, ano);
-			
-			SaldoAtualConta saldo = new SaldoAtualConta();
-			saldo.setAtivo(investimento.isAtivo());
-			saldo.setDescricaoConta(investimento.getLabel());
-			saldo.setMoedaConta(getMoedaService().buscarPadraoPorUsuario(investimento.getUsuario()));
-			saldo.setTipoConta(TipoConta.OUTROS);			
-			saldo.setSaldoPeriodo(resumo.getAplicacao() - resumo.getResgate());
-			saldo.setSaldoRegistrado(resumo.getRendimentoBruto() - (resumo.getImpostoRenda() + resumo.getIof()));
-			saldo.setSaldoAtual(saldo.getSaldoPeriodo() + saldo.getSaldoRegistrado());
-			
-			// Inclui o saldo no List
-			saldosAtualContas.add(saldo);
-		}
+//		// Traz todos os investimento do usuário
+//		List<Investimento> investimentos = getInvestimentoService().buscarPorUsuario(getUsuarioComponent().getUsuarioLogado());
+//		
+//		// Pega o mês/ano atual
+//		Calendar temp = Calendar.getInstance();
+//		int mes = temp.get(Calendar.MONTH) + 1;
+//		int ano = temp.get(Calendar.YEAR);
+//		
+//		// Itera os investimentos
+//		for (Investimento investimento : investimentos) {
+//			
+//			ResumoInvestimento resumo = investimento.buscarResumoInvestimento(mes, ano);
+//			if (resumo == null)
+//				resumo = new ResumoInvestimento(mes, ano);
+//			
+//			SaldoAtualConta saldo = new SaldoAtualConta();
+//			saldo.setAtivo(investimento.isAtivo());
+//			saldo.setDescricaoConta(investimento.getLabel());
+//			saldo.setMoedaConta(getMoedaService().buscarPadraoPorUsuario(investimento.getUsuario()));
+//			saldo.setTipoConta(TipoConta.OUTROS);			
+//			saldo.setSaldoPeriodo(resumo.getAplicacao() - resumo.getResgate());
+//			saldo.setSaldoRegistrado(resumo.getRendimentoBruto() - (resumo.getImpostoRenda() + resumo.getIof()));
+//			saldo.setSaldoAtual(saldo.getSaldoPeriodo() + saldo.getSaldoRegistrado());
+//			
+//			// Inclui o saldo no List
+//			saldosAtualContas.add(saldo);
+//		}
 		
 		return saldosAtualContas;
 	}
