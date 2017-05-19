@@ -61,7 +61,6 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
-import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;

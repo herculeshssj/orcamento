@@ -163,6 +163,8 @@ public class ArquivoService implements IArquivo {
 					throw new BusinessException("Não foi possível excluir o arquivo.");
 				}
 				break;
+			default :
+				throw new BusinessException("A exclusão não está disponível para este arquivo!");
 		}
 	}
 	
@@ -209,6 +211,8 @@ public class ArquivoService implements IArquivo {
 					listaAnexos.add(anexo);
 				}
 				break;
+			default :
+				throw new BusinessException("Esta opção não está disponível para esta entidade!");
 		}
 		return listaAnexos;
 	}
@@ -236,6 +240,8 @@ public class ArquivoService implements IArquivo {
 				lp.setArquivo(anexo);
 				lancamentoPeriodicoRepository.update(lp);
 				break;
+			default :
+				throw new BusinessException("Esta opção não está disponível para esta entidade!");
 		}
 		
 	}
