@@ -95,27 +95,11 @@ grant all privileges on orcamentotest.* to 'orcamento'@'%';
 
 -- Criação da base de dados
 use orcamento;
-source /caminho/para/o/workspace/eclipse/orcamento/src/docs/script-update-all-db.sql;
+source /caminho/para/o/workspace/eclipse/orcamento-db/src/main/resources/script-create-all-db.sql;
 
 use orcamentotest;
-source /caminho/para/o/workspace/eclipse/orcamento/src/docs/script-update-all-db.sql;
+source /caminho/para/o/workspace/eclipse/orcamento-db/src/main/resources/script-create-all-db.sql;
 ```
-
-Além disso, é necessário adicionar uma entrada no arquivo /etc/hosts para o endereço mysql.localhost, apontando o IP da máquina que está rodando o MySQL. O arquivo /etc/hosts pode ser encontrado nos seguintes locais:
-
-* *Windows* - C:\Windows\System32\Drivers\etc\hosts
-* *Linux* - /etc/hosts
-* *macOS* - /private/etc/hosts
-
-Para alterar o arquivo é necessário a senha de administrador da máquina. 
-
-Inclua a seguinte entrada no arquivo:
-
-```
-127.0.0.1		mysql.localhost
-``` 
-
-Esta configuração é necessária para os casos do projeto ser executado a partir de um container Docker.
 
 ### Configuração do projeto no Eclipse
 
