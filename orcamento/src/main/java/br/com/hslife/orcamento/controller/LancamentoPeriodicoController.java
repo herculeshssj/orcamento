@@ -366,6 +366,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			entity.getArquivo().setTamanho(event.getFile().getSize());		
 			entity.getArquivo().setContainer(Container.LANCAMENTOPERIODICO);
 			entity.getArquivo().setUsuario(getUsuarioLogado());
+			entity.getArquivo().setAttribute("arquivo");
 		} 
 	}
 	

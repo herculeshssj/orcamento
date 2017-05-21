@@ -124,6 +124,7 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 			entity.getArquivo().setTamanho(event.getFile().getSize());
 			entity.getArquivo().setContainer(Container.DOCUMENTOS);
 			entity.getArquivo().setUsuario(getUsuarioLogado());
+			entity.getArquivo().setAttribute("arquivo");
 		} 
 	}
 	

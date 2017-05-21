@@ -349,6 +349,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			entity.getArquivo().setTamanho(event.getFile().getSize());	
 			entity.getArquivo().setContainer(Container.LANCAMENTOCONTA);
 			entity.getArquivo().setUsuario(getUsuarioLogado());
+			entity.getArquivo().setAttribute("arquivo");
 		} 
 	}
 	
