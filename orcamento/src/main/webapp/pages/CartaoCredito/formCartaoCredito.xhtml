@@ -145,17 +145,10 @@
 		</p:outputPanel>		
 
 		<p:outputPanel id="pnlNumeroCartao">
-	
-		<label for="frmFormEntity:txtNumeroCartao">
-			<h:outputText value="Número do cartão:" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}"/>
-			<h:outputText value="Número do cartão de débito:" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}"/>
-		</label>
-		<h:inputText id="txtNumeroCartao" value="#{managedBean.numeroCartao}" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}" disabled="#{!managedBean.entity.ativo}"/>
-		<h:inputText id="txtNumeroCartaoDebito" value="#{managedBean.entity.numeroCartaoDebito}" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}" disabled="#{!managedBean.entity.ativo}"/>
-		<p:tooltip for="txtNumeroCartao" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
-			<h:outputText value="Informe o nº do cartão para usar a importação de lançamentos. O número ficará registrado no sistema de forma criptografada."/>
-		</p:tooltip>
-			
+			<label for="frmFormEntity:txtNumeroCartao">
+				<h:outputText value="Número do cartão de débito:" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}"/>
+			</label>
+			<h:inputText id="txtNumeroCartaoDebito" value="#{managedBean.entity.numeroCartaoDebito}" rendered="#{managedBean.entity.tipoCartao != 'CREDITO'}" disabled="#{!managedBean.entity.ativo}"/>
 		</p:outputPanel>	
 		
 		<label><h:outputText value="Cartão substituto: " rendered="#{managedBean.operation == 'edit'}"/></label>			

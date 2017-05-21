@@ -63,7 +63,6 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
 import br.com.hslife.orcamento.facade.IMoeda;
-import br.com.hslife.orcamento.util.Util;
 
 @Component("cartaoCreditoMB")
 @Scope("session")
@@ -121,9 +120,6 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		Date validade = new Date(entity.getAnoValidade() - 1900, entity.getMesValidade() - 1, entity.getDiaVencimentoFatura());
 		entity.setUsuario(getUsuarioLogado());
 		entity.setValidade(validade);
-		if (!Util.eVazio(numeroCartao) & numeroCartao.length() == 16 & Util.onlyNumber(numeroCartao)) {
-			entity.setNumeroCartao(Util.SHA1(numeroCartao));
-		}
 		numeroCartao = "";
 		return super.save();
 	}

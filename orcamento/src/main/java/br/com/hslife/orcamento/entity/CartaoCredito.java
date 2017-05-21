@@ -135,9 +135,6 @@ public class CartaoCredito extends EntityPersistence {
 	private boolean ativo;
 	
 	@Column(length=40, nullable=true)
-	private String numeroCartao;
-	
-	@Column(length=40, nullable=true)
 	private String numeroCartaoDebito;
 	
 	@Transient
@@ -338,14 +335,6 @@ public class CartaoCredito extends EntityPersistence {
 
 	public void setAnoValidade(int anoValidade) {
 		this.anoValidade = anoValidade;
-	}
-
-	public String getNumeroCartao() {
-		return numeroCartao;
-	}
-
-	public void setNumeroCartao(String numeroCartao) {
-		this.numeroCartao = numeroCartao;
 	}
 
 	public String getNumeroCartaoDebito() {
