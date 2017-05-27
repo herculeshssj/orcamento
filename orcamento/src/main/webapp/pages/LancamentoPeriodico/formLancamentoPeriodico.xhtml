@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -310,6 +310,13 @@
 			<h:graphicImage id="imgReactivate" height="48" width="48" value="/resources/images/svg/make_decision.svg"/>
 			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 		</h:commandLink>
+		<p:spacer width="20" rendered="#{managedBean.entity.statusLancamento == 'ENCERRADO' and managedBean.entity.tipoLancamentoPeriodico != 'PARCELADO'}"/>
+		
+		<h:commandLink title="Reclassificar lançamentos" id="lnkReorder" action="#{managedBean.reclassificarLancamentoView}" rendered="#{managedBean.operation != 'create'}">
+			<h:graphicImage id="imgReorder" height="48" width="48" value="/resources/images/mix.svg"/>
+			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+		</h:commandLink>
+		<p:spacer width="20" rendered="#{managedBean.operation != 'create'}"/>
 	</ui:define>
 	
 </ui:composition>

@@ -49,13 +49,18 @@ package br.com.hslife.orcamento.service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.EntityPersistence;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
@@ -291,5 +296,43 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	@Override
 	public List<LancamentoPeriodico> buscarDescricaoEDataAquisicaoPorUsuario(String descricao, Date dataInicio,	Date dataFim, Usuario usuario) {
 		return getRepository().findDescricaoAndDataAquisicaoByUsuario(descricao, dataInicio, dataFim, usuario);
+	}
+	
+	 @Override
+	public void reclassificarLancamento(LancamentoPeriodico entity, Map<String, ? super EntityPersistence> parametros) {
+		// Busca o lançamento periódico e os lançamentos da conta vinculados a ele
+		 LancamentoPeriodico lancamentoPeriodico = getRepository().findById(entity.getId());
+		 
+		 Categoria categoria = parametros.get("CATEGORIA") == null ? null : (Categoria)parametros.get("CATEGORIA");
+		 Favorecido favorecido = parametros.get("FAVORECIDO") == null ? null : (Favorecido)parametros.get("FAVORECIDO");
+		 MeioPagamento meioPagamento = parametros.get("MEIOPAGAMENTO") ==  null ? null : (MeioPagamento)parametros.get("MEIOPAGAMENTO");
+		 
+		 // Altera as propriedades do lançamento periódico
+		 if (categoria != null)
+			 lancamentoPeriodico.setCategoria(categoria);
+		 if (favorecido != null) 
+			 lancamentoPeriodico.setFavorecido(favorecido);
+		 if (meioPagamento != null)
+			 lancamentoPeriodico.setMeioPagamento(meioPagamento);
+		 
+		 // Salva o lançamento periódico
+		 getRepository().update(lancamentoPeriodico);
+		 
+		 // Itera a lista de lançamentos da conta vinculados para alterar as propriedades
+		 for (LancamentoConta lancamentoConta : lancamentoPeriodico.getPagamentos()) {
+			 // Busca cada lançamento e altera suas propriedades
+			 LancamentoConta l = getLancamentoContaRepository().findById(lancamentoConta.getId());
+			 
+			 // Altera as propriedades do lançamento da conta
+			 if (categoria != null)
+				 l.setCategoria(categoria);
+			 if (favorecido != null) 
+				 l.setFavorecido(favorecido);
+			 if (meioPagamento != null)
+				 l.setMeioPagamento(meioPagamento);
+			 
+			 // Atualiza o lançamento
+			 getLancamentoContaRepository().update(l);
+		 }
 	}
 }

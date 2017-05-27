@@ -48,8 +48,10 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -65,6 +67,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
@@ -135,6 +138,9 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	private LancamentoConta lancamentoSelecionado;
 	private LancamentoConta[] lancamentosSelecionados;
 	private String tipoSelecao;
+	private Categoria categoriaSelecionada;
+	private Favorecido favorecidoSelecionado;
+	private MeioPagamento meioPagamentoSelecionado;
 	
 	public LancamentoPeriodicoController() {
 		super(new LancamentoPeriodico());
@@ -323,6 +329,25 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 			errorMessage(be.getMessage());
 		}
 		return super.edit();
+	}
+	
+	public String reclassificarLancamentoView() {
+		return "/pages/LancamentoPeriodico/reclassificarLancamento";
+	}
+	
+	public String reclassificarLancamento() {
+		try {
+			Map<String, ? super EntityPersistence> parametros = new HashMap<>();
+			parametros.put("CATEGORIA", categoriaSelecionada);
+			parametros.put("FAVORECIDO", favorecidoSelecionado);
+			parametros.put("MEIOPAGAMENTO", meioPagamentoSelecionado);
+			getService().reclassificarLancamento(entity, parametros);
+			infoMessage("Lançamento reclassificado com sucesso!");
+			return list();
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public String retornarPaginaEdicao() {
@@ -707,5 +732,29 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 
 	public void setCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
 		this.criterioBusca = criterioBusca;
+	}
+
+	public Categoria getCategoriaSelecionada() {
+		return categoriaSelecionada;
+	}
+
+	public void setCategoriaSelecionada(Categoria categoriaSelecionada) {
+		this.categoriaSelecionada = categoriaSelecionada;
+	}
+
+	public Favorecido getFavorecidoSelecionado() {
+		return favorecidoSelecionado;
+	}
+
+	public void setFavorecidoSelecionado(Favorecido favorecidoSelecionado) {
+		this.favorecidoSelecionado = favorecidoSelecionado;
+	}
+
+	public MeioPagamento getMeioPagamentoSelecionado() {
+		return meioPagamentoSelecionado;
+	}
+
+	public void setMeioPagamentoSelecionado(MeioPagamento meioPagamentoSelecionado) {
+		this.meioPagamentoSelecionado = meioPagamentoSelecionado;
 	}
 }
