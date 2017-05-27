@@ -48,6 +48,8 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -66,6 +68,7 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1172336301433508801L;
+	private static final Logger logger = LogManager.getLogger(CategoriaController.class);
 
 	@Autowired
 	private ICategoria service; 
@@ -97,6 +100,17 @@ public class CategoriaController extends AbstractCRUDController<Categoria> {
 	public String save() {
 		entity.setUsuario(getUsuarioLogado());
 		return super.save();
+	}
+	
+	@Override
+	public String delete() {
+		try {
+			return super.delete();
+		} catch (Exception e) {
+			errorMessage("Não é possível excluir! Existem vínculos existentes com o registro!");
+			logger.catching(e);
+		}
+		return "";
 	}
 
 	public ICategoria getService() {

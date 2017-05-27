@@ -49,13 +49,11 @@ package br.com.hslife.orcamento.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ICategoria;
 import br.com.hslife.orcamento.repository.CategoriaRepository;
 
@@ -89,17 +87,6 @@ public class CategoriaService extends AbstractCRUDService<Categoria> implements 
 			getRepository().updateAllToNotDefault(entity.getTipoCategoria(), entity.getUsuario());
 		}
 		super.alterar(entity);
-	}
-	
-	@Override
-	public void excluir(Categoria entity) {
-		try {
-			super.excluir(entity);
-		} catch (DataIntegrityViolationException dive) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
-		} catch (Exception e) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
-		}
 	}
 
 	@Override
