@@ -80,6 +80,8 @@
 			<f:facet name="header">
 				<h:outputText value="Descrição" />
 			</f:facet>
+			<h:graphicImage id="imgPeople" title="Conta conjunta" value="/resources/images/svg/conference_call.svg" height="20" width="20" rendered="#{item.contaConjunta}"/>
+			<p:spacer width="5" rendered="#{item.contaConjunta}"/>
 			<h:outputText value="#{item.descricao}" />
 		</p:column>
 
