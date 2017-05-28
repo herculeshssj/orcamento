@@ -2,7 +2,7 @@ package br.com.hslife.orcamento.entity;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,12 +35,19 @@ public class ContaCompartilhadaTest {
 
 	@Test
 	public void testGerarHash() {
-		Date dataAtual = new Date();
+		Calendar dataAtual = Calendar.getInstance();
 		
 		entity.gerarHash();
 		
-		assertEquals(Util.SHA256(dataAtual.toString()), entity.getHashAutorizacao());
-		assertEquals(dataAtual, entity.getDataGeracaoHash());
+		assertEquals(Util.SHA256(dataAtual.getTime().toString()), entity.getHashAutorizacao());
+		
+		Calendar dataAtualTest = Calendar.getInstance();
+		dataAtualTest.setTime(entity.getDataGeracaoHash());
+		assertEquals(dataAtual.get(Calendar.DAY_OF_YEAR), dataAtualTest.get(Calendar.DAY_OF_YEAR));
+		assertEquals(dataAtual.get(Calendar.MONTH), dataAtualTest.get(Calendar.MONTH));
+		assertEquals(dataAtual.get(Calendar.YEAR), dataAtualTest.get(Calendar.YEAR));
+		assertEquals(dataAtual.get(Calendar.HOUR_OF_DAY), dataAtualTest.get(Calendar.HOUR_OF_DAY));
+		assertEquals(dataAtual.get(Calendar.MINUTE), dataAtualTest.get(Calendar.MINUTE));
 	}
 
 }
