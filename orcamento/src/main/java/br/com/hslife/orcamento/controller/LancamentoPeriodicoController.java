@@ -153,6 +153,9 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		entity = new LancamentoPeriodico();
 		listEntity = new ArrayList<LancamentoPeriodico>();
 		pagamentoPeriodo = new LancamentoConta();
+		categoriaSelecionada = null;
+		favorecidoSelecionado = null;
+		meioPagamentoSelecionado = null;
 	}
 	
 	@Override
@@ -332,6 +335,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	}
 	
 	public String reclassificarLancamentoView() {
+		actionTitle = "- Reclassificar";
 		return "/pages/LancamentoPeriodico/reclassificarLancamento";
 	}
 	
