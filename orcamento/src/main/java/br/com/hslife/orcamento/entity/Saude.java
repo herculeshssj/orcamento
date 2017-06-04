@@ -46,140 +46,109 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="banco")
+@Table(name="saude")
 @SuppressWarnings("serial")
-public class Banco extends EntityPersistence {
+public class Saude extends EntityPersistence {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=100, nullable=false)
-	private String nome;
+	@Column(length=50, nullable=false)
+	private String descricao;
 	
-	@Column(length=5, nullable=false)
-	private String numero;
+	@Column(columnDefinition="text", nullable=false)
+	private String sintomas;
+	
+	@Column(length=100, nullable=true)
+	private String medico;
+	
+	@Column(columnDefinition="text", nullable=true)
+	private String contatoMedico;
 	
 	@Column
-	private boolean padrao;
-	
-	@Column 
 	private boolean ativo;
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	public Banco() {
+	@OneToMany(mappedBy="saude", fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
+	private List<HistoricoSaude> historico;
+	
+	@OneToMany(mappedBy="saude", fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
+	private List<TratamentoSaude> tratamento;
+	
+	public Saude() {
 		ativo = true;
 	}
-	
-	private Banco(Builder builder) {
-		this.nome = builder.nome;
-		this.numero = builder.numero;
-		this.padrao = builder.padrao;
-		this.ativo = builder.ativo;
-		this.usuario = builder.usuario;
+
+	@Override
+	public String getLabel() {
+		return this.descricao;
 	}
-	
-	public static class Builder {
-		private String nome;
-		private String numero;
-		private boolean padrao;
-		private boolean ativo;
-		private Usuario usuario;
-		
-		public Builder nome(String nome) {
-			this.nome = nome;
-			return this;
-		}
-		
-		public Builder numero(String numero) {
-			this.numero = numero;
-			return this;
-		}
-		
-		public Builder padrao(boolean padrao) {
-			this.padrao = padrao;
-			return this;
-		}
-		
-		public Builder ativo(boolean ativo) {
-			this.ativo = ativo;
-			return this;
-		}
-		
-		public Builder usuario(Usuario usuario) {
-			this.usuario = usuario;
-			return this;
-		}
-		
-		public Banco build() {
-			return new Banco(this);
-		}
+
+	@Override
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Sintomas", this.sintomas);
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	@Override
-	public String getLabel() {
-		return this.nome;
-	}
-	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
-	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	public String getNumero() {
-		return numero;
+	public String getSintomas() {
+		return sintomas;
 	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setSintomas(String sintomas) {
+		this.sintomas = sintomas;
 	}
 
-	public boolean isPadrao() {
-		return padrao;
+	public String getMedico() {
+		return medico;
 	}
 
-	public void setPadrao(boolean padrao) {
-		this.padrao = padrao;
+	public void setMedico(String medico) {
+		this.medico = medico;
 	}
 
-	public boolean isAtivo() {
-		return ativo;
+	public String getContatoMedico() {
+		return contatoMedico;
 	}
 
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
+	public void setContatoMedico(String contatoMedico) {
+		this.contatoMedico = contatoMedico;
 	}
 
 	public Usuario getUsuario() {
@@ -188,5 +157,29 @@ public class Banco extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public List<HistoricoSaude> getHistorico() {
+		return historico;
+	}
+
+	public void setHistorico(List<HistoricoSaude> historico) {
+		this.historico = historico;
+	}
+
+	public List<TratamentoSaude> getTratamento() {
+		return tratamento;
+	}
+
+	public void setTratamento(List<TratamentoSaude> tratamento) {
+		this.tratamento = tratamento;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 }
