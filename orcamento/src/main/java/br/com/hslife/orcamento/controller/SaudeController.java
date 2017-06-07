@@ -79,8 +79,14 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	}
 	
 	@Override
+	public String startUp() {
+		find();
+		return super.startUp();
+	}
+	
+	@Override
 	public void find() {
-		
+		listEntity = getService().buscarTodosAtivosPorUsuario(getUsuarioLogado());
 	}
 	
 	@Override

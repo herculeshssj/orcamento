@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -56,35 +56,35 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{bancoMB}" />
+	<ui:param name="managedBean" value="#{saudeController}" />
 	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="parametro_pesquisa">		
-		<h:panelGroup>
-			<label for="frmListEntity:txtNomeBanco">Nome:</label>
-		    <h:inputText id="txtNomeBanco" value="#{managedBean.nomeBanco}"/>
-	    </h:panelGroup>
-	    <h:panelGroup>
-	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
-	    	<label>Somente ativos</label>
-	    </h:panelGroup>	    	    
-	</ui:define>
+	<ui:define name="botao_pesquisa" />
 	
-	<ui:define name="pesquisa_avancada"></ui:define>
+	<ui:define name="parametro_pesquisa" />		
+	
+	<ui:define name="pesquisa_avancada" />
 	
 	<ui:define name="colunas">
 		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
-				<h:outputText value="Número" />
+				<h:outputText value="Descrição" />
 			</f:facet>
-			<h:outputText value="#{item.numero}" />
+			<h:outputText value="#{item.descricao}" />
 		</h:column>
 
 		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
-				<h:outputText value="Banco" />
+				<h:outputText value="Médico" />
 			</f:facet>
-			<h:outputText value="#{item.nome}" />
+			<h:outputText value="#{item.medico}" />
+		</h:column>
+		
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Especialidade" />
+			</f:facet>
+			<h:outputText value="#{item.especialidade}" />
 		</h:column>
 	</ui:define>
 
@@ -98,7 +98,7 @@
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>								
 	  		<p:spacer width="10"/>			
-			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{!item.padrao}">
+			<h:commandLink title="Excluir" action="#{managedBean.view}">
 				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>

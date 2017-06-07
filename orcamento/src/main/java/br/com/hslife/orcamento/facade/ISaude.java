@@ -46,8 +46,13 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.util.List;
+
 import br.com.hslife.orcamento.entity.Saude;
+import br.com.hslife.orcamento.entity.Usuario;
 
 public interface ISaude extends ICRUDService<Saude>{
+	
+	public List<Saude> buscarTodosAtivosPorUsuario(Usuario usuario);
 	
 }

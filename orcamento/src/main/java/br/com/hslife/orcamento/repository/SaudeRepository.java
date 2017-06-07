@@ -46,14 +46,25 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Saude;
+import br.com.hslife.orcamento.entity.Usuario;
 
 @Repository
 public class SaudeRepository extends AbstractCRUDRepository<Saude> {
 	
 	public SaudeRepository() {
 		super(new Saude());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Saude> findAllEnableByUsuario(Usuario usuario) {
+		return getQuery("FROM Saude saude WHERE saude.usuario.id = :idUsuario AND saude.ativo = :ativo ")
+				.setLong("idUsuario", usuario.getId())
+				.setBoolean("ativo", true)
+				.list();
 	}
 }

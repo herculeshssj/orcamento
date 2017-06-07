@@ -80,6 +80,9 @@ public class Saude extends EntityPersistence {
 	@Column(length=100, nullable=true)
 	private String medico;
 	
+	@Column(length=50, nullable=true)
+	private String especialidade;
+	
 	@Column(columnDefinition="text", nullable=true)
 	private String contatoMedico;
 	
@@ -89,6 +92,10 @@ public class Saude extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
+	
+	@ManyToOne
+	@JoinColumn(name="idCategoriaDocumento", nullable=true)
+	private CategoriaDocumento categoriaDocumento;
 	
 	@OneToMany(mappedBy="saude", fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
 	private List<HistoricoSaude> historico;
