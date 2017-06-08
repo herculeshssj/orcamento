@@ -56,7 +56,9 @@ import br.com.hslife.orcamento.entity.Saude;
 import br.com.hslife.orcamento.entity.TratamentoSaude;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.facade.ISaude;
+import br.com.hslife.orcamento.repository.HistoricoSaudeRepository;
 import br.com.hslife.orcamento.repository.SaudeRepository;
+import br.com.hslife.orcamento.repository.TratamentoSaudeRepository;
 
 @Service
 public class SaudeService extends AbstractCRUDService<Saude> implements ISaude {
@@ -64,11 +66,27 @@ public class SaudeService extends AbstractCRUDService<Saude> implements ISaude {
 	@Autowired
 	private SaudeRepository repository;
 	
+	@Autowired
+	private TratamentoSaudeRepository tratamentoSaudeRepository;
+	
+	@Autowired
+	private HistoricoSaudeRepository historicoSaudeRepository;
+	
 	public SaudeRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return this.repository;
 	}
 	
+	public TratamentoSaudeRepository getTratamentoSaudeRepository() {
+		this.tratamentoSaudeRepository.setSessionFactory(sessionFactory);
+		return tratamentoSaudeRepository;
+	}
+
+	public HistoricoSaudeRepository getHistoricoSaudeRepository() {
+		this.historicoSaudeRepository.setSessionFactory(sessionFactory);
+		return historicoSaudeRepository;
+	}
+
 	@Override
 	public List<Saude> buscarTodosAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findAllEnableByUsuario(usuario);
@@ -86,11 +104,40 @@ public class SaudeService extends AbstractCRUDService<Saude> implements ISaude {
 	
 	@Override
 	public void salvarHistoricoSaude(HistoricoSaude historico) {
+		// Valida o histórico
+		historico.validate();
 		
+		// Salva o histórico na base
+		if (historico.getId() == null)
+			getHistoricoSaudeRepository().save(historico);
+		else
+			getHistoricoSaudeRepository().update(historico);
+		
+		// Busca uma instância de saúde na base
+		Saude saude = getRepository().findById(historico.getSaude().getId());
+		
+		// Remove a instância do histórico caso exista
+		saude.getHistorico().remove(historico);
+		
+		// Adiciona a instância no histórico
+		saude.getHistorico().add(historico);
+		
+		// Salva a instância de saúde
+		this.alterar(saude);
 	}
 	
 	@Override
 	public void excluirHistoricoSaude(HistoricoSaude historico) {
+		// Busca uma instância de saúde na base
+		Saude saude = getRepository().findById(historico.getSaude().getId());
 		
+		// Remove a instância do histórico caso exista
+		saude.getHistorico().remove(historico);
+		
+		// Remove o histórico da base
+		getHistoricoSaudeRepository().delete(historico);
+		
+		// Salva a instância de saúde
+		this.alterar(saude);
 	}
 }

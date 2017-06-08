@@ -49,17 +49,23 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
+import br.com.hslife.orcamento.entity.Documento;
 import br.com.hslife.orcamento.entity.HistoricoSaude;
 import br.com.hslife.orcamento.entity.Saude;
 import br.com.hslife.orcamento.entity.TratamentoSaude;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
+import br.com.hslife.orcamento.facade.IDocumento;
 import br.com.hslife.orcamento.facade.ISaude;
 
 @Component
@@ -77,8 +83,12 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	@Autowired
 	private ICategoriaDocumento categoriaDocumentoService;
 	
+	@Autowired
+	private IDocumento documentoService;
+	
 	private HistoricoSaude historicoSaude;
 	private TratamentoSaude tratamentoSaude;
+	private Documento documento;
 	
 	public SaudeController() {
 		super(new Saude());
@@ -88,11 +98,15 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	@Override
 	protected void initializeEntity() {
 		entity = new Saude();
-		listEntity = new ArrayList<Saude>();		
+		listEntity = new ArrayList<Saude>();
+		historicoSaude = new HistoricoSaude();
+		tratamentoSaude = new TratamentoSaude();
+		documento = null;
 	}
 	
 	@Override
 	public String startUp() {
+		initializeEntity();
 		find();
 		return super.startUp();
 	}
@@ -108,12 +122,24 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 		return super.save();
 	}
 	
+	public void novoHistoricoETratamento() {
+		historicoSaude = new HistoricoSaude();
+		tratamentoSaude = new TratamentoSaude();				
+	}
+	
 	public void adicionarHistorico() {
-		
+		try {
+			historicoSaude.setSaude(entity);
+			getService().salvarHistoricoSaude(historicoSaude);
+			entity = getService().buscarPorID(entity.getId());
+			historicoSaude = new HistoricoSaude();
+		} catch (BusinessException | ValidationException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void editarHistorico() {
-		
+		// Método usado unicamente para dar refresh na tela
 	}
 	
 	public void excluirHistorico() {
@@ -125,11 +151,36 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	}
 	
 	public void editarTratamento() {
-		
+		// Método usado unicamente para dar refresh na tela
 	}
 	
 	public void excluirTratamento() {
 		
+	}
+	
+	public void baixarArquivo() {		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		try {			
+			response.setContentType(documento.getArquivo().getContentType());
+			response.setHeader("Content-Disposition","attachment; filename=" + documento.getArquivo().getNomeArquivo());
+			response.setContentLength(documento.getArquivo().getDados().length);
+			ServletOutputStream output = response.getOutputStream();
+			output.write(documento.getArquivo().getDados(), 0, documento.getArquivo().getDados().length);
+			FacesContext.getCurrentInstance().responseComplete();
+		} catch (Exception e) {
+			errorMessage(e.getMessage());
+		}		
+	}
+	
+	public List<Documento> getListaDocumentos() {
+		try {
+			if (entity.getCategoriaDocumento() != null) {
+				return getDocumentoService().buscarPorCategoriaDocumento(entity.getCategoriaDocumento());
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
 	}
 	
 	public List<CategoriaDocumento> getListaCategoriaDocumento() {
@@ -143,6 +194,10 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	
 	public ISaude getService() {
 		return service;
+	}
+
+	public IDocumento getDocumentoService() {
+		return documentoService;
 	}
 
 	public ICategoriaDocumento getCategoriaDocumentoService() {
@@ -163,5 +218,13 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 
 	public void setTratamentoSaude(TratamentoSaude tratamentoSaude) {
 		this.tratamentoSaude = tratamentoSaude;
+	}
+
+	public Documento getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
 	}
 }

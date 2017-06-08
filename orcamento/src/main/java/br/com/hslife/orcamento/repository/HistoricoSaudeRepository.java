@@ -1,4 +1,4 @@
-<!--
+/***
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
 
-    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -42,52 +42,18 @@
 
     Marco II - Nova Iguaçu, RJ, Brasil.
   
-  -->
+***/
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+package br.com.hslife.orcamento.repository;
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+import org.springframework.stereotype.Repository;
 
-<ui:composition template="/templates/formulario.xhtml">
+import br.com.hslife.orcamento.entity.HistoricoSaude;
 
-	<ui:param name="managedBean" value="#{saudeController}" />
+@Repository
+public class HistoricoSaudeRepository extends AbstractCRUDRepository<HistoricoSaude> {
 	
-	<ui:define name="campos">
-				
-		<p:tabView>
-		
-			<p:tab title="Geral">
-			
-				<ui:include src="saudeGeral.xhtml" />
-			
-			</p:tab>
-			
-			<p:tab title="Histórico" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeHistorico.xhtml" />
-			
-			</p:tab>
-			
-			<p:tab title="Tratamento" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeTratamento.xhtml" />
-			
-			</p:tab>
-			
-			<p:tab title="Documentos" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeDocumentos.xhtml" />
-			
-			</p:tab>
-			
-		</p:tabView>				
-		
-	</ui:define>
-	
-</ui:composition>
-</html>
+	public HistoricoSaudeRepository() {
+		super(new HistoricoSaude());
+	}
+}

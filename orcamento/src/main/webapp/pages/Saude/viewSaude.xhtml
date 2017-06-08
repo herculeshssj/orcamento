@@ -56,26 +56,28 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{bancoMB}" />
+	<ui:param name="managedBean" value="#{saudeController}" />
 
 	<ui:define name="campos">
 			
-		<h:panelGrid columns="2">
-			
-			Banco:
-			<h:outputText id="txtNome" value="#{managedBean.entity.nome}" />				
-			
-			Número:
-			<h:outputText id="txtNumero" value="#{managedBean.entity.numero}" />				
-			
-			Padrão:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
-			
-			Ativo:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
-			
-		</h:panelGrid>
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 		
+		<label for="frmFormEntity:txtSintomas">Sintomas:</label>
+		<h:outputText id="txtSintomas" value="#{managedBean.entity.sintomas}"/>
+		
+		<label for="frmFormEntity:txtMedico">Médico:</label>
+		<h:outputText id="txtMédico" value="#{managedBean.entity.medico}"/>
+		
+		<label for="frmFormEntity:txtEspecialidade">Especialidade:</label>
+		<h:outputText id="txtEspecialidade" value="#{managedBean.entity.especialidade}"/>
+		
+		<label for="frmFormEntity:txtContatoMedico">Contato médico:</label>
+		<h:outputTextarea id="txtContatoMedico" value="#{managedBean.entity.contatoMedico}"/>
+		
+		<label>Categoria de documentos:</label>
+		<h:outputText value="#{managedBean.entity.categoriaDocumento.label}"/>
+
 	</ui:define>
 	
 </ui:composition>

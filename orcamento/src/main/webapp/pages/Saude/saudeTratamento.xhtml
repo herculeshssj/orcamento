@@ -93,12 +93,12 @@
 				<h:outputText value="Ações" />
 			</f:facet>
 			<h:commandLink title="Editar" action="#{managedBean.editarTratamento}">
-				<h:graphicImage id="imgEditTratamento" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+				<h:graphicImage id="imgEditRowTratamento" height="48" width="48" value="/resources/images/edit_row.svg"/>
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.tratamentoSaude}"/>
 			</h:commandLink>
 			<p:spacer height="20"/>
 			<h:commandLink title="Excluir" action="#{managedBean.excluirTratamento}">
-				<h:graphicImage id="imgRemoveTratamento" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<h:graphicImage id="imgDeleteRowTratamento" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
 				<f:setPropertyActionListener value="#{item}" target="#{managedBean.tratamentoSaude}"/>
 			</h:commandLink>
 		</h:column>

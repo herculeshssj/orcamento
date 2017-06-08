@@ -1,4 +1,4 @@
-<!--
+ <!--
   
   	Copyright (c) 2012 - 2020 Hércules S. S. José
 
@@ -53,41 +53,27 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition>
 
 	<ui:param name="managedBean" value="#{saudeController}" />
 	
-	<ui:define name="campos">
-				
-		<p:tabView>
-		
-			<p:tab title="Geral">
-			
-				<ui:include src="saudeGeral.xhtml" />
-			
-			</p:tab>
-			
-			<p:tab title="Histórico" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeHistorico.xhtml" />
-			
-			</p:tab>
-			
-			<p:tab title="Tratamento" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeTratamento.xhtml" />
-			
-			</p:tab>
-			
-			<p:tab title="Documentos" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeDocumentos.xhtml" />
-			
-			</p:tab>
-			
-		</p:tabView>				
-		
-	</ui:define>
-	
+	<h:dataTable id="tableListaDocumentos" value="#{managedBean.listaDocumentos}" var="item">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="Nome do documento" />
+			</f:facet>
+			<h:outputText value="#{item.nome}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}">
+				<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.documento}"/>
+			</h:commandLink>
+		</h:column>
+	</h:dataTable>
+
 </ui:composition>
 </html>
