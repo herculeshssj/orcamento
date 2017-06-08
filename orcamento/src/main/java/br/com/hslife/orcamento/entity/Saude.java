@@ -46,7 +46,10 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -101,10 +104,12 @@ public class Saude extends EntityPersistence {
 	private List<HistoricoSaude> historico;
 	
 	@OneToMany(mappedBy="saude", fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
-	private List<TratamentoSaude> tratamento;
+	private Set<TratamentoSaude> tratamento;
 	
 	public Saude() {
 		ativo = true;
+		historico = new ArrayList<>();
+		tratamento = new HashSet<>();
 	}
 
 	@Override
@@ -166,6 +171,30 @@ public class Saude extends EntityPersistence {
 		this.usuario = usuario;
 	}
 
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public String getEspecialidade() {
+		return especialidade;
+	}
+
+	public void setEspecialidade(String especialidade) {
+		this.especialidade = especialidade;
+	}
+
+	public CategoriaDocumento getCategoriaDocumento() {
+		return categoriaDocumento;
+	}
+
+	public void setCategoriaDocumento(CategoriaDocumento categoriaDocumento) {
+		this.categoriaDocumento = categoriaDocumento;
+	}
+
 	public List<HistoricoSaude> getHistorico() {
 		return historico;
 	}
@@ -174,19 +203,11 @@ public class Saude extends EntityPersistence {
 		this.historico = historico;
 	}
 
-	public List<TratamentoSaude> getTratamento() {
+	public Set<TratamentoSaude> getTratamento() {
 		return tratamento;
 	}
 
-	public void setTratamento(List<TratamentoSaude> tratamento) {
+	public void setTratamento(Set<TratamentoSaude> tratamento) {
 		this.tratamento = tratamento;
-	}
-
-	public boolean isAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
 	}
 }

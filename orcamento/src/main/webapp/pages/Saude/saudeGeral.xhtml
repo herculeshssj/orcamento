@@ -53,41 +53,30 @@
 	xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/formulario.xhtml">
+<ui:composition>
 
 	<ui:param name="managedBean" value="#{saudeController}" />
+			
+	<label for="frmFormEntity:txtDescricao">Descrição:</label>
+	<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 	
-	<ui:define name="campos">
-				
-		<p:tabView>
-		
-			<p:tab title="Geral">
-			
-				<ui:include src="saudeGeral.xhtml"></ui:include>
-			
-			</p:tab>
-			
-			<p:tab title="Histórico" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeHistorico.xhtml"></ui:include>
-			
-			</p:tab>
-			
-			<p:tab title="Tratamento" rendered="#{managedBean.operation != 'create'}">
-			
-				<ui:include src="saudeTratamento.xhtml"></ui:include>
-			
-			</p:tab>
-			
-			<p:tab title="Documentos" rendered="#{managedBean.operation != 'create'}">
-			
-				Aqui entra a relação de documentos vinculados
-			
-			</p:tab>
-			
-		</p:tabView>				
-		
-	</ui:define>
+	<label for="frmFormEntity:txtSintomas">Sintomas:</label>
+	<h:inputTextarea id="txtSintomas" value="#{managedBean.entity.sintomas}"/>
 	
+	<label for="frmFormEntity:txtMedico">Médico:</label>
+	<h:inputText id="txtMédico" value="#{managedBean.entity.medico}"/>
+	
+	<label for="frmFormEntity:txtEspecialidade">Especialidade:</label>
+	<h:inputText id="txtEspecialidade" value="#{managedBean.entity.especialidade}"/>
+	
+	<label for="frmFormEntity:txtContatoMedico">Contato médico:</label>
+	<h:inputTextarea id="txtContatoMedico" value="#{managedBean.entity.contatoMedico}"/>
+	
+	<label>Categoria de documentos:</label>
+	<h:selectOneMenu value="#{managedBean.entity.categoriaDocumento}" converter="entityConverter">	
+		<f:selectItem itemLabel="Selecione uma categoria" />								
+		<f:selectItems value="#{managedBean.listaCategoriaDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+	</h:selectOneMenu>
+
 </ui:composition>
 </html>

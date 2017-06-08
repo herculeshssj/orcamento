@@ -47,12 +47,19 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.CategoriaDocumento;
+import br.com.hslife.orcamento.entity.HistoricoSaude;
 import br.com.hslife.orcamento.entity.Saude;
+import br.com.hslife.orcamento.entity.TratamentoSaude;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.ISaude;
 
 @Component
@@ -66,6 +73,12 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	
 	@Autowired
 	private ISaude service; 
+	
+	@Autowired
+	private ICategoriaDocumento categoriaDocumentoService;
+	
+	private HistoricoSaude historicoSaude;
+	private TratamentoSaude tratamentoSaude;
 	
 	public SaudeController() {
 		super(new Saude());
@@ -95,7 +108,60 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 		return super.save();
 	}
 	
+	public void adicionarHistorico() {
+		
+	}
+	
+	public void editarHistorico() {
+		
+	}
+	
+	public void excluirHistorico() {
+		
+	}
+	
+	public void adicionarTratamento() {
+		
+	}
+	
+	public void editarTratamento() {
+		
+	}
+	
+	public void excluirTratamento() {
+		
+	}
+	
+	public List<CategoriaDocumento> getListaCategoriaDocumento() {
+		try {
+			return getCategoriaDocumentoService().buscarPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<CategoriaDocumento>();
+	}
+	
 	public ISaude getService() {
 		return service;
+	}
+
+	public ICategoriaDocumento getCategoriaDocumentoService() {
+		return categoriaDocumentoService;
+	}
+
+	public HistoricoSaude getHistoricoSaude() {
+		return historicoSaude;
+	}
+
+	public void setHistoricoSaude(HistoricoSaude historicoSaude) {
+		this.historicoSaude = historicoSaude;
+	}
+
+	public TratamentoSaude getTratamentoSaude() {
+		return tratamentoSaude;
+	}
+
+	public void setTratamentoSaude(TratamentoSaude tratamentoSaude) {
+		this.tratamentoSaude = tratamentoSaude;
 	}
 }

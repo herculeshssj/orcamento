@@ -51,7 +51,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.HistoricoSaude;
 import br.com.hslife.orcamento.entity.Saude;
+import br.com.hslife.orcamento.entity.TratamentoSaude;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.facade.ISaude;
 import br.com.hslife.orcamento.repository.SaudeRepository;
@@ -70,5 +72,25 @@ public class SaudeService extends AbstractCRUDService<Saude> implements ISaude {
 	@Override
 	public List<Saude> buscarTodosAtivosPorUsuario(Usuario usuario) {
 		return getRepository().findAllEnableByUsuario(usuario);
+	}
+	
+	@Override
+	public void salvarTratamentoSaude(TratamentoSaude tratamento) {
+		
+	}
+	
+	@Override
+	public void excluirTratamentoSaude(TratamentoSaude tratamento) {
+		
+	}
+	
+	@Override
+	public void salvarHistoricoSaude(HistoricoSaude historico) {
+		
+	}
+	
+	@Override
+	public void excluirHistoricoSaude(HistoricoSaude historico) {
+		
 	}
 }

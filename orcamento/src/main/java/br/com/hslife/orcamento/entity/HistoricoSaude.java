@@ -48,14 +48,22 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="banco")
+@Table(name="historicosaude")
 @SuppressWarnings("serial")
 public class HistoricoSaude extends EntityPersistence {
 
@@ -63,35 +71,85 @@ public class HistoricoSaude extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
 	private Date dataConsulta;
 	
+	@Column(columnDefinition="text", nullable=false)
 	private String quadroClinico;
 	
+	@Column(columnDefinition="text", nullable=false)
 	private String diagnostico;
 	
+	@Column(columnDefinition="text", nullable=false)
 	private String tratamento;
 	
+	@ManyToOne
+	@JoinColumn(name="idSaude", nullable=false)
 	private Saude saude;
 	
 	public HistoricoSaude() {
-	
-	}
-
-	@Override
-	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
 	public String getLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Consulta realizada em " + Util.formataDataHora(this.dataConsulta, Util.DATA);
 	}
 
 	@Override
 	public void validate() {
-		// TODO Auto-generated method stub
-		
+		EntityPersistenceUtil.validaCampoNulo("Data da consulta", this.dataConsulta);
+		EntityPersistenceUtil.validaCampoNulo("Quadro clínico", this.quadroClinico);
+		EntityPersistenceUtil.validaCampoNulo("Diagnóstico", this.diagnostico);
+		EntityPersistenceUtil.validaCampoNulo("Tratamento", this.tratamento);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Date getDataConsulta() {
+		return dataConsulta;
+	}
+
+	public void setDataConsulta(Date dataConsulta) {
+		this.dataConsulta = dataConsulta;
+	}
+
+	public String getQuadroClinico() {
+		return quadroClinico;
+	}
+
+	public void setQuadroClinico(String quadroClinico) {
+		this.quadroClinico = quadroClinico;
+	}
+
+	public String getDiagnostico() {
+		return diagnostico;
+	}
+
+	public void setDiagnostico(String diagnostico) {
+		this.diagnostico = diagnostico;
+	}
+
+	public String getTratamento() {
+		return tratamento;
+	}
+
+	public void setTratamento(String tratamento) {
+		this.tratamento = tratamento;
+	}
+
+	public Saude getSaude() {
+		return saude;
+	}
+
+	public void setSaude(Saude saude) {
+		this.saude = saude;
 	}
 }

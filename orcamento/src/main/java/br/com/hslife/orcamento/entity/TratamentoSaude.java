@@ -46,16 +46,22 @@
 
 package br.com.hslife.orcamento.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoTratamento;
+import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="banco")
+@Table(name="tratamentosaude")
 @SuppressWarnings("serial")
 public class TratamentoSaude extends EntityPersistence {
 
@@ -63,35 +69,84 @@ public class TratamentoSaude extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(length=100, nullable=false)
 	private String descricao;
 
+	@Column(length=15, nullable=false)
+	@Enumerated(EnumType.STRING)
 	private TipoTratamento tipoTratamento;
 	
+	@Column(length=50, nullable=true)
 	private String periodicidade;
 	
+	@Column(columnDefinition="text", nullable=true)
 	private String observacao;
 	
+	@ManyToOne
+	@JoinColumn(name="idSaude", nullable=false)
 	private Saude saude;
 	
 	public TratamentoSaude() {
-	
-	}
-
-	@Override
-	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
 	public String getLabel() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.descricao;
 	}
 
 	@Override
 	public void validate() {
-		// TODO Auto-generated method stub
-		
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 100);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de tratamento", this.tipoTratamento);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Periodicidade", this.periodicidade, 50);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public TipoTratamento getTipoTratamento() {
+		return tipoTratamento;
+	}
+
+	public void setTipoTratamento(TipoTratamento tipoTratamento) {
+		this.tipoTratamento = tipoTratamento;
+	}
+
+	public String getPeriodicidade() {
+		return periodicidade;
+	}
+
+	public void setPeriodicidade(String periodicidade) {
+		this.periodicidade = periodicidade;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	public Saude getSaude() {
+		return saude;
+	}
+
+	public void setSaude(Saude saude) {
+		this.saude = saude;
 	}
 }
