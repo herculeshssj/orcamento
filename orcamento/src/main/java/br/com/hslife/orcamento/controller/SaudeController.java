@@ -133,6 +133,7 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 			getService().salvarHistoricoSaude(historicoSaude);
 			entity = getService().buscarPorID(entity.getId());
 			historicoSaude = new HistoricoSaude();
+			infoMessage("Histórico adicionado com sucesso!");
 		} catch (BusinessException | ValidationException be) {
 			errorMessage(be.getMessage());
 		}
@@ -143,11 +144,26 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	}
 	
 	public void excluirHistorico() {
-		
+		try {
+			getService().excluirHistoricoSaude(historicoSaude);
+			entity = getService().buscarPorID(entity.getId());
+			historicoSaude = new HistoricoSaude();
+			infoMessage("Histórico excluído com sucesso!");
+		} catch (BusinessException | ValidationException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void adicionarTratamento() {
-		
+		try {
+			tratamentoSaude.setSaude(entity);
+			getService().salvarTratamentoSaude(tratamentoSaude);
+			entity = getService().buscarPorID(entity.getId());
+			tratamentoSaude = new TratamentoSaude();
+			infoMessage("Tratamento adicionado com sucesso!");
+		} catch (BusinessException | ValidationException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void editarTratamento() {
@@ -155,7 +171,14 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 	}
 	
 	public void excluirTratamento() {
-		
+		try {
+			getService().excluirTratamentoSaude(tratamentoSaude);
+			entity = getService().buscarPorID(entity.getId());
+			tratamentoSaude = new TratamentoSaude();
+			infoMessage("Tratamento excluído com sucesso!");
+		} catch (BusinessException | ValidationException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public void baixarArquivo() {		

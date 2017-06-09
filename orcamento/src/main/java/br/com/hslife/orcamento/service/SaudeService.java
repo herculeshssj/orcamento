@@ -94,12 +94,44 @@ public class SaudeService extends AbstractCRUDService<Saude> implements ISaude {
 	
 	@Override
 	public void salvarTratamentoSaude(TratamentoSaude tratamento) {
+		// Valida o tratamento
+		tratamento.validate();
 		
+		// Salva o tratamento na base
+		if (tratamento.getId() == null)
+			getTratamentoSaudeRepository().save(tratamento);
+		else
+			getTratamentoSaudeRepository().update(tratamento);
+		
+		// Busca uma instância de saúde na base
+		Saude saude = getRepository().findById(tratamento.getSaude().getId());
+		
+		// Remove a instância do tratamento caso exista
+		saude.getTratamento().remove(tratamento);
+		
+		// Adiciona a instância nos tratamentos
+		saude.getTratamento().add(tratamento);
+		
+		// Salva a instância de saúde
+		this.alterar(saude);
 	}
 	
 	@Override
 	public void excluirTratamentoSaude(TratamentoSaude tratamento) {
+		// Busca uma instância de saúde na base
+		Saude saude = getRepository().findById(tratamento.getSaude().getId());
 		
+		// Busca o tratamento
+		TratamentoSaude ts = getTratamentoSaudeRepository().findById(tratamento.getId());
+		
+		// Remove a instância do tratamento caso exista
+		saude.getTratamento().remove(ts);
+		
+		// Remove o tratamento da base
+		getTratamentoSaudeRepository().delete(ts);
+		
+		// Salva a instância de saúde
+		this.alterar(saude);
 	}
 	
 	@Override
@@ -131,11 +163,14 @@ public class SaudeService extends AbstractCRUDService<Saude> implements ISaude {
 		// Busca uma instância de saúde na base
 		Saude saude = getRepository().findById(historico.getSaude().getId());
 		
+		// Busca o histórico
+		HistoricoSaude hs = getHistoricoSaudeRepository().findById(historico.getId());
+		
 		// Remove a instância do histórico caso exista
-		saude.getHistorico().remove(historico);
+		saude.getHistorico().remove(hs);
 		
 		// Remove o histórico da base
-		getHistoricoSaudeRepository().delete(historico);
+		getHistoricoSaudeRepository().delete(hs);
 		
 		// Salva a instância de saúde
 		this.alterar(saude);

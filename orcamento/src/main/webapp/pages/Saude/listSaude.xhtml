@@ -88,22 +88,5 @@
 		</h:column>
 	</ui:define>
 
-	<ui:define name="acoes">
-		<h:column style="text-align: center; vertical-align: middle;">
-			<f:facet name="header">
-				<h:outputText value="Ações" />
-			</f:facet>
-			<h:commandLink title="Editar" action="#{managedBean.edit}">
-				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandLink>								
-	  		<p:spacer width="10"/>			
-			<h:commandLink title="Excluir" action="#{managedBean.view}">
-				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
-				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
-			</h:commandLink>
-		</h:column>
-	</ui:define>
-
 </ui:composition>
 </html>

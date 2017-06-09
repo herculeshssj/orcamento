@@ -71,6 +71,10 @@
 	<label for="frmFormEntity:txtObservacao">Observação:</label>
 	<h:inputTextarea id="txtObservacao" value="#{managedBean.tratamentoSaude.observacao}"/>
 	
+	<h:commandLink action="#{managedBean.novoHistoricoETratamento}" title="Novo tratamento">
+		<h:graphicImage id="imgNewTratamento" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+	</h:commandLink>
+	
 	<h:commandLink id="lnkAddRowTratamento" title="Adicionar tratamento" actionListener="#{managedBean.adicionarTratamento}">
 		<h:graphicImage id="imgAddRowTratamento" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
 	</h:commandLink>
