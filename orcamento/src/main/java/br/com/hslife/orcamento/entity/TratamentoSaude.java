@@ -48,6 +48,8 @@ package br.com.hslife.orcamento.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,138 +57,96 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.com.hslife.orcamento.enumeration.TipoTratamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="banco")
+@Table(name="tratamentosaude")
 @SuppressWarnings("serial")
-public class Banco extends EntityPersistence {
+public class TratamentoSaude extends EntityPersistence {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(length=100, nullable=false)
-	private String nome;
+	private String descricao;
+
+	@Column(length=15, nullable=false)
+	@Enumerated(EnumType.STRING)
+	private TipoTratamento tipoTratamento;
 	
-	@Column(length=5, nullable=false)
-	private String numero;
+	@Column(length=50, nullable=true)
+	private String periodicidade;
 	
-	@Column
-	private boolean padrao;
-	
-	@Column 
-	private boolean ativo;
+	@Column(columnDefinition="text", nullable=true)
+	private String observacao;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
+	@JoinColumn(name="idSaude", nullable=false)
+	private Saude saude;
 	
-	public Banco() {
-		ativo = true;
+	public TratamentoSaude() {
+		
 	}
-	
-	private Banco(Builder builder) {
-		this.nome = builder.nome;
-		this.numero = builder.numero;
-		this.padrao = builder.padrao;
-		this.ativo = builder.ativo;
-		this.usuario = builder.usuario;
+
+	@Override
+	public String getLabel() {
+		return this.descricao;
 	}
-	
-	public static class Builder {
-		private String nome;
-		private String numero;
-		private boolean padrao;
-		private boolean ativo;
-		private Usuario usuario;
-		
-		public Builder nome(String nome) {
-			this.nome = nome;
-			return this;
-		}
-		
-		public Builder numero(String numero) {
-			this.numero = numero;
-			return this;
-		}
-		
-		public Builder padrao(boolean padrao) {
-			this.padrao = padrao;
-			return this;
-		}
-		
-		public Builder ativo(boolean ativo) {
-			this.ativo = ativo;
-			return this;
-		}
-		
-		public Builder usuario(Usuario usuario) {
-			this.usuario = usuario;
-			return this;
-		}
-		
-		public Banco build() {
-			return new Banco(this);
-		}
+
+	@Override
+	public void validate() {
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 100);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de tratamento", this.tipoTratamento);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Periodicidade", this.periodicidade, 50);
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	@Override
-	public String getLabel() {
-		return this.nome;
-	}
-	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
-	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	public String getNumero() {
-		return numero;
+	public TipoTratamento getTipoTratamento() {
+		return tipoTratamento;
 	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setTipoTratamento(TipoTratamento tipoTratamento) {
+		this.tipoTratamento = tipoTratamento;
 	}
 
-	public boolean isPadrao() {
-		return padrao;
+	public String getPeriodicidade() {
+		return periodicidade;
 	}
 
-	public void setPadrao(boolean padrao) {
-		this.padrao = padrao;
+	public void setPeriodicidade(String periodicidade) {
+		this.periodicidade = periodicidade;
 	}
 
-	public boolean isAtivo() {
-		return ativo;
+	public String getObservacao() {
+		return observacao;
 	}
 
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Saude getSaude() {
+		return saude;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setSaude(Saude saude) {
+		this.saude = saude;
 	}
 }

@@ -1,0 +1,112 @@
+ <!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<ui:param name="managedBean" value="#{saudeController}" />
+	
+	<label for="frmFormEntity:txtDescricaoTratamento">Descrição:</label>
+	<h:inputText id="txtDescricaoTratamento" value="#{managedBean.tratamentoSaude.descricao}"/>
+	
+ 	<label>Tipo de tratamento:</label>
+    <h:selectOneRadio value="#{managedBean.tratamentoSaude.tipoTratamento}" layout="lineDirection">
+		<f:selectItems value="#{enumCombo.listaTipoTratamento}"/>								
+	</h:selectOneRadio>
+	
+	<label for="frmFormEntity:txtPeriodicidade">Periodicidade:</label>
+	<h:inputText id="txtPeriodicidade" value="#{managedBean.tratamentoSaude.periodicidade}"/>
+	
+	<label for="frmFormEntity:txtObservacao">Observação:</label>
+	<h:inputTextarea id="txtObservacao" value="#{managedBean.tratamentoSaude.observacao}"/>
+	
+	<h:commandLink action="#{managedBean.novoHistoricoETratamento}" title="Novo tratamento">
+		<h:graphicImage id="imgNewTratamento" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+	</h:commandLink>
+	
+	<h:commandLink id="lnkAddRowTratamento" title="Adicionar tratamento" actionListener="#{managedBean.adicionarTratamento}">
+		<h:graphicImage id="imgAddRowTratamento" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
+	</h:commandLink>
+
+	<hr/>
+	
+	<h:dataTable id="tableListaTratamento" value="#{managedBean.entity.tratamento}" var="item">
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="Descrição" />
+			</f:facet>
+			<h:outputText value="#{item.descricao}" />
+			<br/>
+			<h:outputText value="#{item.tipoTratamento}" />
+			<br/>
+			<h:outputText value="#{item.periodicidade}" />
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandLink title="Editar" action="#{managedBean.editarTratamento}">
+				<h:graphicImage id="imgEditRowTratamento" height="48" width="48" value="/resources/images/edit_row.svg"/>
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.tratamentoSaude}"/>
+			</h:commandLink>
+			<p:spacer height="20"/>
+			<h:commandLink title="Excluir" action="#{managedBean.excluirTratamento}">
+				<h:graphicImage id="imgDeleteRowTratamento" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.tratamentoSaude}"/>
+			</h:commandLink>
+		</h:column>
+	</h:dataTable>
+
+</ui:composition>
+</html>
