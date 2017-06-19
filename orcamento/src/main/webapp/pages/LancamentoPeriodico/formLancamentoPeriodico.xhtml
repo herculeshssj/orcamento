@@ -82,7 +82,7 @@
 				</h:selectOneRadio>
 				
 				<label for="frmFormEntity:tabDadosLancamento:txtDiaVencimento">Dia de vencimento:</label>
-				<h:inputText id="txtDiaVencimento" value="#{managedBean.entity.diaVencimento}" size="5" disabled="#{managedBean.operation == 'edit'}"/>
+				<h:inputText id="txtDiaVencimento" value="#{managedBean.entity.diaVencimento}" size="5" disabled="#{managedBean.operation == 'edit' and managedBean.parcelamento}"/>
 			
 				<p:outputPanel id="pnlLancamentoPeriodico">
 				
