@@ -94,6 +94,7 @@ import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.model.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
@@ -929,7 +930,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			criterioBusca.setCadastro(cadastro);
 			
 			// Traz todos os lançamentos encontrados
-			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
+			//List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
+			List<LancamentoPanoramaCadastro> lancamentos = getLancamentoContaService().buscarLancamentoParaPanoramaCadastro(conta, cadastro, idRegistro);
 			
 			// Se a lista de lançamentos vier zerada, passa para a próxima conta
 			if (lancamentos == null || lancamentos.isEmpty()) continue;
@@ -938,7 +940,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			Map<Integer, PanoramaCadastro> panoramas = new TreeMap<Integer, PanoramaCadastro>();
 			
 			// Itera a lista de lançamentos, faz os cálculos de valor e quantidade
-			for (LancamentoConta lancamento : lancamentos) {				
+			for (LancamentoPanoramaCadastro lancamento : lancamentos) {				
 				// Determina o ano
 				Integer ano = Integer.valueOf(lancamento.getDataPagamento().getYear() + 1900);
 				
@@ -988,9 +990,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	/*** Implementação dos métodos privados ***/
 	
-	private double getValorPagoConvertido(LancamentoConta lancamento) {
-		if (lancamento.getTaxaConversao() != null) {
-			return lancamento.getTaxaConversao().getValorMoedaDestino();
+	private double getValorPagoConvertido(LancamentoPanoramaCadastro lancamento) {
+		if (lancamento.getValorMoedaDestino() != null) {
+			return lancamento.getValorMoedaDestino();
 		} else {
 			return lancamento.getValorPago();
 		}

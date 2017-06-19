@@ -61,6 +61,7 @@ import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.TaxaConversao;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
@@ -69,6 +70,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.util.LancamentoContaUtil;
@@ -312,5 +314,10 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	public List<LancamentoConta> buscarPorLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
 		return getRepository().findByLancamentoPeriodico(lancamentoPeriodico);
+	}
+	
+	@Override
+	public List<LancamentoPanoramaCadastro> buscarLancamentoParaPanoramaCadastro(Conta conta, CadastroSistema cadastro,	Long idAgrupamento) {
+		return getRepository().findLancamentoForPanoramaCadastro(conta, cadastro, idAgrupamento);
 	}
 }

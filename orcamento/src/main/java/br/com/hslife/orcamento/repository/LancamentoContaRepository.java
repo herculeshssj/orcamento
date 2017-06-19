@@ -55,23 +55,56 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
 
 @Repository
 public class LancamentoContaRepository extends AbstractCRUDRepository<LancamentoConta> {
 	
 	public LancamentoContaRepository() {
 		super(new LancamentoConta());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoPanoramaCadastro> findLancamentoForPanoramaCadastro(Conta conta, CadastroSistema cadastro, Long idAgrupamento) {
+		String agrupamento = null;
+		switch (cadastro) {
+		case CATEGORIA:
+			agrupamento = "lancamento.categoria.id = :idAgrupamento";
+			break;
+		case FAVORECIDO:
+			agrupamento = "lancamento.favorecido.id = :idAgrupamento";
+			break;
+		case MEIOPAGAMENTO:
+			agrupamento = "lancamento.meioPagamento.id = :idAgrupamento";
+			break;
+		case MOEDA:
+			agrupamento = "lancamento.moeda.id = :idAgrupamento";
+			break;
+		default:
+			agrupamento = "1 = 1";
+			break;
+		}
+		
+		return getQuery("SELECT lancamento.tipoLancamento as tipoLancamento, lancamento.dataPagamento as dataPagamento, lancamento.valorPago as valorPago, "
+				+ "taxa.valorMoedaDestino as valorMoedaDestino FROM LancamentoConta lancamento LEFT JOIN lancamento.taxaConversao taxa WHERE "
+				+ "lancamento.conta.id = :idConta AND " + agrupamento)
+				.setLong("idConta", conta.getId())
+				.setLong("idAgrupamento", idAgrupamento)
+				.setResultTransformer(new AliasToBeanResultTransformer(LancamentoPanoramaCadastro.class))
+				.list();		
 	}
 	
 	@SuppressWarnings("unchecked")

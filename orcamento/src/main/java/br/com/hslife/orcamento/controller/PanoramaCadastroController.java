@@ -74,7 +74,7 @@ import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 
-@Component("panoramaCadastroMB")
+@Component
 @Scope("session")
 public class PanoramaCadastroController extends AbstractController {
 

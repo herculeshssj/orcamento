@@ -55,7 +55,7 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{panoramaCadastroMB}" />
+	<ui:param name="managedBean" value="#{panoramaCadastroController}" />
 	
 	<ui:define name="pesquisa">
 		<h:panelGrid columns="3">
@@ -64,7 +64,7 @@
 				Cadastro:
 				<h:selectOneMenu value="#{managedBean.cadastroSelecionado}">
 					<f:selectItems value="#{managedBean.listaCadastro}"/>
-					<p:ajax update="txtRegistro" listener="#{panoramaCadastroMB.getListaRegistro}" />
+					<p:ajax update="txtRegistro" listener="#{panoramaCadastroController.getListaRegistro}" />
 				</h:selectOneMenu>
 			</h:panelGroup>
 			<h:panelGroup>

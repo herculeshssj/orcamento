@@ -52,10 +52,12 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
+import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
 
 public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
@@ -84,4 +86,6 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	public LancamentoConta buscarUltimoPagamentoPeriodoGerado(LancamentoPeriodico lancamentoPeriodico);
 	
 	public List<LancamentoConta> buscarPorLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico);
+	
+	public List<LancamentoPanoramaCadastro> buscarLancamentoParaPanoramaCadastro(Conta conta, CadastroSistema cadastro, Long idAgrupamento);
 }
