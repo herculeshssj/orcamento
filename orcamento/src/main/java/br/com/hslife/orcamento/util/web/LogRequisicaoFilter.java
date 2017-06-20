@@ -47,7 +47,10 @@
 package br.com.hslife.orcamento.util.web;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -62,6 +65,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import br.com.hslife.orcamento.entity.LogRequisicao;
+import br.com.hslife.orcamento.repository.ConnectionFactory;
 import br.com.hslife.orcamento.util.Util;
 
 @WebFilter(urlPatterns="/*")
@@ -81,38 +86,50 @@ public class LogRequisicaoFilter implements Filter {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		try {
 			// A gravação será somente do request. Não iremos monitorar o response
 			if (request instanceof HttpServletRequest) {
+				
+				LogRequisicao logRequisicao = new LogRequisicao();
+				
 				HttpServletRequest req = (HttpServletRequest)request;
+				HttpSession sessao = req.getSession();
 				
 				// Pega as informações do usuário para validar
-				String url = req.getRequestURL().toString();
-				String queryString = req.getQueryString();
+				logRequisicao.setUrl(req.getRequestURL().toString());
+				logRequisicao.setQueryString(req.getQueryString());
 				
-				if (url == null) 
-					url = "";
+				if (logRequisicao.getUrl() == null) 
+					logRequisicao.setUrl("");
 				
-				if (queryString == null)
-					queryString = "";
+				if (logRequisicao.getQueryString() == null)
+					logRequisicao.setQueryString("");
 				
-				HttpSession sessao = req.getSession();
-				String sessaoID = "";
 				if (sessao != null) {
-					sessaoID = sessao.getId();
+					logRequisicao.setSessaoID(sessao.getId());
 				}
 				
+				logRequisicao.setIp(request.getRemoteAddr());
+				logRequisicao.setMetodo(req.getMethod());
+				logRequisicao.setParams(Util.gerarJsonArray(request.getParameterMap()));
+				logRequisicao.setSessaoCriadaEm(new Date(sessao.getCreationTime()));
+				logRequisicao.setUuid(UUID.randomUUID().toString());
+				
 				// Grava as informações do usuário na base
-				System.out.println("IP: " + request.getRemoteAddr());
-				System.out.println("Método: " + req.getMethod());
-				System.out.println("URL: " + url);
-				System.out.println("Query string: " + queryString);
-				System.out.println(Util.gerarJsonArray(request.getParameterMap()));
-				System.out.println("Sessão ID:" + sessaoID);
-				System.out.println("Sessão criada em:" + new Date(sessao.getCreationTime()).toString());
+				System.out.println("UUID: " + logRequisicao.getUuid());
+				System.out.println("IP: " + logRequisicao.getIp());
+				System.out.println("Método: " + logRequisicao.getMetodo());
+				System.out.println("URL: " + logRequisicao.getUrl());
+				System.out.println("Query string: " + logRequisicao.getQueryString());
+				System.out.println("Params: " + logRequisicao.getParams());
+				System.out.println("Sessão ID:" + logRequisicao.getSessaoID());
+				System.out.println("Sessão criada em:" + logRequisicao.getSessaoCriadaEm().toString());
 				System.out.println("/********************************************************************/");
+				
+				this.salvarLogRequisicao(logRequisicao);
 			}
 			
 			// Retorna o controle do fluxo da requisição
@@ -120,12 +137,45 @@ public class LogRequisicaoFilter implements Filter {
 		
 		} catch (ServletException se) {
 			logger.catching(se);
+			se.printStackTrace();
 			throw new ServletException(se);
 		} catch (IOException ie) {
 			logger.catching(ie);
+			ie.printStackTrace();
 			throw new IOException(ie);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.catching(e);
 		}
-	}	
+	}
+	
+	private void salvarLogRequisicao(LogRequisicao logRequisicao) throws Exception {
+		try {
+			// Pega uma nova conexão do pool de conexões do Datasource
+			Connection connection = ConnectionFactory.getDatabaseConnection();
+			
+			// Prepara a statement
+			PreparedStatement pstm = connection.prepareStatement("INSERT INTO logrequisicao "
+					+ "(uuid,ip,metodo,url,queryString,params,sessaoID,sessaoCriadaEm) VALUES (?,?,?,?,?,?,?,?)");
+			
+			pstm.setString(1, UUID.randomUUID().toString()); // chave primária
+			pstm.setString(2, logRequisicao.getIp());
+			pstm.setString(3, logRequisicao.getMetodo());
+			pstm.setString(4, logRequisicao.getUrl());
+			pstm.setString(5, logRequisicao.getQueryString());
+			pstm.setString(6, logRequisicao.getParams());
+			pstm.setString(7, logRequisicao.getSessaoID());
+			pstm.setDate(8, new java.sql.Date(logRequisicao.getSessaoCriadaEm().getTime()));
+			
+			pstm.executeUpdate();
+			
+			// Fecha os recursos abertos
+			pstm.close();
+			connection.close();			
+		} catch (Exception e) {
+			logger.catching(e);
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+	}
 }
