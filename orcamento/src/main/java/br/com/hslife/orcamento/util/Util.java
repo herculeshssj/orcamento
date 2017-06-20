@@ -53,11 +53,16 @@ import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.json.JSONObject;
 
 public class Util {
 	
@@ -425,4 +430,32 @@ public class Util {
     	
     	return contador;
     }
+    
+    public static String gerarJson(Map<String, String> dados) {
+    	if (dados != null && !dados.isEmpty()) {
+    		JSONObject json = new JSONObject();
+    		
+    		for (String s : dados.keySet()) {
+    			json.put(s, dados.get(s));
+    		}
+    		
+    		return json.toString();
+    	}
+    	
+    	return "{}";
+	}
+    
+    public static String gerarJsonArray(Map<String, String[]> dados) {
+    	if (dados != null && !dados.isEmpty()) {
+    		JSONObject json = new JSONObject();
+    		
+    		for (String s : dados.keySet()) {
+    			json.put(s, Arrays.toString(dados.get(s)));
+    		}
+    		
+    		return json.toString();
+    	}
+    	
+    	return "{}";
+	}
 }
