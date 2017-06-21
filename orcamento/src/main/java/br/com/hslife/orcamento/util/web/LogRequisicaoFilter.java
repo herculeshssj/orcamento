@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.util.web;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
@@ -66,6 +67,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.hslife.orcamento.entity.LogRequisicao;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.repository.ConnectionFactory;
 import br.com.hslife.orcamento.util.Util;
 
@@ -77,13 +79,11 @@ public class LogRequisicaoFilter implements Filter {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		System.out.println("Iniciado log da requisição...");
-		
 	}
 	
 	@Override
 	public void destroy() {
 		System.out.println("Finalizado o log da requisição.");
-		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -112,22 +112,22 @@ public class LogRequisicaoFilter implements Filter {
 					logRequisicao.setSessaoID(sessao.getId());
 				}
 				
+				if (sessao != null) {
+					Usuario u = (Usuario)sessao.getAttribute("usuarioLogado");
+					if (u != null) {
+						logRequisicao.setUsuario(u.getLogin());
+					} else {
+						logRequisicao.setUsuario("");
+					}
+				}
+				
 				logRequisicao.setIp(request.getRemoteAddr());
 				logRequisicao.setMetodo(req.getMethod());
 				logRequisicao.setParams(Util.gerarJsonArray(request.getParameterMap()));
 				logRequisicao.setSessaoCriadaEm(new Date(sessao.getCreationTime()));
+				logRequisicao.setDataHora(new Date());
 				logRequisicao.setUuid(UUID.randomUUID().toString());
-				
-				// Grava as informações do usuário na base
-				System.out.println("UUID: " + logRequisicao.getUuid());
-				System.out.println("IP: " + logRequisicao.getIp());
-				System.out.println("Método: " + logRequisicao.getMetodo());
-				System.out.println("URL: " + logRequisicao.getUrl());
-				System.out.println("Query string: " + logRequisicao.getQueryString());
-				System.out.println("Params: " + logRequisicao.getParams());
-				System.out.println("Sessão ID:" + logRequisicao.getSessaoID());
-				System.out.println("Sessão criada em:" + logRequisicao.getSessaoCriadaEm().toString());
-				System.out.println("/********************************************************************/");
+				logRequisicao.setUserAgent(req.getHeader("User-Agent"));
 				
 				this.salvarLogRequisicao(logRequisicao);
 			}
@@ -156,7 +156,7 @@ public class LogRequisicaoFilter implements Filter {
 			
 			// Prepara a statement
 			PreparedStatement pstm = connection.prepareStatement("INSERT INTO logrequisicao "
-					+ "(uuid,ip,metodo,url,queryString,params,sessaoID,sessaoCriadaEm) VALUES (?,?,?,?,?,?,?,?)");
+					+ "(uuid,ip,metodo,url,queryString,params,sessaoID,sessaoCriadaEm,dataHora,userAgent,usuario) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 			
 			pstm.setString(1, UUID.randomUUID().toString()); // chave primária
 			pstm.setString(2, logRequisicao.getIp());
@@ -165,7 +165,10 @@ public class LogRequisicaoFilter implements Filter {
 			pstm.setString(5, logRequisicao.getQueryString());
 			pstm.setString(6, logRequisicao.getParams());
 			pstm.setString(7, logRequisicao.getSessaoID());
-			pstm.setDate(8, new java.sql.Date(logRequisicao.getSessaoCriadaEm().getTime()));
+			pstm.setTimestamp(8, new Timestamp(logRequisicao.getSessaoCriadaEm().getTime()));
+			pstm.setTimestamp(9, new Timestamp(logRequisicao.getDataHora().getTime()));
+			pstm.setString(10, logRequisicao.getUserAgent());
+			pstm.setString(11, logRequisicao.getUsuario());
 			
 			pstm.executeUpdate();
 			

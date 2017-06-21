@@ -58,6 +58,9 @@ public class LogRequisicao {
 	private String params;
 	private String sessaoID;
 	private Date sessaoCriadaEm;
+	private Date dataHora;
+	private String usuario;
+	private String userAgent;
 	
 	public LogRequisicao() {
 		
@@ -125,5 +128,29 @@ public class LogRequisicao {
 
 	public void setParams(String params) {
 		this.params = params;
+	}
+
+	public Date getDataHora() {
+		return dataHora;
+	}
+
+	public void setDataHora(Date dataHora) {
+		this.dataHora = dataHora;
+	}
+	
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getUserAgent() {
+		return userAgent;
+	}
+
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
 	}
 }
