@@ -46,15 +46,18 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Logs;
 import br.com.hslife.orcamento.model.CriterioLog;
+import br.com.hslife.orcamento.model.UsuarioLogado;
 
 @Repository
 public class LogRepository extends AbstractRepository {
@@ -96,5 +99,18 @@ public class LogRepository extends AbstractRepository {
 	
 	public Logs findMostRecentException() {
 		return (Logs)getQuery("FROM Logs log WHERE log.logLevel = 'ERROR' AND log.sendToAdmin = false ORDER BY log.logDate DESC").setMaxResults(1).uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UsuarioLogado> findAllUsuarioLogado() {
+		// Data atual menos 30 minutos
+		Calendar dataAtual = Calendar.getInstance();
+		dataAtual.add(Calendar.MINUTE, -30);
+		
+		return getQuery("SELECT DISTINCT log.usuario as usuario, log.ip as ip, log.sessaoCriadaEm as dataEntrada, log.sessaoID as sessaoID, "
+				+ "log.dataHora as ultimaAtividade FROM LogRequisicao log WHERE log.dataHora >= :dataEntrada AND log.usuario <> ''")
+				.setCalendar("dataEntrada", dataAtual)
+				.setResultTransformer(new AliasToBeanResultTransformer(UsuarioLogado.class))
+				.list();
 	}
 }

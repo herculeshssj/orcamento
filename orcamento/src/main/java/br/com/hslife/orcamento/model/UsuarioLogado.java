@@ -44,29 +44,63 @@
 
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.model;
 
-import java.util.List;
+import java.util.Date;
 
-import br.com.hslife.orcamento.entity.Logs;
-import br.com.hslife.orcamento.model.CriterioLog;
-import br.com.hslife.orcamento.model.UsuarioLogado;
+public class UsuarioLogado {
+	
+	private String usuario;
+	
+	private String ip;
+	
+	private Date dataEntrada;
+	
+	private String sessaoID;
+	
+	private Date ultimaAtividade;
+	
+	public UsuarioLogado() {
+		
+	}
 
-public interface ILog {
-	
-	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca);
+	public String getUsuario() {
+		return usuario;
+	}
 
-	public List<String> buscarTodosNiveis();
-	
-	public List<String> buscarTodosLoggers();
-	
-	public Logs buscarPorID(Long id);
-	
-	public void excluir(Logs logs);
-	
-	public void alterar(Logs logs);
-	
-	public Logs buscarExcecaoMaisRecente();
-	
-	public List<UsuarioLogado> buscarTodosUsuarioLogado();
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public Date getDataEntrada() {
+		return dataEntrada;
+	}
+
+	public void setDataEntrada(Date dataEntrada) {
+		this.dataEntrada = dataEntrada;
+	}
+
+	public String getSessaoID() {
+		return sessaoID;
+	}
+
+	public void setSessaoID(String sessaoID) {
+		this.sessaoID = sessaoID;
+	}
+
+	public Date getUltimaAtividade() {
+		return ultimaAtividade;
+	}
+
+	public void setUltimaAtividade(Date ultimaAtividade) {
+		this.ultimaAtividade = ultimaAtividade;
+	}
 }

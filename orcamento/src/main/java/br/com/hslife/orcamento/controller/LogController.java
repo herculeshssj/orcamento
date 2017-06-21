@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.model.CriterioLog;
+import br.com.hslife.orcamento.model.UsuarioLogado;
 
 @Component("logMB")
 @Scope("session")
@@ -124,6 +125,10 @@ public class LogController extends AbstractController {
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+	}
+	
+	public List<UsuarioLogado> getUsuariosLogados() {
+		return getService().buscarTodosUsuarioLogado();
 	}
 	
 	public void excluirLog() {

@@ -155,4 +155,9 @@
 		<error-code>404</error-code>
 		<location>/erro404.jsp</location>
 	</error-page>
+	
+	<!-- Session idle timeout in minutes -->
+	<session-config>
+      <session-timeout>30</session-timeout>
+    </session-config>
 </web-app>

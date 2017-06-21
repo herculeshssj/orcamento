@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.Logs;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.model.CriterioLog;
+import br.com.hslife.orcamento.model.UsuarioLogado;
 import br.com.hslife.orcamento.repository.LogRepository;
 
 @Service("logService")
@@ -109,5 +110,10 @@ public class LogService implements ILog {
 	public Logs buscarExcecaoMaisRecente() {
 		// Traz o log de exceção mais recente que não tenha sido enviado ainda para o Admininstrador do Sistema
 		return getRepository().findMostRecentException();
+	}
+	
+	@Override
+	public List<UsuarioLogado> buscarTodosUsuarioLogado() {
+		return getRepository().findAllUsuarioLogado();
 	}
 }

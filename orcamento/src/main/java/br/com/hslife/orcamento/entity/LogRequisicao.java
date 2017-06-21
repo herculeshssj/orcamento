@@ -48,19 +48,51 @@ package br.com.hslife.orcamento.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name="logrequisicao")
 public class LogRequisicao {	
 	
+	@Id
 	private String uuid;
+	
+	@Column(length=40)
 	private String ip;
+	
+	@Column(length=8)
 	private String metodo;
+	
+	@Column(length=1024)
 	private String url;
+	
+	@Column(length=1024)
 	private String queryString;
+	
+	@Column(columnDefinition="text")
 	private String params;
+	
+	@Column(length=32)
 	private String sessaoID;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date sessaoCriadaEm;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataHora;
+	
+	@Column(length=50)
 	private String usuario;
+	
+	@Column(length=500)
 	private String userAgent;
+	
+	@Column
 	private int tempo;
 	
 	public LogRequisicao() {

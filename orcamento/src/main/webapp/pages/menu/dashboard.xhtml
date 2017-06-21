@@ -168,6 +168,43 @@
 			  		</h:column>
 		  		</h:dataTable>
 	  		</h:panelGroup>
+	  		
+	  		<h:panelGroup rendered="#{not empty logMB.usuariosLogados and logMB.usuarioLogado.login == 'admin'}">
+		  		<h5>Usuários logados</h5>
+				
+				<h:dataTable value="#{logMB.usuariosLogados}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Usuário"/>
+						</f:facet>
+						<h:outputText value="#{item.usuario}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="IP"/>
+						</f:facet>
+						<h:outputText value="#{item.ip}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Entrou em"/>
+						</f:facet>
+						<h:outputText value="#{item.dataEntrada}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="ID da Sessão"/>
+						</f:facet>
+						<h:outputText value="#{item.sessaoID}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Última atividade"/>
+						</f:facet>
+						<h:outputText value="#{item.ultimaAtividade}" />
+			  		</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
   		
   		</h:form>
      
