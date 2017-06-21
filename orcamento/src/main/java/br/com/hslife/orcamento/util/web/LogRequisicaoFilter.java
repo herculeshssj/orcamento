@@ -78,22 +78,25 @@ public class LogRequisicaoFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		System.out.println("Iniciado log da requisição...");
+		System.out.println("Iniciado log das requisições...");
 	}
 	
 	@Override
 	public void destroy() {
-		System.out.println("Finalizado o log da requisição.");
+		System.out.println("Finalizado o log das requisições.");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		try {
+			
+			LogRequisicao logRequisicao = new LogRequisicao();
+			
+			long inicioRequisicao = System.currentTimeMillis();
+			
 			// A gravação será somente do request. Não iremos monitorar o response
 			if (request instanceof HttpServletRequest) {
-				
-				LogRequisicao logRequisicao = new LogRequisicao();
 				
 				HttpServletRequest req = (HttpServletRequest)request;
 				HttpSession sessao = req.getSession();
@@ -128,12 +131,14 @@ public class LogRequisicaoFilter implements Filter {
 				logRequisicao.setDataHora(new Date());
 				logRequisicao.setUuid(UUID.randomUUID().toString());
 				logRequisicao.setUserAgent(req.getHeader("User-Agent"));
-				
-				this.salvarLogRequisicao(logRequisicao);
 			}
 			
 			// Retorna o controle do fluxo da requisição
 			chain.doFilter(request, response);
+			
+			logRequisicao.setTempo((int)(System.currentTimeMillis() - inicioRequisicao));
+			
+			this.salvarLogRequisicao(logRequisicao);
 		
 		} catch (ServletException se) {
 			logger.catching(se);
@@ -156,7 +161,7 @@ public class LogRequisicaoFilter implements Filter {
 			
 			// Prepara a statement
 			PreparedStatement pstm = connection.prepareStatement("INSERT INTO logrequisicao "
-					+ "(uuid,ip,metodo,url,queryString,params,sessaoID,sessaoCriadaEm,dataHora,userAgent,usuario) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+					+ "(uuid,ip,metodo,url,queryString,params,sessaoID,sessaoCriadaEm,dataHora,userAgent,usuario,tempo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 			
 			pstm.setString(1, UUID.randomUUID().toString()); // chave primária
 			pstm.setString(2, logRequisicao.getIp());
@@ -169,6 +174,7 @@ public class LogRequisicaoFilter implements Filter {
 			pstm.setTimestamp(9, new Timestamp(logRequisicao.getDataHora().getTime()));
 			pstm.setString(10, logRequisicao.getUserAgent());
 			pstm.setString(11, logRequisicao.getUsuario());
+			pstm.setLong(12, logRequisicao.getTempo());
 			
 			pstm.executeUpdate();
 			

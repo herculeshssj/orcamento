@@ -61,6 +61,7 @@ public class LogRequisicao {
 	private Date dataHora;
 	private String usuario;
 	private String userAgent;
+	private int tempo;
 	
 	public LogRequisicao() {
 		
@@ -152,5 +153,13 @@ public class LogRequisicao {
 
 	public void setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
+	}
+
+	public int getTempo() {
+		return tempo;
+	}
+
+	public void setTempo(int tempo) {
+		this.tempo = tempo;
 	}
 }
