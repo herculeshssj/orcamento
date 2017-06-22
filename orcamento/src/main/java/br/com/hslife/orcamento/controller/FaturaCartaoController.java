@@ -570,6 +570,13 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				return "";
 			}
 			
+			// Verifica se o lançamento selecionado foi usado para pagar outra fatura
+			FaturaCartao fatura = getService().buscarFaturaPagaPorLancamentoConta(lancamento);
+			if (fatura != null) {
+				errorMessage("Lançamento selecionado já foi usado para quitar uma fatura!");
+				return "";
+			}
+			
 			lancamentosEncontrados.clear();
 			lancamentosEncontrados.add(lancamento);
 		}

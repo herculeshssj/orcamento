@@ -58,6 +58,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
+import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 import br.com.hslife.orcamento.util.Util;
@@ -209,4 +210,10 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 		
 		return result;
 	} 
+	
+	public FaturaCartao findFaturaPagaByLancamentoConta(LancamentoConta lancamentoConta) {
+		return (FaturaCartao)getQuery("FROM FaturaCartao fatura WHERE fatura.lancamentoPagamento.id = :idLancamento")
+				.setLong("idLancamento", lancamentoConta.getId())
+				.uniqueResult();
+	}
 }

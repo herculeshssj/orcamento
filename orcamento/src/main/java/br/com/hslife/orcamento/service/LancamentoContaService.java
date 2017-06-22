@@ -56,6 +56,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
@@ -71,6 +72,7 @@ import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
+import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.util.LancamentoContaUtil;
@@ -86,6 +88,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private LancamentoImportadoRepository lancamentoImportadoRepository;
+	
+	@Autowired
+	private FaturaCartaoRepository faturaCartaoRepository;
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
@@ -104,6 +109,11 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		return lancamentoImportadoRepository;
 	}
 	
+	public FaturaCartaoRepository getFaturaCartaoRepository() {
+		this.faturaCartaoRepository.setSessionFactory(this.sessionFactory);
+		return faturaCartaoRepository;
+	}
+
 	public IMoeda getMoedaService() {
 		return moedaService;
 	}
@@ -169,6 +179,8 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			}
 		}
 		
+		this.alteraDataPagamentoFaturaCartao(entity);
+		
 		// Define o status do lançamento da conta
 		if (!entity.getStatusLancamentoConta().equals(StatusLancamentoConta.QUITADO)) {
 			if (entity.getDataPagamento().before(new Date())) {
@@ -179,6 +191,27 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		}
 		
 		super.alterar(entity);
+	}
+
+	/*
+	 * Confere se o lançamento representa o pagamento de uma fatura, e se sofreu mudança na sua data de pagamento
+	 * Caso tenha sofrido, atualiza a data de pagamento da fatura do cartão.
+	 */
+	private void alteraDataPagamentoFaturaCartao(LancamentoConta entity) {
+		// Traz uma instância do lançamento da base
+		LancamentoConta lancamento = getRepository().findById(entity.getId());
+		
+		// Compara para ver se a data de pagamento não foi alterada
+		if (!lancamento.getDataPagamento().equals(entity.getDataPagamento())) {
+			// Busca a fatura que o lançamento está vinculado
+			FaturaCartao fatura = getFaturaCartaoRepository().findFaturaPagaByLancamentoConta(lancamento);
+			
+			// Altera a data de pagamento da fatura
+			fatura.setDataPagamento(entity.getDataPagamento());
+			
+			// Salva a fatura
+			getFaturaCartaoRepository().update(fatura);
+		}
 	}
 
 	@Override
