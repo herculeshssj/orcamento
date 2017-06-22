@@ -124,6 +124,25 @@
 		
 		<hr/>
 		
+		<h:panelGroup rendered="#{managedBean.usuarioLogado.login == 'admin'}">
+		<fieldset>
+			<legend>Logs de acesso </legend>
+			
+			<h:panelGrid columns="3">
+			
+				Manter logs por:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['LOGS_NUM_PERIODO']}" />
+				<h:selectOneMenu value="#{managedBean.opcoesGlobalAdmin['LOGS_PERIODO']}">
+					<f:selectItems value="#{enumCombo.listaPeriodoLogs}" />
+				</h:selectOneMenu>
+			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+		
 		<h:panelGroup>
 		<fieldset>
 			<legend>Configurações de contas</legend>

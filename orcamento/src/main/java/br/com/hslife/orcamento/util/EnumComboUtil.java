@@ -59,6 +59,7 @@ import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
+import br.com.hslife.orcamento.enumeration.PeriodoLogs;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
@@ -216,6 +217,14 @@ public class EnumComboUtil {
 	public List<SelectItem> getListaTipoTratamento() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (TipoTratamento enumeration : TipoTratamento.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaPeriodoLogs() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (PeriodoLogs enumeration : PeriodoLogs.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

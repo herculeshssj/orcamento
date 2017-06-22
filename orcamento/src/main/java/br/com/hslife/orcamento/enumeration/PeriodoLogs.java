@@ -44,31 +44,49 @@
 
 ***/
 
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.enumeration;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Calendar;
+import java.util.Date;
 
-import br.com.hslife.orcamento.entity.OpcaoSistema;
-import br.com.hslife.orcamento.entity.Usuario;
-
-public interface IOpcaoSistema {
+public enum PeriodoLogs { 
+	DIA("Dia(s)"), 
+	MES("Mes(es)"), 
+	ANO("Ano(s)"), 
+	BIMESTRE("Bimestre(s)"), 
+	TRIMESTRE("Trimestre(s)"), 
+	QUADRIMESTRE("Quadrimestre(s)"),
+	SEMESTRE("Semestre(s)");
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema);
+	private String descricao;
 	
-	public List<OpcaoSistema> buscarOpcoesGlobalAdmin();
+	private PeriodoLogs(String descricao) {
+		this.descricao = descricao;
+	}
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario);
+	@Override
+	public String toString() {		
+		return this.descricao;
+	}
 	
-	public Map<String, Object> buscarMapOpcoesGlobalAdmin();
-	
-	public Map<String, Object> buscarMapOpcoesUser(Usuario usuario);
-
-	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu);
-	
-	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario);
-	
-	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario); 
-	
-	public OpcaoSistema buscarOpcaoGlobalAdminPorChave(String chave);
+	/*
+	 * Retrocede a data atual para a quantidade do períiodo
+	 * indicado na instância
+	 */
+	public Date getDataPeriodo(int quantidade) {
+		Calendar temp = Calendar.getInstance();
+		
+		switch (this) {
+			case DIA : temp.add(Calendar.DAY_OF_YEAR, -quantidade); break;
+			case MES : temp.add(Calendar.MONTH, -quantidade); break;
+			case ANO : temp.add(Calendar.YEAR, -quantidade); break;
+			case BIMESTRE : temp.add(Calendar.MONTH, -(quantidade * 2)); break;
+			case TRIMESTRE : temp.add(Calendar.MONTH, -(quantidade * 3)); break;
+			case QUADRIMESTRE : temp.add(Calendar.MONTH, -(quantidade * 4)); break;
+			case SEMESTRE : temp.add(Calendar.MONTH, -(quantidade * 6)); break;
+			default: throw new IllegalArgumentException("Valor incorreto!");
+		}
+		
+		return temp.getTime();
+	}
 }

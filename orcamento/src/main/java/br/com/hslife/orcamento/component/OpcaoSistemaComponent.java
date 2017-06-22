@@ -59,6 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.PeriodoLogs;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
@@ -361,5 +362,29 @@ public class OpcaoSistemaComponent {
 			logger.catching(e);
 		}
 		return true;
+	}
+	
+	public PeriodoLogs getLogPeriodo() {
+		OpcaoSistema opcaoSistema = getService().buscarOpcaoGlobalAdminPorChave("LOGS_PERIODO");
+		
+		PeriodoLogs periodo = PeriodoLogs.MES; //valor padrão
+		
+		if (opcaoSistema != null) {
+			periodo = PeriodoLogs.valueOf(opcaoSistema.getValor());
+		}
+		
+		return periodo;
+	}
+	
+	public Integer getLogNumPeriodo() {
+		Integer quantidade = 6; // valor padrão
+		
+		OpcaoSistema opcaoSistema = getService().buscarOpcaoGlobalAdminPorChave("LOGS_NUM_PERIODO");
+		
+		if (opcaoSistema != null) {
+			quantidade = Integer.parseInt(opcaoSistema.getValor());
+		}
+		
+		return quantidade;
 	}
 }

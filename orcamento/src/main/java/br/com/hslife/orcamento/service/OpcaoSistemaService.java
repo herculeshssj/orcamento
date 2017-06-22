@@ -220,4 +220,9 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario) {
 		return getRepository().findOpcoesUserByCasoUso(casoDeUso, usuario);
 	}
+	
+	@Override
+	public OpcaoSistema buscarOpcaoGlobalAdminPorChave(String chave) {
+		return getRepository().findOpcaoGlobalAdminByChave(chave);
+	}
 }
