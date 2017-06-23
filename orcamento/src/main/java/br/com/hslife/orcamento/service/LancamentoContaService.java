@@ -206,11 +206,13 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 			// Busca a fatura que o lançamento está vinculado
 			FaturaCartao fatura = getFaturaCartaoRepository().findFaturaPagaByLancamentoConta(lancamento);
 			
-			// Altera a data de pagamento da fatura
-			fatura.setDataPagamento(entity.getDataPagamento());
-			
-			// Salva a fatura
-			getFaturaCartaoRepository().update(fatura);
+			if (fatura != null) {
+				// Altera a data de pagamento da fatura
+				fatura.setDataPagamento(entity.getDataPagamento());
+				
+				// Salva a fatura
+				getFaturaCartaoRepository().update(fatura);
+			}
 		}
 	}
 

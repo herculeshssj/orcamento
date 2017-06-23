@@ -107,8 +107,8 @@ public class LogRepository extends AbstractRepository {
 		Calendar dataAtual = Calendar.getInstance();
 		dataAtual.add(Calendar.MINUTE, -30);
 		
-		return getQuery("SELECT DISTINCT log.usuario as usuario, log.ip as ip, log.sessaoCriadaEm as dataEntrada, log.sessaoID as sessaoID, "
-				+ "log.dataHora as ultimaAtividade FROM LogRequisicao log WHERE log.dataHora >= :dataEntrada AND log.usuario <> ''")
+		return getQuery("SELECT DISTINCT log.usuario as usuario, log.ip as ip, log.sessaoCriadaEm as dataEntrada, log.sessaoID as sessaoID "
+				+ "FROM LogRequisicao log WHERE log.dataHora >= :dataEntrada AND log.usuario <> ''")
 				.setCalendar("dataEntrada", dataAtual)
 				.setResultTransformer(new AliasToBeanResultTransformer(UsuarioLogado.class))
 				.list();

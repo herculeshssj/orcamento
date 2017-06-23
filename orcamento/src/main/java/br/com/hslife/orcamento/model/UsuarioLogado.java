@@ -58,8 +58,6 @@ public class UsuarioLogado {
 	
 	private String sessaoID;
 	
-	private Date ultimaAtividade;
-	
 	public UsuarioLogado() {
 		
 	}
@@ -94,13 +92,5 @@ public class UsuarioLogado {
 
 	public void setSessaoID(String sessaoID) {
 		this.sessaoID = sessaoID;
-	}
-
-	public Date getUltimaAtividade() {
-		return ultimaAtividade;
-	}
-
-	public void setUltimaAtividade(Date ultimaAtividade) {
-		this.ultimaAtividade = ultimaAtividade;
 	}
 }
