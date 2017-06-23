@@ -44,7 +44,7 @@
 
 ***/
 
-package br.com.hslife.orcamento.util;
+package br.com.hslife.orcamento.util.web;
 
 import java.util.Map;
 

@@ -44,52 +44,41 @@
 
 ***/
 
-package br.com.hslife.orcamento.util;
+package br.com.hslife.orcamento.util.web;
 
-import java.util.Map;
-
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
+import javax.el.ValueExpression;
+import javax.faces.component.html.HtmlOutputText;
 
 import org.primefaces.component.inputmask.InputMask;
 
+import br.com.hslife.orcamento.converter.DateConverter;
+
 /**
- * Cria os componentes PrimeFaces que herdam de UIComponent,
- * como InputMask e FileUpload.
+ * Cria componentes já pré-definidos para uso em 
+ * formulários dinâmicos, como campos de data
+ * formatados, e colunas de tabelas com estilo.
  * 
  * @author herculeshssj
  *
  */
-public class PrimeFacesComponentUtil {
+public class CustomComponentUtil {
 	
 	// Classe não pode ser instanciada
-	private PrimeFacesComponentUtil() {}
+	private CustomComponentUtil() {}
 	
 	/*
-	 * Cria um novo <p:inputMask /> do PrimeFaces
-	 */
-	public static InputMask createInputMask(String id, String value, String mask, Map<String, Object> params) {
-		InputMask inputMask = (InputMask)FacesContext.getCurrentInstance().getApplication().createComponent(InputMask.COMPONENT_TYPE);
-		inputMask.setId(id);
-		inputMask.setValue(value);
-		inputMask.setMask(mask);
-		
-		try {
-			// Caso haja mais parâmetros a serem setados, estes parâmetros estarão no Map
-			if (params != null && !params.isEmpty()) {
-				// Configure a partir daqui a atribuição dinâmica dos atribos do inputMask
-				
-				// Atributo "rendered"
-				inputMask.setRendered(params.containsKey("rendered") ? (Boolean) params.get("rendered") : true);
-				
-				// Atributo "converter"
-				inputMask.setConverter(params.containsKey("converter") ? (Converter)params.get("converter") : null);
-				
-			}
-		} catch (Exception e) {
-			// Encapsula a exceção original na IllegalArgumentException e relança a exceção
-			throw new IllegalArgumentException(e.getCause());
-		}
+	 * Cria um InputMask do PrimeFaces com a máscara no formato DD/MM/AAAA já com o DateConverter definido.
+	 * Este InputMask recebe um value expression em Expression Language a fim de setar um atributo no 
+	 * ManagedBean. 
+	 */	
+	public static InputMask createDateTimeField(String id, ValueExpression valueExpression) {
+		InputMask inputMask = PrimeFacesComponentUtil.createInputMask(id, null, "99/99/9999", null);
+		inputMask.setValueExpression("value", valueExpression);
+		inputMask.setConverter(new DateConverter());
 		return inputMask;
+	}
+	
+	public static HtmlOutputText createLabelField(String id, String value) {
+		return JSFComponentUtil.createOutputText(id, value, null);
 	}
 }

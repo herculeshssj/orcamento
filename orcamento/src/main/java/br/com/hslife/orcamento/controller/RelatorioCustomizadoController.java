@@ -67,7 +67,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
 import br.com.hslife.orcamento.util.RelatorioColunaComparator;
-import br.com.hslife.orcamento.util.RelatorioCustomizadoUtil;
+import br.com.hslife.orcamento.util.web.RelatorioCustomizadoUtil;
 
 @Component("relatorioCustomizadoMB")
 @Scope("session")
