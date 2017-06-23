@@ -454,8 +454,15 @@
 	    <artifactId>spring-security-config</artifactId>
 	    <version>3.1.7.RELEASE</version>
 	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>3.0.1</version>
+	</dependency>
   </dependencies>
-  
+
   <build>
     <finalName>orcamento</finalName>
   </build>
