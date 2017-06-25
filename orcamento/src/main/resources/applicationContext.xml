@@ -127,4 +127,10 @@
 	            authorities-by-username-query="select login as username, tipoUsuario as authority from usuario where login=?" />
 	    </sec:authentication-provider>
 	</sec:authentication-manager>
+	
+	<!-- application.wadl -->
+	<!--
+		Referência: https://stackoverflow.com/questions/31893335/spring-mvc-autowire-requestmappinghandlermapping 
+	 -->
+	<bean name="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 </beans>
