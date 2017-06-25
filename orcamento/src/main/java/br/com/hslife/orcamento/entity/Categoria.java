@@ -61,6 +61,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -119,6 +120,12 @@ public class Categoria extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de categoria", this.tipoCategoria);
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void setId(Long id) {

@@ -67,6 +67,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.Container;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 
 @Entity
 @Table(name="arquivo")
@@ -141,6 +142,12 @@ public class Arquivo extends EntityPersistence {
 			case PAGAMENTODIVIDATERCEIRO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_PAGAMENTODIVIDATERCEIRO"));
 		}
 		return false;
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void setId(Long id) {

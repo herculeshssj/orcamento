@@ -63,6 +63,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -120,6 +121,12 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 	
 	public double getValorPagoConvertido() {
 		return Util.arredondar(this.valorPago * this.taxaConversao);
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public Long getId() {

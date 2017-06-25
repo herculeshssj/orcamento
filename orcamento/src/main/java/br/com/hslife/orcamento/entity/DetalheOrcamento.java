@@ -61,6 +61,7 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.hslife.orcamento.enumeration.SituacaoOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -222,6 +223,12 @@ public class DetalheOrcamento extends EntityPersistence {
 		if (Math.floor(getPorcentagemDebito()) > 70 && Math.floor(getPorcentagemDebito()) <= 100) return SituacaoOrcamento.REGULAR;
 		if (Math.floor(getPorcentagemDebito()) > 100) return SituacaoOrcamento.RUIM;			
 		return SituacaoOrcamento.BOM;
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	public Long getId() {

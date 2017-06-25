@@ -65,6 +65,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -120,6 +121,12 @@ public class FechamentoPeriodo extends EntityPersistence {
 	@Override
 	public void validate() {
 				
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void setId(Long id) {

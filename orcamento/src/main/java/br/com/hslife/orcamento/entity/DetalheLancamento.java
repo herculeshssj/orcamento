@@ -57,6 +57,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -81,6 +82,10 @@ public class DetalheLancamento extends EntityPersistence {
 	
 	@Column(precision=18, scale=2)
 	private double valor;
+	
+	public DetalheLancamento() {
+	
+	}
 
 	@Override
 	public String getLabel() {
@@ -110,6 +115,12 @@ public class DetalheLancamento extends EntityPersistence {
 			data.setSeconds(0);
 		}
 		this.data = data;
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public Long getId() {

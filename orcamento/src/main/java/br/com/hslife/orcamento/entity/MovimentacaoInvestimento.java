@@ -60,6 +60,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -129,6 +130,12 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Data", this.data);
 	}
 
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public Long getId() {
 		return id;
 	}

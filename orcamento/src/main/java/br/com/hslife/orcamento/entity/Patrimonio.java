@@ -59,6 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -132,6 +133,12 @@ public class Patrimonio extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
 	}
 
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public Long getId() {
 		return id;
 	}

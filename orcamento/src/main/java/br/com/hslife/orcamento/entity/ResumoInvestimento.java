@@ -53,6 +53,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import br.com.hslife.orcamento.rest.json.AbstractJson;
+
 @Entity
 @Table(name="resumoinvestimento")
 @SuppressWarnings("serial")
@@ -114,6 +116,12 @@ public class ResumoInvestimento extends EntityPersistence {
 	@Override
 	public void validate() {
 				
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public Long getId() {

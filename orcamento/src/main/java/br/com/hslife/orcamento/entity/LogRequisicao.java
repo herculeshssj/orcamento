@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -57,8 +58,13 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="logrequisicao")
-public class LogRequisicao {	
+public class LogRequisicao implements Serializable {	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8077523274251413630L;
+
 	@Id
 	private String uuid;
 	

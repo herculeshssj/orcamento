@@ -55,6 +55,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.BancoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -144,6 +146,11 @@ public class Banco extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
+	}
+	
+	@Override
+	public BancoJson toJson() {
+		return null;
 	}
 	
 	public void setId(Long id) {

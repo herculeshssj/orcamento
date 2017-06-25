@@ -56,6 +56,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoDado;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -104,6 +105,12 @@ public class RelatorioColuna extends EntityPersistence {
 		if (this.formatar) {
 			EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Máscara de formatação", this.mascaraFormatacao, 50);
 		}
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public Long getId() {

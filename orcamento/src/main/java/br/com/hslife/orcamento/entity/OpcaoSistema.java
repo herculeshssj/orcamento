@@ -58,6 +58,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 
 @Entity
 @Table(name="opcaosistema")
@@ -114,6 +115,12 @@ public class OpcaoSistema extends EntityPersistence {
 	@Override
 	public void validate() {
 				
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public Long getId() {

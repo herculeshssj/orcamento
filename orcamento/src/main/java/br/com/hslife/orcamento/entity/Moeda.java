@@ -59,6 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -152,6 +153,12 @@ public class Moeda extends EntityPersistence {
 		if (!this.padrao && this.valorConversao == 0) {
 			throw new ValidationException("Informe um valor de conversão diferente de 0!");
 		}
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public String getNome() {

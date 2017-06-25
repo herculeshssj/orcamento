@@ -74,6 +74,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -269,6 +270,12 @@ public class Orcamento extends EntityPersistence {
 		return novoOrcamento;
 	}
 
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public void setId(Long id) {
 		this.id = id;
 	}

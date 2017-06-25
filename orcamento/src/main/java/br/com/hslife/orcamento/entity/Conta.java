@@ -72,6 +72,7 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -208,6 +209,12 @@ public class Conta extends EntityPersistence {
 		return this.moeda.getSimboloMonetario() + " " + new DecimalFormat("#,##0.##").format(Util.arredondar(this.totalDebitoPanoramaCadastro));
 	}
 
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public Banco getBanco() {
 		return banco;
 	}

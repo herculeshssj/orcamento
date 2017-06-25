@@ -59,6 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -171,6 +172,12 @@ public class LancamentoImportado extends EntityPersistence {
 	@Override
 	public void validate() {
 				
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public Long getId() {

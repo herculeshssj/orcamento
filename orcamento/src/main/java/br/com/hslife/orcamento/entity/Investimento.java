@@ -76,6 +76,7 @@ import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.rest.json.AbstractJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -268,6 +269,12 @@ public class Investimento extends EntityPersistence {
 			return false;
 		
 		return true;
+	}
+	
+	@Override
+	public AbstractJson toJson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	public Long getId() {

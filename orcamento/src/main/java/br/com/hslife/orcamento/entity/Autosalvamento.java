@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -59,8 +60,13 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="autosalvamento")
-public class Autosalvamento {	
+public class Autosalvamento implements Serializable {	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -942608548494785159L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
