@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
 
-    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
 
     Licença.
     
@@ -44,31 +44,41 @@
 
 ***/
 
-package br.com.hslife.orcamento.rest.json;
+package br.com.hslife.orcamento.rest;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import java.util.List;
 
-import br.com.hslife.orcamento.entity.EntityPersistence;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-public abstract class AbstractJson {
+import br.com.hslife.orcamento.entity.Banco;
+import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.facade.IBanco;
+import br.com.hslife.orcamento.rest.json.BancoJson;
+
+@Controller
+@RequestMapping("/banco")
+public class BancoRest extends AbstractRest<Banco> {
 	
-	private SessionFactory sessionFactory;
+	@Autowired
+	private IBanco service;
 	
-	public abstract EntityPersistence toEntity();
-
-	/*
-	 * As entidades JSon precisam ser beans Spring em virtude do método
-	 * toEntity() necessitar resgatar informações da entidade. 
-	 * 
-	 * Só a entidade persistente sabe compor o seu objeto JSon, e só 
-	 * o objeto JSon sabe compor sua representação persistente.
-	 */
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	@RequestMapping(method = RequestMethod.GET, 
+			headers = "Accept=application/xml, application/json", 
+			produces = {"application/json", "application/xml" })
+	@ResponseBody
+	public List<BancoJson> getAll() {
+		// Temporariamento usando os dados do usuário ID 1 (admin)
+		Usuario usuarioLogado = new Usuario();
+		usuarioLogado.setId(1l);
+		listEntity = getService().buscarAtivosPorUsuario(usuarioLogado);
+		return Banco.toListJson(listEntity);
 	}
-	
-	protected Session getSession() {
-		return this.sessionFactory.getCurrentSession();
+
+	public IBanco getService() {
+		return service;
 	}
 }

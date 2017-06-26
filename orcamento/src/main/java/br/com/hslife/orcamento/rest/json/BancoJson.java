@@ -46,16 +46,24 @@
 
 package br.com.hslife.orcamento.rest.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Component;
+
 import br.com.hslife.orcamento.entity.Banco;
+import br.com.hslife.orcamento.exception.BusinessException;
 
 @XmlRootElement
+@Component
 public class BancoJson extends AbstractJson {
 
 	private Long id;
 	private String nome;
-	private Integer numero;
+	private String numero;
 	private Boolean padrao;
 	private Boolean ativo;
 	private String usuario;
@@ -67,7 +75,34 @@ public class BancoJson extends AbstractJson {
 	
 	@Override
 	public Banco toEntity() {
-		return null;
+		// Busco o banco por ID e por usuário
+		// Fazer a busca em conjunto é importante para evitar um usuário ver os dados de outro
+		Banco banco = (Banco)getSession()
+				.createQuery("FROM Banco banco WHERE banco.id = :idBanco AND banco.usuario.id = :idUsuario")
+				.setLong("idBanco", this.id)
+				.setLong("idUsuario", this.usuarioId)
+				.uniqueResult();
+		
+		if (banco != null) {
+			// Atribui os valores do JSon na entidade, com exceção do usuário.
+			banco.setAtivo(this.ativo);
+			banco.setNome(this.nome);
+			banco.setNumero(this.numero);
+			banco.setPadrao(this.padrao);
+		} else {
+			throw new BusinessException("Entidade com dados inválidos!");
+		}
+		
+		return banco;
+	}
+	
+	public static List<Banco> toListEntity(List<BancoJson> listJson, SessionFactory sessionFactory) {
+		List<Banco> listEntity = new ArrayList<>();
+		for (BancoJson bancoJson : listJson) {
+			bancoJson.setSessionFactory(sessionFactory);			
+			listEntity.add(bancoJson.toEntity());
+		}
+		return listEntity;
 	}
 
 	public Long getId() {
@@ -84,14 +119,6 @@ public class BancoJson extends AbstractJson {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public Integer getNumero() {
-		return numero;
-	}
-
-	public void setNumero(Integer numero) {
-		this.numero = numero;
 	}
 
 	public Boolean getPadrao() {
@@ -124,5 +151,13 @@ public class BancoJson extends AbstractJson {
 
 	public void setUsuarioId(Long usuarioId) {
 		this.usuarioId = usuarioId;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 }
