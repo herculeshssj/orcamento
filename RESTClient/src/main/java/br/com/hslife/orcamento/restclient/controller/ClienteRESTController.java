@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.restclient.controller;
 
+import br.com.hslife.orcamento.restclient.rest.BancoClient;
 import br.com.hslife.orcamento.restclient.rest.FooClient;
 
 /**
@@ -55,10 +56,12 @@ import br.com.hslife.orcamento.restclient.rest.FooClient;
 public class ClienteRESTController implements IClienteREST{
 
     FooClient fooClient = new FooClient();
+    BancoClient bancoClient = new BancoClient();
     
     @Override
     public void execute() {
         fooClient.execute();
+        bancoClient.execute();
     }
     
 }
