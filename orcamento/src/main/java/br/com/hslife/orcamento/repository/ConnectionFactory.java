@@ -58,8 +58,12 @@ import org.apache.commons.dbcp2.PoolableConnectionFactory;
 import org.apache.commons.dbcp2.PoolingDataSource;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ConnectionFactory {
+	
+	private static final Logger logger = LogManager.getLogger(ConnectionFactory.class);
 	
     private static interface Singleton {
         final ConnectionFactory INSTANCE = new ConnectionFactory();
@@ -89,10 +93,24 @@ public class ConnectionFactory {
         PoolingDataSource<PoolableConnection> dataSource = new PoolingDataSource<>(connectionPool);
  
         this.dataSource = dataSource;
+        
+        // POG para manter a conexão sempre ativa
+        new Runnable() {
+			public void run() {
+				while (true) {
+					try {
+						Connection conn = dataSource.getConnection();
+						conn.createStatement().execute("SELECT 1");
+						Thread.sleep(3600000);
+					} catch (Exception e) {
+						logger.catching(e);
+					}
+				}
+			}
+		};
     }
  
     public static Connection getDatabaseConnection() throws SQLException {
         return Singleton.INSTANCE.dataSource.getConnection();
     }
-   
 }
