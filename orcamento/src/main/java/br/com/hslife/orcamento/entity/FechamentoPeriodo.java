@@ -53,16 +53,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.rest.json.AbstractJson;
@@ -102,7 +101,7 @@ public class FechamentoPeriodo extends EntityPersistence {
 	@JoinColumn(name="idContaBancaria", nullable=false)
 	private Conta conta;
 	
-	@OneToMany(mappedBy="fechamentoPeriodo", fetch=FetchType.LAZY)
+	@Transient
 	private List<LancamentoConta> lancamentos;
 	
 	public FechamentoPeriodo() {

@@ -532,7 +532,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			return "";
 		}
 		try {
-			fechamentoPeriodo = fechamentoPeriodoService.buscarFechamentoPorID(fechamentoPeriodo.getId());
+			fechamentoPeriodo.setLancamentos(getService().buscarTodosPorFechamentoPeriodo(fechamentoPeriodo));
 			Collections.sort(fechamentoPeriodo.getLancamentos(), new LancamentoContaComparator());
 			actionTitle = " - Reabrir período";
 			return "/pages/LancamentoConta/reabrirPeriodo";

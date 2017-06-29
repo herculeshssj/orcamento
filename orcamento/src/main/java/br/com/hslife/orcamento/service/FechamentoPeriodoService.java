@@ -226,6 +226,8 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			fechamento.setDataAlteracao(new Date());
 			getRepository().update(fechamento);
 			
+			// Busca os lançamentos vinculados ao fechamento do período
+			fechamento.setLancamentos(getLancamentoContaRepository().findAllByFechamentoPeriodo(fechamento));
 			for (LancamentoConta l : fechamento.getLancamentos()) {
 				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 				getLancamentoContaRepository().update(l);

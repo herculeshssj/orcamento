@@ -59,6 +59,7 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -337,6 +338,13 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	public List<LancamentoConta> findByDescricaoAndUsuario(String descricao, Usuario usuarioLogado) {
 		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
 				.setLong("idUsuario", usuarioLogado.getId())
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LancamentoConta> findAllByFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
+		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.fechamentoPeriodo.id = :idFechamento")
+				.setLong("idFechamento", fechamentoPeriodo.getId())
 				.list();
 	}
 }

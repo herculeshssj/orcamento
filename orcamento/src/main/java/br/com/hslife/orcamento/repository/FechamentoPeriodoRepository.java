@@ -65,13 +65,6 @@ public class FechamentoPeriodoRepository extends AbstractCRUDRepository<Fechamen
 		super(new FechamentoPeriodo());
 	}
 	
-	@Override
-	public FechamentoPeriodo findById(Long id) {
-		return (FechamentoPeriodo) getQuery("FROM FechamentoPeriodo as entity LEFT JOIN FETCH entity.lancamentos WHERE entity.id = :idEntity")
-				.setLong("idEntity", id)
-				.uniqueResult();
-	}
-	
 	@SuppressWarnings("unchecked")
 	public List<FechamentoPeriodo> findAllByConta(Conta conta) {
 		Criteria criteria = getSession().createCriteria(FechamentoPeriodo.class);

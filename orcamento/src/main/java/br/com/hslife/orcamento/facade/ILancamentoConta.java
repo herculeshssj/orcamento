@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.facade;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -88,4 +89,6 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	public List<LancamentoConta> buscarPorLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico);
 	
 	public List<LancamentoPanoramaCadastro> buscarLancamentoParaPanoramaCadastro(Conta conta, CadastroSistema cadastro, Long idAgrupamento);
+	
+	public List<LancamentoConta> buscarTodosPorFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo);
 }
