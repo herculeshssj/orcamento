@@ -361,4 +361,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	public List<LancamentoConta> buscarTodosPorFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
 		return getRepository().findAllByFechamentoPeriodo(fechamentoPeriodo);
 	}
+	
+	@Override
+	public double buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
+		return getRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, dataInicio, dataFim, statusLancamento);
+	}
 }

@@ -54,6 +54,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.faces.model.SelectItem;
+
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
@@ -158,6 +160,22 @@ public class ResumoMensalContasController extends AbstractController {
 			return "";
 		}
 		try {
+			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO) && contaSelecionada.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO)) {
+				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaCartao);
+			} else {
+				if (mesAno == null || mesAno.isEmpty()) {
+					// Preguiça...
+					mesAno = (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR);
+				}
+				
+				String[] dataParticionada = mesAno.split("/");
+				 
+				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, 
+						Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])), // Data inicial
+						Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]))); // Data final
+			}
+				
+			/*
 			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO))
 				if (contaSelecionada.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO))
 					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaCartao);
@@ -175,6 +193,7 @@ public class ResumoMensalContasController extends AbstractController {
 				}
 			else
 				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
+			*/
 			this.gerarGraficoCreditoDebito();
 			this.gerarGraficoComparativo();
 		} catch (ValidationException | BusinessException be) {
@@ -382,13 +401,13 @@ public class ResumoMensalContasController extends AbstractController {
 		return faturas;
 	}
 	
-	public List<String> getListaMesAno() {
-		List<String> mesAno = new LinkedList<>();
+	public List<SelectItem> getListaMesAno() {
+		List<SelectItem> mesAno = new LinkedList<>();
 		Calendar data = Calendar.getInstance();
 		for (int i = 0; i < 12; i++) {
 			data.add(Calendar.MONTH, -1);
 			String temp = data.get(Calendar.MONTH) + 1 + "/" + data.get(Calendar.YEAR);
-			mesAno.add(temp);
+			mesAno.add(new SelectItem(temp, "Período " + (data.get(Calendar.MONTH)+1) + " / " + data.get(Calendar.YEAR)));
 		}
 		return mesAno;
 	}

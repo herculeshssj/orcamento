@@ -67,9 +67,11 @@ import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
+import br.com.hslife.orcamento.util.Util;
 
 @Repository
 public class LancamentoContaRepository extends AbstractCRUDRepository<LancamentoConta> {
@@ -346,5 +348,86 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.fechamentoPeriodo.id = :idFechamento")
 				.setLong("idFechamento", fechamentoPeriodo.getId())
 				.list();
+	}
+	
+	public double getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
+		// Obtém a soma dos créditos
+		StringBuilder hqlCreditos = new StringBuilder();
+		hqlCreditos.append("SELECT SUM(lancamento.valorPago) FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.tipoLancamento = :tipo");
+		
+		if (dataInicio != null) {
+			hqlCreditos.append(" AND lancamento.dataPagamento >= :dataInicio");
+		}
+		
+		if (dataFim != null) {
+			hqlCreditos.append(" AND lancamento.dataPagamento <= :dataFim");
+		}
+		
+		if (statusLancamento != null && statusLancamento.length != 0) {
+			hqlCreditos.append(" AND lancamento.statusLancamentoConta IN (:status)");
+		}
+		
+		Query hqlQueryCredito = getQuery(hqlCreditos.toString());
+		hqlQueryCredito.setLong("idConta", conta.getId());
+		hqlQueryCredito.setParameter("tipo", TipoLancamento.RECEITA);
+		
+		if (dataInicio != null) {
+			hqlQueryCredito.setDate("dataInicio", dataInicio);
+		}
+		
+		if (dataFim != null) {
+			hqlQueryCredito.setDate("dataFim", dataFim);
+		}
+		
+		if (statusLancamento != null && statusLancamento.length != 0) {
+			hqlQueryCredito.setParameterList("status",statusLancamento);
+		}
+		
+		// Executa a query e armazena o valor total de créditos
+		Double totalCreditos = (Double)hqlQueryCredito.uniqueResult();
+		
+		// Obtém a soma dos débitos
+		StringBuilder hqlDebitos = new StringBuilder();
+		hqlDebitos.append("SELECT SUM(lancamento.valorPago) FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.tipoLancamento = :tipo");
+		
+		if (dataInicio != null) {
+			hqlDebitos.append(" AND lancamento.dataPagamento >= :dataInicio");
+		}
+		
+		if (dataFim != null) {
+			hqlDebitos.append(" AND lancamento.dataPagamento <= :dataFim");
+		}
+		
+		if (statusLancamento != null && statusLancamento.length != 0) {
+			hqlDebitos.append(" AND lancamento.statusLancamentoConta IN (:status)");
+		}
+		
+		Query hqlQueryDebito = getQuery(hqlDebitos.toString());
+		hqlQueryDebito.setLong("idConta", conta.getId());
+		hqlQueryDebito.setParameter("tipo", TipoLancamento.DESPESA);
+		
+		if (dataInicio != null) {
+			hqlQueryDebito.setDate("dataInicio", dataInicio);
+		}
+		
+		if (dataFim != null) {
+			hqlQueryDebito.setDate("dataFim", dataFim);
+		}
+		
+		if (statusLancamento != null && statusLancamento.length != 0) {
+			hqlQueryDebito.setParameterList("status",statusLancamento);
+		}
+		
+		// Executa a query e armazena o valor total de créditos
+		Double totalDebitos = (Double)hqlQueryDebito.uniqueResult();
+		
+		// Verifica se os valores são nulos
+		if (totalCreditos == null)
+			totalCreditos = 0.0;
+		if (totalDebitos == null)
+			totalDebitos = 0.0;
+		
+		// Retorna a subtração do total de créditos pelo total de débitos
+		return Util.arredondar(conta.getSaldoInicial() + totalCreditos - totalDebitos);
 	}
 }
