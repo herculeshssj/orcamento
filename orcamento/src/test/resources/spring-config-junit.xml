@@ -101,4 +101,10 @@
     
     <tx:annotation-driven transaction-manager="transactionManager"/>
     
+    <!-- application.wadl -->
+	<!--
+		Referência: https://stackoverflow.com/questions/31893335/spring-mvc-autowire-requestmappinghandlermapping 
+	 -->
+	<bean name="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+    
 </beans>
