@@ -57,6 +57,10 @@ import br.com.hslife.orcamento.enumeration.OperacaoConta;
 
 public interface IFechamentoPeriodo {
 	
+	public void alterar(FechamentoPeriodo entity);
+	
+	public void excluir(FechamentoPeriodo entity);
+	
 	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta);
 	
 	public void fecharPeriodo(Date dataFechamento, Conta conta);

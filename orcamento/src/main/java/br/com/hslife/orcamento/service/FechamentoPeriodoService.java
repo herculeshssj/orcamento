@@ -106,6 +106,39 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 		return lancamentoPeriodicoRepository;
 	}
 
+	@Override
+	public void alterar(FechamentoPeriodo entity) {
+		// Seta a data atual
+		entity.setDataAlteracao(new Date());
+		getRepository().update(entity);
+	}
+	
+	@Override
+	public void excluir(FechamentoPeriodo entity) {
+		// Busca o fechamento imediatamente anterior ao fechamento selecionado
+		FechamentoPeriodo fechamentoAnterior = getRepository().findFechamentoPeriodoAnterior(entity);
+		List<LancamentoConta> lancamentos = null;
+		
+		if (fechamentoAnterior == null) {
+			// Caso não exista fechamento anterior, todos os lançamentos ficam sem fechamento
+			lancamentos = getLancamentoContaRepository().findAllByFechamentoPeriodo(entity);
+			for (LancamentoConta lancamento : lancamentos) {
+				lancamento.setFechamentoPeriodo(null);
+				getLancamentoContaRepository().update(lancamento);
+			}
+		} else {
+			// Caso exista, seta para o fechamento imediatamente posterior ao selecionado
+			lancamentos = getLancamentoContaRepository().findAllByFechamentoPeriodo(entity);
+			for (LancamentoConta lancamento : lancamentos) {
+				lancamento.setFechamentoPeriodo(fechamentoAnterior);
+				getLancamentoContaRepository().update(lancamento);
+			}
+		}
+		
+		// Exclui o fechamento
+		getRepository().delete(getRepository().findById(entity.getId()));
+	}
+	
 	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) {
 		return getRepository().findUltimoFechamentoByConta(conta);
 	}

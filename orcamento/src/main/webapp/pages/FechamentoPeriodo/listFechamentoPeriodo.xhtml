@@ -1,0 +1,120 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{fechamentoPeriodoController}" />
+	<ui:param name="colunaPesquisa" value="4" />
+	
+	<ui:define name="botoes">
+	</ui:define>
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label>Conta:</label>
+			<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+	    </h:panelGroup>	    	    
+	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
+	
+	<ui:define name="colunas">
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Período" />
+			</f:facet>
+			<h:outputText value="#{item.label}" />
+		</h:column>
+
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Alterado em"/>
+			</f:facet>
+			<h:outputText value="#{item.dataAlteracao}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+		</h:column>
+		
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Saldo"/>
+			</f:facet>
+			<h:outputText value="#{item.saldo}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+		</h:column>
+	</ui:define>
+
+	<ui:define name="acoes">
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações" />
+			</f:facet>
+			<h:commandLink title="Editar" action="#{managedBean.edit}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+			</h:commandLink>								
+	  		<p:spacer width="10"/>			
+			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.operacao == 'REABERTURA'}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<f:setPropertyActionListener value="#{item}" target="#{managedBean.entity}"/>
+			</h:commandLink>
+		</h:column>
+	</ui:define>
+
+</ui:composition>
+</html>
