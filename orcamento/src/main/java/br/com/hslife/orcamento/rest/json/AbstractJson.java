@@ -49,13 +49,11 @@ package br.com.hslife.orcamento.rest.json;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import br.com.hslife.orcamento.entity.EntityPersistence;
-
-public abstract class AbstractJson {
+public abstract class AbstractJson<T> {
 	
 	private SessionFactory sessionFactory;
 	
-	public abstract EntityPersistence toEntity();
+	public abstract T toEntity();
 
 	/*
 	 * As entidades JSon precisam ser beans Spring em virtude do método

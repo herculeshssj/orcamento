@@ -51,15 +51,14 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Banco;
-import br.com.hslife.orcamento.exception.BusinessException;
 
 @XmlRootElement
-@Component
-public class BancoJson extends AbstractJson {
+@JsonAutoDetect
+public class BancoJson extends AbstractJson<Banco> {
 
 	private Long id;
 	private String nome;
@@ -75,6 +74,15 @@ public class BancoJson extends AbstractJson {
 	
 	@Override
 	public Banco toEntity() {
+		Banco banco = new Banco();
+		banco.setAtivo(this.ativo);
+		banco.setNome(this.nome);
+		banco.setNumero(this.numero);
+		banco.setPadrao(this.padrao);
+		banco.setUsuarioID(this.usuarioId);
+		banco.setId(this.id);
+		
+		/*
 		// Busco o banco por ID e por usuário
 		// Fazer a busca em conjunto é importante para evitar um usuário ver os dados de outro
 		Banco banco = (Banco)getSession()
@@ -92,7 +100,7 @@ public class BancoJson extends AbstractJson {
 		} else {
 			throw new BusinessException("Entidade com dados inválidos!");
 		}
-		
+		*/
 		return banco;
 	}
 	

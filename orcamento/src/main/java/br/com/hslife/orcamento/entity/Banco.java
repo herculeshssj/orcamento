@@ -57,6 +57,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.rest.json.BancoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -85,6 +86,9 @@ public class Banco extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
+	
+	@Transient
+	private Long usuarioID;
 	
 	public Banco() {
 		ativo = true;
@@ -158,7 +162,7 @@ public class Banco extends EntityPersistence {
 		json.setNome(this.nome);
 		json.setNumero(this.getNumero());
 		json.setPadrao(this.padrao);
-		json.setUsuario(this.usuario.getLabel());
+		json.setUsuario(this.usuario.getLogin());
 		json.setUsuarioId(this.usuario.getId());
 		return json;
 	}
@@ -213,5 +217,13 @@ public class Banco extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Long getUsuarioID() {
+		return usuarioID;
+	}
+
+	public void setUsuarioID(Long usuarioID) {
+		this.usuarioID = usuarioID;
 	}
 }

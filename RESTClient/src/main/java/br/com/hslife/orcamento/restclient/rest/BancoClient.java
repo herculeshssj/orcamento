@@ -94,5 +94,6 @@ public class BancoClient implements IClienteREST {
     @Override
     public void execute() {
         System.out.println(new BancoClient().getAll_JSON(String.class));
+        close();
     }
 }
