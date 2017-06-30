@@ -59,6 +59,7 @@ import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
+import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.PeriodoLogs;
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -225,6 +226,15 @@ public class EnumComboUtil {
 	public List<SelectItem> getListaPeriodoLogs() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (PeriodoLogs enumeration : PeriodoLogs.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+	
+	public List<SelectItem> getListaPeriodicidade() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (PeriodoLancamento enumeration : PeriodoLancamento.values()) {
+			if (enumeration.equals(PeriodoLancamento.FIXO)) continue;
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

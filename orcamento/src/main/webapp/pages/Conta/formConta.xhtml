@@ -85,10 +85,15 @@
 		<label for="frmFormEntity:txtVariacao">Variação/Operação:</label>
 		<h:inputText id="txtVariacao" value="#{managedBean.entity.variacao}" disabled="#{!managedBean.entity.ativo}"/>
 		
-		<h:selectBooleanCheckbox value="#{managedBean.entity.contaConjunta}">
+		<h:selectBooleanCheckbox value="#{managedBean.entity.contaConjunta}" disabled="#{!managedBean.entity.ativo}">
 			<p:ajax update="pnlContaConjunta"/>
 		</h:selectBooleanCheckbox>
 		<label>Conta conjunta</label>
+		
+		<h:selectBooleanCheckbox value="#{managedBean.entity.fechamentoAutomatico}" disabled="#{!managedBean.entity.ativo}">
+			<p:ajax update="pnlFechamentoAutomatico"/>
+		</h:selectBooleanCheckbox>
+		<label>Fechamento automático do período</label>
 		
 		<label>Moeda:</label>
 		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.operation != 'create'}">
@@ -151,6 +156,19 @@
 			</h:panelGroup>
 			
 		</h:panelGrid>
+		
+		<p:outputPanel id="pnlFechamentoAutomatico">
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.fechamentoAutomatico}">
+				<f:facet name="header">
+					<h:outputText value="Fechamento automático" />
+				</f:facet>
+				
+				<label>Periodicidade:</label>
+				<h:selectOneMenu value="#{managedBean.entity.periodicidade}" disabled="#{!managedBean.entity.ativo}">
+					<f:selectItems value="#{enumCombo.listaPeriodicidade}"/>
+				</h:selectOneMenu>
+			</h:panelGrid>
+		</p:outputPanel>
 		
 		<p:outputPanel id="pnlContaConjunta">
 		

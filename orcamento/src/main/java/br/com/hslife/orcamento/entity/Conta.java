@@ -70,6 +70,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.rest.json.AbstractJson;
@@ -129,6 +130,13 @@ public class Conta extends EntityPersistence {
 	@Column(length=255, nullable=true)
 	private String dadosOFX;
 	
+	@Column
+	private boolean fechamentoAutomatico;
+	
+	@Column(length=10)
+	@Enumerated(EnumType.STRING)
+	private PeriodoLancamento periodicidade;
+	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
@@ -175,6 +183,7 @@ public class Conta extends EntityPersistence {
 		ativo = true;
 		dataFechamento = null;
 		saldoFinal = 0;
+		fechamentoAutomatico = false;
 	}
 	
 	@Override
@@ -421,5 +430,21 @@ public class Conta extends EntityPersistence {
 
 	public void setDadosOFX(String dadosOFX) {
 		this.dadosOFX = dadosOFX;
+	}
+
+	public boolean isFechamentoAutomatico() {
+		return fechamentoAutomatico;
+	}
+
+	public void setFechamentoAutomatico(boolean fechamentoAutomatico) {
+		this.fechamentoAutomatico = fechamentoAutomatico;
+	}
+
+	public PeriodoLancamento getPeriodicidade() {
+		return periodicidade;
+	}
+
+	public void setPeriodicidade(PeriodoLancamento periodicidade) {
+		this.periodicidade = periodicidade;
 	}
 }

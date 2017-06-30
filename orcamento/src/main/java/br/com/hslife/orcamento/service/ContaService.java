@@ -273,4 +273,9 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	public List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) {
 		return getRepository().findDescricaoOrTipoContaOrAtivoByUsuario(descricao, tipoConta, usuario, ativo);
 	}
+	
+	@Override
+	public List<Conta> buscarTodosUsuarioPorFechamentoAutomatico(boolean fechaAutomaticamente) {
+		return getRepository().findAllUsuariosByFechamentoAutomatico(fechaAutomaticamente);
+	}
 }
