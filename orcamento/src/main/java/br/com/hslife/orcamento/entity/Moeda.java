@@ -59,7 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.MoedaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -156,9 +156,8 @@ public class Moeda extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public MoedaJson toJson() {
+		return new MoedaJson();
 	}
 
 	public String getNome() {

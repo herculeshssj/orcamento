@@ -46,19 +46,15 @@
 
 package br.com.hslife.orcamento.rest.json;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.hibernate.SessionFactory;
 
 import br.com.hslife.orcamento.entity.Banco;
 
 @XmlRootElement
 @JsonAutoDetect
-public class BancoJson extends AbstractJson<Banco> {
+public class BancoJson extends AbstractJson<Banco, BancoJson> {
 
 	private Long id;
 	private String nome;
@@ -81,36 +77,7 @@ public class BancoJson extends AbstractJson<Banco> {
 		banco.setPadrao(this.padrao);
 		banco.setUsuarioID(this.usuarioId);
 		banco.setId(this.id);
-		
-		/*
-		// Busco o banco por ID e por usuário
-		// Fazer a busca em conjunto é importante para evitar um usuário ver os dados de outro
-		Banco banco = (Banco)getSession()
-				.createQuery("FROM Banco banco WHERE banco.id = :idBanco AND banco.usuario.id = :idUsuario")
-				.setLong("idBanco", this.id)
-				.setLong("idUsuario", this.usuarioId)
-				.uniqueResult();
-		
-		if (banco != null) {
-			// Atribui os valores do JSon na entidade, com exceção do usuário.
-			banco.setAtivo(this.ativo);
-			banco.setNome(this.nome);
-			banco.setNumero(this.numero);
-			banco.setPadrao(this.padrao);
-		} else {
-			throw new BusinessException("Entidade com dados inválidos!");
-		}
-		*/
 		return banco;
-	}
-	
-	public static List<Banco> toListEntity(List<BancoJson> listJson, SessionFactory sessionFactory) {
-		List<Banco> listEntity = new ArrayList<>();
-		for (BancoJson bancoJson : listJson) {
-			bancoJson.setSessionFactory(sessionFactory);			
-			listEntity.add(bancoJson.toEntity());
-		}
-		return listEntity;
 	}
 
 	public Long getId() {

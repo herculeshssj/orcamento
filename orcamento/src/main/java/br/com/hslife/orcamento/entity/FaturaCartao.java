@@ -73,7 +73,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.FaturaCartaoJson;
 
 @Entity
 @Table(name="faturacartao")
@@ -325,9 +325,8 @@ public class FaturaCartao extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public FaturaCartaoJson toJson() {
+		return new FaturaCartaoJson();
 	}
 
 	public Long getId() {

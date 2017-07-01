@@ -66,7 +66,7 @@ import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.GrupoLancamentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.ItemGrupoLancamentoComparator;
 import br.com.hslife.orcamento.util.Util;
@@ -173,9 +173,8 @@ public class GrupoLancamento extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public GrupoLancamentoJson toJson() {
+		return new GrupoLancamentoJson();
 	}
 	
 	public Long getId() {

@@ -59,7 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.BenfeitoriaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -117,9 +117,8 @@ public class Benfeitoria extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public BenfeitoriaJson toJson() {
+		return new BenfeitoriaJson();
 	}
 
 	public Long getId() {

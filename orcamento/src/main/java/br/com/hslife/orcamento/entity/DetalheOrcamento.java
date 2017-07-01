@@ -61,7 +61,7 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.hslife.orcamento.enumeration.SituacaoOrcamento;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.DetalheOrcamentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -226,9 +226,8 @@ public class DetalheOrcamento extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public DetalheOrcamentoJson toJson() {
+		return new DetalheOrcamentoJson();
 	}
 	
 	public Long getId() {

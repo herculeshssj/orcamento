@@ -55,7 +55,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.ModeloDocumentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -112,9 +112,8 @@ public class ModeloDocumento extends EntityPersistence {
 	}
 
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public ModeloDocumentoJson toJson() {
+		return new ModeloDocumentoJson();
 	}
 	
 	public void setId(Long id) {

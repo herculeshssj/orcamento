@@ -60,7 +60,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.DocumentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -107,9 +107,8 @@ public class Documento extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public DocumentoJson toJson() {
+		return new DocumentoJson();
 	}
 
 	public void setId(Long id) {

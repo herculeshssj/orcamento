@@ -67,7 +67,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.Container;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.ArquivoJson;
 
 @Entity
 @Table(name="arquivo")
@@ -145,9 +145,8 @@ public class Arquivo extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArquivoJson toJson() {
+		return new ArquivoJson();
 	}
 
 	public void setId(Long id) {

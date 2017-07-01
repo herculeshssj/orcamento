@@ -59,7 +59,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.HistoricoSaudeJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -107,9 +107,8 @@ public class HistoricoSaude extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public HistoricoSaudeJson toJson() {
+		return new HistoricoSaudeJson();
 	}
 
 	public Long getId() {

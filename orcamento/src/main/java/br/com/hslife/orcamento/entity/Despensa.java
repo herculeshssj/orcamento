@@ -62,7 +62,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.DespensaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -112,9 +112,8 @@ public class Despensa extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public DespensaJson toJson() {
+		return new DespensaJson();
 	}
 
 	public Long getId() {

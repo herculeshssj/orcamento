@@ -62,7 +62,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.ContaCompartilhadaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -147,9 +147,8 @@ public class ContaCompartilhada extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public ContaCompartilhadaJson toJson() {
+		return new ContaCompartilhadaJson();
 	}
 
 	public Long getId() {

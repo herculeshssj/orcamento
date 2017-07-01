@@ -46,27 +46,20 @@
 
 package br.com.hslife.orcamento.rest.json;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import java.util.List;
 
-public abstract class AbstractJson<T> {
-	
-	private SessionFactory sessionFactory;
-	
-	public abstract T toEntity();
+import br.com.hslife.orcamento.entity.EntityPersistence;
 
-	/*
-	 * As entidades JSon precisam ser beans Spring em virtude do método
-	 * toEntity() necessitar resgatar informações da entidade. 
-	 * 
-	 * Só a entidade persistente sabe compor o seu objeto JSon, e só 
-	 * o objeto JSon sabe compor sua representação persistente.
-	 */
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+public abstract class AbstractJson<T extends EntityPersistence, J> {
+	
+	private T entity;
+	private List<T> listEntity;
+	
+	protected T toEntity() {
+		return entity;
 	}
 	
-	protected Session getSession() {
-		return this.sessionFactory.getCurrentSession();
+	protected List<T> toListEntity(List<J> listJson) {
+		return listEntity;
 	}
 }

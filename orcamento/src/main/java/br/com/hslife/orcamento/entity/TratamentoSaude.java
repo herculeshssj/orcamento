@@ -58,7 +58,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoTratamento;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.TratamentoSaudeJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -104,9 +104,8 @@ public class TratamentoSaude extends EntityPersistence {
 	}
 
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public TratamentoSaudeJson toJson() {
+		return new TratamentoSaudeJson();
 	}
 	
 	public Long getId() {

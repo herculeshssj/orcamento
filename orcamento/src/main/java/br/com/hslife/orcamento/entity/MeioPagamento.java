@@ -58,7 +58,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.MeioPagamentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -118,9 +118,8 @@ public class MeioPagamento extends EntityPersistence {
 	}
 
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public MeioPagamentoJson toJson() {
+		return new MeioPagamentoJson();
 	}
 	
 	public Long getId() {

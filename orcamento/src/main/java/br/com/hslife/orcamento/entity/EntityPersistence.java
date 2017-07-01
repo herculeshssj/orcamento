@@ -59,7 +59,7 @@ import org.json.JSONObject;
 
 import br.com.hslife.orcamento.rest.json.AbstractJson;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","rawtypes"})
 @MappedSuperclass
 public abstract class EntityPersistence implements Comparable<EntityPersistence>, Serializable {
 	

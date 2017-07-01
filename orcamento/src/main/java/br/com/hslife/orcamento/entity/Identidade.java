@@ -65,7 +65,7 @@ import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.IdentidadeJson;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -258,9 +258,8 @@ public class Identidade extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public IdentidadeJson toJson() {
+		return new IdentidadeJson();
 	}
 
 	public void setId(Long id) {

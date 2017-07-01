@@ -63,7 +63,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.rest.json.AbstractJson;
+import br.com.hslife.orcamento.rest.json.ItemGrupoLancamentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -128,9 +128,8 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	}
 	
 	@Override
-	public AbstractJson toJson() {
-		// TODO Auto-generated method stub
-		return null;
+	public ItemGrupoLancamentoJson toJson() {
+		return new ItemGrupoLancamentoJson();
 	}
 	
 	public Long getId() {
