@@ -68,7 +68,6 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DetalheOrcamento;
 import br.com.hslife.orcamento.entity.FaturaCartao;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -79,7 +78,6 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IContaCompartilhada;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
-import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.facade.IResumoEstatistica;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 import br.com.hslife.orcamento.util.Util;
@@ -111,11 +109,7 @@ public class ResumoMensalContasController extends AbstractController {
 	@Autowired
 	private IFaturaCartao faturaCartaoService;
 	
-	@Autowired
-	private IFechamentoPeriodo fechamentoPeriodoService;
-	
 	private Conta contaSelecionada;
-	private FechamentoPeriodo fechamentoSelecionado;
 	private FaturaCartao faturaCartao;
 	private ResumoMensalContas resumoMensal;
 	
@@ -175,25 +169,6 @@ public class ResumoMensalContasController extends AbstractController {
 						Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]))); // Data final
 			}
 				
-			/*
-			if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO))
-				if (contaSelecionada.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO))
-					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, faturaCartao);
-				else {
-					if (mesAno == null || mesAno.isEmpty()) {
-						// Preguiça...
-						mesAno = (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR);
-					}
-					
-					String[] dataParticionada = mesAno.split("/");
-					 
-					resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, 
-							Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])), // Data inicial
-							Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]))); // Data final
-				}
-			else
-				resumoMensal = getService().gerarRelatorioResumoMensalContas(contaSelecionada, fechamentoSelecionado);
-			*/
 			this.gerarGraficoCreditoDebito();
 			this.gerarGraficoComparativo();
 		} catch (ValidationException | BusinessException be) {
@@ -269,19 +244,25 @@ public class ResumoMensalContasController extends AbstractController {
 		ChartSeries receitaSeries = new ChartSeries();
 		receitaSeries.setLabel("Receitas");		
 
+		// TODO refatorar trecho de código
+		/*
 		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 			receitaSeries.set(faturaCartao == null ? "Próximas faturas / Lançamento registrados" : faturaCartao.getLabel(), Math.abs(receitas));
 		} else {
-			receitaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(receitas));
+			receitaSeries.set(mesAno == null || mesAno.isEmpty() ? "Periodo atual" : mesAno, Math.abs(receitas));
 		}
+		*/
 		
 		ChartSeries despesaSeries = new ChartSeries();
 		despesaSeries.setLabel("Despesas");
+		// TODO refatorar trecho de código
+		/* 
 		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 			despesaSeries.set(faturaCartao == null ? "Próximas faturas / Lançamento registrados" : faturaCartao.getLabel(), Math.abs(despesas));
 		} else {
 			despesaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(despesas));
 		}
+		*/
 		
         barComparativo.addSeries(receitaSeries);  
         barComparativo.addSeries(despesaSeries);
@@ -317,7 +298,8 @@ public class ResumoMensalContasController extends AbstractController {
 		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 			orcamentoAGerar.setDescricao(faturaCartao == null ? "Orçamento - Próximas faturas" : "Orçamento - " + faturaCartao.getLabel());
 		} else {
-			orcamentoAGerar.setDescricao(fechamentoSelecionado == null ? "Orçamento - Período atual" : "Orçamento - " + fechamentoSelecionado.getLabel());
+			// TODO refatorar
+			//orcamentoAGerar.setDescricao(fechamentoSelecionado == null ? "Orçamento - Período atual" : "Orçamento - " + fechamentoSelecionado.getLabel());
 		}
 		
 		orcamentoAGerar.setInicio(resumoMensal.getInicio());
@@ -365,23 +347,6 @@ public class ResumoMensalContasController extends AbstractController {
 		return new ArrayList<Conta>(contas);
 	}
 	
-	public List<FechamentoPeriodo> getListaFechamentoPeriodo() {
-		List<FechamentoPeriodo> fechamentos = new ArrayList<>();
-		try {			
-			if (contaSelecionada != null) {
-				for (FechamentoPeriodo fechamento : fechamentoPeriodoService.buscarTodosFechamentoPorConta(contaSelecionada)) {
-					fechamentos.add(fechamento);
-					if (fechamentos.size() >= getOpcoesSistema().getLimiteQuantidadeFechamentos()) {
-						break;
-					}
-				}
-			}
-		} catch (ValidationException | BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return fechamentos;
-	}
-	
 	public List<FaturaCartao> getListaFaturaCartao() {
 		List<FaturaCartao> faturas = new ArrayList<>();
 		
@@ -410,10 +375,6 @@ public class ResumoMensalContasController extends AbstractController {
 			mesAno.add(new SelectItem(temp, "Período " + (data.get(Calendar.MONTH)+1) + " / " + data.get(Calendar.YEAR)));
 		}
 		return mesAno;
-	}
-	
-	public void atualizaListaFechamentoPeriodo() {
-		this.getListaFechamentoPeriodo();
 	}
 
 	public boolean isLancamentoAgendado() {
@@ -456,14 +417,6 @@ public class ResumoMensalContasController extends AbstractController {
 
 	public void setResumoMensal(ResumoMensalContas resumoMensal) {
 		this.resumoMensal = resumoMensal;
-	}
-
-	public FechamentoPeriodo getFechamentoSelecionado() {
-		return fechamentoSelecionado;
-	}
-
-	public void setFechamentoSelecionado(FechamentoPeriodo fechamentoSelecionado) {
-		this.fechamentoSelecionado = fechamentoSelecionado;
 	}
 
 	public PieChartModel getPieCategoriaCredito() {

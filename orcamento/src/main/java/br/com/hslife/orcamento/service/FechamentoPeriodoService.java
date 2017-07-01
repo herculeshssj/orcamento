@@ -46,7 +46,6 @@
 
 package br.com.hslife.orcamento.service;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -57,22 +56,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.ApplicationException;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
-import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
-import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
 @Service
@@ -83,18 +76,10 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private FechamentoPeriodoRepository repository;
-	
-	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
 	
 	@Autowired
 	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
-	
-	public FechamentoPeriodoRepository getRepository() {
-		this.repository.setSessionFactory(this.sessionFactory);
-		return repository;
-	}
 
 	public LancamentoContaRepository getLancamentoContaRepository() {
 		this.lancamentoContaRepository.setSessionFactory(this.sessionFactory);
@@ -105,60 +90,20 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 		this.lancamentoPeriodicoRepository.setSessionFactory(this.sessionFactory);
 		return lancamentoPeriodicoRepository;
 	}
-
-	@Override
-	public void alterar(FechamentoPeriodo entity) {
-		// Seta a data atual
-		entity.setDataAlteracao(new Date());
-		getRepository().update(entity);
-	}
 	
 	@Override
-	public void excluir(FechamentoPeriodo entity) {
-		// Busca o fechamento imediatamente anterior ao fechamento selecionado
-		FechamentoPeriodo fechamentoAnterior = getRepository().findFechamentoPeriodoAnterior(entity);
-		List<LancamentoConta> lancamentos = null;
+	public void fecharPeriodo(Conta conta, Date dataInicio, Date dataFim) {
+		this.fecharPeriodo(conta, dataInicio, dataFim, null);
 		
-		if (fechamentoAnterior == null) {
-			// Caso não exista fechamento anterior, todos os lançamentos ficam sem fechamento
-			lancamentos = getLancamentoContaRepository().findAllByFechamentoPeriodo(entity);
-			for (LancamentoConta lancamento : lancamentos) {
-				lancamento.setFechamentoPeriodo(null);
-				getLancamentoContaRepository().update(lancamento);
-			}
-		} else {
-			// Caso exista, seta para o fechamento imediatamente posterior ao selecionado
-			lancamentos = getLancamentoContaRepository().findAllByFechamentoPeriodo(entity);
-			for (LancamentoConta lancamento : lancamentos) {
-				lancamento.setFechamentoPeriodo(fechamentoAnterior);
-				getLancamentoContaRepository().update(lancamento);
-			}
-		}
-		
-		// Exclui o fechamento
-		getRepository().delete(getRepository().findById(entity.getId()));
-	}
-	
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta) {
-		return getRepository().findUltimoFechamentoByConta(conta);
 	}
 
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta) {
-		return getRepository().findByContaAndOperacaoConta(conta, operacaoConta);
+	@Override
+	public void fecharPeriodo(Conta conta, Date dataInicio, Date dataFim, List<LancamentoPeriodico> lancamentosPeriodicos) {
+		// TODO implementar. Os métodos estão comentados
+		
 	}
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta) {
-		this.fecharPeriodo(dataFechamento, conta, null, null);
-	}
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos) {
-		this.fecharPeriodo(dataFechamento, conta, null, lancamentosPeriodicos);
-	}
-	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos) {
-		this.fecharPeriodo(fechamentoPeriodo.getData(), fechamentoPeriodo.getConta(), fechamentoPeriodo, lancamentosPeriodicos);
-	}
-	
+
+	/*
 	@SuppressWarnings("deprecation")
 	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  {
 		// Obtém-se o último fechamento realizado
@@ -247,7 +192,9 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			}
 		}
 	}
-	
+	*/
+	// FIXME refatorar. O método está comentado
+	/*
 	public void reabrirPeriodo(FechamentoPeriodo entity) {
 		// Busca os fechamentos posteriores ao fechamento selecionado
 		List<FechamentoPeriodo> fechamentosPosteriores = getRepository().findFechamentosPosteriores(entity);
@@ -267,7 +214,8 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			}
 		}
 	}
-	
+	*/
+
 	@SuppressWarnings("deprecation")
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) {		
 		pagamentoPeriodo.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
@@ -321,39 +269,5 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 				getLancamentoPeriodicoRepository().update(pagamentoPeriodo.getLancamentoPeriodico());
 			}
 		}
-	}
-
-	@Override
-	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo) {
-		return getRepository().findFechamentoPeriodoAnterior(fechamentoPeriodo);
-	}
-	
-	@Override
-	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta) {
-		return getRepository().findUltimoFechamentoByConta(conta);
-	}
-	
-	@Override
-	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta) {
-		return getRepository().findAllByConta(conta);
-	}
-	
-	@Override
-	public FechamentoPeriodo buscarFechamentoPorID(Long id) {
-		return getRepository().findById(id);
-	}
-	
-	public double saldoUltimoFechamento(Conta conta) {
-		FechamentoPeriodo ultimoFechamento = getRepository().findUltimoFechamentoByConta(conta);
-		if (ultimoFechamento == null) {
-			return conta.getSaldoInicial();
-		} else {
-			return ultimoFechamento.getSaldo();
-		}
-	}
-	
-	@Override
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao) {
-		return getRepository().findLastFechamentoPeriodoBeforeDateByContaAndOperacao(conta, data, operacao);
 	}
 }

@@ -90,9 +90,7 @@
 		</h:selectBooleanCheckbox>
 		<label>Conta conjunta</label>
 		
-		<h:selectBooleanCheckbox value="#{managedBean.entity.fechamentoAutomatico}" disabled="#{!managedBean.entity.ativo}">
-			<p:ajax update="pnlFechamentoAutomatico"/>
-		</h:selectBooleanCheckbox>
+		<h:selectBooleanCheckbox value="#{managedBean.entity.fechamentoAutomatico}" disabled="#{!managedBean.entity.ativo}"/>
 		<label>Fechamento automático do período</label>
 		
 		<label>Moeda:</label>
@@ -156,19 +154,6 @@
 			</h:panelGroup>
 			
 		</h:panelGrid>
-		
-		<p:outputPanel id="pnlFechamentoAutomatico">
-			<h:panelGrid columns="2" rendered="#{managedBean.entity.fechamentoAutomatico}">
-				<f:facet name="header">
-					<h:outputText value="Fechamento automático" />
-				</f:facet>
-				
-				<label>Periodicidade:</label>
-				<h:selectOneMenu value="#{managedBean.entity.periodicidade}" disabled="#{!managedBean.entity.ativo}">
-					<f:selectItems value="#{enumCombo.listaPeriodicidade}"/>
-				</h:selectOneMenu>
-			</h:panelGrid>
-		</p:outputPanel>
 		
 		<p:outputPanel id="pnlContaConjunta">
 		

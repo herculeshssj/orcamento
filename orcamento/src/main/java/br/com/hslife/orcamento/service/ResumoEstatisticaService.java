@@ -50,13 +50,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,18 +69,15 @@ import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
 import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
@@ -174,6 +169,9 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	/*** Implementação dos métodos da interface ***/
 	
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) {
+		// FIXME refatorar método. O conteúdo está comentado
+		/*
+		
 		// Declaração dos objetos
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
@@ -268,6 +266,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		
 		// Retorna a lista de saldos atuais
 		return this.incorporarInvestimentos(saldoAtualContas);
+		*/
+		return new ArrayList<>();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -720,12 +720,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
 		
 		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total
-		FechamentoPeriodo fechamento = getFechamentoPeriodoService().buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
-		if (fechamento == null) {
-			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
-		} else {
-			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(fechamento.getSaldo());
-		}	
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(
+				getLancamentoContaService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, Util.ultimoDiaAno(ano - 1), null));	
 		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJaneiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJaneiro());
 		
 		// Preenche o panorama do saldo anterior 		
@@ -869,60 +865,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		resumoMensal.setFim(criterioBusca.getDataFim());
 		
 		return resumoMensal;
-	}
-	
-	@Override
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) {
-		ResumoMensalContas resumoMensal = new ResumoMensalContas();
-		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
-		FechamentoPeriodo fechamentoAnterior = null;
-				
-		// Busca o fechamento do período anterior
-		if (fechamentoPeriodo != null) 
-			fechamentoAnterior = getFechamentoPeriodoService().buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
-		else
-			fechamentoAnterior = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta);
-		
-		// Preenche os parâmetros de busca
-		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-		criterioBusca.setConta(conta);
-		resumoMensal.setConta(conta);
-		
-		// Determina a data de início do período
-		if (fechamentoAnterior == null) {
-			criterioBusca.setDataInicio(conta.getDataAbertura());
-			criterioBusca.setDataFim(new Date());
-		} else {
-			Calendar temp = Calendar.getInstance();
-			temp.setTime(fechamentoAnterior.getData());
-			temp.add(Calendar.DAY_OF_YEAR, 1);
-			criterioBusca.setDataInicio(temp.getTime());
-		}
-		
-		// Determina a data de fim do período
-		if (fechamentoPeriodo == null) {
-			criterioBusca.setDataFim(new Date());
-		} else {
-			criterioBusca.setDataFim(fechamentoPeriodo.getData());
-		}
-		
-		// Realiza a busca
-		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
-		
-		// Processa as categorias
-		if (fechamentoAnterior == null) {
-			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
-		} else {
-			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
-		}
-		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
-		
-		// Seta no resumo o início e fim do período buscado
-		resumoMensal.setInicio(criterioBusca.getDataInicio());
-		resumoMensal.setFim(criterioBusca.getDataFim());
-		
-		return resumoMensal;	
 	}
 	
 	@SuppressWarnings("deprecation")

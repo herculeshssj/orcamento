@@ -59,7 +59,6 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -343,13 +342,19 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 				.list();
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<LancamentoConta> findAllByFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
-		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.fechamentoPeriodo.id = :idFechamento")
-				.setLong("idFechamento", fechamentoPeriodo.getId())
-				.list();
-	}
-	
+	/**
+	 * Obtém o saldo do período informado para a conta. Pode-se definir quais
+	 * status de lançamentos podem ser considerados no fechamento.
+	 * 
+	 * Este método substituiu a entidade FechamentoPeriodo que fazia o papel
+	 * de guardar informações de períodos anteriores.
+	 * 
+	 * @param conta
+	 * @param dataInicio
+	 * @param dataFim
+	 * @param statusLancamento
+	 * @return o saldo do período
+	 */
 	public double getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
 		// Obtém a soma dos créditos
 		StringBuilder hqlCreditos = new StringBuilder();
