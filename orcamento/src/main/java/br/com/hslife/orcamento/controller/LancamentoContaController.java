@@ -199,7 +199,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		}
 	}
 	
-	public void findByPeriodo() {
+	public void findByPeriodo1() {
 		try {
 			if (criterioBusca.getConta() == null) {
 				warnMessage("Informe a conta!");
@@ -287,12 +287,22 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		}
 	}
 	
-	public void findByPeriodoCartao() {
+	public void findByPeriodo() {
 		if (criterioBusca.getConta() == null) {
 			warnMessage("Informe a conta!");
 			return;
 		}
 		try {
+			
+			criterioBusca.limparCriterios();
+			criterioBusca.setDataInicio(null);
+			criterioBusca.setDataFim(null);
+			
+			if (listEntity != null)
+				listEntity.clear();
+			else
+				listEntity = new LinkedList<>();
+			
 			if (mesAno == null || mesAno.isEmpty()) {
 				// Preguiça...
 				mesAno = (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR);
@@ -304,7 +314,25 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			criterioBusca.setDataFim(Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])));
 			criterioBusca.setLimiteResultado(getOpcoesSistema().getLimiteQuantidadeRegistros());
 			
-			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+			// Adiciona um lançamento extra para exibir o saldo do período anterior
+			LancamentoConta saldoAnterior = new LancamentoConta();
+			Calendar dataPeriodoAnterior = Calendar.getInstance();
+			dataPeriodoAnterior.setTime(criterioBusca.getDataInicio());
+			dataPeriodoAnterior.add(Calendar.DAY_OF_YEAR, -1);
+			
+			saldoAnterior.setDataPagamento(dataPeriodoAnterior.getTime());
+			saldoAnterior.setDescricao("Saldo do período anterior - até " + Util.formataDataHora(dataPeriodoAnterior.getTime(), Util.DATA));
+			saldoAnterior.setValorPago(getService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, dataPeriodoAnterior.getTime(), null));
+			if (saldoAnterior.getValorPago() > 0)
+				saldoAnterior.setTipoLancamento(TipoLancamento.RECEITA);
+			else 
+				saldoAnterior.setTipoLancamento(TipoLancamento.DESPESA);
+			saldoAnterior.setEditavel(false);
+			
+			// Adiciona o saldo anterior na listagem, e adiciona os demais lançamentos encontrados
+			listEntity.add(saldoAnterior);
+			listEntity.addAll(getService().buscarPorCriterioBusca(criterioBusca));
+			
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -766,17 +794,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return faturas;
 	}
 	
-	public List<String> getListaMesAno() {
-		List<String> mesAno = new LinkedList<>();
-		Calendar data = Calendar.getInstance();
-		for (int i = 0; i < 12; i++) {
-			data.add(Calendar.MONTH, -1);
-			String temp = data.get(Calendar.MONTH) + 1 + "/" + data.get(Calendar.YEAR);
-			mesAno.add(temp);
-		}
-		return mesAno;
-	}
-	
 	public void atualizaListaFechamentoPeriodo() {
 		this.getListaFechamentoPeriodo();
 	}
@@ -909,6 +926,17 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return new ArrayList<>();
 	}
 
+	public List<SelectItem> getListaMesAno() {
+		List<SelectItem> mesAno = new LinkedList<>();
+		Calendar data = Calendar.getInstance();
+		for (int i = 0; i < 12; i++) {
+			data.add(Calendar.MONTH, -1);
+			String temp = data.get(Calendar.MONTH) + 1 + "/" + data.get(Calendar.YEAR);
+			mesAno.add(new SelectItem(temp, "Período " + (data.get(Calendar.MONTH)+1) + " / " + data.get(Calendar.YEAR)));
+		}
+		return mesAno;
+	}
+	
 	public ILancamentoConta getService() {
 		return service;
 	}

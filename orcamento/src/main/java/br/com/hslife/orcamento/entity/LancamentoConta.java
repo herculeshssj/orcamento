@@ -183,6 +183,9 @@ public class LancamentoConta extends EntityPersistence {
 	@Transient
 	private LancamentoImportado lancamentoImportado;
 	
+	@Transient
+	private boolean editavel = true;
+	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamentoComparator.class)
 	private SortedSet<DetalheLancamento> detalhes;
@@ -534,5 +537,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setTaxaConversao(TaxaConversao taxaConversao) {
 		this.taxaConversao = taxaConversao;
+	}
+
+	public boolean isEditavel() {
+		return editavel;
+	}
+
+	public void setEditavel(boolean editavel) {
+		this.editavel = editavel;
 	}
 }

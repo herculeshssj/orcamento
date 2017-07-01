@@ -154,12 +154,12 @@
      			</h:outputText>
      		</h:column>     		
      		<h:column style="text-align: center; vertical-align: middle; width: 100px;">
-     			<h:commandLink title="Editar" action="#{managedBean.edit}">
+     			<h:commandLink title="Editar" action="#{managedBean.edit}" rendered="#{item.editavel}">
 					<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 				</h:commandLink>								
 	  			<p:spacer width="10"/>			
-				<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.statusLancamentoConta != 'QUITADO'}">
+				<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.statusLancamentoConta != 'QUITADO' and item.editavel}">
 					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 				</h:commandLink>							
