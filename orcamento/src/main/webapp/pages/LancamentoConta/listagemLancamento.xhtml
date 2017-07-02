@@ -127,8 +127,8 @@
      			</h:outputText>     			
      		</h:column>	
      		<h:column style="vertical-align: middle;">
-     			<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
-     			<h:outputText value=" - AGENDADO" rendered="#{item.statusLancamentoConta == 'AGENDADO'}" style="text-align: left"/>
+     			<h:outputText value="#{item.descricao} " style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+     			<h:graphicImage id="imgAlarm" title="Item agendado" value="/resources/images/svg/alarm_clock.svg" height="20" width="20" rendered="#{item.statusLancamentoConta == 'AGENDADO'}"/>
      			<br/>
      			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20"/>
      			<p:spacer width="5"/>
