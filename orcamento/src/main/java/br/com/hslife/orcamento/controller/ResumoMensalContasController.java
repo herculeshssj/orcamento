@@ -243,26 +243,20 @@ public class ResumoMensalContasController extends AbstractController {
 		
 		ChartSeries receitaSeries = new ChartSeries();
 		receitaSeries.setLabel("Receitas");		
-
-		// TODO refatorar trecho de código
-		/*
+		
 		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 			receitaSeries.set(faturaCartao == null ? "Próximas faturas / Lançamento registrados" : faturaCartao.getLabel(), Math.abs(receitas));
 		} else {
-			receitaSeries.set(mesAno == null || mesAno.isEmpty() ? "Periodo atual" : mesAno, Math.abs(receitas));
+			receitaSeries.set(this.getMesAnoTextual(), Math.abs(receitas));
 		}
-		*/
 		
 		ChartSeries despesaSeries = new ChartSeries();
 		despesaSeries.setLabel("Despesas");
-		// TODO refatorar trecho de código
-		/* 
 		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 			despesaSeries.set(faturaCartao == null ? "Próximas faturas / Lançamento registrados" : faturaCartao.getLabel(), Math.abs(despesas));
 		} else {
-			despesaSeries.set(fechamentoSelecionado == null ? "Periodo atual" : fechamentoSelecionado.getLabel(), Math.abs(despesas));
+			despesaSeries.set(this.getMesAnoTextual(), Math.abs(despesas));
 		}
-		*/
 		
         barComparativo.addSeries(receitaSeries);  
         barComparativo.addSeries(despesaSeries);
@@ -298,8 +292,7 @@ public class ResumoMensalContasController extends AbstractController {
 		if (contaSelecionada.getTipoConta().equals(TipoConta.CARTAO)) {
 			orcamentoAGerar.setDescricao(faturaCartao == null ? "Orçamento - Próximas faturas" : "Orçamento - " + faturaCartao.getLabel());
 		} else {
-			// TODO refatorar
-			//orcamentoAGerar.setDescricao(fechamentoSelecionado == null ? "Orçamento - Período atual" : "Orçamento - " + fechamentoSelecionado.getLabel());
+			orcamentoAGerar.setDescricao(this.getMesAnoTextual());
 		}
 		
 		orcamentoAGerar.setInicio(resumoMensal.getInicio());
@@ -372,9 +365,24 @@ public class ResumoMensalContasController extends AbstractController {
 		for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
 			data.add(Calendar.MONTH, -1);
 			String temp = data.get(Calendar.MONTH) + 1 + "/" + data.get(Calendar.YEAR);
-			mesAno.add(new SelectItem(temp, "Período " + (data.get(Calendar.MONTH)+1) + " / " + data.get(Calendar.YEAR)));
+			mesAno.add(new SelectItem(temp, this.getMesAnoTextual(data)));
 		}
 		return mesAno;
+	}
+	
+	private String getMesAnoTextual(Calendar data) {
+		return "Período " + (data.get(Calendar.MONTH)+1) + " / " + data.get(Calendar.YEAR);
+	}
+	
+	private String getMesAnoTextual() {
+		String mesAno = this.mesAno;
+		if (mesAno == null || mesAno.isEmpty()) {
+			mesAno = (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR);
+		}
+		
+		String[] dataParticionada = mesAno.split("/");
+		
+		return "Período " + dataParticionada[0] + " / " + dataParticionada[1];
 	}
 
 	public boolean isLancamentoAgendado() {

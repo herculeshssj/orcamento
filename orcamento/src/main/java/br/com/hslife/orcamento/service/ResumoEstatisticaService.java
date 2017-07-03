@@ -267,6 +267,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartaoDebito(CriterioBuscaLancamentoConta criterioBusca, int ano) {
+		// TODO refatorar para trabalhar com categoria, e não favorecido
 		// Declara o Map de previsão de lançamentos da conta
 		Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoCartao>();
 		
