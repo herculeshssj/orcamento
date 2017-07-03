@@ -64,15 +64,13 @@
 			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>
 		
-		<label>Período:</label>
-		<h:selectOneMenu id="txtPeriodo" value="#{managedBean.fechamentoPeriodo}" converter="entityConverter" disabled="true">
-			<f:selectItems value="#{managedBean.listaFechamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
-		</h:selectOneMenu>
+		<label for="frmListEntity:txtDataFechamento">Período de fechamento:</label>
+		<h:inputText id="txtDataFechamento" value="#{managedBean.periodoFechamento}" disabled="true"/>
 		
 		<hr />
 		
 		<h5>Lançamentos do período selecionados</h5>
-		<h:dataTable id="tableListEntity" width="100%" value="#{managedBean.fechamentoPeriodo.lancamentos}" var="item" style="font-size: 16px;">
+		<h:dataTable id="tableListEntity" width="100%" value="#{managedBean.listEntity}" var="item" style="font-size: 16px;">
      		<h:column style="vertical-align: middle;">
      			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
      				<f:converter converterId="dateConverter"/>

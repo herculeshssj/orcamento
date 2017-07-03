@@ -64,11 +64,9 @@
 			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>
 		
-		<label for="frmListEntity:txtDataFechamento">Data de fechamento:</label>
-		<p:inputMask id="txtDataFechamento" size="9" mask="99/99/9999" value="#{managedBean.dataFechamento}">
-	    	<f:converter converterId="dateConverter"/>
-	    </p:inputMask>
-	    
+		<label for="frmListEntity:txtDataFechamento">Período de fechamento:</label>
+		<h:inputText id="txtDataFechamento" value="#{managedBean.periodoFechamento}" disabled="true"/>
+	    	
 	    <hr/>
 	    
 	    <h5>Selecione os lançamentos periódicos que serão criados</h5>

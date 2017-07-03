@@ -81,10 +81,12 @@ import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.Container;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoria;
@@ -440,17 +442,18 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 	
 	public String fecharPeriodoView() {
-		// FIXME refatorar
-		/*
 		// Verifica se a conta seleciona está ativa
 		if (!criterioBusca.getConta().isAtivo()) {
 			warnMessage("A conta encontra-se inativa!");
 			return "";
 		}
-		if (fechamentoPeriodo != null && fechamentoPeriodo.getOperacao().equals(OperacaoConta.FECHAMENTO)) {
-			warnMessage("Período selecionado encontra-se fechado.");
+		
+		// Verifica se um período selecionado pode ser fechado
+		if (mesAno == null || mesAno.isEmpty()) {
+			warnMessage("Não se pode fechar o período atual!");
 			return "";
 		}
+			
 		try {
 			actionTitle = " - Fechar período";
 			lancamentosPeriodicos = lancamentoPeriodicoService
@@ -458,26 +461,24 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			for (LancamentoPeriodico lp : lancamentosPeriodicos) {
 				lp.setSelecionado(true);
 			}
-			if (fechamentoPeriodo != null && fechamentoPeriodo.getOperacao().equals(OperacaoConta.REABERTURA)) {
-				dataFechamento = fechamentoPeriodo.getData();				
-			}
 			return "/pages/LancamentoConta/fecharPeriodo";
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		*/
+		
 		return "";
 	}
 	
+	public String getPeriodoFechamento() {
+		String[] dataParticionada = mesAno.split("/");
+		
+		return  Util.formataDataHora(Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])), Util.DATA) 
+				+ " à " 
+				+ Util.formataDataHora(Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1])), Util.DATA);
+	}
+	
 	public String fecharPeriodo() {
-		// FIXME refatorar
-		/*
 		try {
-			if (dataFechamento == null) {
-				warnMessage("Informe a data de fechamento!");
-				return "";
-			}
-			
 			// Remove os lançamentos não selecionados
 			for (Iterator<LancamentoPeriodico> i = lancamentosPeriodicos.iterator(); i.hasNext(); ) {
 				if (!i.next().isSelecionado()) {
@@ -485,57 +486,65 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				}
 			}
 			
-			if (fechamentoPeriodo != null) 
-				fechamentoPeriodoService.fecharPeriodo(fechamentoPeriodo, new ArrayList<>(lancamentosPeriodicos));
-			else 
-				fechamentoPeriodoService.fecharPeriodo(dataFechamento, criterioBusca.getConta(), new ArrayList<>(lancamentosPeriodicos));
+			String[] dataParticionada = mesAno.split("/");
+			Date dataInicio = Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]));
+			Date dataFim = Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]));
+			
+			getFechamentoPeriodoService().fecharPeriodo(criterioBusca.getConta(), dataInicio, dataFim, lancamentosPeriodicos);
 			
 			infoMessage("Período fechado com sucesso.");
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		*/
+		
 		return list();
 	}
 	
 	public String reabrirPeriodoView() {
-		// FIXME refatorar
-		/*
-		// Verifica se a conta seleciona está ativa
+		// Verifica se a conta selecionada está ativa
 		if (!criterioBusca.getConta().isAtivo()) {
 			warnMessage("A conta encontra-se inativa!");
 			return "";
 		}
-		if (fechamentoPeriodo == null) {
-			warnMessage("Selecione um fechamento de período!");
+		
+		// Verifica se um período selecionado pode ser fechado
+		if (mesAno == null || mesAno.isEmpty()) {
+			warnMessage("Não se pode reabrir o período atual!");
 			return "";
 		}
-		if (fechamentoPeriodo.getOperacao().equals(OperacaoConta.REABERTURA)) {
-			warnMessage("O período selecionado já foi reaberto.");
-			return "";
-		}
+		
 		try {
-			fechamentoPeriodo.setLancamentos(getService().buscarTodosPorFechamentoPeriodo(fechamentoPeriodo));
-			Collections.sort(fechamentoPeriodo.getLancamentos(), new LancamentoContaComparator());
+			String[] dataParticionada = mesAno.split("/");
+			Date dataInicio = Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]));
+			Date dataFim = Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]));
+			
+			criterioBusca.limparCriterios();
+			criterioBusca.setDataInicio(dataInicio);
+			criterioBusca.setDataFim(dataFim);
+			criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.QUITADO});
+			listEntity = getService().buscarPorCriterioBusca(criterioBusca);
+			
 			actionTitle = " - Reabrir período";
 			return "/pages/LancamentoConta/reabrirPeriodo";
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		*/
+		
 		return "";
 	}
 	
 	public String reabrirPeriodo() {
-		// FIXME refatorar
-		/*
 		try {
-			fechamentoPeriodoService.reabrirPeriodo(fechamentoPeriodo);
+			String[] dataParticionada = mesAno.split("/");
+			Date dataInicio = Util.primeiroDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]));
+			Date dataFim = Util.ultimoDiaMes(Integer.valueOf(dataParticionada[0]) - 1, Integer.valueOf(dataParticionada[1]));
+			
+			getFechamentoPeriodoService().reabrirPeriodo(criterioBusca.getConta(), dataInicio, dataFim);
 			infoMessage("Período reaberto com sucesso.");
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		*/
+		
 		return list();
 	}
 	
@@ -875,6 +884,10 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return mesAno;
 	}
 	
+	public IFechamentoPeriodo getFechamentoPeriodoService() {
+		return fechamentoPeriodoService;
+	}
+
 	public ILancamentoConta getService() {
 		return service;
 	}

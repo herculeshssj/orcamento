@@ -64,6 +64,7 @@ import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -94,96 +95,20 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 	@Override
 	public void fecharPeriodo(Conta conta, Date dataInicio, Date dataFim) {
 		this.fecharPeriodo(conta, dataInicio, dataFim, null);
-		
 	}
 
 	@Override
 	public void fecharPeriodo(Conta conta, Date dataInicio, Date dataFim, List<LancamentoPeriodico> lancamentosPeriodicos) {
-		// TODO implementar. Os métodos estão comentados
-		
-	}
-
-	/*
-	@SuppressWarnings("deprecation")
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos)  {
-		// Obtém-se o último fechamento realizado
-		FechamentoPeriodo fechamentoAnterior;
-		if (fechamentoReaberto == null)
-			fechamentoAnterior = getRepository().findUltimoFechamentoByConta(conta);
-		else 
-			fechamentoAnterior = getRepository().findFechamentoPeriodoAnterior(fechamentoReaberto);
-		
-		double saldoFechamentoAnterior = 0;
-		
-		if (fechamentoAnterior == null) {
-			saldoFechamentoAnterior = conta.getSaldoInicial();
-		} else {
-			saldoFechamentoAnterior = fechamentoAnterior.getSaldo();
-		}
-		
-		// Incrementa a data do fechamento anterior
-		Calendar temp = Calendar.getInstance();
-		if (fechamentoAnterior != null) {
-			temp.setTime(fechamentoAnterior.getData());
-			temp.add(Calendar.DAY_OF_YEAR, 1);
-		} else
-			temp.setTime(conta.getDataAbertura());		
-		
-		// Calcula o saldo do período
+		// Busca os lançamentos da conta para o período selecionado
 		CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
 		criterio.setConta(conta);
-		criterio.setDescricao("");
-		criterio.setDataInicio(temp.getTime());
-		criterio.setDataFim(dataFechamento);
-		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-		double saldoFechamento = LancamentoContaUtil.calcularSaldoLancamentos(getLancamentoContaRepository().findByCriterioBusca(criterio));
-		
-		// Cria o novo fechamento para a conta
-		FechamentoPeriodo novoFechamento = new FechamentoPeriodo();
-		if (fechamentoReaberto == null) {
-			// Antes de prosseguir, verifica se não existem períodos reabertos
-			List<FechamentoPeriodo> fechamentosReabertos = getRepository().findByContaAndOperacaoConta(conta, OperacaoConta.REABERTURA);
-			if (fechamentosReabertos != null && !fechamentosReabertos.isEmpty()) {
-				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
-			}
-			
-			novoFechamento.setConta(conta);
-			novoFechamento.setData(dataFechamento);
-			novoFechamento.setOperacao(OperacaoConta.FECHAMENTO);
-			novoFechamento.setDataAlteracao(new Date());
-			novoFechamento.setSaldo(saldoFechamentoAnterior + saldoFechamento);
-			
-			// Obtém o mês e ano da data de fechamento
-			temp.setTime(dataFechamento);
-			novoFechamento.setMes(temp.getTime().getMonth() + 1);
-			novoFechamento.setAno(temp.get(Calendar.YEAR));
-			
-			// Salva o fechamento
-			getRepository().save(novoFechamento);
-		} else {
-			// Antes de prosseguir, verifica se o período selecionado não contém
-			// períodos reabertos anteriores
-			List<FechamentoPeriodo> fechamentosAnterioresReabertos = getRepository().findFechamentosAnterioresReabertos(fechamentoReaberto);
-			if (fechamentosAnterioresReabertos != null && !fechamentosAnterioresReabertos.isEmpty()) {
-				throw new BusinessException("Não é possível fechar! Existem períodos anteriores reabertos!");
-			}
-			
-			// Altera os dados do fechamento já existente
-			fechamentoReaberto.setOperacao(OperacaoConta.FECHAMENTO);
-			fechamentoReaberto.setDataAlteracao(new Date());
-			fechamentoReaberto.setSaldo(saldoFechamentoAnterior + saldoFechamento);
-			
-			// Salva o fechamento
-			getRepository().update(fechamentoReaberto);
-		}
+		criterio.setDataInicio(dataInicio);
+		criterio.setDataFim(dataFim);
+		criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO});
 		
 		// Quita os lançamentos do período
 		for (LancamentoConta l : getLancamentoContaRepository().findByCriterioBusca(criterio)) {
 			l.setStatusLancamentoConta(StatusLancamentoConta.QUITADO);
-			if (fechamentoReaberto == null)
-				l.setFechamentoPeriodo(novoFechamento);
-			else
-				l.setFechamentoPeriodo(fechamentoReaberto);
 
 			if (lancamentosPeriodicos != null && lancamentosPeriodicos.contains(l.getLancamentoPeriodico())) {
 				this.registrarPagamento(l);
@@ -192,29 +117,22 @@ public class FechamentoPeriodoService implements IFechamentoPeriodo {
 			}
 		}
 	}
-	*/
-	// FIXME refatorar. O método está comentado
-	/*
-	public void reabrirPeriodo(FechamentoPeriodo entity) {
-		// Busca os fechamentos posteriores ao fechamento selecionado
-		List<FechamentoPeriodo> fechamentosPosteriores = getRepository().findFechamentosPosteriores(entity);
+
+	@Override
+	public void reabrirPeriodo(Conta conta, Date dataInicio, Date dataFim) {
+		// Busca os lançamentos da conta para o período informado
+		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
+		criterioBusca.setConta(conta);
+		criterioBusca.setDataInicio(dataInicio);
+		criterioBusca.setDataFim(dataFim);
+		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.QUITADO});
 		
-		// Itera a lista de fechamentos realizando a reabertura dos mesmos e dos lançamentos vinculados
-		for (FechamentoPeriodo fechamentoPeriodo : fechamentosPosteriores) {
-			FechamentoPeriodo fechamento = getRepository().findById(fechamentoPeriodo.getId());
-			fechamento.setOperacao(OperacaoConta.REABERTURA);
-			fechamento.setDataAlteracao(new Date());
-			getRepository().update(fechamento);
-			
-			// Busca os lançamentos vinculados ao fechamento do período
-			fechamento.setLancamentos(getLancamentoContaRepository().findAllByFechamentoPeriodo(fechamento));
-			for (LancamentoConta l : fechamento.getLancamentos()) {
-				l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
-				getLancamentoContaRepository().update(l);
-			}
+		// Itera o resultado da busca, setando cada lançamento quitado para registrado
+		for (LancamentoConta l : getLancamentoContaRepository().findByCriterioBusca(criterioBusca)) {
+			l.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+			getLancamentoContaRepository().update(l);
 		}
 	}
-	*/
 
 	@SuppressWarnings("deprecation")
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo) {		

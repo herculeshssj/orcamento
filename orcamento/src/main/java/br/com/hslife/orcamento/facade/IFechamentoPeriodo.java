@@ -59,6 +59,8 @@ public interface IFechamentoPeriodo {
 	
 	public void fecharPeriodo(Conta conta, Date dataInicio, Date dataFim, List<LancamentoPeriodico> lancamentosPeriodicos);
 	
+	public void reabrirPeriodo(Conta conta, Date dataInicio, Date dataFim);
+	
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo);
 	
 }
