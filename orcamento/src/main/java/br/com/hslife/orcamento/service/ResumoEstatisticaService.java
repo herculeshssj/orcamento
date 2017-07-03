@@ -50,11 +50,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IContaCompartilhada;
@@ -163,10 +166,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	/*** Implementação dos métodos da interface ***/
 	
+	@Override
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) {
-		// FIXME refatorar método. O conteúdo está comentado
-		/*
-		
 		// Declaração dos objetos
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
 		SaldoAtualConta saldoAtual = new SaldoAtualConta();
@@ -199,9 +200,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Verifica se a conta é do tipo CARTAO
 			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
 				// Seta o saldo do período com o limite do cartão
-				saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao() 
-						? conta.getCartaoCredito().getLimiteCartao() 
-								: Util.arredondar(conta.getCartaoCredito().getLimiteCartao() * conta.getMoeda().getValorConversao()));
+				saldoAtual.setSaldoPeriodo(conta.getCartaoCredito().getLimiteCartao());
 				
 				// Traz todos os lançamentos do cartão que ainda não foram quitados
 				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
@@ -209,42 +208,34 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				// Seta a conta
 				criterio.setConta(conta);
 			} else {
-				// Traz o último período de fechamento da conta
-				FechamentoPeriodo ultimoFechamento = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta); 
-				if (ultimoFechamento == null) {
-					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
-							? conta.getSaldoInicial()
-									: Util.arredondar(conta.getSaldoInicial() * conta.getMoeda().getValorConversao()));
+				// Traz o saldo do período anterior
+				double saldoPeriodoAnterior = 0.0;
+				if (agendado) {
+					saldoPeriodoAnterior = getLancamentoContaService()
+							.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, Util.ultimoDiaMesAnterior(), 
+									new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
 				} else {
-					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
-							? ultimoFechamento.getSaldo()
-									: Util.arredondar(ultimoFechamento.getSaldo() * conta.getMoeda().getValorConversao()));
+					saldoPeriodoAnterior = getLancamentoContaService()
+							.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, Util.ultimoDiaMesAnterior(), 
+									new StatusLancamentoConta[]{StatusLancamentoConta.QUITADO, StatusLancamentoConta.REGISTRADO});
 				}
 				
-				// Traz os lançamentos da data de fechamento em diante
-				// Se a opção de agendado estiver marcada, traz os lançamentos agendados
-				if (agendado)
-					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-				else 
-					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-				
-				criterio.setConta(conta);
-				if (ultimoFechamento == null) {
-					criterio.setDataInicio(conta.getDataAbertura());
-				}
-				else {
-					Calendar temp = Calendar.getInstance();
-					temp.setTime(ultimoFechamento.getData());
-					temp.add(Calendar.DAY_OF_YEAR, 1);
-					criterio.setDataInicio(temp.getTime());
-				}
+				saldoAtual.setSaldoPeriodo(saldoPeriodoAnterior);
 			}
 			
-			// Para os cartões de débito, traz somente os lançamentos do mês corrente
-			if (conta.getTipoConta().equals(TipoConta.CARTAO) && conta.getCartaoCredito().getTipoCartao().equals(TipoCartao.DEBITO)) {
-				criterio.setDataInicio(Util.primeiroDiaMesAtual());
-				criterio.setDataFim(Util.ultimoDiaMesAtual());
-			}
+			// Se a opção de agendado estiver marcada, traz os lançamentos agendados
+			if (agendado)
+				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+			else 
+				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+			
+			criterio.setConta(conta);
+			
+			// Traz os lançamentos da data de fechamento em diante
+			Calendar temp = Calendar.getInstance();
+			temp.setTime(Util.ultimoDiaMesAnterior());
+			temp.add(Calendar.DAY_OF_YEAR, 1);
+			criterio.setDataInicio(temp.getTime());
 			
 			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterio);
 			
@@ -257,12 +248,11 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Adiciona na lista de saldos da conta
 			saldoAtualContas.add(saldoAtual);
 			saldoAtual = new SaldoAtualConta();
+			
 		}
 		
 		// Retorna a lista de saldos atuais
-		return this.incorporarInvestimentos(saldoAtualContas);
-		*/
-		return new ArrayList<>();
+		return saldoAtualContas;
 	}
 	
 	@SuppressWarnings("deprecation")
