@@ -70,15 +70,10 @@ import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
-import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
-import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IContaCompartilhada;
@@ -272,13 +267,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	@SuppressWarnings("deprecation")
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartaoDebito(CriterioBuscaLancamentoConta criterioBusca, int ano) {
-		// Pega a data atual
-		Calendar hoje = Calendar.getInstance();
-		
-		if (ano > hoje.get(Calendar.YEAR)) {
-			throw new BusinessException("Não implementado previsão para anos posteriores ao atual");
-		}
-		
 		// Declara o Map de previsão de lançamentos da conta
 		Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoCartao>();
 		
@@ -338,7 +326,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return resultado;
 	}
 	
-	@SuppressWarnings("deprecation")
+	@Override
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano) {
 		
 		// Caso o cartão seja de débito, desvia para o método correspondente
@@ -359,6 +347,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Traz todas as faturas do ano selecionado
 			faturasCartao = getFaturaCartaoService().buscarTodosPorContaEAnoOrdenadosPorMesAno(criterioBusca.getConta(), ano);
 		} else {
+			/** Eliminado a previsão de faturas de anos posteriores **/
+			/**
 			// Verifica se realmente não existem faturas para o ano seleciona. Se existirem, segue com o fluxo normal do método
 			faturasCartao = getFaturaCartaoService().buscarTodosPorContaEAnoOrdenadosPorMesAno(criterioBusca.getConta(), ano);
 			
@@ -366,7 +356,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				// Anos posteriores é realizado a estimativa baseado no ano informado e os lançamentos periódicos ativos da conta
 				// Todos os lançamentos gerados são incluídos em faturas correspondentes aos meses do ano informado 
 				
-				/*** Parcelamentos ***/
+				/*** Parcelamentos ***
 				// Busca todos os parcelamentos ativos da conta selecionada
 				List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
 						buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);
@@ -384,7 +374,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					}				
 				}
 				
-				/*** Despesas fixas ***/
+				/*** Despesas fixas ***
 				// Traz todos os lançamentos fixos ativos da conta selecionada
 				List<LancamentoPeriodico> despesasFixas = getLancamentoPeriodicoService().
 						buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
@@ -452,7 +442,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					
 				}
 				
-				/*** Lançamentos avulsos ***/
+				/*** Lançamentos avulsos ***
 				// Traz os lançamentos avulsos existente no ano do relatório
 				List<LancamentoConta> todosAvulsos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 				
@@ -478,6 +468,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				}
 				
 			}
+			**/
 		}
 				
 		// Traz os lançamentos de cada fatura e classifica-os em suas respectivas categorias
@@ -562,17 +553,19 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		mapPanoramaLancamentos.put(saldoAnterior.getOid(), saldoAnterior);
 		
 		// Criação das listas que serão usadas
-		List<LancamentoConta> avulsos = new ArrayList<LancamentoConta>();
-		List<LancamentoConta> parcelas = new ArrayList<LancamentoConta>();
+		//List<LancamentoConta> avulsos = new ArrayList<LancamentoConta>();
+		//List<LancamentoConta> parcelas = new ArrayList<LancamentoConta>();
 		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
 		
 		if (ano <= hoje.get(Calendar.YEAR)) {
 			// Ano atual e anteriores é trazido o que está atualmente registrado na conta
 			lancamentosProcessados = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		} else {
+			/** Eliminado a previsão de lançamentos de anos posteriores **/
+			/**
 			// Anos posteriores é realizado a estimativa baseado no mês e ano informado e os lançamentos periódicos ativos da conta
 			
-			/*** Lançamentos parcelados ***/
+			/*** Lançamentos parcelados ***
 			// Traz todos os lançamentos parcelados ativos da conta selecionada
 			List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
 					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);					
@@ -592,7 +585,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Adiciona as parcelas nos lançamentos processados
 			lancamentosProcessados.addAll(parcelas);
 			
-			/*** Lançamentos fixos ***/
+			/*** Lançamentos fixos ***
 			// Traz todos os lançamentos fixos ativos da conta selecionada
 			List<LancamentoPeriodico> despesasFixas = getLancamentoPeriodicoService().
 					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
@@ -660,7 +653,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 			
 			
-			/*** Lançamentos avulsos ***/
+			/*** Lançamentos avulsos ***
 			// Traz os lançamentos avulsos existente no ano do relatório
 			avulsos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 			
@@ -672,7 +665,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 			
 			// Inclui os lançamentos avulsos
-			lancamentosProcessados.addAll(avulsos);			
+			lancamentosProcessados.addAll(avulsos);
+			**/
 		}
 		
 		// Busca os lançamentos e classifica-os em suas respectivas categorias

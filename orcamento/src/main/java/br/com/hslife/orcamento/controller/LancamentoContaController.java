@@ -269,6 +269,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			saldoAnterior.setDataPagamento(dataPeriodoAnterior.getTime());
 			saldoAnterior.setDescricao("Saldo do período anterior - até " + Util.formataDataHora(dataPeriodoAnterior.getTime(), Util.DATA));
 			saldoAnterior.setValorPago(getService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, dataPeriodoAnterior.getTime(), null));
+			saldoAnterior.setMoeda(criterioBusca.getConta().getMoeda());
 			if (saldoAnterior.getValorPago() > 0)
 				saldoAnterior.setTipoLancamento(TipoLancamento.RECEITA);
 			else 
@@ -866,7 +867,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	public List<SelectItem> getListaMesAno() {
 		List<SelectItem> mesAno = new LinkedList<>();
 		Calendar data = Calendar.getInstance();
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < getOpcoesSistema().getLimiteQuantidadeFechamentos(); i++) {
 			data.add(Calendar.MONTH, -1);
 			String temp = data.get(Calendar.MONTH) + 1 + "/" + data.get(Calendar.YEAR);
 			mesAno.add(new SelectItem(temp, "Período " + (data.get(Calendar.MONTH)+1) + " / " + data.get(Calendar.YEAR)));

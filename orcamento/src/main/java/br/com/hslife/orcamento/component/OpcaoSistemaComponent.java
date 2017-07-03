@@ -109,6 +109,7 @@ public class OpcaoSistemaComponent {
 		opcoesUsuario.put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", "INDIVIDUAL");
 		opcoesUsuario.put("CONTA_EXIBIR_MEIO_PAGAMENTO", Boolean.FALSE);
 		opcoesUsuario.put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", Integer.valueOf(12));
+		opcoesUsuario.put("RESUMO_LIMITE_ANOS_PANORAMA", Integer.valueOf(5));
 		opcoesUsuario.put("NOTIFICAR_AGENDAMENTO_EMAIL", Boolean.FALSE);
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_FATURACARTAO", Integer.valueOf(1));
@@ -137,6 +138,7 @@ public class OpcaoSistemaComponent {
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS", this.getLimiteQuantidadeRegistros());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTA_EXIBIR_INATIVAS", this.getExibirContasInativas());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS", this.getLimiteQuantidadeFechamentos());
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_LIMITE_ANOS_PANORAMA", this.getLimiteAnosPanorama());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", this.getFormaAgrupamentoPagamento());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTROLAR_ESTOQUE_DESPENSA", this.getControlarEstoqueItemDespensa());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("MOEDA_PADRAO", moedaPadrao);
@@ -285,6 +287,27 @@ public class OpcaoSistemaComponent {
 			logger.catching(e);
 		}
 		return false;
+	}
+	
+	public Integer getLimiteAnosPanorama() {
+		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
+		try {
+			// Verifica se o valor existe no cache
+			if (recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_ANOS_PANORAMA") != null) {
+				return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_ANOS_PANORAMA"));
+			} else {
+				OpcaoSistema opcao = buscarPorChaveEUsuario("RESUMO_LIMITE_ANOS_PANORAMA", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_ANOS_PANORAMA", Integer.valueOf(opcao.getValor()));
+					return Integer.valueOf((Integer)recuperaParametroCacheUsuario(usuarioLogado, "RESUMO_LIMITE_ANOS_PANORAMA"));
+				}
+			}
+		} catch (ApplicationException be) {
+			logger.catching(be);
+		} catch (Exception e) {
+			logger.catching(e);
+		}	
+		return 5; // valor padrão.
 	}
 	
 	public Integer getLimiteQuantidadeFechamentos() {
