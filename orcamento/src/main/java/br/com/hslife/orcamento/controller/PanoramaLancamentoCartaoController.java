@@ -166,7 +166,7 @@ public class PanoramaLancamentoCartaoController extends AbstractController {
 	
 	public List<Integer> getListaAno() {
 		List<Integer> anos = new ArrayList<>();
-		for (int i = Calendar.getInstance().get(Calendar.YEAR) + 5; i > Calendar.getInstance().get(Calendar.YEAR) - 6; i--) {
+		for (int i = Calendar.getInstance().get(Calendar.YEAR); i > Calendar.getInstance().get(Calendar.YEAR) - getOpcoesSistema().getLimiteAnosPanorama(); i--) {
 			anos.add(i);
 		}
 		return anos;

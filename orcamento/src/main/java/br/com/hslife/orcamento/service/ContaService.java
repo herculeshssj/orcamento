@@ -54,7 +54,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoImportado;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -65,7 +64,6 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
 import br.com.hslife.orcamento.repository.ContaRepository;
-import br.com.hslife.orcamento.repository.FechamentoPeriodoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoImportadoRepository;
 import br.com.hslife.orcamento.util.Util;
@@ -80,9 +78,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	private IFechamentoPeriodo fechamentoPeriodoService;
 	
 	@Autowired
-	private FechamentoPeriodoRepository fechamentoPeriodoRepository;
-	
-	@Autowired
 	private LancamentoContaRepository lancamentoContaRepository;
 	
 	@Autowired
@@ -92,11 +87,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 		return fechamentoPeriodoService;
 	}
 	
-	public FechamentoPeriodoRepository getFechamentoPeriodoRepository() {
-		this.fechamentoPeriodoRepository.setSessionFactory(this.sessionFactory);
-		return fechamentoPeriodoRepository;
-	}
-
 	public ContaRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
@@ -141,8 +131,8 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 	}
 	
 	@Override
-	public void desativarConta(Conta conta, String situacaoLancamentos, boolean fecharPeriodo) {
-		
+	public void desativarConta(Conta conta, String situacaoLancamentos) {
+		// TODO analisar para saber se há necessidade de refatoração
 		if (situacaoLancamentos.equals("QUITAR")) {			
 			// Busca o último lançamento cadastrado, caso não exista cria um novo lançamento e define a data de 
 			// pagamento com a data atual
@@ -159,10 +149,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 				ultimoLancamento.setTipoLancamento(TipoLancamento.DESPESA);
 			}				
 			
-			// Realiza o fechamento do período, caso o usuário tenha optado em fazê-lo
-			if (fecharPeriodo)
-				getFechamentoPeriodoService().fecharPeriodo(ultimoLancamento.getDataPagamento(), conta);
-			
 			// Seta a data de fechamento da conta com a data de pagamento do último lançamento
 			conta.setDataFechamento(ultimoLancamento.getDataPagamento());
 			
@@ -170,18 +156,14 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			getLancamentoContaRepository().deleteAllLancamentoContaAfterDateByConta(conta.getDataFechamento(), conta);
 			
 			// Define o saldo final da conta com base no último fechamento realizado
-			conta.setSaldoFinal(getFechamentoPeriodoService().buscarUltimoFechamentoPeriodoPorConta(conta).getSaldo());
+			conta.setSaldoFinal(getLancamentoContaRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, conta.getDataFechamento(), null));
 			
 		} else if (situacaoLancamentos.equals("EXCLUIR")) {						
-			// Realiza o fechamento do período, caso o usuário tenha optado em fazê-lo
-			if (fecharPeriodo)
-				getFechamentoPeriodoService().fecharPeriodo(conta.getDataFechamento(), conta);
-						
 			// Exclui todos os lançamentos existentes após a data de fechamento da conta
 			getLancamentoContaRepository().deleteAllLancamentoContaAfterDateByConta(conta.getDataFechamento(), conta);
 						
 			// Define o saldo final da conta com base no último fechamento realizado
-			conta.setSaldoFinal(getFechamentoPeriodoService().buscarUltimoFechamentoPeriodoPorConta(conta).getSaldo());			
+			conta.setSaldoFinal(getLancamentoContaRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, conta.getDataFechamento(), null));			
 		}
 		
 		// Seta a conta como inativa
@@ -200,13 +182,6 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			// Exclui os lançamentos importados
 			for (LancamentoImportado importado : getLancamentoImportadoRepository().findByConta(entity)) {
 				getLancamentoImportadoRepository().delete(importado);
-			}
-			
-			// Exclui todos os fechamentos de períodos
-			// Neste caso é necessário ser o próprio repositório para poder ficar dentro do mesmo
-			// contexto transacional
-			for (FechamentoPeriodo fechamento : getFechamentoPeriodoRepository().findAllByConta(entity)) {
-				getFechamentoPeriodoRepository().delete(fechamento);
 			}
 			
 			// Exclui a conta

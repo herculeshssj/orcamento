@@ -70,7 +70,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.rest.json.ContaJson;
@@ -132,10 +131,6 @@ public class Conta extends EntityPersistence {
 	
 	@Column
 	private boolean fechamentoAutomatico;
-	
-	@Column(length=10)
-	@Enumerated(EnumType.STRING)
-	private PeriodoLancamento periodicidade;
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
@@ -437,13 +432,5 @@ public class Conta extends EntityPersistence {
 
 	public void setFechamentoAutomatico(boolean fechamentoAutomatico) {
 		this.fechamentoAutomatico = fechamentoAutomatico;
-	}
-
-	public PeriodoLancamento getPeriodicidade() {
-		return periodicidade;
-	}
-
-	public void setPeriodicidade(PeriodoLancamento periodicidade) {
-		this.periodicidade = periodicidade;
 	}
 }

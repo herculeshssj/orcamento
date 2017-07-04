@@ -50,42 +50,17 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
 
 public interface IFechamentoPeriodo {
 	
-	public void alterar(FechamentoPeriodo entity);
+	public void fecharPeriodo(Conta conta, Date dataInicio, Date dataFim);
 	
-	public void excluir(FechamentoPeriodo entity);
+	public void fecharPeriodo(Conta conta, Date dataInicio, Date dataFim, List<LancamentoPeriodico> lancamentosPeriodicos);
 	
-	public List<FechamentoPeriodo> buscarPorContaEOperacaoConta(Conta conta, OperacaoConta operacaoConta);
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta);
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, List<LancamentoPeriodico> lancamentosPeriodicos);
-	
-	public void fecharPeriodo(FechamentoPeriodo fechamentoPeriodo, List<LancamentoPeriodico> lancamentosPeriodicos);
-	
-	public void fecharPeriodo(Date dataFechamento, Conta conta, FechamentoPeriodo fechamentoReaberto, List<LancamentoPeriodico> lancamentosPeriodicos) ;
-	
-	public void reabrirPeriodo(FechamentoPeriodo entity);
+	public void reabrirPeriodo(Conta conta, Date dataInicio, Date dataFim);
 	
 	public void registrarPagamento(LancamentoConta pagamentoPeriodo);
 	
-	public FechamentoPeriodo buscarFechamentoPeriodoAnterior(FechamentoPeriodo fechamentoPeriodo);
-	
-	public FechamentoPeriodo buscarUltimoFechamentoConta(Conta conta);
-	
-	public List<FechamentoPeriodo> buscarTodosFechamentoPorConta(Conta conta);
-	
-	public FechamentoPeriodo buscarFechamentoPorID(Long id);
-	
-	public double saldoUltimoFechamento(Conta conta);
-	
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(Conta conta, Date data, OperacaoConta operacao);
-	
-	public FechamentoPeriodo buscarUltimoFechamentoPeriodoPorConta(Conta conta);
 }

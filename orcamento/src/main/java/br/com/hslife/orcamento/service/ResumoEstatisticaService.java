@@ -71,19 +71,12 @@ import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
-import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.OperacaoConta;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
-import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IContaCompartilhada;
@@ -173,6 +166,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	
 	/*** Implementação dos métodos da interface ***/
 	
+	@Override
 	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) {
 		// Declaração dos objetos
 		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
@@ -206,9 +200,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Verifica se a conta é do tipo CARTAO
 			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
 				// Seta o saldo do período com o limite do cartão
-				saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao() 
-						? conta.getCartaoCredito().getLimiteCartao() 
-								: Util.arredondar(conta.getCartaoCredito().getLimiteCartao() * conta.getMoeda().getValorConversao()));
+				saldoAtual.setSaldoPeriodo(conta.getCartaoCredito().getLimiteCartao());
 				
 				// Traz todos os lançamentos do cartão que ainda não foram quitados
 				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
@@ -216,42 +208,34 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				// Seta a conta
 				criterio.setConta(conta);
 			} else {
-				// Traz o último período de fechamento da conta
-				FechamentoPeriodo ultimoFechamento = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta); 
-				if (ultimoFechamento == null) {
-					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
-							? conta.getSaldoInicial()
-									: Util.arredondar(conta.getSaldoInicial() * conta.getMoeda().getValorConversao()));
+				// Traz o saldo do período anterior
+				double saldoPeriodoAnterior = 0.0;
+				if (agendado) {
+					saldoPeriodoAnterior = getLancamentoContaService()
+							.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, Util.ultimoDiaMesAnterior(), 
+									new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
 				} else {
-					saldoAtual.setSaldoPeriodo(conta.getMoeda().isPadrao()
-							? ultimoFechamento.getSaldo()
-									: Util.arredondar(ultimoFechamento.getSaldo() * conta.getMoeda().getValorConversao()));
+					saldoPeriodoAnterior = getLancamentoContaService()
+							.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, Util.ultimoDiaMesAnterior(), 
+									new StatusLancamentoConta[]{StatusLancamentoConta.QUITADO, StatusLancamentoConta.REGISTRADO});
 				}
 				
-				// Traz os lançamentos da data de fechamento em diante
-				// Se a opção de agendado estiver marcada, traz os lançamentos agendados
-				if (agendado)
-					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-				else 
-					criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-				
-				criterio.setConta(conta);
-				if (ultimoFechamento == null) {
-					criterio.setDataInicio(conta.getDataAbertura());
-				}
-				else {
-					Calendar temp = Calendar.getInstance();
-					temp.setTime(ultimoFechamento.getData());
-					temp.add(Calendar.DAY_OF_YEAR, 1);
-					criterio.setDataInicio(temp.getTime());
-				}
+				saldoAtual.setSaldoPeriodo(saldoPeriodoAnterior);
 			}
 			
-			// Para os cartões de débito, traz somente os lançamentos do mês corrente
-			if (conta.getTipoConta().equals(TipoConta.CARTAO) && conta.getCartaoCredito().getTipoCartao().equals(TipoCartao.DEBITO)) {
-				criterio.setDataInicio(Util.primeiroDiaMesAtual());
-				criterio.setDataFim(Util.ultimoDiaMesAtual());
-			}
+			// Se a opção de agendado estiver marcada, traz os lançamentos agendados
+			if (agendado)
+				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+			else 
+				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+			
+			criterio.setConta(conta);
+			
+			// Traz os lançamentos da data de fechamento em diante
+			Calendar temp = Calendar.getInstance();
+			temp.setTime(Util.ultimoDiaMesAnterior());
+			temp.add(Calendar.DAY_OF_YEAR, 1);
+			criterio.setDataInicio(temp.getTime());
 			
 			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterio);
 			
@@ -264,21 +248,16 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Adiciona na lista de saldos da conta
 			saldoAtualContas.add(saldoAtual);
 			saldoAtual = new SaldoAtualConta();
+			
 		}
 		
 		// Retorna a lista de saldos atuais
-		return this.incorporarInvestimentos(saldoAtualContas);
+		return saldoAtualContas;
 	}
 	
 	@SuppressWarnings("deprecation")
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartaoDebito(CriterioBuscaLancamentoConta criterioBusca, int ano) {
-		// Pega a data atual
-		Calendar hoje = Calendar.getInstance();
-		
-		if (ano > hoje.get(Calendar.YEAR)) {
-			throw new BusinessException("Não implementado previsão para anos posteriores ao atual");
-		}
-		
+		// TODO refatorar para trabalhar com categoria, e não favorecido
 		// Declara o Map de previsão de lançamentos da conta
 		Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoCartao>();
 		
@@ -338,7 +317,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return resultado;
 	}
 	
-	@SuppressWarnings("deprecation")
+	@Override
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano) {
 		
 		// Caso o cartão seja de débito, desvia para o método correspondente
@@ -359,6 +338,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Traz todas as faturas do ano selecionado
 			faturasCartao = getFaturaCartaoService().buscarTodosPorContaEAnoOrdenadosPorMesAno(criterioBusca.getConta(), ano);
 		} else {
+			/** Eliminado a previsão de faturas de anos posteriores **/
+			/**
 			// Verifica se realmente não existem faturas para o ano seleciona. Se existirem, segue com o fluxo normal do método
 			faturasCartao = getFaturaCartaoService().buscarTodosPorContaEAnoOrdenadosPorMesAno(criterioBusca.getConta(), ano);
 			
@@ -366,7 +347,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				// Anos posteriores é realizado a estimativa baseado no ano informado e os lançamentos periódicos ativos da conta
 				// Todos os lançamentos gerados são incluídos em faturas correspondentes aos meses do ano informado 
 				
-				/*** Parcelamentos ***/
+				/*** Parcelamentos ***
 				// Busca todos os parcelamentos ativos da conta selecionada
 				List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
 						buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);
@@ -384,7 +365,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					}				
 				}
 				
-				/*** Despesas fixas ***/
+				/*** Despesas fixas ***
 				// Traz todos os lançamentos fixos ativos da conta selecionada
 				List<LancamentoPeriodico> despesasFixas = getLancamentoPeriodicoService().
 						buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
@@ -452,7 +433,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 					
 				}
 				
-				/*** Lançamentos avulsos ***/
+				/*** Lançamentos avulsos ***
 				// Traz os lançamentos avulsos existente no ano do relatório
 				List<LancamentoConta> todosAvulsos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 				
@@ -478,6 +459,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				}
 				
 			}
+			**/
 		}
 				
 		// Traz os lançamentos de cada fatura e classifica-os em suas respectivas categorias
@@ -562,17 +544,19 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		mapPanoramaLancamentos.put(saldoAnterior.getOid(), saldoAnterior);
 		
 		// Criação das listas que serão usadas
-		List<LancamentoConta> avulsos = new ArrayList<LancamentoConta>();
-		List<LancamentoConta> parcelas = new ArrayList<LancamentoConta>();
+		//List<LancamentoConta> avulsos = new ArrayList<LancamentoConta>();
+		//List<LancamentoConta> parcelas = new ArrayList<LancamentoConta>();
 		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
 		
 		if (ano <= hoje.get(Calendar.YEAR)) {
 			// Ano atual e anteriores é trazido o que está atualmente registrado na conta
 			lancamentosProcessados = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		} else {
+			/** Eliminado a previsão de lançamentos de anos posteriores **/
+			/**
 			// Anos posteriores é realizado a estimativa baseado no mês e ano informado e os lançamentos periódicos ativos da conta
 			
-			/*** Lançamentos parcelados ***/
+			/*** Lançamentos parcelados ***
 			// Traz todos os lançamentos parcelados ativos da conta selecionada
 			List<LancamentoPeriodico> parcelamentos = getLancamentoPeriodicoService().
 					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.PARCELADO, criterioBusca.getConta(), StatusLancamento.ATIVO);					
@@ -592,7 +576,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			// Adiciona as parcelas nos lançamentos processados
 			lancamentosProcessados.addAll(parcelas);
 			
-			/*** Lançamentos fixos ***/
+			/*** Lançamentos fixos ***
 			// Traz todos os lançamentos fixos ativos da conta selecionada
 			List<LancamentoPeriodico> despesasFixas = getLancamentoPeriodicoService().
 					buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico.FIXO, criterioBusca.getConta(), StatusLancamento.ATIVO);
@@ -660,7 +644,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 			
 			
-			/*** Lançamentos avulsos ***/
+			/*** Lançamentos avulsos ***
 			// Traz os lançamentos avulsos existente no ano do relatório
 			avulsos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 			
@@ -672,7 +656,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			}
 			
 			// Inclui os lançamentos avulsos
-			lancamentosProcessados.addAll(avulsos);			
+			lancamentosProcessados.addAll(avulsos);
+			**/
 		}
 		
 		// Busca os lançamentos e classifica-os em suas respectivas categorias
@@ -720,12 +705,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
 		
 		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total
-		FechamentoPeriodo fechamento = getFechamentoPeriodoService().buscarUltimoFechamentoPeriodoAntesDataPorContaEOperacao(criterioBusca.getConta(), Util.ultimoDiaAno(ano - 1), OperacaoConta.FECHAMENTO);
-		if (fechamento == null) {
-			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(criterioBusca.getConta().getSaldoInicial());
-		} else {
-			mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(fechamento.getSaldo());
-		}	
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(
+				getLancamentoContaService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, Util.ultimoDiaAno(ano - 1), null));	
 		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJaneiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJaneiro());
 		
 		// Preenche o panorama do saldo anterior 		
@@ -826,9 +807,19 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 		
 		// Preenche os parâmetros de busca
-		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
 		criterioBusca.setConta(conta);
 		resumoMensal.setConta(conta);
+		
+		// Determina a data de início do período
+		if (dataInicio == null) {
+			criterioBusca.setDataInicio(conta.getDataAbertura());
+		}
+		
+		// Determina a data de fim do período
+		if (dataFim == null) {
+			criterioBusca.setDataFim(new Date());
+		}
 		
 		criterioBusca.setDataInicio(dataInicio);
 		criterioBusca.setDataFim(dataFim);
@@ -836,8 +827,21 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		// Realiza a busca
 		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		
+		// Determina a data de término do período anterior
+		Calendar dataPeriodoAnterior = Calendar.getInstance();
+		dataPeriodoAnterior.setTime(dataInicio);
+		dataPeriodoAnterior.add(Calendar.DAY_OF_YEAR, -1);
+		
+		// Calcula o saldo do periodo anterior
+		double saldoAnterior = getLancamentoContaService()
+				.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, dataPeriodoAnterior.getTime(), 
+						new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		
+		// Calcula o saldo atual
+		double saldoAtual = saldoAnterior + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos);
+		
 		// Processa as categorias, favorecidos e meios de pagamento
-		resumoMensal.setCategoriasCartao(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos));
+		resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), saldoAnterior, saldoAtual);
 		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
 		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
 		
@@ -846,60 +850,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		resumoMensal.setFim(criterioBusca.getDataFim());
 		
 		return resumoMensal;
-	}
-	
-	@Override
-	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FechamentoPeriodo fechamentoPeriodo) {
-		ResumoMensalContas resumoMensal = new ResumoMensalContas();
-		CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
-		FechamentoPeriodo fechamentoAnterior = null;
-				
-		// Busca o fechamento do período anterior
-		if (fechamentoPeriodo != null) 
-			fechamentoAnterior = getFechamentoPeriodoService().buscarFechamentoPeriodoAnterior(fechamentoPeriodo);
-		else
-			fechamentoAnterior = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta);
-		
-		// Preenche os parâmetros de busca
-		//criterioBusca.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-		criterioBusca.setConta(conta);
-		resumoMensal.setConta(conta);
-		
-		// Determina a data de início do período
-		if (fechamentoAnterior == null) {
-			criterioBusca.setDataInicio(conta.getDataAbertura());
-			criterioBusca.setDataFim(new Date());
-		} else {
-			Calendar temp = Calendar.getInstance();
-			temp.setTime(fechamentoAnterior.getData());
-			temp.add(Calendar.DAY_OF_YEAR, 1);
-			criterioBusca.setDataInicio(temp.getTime());
-		}
-		
-		// Determina a data de fim do período
-		if (fechamentoPeriodo == null) {
-			criterioBusca.setDataFim(new Date());
-		} else {
-			criterioBusca.setDataFim(fechamentoPeriodo.getData());
-		}
-		
-		// Realiza a busca
-		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
-		
-		// Processa as categorias
-		if (fechamentoAnterior == null) {
-			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), conta.getSaldoInicial(), conta.getSaldoInicial() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
-		} else {
-			resumoMensal.setCategorias(LancamentoContaUtil.organizarLancamentosPorCategoria(lancamentos), fechamentoAnterior.getSaldo(), fechamentoAnterior.getSaldo() + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos));
-		}
-		resumoMensal.setFavorecidos(LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentos));
-		resumoMensal.setMeiosPagamento(LancamentoContaUtil.organizarLancamentosPorMeioPagamento(lancamentos));
-		
-		// Seta no resumo o início e fim do período buscado
-		resumoMensal.setInicio(criterioBusca.getDataInicio());
-		resumoMensal.setFim(criterioBusca.getDataFim());
-		
-		return resumoMensal;	
 	}
 	
 	@SuppressWarnings("deprecation")

@@ -80,7 +80,7 @@
     		    		
      		<h:column style="text-align: center; vertical-align: middle;">
 				<f:facet name="header">
-					<h:outputText value="Conta/Investimento"/>
+					<h:outputText value="Conta"/>
 				</f:facet>
 				<h:outputText value="#{item.descricaoConta}"/>						
 	  		</h:column>
@@ -115,14 +115,6 @@
 				</h:outputText>						
 	  		</h:column>
 	  		
-	  		<f:facet name="footer">
-	  			<h:outputText value="Saldo total das contas: "/>
-	  			<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} "/>
-	  			<h:outputText value="#{managedBean.saldoTotalContas}">
-	  				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-	  			</h:outputText>
-	  		</f:facet>
-     		
      	</h:dataTable>
 		
 		</p:tab>

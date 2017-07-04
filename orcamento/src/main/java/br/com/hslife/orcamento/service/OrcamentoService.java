@@ -189,4 +189,9 @@ public class OrcamentoService extends AbstractCRUDService<Orcamento> implements 
 		// Persiste os dados na base
 		getRepository().update(entity);
 	}
+	
+	@Override
+	public List<Orcamento> buscarAbrangenciaAtivosInativosPorUsuario(AbrangenciaOrcamento abrangencia, boolean ativo, Usuario usuario) {
+		return getRepository().findAbrangenciaEnableDisableByUsuario(abrangencia, ativo, usuario);
+	}
 }

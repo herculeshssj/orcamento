@@ -83,4 +83,14 @@ public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
 				.setLong("idUsuario", usuario.getId())
 				.list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Orcamento> findAbrangenciaEnableDisableByUsuario(AbrangenciaOrcamento abrangencia, boolean ativo, Usuario usuario) {
+		return getQuery("FROM Orcamento orcamento WHERE orcamento.abrangenciaOrcamento = :abrangencia and orcamento.ativo = :ativo "
+				+ "AND orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
+				.setParameter("abrangencia", abrangencia)
+				.setBoolean("ativo", ativo)
+				.setLong("idUsuario", usuario.getId())
+				.list();
+	}
 }

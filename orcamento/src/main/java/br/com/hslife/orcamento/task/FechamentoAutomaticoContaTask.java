@@ -59,9 +59,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IFechamentoPeriodo;
+import br.com.hslife.orcamento.util.Util;
 
 @Component
 @Transactional(propagation=Propagation.SUPPORTS)
@@ -86,6 +86,8 @@ public class FechamentoAutomaticoContaTask {
 	@Scheduled(fixedDelay=3600000)
 	public void fecharPeriodo() {
 		try {
+			
+			/*** Os períodos são fechados todo dia 01 de cada mês. ***/
 		
 			// Busca todas as contas configuradas para fechamento automático
 			List<Conta> contas = getContaService().buscarTodosUsuarioPorFechamentoAutomatico(true);
@@ -97,31 +99,21 @@ public class FechamentoAutomaticoContaTask {
 				// Obtém a data atual
 				Calendar dataAtual = Calendar.getInstance();
 				
-				// Define a data de fechamento
-				Date dataFechamento = null;
-				
-				// Verifica se a conta já possui um fechamento existente
-				FechamentoPeriodo fechamentoAtual = getFechamentoPeriodoService().buscarUltimoFechamentoConta(conta);
-				if (fechamentoAtual == null) {
-					// Usa a data de abertura da conta como referência
-					dataFechamento = conta.getDataAbertura();
-				} else {
-					// Usa a data de fechamento do último período
-					dataFechamento = fechamentoAtual.getData();
-				}
-				
-				// Incrementa a data de fechamento de acordo com a periodicidade definida na conta
-				dataFechamento = conta.getPeriodicidade().getDataPeriodo(dataFechamento);
-				
-				// Verifica se a data atual é posterior a data de fechamento
-				if (dataAtual.getTime().after(dataFechamento)) {
-					// Realiza o fechamento usando a data atual, decrementado em um dia
+				// Verifica se é o primeiro dia do mês
+				if (dataAtual.get(Calendar.DAY_OF_MONTH) == 1) {
+					
+					// Decrementa em um dia a data atual
 					dataAtual.add(Calendar.DAY_OF_YEAR, -1);
-					// Executa o fechamento do período
-					getFechamentoPeriodoService().fecharPeriodo(dataAtual.getTime(), conta);
-					logger.info("Fechamento automático da conta " + conta.getLabel() + " realizada com sucesso!");
-				} else {
-					// Faz nada
+					
+					// Declara as datas de início e término do fechamento
+					Date dataFimFechamento = dataAtual.getTime();
+					Date dataInicioFechamento = Util.primeiroDiaMes(dataFimFechamento);
+					
+					// Executa o fechamento para a conta selecionada
+					getFechamentoPeriodoService().fecharPeriodo(conta, dataInicioFechamento, dataFimFechamento);
+				
+					// Registra o sucesso da operação no log
+					logger.info("Fechamento automático da conta " + conta.getLabel() + " realizado com sucesso!");
 				}
 			}
 			

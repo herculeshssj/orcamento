@@ -176,12 +176,11 @@ public class LancamentoConta extends EntityPersistence {
 	@JoinColumn(name="idLancamentoPeriodico", nullable=true)
 	private LancamentoPeriodico lancamentoPeriodico;
 	
-	@ManyToOne
-	@JoinColumn(name="idFechamentoPeriodo", nullable=true)
-	private FechamentoPeriodo fechamentoPeriodo;
-	
 	@Transient
 	private LancamentoImportado lancamentoImportado;
+	
+	@Transient
+	private boolean editavel = true;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamentoComparator.class)
@@ -511,14 +510,6 @@ public class LancamentoConta extends EntityPersistence {
 		this.statusLancamentoConta = statusLancamentoConta;
 	}
 
-	public FechamentoPeriodo getFechamentoPeriodo() {
-		return fechamentoPeriodo;
-	}
-
-	public void setFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
-		this.fechamentoPeriodo = fechamentoPeriodo;
-	}
-
 	public SortedSet<DetalheLancamento> getDetalhes() {
 		return detalhes;
 	}
@@ -533,5 +524,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setTaxaConversao(TaxaConversao taxaConversao) {
 		this.taxaConversao = taxaConversao;
+	}
+
+	public boolean isEditavel() {
+		return editavel;
+	}
+
+	public void setEditavel(boolean editavel) {
+		this.editavel = editavel;
 	}
 }

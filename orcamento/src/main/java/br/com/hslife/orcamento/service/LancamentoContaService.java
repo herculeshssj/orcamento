@@ -57,7 +57,6 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
-import br.com.hslife.orcamento.entity.FechamentoPeriodo;
 import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
@@ -358,7 +357,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	}
 	
 	@Override
-	public List<LancamentoConta> buscarTodosPorFechamentoPeriodo(FechamentoPeriodo fechamentoPeriodo) {
-		return getRepository().findAllByFechamentoPeriodo(fechamentoPeriodo);
+	public double buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
+		return getRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, dataInicio, dataFim, statusLancamento);
 	}
 }

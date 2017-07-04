@@ -262,7 +262,7 @@ public class PanoramaOrcamentoController extends AbstractController {
 	
 	public List<Orcamento> getListaOrcamentoCategoria() {
 		try {
-			return orcamentoService.buscarAbrangeciaPorUsuario(AbrangenciaOrcamento.CATEGORIA, getUsuarioLogado());
+			return getOrcamentoService().buscarAbrangenciaAtivosInativosPorUsuario(AbrangenciaOrcamento.CATEGORIA, true, getUsuarioLogado());
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
@@ -332,5 +332,9 @@ public class PanoramaOrcamentoController extends AbstractController {
 
 	public void setExibirGraficoDebito(boolean exibirGraficoDebito) {
 		this.exibirGraficoDebito = exibirGraficoDebito;
+	}
+
+	public IOrcamento getOrcamentoService() {
+		return orcamentoService;
 	}
 }
