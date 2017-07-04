@@ -59,53 +59,76 @@
 
 	<ui:define name="campos">
 
-		<h:panelGrid columns="2">
+		<p:tabView>
+			<p:tab title="Usuário">
+				<h:panelGrid columns="2">
 			
-			Nome:
-			<h:inputText id="txtNome" value="#{managedBean.entity.nome}"/>
-			
-			Login:
-			<h:inputText id="txtLogin" value="#{managedBean.entity.login}" disabled="true" />
-			
-			E-Mail:
-			<h:inputText id="txtEmail" value="#{managedBean.entity.email}">
-				<f:validator validatorId="emailValidator"/>
-			</h:inputText>
-								
-			Data de criação:
-			<h:outputText id="txtDataCriacao" value="#{managedBean.entity.dataCriacao}">
-				<f:converter converterId="dateConverter"/>
-			</h:outputText>
-			
-			TokenID:
-			<h:panelGroup>
-				<h:outputText value="#{managedBean.entity.tokenID}"/>
-				<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20"/>
-				<p:tooltip for="imgInfo">
-					<h:outputText value="Use este token para acessar as funcionalidades do sistema com suas credenciais."/>
-				</p:tooltip>
-			</h:panelGroup>
-			
-			Ativo:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true" />
+					Nome:
+					<h:inputText id="txtNome" value="#{managedBean.entity.nome}"/>
+					
+					Login:
+					<h:inputText id="txtLogin" value="#{managedBean.entity.login}" disabled="true" />
+					
+					E-Mail:
+					<h:inputText id="txtEmail" value="#{managedBean.entity.email}">
+						<f:validator validatorId="emailValidator"/>
+					</h:inputText>
+										
+					Data de criação:
+					<h:outputText id="txtDataCriacao" value="#{managedBean.entity.dataCriacao}">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+					
+					TokenID:
+					<h:panelGroup>
+						<h:outputText value="#{managedBean.entity.tokenID}"/>
+						<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20"/>
+						<p:tooltip for="imgInfo">
+							<h:outputText value="Use este token para acessar as funcionalidades do sistema com suas credenciais."/>
+						</p:tooltip>
+					</h:panelGroup>
+					
+					Ativo:
+					<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true" />
+						
+				</h:panelGrid>
 				
-		</h:panelGrid>
+				<h:commandLink id="lnkOkUsuario" title="Salvar registro" action="#{managedBean.saveUser}">
+		     		<h:graphicImage id="imgOkUsuario" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		     	</h:commandLink>
+		     	&nbsp;&nbsp;&nbsp;
+		     	<h:commandLink id="lnkID" title="Gerar token" action="#{managedBean.gerarTokenID}">
+		     		<h:graphicImage id="imgKey" height="48" width="48" value="/resources/images/svg/key.svg"/>
+		     	</h:commandLink>
+		     	&nbsp;&nbsp;&nbsp;
+		     	<h:commandLink title="Deslogar das credenciais do usuário" action="#{managedBean.deslogarComo}" rendered="#{managedBean.usuarioLogado.logado == true}">
+					<h:graphicImage id="imgLogout" height="48" width="48" value="/resources/images/svg/light_at_the_end_of_tunnel.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.usuarioLogado.id}"/>
+				</h:commandLink>
+			</p:tab>
+			
+			<p:tab title="Pessoal">
+				<ui:include src="/pages/Pessoal/dadosPessoais.xhtml"/>
+			</p:tab>
+			
+			<p:tab title="Documentos">
+				<ui:include src="/pages/Identidade/formIdentidade.xhtml"/>
+			</p:tab>
+			
+			<p:tab title="Endereços">
+				<ui:include src="/pages/Pessoal/enderecos.xhtml"/>
+			</p:tab>
+			
+			<p:tab title="Telefones">
+				<ui:include src="/pages/Pessoal/telefones.xhtml"/>
+			</p:tab>
+			
+		</p:tabView>
 
 	</ui:define>
 	
 	<ui:define name="acoes">
-		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.saveUser}">
-     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
-     	</h:commandLink>
-     	&nbsp;&nbsp;&nbsp;
-     	<h:commandLink id="lnkID" title="Gerar token" action="#{managedBean.gerarTokenID}">
-     		<h:graphicImage id="imgKey" height="48" width="48" value="/resources/images/svg/key.svg"/>
-     	</h:commandLink>
-     	&nbsp;&nbsp;&nbsp;
-     	<h:commandLink title="Deslogar das credenciais do usuário" action="#{managedBean.deslogarComo}" rendered="#{managedBean.usuarioLogado.logado == true}">
-			<h:graphicImage id="imgLogout" height="48" width="48" value="/resources/images/svg/light_at_the_end_of_tunnel.svg"/>
-			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.usuarioLogado.id}"/>
-		</h:commandLink>
+		
 	</ui:define>
 </ui:composition>
 </html>
