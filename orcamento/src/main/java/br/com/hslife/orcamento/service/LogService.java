@@ -54,6 +54,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.hslife.orcamento.entity.LogRequisicao;
 import br.com.hslife.orcamento.entity.Logs;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ILog;
@@ -115,5 +116,10 @@ public class LogService implements ILog {
 	@Override
 	public List<UsuarioLogado> buscarTodosUsuarioLogado() {
 		return getRepository().findAllUsuarioLogado();
+	}
+	
+	@Override
+	public void salvarLogRequisicao(LogRequisicao logRequisicao) {
+		getRepository().saveLog(logRequisicao);		
 	}
 }

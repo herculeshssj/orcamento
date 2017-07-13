@@ -55,6 +55,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.LogRequisicao;
 import br.com.hslife.orcamento.entity.Logs;
 import br.com.hslife.orcamento.model.CriterioLog;
 import br.com.hslife.orcamento.model.UsuarioLogado;
@@ -95,6 +96,10 @@ public class LogRepository extends AbstractRepository {
 	
 	public void update(Logs entity) {
 		getSession().update(entity);
+	}
+	
+	public void saveLog(LogRequisicao entity) {
+		getSession().save(entity);
 	}
 	
 	public Logs findMostRecentException() {

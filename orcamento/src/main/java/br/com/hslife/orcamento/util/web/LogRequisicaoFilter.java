@@ -47,9 +47,6 @@
 package br.com.hslife.orcamento.util.web;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
@@ -65,19 +62,25 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import br.com.hslife.orcamento.entity.LogRequisicao;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.repository.ConnectionFactory;
+import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.util.Util;
 
 @WebFilter(urlPatterns="/*")
 public class LogRequisicaoFilter implements Filter {
 	
+	@Autowired
+	private ILog logService;
+	
 	private static final Logger logger = LogManager.getLogger(LogRequisicaoFilter.class);
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
+	public void init(FilterConfig config) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 		System.out.println("Iniciado log das requisições...");
 	}
 	
@@ -138,7 +141,7 @@ public class LogRequisicaoFilter implements Filter {
 			
 			logRequisicao.setTempo((int)(System.currentTimeMillis() - inicioRequisicao));
 			
-			this.salvarLogRequisicao(logRequisicao);
+			getLogService().salvarLogRequisicao(logRequisicao);
 		
 		} catch (ServletException se) {
 			logger.catching(se);
@@ -153,38 +156,12 @@ public class LogRequisicaoFilter implements Filter {
 			logger.catching(e);
 		}
 	}
-	
-	private void salvarLogRequisicao(LogRequisicao logRequisicao) throws Exception {
-		try {
-			// Pega uma nova conexão do pool de conexões do Datasource
-			Connection connection = ConnectionFactory.getDatabaseConnection();
-			
-			// Prepara a statement
-			PreparedStatement pstm = connection.prepareStatement("INSERT INTO logrequisicao "
-					+ "(uuid,ip,metodo,url,queryString,params,sessaoID,sessaoCriadaEm,dataHora,userAgent,usuario,tempo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-			
-			pstm.setString(1, UUID.randomUUID().toString()); // chave primária
-			pstm.setString(2, logRequisicao.getIp());
-			pstm.setString(3, logRequisicao.getMetodo());
-			pstm.setString(4, logRequisicao.getUrl());
-			pstm.setString(5, logRequisicao.getQueryString());
-			pstm.setString(6, logRequisicao.getParams());
-			pstm.setString(7, logRequisicao.getSessaoID());
-			pstm.setTimestamp(8, new Timestamp(logRequisicao.getSessaoCriadaEm().getTime()));
-			pstm.setTimestamp(9, new Timestamp(logRequisicao.getDataHora().getTime()));
-			pstm.setString(10, logRequisicao.getUserAgent());
-			pstm.setString(11, logRequisicao.getUsuario());
-			pstm.setLong(12, logRequisicao.getTempo());
-			
-			pstm.executeUpdate();
-			
-			// Fecha os recursos abertos
-			pstm.close();
-			connection.close();			
-		} catch (Exception e) {
-			logger.catching(e);
-			e.printStackTrace();
-			throw new Exception(e);
-		}
+
+	public ILog getLogService() {
+		return logService;
+	}
+
+	public void setLogService(ILog logService) {
+		this.logService = logService;
 	}
 }

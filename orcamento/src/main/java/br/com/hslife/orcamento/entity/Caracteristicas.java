@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -60,7 +62,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="caracteristicas")
-public class Caracteristicas {
+public class Caracteristicas implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4631487002428778535L;
 
 	@Id
 	private Long idVeiculo;

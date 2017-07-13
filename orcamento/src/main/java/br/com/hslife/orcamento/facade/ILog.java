@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
+import br.com.hslife.orcamento.entity.LogRequisicao;
 import br.com.hslife.orcamento.entity.Logs;
 import br.com.hslife.orcamento.model.CriterioLog;
 import br.com.hslife.orcamento.model.UsuarioLogado;
@@ -69,4 +70,6 @@ public interface ILog {
 	public Logs buscarExcecaoMaisRecente();
 	
 	public List<UsuarioLogado> buscarTodosUsuarioLogado();
+	
+	public void salvarLogRequisicao(LogRequisicao logRequisicao);
 }
