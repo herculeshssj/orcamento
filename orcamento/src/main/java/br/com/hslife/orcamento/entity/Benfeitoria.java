@@ -89,6 +89,10 @@ public class Benfeitoria extends EntityPersistence {
 	private Date dataFim;
 	
 	@ManyToOne
+	@JoinColumn(name="idFavorecido")
+	private Favorecido favorecido;
+	
+	@ManyToOne
 	@JoinColumn(name="idCategoriaDocumento", nullable=true)
 	private CategoriaDocumento categoriaDocumento;
 	
@@ -113,7 +117,6 @@ public class Benfeitoria extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Detalhes da benfeitoria", this.detalheBenfeitoria);
-		EntityPersistenceUtil.validaCampoNulo("Data de início", this.dataInicio);
 	}
 	
 	@Override
@@ -191,5 +194,13 @@ public class Benfeitoria extends EntityPersistence {
 
 	public void setGrupoLancamento(GrupoLancamento grupoLancamento) {
 		this.grupoLancamento = grupoLancamento;
+	}
+
+	public Favorecido getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(Favorecido favorecido) {
+		this.favorecido = favorecido;
 	}
 }

@@ -72,6 +72,12 @@
 			
 				<p:panelGrid columns="2">
 			
+					<label>Detalhes da aquisição:</label>
+					<h:outputText value="#{patrimonio.detalheEntradaPatrimonio}"/>
+					
+					<label>Favorecido:</label>
+					<h:outputText value="#{patrimonio.favorecido.label}"/>	
+					
 					<label>Data de aquisição:</label>
 					<h:outputText value="#{patrimonio.dataEntrada}">
 						<f:converter converterId="dateConverter"/>
@@ -84,12 +90,6 @@
 							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
 					</h:panelGroup>
-					
-					<label>Detalhes da aquisição:</label>
-					<h:outputText value="#{patrimonio.detalheEntradaPatrimonio}"/>
-					
-					<label>Favorecido:</label>
-					<h:outputText value="#{patrimonio.favorecido.label}"/>						
 				
 				</p:panelGrid>
 				

@@ -95,11 +95,6 @@
 		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
 			<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
-		
-		<label>Grupo de lançamento:</label>
-		<h:selectOneMenu value="#{managedBean.entity.grupoLancamento}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaGrupoLancamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
-		</h:selectOneMenu>
 			
 		<label for="frmFormEntity:txtDataSaida">Data de saída:</label>
 		<p:inputMask id="txtDataSaida" value="#{managedBean.entity.dataSaida}" size="10" mask="99/99/9999">

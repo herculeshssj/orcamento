@@ -55,12 +55,14 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Benfeitoria;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.GrupoLancamento;
 import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IBenfeitoria;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
+import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
 import br.com.hslife.orcamento.facade.IPatrimonio;
 
@@ -78,6 +80,9 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	
 	@Autowired
 	private IPatrimonio patrimonioService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
 	
 	@Autowired
 	private ICategoriaDocumento categoriaDocumentoService;
@@ -138,6 +143,15 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 		}
 		return new ArrayList<>();
 	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			return getFavorecidoService().buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
 
 	public IBenfeitoria getService() {
 		return service;
@@ -161,5 +175,9 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 
 	public void setPatrimonioSelecionado(Patrimonio patrimonioSelecionado) {
 		this.patrimonioSelecionado = patrimonioSelecionado;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
 	}
 }
