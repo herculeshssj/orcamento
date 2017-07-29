@@ -53,6 +53,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Endereco;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Usuario;
 
 @Repository
@@ -66,6 +67,13 @@ public class EnderecoRepository extends AbstractCRUDRepository<Endereco> {
 	public List<Endereco> findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Endereco.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Endereco> findByFavorecido(Favorecido favorecido) {
+		Criteria criteria = getSession().createCriteria(Endereco.class);
+		criteria.add(Restrictions.eq("favorecido.id", favorecido.getId()));
 		return criteria.list();
 	}
 	

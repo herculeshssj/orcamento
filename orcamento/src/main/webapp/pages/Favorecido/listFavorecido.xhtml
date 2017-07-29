@@ -56,7 +56,7 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{favorecidoMB}" />
+	<ui:param name="managedBean" value="#{favorecidoController}" />
 	<ui:param name="colunaPesquisa" value="4" />
 	
 	<ui:define name="parametro_pesquisa">		
@@ -67,6 +67,8 @@
 	    <h:panelGroup>
 	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
 	    	<label>Somente ativos</label>
+	    	<h:selectBooleanCheckbox value="#{managedBean.somenteFinanceiro}" />
+	    	<label>Visível para lançamentos</label>
 	    </h:panelGroup>	    	    
 	</ui:define>
 	

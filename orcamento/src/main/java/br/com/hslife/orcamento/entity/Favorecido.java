@@ -97,6 +97,9 @@ public class Favorecido extends EntityPersistence {
 	@Column(length=14, nullable=true)
 	private String cpfCnpj;
 	
+	@Column
+	private boolean financeiro;
+	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
@@ -115,6 +118,7 @@ public class Favorecido extends EntityPersistence {
 	
 	public Favorecido() {
 		ativo = true;
+		financeiro = true;
 		saldoPago = 0.0;
 		saldoCredito = 0.0;
 		saldoDebito = 0.0;
@@ -249,5 +253,13 @@ public class Favorecido extends EntityPersistence {
 
 	public void setCpfCnpj(String cpfCnpj) {
 		this.cpfCnpj = cpfCnpj;
+	}
+
+	public boolean isFinanceiro() {
+		return financeiro;
+	}
+
+	public void setFinanceiro(boolean financeiro) {
+		this.financeiro = financeiro;
 	}
 }

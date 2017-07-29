@@ -95,8 +95,12 @@ public class Endereco extends EntityPersistence {
 	private String cep;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
+	@JoinColumn(name="idUsuario", nullable=true)
 	private Usuario usuario;
+	
+	@ManyToOne
+	@JoinColumn(name="idFavorecido", nullable=true)
+	private Favorecido favorecido;
 	
 	public Endereco() {
 		
@@ -158,7 +162,6 @@ public class Endereco extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("Estado", this.estado, 2);
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringOpcional("CEP", this.cep, 8);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
-		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
 	}
 	
 	public static class Builder {
@@ -319,5 +322,13 @@ public class Endereco extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public Favorecido getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(Favorecido favorecido) {
+		this.favorecido = favorecido;
 	}
 }

@@ -80,8 +80,12 @@ public class Telefone extends EntityPersistence {
 	private String ramal;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
+	@JoinColumn(name="idUsuario", nullable=true)
 	private Usuario usuario;
+	
+	@ManyToOne
+	@JoinColumn(name="idFavorecido", nullable=true)
+	private Favorecido favorecido;
 	
 	public Telefone() {
 	}
@@ -210,5 +214,13 @@ public class Telefone extends EntityPersistence {
 
 	public void setRamal(String ramal) {
 		this.ramal = ramal;
+	}
+
+	public Favorecido getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(Favorecido favorecido) {
+		this.favorecido = favorecido;
 	}
 }

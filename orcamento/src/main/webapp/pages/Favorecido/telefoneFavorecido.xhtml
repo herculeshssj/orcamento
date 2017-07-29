@@ -44,7 +44,6 @@
 
 -->
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -52,37 +51,61 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/templates/visualizar.xhtml">
+<ui:composition>
 
 	<ui:param name="managedBean" value="#{favorecidoController}" />
 
-	<ui:define name="campos">
-			
-		<h:panelGrid columns="2">
-			
-			Nome:
-			<h:outputText id="txtNome" value="#{managedBean.entity.nome}"/>				
-			
-			Tipo de Pessoa:
-			<h:outputText value="#{managedBean.entity.tipoPessoa}"/>
-			
-			Observação:
-			<h:outputText value="#{managedBean.entity.contato}"/>				
-			
-			Ativo:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
-			
-			Visível nos lançamentos:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.financeiro}" disabled="true"/>
-						
-			Padrão:
-			<h:selectBooleanCheckbox value="#{managedBean.entity.padrao}" disabled="true"/>
-						
-		</h:panelGrid>
+	<p:tab title="Telefones">
+								
+		<h:panelGrid columns="4">
 		
-	</ui:define>
+			Descrição:
+			<h:inputText value="#{managedBean.telefone.descricao}"/>
+						
+			DDD:
+			<h:inputText value="#{managedBean.telefone.ddd}"/>
+			
+			Número:
+			<h:inputText value="#{managedBean.telefone.numero}"/>
+			
+			Ramal:
+			<h:inputText value="#{managedBean.telefone.ramal}"/>
+			
+			<h:outputText />
+			<h:commandLink id="lnkOkTelefone" title="Salvar telefone" action="#{managedBean.salvarTelefone}">
+   				<h:graphicImage id="imgOkTelefone" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+   			</h:commandLink>
+			
+			<h:outputText />
+			<h:outputText />
+									
+		</h:panelGrid>
+	
+		<h:dataTable value="#{managedBean.listaTelefone}" var="item">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Telefone"/>
+				</f:facet>
+				<h:outputText value="#{item.label}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Ações"/>
+				</f:facet>
+				<h:commandLink title="Editar" action="#{managedBean.editarTelefone}">
+					<h:graphicImage id="imgEditTelefone" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.telefone}"/>
+				</h:commandLink>								
+ 					&nbsp;&nbsp;&nbsp;
+				<h:commandLink title="Excluir" action="#{managedBean.excluirTelefone}">
+					<h:graphicImage id="imgRemoveTelefone" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.telefone}"/>
+				</h:commandLink>					
+			</h:column>
+		</h:dataTable>	
+	</p:tab>
 	
 </ui:composition>
 </html>

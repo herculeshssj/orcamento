@@ -52,6 +52,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
 
@@ -66,6 +67,13 @@ public class TelefoneRepository extends AbstractCRUDRepository<Telefone> {
 	public List<Telefone> findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Telefone.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Telefone> findByFavorecido(Favorecido favorecido) {
+		Criteria criteria = getSession().createCriteria(Telefone.class);
+		criteria.add(Restrictions.eq("favorecido.id", favorecido.getId()));
 		return criteria.list();
 	}
 	

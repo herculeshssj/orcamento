@@ -48,7 +48,9 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
+import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 
@@ -71,4 +73,16 @@ public interface IFavorecido extends ICRUDService<Favorecido> {
 	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario);
 	
 	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, List<Usuario> usuarios);
+	
+	public List<Endereco> buscarEnderecos(Favorecido favorecido);
+	
+	public List<Telefone> buscarTelefones(Favorecido favorecido);
+	
+	public void salvarEndereco(Endereco entity);
+	
+	public void excluirEndereco(Endereco entity);
+	
+	public void salvarTelefone(Telefone entity);
+	
+	public void excluirTelefone(Telefone entity);
 }

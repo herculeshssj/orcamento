@@ -52,18 +52,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.repository.EnderecoRepository;
 import br.com.hslife.orcamento.repository.FavorecidoRepository;
+import br.com.hslife.orcamento.repository.TelefoneRepository;
 
 @Service("favorecidoService")
 public class FavorecidoService extends AbstractCRUDService<Favorecido> implements IFavorecido {
 	
 	@Autowired
 	private FavorecidoRepository repository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private TelefoneRepository telefoneRepository;
+
+	public EnderecoRepository getEnderecoRepository() {
+		this.enderecoRepository.setSessionFactory(this.sessionFactory);
+		return enderecoRepository;
+	}
+
+	public TelefoneRepository getTelefoneRepository() {
+		this.telefoneRepository.setSessionFactory(this.sessionFactory);
+		return telefoneRepository;
+	}
 
 	public FavorecidoRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
@@ -145,5 +165,45 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 			favorecidoEncontrado = getRepository().findDefaultByUsuario(usuario);
 		
 		return favorecidoEncontrado;
+	}
+	
+	@Override
+	public List<Endereco> buscarEnderecos(Favorecido favorecido) {
+		return getEnderecoRepository().findByFavorecido(favorecido);
+	}
+
+	@Override
+	public List<Telefone> buscarTelefones(Favorecido favorecido) {
+		return getTelefoneRepository().findByFavorecido(favorecido);
+	}
+
+	@Override
+	public void salvarEndereco(Endereco entity) {
+		entity.validate();
+		if (entity.getId() == null) {
+			getEnderecoRepository().save(entity);
+		} else {
+			getEnderecoRepository().update(entity);
+		}
+	}
+
+	@Override
+	public void excluirEndereco(Endereco entity) {
+		getEnderecoRepository().delete(entity);		
+	}
+
+	@Override
+	public void salvarTelefone(Telefone entity) {
+		entity.validate();
+		if (entity.getId() == null) {
+			getTelefoneRepository().save(entity);
+		} else {
+			getTelefoneRepository().update(entity);
+		}
+	}
+
+	@Override
+	public void excluirTelefone(Telefone entity) {
+		getTelefoneRepository().delete(entity);		
 	}
 }

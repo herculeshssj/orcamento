@@ -55,13 +55,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.Endereco;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IFavorecido;
 
-@Component("favorecidoMB")
+@Component
 @Scope("session")
 public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	
@@ -75,6 +77,13 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	
 	private String nomeFavorecido;
 	private boolean somenteAtivos = true;
+	private boolean somenteFinanceiro = true;
+	
+	private Endereco endereco = new Endereco();
+	private Telefone telefone = new Telefone();
+	
+	private List<Endereco> listaEndereco = new ArrayList<>();
+	private List<Telefone> listaTelefone = new ArrayList<>();
 
 	public FavorecidoController() {
 		super(new Favorecido());
@@ -84,7 +93,13 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	@Override
 	protected void initializeEntity() {
 		entity = new Favorecido();
-		listEntity = new ArrayList<Favorecido>();		
+		listEntity = new ArrayList<Favorecido>();
+		
+		endereco = new Endereco();
+		telefone = new Telefone();
+		
+		listaEndereco = new ArrayList<>();
+		listaTelefone = new ArrayList<>();
 	}
 	
 	@Override
@@ -100,6 +115,89 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	public String save() {
 		entity.setUsuario(getUsuarioLogado());
 		return super.save();
+	}
+	
+	@Override
+	public String edit() {
+		try {
+			String retorno = super.edit();
+			
+			// Traz os telefones e endereços do favorecido
+			listaEndereco = getService().buscarEnderecos(entity);
+			listaTelefone = getService().buscarTelefones(entity);
+			
+			return retorno;
+			
+		} catch (BusinessException | ValidationException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public void salvarEndereco() {
+		try {
+			// Verifica se o favorecido já está salvo na base
+			if (entity.getId() == null) {
+				warnMessage("Salve primeiro o favorecido antes de cadastrar um endereço!");
+				return;
+			}
+			
+			endereco.setFavorecido(entity);
+			getService().salvarEndereco(endereco);
+			listaEndereco = getService().buscarEnderecos(entity);
+			endereco = new Endereco();
+			infoMessage("Endereço salvo com sucesso!");
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void salvarTelefone() {
+		try {
+			// Verifica se o favorecido já está salvo na base
+			if (entity.getId() == null) {
+				warnMessage("Salve primeiro o favorecido antes de cadastrar um telefone!");
+				return;
+			}
+			
+			telefone.setFavorecido(entity);
+			getService().salvarTelefone(telefone);
+			listaTelefone = getService().buscarTelefones(entity);
+			telefone = new Telefone();
+			infoMessage("Telefone salvo com sucesso!");
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void editarEndereco() {
+		// Método criado unicamente para disparar o action do commandButton
+	}
+	
+	public void editarTelefone() {
+		// Método criado unicamento para disparar o action do commandButton
+	}
+	
+	public void excluirEndereco() {
+		try {			
+			getService().excluirEndereco(endereco);
+			listaEndereco = getService().buscarEnderecos(entity);
+			endereco = new Endereco();
+			infoMessage("Endereço excluído com sucesso!");
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+	
+	public void excluirTelefone() {
+		try {
+			getService().excluirTelefone(telefone);
+			listaTelefone = getService().buscarTelefones(entity);
+			telefone = new Telefone();
+			infoMessage("Telefone excluído com sucesso!");
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 	
 	public List<SelectItem> getListaTipoPessoa() {
@@ -131,5 +229,45 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 
 	public void setSomenteAtivos(boolean somenteAtivos) {
 		this.somenteAtivos = somenteAtivos;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Telefone getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(Telefone telefone) {
+		this.telefone = telefone;
+	}
+
+	public List<Endereco> getListaEndereco() {
+		return listaEndereco;
+	}
+
+	public void setListaEndereco(List<Endereco> listaEndereco) {
+		this.listaEndereco = listaEndereco;
+	}
+
+	public List<Telefone> getListaTelefone() {
+		return listaTelefone;
+	}
+
+	public void setListaTelefone(List<Telefone> listaTelefone) {
+		this.listaTelefone = listaTelefone;
+	}
+
+	public boolean isSomenteFinanceiro() {
+		return somenteFinanceiro;
+	}
+
+	public void setSomenteFinanceiro(boolean somenteFinanceiro) {
+		this.somenteFinanceiro = somenteFinanceiro;
 	}
 }

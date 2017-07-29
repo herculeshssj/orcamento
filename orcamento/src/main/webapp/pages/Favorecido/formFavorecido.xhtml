@@ -55,29 +55,48 @@
 
 <ui:composition template="/templates/formulario.xhtml">
 
-	<ui:param name="managedBean" value="#{favorecidoMB}" />
+	<ui:param name="managedBean" value="#{favorecidoController}" />
 	
 	<ui:define name="campos">
 	
-		<label for="frmFormEntity:txtNome">Nome:</label>
-		<h:inputText id="txtNome" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo}"/>
+		<p:tabView>
 		
-		<label>Tipo de Pessoa:</label>
-		<h:selectOneRadio value="#{managedBean.entity.tipoPessoa}" disabled="#{!managedBean.entity.ativo}">
-			<f:selectItems value="#{enumCombo.listaTipoPessoa}"/>
-		</h:selectOneRadio>				
-		
-		<label for="frmFormEntity:txtCpf">CPF/CNPJ:</label>
-		<h:inputText id="txtCpf" value="#{managedBean.entity.cpfCnpj}" disabled="#{!managedBean.entity.ativo}"/>				
-		
-		<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
-		<label>Padrão:</label>
-		
-		<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
-		<label>Ativo:</label>
-		
-		<label for="frmFormEntity:txtContato">Contato:</label>
-		<h:inputTextarea id="txtContato" value="#{managedBean.entity.contato}" disabled="#{!managedBean.entity.ativo}"/>
+			<p:tab title="Dados gerais">
+	
+				<label for="frmFormEntity:txtNome">Nome:</label>
+				<h:inputText id="txtNome" value="#{managedBean.entity.nome}" disabled="#{!managedBean.entity.ativo}"/>
+				
+				<label>Tipo de Pessoa:</label>
+				<h:selectOneRadio value="#{managedBean.entity.tipoPessoa}" disabled="#{!managedBean.entity.ativo}">
+					<f:selectItems value="#{enumCombo.listaTipoPessoa}"/>
+				</h:selectOneRadio>				
+				
+				<label for="frmFormEntity:txtCpf">CPF/CNPJ:</label>
+				<h:inputText id="txtCpf" value="#{managedBean.entity.cpfCnpj}" disabled="#{!managedBean.entity.ativo}"/>				
+				
+				<h:selectBooleanCheckbox id="txtPadrao" value="#{managedBean.entity.padrao}" disabled="#{!managedBean.entity.ativo}"/>
+				<label>Padrão</label>
+				
+				<h:selectBooleanCheckbox id="txtFinanceiro" value="#{managedBean.entity.financeiro}" disabled="#{!managedBean.entity.ativo}"/>
+				<label>Visível nos lançamentos</label>
+				
+				<h:selectBooleanCheckbox id="txtAtivo" value="#{managedBean.entity.ativo}"/>
+				<label>Ativo</label>
+				
+				<label for="frmFormEntity:txtContato">Observação:</label>
+				<h:inputTextarea id="txtContato" value="#{managedBean.entity.contato}" disabled="#{!managedBean.entity.ativo}"/>
+			
+			</p:tab>
+			
+			<p:tab title="Endereços">
+				<ui:include src="/pages/Favorecido/enderecoFavorecido.xhtml"/>
+			</p:tab>
+			
+			<p:tab title="Telefones">
+				<ui:include src="/pages/Favorecido/telefoneFavorecido.xhtml"/>
+			</p:tab>
+			
+		</p:tabView>
 			
 	</ui:define>
 
