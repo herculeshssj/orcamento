@@ -72,6 +72,8 @@ public interface IFavorecido extends ICRUDService<Favorecido> {
 	
 	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario);
 	
+	public List<Favorecido> buscarTipoPessoaENomeEAtivoEFinanceiroPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Boolean financeiro, Usuario usuario);
+	
 	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, List<Usuario> usuarios);
 	
 	public List<Endereco> buscarEnderecos(Favorecido favorecido);

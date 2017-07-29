@@ -105,7 +105,7 @@ public class FavorecidoController extends AbstractCRUDController<Favorecido> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeFavorecido, getUsuarioLogado(), somenteAtivos);
+			listEntity = getService().buscarTipoPessoaENomeEAtivoEFinanceiroPorUsuario(null, nomeFavorecido, somenteAtivos, somenteFinanceiro, getUsuarioLogado());
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
