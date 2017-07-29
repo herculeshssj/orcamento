@@ -86,6 +86,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 	public List<Favorecido> findEnabledByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Favorecido.class);
 		criteria.add(Restrictions.eq("ativo", true));
+		criteria.add(Restrictions.eq("financeiro", true));
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
