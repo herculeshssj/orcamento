@@ -72,36 +72,52 @@
 		
 		<hr/>
 	
-		<h:panelGrid columns="4">
-			<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
-			<h:inputText id="txtFavorecido" value="#{managedBean.orcamento.favorecido}"/>
+		<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
+		<h:inputText id="txtFavorecido" value="#{managedBean.orcamento.favorecido}"/>
+		
+		<label for="frmFormEntity:txtContato">Contato:</label>
+		<h:inputText id="txtContato" value="#{managedBean.orcamento.contato}"/>
+		
+		<label for="frmFormEntity:txtData">Data:</label>
+		<p:inputMask id="txtData" value="#{managedBean.orcamento.data}" size="10" mask="99/99/9999">
+			<f:converter converterId="dateConverter"/>
+		</p:inputMask>
+		
+		<label for="frmFormEntity:txtValor">Valor:</label>
+		<h:inputText id="txtValor" value="#{managedBean.orcamento.valor}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+		
+		<label for="frmFormEntity:txtDetalhes">Detalhes:</label>
+		<h:inputTextarea id="txtDetalhes" value="#{managedBean.orcamento.detalhes}"/>
+		
+		<h:selectBooleanCheckbox id="txtAprovado" value="#{managedBean.orcamento.aprovado}"/>
+		<label>Aprovado</label>
+		
+		<br/>
+		
+		<h:outputText />
+		<h:commandLink action="#{managedBean.adicionarOrcamento}" title="Adicionar">
+			<h:graphicImage id="imgNew" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+		</h:commandLink>
 			
-			<label for="frmFormEntity:txtContato">Contato:</label>
-			<h:inputText id="txtContato" value="#{managedBean.orcamento.contato}"/>
-			
-			<label for="frmFormEntity:txtValor">Valor:</label>
-			<h:inputText id="txtValor" value="#{managedBean.orcamento.valor}">
-				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-			</h:inputText>
-			
-			<label for="frmFormEntity:txtDetalhes">Detalhes:</label>
-			<h:inputTextarea id="txtDetalhes" value="#{managedBean.orcamento.detalhes}"/>
-			
-			<h:outputText />
-			<h:commandLink action="#{managedBean.adicionarOrcamento}" title="Adicionar">
-				<h:graphicImage id="imgNew" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
-			</h:commandLink>
-			
-			<h:outputText />
-			<h:outputText />
-		</h:panelGrid>
-			
+		<hr/>	
+		
 		<h:dataTable id="tableOrcamento" value="#{managedBean.listaOrcamento}" var="item">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="Favorecido"/>
 				</f:facet>
-				<h:outputText value="#{item.favorecido}"/>
+				<h:outputText value="#{item.favorecido} "/>
+				<h:graphicImage id="imgApprove" title="Orçamento Aprovado" value="/resources/images/svg/approval.svg" height="20" width="20" rendered="#{item.aprovado}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Data"/>
+				</f:facet>
+				<h:outputText value="#{item.data}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
 			</h:column>
 			<h:column>
 				<f:facet name="header">
@@ -127,7 +143,7 @@
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.orcamento}"/>
 				</h:commandLink>								
  					<p:spacer width="20"/>
-				<h:commandLink title="Excluir" action="#{managedBean.excluirOrcamento}">
+				<h:commandLink title="Excluir" action="#{managedBean.removerOrcamento}">
 					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.orcamento}"/>
 				</h:commandLink>

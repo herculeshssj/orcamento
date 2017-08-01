@@ -108,6 +108,8 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	protected void initializeEntity() {
 		entity = new Benfeitoria();
 		listEntity = new ArrayList<>();
+		orcamento = new OrcamentoBenfeitoria();
+		listaOrcamento = new ArrayList<>();
 	}
 	
 	@Override
@@ -133,11 +135,13 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 		return retorno;
 	}
 	
-	public String orcamentoBenfeitoriaView() {		
+	public String orcamentoBenfeitoriaView() {
+		listaOrcamento = new ArrayList<>();
+		
+		entity = getService().buscarPorID(idEntity);
+		
 		if (entity.getOrcamentoBenfeitoria() != null && !entity.getOrcamentoBenfeitoria().isEmpty()) {
 			JSONArray jsonArray = new JSONArray(entity.getOrcamentoBenfeitoria());
-			
-			listaOrcamento = new ArrayList<>();
 			
 			for (int i = 0; i < jsonArray.length(); i++) {
 				listaOrcamento.add(new OrcamentoBenfeitoria(jsonArray.getJSONObject(i)));
@@ -148,8 +152,28 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	}
 	
 	public void adicionarOrcamento() {
-		orcamento.setId(System.currentTimeMillis());
+		// Verifica se o orçamento já possui ID
+		if (orcamento.getId() != null && orcamento.getId() > 0) {
+			// Exclui o orçamento da listagem
+			this.removerOrcamento();
+		} else {
+			// Seta o ID do Orçamento
+			orcamento.setId(System.currentTimeMillis());
+		}
+		// Seta a data
+		orcamento.setDataLong(orcamento.getData().getTime());
+		
+		// Itera os itens para que não tenha mais nenhum outro orçamento
+		// aprovado
+		if (orcamento.getAprovado()) {
+			for (OrcamentoBenfeitoria ob : listaOrcamento) {	
+				ob.setAprovado(false);
+			}
+		}		
+		
+		// Adiciona o orçamento na listagem		
 		listaOrcamento.add(orcamento);
+		
 		orcamento = new OrcamentoBenfeitoria();
 		
 		Collections.sort(listaOrcamento);

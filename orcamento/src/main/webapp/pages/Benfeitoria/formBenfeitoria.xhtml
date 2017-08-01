@@ -80,7 +80,7 @@
 			<f:converter converterId="dateConverter"/>
 		</p:inputMask>
 		
-		<label for="frmFormEntity:txtDataFim">Data de términio:</label>
+		<label for="frmFormEntity:txtDataFim">Data de término:</label>
 		<p:inputMask id="txtDataFim" value="#{managedBean.entity.dataFim}" size="10" mask="99/99/9999">
 			<f:converter converterId="dateConverter"/>
 		</p:inputMask>
@@ -92,6 +92,7 @@
 		
 		<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
 		<h:selectOneMenu id="txtFavorecido" value="#{managedBean.entity.favorecido}" converter="entityConverter">
+			<f:selectItem itemLabel="Selecione um favorecido" />
 			<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
 		

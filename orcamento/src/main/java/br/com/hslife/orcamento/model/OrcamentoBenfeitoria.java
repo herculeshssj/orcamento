@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -68,12 +69,20 @@ public class OrcamentoBenfeitoria implements Comparable<OrcamentoBenfeitoria>, S
 	
 	private String contato;
 	
+	private Date data;
+	
+	private Long dataLong;
+	
 	private Double valor;
 	
 	private String detalhes;
 	
+	private Boolean aprovado;
+	
+	private String versao = "1.0";
+	
 	public OrcamentoBenfeitoria() {
-		
+		data = new Date();
 	}
 	
 	public OrcamentoBenfeitoria(JSONObject json) {		
@@ -82,6 +91,9 @@ public class OrcamentoBenfeitoria implements Comparable<OrcamentoBenfeitoria>, S
 		this.contato = json.getString("contato");
 		this.valor = json.getDouble("valor");
 		this.detalhes = json.getString("detalhes");
+		this.dataLong = json.getLong("dataLong");
+		this.data = new Date(this.dataLong);
+		this.aprovado = json.getBoolean("aprovado");
 	}
 	
 	@Override
@@ -149,5 +161,33 @@ public class OrcamentoBenfeitoria implements Comparable<OrcamentoBenfeitoria>, S
 
 	public void setDetalhes(String detalhes) {
 		this.detalhes = detalhes;
+	}
+
+	public String getVersao() {
+		return versao;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Long getDataLong() {
+		return dataLong;
+	}
+
+	public void setDataLong(Long dataLong) {
+		this.dataLong = dataLong;
+	}
+
+	public Boolean getAprovado() {
+		return aprovado;
+	}
+
+	public void setAprovado(Boolean aprovado) {
+		this.aprovado = aprovado;
 	}
 }
