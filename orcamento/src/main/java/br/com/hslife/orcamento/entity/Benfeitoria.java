@@ -88,6 +88,9 @@ public class Benfeitoria extends EntityPersistence {
 	@Temporal(TemporalType.DATE)
 	private Date dataFim;
 	
+	@Column(columnDefinition="text", nullable=true)
+	private String orcamentoBenfeitoria;
+	
 	@ManyToOne
 	@JoinColumn(name="idFavorecido")
 	private Favorecido favorecido;
@@ -202,5 +205,13 @@ public class Benfeitoria extends EntityPersistence {
 
 	public void setFavorecido(Favorecido favorecido) {
 		this.favorecido = favorecido;
+	}
+
+	public String getOrcamentoBenfeitoria() {
+		return orcamentoBenfeitoria;
+	}
+
+	public void setOrcamentoBenfeitoria(String orcamentoBenfeitoria) {
+		this.orcamentoBenfeitoria = orcamentoBenfeitoria;
 	}
 }

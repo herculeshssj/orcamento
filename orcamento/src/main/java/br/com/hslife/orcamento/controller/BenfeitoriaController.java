@@ -47,8 +47,11 @@
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -65,6 +68,7 @@ import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
 import br.com.hslife.orcamento.facade.IPatrimonio;
+import br.com.hslife.orcamento.model.OrcamentoBenfeitoria;
 
 @Component
 @Scope("session")
@@ -91,6 +95,9 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	private IGrupoLancamento grupoLancamentoService;
 	
 	private Patrimonio patrimonioSelecionado;
+	
+	private OrcamentoBenfeitoria orcamento = new OrcamentoBenfeitoria();
+	private List<OrcamentoBenfeitoria> listaOrcamento;
 	
 	public BenfeitoriaController() {
 		super(new Benfeitoria());
@@ -124,6 +131,53 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 		String retorno = super.save();
 		find(); // somente para forçar uma busca inicial
 		return retorno;
+	}
+	
+	public String orcamentoBenfeitoriaView() {		
+		if (entity.getOrcamentoBenfeitoria() != null && !entity.getOrcamentoBenfeitoria().isEmpty()) {
+			JSONArray jsonArray = new JSONArray(entity.getOrcamentoBenfeitoria());
+			
+			listaOrcamento = new ArrayList<>();
+			
+			for (int i = 0; i < jsonArray.length(); i++) {
+				listaOrcamento.add(new OrcamentoBenfeitoria(jsonArray.getJSONObject(i)));
+			}
+		}
+		
+		return "/pages/Benfeitoria/orcamentoBenfeitoria";
+	}
+	
+	public void adicionarOrcamento() {
+		orcamento.setId(System.currentTimeMillis());
+		listaOrcamento.add(orcamento);
+		orcamento = new OrcamentoBenfeitoria();
+		
+		Collections.sort(listaOrcamento);
+	}
+	
+	public void editarOrcamento() {
+		// Usado somente para carregar as informações do orçamento
+	}
+	
+	public void removerOrcamento() {
+		for (Iterator<OrcamentoBenfeitoria> i = listaOrcamento.iterator(); i.hasNext(); ) {
+			OrcamentoBenfeitoria ob = i.next();
+			if (ob.equals(orcamento)) {
+				i.remove();
+				break;
+			}
+		}
+	}
+	
+	public String salvarOrcamentoBenfeitoria() {
+		try {
+			JSONArray jsonArray = new JSONArray(listaOrcamento);
+			entity.setOrcamentoBenfeitoria(jsonArray.toString());
+			return this.save();
+		} catch (BusinessException | ValidationException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
 	}
 	
 	public List<CategoriaDocumento> getListaCategoriaDocumento() {
@@ -179,5 +233,21 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 
 	public IFavorecido getFavorecidoService() {
 		return favorecidoService;
+	}
+
+	public OrcamentoBenfeitoria getOrcamento() {
+		return orcamento;
+	}
+
+	public void setOrcamento(OrcamentoBenfeitoria orcamento) {
+		this.orcamento = orcamento;
+	}
+
+	public List<OrcamentoBenfeitoria> getListaOrcamento() {
+		return listaOrcamento;
+	}
+
+	public void setListaOrcamento(List<OrcamentoBenfeitoria> listaOrcamento) {
+		this.listaOrcamento = listaOrcamento;
 	}
 }

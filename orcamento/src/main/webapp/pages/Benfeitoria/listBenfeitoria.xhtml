@@ -111,6 +111,10 @@
 						<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 						<f:setPropertyActionListener value="#{benfeitoria.id}" target="#{managedBean.idEntity}"/>
 					</h:commandLink>
+					<p:spacer width="20"/>
+					<h:commandLink title="Orçamentos" action="#{managedBean.orcamentoBenfeitoriaView}">
+		     			<h:graphicImage id="imgRegister" height="48" width="48" value="/resources/images/svg/sales_performance.svg"/>
+		     		</h:commandLink>
 				</h:panelGroup>
 				
 			</p:tab>
