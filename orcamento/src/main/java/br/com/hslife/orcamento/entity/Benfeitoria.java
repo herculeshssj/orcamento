@@ -119,6 +119,7 @@ public class Benfeitoria extends EntityPersistence {
 	@Override
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaCampoNulo("Data de início", this.dataInicio);
 		EntityPersistenceUtil.validaCampoNulo("Detalhes da benfeitoria", this.detalheBenfeitoria);
 	}
 	

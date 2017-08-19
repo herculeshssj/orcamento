@@ -65,7 +65,7 @@ public class BenfeitoriaRepository extends AbstractCRUDRepository<Benfeitoria> {
 	public List<Benfeitoria> findAllByUsuario(Usuario usuario) {
 		hqlParameters.clear();
 		
-		StringBuilder hql = new StringBuilder().append("FROM Benfeitoria b WHERE b.patrimonio.usuario.id = :idUsuario");
+		StringBuilder hql = new StringBuilder().append("FROM Benfeitoria b WHERE b.patrimonio.usuario.id = :idUsuario ORDER BY b.descricao ASC");
 		
 		hqlParameters.put("idUsuario", usuario.getId());
 		
@@ -76,7 +76,7 @@ public class BenfeitoriaRepository extends AbstractCRUDRepository<Benfeitoria> {
 	public List<Benfeitoria> findAllByPatrimonioAndUsuario(Patrimonio patrimonio, Usuario usuario) {
 		hqlParameters.clear();
 		
-		StringBuilder hql = new StringBuilder().append("FROM Benfeitoria b WHERE b.patrimonio.id = :idPatrimonio AND b.patrimonio.usuario.id = :idUsuario");
+		StringBuilder hql = new StringBuilder().append("FROM Benfeitoria b WHERE b.patrimonio.id = :idPatrimonio AND b.patrimonio.usuario.id = :idUsuario ORDER BY b.descricao ASC");
 		
 		hqlParameters.put("idPatrimonio", patrimonio.getId());
 		hqlParameters.put("idUsuario", usuario.getId());
