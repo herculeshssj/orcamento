@@ -1,0 +1,234 @@
+
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{opcaoSistemaMB}" />
+
+	<ui:define name="campos">
+
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações gerais</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Exibir as buscas realizadas:
+				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['GERAL_EXIBIR_BUSCAS_REALIZADAS']}"/>
+				
+				Notificar agendamentos por e-mail:
+				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['NOTIFICAR_AGENDAMENTO_EMAIL']}"/>
+			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+		
+		<h:panelGroup rendered="#{managedBean.usuarioLogado.login == 'admin'}">
+		<fieldset>
+			<legend>Configurações de e-mail</legend>
+			
+			<h:panelGrid columns="4">
+			
+				Servidor SMTP:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_SERVIDOR']}"/>
+				
+				Porta SMTP:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_PORTA']}"/>
+				
+				Usuário:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_USUARIO']}"/>
+				
+				Senha:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_SENHA']}"/>
+				
+				Nome do remetente:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_REMETENTE']}"/>
+				
+				E-Mail do remetente:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_EMAIL_REMETENTE']}"/>
+				
+				Usar SSL:
+				<h:selectBooleanCheckbox value="#{managedBean.opcoesGlobalAdmin['EMAIL_USAR_SSL']}"/>
+				
+				Charset:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_CHARSET']}"/>
+				
+				Método de envio:
+				<h:selectOneMenu value="#{managedBean.opcoesGlobalAdmin['EMAIL_METODO_ENVIO']}">
+					<f:selectItem itemLabel="JavaMail" itemValue="JAVAMAIL" />
+					<f:selectItem itemLabel="SendGrid" itemValue="SENDGRID" />
+				</h:selectOneMenu>
+				
+				API KEY:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_APIKEY']}"/>
+			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+		
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações de contas</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Exibir contas inativas:
+				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['CONTA_EXIBIR_INATIVAS']}"/>
+				
+				Exibir meios de pagamento:
+				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['CONTA_EXIBIR_MEIO_PAGAMENTO']}"/>
+				
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>	
+		
+		<hr/>
+		
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações de lançamentos de conta/cartão</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Quantidade máxima de registros exibidos na busca:
+				<h:inputText value="#{managedBean.opcoesUser['LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS']}"/>
+			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+		
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações de despensa</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Habilitar controle de estoque:
+				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['CONTROLAR_ESTOQUE_DESPENSA']}"/>
+				
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+	
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações dos resumos e estatísticas</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Forma de agrupamento dos pagamentos:
+				<h:selectOneMenu value="#{managedBean.opcoesUser['RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS']}">
+					<f:selectItem itemLabel="Individual (sem agrupamento)" itemValue="INDIVIDUAL" />
+					<f:selectItem itemLabel="Por conta" itemValue="CONTA" />
+					<f:selectItem itemLabel="Por tipo de conta" itemValue="TIPO_CONTA" />
+				</h:selectOneMenu>
+				
+				Limite de fechamentos a exibir:
+				<h:inputText value="#{managedBean.opcoesUser['RESUMO_LIMITE_QUANTIDADE_FECHAMENTOS']}"/>
+				
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+
+		<hr />
+		
+		<h:panelGroup>
+		<fieldset>
+			<legend>Tempo de guarda</legend>
+			
+			<h:panelGrid columns="2">
+				
+				Tempo de guarda dos anexos em Lançamentos da conta/cartão (anos):
+				<h:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA']}"/>
+				
+				Tempo de guarda dos anexos em Faturas do Cartão (anos):
+				<h:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_FATURACARTAO']}"/>
+				
+				Tempo de guarda dos anexos em Lançamentos Periódicos (anos):
+				<h:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO']}"/>
+				
+				Tempo de guarda dos anexos em Documento (anos):
+				<h:inputText value="#{managedBean.opcoesUser['ARQUIVO_TEMPO_GUARDA_DOCUMENTOS']}"/>
+				
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+
+	</ui:define>
+
+	<ui:define name="acoes">
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}">
+			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		</h:commandLink>
+	</ui:define>
+	
+</ui:composition>
+</html>

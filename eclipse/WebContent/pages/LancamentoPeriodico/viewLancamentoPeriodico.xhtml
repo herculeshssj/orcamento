@@ -1,0 +1,162 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/visualizar.xhtml">
+
+	<ui:param name="managedBean" value="#{lancamentoPeriodicoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+			
+			Tipo de despesa:
+			<h:outputText value="#{managedBean.entity.tipoLancamentoPeriodico}" />				
+			
+		</h:panelGrid>
+		
+		<hr />
+		
+		<h:panelGrid columns="2">
+		
+			Descrição:
+			<h:outputText value="#{managedBean.entity.descricao}" />
+			
+			Observação:
+			<h:outputText value="#{managedBean.entity.observacao}"/>
+			
+			Tipo de lançamento gerado:
+			<h:outputText value="#{managedBean.entity.tipoLancamento}"/>
+			
+			Moeda:
+			<h:outputText value="#{managedBean.entity.moeda.label}"/>
+			
+			Dia de vencimento:
+			<h:outputText value="#{managedBean.entity.diaVencimento}"/>
+		
+		</h:panelGrid>
+	
+		<hr />
+	
+		<p:outputPanel id="pnlLancamentoPeriodico">
+		
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
+			
+				Data de aquisição:			
+				<h:outputText value="#{managedBean.entity.dataAquisicao}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+	    		
+	    		Valor por período:
+	    		<h:outputText value="#{managedBean.entity.valorParcela}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:outputText>
+	    		
+				Periodicidade:
+				<h:outputText value="#{managedBean.entity.periodoLancamento}"/>
+				
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
+			
+				Data de compra:	
+				<h:outputText value="#{managedBean.entity.dataAquisicao}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>		
+				
+	    		Valor da compra:
+	    		<h:outputText value="#{managedBean.entity.valorCompra}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:outputText>
+	    		
+	    		Valor da parcela:
+	    		<h:outputText value="#{managedBean.entity.valorParcela}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:outputText>
+				
+				Quantidade de parcelas:
+				<h:outputText value="#{managedBean.entity.totalParcela}" />
+				
+			</h:panelGrid>
+		
+		</p:outputPanel>
+		
+		<hr />
+		
+		<h:panelGrid columns="2">
+		
+			Conta de pagamento:
+			<h:outputText value="#{managedBean.entity.conta.label}" />			
+			
+			Categoria:
+			<h:outputText value="#{managedBean.entity.categoria.label}" />
+			
+			Favorecido/Sacado:
+			<h:outputText value="#{managedBean.entity.favorecido.label}" />
+			
+			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
+			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>			
+						
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">			
+			Comprovante:
+			<h:outputText value="#{managedBean.entity.arquivo.nomeArquivo}" rendered="#{managedBean.entity.arquivo != null}"/>
+			<h:outputText value="Sem anexo" rendered="#{managedBean.entity.arquivo == null}"/>
+		</h:panelGrid>
+	
+	</ui:define>
+	
+</ui:composition>
+</html>

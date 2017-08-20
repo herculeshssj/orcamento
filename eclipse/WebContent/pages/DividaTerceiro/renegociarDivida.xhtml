@@ -1,0 +1,132 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/visualizar.xhtml">
+
+	<ui:param name="managedBean" value="#{dividaTerceiroMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Favorecido:
+			<h:outputText value="#{managedBean.entity.favorecido.label}" />		
+	     	
+	     	Tipo de dívida:
+	     	<h:outputText value="#{managedBean.entity.tipoCategoria}" />
+	     	
+	     	Status da dívida:
+	     	<h:outputText value="#{managedBean.entity.statusDivida}" />	
+	     
+			Moeda:
+			<h:outputText value="#{managedBean.entity.moeda.label}" />
+			
+			Total pago:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalPago}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+			
+			Total a pagar:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalAPagar}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+	     	
+	   </h:panelGrid>  
+				
+		<label>Justificativa:</label>
+		<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
+		
+		<br/><br/>
+			
+		<label for="frmFormEntity:txtDataNegociacao">Data da renegociação:</label>
+	    <p:inputMask id="txtDataNegociacao" size="10" mask="99/99/9999" value="#{managedBean.entity.dataNegociacao}">
+			<f:converter converterId="dateConverter"/>
+		</p:inputMask>
+	     	
+	    <label for="frmFormEntity:txtValorDivida">Valor da dívida renegociada:</label>
+	    <h:inputText id="txtValorDivida" value="#{managedBean.entity.valorDivida}" size="10">
+			<f:convertNumber type="currency" pattern="###.##"/>
+		</h:inputText>
+			
+		<label for="frmFormEntity:txtJustificativa">Justificativa para renegociar:</label>
+		<h:inputTextarea id="txtJustificativa" value="#{managedBean.novaJustificativa}" />
+			
+		<label>Selecione um modelo:</label>		
+		<h:selectOneMenu value="#{managedBean.entity.modeloDocumento}" converter="entityConverter">
+			<f:selectItems value="#{managedBean.listaModeloDocumento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+		</h:selectOneMenu>
+		<h:commandLink value="Visualizar modelo" action="#{managedBean.visualizarModeloDocumento}" target="_blank"/>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+   			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+   		</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Renegociar dívida" action="#{managedBean.renegociarDivida}">
+   			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+   		</h:commandLink>
+	</ui:define>
+	
+</ui:composition>
+</html>

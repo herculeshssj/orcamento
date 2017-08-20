@@ -1,0 +1,198 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{lancamentoContaMB}" />
+	
+	<ui:define name="campos">
+	
+		<label>Conta:</label>
+		<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+			<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			<p:ajax event="change" update="txtLancamentoImportado,pnlLancamentoCartao" listener="#{managedBean.atualizaComboLancamentosImportado}"/>			
+		</h:selectOneMenu>
+		
+		<label>Tipo de lançamento:</label>
+		<h:selectOneRadio id="txtTipoLancamento" value="#{managedBean.entity.tipoLancamento}" layout="lineDirection" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+			<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>
+			<p:ajax update="txtCategoria" listener="#{managedBean.atualizaComboCategorias}"/>				
+		</h:selectOneRadio>
+		
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.conta.ativo}"/>
+		<p:tooltip for="txtDescricao">
+			<h:outputText value="Histórico: #{managedBean.entity.historico}"/>
+		</p:tooltip>
+	
+		<label for="frmFormEntity:txtNumeroDocumento">Número do documento:</label>
+		<h:inputText id="txtNumeroDocumento" value="#{managedBean.entity.numeroDocumento}" disabled="#{!managedBean.entity.conta.ativo}"/>
+		
+		<h:panelGroup rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'FIXO'}">
+			<label for="frmFormEntity:txtPeriodo"><h:outputText value="Período / Ano:" /></label>
+			<h:panelGrid columns="3">
+				<h:inputText value="#{managedBean.entity.periodo}" size="5"/>
+				<h:outputText value=" / " />
+				<h:inputText value="#{managedBean.entity.ano}" size="5"/>
+			</h:panelGrid>
+		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{managedBean.entity.lancamentoPeriodico != null and managedBean.entity.lancamentoPeriodico.tipoLancamentoPeriodico == 'PARCELADO'}">
+			<label><h:outputText value="Parcela:" /></label>
+			<h:inputText value="#{managedBean.entity.parcela}" disabled="true"/>
+		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{managedBean.entity.lancamentoPeriodico != null}">
+			<label for="frmFormEntity:txtDataVencimento"><h:outputText value="Data de vencimento:" /></label>
+			<p:inputMask id="txtDataVencimento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataVencimento}">
+	    		<f:converter converterId="dateConverter"/>
+	    	</p:inputMask>
+    	</h:panelGroup>
+    	
+    	<label for="frmFormEntity:txtDataPagamento">Data de pagamento:</label>
+    	<p:inputMask id="txtDataPagamento" size="10" mask="99/99/9999" value="#{managedBean.entity.dataPagamento}" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+    		<f:converter converterId="dateConverter"/>
+    	</p:inputMask>
+    	
+    	<label for="frmFormEntity:txtValorPago">Valor pago:</label>
+    	<h:inputText id="txtValorPago" value="#{managedBean.entity.valorPago}" size="10" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+			<f:convertNumber type="currency" pattern="###.##"/>
+		</h:inputText>
+		
+		<label>Categoria:</label>
+		<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoria}"  converter="entityConverter" disabled="#{!managedBean.entity.conta.ativo}">
+			<f:selectItem itemLabel="Nenhuma categoria"/>
+			<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		</h:selectOneMenu>
+		
+		<label>Favorecido:</label>
+		<h:selectOneMenu id="txtFavorecido" value="#{managedBean.entity.favorecido}" converter="entityConverter" disabled="#{!managedBean.entity.conta.ativo}">
+			<f:selectItem itemLabel="Nenhum favorecido"/>
+			<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		</h:selectOneMenu>
+		
+		<h:panelGroup rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+			<label>Meio de pagamento:</label>
+			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.entity.meioPagamento}" converter="entityConverter" disabled="#{!managedBean.entity.conta.ativo}">
+				<f:selectItem itemLabel="Nenhum meio de pagamento"/>
+				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+		</h:panelGroup>
+		
+		<label><h:outputText value="Vincular lançamento importado:" rendered="#{managedBean.entity.conta.ativo and managedBean.operation == 'edit'}"/></label>
+		<h:selectOneMenu id="txtLancamentoImportado" value="#{managedBean.entity.lancamentoImportado}" converter="entityConverter" rendered="#{managedBean.entity.conta.ativo and managedBean.operation == 'edit'}">
+			<f:selectItem itemLabel="Não vincular"/>
+			<f:selectItems value="#{managedBean.listaLancamentoImportado}" />
+		</h:selectOneMenu>
+		
+		<p:outputPanel id="pnlLancamentoCartao">
+			
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO' and managedBean.entity.conta.cartaoCredito.tipoCartao == 'CREDITO'}">
+			
+				Moeda:
+				<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.entity.statusLancamentoConta == 'QUITADO'}">
+					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+				</h:selectOneMenu>
+				
+				<h:outputText value="Taxa de conversão:" rendered="#{managedBean.entity.taxaConversao != null}"/>
+				<h:panelGrid columns="7" rendered="#{managedBean.entity.taxaConversao != null}">
+					<h:outputText value="#{managedBean.entity.taxaConversao.moedaOrigem.simboloMonetario}"/>
+					<h:outputText value="--->"/>
+					<h:outputText value="#{managedBean.entity.taxaConversao.moedaDestino.simboloMonetario}"/>
+					<h:outputText value="Taxa:"/>
+					<h:outputText value="#{managedBean.entity.taxaConversao.taxaConversao}">
+						<f:convertNumber minFractionDigits="4" maxFractionDigits="4" />
+					</h:outputText>
+					<h:outputText value="Valor:"/>
+					<h:outputText value="#{managedBean.entity.taxaConversao.valorMoedaDestino}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:panelGrid>
+				
+			</h:panelGrid>
+			
+		</p:outputPanel>
+		
+		<h:panelGrid columns="1">
+			Comprovante:
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" rendered="#{managedBean.entity.conta.ativo}"/>			
+			<h:panelGroup>
+				<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
+					<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+				</h:commandLink>
+				&nbsp;&nbsp;&nbsp;
+				<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}" rendered="#{managedBean.entity.conta.ativo and managedBean.entity.possuiAnexo}">
+					<h:graphicImage id="imgDeleteFile" value="/resources/images/svg/delete_row.svg" height="48" width="48"/>
+				</h:commandLink>								
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<label for="frmFormEntity:txtObservacao">Observação:</label>
+		<h:inputTextarea id="txtObservacao" value="#{managedBean.entity.observacao}" disabled="#{!managedBean.entity.conta.ativo}"/>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.conta.ativo}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>

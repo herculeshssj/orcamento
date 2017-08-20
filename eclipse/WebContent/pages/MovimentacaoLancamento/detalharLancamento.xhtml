@@ -1,0 +1,178 @@
+<!--
+  
+  	Copyright (c) 2012 - 2020 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou 
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como 
+
+    publicada pela Fundação do Software Livre (FSF); na versão 2.1 da 
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, 
+
+    mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO a 
+    
+    qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública 
+    
+    Geral Menor GNU em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob o 
+
+    nome de "LICENSE.TXT" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento ou escreva 
+    
+    para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor, 
+    
+    Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor entre  
+
+    em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva para 
+
+    Hércules S. S. José, Av. Ministro Lafaeyte de Andrade, 1683 - Bl. 3 Apt 404, 
+
+    Marco II - Nova Iguaçu, RJ, Brasil.
+  
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{movimentacaoLancamentoMB}" />
+	
+	<ui:define name="campos">
+		
+		<label>Conta:</label>
+		<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter" disabled="true">
+			<f:selectItems value="#{managedBean.listaContaAtivo}" var="item" itemLabel="#{item.label}" itemValue="#{item}" itemDisabled="#{!item.ativo}"/>
+		</h:selectOneMenu>			
+		
+		<h:panelGrid columns="2">
+		
+			Lançamento:
+			<h:outputText value="#{managedBean.lancamentoSelecionado.label}" />
+			
+			Data de pagamento:
+			<h:outputText value="#{managedBean.lancamentoSelecionado.dataPagamento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Valor pago:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.lancamentoSelecionado.moeda.simboloMonetario} "/>
+				<h:outputText value="#{managedBean.lancamentoSelecionado.valorPago}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:outputText>
+			</h:panelGroup>
+			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="7">
+			<label for="frmFormEntity:txtDescricao">Descrição:</label>
+			<h:inputText id="txtDescricao" value="#{managedBean.detalheLancamento.descricao}"/>
+			
+			<label for="frmFormEntity:txtData">Data de pagamento:</label>
+			<p:inputMask id="txtData" size="9" mask="99/99/9999" value="#{managedBean.detalheLancamento.data}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+		    
+		    <label for="frmFormEntity:txtValor">Valor pago:</label>
+		    <h:inputText id="txtValor" value="#{managedBean.detalheLancamento.valor}" size="10">
+				<f:convertNumber type="currency" pattern="###.##"/>
+			</h:inputText>
+			
+			<h:commandLink id="lnkAddRow" title="Adicionar detalhe" action="#{managedBean.adicionarDetalheLancamento}">
+	     		<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
+	     	</h:commandLink>
+		</h:panelGrid>
+		
+		<h:dataTable id="tableDetalheLancamento" value="#{managedBean.lancamentoSelecionado.detalhes}" var="item">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Descrição"/>
+				</f:facet>
+				<h:outputText value="#{item.descricao}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Data"/>
+				</f:facet>
+				<h:outputText value="#{item.data}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Valor"/>
+				</f:facet>
+				<h:outputText value="#{item.valor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Ação"/>
+				</f:facet>
+				<h:commandLink id="lnkDelRow" title="Remover detalhe" action="#{managedBean.removerDetalheLancamento}">
+		     		<h:graphicImage id="imgDelRow" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
+		     		<f:setPropertyActionListener value="#{item}" target="#{managedBean.detalheLancamento}"/>
+		     	</h:commandLink>
+			</h:column>
+			<f:facet name="footer">
+				Detalhado:
+				<h:outputText value="#{managedBean.lancamentoSelecionado.moeda.simboloMonetario} " />
+				<h:outputText value="#{managedBean.lancamentoSelecionado.totalDetalhado}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+				|
+				À detalhar:
+				<h:outputText value="#{managedBean.lancamentoSelecionado.moeda.simboloMonetario} " />
+				<h:outputText value="#{managedBean.lancamentoSelecionado.totalADetalhar}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+				|
+				Créditos:
+				<h:outputText value="#{managedBean.lancamentoSelecionado.moeda.simboloMonetario} " style="color: #0000FF;"/>
+				<h:outputText value="#{managedBean.lancamentoSelecionado.totalCredito}"  style="color: #0000FF;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+				|
+				Débitos:
+				<h:outputText value="#{managedBean.lancamentoSelecionado.moeda.simboloMonetario} " style="color: #FF0000;"/>
+				<h:outputText value="#{managedBean.lancamentoSelecionado.totalDebito}" style="color: #FF0000;">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</f:facet>
+		</h:dataTable>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+     		<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Confirmar" action="#{managedBean.salvarDetalhamento}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>    	
+	</ui:define>
+	
+</ui:composition>
+</html>
