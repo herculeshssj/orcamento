@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -154,17 +155,18 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 			
 			// Exclui todos os lançamentos existentes após a data de fechamento da conta
 			getLancamentoContaRepository().deleteAllLancamentoContaAfterDateByConta(conta.getDataFechamento(), conta);
-			
-			// Define o saldo final da conta com base no último fechamento realizado
-			conta.setSaldoFinal(getLancamentoContaRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, conta.getDataFechamento(), null));
-			
+		
 		} else if (situacaoLancamentos.equals("EXCLUIR")) {						
 			// Exclui todos os lançamentos existentes após a data de fechamento da conta
-			getLancamentoContaRepository().deleteAllLancamentoContaAfterDateByConta(conta.getDataFechamento(), conta);
-						
-			// Define o saldo final da conta com base no último fechamento realizado
-			conta.setSaldoFinal(getLancamentoContaRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, conta.getDataFechamento(), null));			
+			getLancamentoContaRepository().deleteAllLancamentoContaAfterDateByConta(conta.getDataFechamento(), conta);			
 		}
+		
+		// Define o saldo final da conta com base no último fechamento realizado
+		BigDecimal saldoFinal = getLancamentoContaRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, conta.getDataFechamento(), null);
+		if (saldoFinal.signum() == 1)
+			conta.setSaldoFinal(saldoFinal.doubleValue());
+		else
+			conta.setSaldoFinal(saldoFinal.doubleValue() * -1);
 		
 		// Seta a conta como inativa
 		conta.setAtivo(false);

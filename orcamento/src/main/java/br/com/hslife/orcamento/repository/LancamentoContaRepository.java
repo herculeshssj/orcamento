@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +71,6 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
 import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
-import br.com.hslife.orcamento.util.Util;
 
 @Repository
 public class LancamentoContaRepository extends AbstractCRUDRepository<LancamentoConta> {
@@ -355,7 +355,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	 * @param statusLancamento
 	 * @return o saldo do período
 	 */
-	public double getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
+	public BigDecimal getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
 		// Obtém a soma dos créditos
 		StringBuilder hqlCreditos = new StringBuilder();
 		hqlCreditos.append("SELECT SUM(lancamento.valorPago) FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.tipoLancamento = :tipo");
@@ -433,6 +433,6 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			totalDebitos = 0.0;
 		
 		// Retorna a subtração do total de créditos pelo total de débitos
-		return Util.arredondar(conta.getSaldoInicial() + totalCreditos - totalDebitos);
+		return new BigDecimal(conta.getSaldoInicial() + totalCreditos - totalDebitos);
 	}
 }

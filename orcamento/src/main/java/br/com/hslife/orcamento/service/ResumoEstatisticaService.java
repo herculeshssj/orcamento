@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -209,7 +210,7 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 				criterio.setConta(conta);
 			} else {
 				// Traz o saldo do período anterior
-				double saldoPeriodoAnterior = 0.0;
+				BigDecimal saldoPeriodoAnterior = new BigDecimal(0.0);
 				if (agendado) {
 					saldoPeriodoAnterior = getLancamentoContaService()
 							.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, Util.ultimoDiaMesAnterior(), 
@@ -220,7 +221,10 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 									new StatusLancamentoConta[]{StatusLancamentoConta.QUITADO, StatusLancamentoConta.REGISTRADO});
 				}
 				
-				saldoAtual.setSaldoPeriodo(saldoPeriodoAnterior);
+				if (saldoPeriodoAnterior.signum() == 1)
+					saldoAtual.setSaldoPeriodo(saldoPeriodoAnterior.doubleValue());
+				else
+					saldoAtual.setSaldoPeriodo(saldoPeriodoAnterior.doubleValue() * -1);
 			}
 			
 			// Se a opção de agendado estiver marcada, traz os lançamentos agendados
@@ -705,8 +709,14 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
 		
 		// Pegar o valor do último fechamento do ano anterior e atribui no mês de janeiro do panorama do saldo total
-		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(
-				getLancamentoContaService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, Util.ultimoDiaAno(ano - 1), null));	
+		BigDecimal bigSaldoPeriodoAnterior = getLancamentoContaService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, Util.ultimoDiaAno(ano - 1), null);
+		double saldoPeriodoAnterior = 0.0;
+		if (bigSaldoPeriodoAnterior.signum() == 1)
+			saldoPeriodoAnterior = bigSaldoPeriodoAnterior.doubleValue();
+		else
+			saldoPeriodoAnterior = bigSaldoPeriodoAnterior.doubleValue() * -1;
+		
+		mapPanoramaLancamentos.get(saldoAnterior.getOid()).setJaneiro(saldoPeriodoAnterior);	
 		mapPanoramaLancamentos.get(saldoTotal.getOid()).setJaneiro(mapPanoramaLancamentos.get(saldoTotal.getOid()).getJaneiro() + mapPanoramaLancamentos.get(saldoAnterior.getOid()).getJaneiro());
 		
 		// Preenche o panorama do saldo anterior 		
@@ -833,9 +843,15 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		dataPeriodoAnterior.add(Calendar.DAY_OF_YEAR, -1);
 		
 		// Calcula o saldo do periodo anterior
-		double saldoAnterior = getLancamentoContaService()
+		double saldoAnterior = 0.0;
+		BigDecimal bigSaldoAnterior = getLancamentoContaService()
 				.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, dataPeriodoAnterior.getTime(), 
 						new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
+		
+		if (bigSaldoAnterior.signum() == 1)
+			saldoAnterior = bigSaldoAnterior.doubleValue();
+		else
+			saldoAnterior = bigSaldoAnterior.doubleValue() * -1;
 		
 		// Calcula o saldo atual
 		double saldoAtual = saldoAnterior + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos);

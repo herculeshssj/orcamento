@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -90,5 +91,5 @@ public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
 	public List<LancamentoPanoramaCadastro> buscarLancamentoParaPanoramaCadastro(Conta conta, CadastroSistema cadastro, Long idAgrupamento);
 	
-	public double buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento);
+	public BigDecimal buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento);
 }

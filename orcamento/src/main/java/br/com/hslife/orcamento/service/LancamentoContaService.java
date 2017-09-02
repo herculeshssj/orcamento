@@ -46,6 +46,7 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -357,7 +358,7 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	}
 	
 	@Override
-	public double buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
-		return getRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, dataInicio, dataFim, statusLancamento);
+	public BigDecimal buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento) {
+		return getRepository().getSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, dataInicio, dataFim, statusLancamento); 
 	}
 }

@@ -141,7 +141,7 @@
 					<h:commandLink title="Selecionar" action="#{managedBean.findByFatura}" rendered="#{managedBean.criterioBusca.conta.cartaoCredito.tipoCartao == 'CREDITO'}">
 						<h:graphicImage id="imgSelectCartao" height="48" width="48" value="/resources/images/svg/advance.svg"/>
 					</h:commandLink>
-					<h:commandLink title="Selecionar" action="#{managedBean.findByPeriodoCartao}" rendered="#{managedBean.criterioBusca.conta.cartaoCredito.tipoCartao == 'DEBITO'}">
+					<h:commandLink title="Selecionar" action="#{managedBean.findByPeriodo}" rendered="#{managedBean.criterioBusca.conta.cartaoCredito.tipoCartao == 'DEBITO'}">
 						<h:graphicImage id="imgSelectCartaoDebito" height="48" width="48" value="/resources/images/svg/advance.svg"/>
 					</h:commandLink>
 					<h:commandLink title="Importar lançamentos" action="#{managedBean.importarLancamentos}">

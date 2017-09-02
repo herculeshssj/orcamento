@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -268,11 +269,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			dataPeriodoAnterior.setTime(criterioBusca.getDataInicio());
 			dataPeriodoAnterior.add(Calendar.DAY_OF_YEAR, -1);
 			
+			BigDecimal valorSaldoAnterior = getService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, dataPeriodoAnterior.getTime(), null);
+			
 			saldoAnterior.setDataPagamento(dataPeriodoAnterior.getTime());
 			saldoAnterior.setDescricao("Saldo do período anterior - até " + Util.formataDataHora(dataPeriodoAnterior.getTime(), Util.DATA));
-			saldoAnterior.setValorPago(getService().buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(criterioBusca.getConta(), null, dataPeriodoAnterior.getTime(), null));
+			saldoAnterior.setValorPago(valorSaldoAnterior.doubleValue());
 			saldoAnterior.setMoeda(criterioBusca.getConta().getMoeda());
-			if (saldoAnterior.getValorPago() > 0)
+			if (valorSaldoAnterior.signum() == 1)
 				saldoAnterior.setTipoLancamento(TipoLancamento.RECEITA);
 			else 
 				saldoAnterior.setTipoLancamento(TipoLancamento.DESPESA);
@@ -564,6 +567,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			return "";
 		}
 		movimentacaoLancamentoMB.setLancamentosSelecionados(this.removerNaoSelecionados(new ArrayList<>(listEntity)));
+		movimentacaoLancamentoMB.setContaSelecionada(criterioBusca.getConta());
 		initializeEntity();
 		return movimentacaoLancamentoMB.duplicarView();
 	}
