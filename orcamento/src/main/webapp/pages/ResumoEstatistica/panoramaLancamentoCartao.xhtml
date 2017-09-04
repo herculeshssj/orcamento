@@ -63,7 +63,7 @@
 			<h:panelGroup>
 				<label>Cartão:</label>
 				<h:selectOneMenu id="txtCartao" value="#{managedBean.criterioBusca.conta}" converter="entityConverter">
-					<f:selectItems value="#{managedBean.listaContaAtiva}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
 				</h:selectOneMenu>
 			</h:panelGroup>
 			<h:panelGroup>

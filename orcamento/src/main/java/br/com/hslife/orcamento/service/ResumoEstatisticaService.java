@@ -259,75 +259,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		return saldoAtualContas;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartaoDebito(CriterioBuscaLancamentoConta criterioBusca, int ano) {
-		// TODO refatorar para trabalhar com categoria, e não favorecido
-		// Declara o Map de previsão de lançamentos da conta
-		Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoCartao>();
-		
-		// Traz os lançamentos registrados no cartão de débito, independente de ser avulso, mensalidade ou parcela
-		List<LancamentoConta> lancamentosProcessados = new ArrayList<LancamentoConta>();
-		criterioBusca.setDataInicio(Util.primeiroDiaAno(ano));
-		criterioBusca.setDataFim(Util.ultimoDiaAno(ano));
-		lancamentosProcessados = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
-		
-		// Busca os lançamentos e classifica-os em suas respectivas categorias
-		List<Favorecido> favorecidos = LancamentoContaUtil.organizarLancamentosPorFavorecido(lancamentosProcessados);
-		
-		for (Favorecido favorecido : favorecidos) {
-			String oid = Util.MD5(favorecido.getNome());
-			PanoramaLancamentoCartao panorama = new PanoramaLancamentoCartao();
-			panorama.setConta(criterioBusca.getConta());
-			panorama.setDescricao(favorecido.getNome());
-			panorama.setAno(ano);
-			panorama.setOid(oid);								
-			panorama.setIndice(mapPanoramaLancamentos.values().size() + 1);
-			mapPanoramaLancamentos.put(oid, panorama);
-				
-			// Rotina de inserção dos valores dos lançamentos no panorama
-			for (LancamentoConta lancamento : favorecido.getLancamentos()) {
-				mapPanoramaLancamentos.get(oid).setarMes(lancamento.getDataPagamento().getMonth(), lancamento);
-			}
-		}		
-		
-		// Realiza o cálculo do saldo total
-		PanoramaLancamentoCartao saldoTotal = new PanoramaLancamentoCartao();
-		saldoTotal.setConta(criterioBusca.getConta());
-		saldoTotal.setAno(ano);
-		saldoTotal.setOid(Util.MD5("Saldo Total"));
-		saldoTotal.setDescricao("Saldo Total");
-		saldoTotal.setIndice(mapPanoramaLancamentos.values().size() + 1);
-		
-		for (PanoramaLancamentoCartao panorama : mapPanoramaLancamentos.values()) {
-			saldoTotal.setJaneiro(saldoTotal.getJaneiro() + panorama.getJaneiro());
-			saldoTotal.setFevereiro(saldoTotal.getFevereiro() + panorama.getFevereiro());
-			saldoTotal.setMarco(saldoTotal.getMarco() + panorama.getMarco());
-			saldoTotal.setAbril(saldoTotal.getAbril() + panorama.getAbril());
-			saldoTotal.setMaio(saldoTotal.getMaio() + panorama.getMaio());
-			saldoTotal.setJunho(saldoTotal.getJunho() + panorama.getJunho());
-			saldoTotal.setJulho(saldoTotal.getJulho() + panorama.getJulho());
-			saldoTotal.setAgosto(saldoTotal.getAgosto() + panorama.getAgosto());
-			saldoTotal.setSetembro(saldoTotal.getSetembro() + panorama.getSetembro());
-			saldoTotal.setOutubro(saldoTotal.getOutubro() + panorama.getOutubro());
-			saldoTotal.setNovembro(saldoTotal.getNovembro() + panorama.getNovembro());
-			saldoTotal.setDezembro(saldoTotal.getDezembro() + panorama.getDezembro());
-		}
-		
-		mapPanoramaLancamentos.put(saldoTotal.getOid(), saldoTotal);
-		
-		// Salva o resultado em um List e depois retorna os valores adicionados
-		List<PanoramaLancamentoCartao> resultado = new LinkedList<>(mapPanoramaLancamentos.values());
-
-		return resultado;
-	}
-	
 	@Override
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano) {
-		
-		// Caso o cartão seja de débito, desvia para o método correspondente
-		if (criterioBusca.getConta().getCartaoCredito().getTipoCartao().equals(TipoCartao.DEBITO)) {
-			return this.gerarRelatorioPanoramaLancamentoCartaoDebito(criterioBusca, ano);
-		}
 		
 		// Declara o Map de previsão de lançamentos do cartao
 		Map<String, PanoramaLancamentoCartao> mapPanoramaLancamentos = new LinkedHashMap<String, PanoramaLancamentoCartao>();
@@ -847,12 +780,8 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		BigDecimal bigSaldoAnterior = getLancamentoContaService()
 				.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, dataPeriodoAnterior.getTime(), 
 						new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-		
-		if (bigSaldoAnterior.signum() == 1)
-			saldoAnterior = bigSaldoAnterior.doubleValue();
-		else
-			saldoAnterior = bigSaldoAnterior.doubleValue() * -1;
-		
+		saldoAnterior = bigSaldoAnterior.doubleValue();
+
 		// Calcula o saldo atual
 		double saldoAtual = saldoAnterior + LancamentoContaUtil.calcularSaldoLancamentos(lancamentos);
 		

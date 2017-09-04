@@ -59,6 +59,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
@@ -137,12 +138,25 @@ public class PanoramaLancamentoCartaoController extends AbstractController {
 		}
 	}
 	
-	public List<Conta> getListaContaAtiva() {
-		Set<Conta> contas = new HashSet<>();
+	public List<Conta> getListaConta() {
+		Set<Conta> contasSelecionadas = new HashSet<>();
+		
 		try {
-			contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{TipoConta.CARTAO}, getUsuarioLogado(), true));
 			
-			// Traz as contas compartilhadas para com o usuário atualmente logado
+			// Adiciona todas as contas do usuário, com exceção as contas do tipo cartão de crédito
+			List<Conta> contas = new ArrayList<>();
+			if (getOpcoesSistema().getExibirContasInativas()) {
+				contas = getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, null, getUsuarioLogado(), null);
+			} else {
+				contas = getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, null, getUsuarioLogado(), true);
+			}
+			
+			for (Conta c : contas) {
+				if (c.getTipoConta().equals(TipoConta.CARTAO) && c.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO))
+					contasSelecionadas.add(c);
+			}
+			
+			// Traz as contas compartilhadas para o usuário atualmente logado
 			List<ContaCompartilhada> contasCompartilhadas = contaCompartilhadaService.buscarTodosPorUsuario(getUsuarioLogado());
 									
 			// Acrescenta no Set as contas compartilhadas dos demais usuários
@@ -152,16 +166,18 @@ public class PanoramaLancamentoCartaoController extends AbstractController {
 						&& contaCompartilhada.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
 					contas.add(contaCompartilhada.getConta());
 				} else if (contaCompartilhada.getConta().isAtivo() 
-						&& contaCompartilhada.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
+						&& !contaCompartilhada.getConta().getTipoConta().equals(TipoConta.CARTAO)) {
 					contas.add(contaCompartilhada.getConta());
 				} else {
 					continue;
 				}
 			}
+			
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-		return new ArrayList<Conta>(contas);
+		
+		return new ArrayList<>(contasSelecionadas);
 	}
 	
 	public List<Integer> getListaAno() {
@@ -170,6 +186,10 @@ public class PanoramaLancamentoCartaoController extends AbstractController {
 			anos.add(i);
 		}
 		return anos;
+	}
+
+	public IConta getContaService() {
+		return contaService;
 	}
 
 	public void setContaService(IConta contaService) {
