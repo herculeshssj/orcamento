@@ -1,0 +1,217 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{saldoAtualContasMB}" />
+	
+	<ui:define name="botoes">	
+	
+	</ui:define>
+	
+	<ui:define name="pesquisa">
+		Calcular com lançamentos agendados:
+		<h:selectBooleanCheckbox value="#{managedBean.lancamentoAgendado}"/>
+		<p:spacer width="20"/>
+		<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		</h:commandLink>
+	</ui:define>
+	
+	<ui:define name="tabela">
+	
+		<p:tabView>
+		
+		<p:tab title="Contas ativas">
+	
+    	<h:dataTable id="tableListEntityContaAtivas" width="100%" value="#{managedBean.contasAtivas}" var="item">
+    		    		
+     		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Conta"/>
+				</f:facet>
+				<h:outputText value="#{item.descricaoConta}"/>						
+	  		</h:column>
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Saldo período"/>
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoPeriodo}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>	  				
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Saldo registrado"/>
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoRegistrado}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>		
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Saldo atual"/>					
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoAtual}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>
+	  		
+     	</h:dataTable>
+		
+		</p:tab>
+		
+		<p:tab title="Limites dos Cartões">
+		
+		<h:dataTable id="tableListEntityCartaoAtivas" width="100%" value="#{managedBean.limiteCartaoCredito}" var="item">
+    	     		    		
+     		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Cartão"/>
+				</f:facet>
+				<h:outputText value="#{item.descricaoConta}"/>						
+	  		</h:column>
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Limite"/>
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoPeriodo}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>	  				
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Registrado"/>
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoRegistrado}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>		
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Limite Disponível"/>					
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoAtual}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>
+     		
+     	</h:dataTable>
+     	
+     	</p:tab>
+     		
+		<p:tab title="Contas inativas" rendered="#{managedBean.opcoesSistema.exibirContasInativas}">
+	
+		<h:dataTable id="tableListEntityContaInativas" width="100%" value="#{managedBean.contasInativas}" var="item">
+    	
+     		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Conta"/>
+				</f:facet>
+				<h:outputText value="#{item.descricaoConta}"/>						
+	  		</h:column>
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Saldo período"/>
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoPeriodo}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>	  				
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Saldo registrado"/>
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoRegistrado}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>		
+	  		
+	  		<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Saldo atual"/>					
+				</f:facet>
+				<h:outputText value="#{item.moedaConta.simboloMonetario} "/>
+				<h:outputText value="#{item.saldoAtual}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>						
+	  		</h:column>
+	  		
+     	</h:dataTable>
+     	
+     	</p:tab>
+		     	
+		</p:tabView>
+	
+	</ui:define>
+	
+</ui:composition>
+</html>

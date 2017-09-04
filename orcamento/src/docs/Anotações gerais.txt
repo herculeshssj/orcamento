@@ -1,0 +1,27 @@
+Perfis:
+- Administrador;
+- Usuário.
+
+Entidades:
+- Usuário;
+- Tipo de veículos;
+- Montadora;
+- Modelo de veículos;
+- Meio de pagamento;
+- Características de veículos;
+- Seguro;
+- Favorecido;
+- Combustível;
+- Tipos de lançamentos de veículos;
+- Lançamentos de veículos;
+- Veículo;
+- Viagem.
+
+Frameworks:
+1º - Spring MVC
+2º - VRaptor
+3º - JavaEE 7
+4º - Grails
+5º - Play
+6º - ASP.NET Core
+

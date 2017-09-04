@@ -1,0 +1,182 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{lancamentoPeriodicoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="4">
+			
+			<strong>Tipo de despesa:</strong>
+			<h:outputText value="#{managedBean.entity.tipoLancamentoPeriodico}" />
+			<strong>Tipo de lançamento gerado:</strong>
+			<h:outputText value="#{managedBean.entity.tipoLancamento}"/>
+			
+			<strong>Descrição:</strong>
+			<h:outputText value="#{managedBean.entity.descricao}" />
+			<strong>Observação:</strong>
+			<h:outputText value="#{managedBean.entity.observacao}"/>
+			
+			<strong>Moeda:</strong>
+			<h:outputText value="#{managedBean.entity.moeda.label}"/>
+			<strong>Dia de vencimento:</strong>
+			<h:outputText value="#{managedBean.entity.diaVencimento}"/>				
+			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="4" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
+			
+				<strong>Data de aquisição:</strong>		
+				<h:outputText value="#{managedBean.entity.dataAquisicao}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+	    		
+	    		<strong>Valor por período:</strong>
+	    		<h:outputText value="#{managedBean.entity.valorParcela}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:outputText>
+	    		
+				<strong>Periodicidade:</strong>
+				<h:outputText value="#{managedBean.entity.periodoLancamento}"/>
+				
+				<h:outputText />
+				<h:outputText />
+				
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'PARCELADO'}">
+			
+				<strong>Data de compra:</strong>
+				<h:outputText value="#{managedBean.entity.dataAquisicao}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>		
+				
+	    		<strong>Valor da compra:</strong>
+	    		<h:outputText value="#{managedBean.entity.valorCompra}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:outputText>
+	    		
+	    		<strong>Valor da parcela:</strong>
+	    		<h:outputText value="#{managedBean.entity.valorParcela}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:outputText>
+				
+				<strong>Quantidade de parcelas:</strong>
+				<h:outputText value="#{managedBean.entity.totalParcela}" />
+				
+			</h:panelGrid>
+		
+		<hr />
+	
+		<h:selectOneMenu value="#{managedBean.pagamentoPeriodo}" converter="entityConverter" required="true" requiredMessage="Selecione uma parcela/mensalidade!">
+			<f:selectItem itemLabel="Selecione um período/parcela"/>
+			<f:selectItems value="#{managedBean.listaPagamentoPeriodo}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			<p:ajax event="change" update="pnlPagamentoPeriodo" listener="#{lancamentoPeriodicoMB.carregarPagamentoPeriodo}"/>
+		</h:selectOneMenu>
+		
+		<br/><br/>
+	
+		<p:outputPanel id="pnlPagamentoPeriodo">
+			
+			<h:panelGrid columns="4">
+			
+				Período:
+				<h:outputText value="#{managedBean.pagamentoPeriodo.periodo}"/>
+			
+				Ano:
+				<h:outputText value="#{managedBean.pagamentoPeriodo.ano}"/>
+				
+				Parcela:
+				<h:outputText value="#{managedBean.pagamentoPeriodo.parcela}"/>
+				
+				Data de vencimento:
+				<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.pagamentoPeriodo.dataVencimento}">
+			    	<f:converter converterId="dateConverter"/>
+			    </p:inputMask>
+				
+				Data de pagamento:
+				<p:inputMask size="10" mask="99/99/9999" value="#{managedBean.pagamentoPeriodo.dataPagamento}">
+			    	<f:converter converterId="dateConverter"/>
+			    </p:inputMask>
+				
+				Valor pago:
+				<p:inputText value="#{managedBean.pagamentoPeriodo.valorPago}" size="10">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</p:inputText>
+				
+			</h:panelGrid>
+			
+		</p:outputPanel>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Registrar pagamento" action="#{managedBean.registrarPagamento}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+     	<p:spacer width="20" />
+		<h:commandLink id="lnkAdicionarRegistro" title="Gerar mensalidade" action="#{managedBean.gerarMensalidade}" immediate="true" rendered="#{managedBean.entity.tipoLancamentoPeriodico == 'FIXO'}">
+     		<h:graphicImage id="imgAdicionarRegistro" height="48" width="48" value="/resources/images/svg/add_database.svg"/>
+     	</h:commandLink>
+	</ui:define>
+	
+</ui:composition>
+</html>

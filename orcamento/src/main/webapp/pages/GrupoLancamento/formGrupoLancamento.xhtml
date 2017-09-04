@@ -1,0 +1,217 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{grupoLancamentoController}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDescricao">Descrição:</label>
+				<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label>Moeda:</label>
+				<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
+					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+				</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtPrevisaoReceita">Previsão de receita:</label>
+				<h:inputText id="txtPrevisaoReceita" value="#{managedBean.entity.previsaoReceita}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:inputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtPrevisaoDespesa">Previsão de despesa:</label>
+				<h:inputText id="txtPrevisaoDespesa" value="#{managedBean.entity.previsaoDespesa}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:inputText>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtMeta">Meta:</label>
+				<h:inputText id="txtMeta" value="#{managedBean.entity.meta}"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDetalheMeta">Detalhes da meta:</label>
+				<h:inputTextarea id="txtDetalheMeta" value="#{managedBean.entity.detalheMeta}"/>
+			</h:panelGroup>
+		</h:panelGrid>
+	
+		<p:tabView>
+		
+			<p:tab title="Lançamentos de Conta/Cartão">
+				
+				<h:panelGrid columns="4">
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDescricaoBusca">Descrição</label>
+						<h:inputText id="txtDescricaoBusca" value="#{managedBean.criterioBusca.descricao}"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDataInicio">De</label>
+						<p:inputMask id="txtDataInicio" value="#{managedBean.criterioBusca.dataInicio}" size="10" mask="99/99/9999">
+							<f:converter converterId="dateConverter"/>
+						</p:inputMask>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDataFim">À</label>
+						<p:inputMask id="txtDataFim" value="#{managedBean.criterioBusca.dataFim}" size="10" mask="99/99/9999">
+							<f:converter converterId="dateConverter"/>
+						</p:inputMask>
+					</h:panelGroup>
+					<p:commandLink title="Pesquisar" action="#{managedBean.buscarLancamentos}" update="tableLancamentos">
+		     			<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		     		</p:commandLink>
+				</h:panelGrid>
+				
+				<p:dataTable id="tableLancamentos" var="item" value="#{managedBean.itensEncontrados}">
+					<p:column>
+						<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+					</p:column>
+					<p:column headerText="Descrição">
+						<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+					</p:column>
+					<p:column headerText="Data">
+						<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+							<f:converter converterId="dateConverter"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Valor">
+						<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>	
+				
+				<p:commandLink value="Incluir lançamento" action="#{managedBean.incluirLancamento}" update="tableLancamentos,frmFormEntity:tableItens"/>
+				
+			</p:tab>
+			
+			<p:tab title="Itens de Grupos de Lançamentos">
+			
+				<h:panelGrid columns="5" id="pnlItemGrupo">
+					<h:panelGroup>
+						<label for="frmFormEntity:txtDescricaoItem">Descrição</label>
+						<h:inputText id="txtDescricaoItem" value="#{managedBean.itemGrupoLancamento.descricao}"/>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtTipoItem">Tipo</label>
+						<h:selectOneMenu id="txtTipoItem" value="#{managedBean.itemGrupoLancamento.tipoLancamento}">
+							<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>				
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtData">Data</label>
+						<p:inputMask id="txtData" value="#{managedBean.itemGrupoLancamento.data}" size="10" mask="99/99/9999">
+							<f:converter converterId="dateConverter"/>
+						</p:inputMask>
+					</h:panelGroup>
+					<h:panelGroup>
+						<label for="frmFormEntity:txtValor">Valor</label>
+						<h:inputText id="txtValor" value="#{managedBean.itemGrupoLancamento.valor}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:inputText>
+					</h:panelGroup>					
+					<h:commandLink id="lnkAddRow" title="Adicionar item no grupo" action="#{managedBean.adicionarItemGrupo}">
+		     			<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
+		     		</h:commandLink>
+				</h:panelGrid>
+				
+			</p:tab>
+		
+		</p:tabView>
+		
+		<hr/>
+		
+		<h:dataTable id="tableItens" var="item" value="#{managedBean.entity.itens}">
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Descrição" />
+				</f:facet>
+				<h:outputText value="#{item.descricao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Data" />
+				</f:facet>
+				<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Valor" />
+				</f:facet>
+				<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Ações" />
+				</f:facet>
+				<h:commandLink title="Excluir" action="#{managedBean.excluirLancamento}">
+					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+					<f:setPropertyActionListener value="#{item}" target="#{managedBean.itemSelecionado}"/>
+				</h:commandLink>
+			</h:column>
+		</h:dataTable>
+		
+	</ui:define>
+
+</ui:composition>
+</html>

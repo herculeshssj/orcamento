@@ -1,0 +1,139 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{itemDespensaMB}" />
+	
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="4">
+			
+			Descrição:
+			<h:outputText value="#{managedBean.entity.descricao}"/>
+			
+			Despensa:	
+			<h:outputText value="#{managedBean.entity.despensa.descricao}"/>
+			
+			Unidade de Medida:
+			<h:panelGroup>
+	    		<h:outputText value="#{managedBean.entity.unidadeMedida.descricao}" />&nbsp;(<h:outputText value="#{managedBean.entity.unidadeMedida.sigla}" />)
+	    	</h:panelGroup>
+			
+			Quantidade atual:
+			<h:outputText value="#{managedBean.entity.quantidadeAtual}"/>
+			
+			Estoque (VERDE):
+			<h:outputText value="#{managedBean.entity.quantidadeVerde}" />				
+			
+			Estoque (AMARELO):
+			<h:outputText value="#{managedBean.entity.quantidadeAmarelo}" />				
+			
+			Estoque (VERMELHO):
+			<h:outputText value="#{managedBean.entity.quantidadeVermelho}" />	
+			
+			Validade em estoque:
+			<h:outputText value="#{managedBean.entity.validade}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>	
+			
+		</h:panelGrid>
+		
+		<p:outputPanel id="pnlRegistroCompraConsumo">
+		
+			<h:panelGrid columns="2">
+			
+				Operação:
+				<h:selectOneRadio id="txtOperacao" value="#{managedBean.movimentoItemDespensa.operacaoDespensa}" required="true" requiredMessage="Informe a operação!">
+					<f:selectItems value="#{managedBean.listaOperacaoDespensa}"/>
+					<p:ajax event="change" update="pnlRegistroCompraConsumo" listener="#{managedBean.exibirCamposValidadeValor}"/>
+				</h:selectOneRadio>
+				
+				Quantidade:
+				<h:inputText id="txtQuantidade" value="#{managedBean.movimentoItemDespensa.quantidade}"/>
+				
+				Data da compra/consumo:
+				<p:inputMask id="txtDataCompraBaixa" value="#{managedBean.movimentoItemDespensa.dataOperacao}" mask="99/99/9999">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>
+				
+				<h:outputText value="Valor unitário (#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario}):" rendered="#{managedBean.exibirCamposCompra}"/>
+				<h:inputText value="#{managedBean.movimentoItemDespensa.valor}" size="10" rendered="#{managedBean.exibirCamposCompra}">
+					<f:convertNumber pattern="###.##"/>
+				</h:inputText>				
+				
+				<h:outputText value="Validade:" rendered="#{managedBean.exibirCamposCompra and managedBean.entity.perecivel}"/>
+				<p:inputMask value="#{managedBean.validadeItemDespensa}" mask="99/99/9999" rendered="#{managedBean.exibirCamposCompra and managedBean.entity.perecivel}">
+					<f:converter converterId="dateConverter"/>
+				</p:inputMask>		
+				
+			</h:panelGrid>
+			
+		</p:outputPanel>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+     		<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="10" />
+		<h:commandLink id="lnkOk" title="Registrar" action="#{managedBean.registrarCompraConsumo}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>		
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,122 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{cartaoCreditoMB}" />
+	
+	<ui:define name="campos">
+	
+		<label>Cartão de crédito:</label>
+		<h:outputText value="#{managedBean.entity.label}"/>
+		
+		<hr/>
+		
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.novoCartao.descricao}" />
+		
+		<label>Bandeira:</label>
+		<h:selectOneMenu id="txtBandeira" value="#{managedBean.novoCartao.bandeira}">
+			<f:selectItem itemLabel="Nenhuma"/>
+			<f:selectItems value="#{enumCombo.listaBandeira}"/>
+		</h:selectOneMenu>
+		
+		<label>Tipo de cartão:</label>
+		<h:selectOneRadio id="txtTipoCartao" value="#{managedBean.novoCartao.tipoCartao}">
+			<f:selectItems value="#{enumCombo.listaTipoCartao}"/>
+			<p:ajax update="pnlCredito" event="change" />
+		</h:selectOneRadio>
+		
+		<label>Abrangência:</label>
+		<h:selectOneRadio id="txtAbrangencia" value="#{managedBean.novoCartao.abrangencia}">
+			<f:selectItems value="#{enumCombo.listaAbrangencia}"/>
+		</h:selectOneRadio>
+		
+		<p:outputPanel id="pnlCredito">
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.novoCartao.tipoCartao == 'CREDITO'}">			
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDiaFechamentoFatura">Dia de fechamento da fatura:</label>
+				<h:inputText id="txtDiaFechamentoFatura" value="#{managedBean.novoCartao.diaFechamentoFatura}" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<label for="frmFormEntity:txtDiaVencimentoFatura">Dia de vencimento da fatura:</label>
+				<h:inputText id="txtDiaVencimentoFatura" value="#{managedBean.novoCartao.diaVencimentoFatura}" />
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="4" rendered="#{managedBean.novoCartao.tipoCartao == 'CREDITO'}">
+			<label for="frmFormEntity:txtMes">Validade:</label>
+			<h:inputText id="txtMes" value="#{managedBean.novoCartao.mesValidade}" />
+			<h:outputText value=" / " />
+			<h:inputText value="#{managedBean.novoCartao.anoValidade}" />
+		</h:panelGrid>	
+		
+		</p:outputPanel>
+	
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Substituir cartão" action="#{managedBean.substituirCartao}">
+     		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+     	</h:commandLink>
+	</ui:define>
+	
+</ui:composition>
+</html>

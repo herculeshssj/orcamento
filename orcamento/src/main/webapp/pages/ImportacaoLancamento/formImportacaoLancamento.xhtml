@@ -1,0 +1,249 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{importacaoLancamentoMB}" />
+	
+	<ui:define name="campos">
+	
+		<p:dialog header="Importação de Lançamentos" modal="true" widgetVar="dlgImportacao" minHeight="40">
+			Importação via OFX<br/><br/>
+			
+			Processa todos os lançamentos contidos no arquivo OFX. <br/>
+			Valida as informações do arquivo de acordo com a <br/>
+			configuração registrada na conta para não haver fraude. <br/>
+			Somente os lançamentos cuja data de pagamento for posterior <br/>
+			a data de abertura da conta serão importados.
+			
+			<br/><br/>
+			
+			Importação via CSV<br/><br/>
+			Importação arquivos CSV separados por vírgula no e formato<br/>
+			 UTF-8. Abaixo segue o cabeçalho do arquivo CSV:<br/>
+			- HISTORICO<br/>
+			- DOCUMENTO<br/>
+			- DATA<br/>
+			- VALOR<br/>
+			- OBSERVACAO<br/>
+			- QUANTIDADE<br/>
+			- CATEGORIA<br/>
+			- FAVORECIDO<br/>
+			- MEIOPAGAMENTO<br/>
+			- MOEDA<br/>	
+		</p:dialog>
+	
+		<h:panelGrid columns="2">
+			
+			Conta:
+			<h:selectOneMenu id="txtConta" value="#{managedBean.contaSelecionada}" converter="entityConverter" disabled="true">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>			
+			</h:selectOneMenu>					
+			
+			Tipo de arquivo:
+			<h:panelGroup>
+				<h:selectOneRadio value="#{managedBean.tipoArquivo}">
+					<f:selectItem itemLabel="OFX" itemValue="OFX"/>
+					<f:selectItem itemLabel="CSV" itemValue="CSV"/>
+				</h:selectOneRadio>
+			</h:panelGroup>
+			
+			Selecione o arquivo:
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" invalidSizeMessage="Tamanho máximo de arquivo: 16MB"/>
+			
+			<h:outputText value=""/>
+			<h:panelGroup>
+				<h:commandLink title="Processar Arquivo" action="#{managedBean.processarArquivo}">
+					<h:graphicImage id="imgProcess" height="48" width="48" value="/resources/images/svg/services.svg"/>					
+				</h:commandLink>
+				<p:commandLink title="Ajuda" onclick="PF('dlgImportacao').show()">
+					<h:graphicImage id="imgHelp" height="48" width="48" value="/resources/images/svg/about.svg"/>					
+				</p:commandLink>				
+			</h:panelGroup>						
+			
+		</h:panelGrid>
+	
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.contaSelecionada.tipoConta != 'CARTAO'}">
+			N° do banco: 
+			<h:outputText value="#{managedBean.infoArquivo.bancoID}"/>
+			
+			Agência:
+			<h:outputText value="#{managedBean.infoArquivo.agencia}"/>
+			
+			Conta:
+			<h:outputText value="#{managedBean.infoArquivo.conta}"/>
+			
+			Tipo de conta:
+			<h:outputText value="#{managedBean.infoArquivo.tipoConta}"/>
+			
+			Data do arquivo:
+			<h:outputText value="#{managedBean.infoArquivo.dataArquivo}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			Balanço final:
+			<h:outputText value="#{managedBean.infoArquivo.balancoFinal}">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+			
+			Moeda padrão:
+			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
+			
+			Quantidade de transações:
+			<h:outputText value="#{managedBean.infoArquivo.quantidadeTransacao}"/>
+			
+			Período:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.infoArquivo.inicioTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+				à
+				<h:outputText value="#{managedBean.infoArquivo.fimTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+			</h:panelGroup>			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{managedBean.exibirInfoArquivo and managedBean.contaSelecionada.tipoConta == 'CARTAO'}">			
+			Moeda padrão:
+			<h:outputText value="#{managedBean.infoArquivo.moedaPadrao}"/>
+			
+			Quantidade de transações:
+			<h:outputText value="#{managedBean.infoArquivo.quantidadeTransacao}"/>
+			
+			Período:
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.infoArquivo.inicioTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+				à
+				<h:outputText value="#{managedBean.infoArquivo.fimTransacoes}">
+					<f:converter converterId="dateConverter"/>	
+				</h:outputText>
+			</h:panelGroup>			
+		</h:panelGrid>
+		
+		<h5>Lançamentos válidos para importação</h5>
+		
+		<h:dataTable value="#{managedBean.listEntity}" var="item">
+			<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Data"/>
+				</f:facet>						
+				<h:outputText value="#{item.data}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+		  	</h:column>	  	
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Histórico"/>
+				</f:facet>
+				<h:outputText value="#{item.historico}"/>						
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Moeda"/>
+				</f:facet>	
+				<h:selectOneMenu value="#{item.moeda}" rendered="#{item.conta.tipoConta == 'CARTAO'}">
+					<f:selectItems value="#{managedBean.listaCodigoMonetario}" />
+				</h:selectOneMenu>
+				<h:outputText value="#{item.conta.moeda.codigoMonetario}" rendered="#{item.conta.tipoConta != 'CARTAO'}"/>
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Valor"/>
+				</f:facet>						
+				<h:outputText value="#{item.valor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+		  	</h:column>
+		  	<h:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Ações"/>
+				</f:facet>
+				<h:commandLink title="Importar lançamento" action="#{managedBean.importarLancamento}">
+					<h:graphicImage id="imgImport" height="48" width="48" value="/resources/images/svg/import.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+				</h:commandLink>							
+				<p:spacer width="15"/>
+				<h:commandLink title="Excluir" action="#{managedBean.excluirLancamentoImportado}">
+					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+				</h:commandLink>
+		  	</h:column>
+		  	<f:facet name="footer">
+       			<h:outputText value="#{managedBean.quantRegistros} item(ns) encontrado(s)"></h:outputText>
+   			</f:facet>
+		</h:dataTable>
+		
+		Quitar automaticamente os lançamentos importados
+		<h:selectBooleanCheckbox value="#{managedBean.quitarAutomaticamente}"/>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+		</h:commandLink>
+		<h:commandLink id="lnkAvancar" title="Avançar" action="#{managedBean.confirmarImportacao}" immediate="true">
+			<h:graphicImage id="imgForward" height="48" width="48" value="/resources/images/svg/redo.svg"/>
+		</h:commandLink>
+		<h:commandLink title="Apagar lançamentos importados" action="#{managedBean.apagarLancamentos}">
+			<h:graphicImage id="imgRecycle" height="48" width="48" value="/resources/images/svg/full_trash.svg"/>
+		</h:commandLink>
+	</ui:define>
+		
+</ui:composition>
+</html>

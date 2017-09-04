@@ -1,0 +1,157 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{itemDespensaMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="4">
+			<h:panelGroup>
+				<label>Despensa:</label>
+				<h:selectOneMenu value="#{managedBean.despensa}" converter="entityConverter">
+					<f:selectItem itemLabel="Selecione" />
+		    		<f:selectItems value="#{managedBean.listaDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		    		<p:ajax update="txtItemDespensa" listener="#{managedBean.getListaItemDespensa}"/>
+		    	</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label>Item:</label>
+				<h:selectOneMenu id="txtItemDespensa" value="#{managedBean.itemDespensa}" converter="entityConverter">
+		    		<f:selectItems value="#{managedBean.listaItemDespensa}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+		    	</h:selectOneMenu>
+			</h:panelGroup>
+			<h:panelGroup>
+				<label>Quantidade:</label>
+				<h:inputText value="#{managedBean.quantidadeItemDespensa}" size="3" maxlength="5"/>
+			</h:panelGroup>
+			<h:panelGroup>
+				<p:commandLink id="lnkAddRow" title="Adicionar item à lista" actionListener="#{managedBean.adicionarItemListaCompra}" update="tableListaCompra">
+	     			<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
+	     		</p:commandLink>
+			</h:panelGroup>		
+		</h:panelGrid>
+		
+		<p:dataTable id="tableListaCompra" width="100%" value="#{managedBean.listaCompras}" var="item">
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Descrição" />
+				</f:facet>
+				<h:outputText value="#{item.descricao}"/>
+			</p:column>			
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Marca" />
+				</f:facet>
+				<h:outputText value="#{item.marca}"/>
+			</p:column>
+			<p:column style="text-align: center; vertical-align: middle;">
+				<f:facet name="header">
+					<h:outputText value="Quantidade a comprar" />
+				</f:facet>
+				<h:outputText value="#{item.quantidadeAtual} "/>
+				<h:outputText value="#{item.unidadeMedida.sigla}"/>
+			</p:column>			
+			<p:column style="text-align: center; vertical-align: middle;" rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+				<f:facet name="header">
+					<h:outputText value="Valor aproximado" />
+				</f:facet>
+				<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} "/>
+				<h:outputText value="#{item.valor}">
+					<f:convertNumber pattern="###.##"/>
+				</h:outputText>
+			</p:column>			
+			<p:column style="text-align: center; vertical-align: middle;" exportable="false">
+				<f:facet name="header">
+					<h:outputText value="Ação" />
+				</f:facet>
+				<h:commandLink id="lnkDelRow" title="Remover detalhe" action="#{managedBean.removerItemListaCompra}">
+		     		<h:graphicImage id="imgDelRow" height="48" width="48" value="/resources/images/svg/delete_row.svg"/>
+		     		<f:setPropertyActionListener value="#{item}" target="#{managedBean.itemDespensa}"/>
+		     	</h:commandLink>
+			</p:column>
+			<p:columnGroup type="footer">
+	            <p:row>
+	                <p:column footerText="#{managedBean.totalItens} itens" />
+	                <p:column footerText="" />	                
+	                <p:column footerText="#{managedBean.totalItensListaCompra} itens a comprar" />
+	                <p:column footerText="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} #{managedBean.totalValorListaCompra}" rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}"/>
+	                <p:column footerText="" />
+	            </p:row>	            
+        	</p:columnGroup>
+			
+		</p:dataTable>
+			
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+     		<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>
+     	&nbsp;&nbsp;
+     	<h:commandLink title="Exportar para MS-Excel">
+			<p:graphicImage value="/resources/images/MSExcel.png" width="48" height="48"/>
+			<p:dataExporter type="xls" target="tableListaCompra" fileName="ListaDeCompras" encoding="iso-8859-1"/> 
+		</h:commandLink>
+		&nbsp;&nbsp;
+		<h:commandLink title="Exportar para PDF">
+			<p:graphicImage value="/resources/images/PDF.png" width="48" height="48"/>
+			<p:dataExporter type="pdf" target="tableListaCompra" fileName="ListaDeCompras" encoding="iso-8859-1"/> 
+		</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>

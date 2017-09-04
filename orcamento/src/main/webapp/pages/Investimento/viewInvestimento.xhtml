@@ -1,0 +1,109 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/visualizar.xhtml">
+
+	<ui:param name="managedBean" value="#{investimentoMB}" />
+
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+			
+			<label>Banco:</label>
+			<h:outputText value="#{managedBean.entity.banco.nome}" />
+					
+			<label>Tipo de investimento:</label>
+			<h:outputText value="#{managedBean.entity.tipoInvestimento}" />
+				
+			<label for="frmFormEntity:txtDescricao">Descrição:</label>
+			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}" />				
+			
+			<label for="frmFormEntity:txtCnpj">CNPJ:</label>
+			<h:outputText id="txtCnpj" value="#{managedBean.entity.cnpj}"/>				
+			
+			<label for="frmListEntity:txtInicioInvestimento">Início do investimento:</label>
+			<h:outputText id="txtInicioInvestimento" value="#{managedBean.entity.inicioInvestimento}">
+		    	<f:converter converterId="dateConverter"/>
+		    </h:outputText>
+		    
+		    <label for="frmListEntity:txtTerminoInvestimento">Término do investimento:</label>
+			<p:inputMask id="txtTerminoInvestimento" size="9" mask="99/99/9999" value="#{managedBean.entity.terminoInvestimento}">
+		    	<f:converter converterId="dateConverter"/>
+		    </p:inputMask>
+		    
+		    <label for="frmFormEntity:txtObservacao">Observação:</label>
+			<h:outputText id="txtObservacao" value="#{managedBean.entity.observacao}"/>
+		
+		</h:panelGrid>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Excluir registro" action="#{managedBean.delete}">
+			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		</h:commandLink>
+		<p:spacer width="20" />
+		<h:commandLink id="lnkFinish" title="Encerrar investimento" action="#{managedBean.encerrarInvestimento}">
+     		<h:graphicImage id="imgFinish" height="48" width="48" value="/resources/images/svg/disapprove.svg"/>
+     	</h:commandLink>
+	</ui:define>
+	
+</ui:composition>
+</html>

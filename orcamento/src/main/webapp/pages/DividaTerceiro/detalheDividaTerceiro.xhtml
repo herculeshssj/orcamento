@@ -1,0 +1,158 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/visualizar.xhtml">
+
+	<ui:param name="managedBean" value="#{dividaTerceiroMB}" />
+
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Favorecido:
+			<h:outputText value="#{managedBean.entity.favorecido.label}" />		
+	     	
+	     	Tipo de dívida:
+	     	<h:outputText value="#{managedBean.entity.tipoCategoria}" />
+	     	
+	     	Status da dívida:
+	     	<h:outputText value="#{managedBean.entity.statusDivida}" />	
+	     	
+	     	Data da negociação:
+	     	<h:outputText value="#{managedBean.entity.dataNegociacao}">
+	     		<f:converter converterId="dateConverter"/>
+	     	</h:outputText>
+	     	
+	     	Valor da dívida:
+	     	<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.valorDivida}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+			
+			Moeda:
+			<h:outputText value="#{managedBean.entity.moeda.label}" />
+			
+			Total pago:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalPago}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+			
+			Total a pagar:
+			<h:panelGroup>
+	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+		     	<h:outputText value="#{managedBean.entity.totalAPagar}">
+		     		<f:convertNumber type="currency" pattern="###.##"/>
+		     	</h:outputText>
+	     	</h:panelGroup>
+			
+		</h:panelGrid>
+				
+		<label>Justificativa:</label>
+		<h:outputText value="#{managedBean.entity.justificativa}" escape="false"/>
+		
+		<hr />
+		
+		<h:panelGroup rendered="#{managedBean.entity.statusDivida != 'REGISTRADO'}">
+			<h:dataTable value="#{managedBean.entity.pagamentos}" var="item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Descrição" />
+					</f:facet>
+					<h:outputText value="#{item.label}"/>
+				</h:column>
+				<h:column style="text-align: center; vertical-align: middle;">
+					<f:facet name="header">
+						<h:outputText value="Ação" />
+					</f:facet>
+					<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovante}" target="_blank" rendered="#{item.arquivoComprovante == null}">
+						<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
+					</h:commandLink>
+					<h:commandLink value="Comprovante" action="#{managedBean.visualizarComprovanteAnexado}" target="_blank" rendered="#{item.arquivoComprovante != null}">
+						<f:setPropertyActionListener value="#{item}" target="#{managedBean.pagamentoDivida}"/>
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:panelGroup>
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+   			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+   		</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkContract" title="Visualizar termo/contrato gerado" action="#{managedBean.visualizarTermoDivida}" target="_blank" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO' and managedBean.entity.arquivoTermoDivida == null}">
+   			<h:graphicImage id="imgContract" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
+   		</h:commandLink>
+   		<h:commandLink id="lnkContractFile" title="Visualizar termo/contrato anexado" action="#{managedBean.visualizarTermoDividaAnexado}" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO' and managedBean.entity.arquivoTermoDivida != null}">
+   			<h:graphicImage id="imgContractFile" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
+   		</h:commandLink>
+		&nbsp;&nbsp;&nbsp;
+		<h:commandLink id="lnkCertificate" title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO' and managedBean.entity.arquivoTermoQuitacao == null}">
+			<h:graphicImage id="imgCertificate" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
+		</h:commandLink>
+		<h:commandLink id="lnkCertificateFile" title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacaoAnexado}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO' and managedBean.entity.arquivoTermoQuitacao != null}">
+			<h:graphicImage id="imgCertificateFile" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
+		</h:commandLink>
+	</ui:define>
+	
+</ui:composition>
+</html>

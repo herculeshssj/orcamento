@@ -1,0 +1,208 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/principal.xhtml">
+
+	<ui:define name="titulo">
+		<h3>Dashboard</h3>
+	</ui:define>
+
+	<ui:define name="conteudo">
+	
+		<h:form id="frmDashboard">
+		
+			<h:panelGroup rendered="#{not empty agendaMB.agendamentosDoDia}">
+				<h5>Agenda do dia</h5>
+				
+				<h:dataTable value="#{agendaMB.agendamentosDoDia}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>
+						</f:facet>
+						<h:outputText value="#{item.descricao}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Tipo"/>
+						</f:facet>
+						<h:outputText value="#{item.tipoAgendamento}" />
+			  		</h:column>  			
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Data"/>
+						</f:facet>
+						<h:outputText value="#{item.dateLabel}" style="white-space: pre;"/>
+			  		</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
+	  		
+	  		
+	  		<h:panelGroup rendered="#{not empty dividaTerceiroMB.dividaTerceiroAtrasado}">
+		  		<h5>Dívidas de favorecidos</h5>
+				
+				<h:dataTable value="#{dividaTerceiroMB.dividaTerceiroAtrasado}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Favorecido" />
+						</f:facet>
+						<h:outputText value="#{item.favorecido.nome}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Valor"/>
+						</f:facet>
+						<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+						<h:outputText value="#{item.valorDivida}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:convertNumber type="currency" pattern="###.##"/>
+						</h:outputText>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Pago"/>
+						</f:facet>
+						<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+						<h:outputText value="#{item.totalPago}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:convertNumber type="currency" pattern="###.##"/>
+						</h:outputText>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="À pagar"/>
+						</f:facet>
+						<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+						<h:outputText value="#{item.totalAPagar}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:convertNumber type="currency" pattern="###.##"/>
+						</h:outputText>
+					</h:column>
+					<p:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Último pagamento realizado" />
+						</f:facet>
+						<h:outputText value="#{item.ultimoPagamentoEfetuado}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
+							<f:converter converterId="dateConverter"/>
+						</h:outputText>
+					</p:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Dias em atraso" />
+						</f:facet>
+						<h:outputText value="#{item.quantidadeDiasUltimoPagamento}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
+					</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
+	  		
+	  		<h:panelGroup rendered="#{not empty itemDespensaMB.itemDespensaVencido}">
+		  		<h5>Itens de despensa vencidos</h5>
+				
+				<h:dataTable value="#{itemDespensaMB.itemDespensaVencido}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>
+						</f:facet>
+						<h:outputText value="#{item.descricao}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Unidade de Medida"/>
+						</f:facet>
+						<h:outputText value="#{item.unidadeMedida.descricao}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Despensa"/>
+						</f:facet>
+						<h:outputText value="#{item.despensa.descricao}" />
+			  		</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
+	  		
+	  		<h:panelGroup rendered="#{not empty logMB.usuariosLogados and logMB.usuarioLogado.login == 'admin'}">
+		  		<h5>Usuários logados</h5>
+				
+				<h:dataTable value="#{logMB.usuariosLogados}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Usuário"/>
+						</f:facet>
+						<h:outputText value="#{item.usuario}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="IP"/>
+						</f:facet>
+						<h:outputText value="#{item.ip}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Entrou em"/>
+						</f:facet>
+						<h:outputText value="#{item.dataEntrada}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="ID da Sessão"/>
+						</f:facet>
+						<h:outputText value="#{item.sessaoID}" />
+			  		</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
+  		
+  		</h:form>
+     
+	</ui:define>
+	
+</ui:composition>
+</html>

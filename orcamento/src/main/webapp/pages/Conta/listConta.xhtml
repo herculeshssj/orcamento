@@ -1,0 +1,134 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{contaMB}" />
+	<ui:param name="colunaPesquisa" value="4" />
+	
+	<ui:define name="parametro_pesquisa">		
+		<h:panelGroup>
+			<label>Tipo de conta:</label>
+			<h:selectOneMenu value="#{managedBean.tipoSelecionado}">
+				<f:selectItem itemLabel="Todos" />
+				<f:selectItems value="#{enumCombo.listaTipoConta}"/>
+			</h:selectOneMenu>
+	    </h:panelGroup>
+	    <h:panelGroup>
+	    	<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+	    	Somente ativos
+	    </h:panelGroup>	    	    
+	</ui:define>
+	
+	<ui:define name="pesquisa_avancada"></ui:define>
+	
+	<ui:define name="colunas">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição" />
+			</f:facet>
+			<h:graphicImage id="imgPeople" title="Conta conjunta" value="/resources/images/svg/conference_call.svg" height="20" width="20" rendered="#{item.contaConjunta}"/>
+			<p:spacer width="5" rendered="#{item.contaConjunta}"/>
+			<h:outputText value="#{item.descricao}" />
+		</p:column>
+
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Banco" />
+			</f:facet>
+			<h:outputText value="#{item.banco == null ? 'Nenhum' : item.banco.nome}" />
+		</p:column>
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<p:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Ações"/>
+			</f:facet>
+			<h:commandLink title="Editar" action="#{managedBean.edit}" rendered="#{item.tipoConta != 'CARTAO'}">
+				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
+			<h:commandLink title="Editar cartão de crédito" action="#{cartaoCreditoMB.edit}" rendered="#{item.tipoConta == 'CARTAO'}">
+				<h:graphicImage id="imgEditCartao" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
+				<f:setPropertyActionListener value="#{item.cartaoCredito.id}" target="#{cartaoCreditoMB.idEntity}" />
+			</h:commandLink>
+			<p:spacer width="10"/>
+			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{item.tipoConta != 'CARTAO'}">
+				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
+			<p:spacer width="10"/>			
+			<h:panelGroup rendered="#{item.tipoConta != 'CARTAO'}">
+				<h:commandLink title="Ativar conta" action="#{managedBean.ativarContaView}" rendered="#{!item.ativo}">
+					<h:graphicImage id="imgEnable" height="48" width="48" value="/resources/images/svg/checkmark.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+				</h:commandLink>					
+				<h:commandLink title="Desativar conta" action="#{managedBean.desativarContaView}" rendered="#{item.ativo}">
+					<h:graphicImage id="imgDisable" height="48" width="48" value="/resources/images/svg/cancel.svg"/>
+					<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}" />
+				</h:commandLink>
+			</h:panelGroup>
+		</p:column>
+	</ui:define>
+	
+	<ui:define name="outras_opcoes">
+		<h:commandLink value="Contas compartilhadas" action="#{contaCompartilhadaMB.startUp}"/> | 
+		<h:commandLink value="Configuração de importação" action="#{importacaoLancamentoMB.configurar}"/>
+	</ui:define>
+
+</ui:composition>
+</html>

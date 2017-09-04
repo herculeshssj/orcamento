@@ -1,0 +1,157 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/visualizar.xhtml">
+
+	<ui:param name="managedBean" value="#{itemDespensaMB}" />
+	
+	<ui:define name="campos">
+			
+		<h:panelGrid columns="2">
+			
+			Descrição:
+			<h:outputText value="#{managedBean.entity.descricao}"/>
+			
+			Despensa:	
+			<h:outputText value="#{managedBean.entity.despensa.descricao}"/>
+			
+			Características:			
+			<h:outputText value="#{managedBean.entity.caracteristicas}"/>
+			
+			Unidade de Medida:
+			<h:panelGroup>
+	    		<h:outputText value="#{managedBean.entity.unidadeMedida.descricao}" />&nbsp;(<h:outputText value="#{managedBean.entity.unidadeMedida.sigla}" />)
+	    	</h:panelGroup>
+	    	
+	    	Marca favorita:
+	    	<h:outputText value="#{managedBean.entity.marca}"/>
+			
+			<h:panelGroup rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+			
+				Quantidade atual:
+				<h:outputText value="#{managedBean.entity.quantidadeAtual}"/>
+				
+				Estoque (VERDE):
+				<h:outputText value="#{managedBean.entity.quantidadeVerde}" />				
+				
+				Estoque (AMARELO):
+				<h:outputText value="#{managedBean.entity.quantidadeAmarelo}" />				
+				
+				Estoque (VERMELHO):
+				<h:outputText value="#{managedBean.entity.quantidadeVermelho}" />	
+				
+				Validade em estoque:
+				<h:outputText value="#{managedBean.entity.validade}">
+					<f:converter converterId="dateConverter"/>
+				</h:outputText>
+				
+				Valor unitário:
+				<h:panelGroup>
+					<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario}"/>
+					<h:outputText value="#{managedBean.entity.valor}">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:panelGroup>	
+				
+				Perecível:
+				<h:selectBooleanCheckbox value="#{managedBean.entity.perecivel}" disabled="true"/>
+			
+			</h:panelGroup>			
+			
+		</h:panelGrid>
+		
+		<p:accordionPanel activeIndex="1" rendered="#{managedBean.opcoesSistema.controlarEstoqueItemDespensa}">
+			<p:tab title="Clique aqui para visualizar o histórico de movimentação">
+		
+				<h:dataTable value="#{managedBean.entity.movimentacao}" var="mov">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Operação" />
+						</f:facet>
+						<h:outputText value="#{mov.operacaoDespensa}" />
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Data" />
+						</f:facet>
+						<h:outputText value="#{mov.dataOperacao}">
+							<f:converter converterId="dateConverter"/>
+						</h:outputText>
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Quantidade" />
+						</f:facet>
+						<h:outputText value="#{mov.quantidade}" />
+					</h:column>
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Valor" />
+						</f:facet>
+						<h:outputText value="-" rendered="#{mov.operacaoDespensa == 'CONSUMO'}"/>
+						<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " rendered="#{mov.operacaoDespensa == 'COMPRA'}"/>
+						<h:outputText value="#{mov.valor}" rendered="#{mov.operacaoDespensa == 'COMPRA'}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>
+					</h:column>
+				</h:dataTable>
+		
+			</p:tab>
+		</p:accordionPanel>
+		
+	</ui:define>
+
+</ui:composition>
+</html>

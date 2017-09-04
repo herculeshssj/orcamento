@@ -1,0 +1,215 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/listagem.xhtml">
+
+	<ui:param name="managedBean" value="#{resumoMensalContasMB}" />
+	
+	<ui:define name="pesquisa">
+	
+		<h:panelGrid columns="3">
+			<h:panelGroup>
+				<label>Conta:</label>
+				<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
+					<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					<p:ajax update="pnlPeriodoFatura" />
+				</h:selectOneMenu>
+			</h:panelGroup>
+			
+			<p:outputPanel id="pnlPeriodoFatura">
+			
+				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta != 'CARTAO'}">
+					<label>Período:</label>
+					<h:selectOneMenu id="txtMesAno" value="#{managedBean.mesAno}">
+						<f:selectItem itemLabel="Período atual"/>
+						<f:selectItems value="#{managedBean.listaMesAno}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{managedBean.contaSelecionada.tipoConta == 'CARTAO'}">
+					<label>Fatura/Período:</label>
+					<h:selectOneMenu id="txtFatura" value="#{managedBean.faturaCartao}" converter="entityConverter" rendered="#{managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'CREDITO'}">
+						<f:selectItem itemLabel="Próximas faturas / Lançamento registrados" />
+						<f:selectItems value="#{managedBean.listaFaturaCartao}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					</h:selectOneMenu>
+					<h:selectOneMenu id="txtMesAno1" value="#{managedBean.mesAno}" rendered="#{managedBean.contaSelecionada.cartaoCredito.tipoCartao == 'DEBITO'}">
+						<f:selectItem itemLabel="Período atual"/>
+						<f:selectItems value="#{managedBean.listaMesAno}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				
+			</p:outputPanel>
+				
+			<h:panelGroup>
+				<h:commandLink title="Pesquisar" action="#{managedBean.find}">
+		     		<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+		     	</h:commandLink>
+		     	<h:commandLink title="Registrar orçamento a partir dos dados do resumo" action="#{managedBean.registrarOrcamento}">
+		     		<h:graphicImage id="imgRegister" height="48" width="48" value="/resources/images/svg/sales_performance.svg"/>
+		     	</h:commandLink>
+	     	</h:panelGroup>
+		</h:panelGrid>
+			
+	</ui:define>
+	
+	<ui:define name="tabela">
+	
+		<script type="text/javascript">
+	    function ext1() {
+	        this.cfg.legend= {
+	             show: true,
+	             location: 's',
+	             placement: 'outsideGrid'
+	           }   
+	    }
+		</script>
+	
+		<p:tabView>
+			<p:tab title="Categoria">
+				<h:dataTable width="100%" value="#{managedBean.resumoMensal.categorias}" var="item">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>
+						</f:facet>
+						<h:outputText value="#{item.descricao}" style="#{item.descricao == 'Saldo anterior' || item.descricao == 'Saldo atual' ? 'font-weight: bold; font-style: italic;' : 'font-weight: normal'}"/>						
+					</h:column>
+					<h:column style="text-align: right; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Valor"/>
+						</f:facet>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}"/>
+						<h:outputText value="#{item.saldoPago}" style="#{item.saldoPago > 0 ? 'color: #0000FF;' : 'color: #FF0000;'}">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
+					</h:column>					
+				</h:dataTable>
+			</p:tab>
+			<p:tab title="Favorecido">
+				<h:dataTable width="100%" value="#{managedBean.resumoMensal.favorecidos}" var="item">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>
+						</f:facet>
+						<h:outputText value="#{item.nome}"/>						
+					</h:column>
+					<h:column style="text-align: right; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Créditos"/>
+						</f:facet>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #0000FF;"/>
+						<h:outputText value="#{item.saldoCredito}" style="color: #0000FF;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
+					</h:column>
+					<h:column style="text-align: right; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Débitos"/>
+						</f:facet>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #FF0000;"/>
+						<h:outputText value="#{item.saldoDebito}" style="color: #FF0000;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
+					</h:column>					
+				</h:dataTable>
+			</p:tab>
+			<p:tab title="Meio de Pagamento" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+				<h:dataTable width="100%" value="#{managedBean.resumoMensal.meiosPagamento}" var="item">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>
+						</f:facet>
+						<h:outputText value="#{item.descricao}" />						
+					</h:column>
+					<h:column style="text-align: right; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Créditos"/>
+						</f:facet>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #0000FF;"/>
+						<h:outputText value="#{item.saldoCredito}" style="color: #0000FF;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
+					</h:column>
+					<h:column style="text-align: right; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Débitos"/>
+						</f:facet>
+						<h:outputText value="#{managedBean.resumoMensal.conta.moeda.simboloMonetario} " style="color: #FF0000;"/>
+						<h:outputText value="#{item.saldoDebito}" style="color: #FF0000;">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+						</h:outputText>						
+					</h:column>					
+				</h:dataTable>
+			</p:tab>
+			<p:tab title="Receitas" rendered="#{managedBean.exibirPieCategoriaCredito}">
+				<center>
+			 		<p:chart type="pie" responsive="true" id="pieCategoriaCredito" model="#{managedBean.pieCategoriaCredito}" style="#{managedBean.styleCorrectionCredito}"/>
+			 	</center>								
+			</p:tab>
+			<p:tab title="Despesas" rendered="#{managedBean.exibirPieCategoriaDebito}">
+				<center>
+					<p:chart type="pie" responsive="true" id="pieCategoriaDebito" model="#{managedBean.pieCategoriaDebito}" style="#{managedBean.styleCorrectionDebito}" />
+				</center>
+			</p:tab>
+			<p:tab title="Comparativo" rendered="#{managedBean.exibirBarComparativo}">
+				<center>
+					<p:chart type="bar" responsive="true" id="barComparativo" model="#{managedBean.barComparativo}" style="height:600px"/>
+				</center> 
+			</p:tab>
+		</p:tabView>
+	
+	</ui:define>
+	
+</ui:composition>
+</html>

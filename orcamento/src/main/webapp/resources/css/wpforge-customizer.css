@@ -1,0 +1,196 @@
+.header_container {
+	background-color: #e6e6e6;
+}
+
+.header_wrap {
+	max-width: 64rem;
+	background-color: #ffffff;
+}
+
+.site-title a, .site-description {
+	color: #444444;
+}
+
+.header-info a:hover {
+	color: #0078a0;
+}
+
+.nav_container {
+	background-color: #e6e6e6;
+}
+
+.nav_wrap {
+	max-width: 64rem;
+	background-color: #333333;
+}
+
+.top-bar, .top-bar-section ul li, .top-bar-section li:not (.has-form ) a:not
+	(.button ), .top-bar-section ul li:hover:not (.has-form ) >a,
+	.top-bar-section .dropdown li:not (.has-form ):not (.active ) >a:not (.button
+	), .contain-to-grid {
+	background-color: #333333;
+}
+
+.top-bar-section>ul>.divider, .top-bar-section>ul>[role="separator"] {
+	border-right: solid 1px #4e4e4e;
+}
+
+.top-bar-section li:not (.has-form ) a:not (.button ):hover, .top-bar .name:hover,
+	.top-bar-section .dropdown li:not (.has-form ):not (.active ):hover>a:not
+	(.button ) {
+	background-color: #272727;
+}
+
+.top-bar-section li.active:not (.has-form ) a:not (.button ){
+	background-color: #008cba;
+}
+
+.top-bar-section li.active:not (.has-form ) a:not (.button ):hover {
+	background-color: #0078a0;
+}
+
+.top-bar .name a, .top-bar-section ul li>a, .top-bar-section li.active:not
+	(.has-form ) a:not (.button ), .top-bar-section .dropdown li:not (.has-form
+	):not (.active ) >a:not (.button ) {
+	color: #ffffff;
+}
+
+.top-bar .name a:hover, .top-bar-section ul li>a:hover, .top-bar-section ul li>a:focus
+	{
+	color: #ffffff !important;
+}
+
+.content_container {
+	background-color: #e6e6e6;
+}
+
+.content_wrap {
+	max-width: 64rem;
+	background-color: #ffffff;
+}
+
+#content, #content h1, #content h2, #content h3, #content h4, #content h5,
+	#content h6 {
+	color: #444444;
+}
+
+#content a {
+	color: #008CBA;
+}
+
+#content a:hover {
+	color: #007095;
+}
+
+#content ul.pagination li.current a, #content ul.pagination li.current button,
+	#content ul.pagination li.current a:hover, #content ul.pagination li.current a:focus,
+	#content ul.pagination li.current button:hover, #content ul.pagination li.current button:focus,
+	#content .page-links a {
+	background-color: #008CBA;
+	color: #ffffff;
+}
+
+#content ul.pagination li a, #content ul.pagination li button {
+	color: #999999;
+}
+
+#content ul.pagination li:hover a, #content ul.pagination li a:focus,
+	#content ul.pagination li:hover button, #content ul.pagination li button:focus
+	{
+	color: #999999;
+	background-color: #e6e6e6;
+}
+
+.sidebar_wrap {
+	max-width: 64rem;
+	background-color: #ffffff;
+}
+
+#content.columns {
+	float: left !important;
+}
+
+#secondary .widget-title {
+	color: #444444;
+}
+
+#secondary {
+	color: #444444
+}
+
+#secondary a {
+	color: #008CBA;
+}
+
+#secondary a:hover {
+	color: #007095;
+}
+
+.sidebar_container {
+	background-color: #e6e6e6;
+}
+
+.footer_container {
+	background-color: #e6e6e6;
+}
+
+.footer_wrap {
+	max-width: 64rem;
+	background-color: #ffffff;
+	width: 100%
+}
+
+#secondary-sidebar .widget-title {
+	color: #444444;
+}
+
+#secondary-sidebar {
+	color: #444444;
+}
+
+#secondary-sidebar a {
+	color: #008CBA;
+}
+
+#secondary-sidebar a:hover {
+	color: #007095;
+}
+
+footer[role="contentinfo"] p {
+	color: #444444;
+}
+
+footer[role="contentinfo"] a {
+	color: #008CBA;
+}
+
+footer[role="contentinfo"] a:hover {
+	color: #007095;
+}
+
+button, .button, #content dl.sub-nav dd.active a {
+	background-color: #008CBA;
+}
+
+button, .button, #content a.button, #content dl.sub-nav dd.active a {
+	color: #ffffff;
+}
+
+button:hover, button:focus, .button:hover, .button:focus, #content dl.sub-nav dd.active a:hover,
+	#content dl.sub-nav dd.active a:focus {
+	background-color: #007095;
+}
+
+button:hover, button:focus, .button:hover, .button:focus, #content dl.sub-nav dd.active a:hover,
+	#content dl.sub-nav dd.active a:focus {
+	color: #ffffff;
+}
+
+#backtotop {
+	background-color: #888888;
+	color: #ffffff;
+}
+
+#backtotop:hover, #backtotop:focus {
+	background-color: #444444;
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="Patrimônio.erd" time="201708042306">
+	<entities>
+		<data-source id="mysql5-15db01dc611-3159e11b82719e7b">
+			<entity id="1" name="patrimonio" fq-name="orcamento.patrimonio" x="380" y="260">
+				<path name="orcamento"/>
+			</entity>
+			<entity id="2" name="usuario" fq-name="orcamento.usuario" x="100" y="380">
+				<path name="orcamento"/>
+			</entity>
+			<entity id="3" name="categoriadocumento" fq-name="orcamento.categoriadocumento" x="80" y="100">
+				<path name="orcamento"/>
+			</entity>
+			<entity id="4" name="favorecido" fq-name="orcamento.favorecido" x="420" y="640">
+				<path name="orcamento"/>
+			</entity>
+			<entity id="5" name="moeda" fq-name="orcamento.moeda" x="400" y="-60">
+				<path name="orcamento"/>
+			</entity>
+			<entity id="6" name="benfeitoria" fq-name="orcamento.benfeitoria" x="660" y="160">
+				<path name="orcamento"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="fk_usuario_patrimonio" fq-name="orcamento.patrimonio.fk_usuario_patrimonio" type="fk" pk-ref="1" fk-ref="2"/>
+		<relation name="fk_categoriadocumento_patrimonio" fq-name="orcamento.patrimonio.fk_categoriadocumento_patrimonio" type="fk" pk-ref="1" fk-ref="3"/>
+		<relation name="fk_favorecido_patrimonio" fq-name="orcamento.patrimonio.fk_favorecido_patrimonio" type="fk" pk-ref="1" fk-ref="4"/>
+		<relation name="fk_moeda_patrimonio" fq-name="orcamento.patrimonio.fk_moeda_patrimonio" type="fk" pk-ref="1" fk-ref="5"/>
+		<relation name="FKD0771AE17083BD82" fq-name="orcamento.categoriadocumento.FKD0771AE17083BD82" type="fk" pk-ref="3" fk-ref="2"/>
+		<relation name="FK1D15D5D87083BD82" fq-name="orcamento.favorecido.FK1D15D5D87083BD82" type="fk" pk-ref="4" fk-ref="2"/>
+		<relation name="fk_usuario_moeda" fq-name="orcamento.moeda.fk_usuario_moeda" type="fk" pk-ref="5" fk-ref="2"/>
+		<relation name="fk_categoriadocumento_benfetoria" fq-name="orcamento.benfeitoria.fk_categoriadocumento_benfetoria" type="fk" pk-ref="6" fk-ref="3"/>
+		<relation name="fk_patrimonio_benfetoria" fq-name="orcamento.benfeitoria.fk_patrimonio_benfetoria" type="fk" pk-ref="6" fk-ref="1"/>
+	</relations>
+	<notes/>
+</diagram>
