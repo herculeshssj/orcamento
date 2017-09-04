@@ -282,12 +282,12 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public String save() {
 		if (entity.getId() == null) {
 			entity.setConta(cartaoSelecionado.getConta());
+			
+			entity.setMes(entity.getDataVencimento().getMonth() + 1);
+			entity.setAno(entity.getDataVencimento().getYear() + 1900);
 		}
 		
 		entity.adicionarTodosLancamentos(lancamentosAdicionados);
-		
-		entity.setMes(entity.getDataVencimento().getMonth() + 1);
-		entity.setAno(entity.getDataVencimento().getYear() + 1900);
 		
 		return super.save();
 	}
