@@ -52,7 +52,7 @@
   <packaging>war</packaging>
   <version>2017</version>
   <name>Orçamento Doméstico</name>
-  <url>https://github.com/herculeshssj/orcamento-maven</url>
+  <url>https://github.com/herculeshssj/orcamento</url>
   
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -71,11 +71,31 @@
   
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.12</version>
+	    <scope>test</scope>
     </dependency>
+    
+    <dependency>
+    		<groupId>org.flywaydb</groupId>
+    		<artifactId>flyway-core</artifactId>
+    		<version>4.1.2</version>
+    </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>1.7.25</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-simple</artifactId>
+	    <version>1.7.25</version>
+	</dependency>
     
     <!-- https://mvnrepository.com/artifact/antlr/antlr -->
 	<dependency>
@@ -464,7 +484,7 @@
   </dependencies>
 
   <build>
-    <finalName>orcamento</finalName>
+    <finalName>orcamento</finalName>  
   </build>
   
 </project>
