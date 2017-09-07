@@ -53,17 +53,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.java.dev.wadl._2009._02.WadlApplication;
-import net.java.dev.wadl._2009._02.WadlDoc;
-import net.java.dev.wadl._2009._02.WadlMethod;
-import net.java.dev.wadl._2009._02.WadlParam;
-import net.java.dev.wadl._2009._02.WadlParamStyle;
-import net.java.dev.wadl._2009._02.WadlRepresentation;
-import net.java.dev.wadl._2009._02.WadlRequest;
-import net.java.dev.wadl._2009._02.WadlResource;
-import net.java.dev.wadl._2009._02.WadlResources;
-import net.java.dev.wadl._2009._02.WadlResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -76,6 +65,17 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import br.com.hslife.orcamento.util.rest.WadlApplication;
+import br.com.hslife.orcamento.util.rest.WadlDoc;
+import br.com.hslife.orcamento.util.rest.WadlMethod;
+import br.com.hslife.orcamento.util.rest.WadlParam;
+import br.com.hslife.orcamento.util.rest.WadlParamStyle;
+import br.com.hslife.orcamento.util.rest.WadlRepresentation;
+import br.com.hslife.orcamento.util.rest.WadlRequest;
+import br.com.hslife.orcamento.util.rest.WadlResource;
+import br.com.hslife.orcamento.util.rest.WadlResources;
+import br.com.hslife.orcamento.util.rest.WadlResponse;
 
 /**
  * Classe que gera automaticamente o arquivo WADL com os serviços REST do projeto.
