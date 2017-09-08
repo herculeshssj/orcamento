@@ -135,6 +135,11 @@
 					<li id="menu-item-3185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/Categoria/listCategoria.faces">Categorias</a>
 					</li>
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
+						<li id="menu-item-4191-1-1" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+							<a href="#{request.contextPath}/pages/CategoriaInvestimento/listCategoriaInvestimento.faces">Categorias de Investimento</a>
+						</li>
+					</h:panelGroup>
 					<li id="menu-item-3189" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/Conta/listConta.faces">Contas</a>
 					</li>
@@ -167,11 +172,9 @@
 					<li id="menu-item-4190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/FaturaCartao/listFaturaCartao.faces">Fatura do Cartão</a>
 					</li>
-					<!-- Ocultado a pedido do Product Owner 
 					<li id="menu-item-4191" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/Investimento/listInvestimento.faces">Investimentos</a>
 					</li>
-					 -->
 					<li id="menu-item-4186" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/LancamentoConta/listLancamentoConta.faces">Lançamentos da Conta/Cartão</a>
 					</li>
