@@ -85,7 +85,6 @@ import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -647,9 +646,9 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		List<Conta> contas = new ArrayList<>();
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), null);
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), null);
 			} else {
-				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
 			}
 			if (contas != null && !contas.isEmpty() && criterioBusca.getConta() == null) {
 				criterioBusca.setConta(contas.get(0));
@@ -663,7 +662,7 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	
 	public List<Conta> getListaContaAtivo() {
 		try {
-			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true);
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}

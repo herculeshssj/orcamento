@@ -65,7 +65,7 @@ alter table investimento change column `idCategoriaInvestimento` `idCategoriaInv
 alter table conta change column `tipoConta` `tipoConta` varchar(15) not null;
 
 -- Cadastra uma conta do tipo investimento para cada banco
-insert into conta (descricao, idUsuario, tipoConta, dataAbertura, saldoInicial, saldoFinal, idMoeda, idBanco)
+insert into conta (descricao, idUsuario, tipoConta, dataAbertura, saldoInicial, saldoFinal, idMoeda, idBanco, ativo)
 	select distinct 
 	(select concat(b.nome,' [Corretora]')  from banco b where b.id = i.idBanco) as descricao,
 	(select b.idUsuario from banco b where b.id = i.idBanco) as idUsuario,
@@ -74,7 +74,8 @@ insert into conta (descricao, idUsuario, tipoConta, dataAbertura, saldoInicial, 
 	0.0,
 	0.0,
 	(select m.id from moeda m where m.padrao = true and m.idUsuario = (select b.idUsuario from banco b where b.id = i.idBanco)) as idMoeda,
-	i.idBanco
+	i.idBanco,
+	true
 	FROM
 	investimento i;
 
