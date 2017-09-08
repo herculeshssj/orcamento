@@ -44,19 +44,11 @@
 
 ***/
 
-package br.com.hslife.orcamento.enumeration;
-
-public enum TipoConta {
-	CORRENTE("Conta Corrente"), POUPANCA("Conta Poupança"), CARTAO("Cartão de Crédito"), INVESTIMENTO("Investimento"), OUTROS("Outros");
-	
-	private String descricao;
-	
-	private TipoConta(String descricao) {
-		this.descricao = descricao;
-	}
-	
-	@Override
-	public String toString() {
-		return descricao;
-	}
-}
+-- Categoria de investimentos - Github Issue orcamento #304
+create table categoriainvestimento (
+	id bigint not null auto_increment,
+	descricao varchar(50) not null,
+	tipoInvestimento varchar(10) not null,
+	ativo boolean,
+	primary key(id)
+) Engine=InnoDB;

@@ -57,8 +57,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -72,7 +70,6 @@ import javax.persistence.TemporalType;
 
 import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
-import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
@@ -87,14 +84,6 @@ public class Investimento extends EntityPersistence {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
-	@ManyToOne
-	@JoinColumn(name="idBanco", nullable=false)
-	private Banco banco;
-	
-	@Column(length=10, nullable=false)
-	@Enumerated(EnumType.STRING)
-	private TipoInvestimento tipoInvestimento;
 	
 	@Column(length=50, nullable=false)
 	private String descricao;
@@ -114,8 +103,12 @@ public class Investimento extends EntityPersistence {
 	private String observacao;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
+	@JoinColumn(name="idConta", nullable=false)
+	private Conta conta;
+	
+	@ManyToOne
+	@JoinColumn(name="idCategoriaInvestimento", nullable=false)
+	private CategoriaInvestimento categoriaInvestimento;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	private List<ResumoInvestimento> resumosInvestimento;
@@ -135,11 +128,11 @@ public class Investimento extends EntityPersistence {
 
 	@Override
 	public void validate() {
-		EntityPersistenceUtil.validaCampoNulo("Banco", this.banco);
-		EntityPersistenceUtil.validaCampoNulo("Tipo de investimento", this.tipoInvestimento);
+		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("CNPJ", this.cnpj, 14);
 		EntityPersistenceUtil.validaCampoNulo("Início do investimento", this.inicioInvestimento);
+		EntityPersistenceUtil.validaCampoNulo("Categoria de Investimento", this.categoriaInvestimento);
 		
 		try {
 			CNPJValidator validatorCnpj = new CNPJValidator();
@@ -284,22 +277,6 @@ public class Investimento extends EntityPersistence {
 		this.id = id;
 	}
 
-	public Banco getBanco() {
-		return banco;
-	}
-
-	public void setBanco(Banco banco) {
-		this.banco = banco;
-	}
-
-	public TipoInvestimento getTipoInvestimento() {
-		return tipoInvestimento;
-	}
-
-	public void setTipoInvestimento(TipoInvestimento tipoInvestimento) {
-		this.tipoInvestimento = tipoInvestimento;
-	}
-
 	public String getDescricao() {
 		return descricao;
 	}
@@ -314,14 +291,6 @@ public class Investimento extends EntityPersistence {
 
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public Date getInicioInvestimento() {
@@ -362,5 +331,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public CategoriaInvestimento getCategoriaInvestimento() {
+		return categoriaInvestimento;
+	}
+
+	public void setCategoriaInvestimento(CategoriaInvestimento categoriaInvestimento) {
+		this.categoriaInvestimento = categoriaInvestimento;
 	}
 }

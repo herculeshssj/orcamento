@@ -46,33 +46,14 @@
 
 package br.com.hslife.orcamento.repository;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Investimento;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 
 @Repository
 public class InvestimentoRepository extends AbstractCRUDRepository<Investimento> {
 	
 	public InvestimentoRepository() {
 		super(new Investimento());
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Investimento> findByUsuario(Usuario usuario) {
-		return getQuery("FROM Investimento investimento WHERE investimento.usuario.id = :idUsuario")
-				.setLong("idUsuario", usuario.getId())
-				.list();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Investimento> findByTipoInvestimentoAndUsuario(TipoInvestimento tipoInvestimento, Usuario usuario) {
-		return getQuery("FROM Investimento investimento WHERE investimento.tipoInvestimento = :tipoInvestimento AND investimento.usuario.id = :idUsuario")
-				.setLong("idUsuario", usuario.getId())
-				.setParameter("tipoInvestimento", tipoInvestimento)
-				.list();
 	}
 }

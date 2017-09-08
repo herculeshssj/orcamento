@@ -171,7 +171,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		String retorno = null;
 		try {
 			
-			entity.setUsuario(getUsuarioLogado());
+			//entity.setUsuario(getUsuarioLogado());
 			// Verifica se a operação atual é de criação
 			if (this.operation.equals("create"))
 				entity.investimentoInicial(entity.getInicioInvestimento(), investimentoInicial);
@@ -281,19 +281,19 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	}
 	
 	public void atualizaListaInvestimento() {
-		listEntity = getService().buscarPorTipoInvestimentoEUsuario(tipoSelecionado, getUsuarioLogado());
+		//listEntity = getService().buscarPorTipoInvestimentoEUsuario(tipoSelecionado, getUsuarioLogado());
 	}
 	
 	public List<Banco> getListaBanco() {
 		try {
 			List<Banco> resultado = getBancoService().buscarAtivosPorUsuario(getUsuarioLogado());
-			// Lógica para incluir o banco inativo da entidade na combo
-			if (resultado != null && entity.getBanco() != null) {
-				if (!resultado.contains(entity.getBanco())) {
-					entity.getBanco().setAtivo(true);
-					resultado.add(entity.getBanco());
-				}
-			}
+//			// Lógica para incluir o banco inativo da entidade na combo
+//			if (resultado != null && entity.getBanco() != null) {
+//				if (!resultado.contains(entity.getBanco())) {
+//					entity.getBanco().setAtivo(true);
+//					resultado.add(entity.getBanco());
+//				}
+//			}
 			return resultado;
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());

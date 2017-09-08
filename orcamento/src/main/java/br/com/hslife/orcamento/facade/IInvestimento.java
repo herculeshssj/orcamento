@@ -54,8 +54,6 @@ import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 
 public interface IInvestimento extends ICRUDService<Investimento>{
 	
-	public List<Investimento> buscarPorUsuario(Usuario usuario);
-	
-	public List<Investimento> buscarPorTipoInvestimentoEUsuario(TipoInvestimento tipoInvestimento, Usuario usuario);
+
 	
 }

@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
 
-    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da 
 
     Licença.
     
@@ -44,19 +44,21 @@
 
 ***/
 
-package br.com.hslife.orcamento.enumeration;
+package br.com.hslife.orcamento.rest.json;
 
-public enum TipoConta {
-	CORRENTE("Conta Corrente"), POUPANCA("Conta Poupança"), CARTAO("Cartão de Crédito"), INVESTIMENTO("Investimento"), OUTROS("Outros");
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+
+import br.com.hslife.orcamento.entity.Usuario;
+
+@XmlRootElement
+@JsonAutoDetect
+public class CategoriaInvestimentoJson extends AbstractJson<Usuario, CategoriaInvestimentoJson> {
+
+	// Atributos
 	
-	private String descricao;
-	
-	private TipoConta(String descricao) {
-		this.descricao = descricao;
-	}
-	
-	@Override
-	public String toString() {
-		return descricao;
+	public CategoriaInvestimentoJson() {
+		
 	}
 }

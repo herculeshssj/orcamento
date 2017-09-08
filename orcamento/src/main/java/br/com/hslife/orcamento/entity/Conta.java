@@ -119,7 +119,7 @@ public class Conta extends EntityPersistence {
 	@Temporal(TemporalType.DATE)
 	private Date dataFechamento;
 	
-	@Column(length=10)
+	@Column(length=15)
 	@Enumerated(EnumType.STRING)
 	private TipoConta tipoConta;
 	
