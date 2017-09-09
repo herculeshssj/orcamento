@@ -110,6 +110,20 @@ public class ContaService extends AbstractCRUDService<Conta> implements IConta {
 				throw new BusinessException("Data de abertura (" + Util.formataDataHora(entity.getDataAbertura(), Util.DATA) + ") e data de fechamento (" +  Util.formataDataHora(entity.getDataFechamento(), Util.DATA)+") incorretos!");
 			}
 		}
+		
+		// Verifica se já existe outra conta do tipo investimento para o banco selecionado
+		List<Conta> contas = getRepository().findByBancoAndTipoContaAndUsuario(entity.getBanco(), entity.getTipoConta(), entity.getUsuario());		
+		if (contas.size() == 1) {
+			// Verifica se a conta encontrada é a mesma que está sendo validada
+			if (!contas.get(0).equals(entity)) {
+				// Se não for igual, lança uma exceção
+				throw new BusinessException("Só pode haver uma conta investimento para o banco selecionado!");
+			}
+		} else if (contas.size() > 1) {
+			// Se existir mais de uma conta investimento para o banco selecionado
+			throw new BusinessException("Só pode haver uma conta investimento para o banco selecionado!");
+		}
+		
 	}
 	
 	@Override

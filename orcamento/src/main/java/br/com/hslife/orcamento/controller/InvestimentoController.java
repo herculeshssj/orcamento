@@ -57,14 +57,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.entity.Banco;
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.MovimentacaoInvestimento;
 import br.com.hslife.orcamento.entity.ResumoInvestimento;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.facade.IBanco;
+import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.util.Util;
 
@@ -81,8 +82,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private IInvestimento service;
 	
 	@Autowired
-	private IBanco bancoService;
+	private IConta contaService;
 	
+	private Conta contaSelecionada;
 	private TipoInvestimento tipoSelecionado;
 	private ResumoInvestimento resumo;
 	private MovimentacaoInvestimento movimentacao;
@@ -281,24 +283,10 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	}
 	
 	public void atualizaListaInvestimento() {
-		//listEntity = getService().buscarPorTipoInvestimentoEUsuario(tipoSelecionado, getUsuarioLogado());
-	}
-	
-	public List<Banco> getListaBanco() {
-		try {
-			List<Banco> resultado = getBancoService().buscarAtivosPorUsuario(getUsuarioLogado());
-//			// Lógica para incluir o banco inativo da entidade na combo
-//			if (resultado != null && entity.getBanco() != null) {
-//				if (!resultado.contains(entity.getBanco())) {
-//					entity.getBanco().setAtivo(true);
-//					resultado.add(entity.getBanco());
-//				}
-//			}
-			return resultado;
-		} catch (ValidationException | BusinessException be) {
-			errorMessage(be.getMessage());
-		}
-		return new ArrayList<>();
+		if (contaSelecionada != null)
+			listEntity = getService().buscarPorConta(contaSelecionada);
+		else
+			listEntity = new ArrayList<>();
 	}
 	
 	public List<SelectItem> getListaMeses() {
@@ -315,6 +303,28 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 			anos.add(i);
 		}
 		return anos;
+	}
+	
+	public List<Conta> getListaConta() {
+		List<Conta> contas = new ArrayList<>();
+		try {
+			if (getOpcoesSistema().getExibirContasInativas()) {
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[] {TipoConta.INVESTIMENTO}, getUsuarioLogado(), null);
+			} else {
+				contas = contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[] {TipoConta.INVESTIMENTO}, getUsuarioLogado(), true);
+			}
+			if (contas != null && !contas.isEmpty() && contaSelecionada == null) {
+				contaSelecionada = contas.get(0);
+			}
+			return contas;
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<Conta>();
+	}
+
+	public IConta getContaService() {
+		return contaService;
 	}
 
 	public TipoInvestimento getTipoSelecionado() {
@@ -351,10 +361,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public IInvestimento getService() {
 		return service;
-	}
-
-	public IBanco getBancoService() {
-		return bancoService;
 	}
 
 	public Set<MovimentacaoInvestimento> getMovimentacoesInvestimento() {
@@ -395,5 +401,13 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public void setAnoMovimentacao(int anoMovimentacao) {
 		this.anoMovimentacao = anoMovimentacao;
+	}
+
+	public Conta getContaSelecionada() {
+		return contaSelecionada;
+	}
+
+	public void setContaSelecionada(Conta contaSelecionada) {
+		this.contaSelecionada = contaSelecionada;
 	}
 }

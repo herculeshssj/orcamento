@@ -232,4 +232,13 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 				.setBoolean("valor", fechaAutomaticamente)
 				.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Conta> findByBancoAndTipoContaAndUsuario(Banco banco, TipoConta tipoConta, Usuario usuario) {
+		Criteria criteria = getSession().createCriteria(Conta.class);
+		criteria.add(Restrictions.eq("banco.id", banco.getId()));
+		criteria.add(Restrictions.eq("tipoConta", tipoConta));
+		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
+		return criteria.addOrder(Order.asc("descricao")).list();
+	}
 }

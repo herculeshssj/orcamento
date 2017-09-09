@@ -61,11 +61,11 @@
 	
 	<ui:define name="parametro_pesquisa">		
 		<h:panelGroup>
-			<label>Tipo:</label>
-			<h:selectOneMenu value="#{managedBean.tipoSelecionado}">
-				<f:selectItem itemLabel="Selecione um investimento" />
-				<f:selectItems value="#{enumCombo.listaTipoInvestimento}"/>
-				<p:ajax update="txtInvestimento" listener="#{managedBean.atualizaListaInvestimento}" />
+			<label>Conta:</label>
+			<h:selectOneMenu value="#{managedBean.contaSelecionada}" converter="entityConverter">
+				<f:selectItem itemLabel="Selecione uma conta" />
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				<p:ajax event="change" update="txtInvestimento" listener="#{managedBean.atualizaListaInvestimento}"/>			
 			</h:selectOneMenu>
 	    </h:panelGroup>
 	    <h:panelGroup>
@@ -103,11 +103,14 @@
 			<label>Descrição:</label>
 			<h:outputText value="#{managedBean.entity.label}"/>
 			
-			<label>Banco:</label>
-			<h:outputText value="#{managedBean.entity.banco.label}"/>
+			<label>Conta:</label>
+			<h:outputText value="#{managedBean.entity.conta.label}"/>
+			
+			<label>Categoria de investimento:</label>
+			<h:outputText value="#{managedBean.entity.categoriaInvestimento.label}"/>
 			
 			<label>Tipo de investimento:</label>
-			<h:outputText value="#{managedBean.entity.tipoInvestimento}"/>
+			<h:outputText value="#{managedBean.entity.categoriaInvestimento.tipoInvestimento}"/>
 			
 			<label>CNPJ:</label>
 			<h:outputText value="#{managedBean.entity.cnpj}"/>
@@ -122,9 +125,11 @@
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			
-			<label>Observações:</label>
-			<h:outputText value="#{managedBean.entity.observacao}"/>
-		</h:panelGrid>	
+		</h:panelGrid>
+		
+		<label><b>Observações:</b></label>
+		<h:outputText value="#{managedBean.entity.observacao}"/>	
+		<br/>
 	
 		<p:tabView id="tabInvestimento" rendered="#{managedBean.entity.id != null}">
 			<p:tab id="tabResumo" title="Resumo">

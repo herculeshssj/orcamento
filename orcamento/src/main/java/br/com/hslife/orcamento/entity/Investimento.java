@@ -340,4 +340,12 @@ public class Investimento extends EntityPersistence {
 	public void setCategoriaInvestimento(CategoriaInvestimento categoriaInvestimento) {
 		this.categoriaInvestimento = categoriaInvestimento;
 	}
+
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
+	}
 }

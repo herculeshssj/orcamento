@@ -46,8 +46,11 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 
 @Repository
@@ -55,5 +58,10 @@ public class InvestimentoRepository extends AbstractCRUDRepository<Investimento>
 	
 	public InvestimentoRepository() {
 		super(new Investimento());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Investimento> findByConta(Conta conta) {
+		return getQuery("FROM Investimento i WHERE i.conta.id = " + conta.getId()).list();
 	}
 }

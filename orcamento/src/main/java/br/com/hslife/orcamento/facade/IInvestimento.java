@@ -48,12 +48,11 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 
 public interface IInvestimento extends ICRUDService<Investimento>{
 	
-
+	public List<Investimento> buscarPorConta(Conta conta);
 	
 }

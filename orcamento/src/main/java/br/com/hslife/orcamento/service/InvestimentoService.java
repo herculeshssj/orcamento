@@ -46,9 +46,12 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.repository.InvestimentoRepository;
@@ -64,4 +67,8 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 		return this.repository;
 	}
 
+	@Override
+	public List<Investimento> buscarPorConta(Conta conta) {
+		return getRepository().findByConta(conta);
+	}
 }
