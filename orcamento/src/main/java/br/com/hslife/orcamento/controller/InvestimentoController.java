@@ -57,6 +57,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.MovimentacaoInvestimento;
@@ -65,6 +66,7 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.facade.ICategoriaInvestimento;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.util.Util;
@@ -83,6 +85,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Autowired
 	private IConta contaService;
+	
+	@Autowired
+	private ICategoriaInvestimento categoriaInvestimentoService;
 	
 	private Conta contaSelecionada;
 	private TipoInvestimento tipoSelecionado;
@@ -116,6 +121,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		resumo = null;
 		movimentacoesInvestimento = null;
 		investimentoInicial = 0;
+		contaSelecionada = null;
 	}
 	
 	@Override
@@ -322,9 +328,23 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		}
 		return new ArrayList<Conta>();
 	}
+	
+	public List<CategoriaInvestimento> getListaCategoriaInvestimento() {
+		List<CategoriaInvestimento> categorias = new ArrayList<>();
+		try {
+			return getCategoriaInvestimentoService().buscarTodos();
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return categorias;
+	}
 
 	public IConta getContaService() {
 		return contaService;
+	}
+
+	public ICategoriaInvestimento getCategoriaInvestimentoService() {
+		return categoriaInvestimentoService;
 	}
 
 	public TipoInvestimento getTipoSelecionado() {

@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.facade;
 
+import java.util.List;
+
 import br.com.hslife.orcamento.entity.EntityPersistence;
 
 public interface ICRUDService<E extends EntityPersistence> {
@@ -59,5 +61,7 @@ public interface ICRUDService<E extends EntityPersistence> {
 	public E buscarPorID(Long id);
 	
 	public void validar(E entity);
+	
+	public List<E> buscarTodos();
 
 }

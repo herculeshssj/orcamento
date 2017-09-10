@@ -59,21 +59,21 @@
 	
 	<ui:define name="campos">
 	
-		<label>Banco:</label>
-		<h:selectOneMenu value="#{managedBean.entity.banco}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+		<label>Conta:</label>
+		<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter">
+			<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
 		
-		<label>Tipo de investimento:</label>
-		<h:selectOneMenu value="#{managedBean.entity.tipoInvestimento}">
-			<f:selectItems value="#{enumCombo.listaTipoInvestimento}"/>
+		<label>Categoria de investimento:</label>
+		<h:selectOneMenu value="#{managedBean.entity.categoriaInvestimento}" converter="entityConverter">
+			<f:selectItems value="#{managedBean.listaCategoriaInvestimento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
 				
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" />				
 		
 		<label for="frmFormEntity:txtCnpj">CNPJ:</label>
-		<h:inputText id="txtCnpj" value="#{managedBean.entity.cnpj}"/>				
+		<p:inputMask mask="99.999.999/9999-99" id="txtCnpj" value="#{managedBean.entity.cnpj}"/>				
 		
 		<label for="frmListEntity:txtInicioInvestimento">Início do investimento:</label>
 		<p:inputMask id="txtInicioInvestimento" size="9" mask="99/99/9999" value="#{managedBean.entity.inicioInvestimento}">
@@ -83,7 +83,7 @@
 	    <h:panelGroup rendered="#{managedBean.operation == 'create'}">
 	    	<label for="frmFormEntity:txtInvestimentoInicial">Investimento inicial:</label>
 	    </h:panelGroup>
-    	<h:inputText id="txtValorPago" value="#{managedBean.investimentoInicial}" rendered="#{managedBean.operation == 'create'}">
+   		<h:inputText id="txtValorPago" value="#{managedBean.investimentoInicial}" rendered="#{managedBean.operation == 'create'}">
 			<f:convertNumber type="currency" pattern="###.##"/>
 		</h:inputText>
 	    

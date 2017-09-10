@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
@@ -80,6 +82,10 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 
 	public E buscarPorID(Long id) {
 		return getRepository().findById(id);
+	}
+	
+	public List<E> buscarTodos() {
+		return getRepository().findAll();
 	}
 	
 	public void validar(E entity) {

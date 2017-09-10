@@ -75,6 +75,7 @@ import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.rest.json.InvestimentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="investimento")
@@ -144,6 +145,10 @@ public class Investimento extends EntityPersistence {
 		} catch (InvalidStateException ise) {
 			throw new ValidationException(ise);
 		}
+	}
+	
+	public String getCnpjFormatado() {
+		return Util.formatarCNPJ(this.cnpj);
 	}
 	
 	public void movimentarInvestimento(MovimentacaoInvestimento movimentacao) {

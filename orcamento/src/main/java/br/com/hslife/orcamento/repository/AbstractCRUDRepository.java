@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.repository;
 
+import java.util.List;
+
 import br.com.hslife.orcamento.entity.EntityPersistence;
 
 public abstract class AbstractCRUDRepository<E extends EntityPersistence> extends AbstractRepository implements IRepository<E>{
@@ -73,5 +75,10 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 		return (E) getQuery("FROM " + entity.getClass().getSimpleName() + " as entity WHERE entity.id = :idEntity")
 				.setLong("idEntity", id)
 				.uniqueResult();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<E> findAll() {
+		return getQuery("FROM " + entity.getClass().getSimpleName() + " as entity").list();
 	}
 }

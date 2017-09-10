@@ -63,6 +63,10 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
+import br.com.caelum.stella.format.CNPJFormatter;
+import br.com.caelum.stella.format.CPFFormatter;
+import br.com.caelum.stella.format.Formatter;
+
 public class Util {
 	
 	/** Seção de constantes **/
@@ -123,32 +127,43 @@ public class Util {
         return sen;
     }
     
-    public static String moedaBrasil(double valor) {
-    	NumberFormat formatarMoeda = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
-    	return formatarMoeda.format(valor);  
-    }
+	public static String moedaBrasil(double valor) {
+		NumberFormat formatarMoeda = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		return formatarMoeda.format(valor);
+	}
     
-    public static String formataDataHora(Date dataHora, String opcao) {
-    	SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    	if (dataHora == null) return "";
-    	if (opcao.equals(Util.DATAHORA)) {
-    		formata = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    	}
-    	if (opcao.equals(Util.DATA)) {
-    		formata = new SimpleDateFormat("dd/MM/yyyy");
-    	}
-    	if (opcao.equals(Util.HORA)) {
-    		formata = new SimpleDateFormat("HH:mm");
-    	}    	
-        if (opcao.equals(Util.DATABASE)) {
-        	formata = new SimpleDateFormat("yyyy-MM-dd");
-        }
-        if (opcao.equals(Util.DATABASE_DATA)) {
-        	formata = new SimpleDateFormat("yyyy-MM-dd");
-        }
+	public static String formatarCPF(String cpf) {
+		Formatter formatador = new CPFFormatter();
+		return formatador.format(cpf);
+	}
+	
+	public static String formatarCNPJ(String cnpj) {
+		Formatter formatador = new CNPJFormatter();
+		return formatador.format(cnpj);
+	}
+	
+	public static String formataDataHora(Date dataHora, String opcao) {
+		SimpleDateFormat formata = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		if (dataHora == null)
+			return "";
+		if (opcao.equals(Util.DATAHORA)) {
+			formata = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		}
+		if (opcao.equals(Util.DATA)) {
+			formata = new SimpleDateFormat("dd/MM/yyyy");
+		}
+		if (opcao.equals(Util.HORA)) {
+			formata = new SimpleDateFormat("HH:mm");
+		}
+		if (opcao.equals(Util.DATABASE)) {
+			formata = new SimpleDateFormat("yyyy-MM-dd");
+		}
+		if (opcao.equals(Util.DATABASE_DATA)) {
+			formata = new SimpleDateFormat("yyyy-MM-dd");
+		}
 
-        return formata.format(dataHora);
-    }
+		return formata.format(dataHora);
+	}
     
     /*
      * Retorna o primeiro dia do mês anterior a partir da data atual

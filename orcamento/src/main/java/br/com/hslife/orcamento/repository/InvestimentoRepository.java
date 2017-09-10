@@ -62,6 +62,6 @@ public class InvestimentoRepository extends AbstractCRUDRepository<Investimento>
 	
 	@SuppressWarnings("unchecked")
 	public List<Investimento> findByConta(Conta conta) {
-		return getQuery("FROM Investimento i WHERE i.conta.id = " + conta.getId()).list();
+		return getQuery("FROM Investimento i WHERE i.conta.id = " + conta.getId() + " ORDER BY i.descricao ASC").list();
 	}
 }

@@ -62,17 +62,17 @@
 	
 		<h:panelGrid columns="2">
 			
-			<label>Banco:</label>
-			<h:outputText value="#{managedBean.entity.banco.nome}" />
+			<label>Conta:</label>
+			<h:outputText value="#{managedBean.entity.conta.label}" />
 					
-			<label>Tipo de investimento:</label>
-			<h:outputText value="#{managedBean.entity.tipoInvestimento}" />
+			<label>Categoria de investimento:</label>
+			<h:outputText value="#{managedBean.entity.categoriaInvestimento}" />
 				
 			<label for="frmFormEntity:txtDescricao">Descrição:</label>
 			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}" />				
 			
 			<label for="frmFormEntity:txtCnpj">CNPJ:</label>
-			<h:outputText id="txtCnpj" value="#{managedBean.entity.cnpj}"/>				
+			<h:outputText id="txtCnpj" value="#{managedBean.entity.cnpjFormatado}"/>				
 			
 			<label for="frmListEntity:txtInicioInvestimento">Início do investimento:</label>
 			<h:outputText id="txtInicioInvestimento" value="#{managedBean.entity.inicioInvestimento}">
