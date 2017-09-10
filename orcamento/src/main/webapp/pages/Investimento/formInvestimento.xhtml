@@ -66,7 +66,8 @@
 		
 		<label>Categoria de investimento:</label>
 		<h:selectOneMenu value="#{managedBean.entity.categoriaInvestimento}" converter="entityConverter">
-			<f:selectItems value="#{managedBean.listaCategoriaInvestimento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+			<f:selectItems value="#{managedBean.listaCategoriaInvestimento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			<p:ajax update="pnlInvestimentoInicial" event="change" listener="#{managedBean.atualizaInvestimentoInicial}"/>									
 		</h:selectOneMenu>
 				
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
@@ -80,12 +81,14 @@
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>
 	    
-	    <h:panelGroup rendered="#{managedBean.operation == 'create'}">
-	    	<label for="frmFormEntity:txtInvestimentoInicial">Investimento inicial:</label>
-	    </h:panelGroup>
-   		<h:inputText id="txtValorPago" value="#{managedBean.investimentoInicial}" rendered="#{managedBean.operation == 'create'}">
-			<f:convertNumber type="currency" pattern="###.##"/>
-		</h:inputText>
+	    <p:outputPanel id="pnlInvestimentoInicial">
+	    		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
+		    		<label for="frmFormEntity:txtInvestimentoInicial">Investimento inicial:</label>
+		    		<h:inputText id="txtValorPago" value="#{managedBean.investimentoInicial}">
+					<f:convertNumber type="currency" pattern="###.##"/>
+				</h:inputText>
+			</h:panelGroup>
+	    </p:outputPanel>
 	    
 	    <label for="frmFormEntity:txtObservacao">Observação:</label>
 		<h:inputTextarea id="txtObservacao" value="#{managedBean.entity.observacao}"/>

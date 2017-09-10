@@ -70,6 +70,7 @@ import javax.persistence.TemporalType;
 
 import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
+import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
@@ -129,6 +130,9 @@ public class Investimento extends EntityPersistence {
 
 	@Override
 	public void validate() {
+		// Limpa a formatação do CNPJ
+		this.cnpj = this.cnpj.replace(".", "").replace("/", "").replace("-", "");
+		
 		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("CNPJ", this.cnpj, 14);
@@ -212,7 +216,7 @@ public class Investimento extends EntityPersistence {
 		if (inicioInvestimento == null) 
 			throw new ValidationException("Não é possível continuar! Data informada é inválida!");
 		
-		if (valorInicial <= 0) 
+		if (this.categoriaInvestimento.getTipoInvestimento().equals(TipoInvestimento.FIXO) && valorInicial <= 0) 
 			throw new ValidationException("Valor inicial deve ser maior que zero!");
 		
 		// Por se tratar de um investimento inicial, o List e o Set são reiniciados

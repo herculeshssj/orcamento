@@ -127,9 +127,11 @@
 			
 		</h:panelGrid>
 		
-		<label><b>Observações:</b></label>
-		<h:outputText value="#{managedBean.entity.observacao}"/>	
-		<br/>
+		<h:panelGroup rendered="#{managedBean.entity.id != null}">
+			<label><b>Observações:</b></label>
+			<h:outputText value="#{managedBean.entity.observacao}"/>	
+			<br/>
+		</h:panelGroup>
 	
 		<p:tabView id="tabInvestimento" rendered="#{managedBean.entity.id != null}">
 			<p:tab id="tabResumo" title="Resumo">

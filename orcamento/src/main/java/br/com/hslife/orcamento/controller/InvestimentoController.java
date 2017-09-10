@@ -185,11 +185,11 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 				entity.investimentoInicial(entity.getInicioInvestimento(), investimentoInicial);
 			
 			retorno = super.save();
-			initializeEntity();
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		
+		initializeEntity();
 		return retorno;
 	}
 	
@@ -293,6 +293,10 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 			listEntity = getService().buscarPorConta(contaSelecionada);
 		else
 			listEntity = new ArrayList<>();
+	}
+	
+	public void atualizaInvestimentoInicial() {
+		// Exibir e ocultar o campo 'Investimento Inicial' no cadastro
 	}
 	
 	public List<SelectItem> getListaMeses() {
