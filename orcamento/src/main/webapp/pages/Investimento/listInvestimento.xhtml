@@ -44,7 +44,6 @@
 
 -->
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -87,6 +86,10 @@
 			</h:commandLink>	
 			<h:commandLink title="Excluir/Encerrar" action="#{managedBean.view}">
 				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
+			<h:commandLink title="Aplicação/Resgate" action="#{managedBean.aplicacaoResgateView}">
+				<h:graphicImage id="imgInvest" height="48" width="48" value="/resources/images/svg/bullish.svg"/>
 				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>
 		</h:panelGroup>
@@ -174,6 +177,16 @@
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
 					
+					<label>Ações/Cotas Compradas:</label>
+					<h:outputText value="#{managedBean.resumo.cotasCompradas}" >
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+					
+					<label>Ações/Cotas Vendidas:</label>
+					<h:outputText value="#{managedBean.resumo.cotasVendidas}" >
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+					
 					<label>Rendimento bruto:</label>
 					<h:outputText value="#{managedBean.resumo.rendimentoBruto}" >
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
@@ -189,7 +202,7 @@
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
 					
-					<label>Rendimento líquido:</label>
+					<label>Saldo:</label>
 					<h:outputText value="#{managedBean.resumo.rendimentoLiquido}" >
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
@@ -232,13 +245,21 @@
 							<f:setPropertyActionListener value="#{item}" target="#{managedBean.movimentacao}"/>
 						</h:commandLink>													
 					</h:column>
-					<h:column>
+					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
 						<f:facet name="header">
 							<h:outputText value="Documento"/>
 						</f:facet>
 						<h:outputText value="#{item.documento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>							
 					</h:column>
-					<h:column>
+					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+						<f:facet name="header">
+							<h:outputText value="Ações/Cotas"/>
+						</f:facet>
+						<h:outputText value="#{item.cotas}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="6" />
+						</h:outputText>
+					</h:column>
+					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
 						<f:facet name="header">
 							<h:outputText value="Valor"/>
 						</f:facet>
@@ -246,6 +267,14 @@
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
 					</h:column>
+					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+						<f:facet name="header">
+							<h:outputText value="Valor"/>
+						</f:facet>
+						<h:outputText value="#{item.valorCota}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
+						</h:outputText>
+					</h:column>	
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="IR"/>
@@ -256,41 +285,21 @@
 					</h:column>	
 					<h:column>
 						<f:facet name="header">
-							<h:outputText value="IOF"/>
+							<h:outputText value="IOF" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}"/>
+							<h:outputText value="Tarifas" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
 						</f:facet>
 						<h:outputText value="#{item.iof}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 						</h:outputText>
-					</h:column>
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Compensação"/>
-						</f:facet>
-						<h:outputText value="#{item.compensacaoImpostoRenda}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-						</h:outputText>
 					</h:column>	
 					<h:column>
 						<f:facet name="header">
-							<h:outputText value="Cotas"/>
+							<h:outputText value="Total"/>
 						</f:facet>
-						<h:outputText value="#{item.cotas}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="6" />
-						</h:outputText>
-					</h:column>	
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Valor"/>
-						</f:facet>
-						<h:outputText value="#{item.valorCota}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<h:outputText value="#{item.valorTotalRendaVariavel}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
 						</h:outputText>
-					</h:column>
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Saldo"/>
-						</f:facet>
-						<h:outputText value="#{item.saldoCotas}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<h:outputText value="#{item.valorTotalRendaFixa}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
 							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
 						</h:outputText>
 					</h:column>		

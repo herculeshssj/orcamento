@@ -52,6 +52,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.rest.json.ResumoInvestimentoJson;
 
@@ -88,6 +89,12 @@ public class ResumoInvestimento extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)
 	private double rendimentoLiquido;
 	
+	@Transient
+	private double cotasCompradas;
+	
+	@Transient
+	private double cotasVendidas;
+	
 	public ResumoInvestimento() {
 		this.aplicacao = 0.0;
 		this.resgate = 0.0;
@@ -95,6 +102,8 @@ public class ResumoInvestimento extends EntityPersistence {
 		this.impostoRenda = 0.0;
 		this.iof = 0.0;
 		this.rendimentoLiquido = 0.0;
+		this.cotasCompradas = 0;
+		this.cotasVendidas = 0;
 	}
 	
 	public ResumoInvestimento(int mes, int ano) {
@@ -193,5 +202,21 @@ public class ResumoInvestimento extends EntityPersistence {
 
 	public void setRendimentoLiquido(double rendimentoLiquido) {
 		this.rendimentoLiquido = rendimentoLiquido;
+	}
+
+	public double getCotasCompradas() {
+		return cotasCompradas;
+	}
+
+	public void setCotasCompradas(double cotasCompradas) {
+		this.cotasCompradas = cotasCompradas;
+	}
+
+	public double getCotasVendidas() {
+		return cotasVendidas;
+	}
+
+	public void setCotasVendidas(double cotasVendidas) {
+		this.cotasVendidas = cotasVendidas;
 	}
 }

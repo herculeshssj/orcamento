@@ -129,6 +129,17 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Tipo de lançamento", this.tipoLancamento);
 		EntityPersistenceUtil.validaCampoNulo("Data", this.data);
 	}
+	
+	public double getValorTotalRendaVariavel() {
+		if (this.tipoLancamento.equals(TipoLancamento.RECEITA))
+			return ((valorCota * cotas) + iof) - impostoRenda;
+		else 
+			return (valorCota * cotas) - (iof + impostoRenda);
+	}
+	
+	public double getValorTotalRendaFixa() {
+		return valor - (iof +  impostoRenda + compensacaoImpostoRenda);
+	}
 
 	@Override
 	public MovimentacaoInvestimentoJson toJson() {

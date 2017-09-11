@@ -59,6 +59,40 @@
 	
 	<ui:define name="campos">
 	
+		<h:panelGrid columns="2" rendered="#{managedBean.entity.id != null}">
+			<f:facet name="header">
+				<h:outputText value="Dados do Investimento" />
+			</f:facet>
+			
+			<label>Descrição:</label>
+			<h:outputText value="#{managedBean.entity.label}"/>
+			
+			<label>Conta:</label>
+			<h:outputText value="#{managedBean.entity.conta.label}"/>
+			
+			<label>Categoria de investimento:</label>
+			<h:outputText value="#{managedBean.entity.categoriaInvestimento.label}"/>
+			
+			<label>Tipo de investimento:</label>
+			<h:outputText value="#{managedBean.entity.categoriaInvestimento.tipoInvestimento}"/>
+			
+			<label>CNPJ:</label>
+			<h:outputText value="#{managedBean.entity.cnpjFormatado}"/>
+			
+			<label>Início do investimento:</label>
+			<h:outputText value="#{managedBean.entity.inicioInvestimento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			<label>Término do investimento:</label>
+			<h:outputText value="#{managedBean.entity.terminoInvestimento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+		</h:panelGrid>
+		
+		<hr/>
+	
 		<label>Tipo de lançamento:</label>
 		<h:selectOneRadio id="txtTipoLancamento" value="#{managedBean.movimentacao.tipoLancamento}" layout="lineDirection">
 			<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>				
@@ -72,42 +106,40 @@
 	    <label for="frmFormEntity:txtHistorico">Histórico:</label>
 		<h:inputText id="txtHistorico" value="#{managedBean.movimentacao.historico}" />
 		
-		<label for="frmFormEntity:txtDocumento">Documento:</label>
-		<h:inputText id="txtDocumento" value="#{managedBean.movimentacao.documento}" />		
+		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
+			<label for="frmFormEntity:txtDocumento">Documento:</label>
+			<h:inputText id="txtDocumento" value="#{managedBean.movimentacao.documento}" />
+		</h:panelGroup>		
+		
+		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+			<label for="frmFormEntity:txtCotas">Ações / Cotas:</label>
+			<h:inputText id="txtCotas" value="#{managedBean.movimentacao.cotas}" >
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="6" />
+			</h:inputText>
+		</h:panelGroup>
 
-		<label for="frmFormEntity:txtValor">Valor:</label>
-		<h:inputText id="txtValor" value="#{managedBean.movimentacao.valor}" >
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		</h:inputText>	
+		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
+			<label for="frmFormEntity:txtValor">Valor:</label>
+			<h:inputText id="txtValor" value="#{managedBean.movimentacao.valor}" >
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</h:inputText>	
+		</h:panelGroup>
+		
+		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+			<label for="frmFormEntity:txtValorCota">Valor da Cota:</label>
+			<h:inputText id="txtValorCota" value="#{managedBean.movimentacao.valorCota}" >
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="9" />
+			</h:inputText>
+		</h:panelGroup>
 		
 		<label for="frmFormEntity:txtImpostoRenda">Imposto de renda:</label>
 		<h:inputText id="txtImpostoRenda" value="#{managedBean.movimentacao.impostoRenda}" >
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		</h:inputText>
 		
-		<label for="frmFormEntity:txtIOF">IOF:</label>
+		<label for="frmFormEntity:txtIOF">IOF / Tarifas:</label>
 		<h:inputText id="txtIOF" value="#{managedBean.movimentacao.iof}" >
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		</h:inputText>
-		
-		<label for="frmFormEntity:txtCompensacaoImpostoRenda">Compensação Imposto de renda:</label>
-		<h:inputText id="txtCompensacaoImpostoRenda" value="#{managedBean.movimentacao.compensacaoImpostoRenda}" >
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		</h:inputText>
-		
-		<label for="frmFormEntity:txtCotas">Cotas:</label>
-		<h:inputText id="txtCotas" value="#{managedBean.movimentacao.cotas}" >
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="6" />
-		</h:inputText>
-		
-		<label for="frmFormEntity:txtValorCota">Valor da Cota:</label>
-		<h:inputText id="txtValorCota" value="#{managedBean.movimentacao.valorCota}" >
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="9" />
-		</h:inputText>
-		
-		<label for="frmFormEntity:txtSaldoCotas">Saldo das Cotas:</label>
-		<h:inputText id="txtSaldoCotas" value="#{managedBean.movimentacao.saldoCotas}" >
-			<f:convertNumber minFractionDigits="2" maxFractionDigits="9" />
 		</h:inputText>
 
 	</ui:define>

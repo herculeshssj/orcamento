@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -94,7 +95,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private ResumoInvestimento resumo;
 	private MovimentacaoInvestimento movimentacao;
 	private double investimentoInicial;
-	private Set<MovimentacaoInvestimento> movimentacoesInvestimento;
+	private Set<MovimentacaoInvestimento> movimentacoesInvestimento = new HashSet<>();
 	
 	private int mesResumo;
 	private int anoResumo;
@@ -119,7 +120,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		tipoSelecionado = null;
 		movimentacao = null;
 		resumo = null;
-		movimentacoesInvestimento = null;
+		movimentacoesInvestimento.clear();
 		investimentoInicial = 0;
 		contaSelecionada = null;
 	}
@@ -130,7 +131,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		// movimentação
 		movimentacao = null;
 		resumo = null;
-		movimentacoesInvestimento = null;
+		movimentacoesInvestimento.clear();
 		
 		// Pega o mês/ano atual
 		Calendar temp = Calendar.getInstance();
@@ -286,6 +287,17 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		}
 		
 		return "";
+	}
+	
+	public String aplicacaoResgateView() {
+		// TODO implementar
+		errorMessage("Método não implementado");
+		return "";
+	}
+	
+	public String aplicacaoResgate() {
+		// TODO implementar
+		throw new RuntimeException("Não implementado!");
 	}
 	
 	public void atualizaListaInvestimento() {
