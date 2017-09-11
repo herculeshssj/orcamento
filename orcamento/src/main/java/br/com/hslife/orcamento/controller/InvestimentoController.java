@@ -97,6 +97,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private MovimentacaoInvestimento movimentacao;
 	private double investimentoInicial;
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento = new HashSet<>();
+	private Investimento investimentoSelecionado;
 	
 	private int mesResumo;
 	private int anoResumo;
@@ -112,27 +113,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	public InvestimentoController() {
 		super(new Investimento());
 		moduleTitle = "Investimentos";
-	}
-	
-	@Override
-	protected void initializeEntity() {
-		entity = new Investimento();
-		listEntity = new ArrayList<Investimento>();		
-		tipoSelecionado = null;
-		movimentacao = null;
-		resumo = null;
-		movimentacoesInvestimento = new LinkedHashSet<>();
-		investimentoInicial = 0;
-		contaSelecionada = null;
-	}
-	
-	@Override
-	public void find() {
-		// Limpa as variáveis usadas para os dados do resumo e 
-		// movimentação
-		movimentacao = null;
-		resumo = new ResumoInvestimento(entity);
-		movimentacoesInvestimento = new LinkedHashSet<>();
 		
 		// Pega o mês/ano atual
 		Calendar temp = Calendar.getInstance();
@@ -140,10 +120,31 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		int ano = temp.get(Calendar.YEAR);
 		
 		// Já deixa marcado o mês/ano atual no resumo e na movimentação
-		mesResumo = mes;
-		anoResumo = ano;
+		mesResumo = mes; //remover
+		anoResumo = ano; //remover
 		mesMovimentacao = mes;
 		anoMovimentacao = ano;
+	}
+	
+	@Override
+	protected void initializeEntity() {
+		entity = new Investimento();		
+		tipoSelecionado = null;
+		movimentacao = null;
+		resumo = null;
+		movimentacoesInvestimento = new LinkedHashSet<>();
+		investimentoInicial = 0;
+	}
+	
+	@Override
+	public void find() {
+		entity = getService().buscarPorID(investimentoSelecionado.getId());
+		
+		// Limpa as variáveis usadas para os dados do resumo e 
+		// movimentação
+		movimentacao = null;
+		resumo = new ResumoInvestimento(entity);
+		movimentacoesInvestimento = new LinkedHashSet<>();
 	}
 	
 	@Override
@@ -221,6 +222,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	public String voltarInvestimento() {
 		actionTitle = "";
+		find();
 		return "/pages/Investimento/listInvestimento";
 	}
 	
@@ -247,21 +249,15 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 			switch (operacaoInvestimento) {
 				case SALVAR_MOVIMENTACAO : 
 					entity.movimentarInvestimento(movimentacao);
-					movimentacoesInvestimento = new LinkedHashSet<>();
-					movimentacao = new MovimentacaoInvestimento();
-					resumo = new ResumoInvestimento(entity);
-					//this.selecionarMovimentacoesInvestimento();
 					break;
 				case EXCLUIR_MOVIMENTACAO : 
 					entity.excluirMovimentacao(movimentacao);
-					movimentacoesInvestimento = new LinkedHashSet<>();
-					movimentacao = new MovimentacaoInvestimento();
-					//this.selecionarMovimentacoesInvestimento();
 				case EDITAR_MOVIMENTACAO : 
 				default : 
 			}
 			getService().alterar(entity);
 			infoMessage("Dados do investimento salvos com sucesso!");
+			initializeEntity();
 			return this.voltarInvestimento();
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
@@ -426,5 +422,13 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public void setContaSelecionada(Conta contaSelecionada) {
 		this.contaSelecionada = contaSelecionada;
+	}
+
+	public Investimento getInvestimentoSelecionado() {
+		return investimentoSelecionado;
+	}
+
+	public void setInvestimentoSelecionado(Investimento investimentoSelecionado) {
+		this.investimentoSelecionado = investimentoSelecionado;
 	}
 }

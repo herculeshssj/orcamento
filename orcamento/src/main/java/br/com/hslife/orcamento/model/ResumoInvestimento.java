@@ -119,6 +119,7 @@ public class ResumoInvestimento {
 		if (investimento == null)
 			return cotas;
 		
+		cotas = 0;
 		for (MovimentacaoInvestimento movimentacao : investimento.getMovimentacoesInvestimento()) {
 			if (movimentacao.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
 				cotas += movimentacao.getCotas();
@@ -149,5 +150,9 @@ public class ResumoInvestimento {
 			precoMedio = Util.arredondar(totalGasto / totalCotas);
 		
 		return precoMedio;
+	}
+
+	public double getValorInvestimento() {
+		return this.getCotas() * this.getPrecoMedio();
 	}
 }

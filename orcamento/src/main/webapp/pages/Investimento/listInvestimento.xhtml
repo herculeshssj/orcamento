@@ -69,7 +69,7 @@
 	    </h:panelGroup>
 	    <h:panelGroup>
 			<label>Investimento:</label>
-			<h:selectOneMenu id="txtInvestimento" value="#{managedBean.entity}" converter="entityConverter">
+			<h:selectOneMenu id="txtInvestimento" value="#{managedBean.investimentoSelecionado}" converter="entityConverter">
 				<f:selectItems value="#{managedBean.listEntity}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 	    </h:panelGroup>	    	    
@@ -177,6 +177,11 @@
 					
 					<label>Preço médio:</label>
 					<h:outputText value="#{managedBean.resumo.precoMedio}" >
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+					
+					<label>Total do investimento:</label>
+					<h:outputText value="#{managedBean.resumo.valorInvestimento}" >
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
 				</h:panelGrid>
