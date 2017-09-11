@@ -49,6 +49,7 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,7 +63,6 @@ import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.MovimentacaoInvestimento;
-import br.com.hslife.orcamento.entity.ResumoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -70,6 +70,7 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoriaInvestimento;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
+import br.com.hslife.orcamento.model.ResumoInvestimento;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("investimentoMB")
@@ -105,7 +106,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private OperacaoInvestimento operacaoInvestimento;
 	
 	public enum OperacaoInvestimento {
-		SALVAR_RESUMO, EDITAR_RESUMO, SALVAR_MOVIMENTACAO, EDITAR_MOVIMENTACAO, EXCLUIR_MOVIMENTACAO;
+		SALVAR_MOVIMENTACAO, EDITAR_MOVIMENTACAO, EXCLUIR_MOVIMENTACAO;
 	}
 	
 	public InvestimentoController() {
@@ -120,7 +121,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		tipoSelecionado = null;
 		movimentacao = null;
 		resumo = null;
-		movimentacoesInvestimento.clear();
+		movimentacoesInvestimento = new LinkedHashSet<>();
 		investimentoInicial = 0;
 		contaSelecionada = null;
 	}
@@ -130,8 +131,8 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		// Limpa as variáveis usadas para os dados do resumo e 
 		// movimentação
 		movimentacao = null;
-		resumo = null;
-		movimentacoesInvestimento.clear();
+		resumo = new ResumoInvestimento(entity);
+		movimentacoesInvestimento = new LinkedHashSet<>();
 		
 		// Pega o mês/ano atual
 		Calendar temp = Calendar.getInstance();
@@ -213,11 +214,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		}
 		return null;
 	}
-	
-	public void selecionarResumoInvestimento() {
-		resumo = entity.buscarResumoInvestimento(mesResumo, anoResumo);
-	}
-	
+
 	public void selecionarMovimentacoesInvestimento() {
 		movimentacoesInvestimento = entity.buscarMovimentacoesInvestimento(mesMovimentacao, anoMovimentacao);
 	}
@@ -225,21 +222,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	public String voltarInvestimento() {
 		actionTitle = "";
 		return "/pages/Investimento/listInvestimento";
-	}
-	
-	public String novoResumo() {
-		resumo = new ResumoInvestimento();
-		resumo.setMes(mesResumo);
-		resumo.setAno(anoResumo);
-		actionTitle = " - Novo resumo";
-		operacaoInvestimento = OperacaoInvestimento.SALVAR_RESUMO;
-		return "/pages/Investimento/formResumoInvestimento";		
-	}
-	
-	public String editarResumo() {
-		actionTitle = " - Editar resumo";
-		operacaoInvestimento = OperacaoInvestimento.EDITAR_RESUMO;
-		return "/pages/Investimento/formResumoInvestimento";
 	}
 	
 	public String novaMovimentacao() {
@@ -263,20 +245,19 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	public String salvarDadosInvestimento() {
 		try {
 			switch (operacaoInvestimento) {
-				case SALVAR_RESUMO : entity.criarResumoInvestimento(resumo); break;
 				case SALVAR_MOVIMENTACAO : 
 					entity.movimentarInvestimento(movimentacao);
-					movimentacoesInvestimento.clear();
-					this.selecionarMovimentacoesInvestimento();
+					movimentacoesInvestimento = new LinkedHashSet<>();
+					movimentacao = new MovimentacaoInvestimento();
+					resumo = new ResumoInvestimento(entity);
+					//this.selecionarMovimentacoesInvestimento();
 					break;
 				case EXCLUIR_MOVIMENTACAO : 
 					entity.excluirMovimentacao(movimentacao);
-					movimentacoesInvestimento.clear();
-					this.selecionarMovimentacoesInvestimento();
+					movimentacoesInvestimento = new LinkedHashSet<>();
+					movimentacao = new MovimentacaoInvestimento();
+					//this.selecionarMovimentacoesInvestimento();
 				case EDITAR_MOVIMENTACAO : 
-				case EDITAR_RESUMO : // Sempre estou trabalhando com a mesma referência do resumo selecionado do List
-									// Isso faz que seja desnecessário fazer qualquer operação. Basta alterar os valores
-									// e pedir para salvar o investimento como um todo.
 				default : 
 			}
 			getService().alterar(entity);

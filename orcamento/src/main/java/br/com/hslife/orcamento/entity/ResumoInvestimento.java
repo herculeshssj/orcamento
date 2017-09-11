@@ -95,6 +95,17 @@ public class ResumoInvestimento extends EntityPersistence {
 	@Transient
 	private double cotasVendidas;
 	
+	/*
+	 * Aplicação:
+Resgate:
+Ações/Cotas Compradas:
+Ações/Cotas Vendidas:
+Rendimento bruto:
+Imposto de renda:
+IOF:
+Saldo:
+	 */
+	
 	public ResumoInvestimento() {
 		this.aplicacao = 0.0;
 		this.resgate = 0.0;

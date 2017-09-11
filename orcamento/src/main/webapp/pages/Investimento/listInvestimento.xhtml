@@ -138,35 +138,7 @@
 	
 		<p:tabView id="tabInvestimento" rendered="#{managedBean.entity.id != null}">
 			<p:tab id="tabResumo" title="Resumo">
-				<h:panelGrid columns="4">
-					<label>Mês / Ano:</label>
-					<h:selectOneMenu value="#{managedBean.mesResumo}">
-						<f:selectItems value="#{managedBean.listaMeses}"/>
-					</h:selectOneMenu>
-					<h:selectOneMenu value="#{managedBean.anoResumo}">
-						<f:selectItems value="#{managedBean.listaAnos}"/>
-					</h:selectOneMenu>					
-					<h:panelGroup>
-						<p:commandLink title="Pesquisar" actionListener="#{managedBean.selecionarResumoInvestimento}" update="gridResumo">
-							<h:graphicImage id="imgSearchResumo" height="48" width="48" value="/resources/images/svg/search.svg"/>
-						</p:commandLink>
-						<h:commandLink title="Novo resumo" action="#{managedBean.novoResumo}">
-	     					<h:graphicImage id="imgNewResumo" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
-	     				</h:commandLink>
-						<h:commandLink title="Editar resumo" action="#{managedBean.editarResumo}">
-							<h:graphicImage id="imgEditResumo" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>						
-						</h:commandLink>					
-					</h:panelGroup>				
-				</h:panelGrid>
-				
-				<h:panelGrid id="gridResumo" columns="2">
-					<label>Período:</label>
-					<h:panelGroup>
-						<h:outputText value="#{managedBean.resumo.mes}" />
-						/
-						<h:outputText value="#{managedBean.resumo.ano}" />
-					</h:panelGroup>
-				
+				<h:panelGrid id="gridResumoFixo" columns="2" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
 					<label>Aplicação:</label>
 					<h:outputText value="#{managedBean.resumo.aplicacao}" >
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
@@ -175,16 +147,6 @@
 					<label>Resgate:</label>
 					<h:outputText value="#{managedBean.resumo.resgate}" >
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>Ações/Cotas Compradas:</label>
-					<h:outputText value="#{managedBean.resumo.cotasCompradas}" >
-						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>Ações/Cotas Vendidas:</label>
-					<h:outputText value="#{managedBean.resumo.cotasVendidas}" >
-						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
 					
 					<label>Rendimento bruto:</label>
@@ -206,8 +168,20 @@
 					<h:outputText value="#{managedBean.resumo.rendimentoLiquido}" >
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
-
 				</h:panelGrid>
+				<h:panelGrid id="gridResumoVariavel" columns="2" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+					<label>Ações/Cotas:</label>
+					<h:outputText value="#{managedBean.resumo.cotas}" >
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+					
+					<label>Preço médio:</label>
+					<h:outputText value="#{managedBean.resumo.precoMedio}" >
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:panelGrid>
+
+				
 			</p:tab>
 			<p:tab id="tabMovimentacao" title="Movimentação">
 				<h:panelGrid columns="4">
