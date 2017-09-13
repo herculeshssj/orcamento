@@ -247,7 +247,7 @@ public class Investimento extends EntityPersistence {
 		return null;
 	}
 	
-	public Set<MovimentacaoInvestimento> buscarMovimentacoesInvestimento(int mes, int ano) {
+	public Set<MovimentacaoInvestimento> buscarMovimentacoesInvestimento(Integer mes, int ano) {
 		Set<MovimentacaoInvestimento> movimentacoes = new LinkedHashSet<>();
 		
 		// Itera o set de movimentações, adicionando as movimentações cuja data pertence ao mês/ano informados
@@ -255,8 +255,14 @@ public class Investimento extends EntityPersistence {
 		for (MovimentacaoInvestimento movimentacao : this.movimentacoesInvestimento) {
 			temp.setTime(movimentacao.getData());
 			
-			if ((temp.get(Calendar.MONTH) + 1) == mes && temp.get(Calendar.YEAR) == ano) 
-				movimentacoes.add(movimentacao);
+			if (mes == null || mes == 0) {
+				// Busca somente pelo ano
+				if (temp.get(Calendar.YEAR) == ano)
+					movimentacoes.add(movimentacao);
+			} else {
+				if ((temp.get(Calendar.MONTH) + 1) == mes && temp.get(Calendar.YEAR) == ano) 
+					movimentacoes.add(movimentacao);
+			}
 		}
 		
 		return movimentacoes;

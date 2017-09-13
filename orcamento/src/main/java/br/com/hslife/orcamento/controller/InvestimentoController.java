@@ -101,7 +101,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	private int mesResumo;
 	private int anoResumo;
-	private int mesMovimentacao;
+	private Integer mesMovimentacao;
 	private int anoMovimentacao;
 	
 	private OperacaoInvestimento operacaoInvestimento;
@@ -138,7 +138,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Override
 	public void find() {
-		entity = getService().buscarPorID(investimentoSelecionado.getId());
+		if (investimentoSelecionado != null && investimentoSelecionado.getId() != null) {
+			entity = getService().buscarPorID(investimentoSelecionado.getId());
+		}
 		
 		// Limpa as variáveis usadas para os dados do resumo e 
 		// movimentação
@@ -400,14 +402,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		this.anoResumo = anoResumo;
 	}
 
-	public int getMesMovimentacao() {
-		return mesMovimentacao;
-	}
-
-	public void setMesMovimentacao(int mesMovimentacao) {
-		this.mesMovimentacao = mesMovimentacao;
-	}
-
 	public int getAnoMovimentacao() {
 		return anoMovimentacao;
 	}
@@ -430,5 +424,13 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public void setInvestimentoSelecionado(Investimento investimentoSelecionado) {
 		this.investimentoSelecionado = investimentoSelecionado;
+	}
+
+	public Integer getMesMovimentacao() {
+		return mesMovimentacao;
+	}
+
+	public void setMesMovimentacao(Integer mesMovimentacao) {
+		this.mesMovimentacao = mesMovimentacao;
 	}
 }

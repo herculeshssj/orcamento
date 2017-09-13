@@ -192,6 +192,7 @@
 				<h:panelGrid columns="4">
 					<label>Mês / Ano:</label>
 					<h:selectOneMenu value="#{managedBean.mesMovimentacao}">
+						<f:selectItem itemLabel="Todos"/>
 						<f:selectItems value="#{managedBean.listaMeses}"/>
 					</h:selectOneMenu>
 					<h:selectOneMenu value="#{managedBean.anoMovimentacao}">
