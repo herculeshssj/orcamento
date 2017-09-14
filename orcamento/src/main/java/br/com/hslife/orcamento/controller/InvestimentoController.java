@@ -138,6 +138,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Override
 	public void find() {
+		this.atualizaListaInvestimento();
 		if (investimentoSelecionado != null && investimentoSelecionado.getId() != null) {
 			entity = getService().buscarPorID(investimentoSelecionado.getId());
 		}

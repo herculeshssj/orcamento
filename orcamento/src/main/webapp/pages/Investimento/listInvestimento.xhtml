@@ -221,7 +221,7 @@
 						<f:facet name="header">
 							<h:outputText value="Histórico"/>
 						</f:facet>
-						<h:commandLink value="#{item.historico}" action="#{managedBean.editarMovimentacao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<h:commandLink value="#{item.historico}" action="#{managedBean.editarMovimentacao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right; text-decoration: underline' : 'color: #FF0000; text-align: right; text-decoration: underline' }">
 							<f:setPropertyActionListener value="#{item}" target="#{managedBean.movimentacao}"/>
 						</h:commandLink>													
 					</h:column>

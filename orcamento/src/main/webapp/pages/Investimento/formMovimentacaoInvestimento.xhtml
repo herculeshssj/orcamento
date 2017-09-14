@@ -98,14 +98,14 @@
 			<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>				
 		</h:selectOneRadio>
 	
+		<label for="frmFormEntity:txtHistorico">Histórico:</label>
+		<h:inputText id="txtHistorico" value="#{managedBean.movimentacao.historico}" />
+	
 		<label for="frmListEntity:txtData">Data:</label>
 		<p:inputMask id="txtData" size="9" mask="99/99/9999" value="#{managedBean.movimentacao.data}">
 	    	<f:converter converterId="dateConverter"/>
 	    </p:inputMask>
 	    
-	    <label for="frmFormEntity:txtHistorico">Histórico:</label>
-		<h:inputText id="txtHistorico" value="#{managedBean.movimentacao.historico}" />
-		
 		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
 			<label for="frmFormEntity:txtDocumento">Documento:</label>
 			<h:inputText id="txtDocumento" value="#{managedBean.movimentacao.documento}" />
