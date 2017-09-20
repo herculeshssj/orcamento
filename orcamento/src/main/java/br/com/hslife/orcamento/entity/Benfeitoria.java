@@ -107,6 +107,10 @@ public class Benfeitoria extends EntityPersistence {
 	@JoinColumn(name="idGrupoLancamento", nullable=true)
 	private GrupoLancamento grupoLancamento;
 	
+	@ManyToOne
+	@JoinColumn(name="idMeioPagamento", nullable=true)
+	private MeioPagamento meioPagamento;
+	
 	public Benfeitoria() {
 		
 	}
@@ -214,5 +218,13 @@ public class Benfeitoria extends EntityPersistence {
 
 	public void setOrcamentoBenfeitoria(String orcamentoBenfeitoria) {
 		this.orcamentoBenfeitoria = orcamentoBenfeitoria;
+	}
+
+	public MeioPagamento getMeioPagamento() {
+		return meioPagamento;
+	}
+
+	public void setMeioPagamento(MeioPagamento meioPagamento) {
+		this.meioPagamento = meioPagamento;
 	}
 }

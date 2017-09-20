@@ -60,6 +60,7 @@ import br.com.hslife.orcamento.entity.Benfeitoria;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.GrupoLancamento;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
@@ -67,6 +68,7 @@ import br.com.hslife.orcamento.facade.IBenfeitoria;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IPatrimonio;
 import br.com.hslife.orcamento.model.OrcamentoBenfeitoria;
 
@@ -87,6 +89,9 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	
 	@Autowired
 	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
 	
 	@Autowired
 	private ICategoriaDocumento categoriaDocumentoService;
@@ -230,9 +235,30 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 		}
 		return new ArrayList<>();
 	}
+	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			List<MeioPagamento> resultado = getMeioPagamentoService().buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o meio de pagamento inativo da entidade na combo
+			if (resultado != null && entity.getMeioPagamento() != null) {
+				if (!resultado.contains(entity.getMeioPagamento())) {
+					entity.getMeioPagamento().setAtivo(true);
+					resultado.add(entity.getMeioPagamento());
+				}
+			}
+			return resultado;
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
 
 	public IBenfeitoria getService() {
 		return service;
+	}
+	
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
 	}
 
 	public IPatrimonio getPatrimonioService() {

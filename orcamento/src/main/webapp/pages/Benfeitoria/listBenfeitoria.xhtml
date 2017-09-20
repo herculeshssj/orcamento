@@ -96,6 +96,12 @@
 					<label>Favorecido:</label>
 					<h:outputText value="#{benfeitoria.favorecido.label}"/>
 					
+					<h:panelGroup rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+						<label>Meio de Pagamento:</label>
+						<h:outputText value="#{patrimonio.meioPagamento.label}"/>	
+					</h:panelGroup>
+					<h:outputText rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}"/>
+					
 					<label>Detalhes da benfeitoria:</label>
 					<h:outputText value="#{benfeitoria.detalheBenfeitoria}"/>
 					

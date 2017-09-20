@@ -76,7 +76,13 @@
 					<h:outputText value="#{patrimonio.detalheEntradaPatrimonio}"/>
 					
 					<label>Favorecido:</label>
-					<h:outputText value="#{patrimonio.favorecido.label}"/>	
+					<h:outputText value="#{patrimonio.favorecido.label}"/>
+					
+					<h:panelGroup rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+						<h:outputText value="Meio de Pagamento:"/>
+						<h:outputText value="#{patrimonio.meioPagamento.label}"/>	
+					</h:panelGroup>
+					<h:outputText rendered="#{!managedBean.opcoesSistema.exibirMeioPagamento}"/>
 					
 					<label>Data de aquisição:</label>
 					<h:outputText value="#{patrimonio.dataEntrada}">

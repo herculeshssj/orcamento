@@ -114,6 +114,10 @@ public class Patrimonio extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=false)
 	private Moeda moeda;
 	
+	@ManyToOne
+	@JoinColumn(name="idMeioPagamento", nullable=true)
+	private MeioPagamento meioPagamento;
+	
 	public Patrimonio() {
 		ativo = false;
 	}
@@ -240,5 +244,13 @@ public class Patrimonio extends EntityPersistence {
 
 	public void setMoeda(Moeda moeda) {
 		this.moeda = moeda;
+	}
+
+	public MeioPagamento getMeioPagamento() {
+		return meioPagamento;
+	}
+
+	public void setMeioPagamento(MeioPagamento meioPagamento) {
+		this.meioPagamento = meioPagamento;
 	}
 }

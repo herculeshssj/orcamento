@@ -56,6 +56,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.GrupoLancamento;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -63,6 +64,7 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.IFavorecido;
 import br.com.hslife.orcamento.facade.IGrupoLancamento;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IPatrimonio;
 
@@ -80,6 +82,9 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 	
 	@Autowired
 	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
 	
 	@Autowired
 	private ICategoriaDocumento categoriaDocumentoService;
@@ -148,6 +153,23 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 		return new ArrayList<>();
 	}
 	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			List<MeioPagamento> resultado = getMeioPagamentoService().buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o meio de pagamento inativo da entidade na combo
+			if (resultado != null && entity.getMeioPagamento() != null) {
+				if (!resultado.contains(entity.getMeioPagamento())) {
+					entity.getMeioPagamento().setAtivo(true);
+					resultado.add(entity.getMeioPagamento());
+				}
+			}
+			return resultado;
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
 	public List<Moeda> getListaMoeda() {
 		try {
 			return getMoedaService().buscarAtivosPorUsuario(getUsuarioLogado());
@@ -168,6 +190,10 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 
 	public IPatrimonio getService() {
 		return service;
+	}
+
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
 	}
 
 	public IFavorecido getFavorecidoService() {

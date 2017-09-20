@@ -85,6 +85,14 @@
 			<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 		</h:selectOneMenu>
 		
+		<h:panelGroup rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+			<label>Meio de pagamento:</label>
+			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.entity.meioPagamento}" converter="entityConverter">
+				<f:selectItem itemLabel="Nenhum meio de pagamento"/>
+				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+		</h:panelGroup>
+		
 		<label for="frmFormEntity:txtCategoriaDocumento">Categoria de documento:</label>
 		<h:selectOneMenu id="txtCategoriaDocumento" value="#{managedBean.entity.categoriaDocumento}" converter="entityConverter">
 			<f:selectItem itemLabel="Selecione uma categoria de documento" />
