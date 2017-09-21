@@ -86,7 +86,7 @@
 		</h:selectOneMenu>
 		
 		<h:panelGroup rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
-			<label>Meio de pagamento:</label>
+			<label for="frmFormEntity:txtMeioPagamento">Meio de pagamento:</label>
 			<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.entity.meioPagamento}" converter="entityConverter">
 				<f:selectItem itemLabel="Nenhum meio de pagamento"/>
 				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>

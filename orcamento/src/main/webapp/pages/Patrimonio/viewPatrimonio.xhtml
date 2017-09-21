@@ -84,10 +84,8 @@
 			<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
 			<h:outputText value="#{managedBean.entity.favorecido.label}" />
 			
-			<h:panelGroup rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
-				<label for="frmFormEntity:txtMeioPagamento">Favorecido:</label>
-				<h:outputText value="#{managedBean.entity.meioPagamento.label}" />
-			</h:panelGroup>
+			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>	
+			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
 			
 			<label for="frmFormEntity:txtCategoriaDocumento">Categoria de documento:</label>
 			<h:outputText value="#{managedBean.entity.categoriaDocumento.label}" />

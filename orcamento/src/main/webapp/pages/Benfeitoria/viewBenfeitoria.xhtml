@@ -86,6 +86,12 @@
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
 			
+			<label for="frmFormEntity:txtFavorecido">Favorecido:</label>
+			<h:outputText id="txtFavorecido" value="#{managedBean.entity.favorecido.label}"/>
+			
+			<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>	
+			<h:outputText value="#{managedBean.entity.meioPagamento.label}" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}" />
+			
 			<label for="frmFormEntity:txtDetalheBenfeitoria">Detalhes da benfeitoria:</label>
 			<h:outputText id="txtDetalheBenfeitoria" value="#{managedBean.entity.detalheBenfeitoria}"/>
 			
