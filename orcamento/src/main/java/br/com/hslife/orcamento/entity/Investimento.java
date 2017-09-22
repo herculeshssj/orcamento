@@ -101,6 +101,9 @@ public class Investimento extends EntityPersistence {
 	@Temporal(TemporalType.DATE)
 	private Date terminoInvestimento;
 	
+	@Column(length=10, nullable=true)
+	private String ticker;
+	
 	@Column(columnDefinition="text", nullable=true)
 	private String observacao;
 	
@@ -135,6 +138,7 @@ public class Investimento extends EntityPersistence {
 		
 		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Código da ação", this.ticker, 10);
 		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("CNPJ", this.cnpj, 14);
 		EntityPersistenceUtil.validaCampoNulo("Início do investimento", this.inicioInvestimento);
 		EntityPersistenceUtil.validaCampoNulo("Categoria de Investimento", this.categoriaInvestimento);
@@ -362,5 +366,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setConta(Conta conta) {
 		this.conta = conta;
+	}
+
+	public String getTicker() {
+		return ticker;
+	}
+
+	public void setTicker(String ticker) {
+		this.ticker = ticker;
 	}
 }

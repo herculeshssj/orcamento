@@ -118,6 +118,9 @@
 			<label>CNPJ:</label>
 			<h:outputText value="#{managedBean.entity.cnpjFormatado}"/>
 			
+			<h:outputText value="Código da ação:" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
+			<h:outputText value="#{managedBean.entity.ticker}" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
+			
 			<label>Início do investimento:</label>
 			<h:outputText value="#{managedBean.entity.inicioInvestimento}">
 				<f:converter converterId="dateConverter"/>
@@ -285,6 +288,9 @@
 					</h:column>		
 				</h:dataTable>
 
+			</p:tab>
+			<p:tab title="Cotação" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+				<ui:include src="/pages/Investimento/cotacaoInvestimento.xhtml"/>
 			</p:tab>
 		</p:tabView>
 	</ui:define>

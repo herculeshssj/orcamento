@@ -70,6 +70,7 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICategoriaInvestimento;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
+import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.model.ResumoInvestimento;
 import br.com.hslife.orcamento.util.Util;
 
@@ -98,6 +99,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private double investimentoInicial;
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento = new HashSet<>();
 	private Investimento investimentoSelecionado;
+	private InfoCotacao infoCotacao;
 	
 	private int mesResumo;
 	private int anoResumo;
@@ -148,6 +150,11 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		movimentacao = null;
 		resumo = new ResumoInvestimento(entity);
 		movimentacoesInvestimento = new LinkedHashSet<>();
+		
+		// Obtém a cotação do investimento
+		if (entity.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
+			this.obterCotacao();
+		}
 	}
 	
 	@Override
@@ -278,6 +285,10 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	public String aplicacaoResgate() {
 		// TODO implementar
 		throw new RuntimeException("Não implementado!");
+	}
+	
+	private void obterCotacao() {
+		this.infoCotacao = new InfoCotacao(entity.getTicker());
 	}
 	
 	public void atualizaListaInvestimento() {
@@ -433,5 +444,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public void setMesMovimentacao(Integer mesMovimentacao) {
 		this.mesMovimentacao = mesMovimentacao;
+	}
+
+	public InfoCotacao getInfoCotacao() {
+		return infoCotacao;
 	}
 }

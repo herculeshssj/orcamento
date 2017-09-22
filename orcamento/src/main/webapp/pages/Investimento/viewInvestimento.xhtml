@@ -72,7 +72,10 @@
 			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}" />				
 			
 			<label for="frmFormEntity:txtCnpj">CNPJ:</label>
-			<h:outputText id="txtCnpj" value="#{managedBean.entity.cnpjFormatado}"/>				
+			<h:outputText id="txtCnpj" value="#{managedBean.entity.cnpjFormatado}"/>
+			
+			<h:outputText value="Código da ação:" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
+			<h:outputText value="#{managedBean.entity.ticker}" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>				
 			
 			<label for="frmListEntity:txtInicioInvestimento">Início do investimento:</label>
 			<h:outputText id="txtInicioInvestimento" value="#{managedBean.entity.inicioInvestimento}">

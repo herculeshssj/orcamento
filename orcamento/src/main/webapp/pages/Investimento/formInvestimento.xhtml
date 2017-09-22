@@ -74,7 +74,12 @@
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" />				
 		
 		<label for="frmFormEntity:txtCnpj">CNPJ:</label>
-		<p:inputMask mask="99.999.999/9999-99" id="txtCnpj" value="#{managedBean.entity.cnpj}"/>				
+		<p:inputMask mask="99.999.999/9999-99" id="txtCnpj" value="#{managedBean.entity.cnpj}"/>
+		
+		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+			<label for="frmFormEntity:txtTicker">Código da ação:</label>
+		</h:panelGroup>
+		<h:inputText id="txtTicker" value="#{managedBean.entity.ticker}" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>				
 		
 		<label for="frmListEntity:txtInicioInvestimento">Início do investimento:</label>
 		<p:inputMask id="txtInicioInvestimento" size="9" mask="99/99/9999" value="#{managedBean.entity.inicioInvestimento}">
