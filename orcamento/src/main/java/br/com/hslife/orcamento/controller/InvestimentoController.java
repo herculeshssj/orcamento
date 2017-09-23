@@ -152,7 +152,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		movimentacoesInvestimento = new LinkedHashSet<>();
 		
 		// Obtém a cotação do investimento
-		if (entity.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
+		if (entity != null 
+				&& entity.getCategoriaInvestimento() != null
+				&& entity.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
 			this.obterCotacao();
 		}
 	}
