@@ -167,6 +167,12 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Override
 	public String edit() {
+		// Verifica se existe investimento selecionado
+		if (idEntity == null || idEntity < 0) {
+			warnMessage("Nenhum investimento foi selecionado!");
+			return "";
+		}
+		
 		// Verifica se o investimento foi encerrado
 		String retorno = super.edit();
 		if (!entity.isAtivo()) {
@@ -179,6 +185,12 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Override
 	public String view() {
+		// Verifica se existe investimento selecionado
+		if (idEntity == null || idEntity < 0) {
+			warnMessage("Nenhum investimento foi selecionado!");
+			return "";
+		}
+		
 		// Verifica se o investimento foi encerrado
 		String retorno = super.view();
 		if (!entity.isAtivo()) {
@@ -279,6 +291,12 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	}
 	
 	public String aplicacaoResgateView() {
+		// Verifica se existe investimento selecionado
+		if (idEntity == null || idEntity < 0) {
+			warnMessage("Nenhum investimento foi selecionado!");
+			return "";
+		}
+		
 		// TODO implementar
 		errorMessage("Método não implementado");
 		return "";
