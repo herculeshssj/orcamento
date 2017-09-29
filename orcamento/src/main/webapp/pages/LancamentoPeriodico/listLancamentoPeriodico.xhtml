@@ -149,6 +149,42 @@
 			</h:commandLink>
 	  	</h:column>
     </ui:define>
+    
+    <ui:define name="outras_opcoes">
+    
+    		<h:panelGrid columns="3">
+    		
+    			<b>Despesas Fixas:</b>
+    			<h:panelGroup>
+	    			<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " style="color: #0000FF;"/>
+	    			<h:outputText value="#{managedBean.totalFixoReceita}" style="color: #0000FF;">
+	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	    			</h:outputText>
+    			</h:panelGroup>
+    			<h:panelGroup>
+    				<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " style="color: #FF0000;"/>
+	    			<h:outputText value="#{managedBean.totalFixoDespesa}" style="color: #FF0000;">
+	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	    			</h:outputText>
+    			</h:panelGroup>
+    			
+    			<b>Parcelamentos:</b>
+    			<h:panelGroup>
+	    			<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " style="color: #0000FF;"/>
+	    			<h:outputText value="#{managedBean.totalParceladoReceita}" style="color: #0000FF;">
+	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	    			</h:outputText>
+	    		</h:panelGroup>
+	    		<h:panelGroup>
+    				<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " style="color: #FF0000;"/>
+	    			<h:outputText value="#{managedBean.totalParceladoDespesa}" style="color: #FF0000;">
+	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	    			</h:outputText>
+	    		</h:panelGroup>
+    		
+    		</h:panelGrid>
+    
+    </ui:define>
 	
 </ui:composition>
 </html>

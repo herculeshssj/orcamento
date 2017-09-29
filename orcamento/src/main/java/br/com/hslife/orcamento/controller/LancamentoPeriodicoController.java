@@ -481,6 +481,79 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return valor;
 	}
 	
+	private List<LancamentoPeriodico> buscarTodosAtivos(TipoLancamentoPeriodico tipo) {
+		try {
+			return getService().buscarPorTipoLancamentoEStatusLancamentoPorUsuario(tipo, StatusLancamento.ATIVO, getUsuarioLogado());
+		} catch (BusinessException | ValidationException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public double getTotalFixoReceita() {
+		double valor = 0.0;
+		
+		for (LancamentoPeriodico lancamento : this.buscarTodosAtivos(TipoLancamentoPeriodico.FIXO)) {
+			if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+				if (lancamento.getMoeda().equals(getOpcoesSistema().getMoedaPadrao())) {
+					valor += lancamento.getValorParcela();
+				} else {
+					valor += lancamento.getValorParcela() * lancamento.getMoeda().getValorConversao();
+				}
+			}
+		}
+		
+		return valor;
+	}
+	
+	public double getTotalFixoDespesa() {
+		double valor = 0.0;
+		
+		for (LancamentoPeriodico lancamento : this.buscarTodosAtivos(TipoLancamentoPeriodico.FIXO)) {
+			if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				if (lancamento.getMoeda().equals(getOpcoesSistema().getMoedaPadrao())) {
+					valor += lancamento.getValorParcela();
+				} else {
+					valor += lancamento.getValorParcela() * lancamento.getMoeda().getValorConversao();
+				}
+			}
+		}
+		
+		return valor;
+	}
+	
+	public double getTotalParceladoReceita() {
+		double valor = 0.0;
+		
+		for (LancamentoPeriodico lancamento : this.buscarTodosAtivos(TipoLancamentoPeriodico.PARCELADO)) {
+			if (lancamento.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+				if (lancamento.getMoeda().equals(getOpcoesSistema().getMoedaPadrao())) {
+					valor += lancamento.getValorParcela();
+				} else {
+					valor += lancamento.getValorParcela() * lancamento.getMoeda().getValorConversao();
+				}
+			}
+		}
+		
+		return valor;
+	}
+	
+	public double getTotalParceladoDespesa() {
+		double valor = 0.0;
+		
+		for (LancamentoPeriodico lancamento : this.buscarTodosAtivos(TipoLancamentoPeriodico.PARCELADO)) {
+			if (lancamento.getTipoLancamento().equals(TipoLancamento.DESPESA)) {
+				if (lancamento.getMoeda().equals(getOpcoesSistema().getMoedaPadrao())) {
+					valor += lancamento.getValorParcela();
+				} else {
+					valor += lancamento.getValorParcela() * lancamento.getMoeda().getValorConversao();
+				}
+			}
+		}
+		
+		return valor;
+	}
+	
 	public List<Conta> getListaConta() {
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
