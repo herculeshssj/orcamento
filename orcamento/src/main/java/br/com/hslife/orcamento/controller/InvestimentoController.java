@@ -290,23 +290,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		return "";
 	}
 	
-	public String aplicacaoResgateView() {
-		// Verifica se existe investimento selecionado
-		if (idEntity == null || idEntity < 0) {
-			warnMessage("Nenhum investimento foi selecionado!");
-			return "";
-		}
-		
-		// TODO implementar
-		errorMessage("Método não implementado");
-		return "";
-	}
-	
-	public String aplicacaoResgate() {
-		// TODO implementar
-		throw new RuntimeException("Não implementado!");
-	}
-	
 	private void obterCotacao() {
 		this.infoCotacao = new InfoCotacao(entity.getTicker());
 	}

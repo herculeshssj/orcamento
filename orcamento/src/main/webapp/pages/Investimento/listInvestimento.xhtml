@@ -88,10 +88,6 @@
 				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>
-			<h:commandLink title="Aplicação/Resgate" action="#{managedBean.aplicacaoResgateView}">
-				<h:graphicImage id="imgInvest" height="48" width="48" value="/resources/images/svg/bullish.svg"/>
-				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
-			</h:commandLink>
 		</h:panelGroup>
 	</ui:define>
 	
@@ -138,161 +134,110 @@
 			<h:outputText value="#{managedBean.entity.observacao}"/>	
 			<br/>
 		</h:panelGroup>
+		
+		<hr/>
+		
+		<h:panelGrid columns="1" rendered="#{managedBean.entity.id != null}">
+			<f:facet name="header">
+				<h:outputText value="Movimentações do Investimento" />
+			</f:facet>
+			<h:panelGrid columns="4">
+				<label>Mês / Ano:</label>
+				<h:selectOneMenu value="#{managedBean.mesMovimentacao}">
+					<f:selectItem itemLabel="Todos"/>
+					<f:selectItems value="#{managedBean.listaMeses}"/>
+				</h:selectOneMenu>
+				<h:selectOneMenu value="#{managedBean.anoMovimentacao}">
+					<f:selectItems value="#{managedBean.listaAnos}"/>
+				</h:selectOneMenu>
+				<h:panelGroup>
+					<p:commandLink title="Pesquisar" actionListener="#{managedBean.selecionarMovimentacoesInvestimento}" update="tableMovimentacao">
+						<h:graphicImage id="imgSearchMovimentacao" height="48" width="48" value="/resources/images/svg/search.svg"/>
+					</p:commandLink>
+					<h:commandLink title="Nova movimentação" action="#{managedBean.novaMovimentacao}">
+	    					<h:graphicImage id="imgNewMovimentacao" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+	    				</h:commandLink>
+	   				</h:panelGroup>				
+			</h:panelGrid>
+			
+			<h:dataTable id="tableMovimentacao" value="#{managedBean.movimentacoesInvestimento}" var="item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Data"/>
+					</f:facet>
+					<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Histórico"/>
+					</f:facet>
+					<h:commandLink value="#{item.historico}" action="#{managedBean.editarMovimentacao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right; text-decoration: underline' : 'color: #FF0000; text-align: right; text-decoration: underline' }">
+						<f:setPropertyActionListener value="#{item}" target="#{managedBean.movimentacao}"/>
+					</h:commandLink>													
+				</h:column>
+				<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
+					<f:facet name="header">
+						<h:outputText value="Documento"/>
+					</f:facet>
+					<h:outputText value="#{item.documento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>							
+				</h:column>
+				<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+					<f:facet name="header">
+						<h:outputText value="Ações/Cotas"/>
+					</f:facet>
+					<h:outputText value="#{item.cotas}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<f:convertNumber minFractionDigits="2" maxFractionDigits="6" />
+					</h:outputText>
+				</h:column>
+				<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
+					<f:facet name="header">
+						<h:outputText value="Valor"/>
+					</f:facet>
+					<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:column>
+				<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+					<f:facet name="header">
+						<h:outputText value="Valor"/>
+					</f:facet>
+					<h:outputText value="#{item.valorCota}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
+					</h:outputText>
+				</h:column>	
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="IR"/>
+					</f:facet>
+					<h:outputText value="#{item.impostoRenda}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:column>	
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="IOF" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}"/>
+						<h:outputText value="Tarifas" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
+					</f:facet>
+					<h:outputText value="#{item.iof}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:column>	
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Total"/>
+					</f:facet>
+					<h:outputText value="#{item.valorTotalRendaVariavel}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
+					</h:outputText>
+					<h:outputText value="#{item.valorTotalRendaFixa}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
+					</h:outputText>
+				</h:column>		
+			</h:dataTable>
+		</h:panelGrid>
 	
-		<p:tabView id="tabInvestimento" rendered="#{managedBean.entity.id != null}">
-			<p:tab id="tabResumo" title="Resumo">
-				<h:panelGrid id="gridResumoFixo" columns="2" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
-					<label>Aplicação:</label>
-					<h:outputText value="#{managedBean.resumo.aplicacao}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>	
-					
-					<label>Resgate:</label>
-					<h:outputText value="#{managedBean.resumo.resgate}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>Rendimento bruto:</label>
-					<h:outputText value="#{managedBean.resumo.rendimentoBruto}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>Imposto de renda:</label>
-					<h:outputText value="#{managedBean.resumo.impostoRenda}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>IOF:</label>
-					<h:outputText value="#{managedBean.resumo.iof}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>Saldo:</label>
-					<h:outputText value="#{managedBean.resumo.rendimentoLiquido}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-				</h:panelGrid>
-				<h:panelGrid id="gridResumoVariavel" columns="2" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
-					<label>Ações/Cotas:</label>
-					<h:outputText value="#{managedBean.resumo.cotas}" >
-						<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>Preço médio:</label>
-					<h:outputText value="#{managedBean.resumo.precoMedio}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-					
-					<label>Total do investimento:</label>
-					<h:outputText value="#{managedBean.resumo.valorInvestimento}" >
-						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-					</h:outputText>
-				</h:panelGrid>
-
-				
-			</p:tab>
-			<p:tab id="tabMovimentacao" title="Movimentação">
-				<h:panelGrid columns="4">
-					<label>Mês / Ano:</label>
-					<h:selectOneMenu value="#{managedBean.mesMovimentacao}">
-						<f:selectItem itemLabel="Todos"/>
-						<f:selectItems value="#{managedBean.listaMeses}"/>
-					</h:selectOneMenu>
-					<h:selectOneMenu value="#{managedBean.anoMovimentacao}">
-						<f:selectItems value="#{managedBean.listaAnos}"/>
-					</h:selectOneMenu>
-					<h:panelGroup>
-						<p:commandLink title="Pesquisar" actionListener="#{managedBean.selecionarMovimentacoesInvestimento}" update="tableMovimentacao">
-							<h:graphicImage id="imgSearchMovimentacao" height="48" width="48" value="/resources/images/svg/search.svg"/>
-						</p:commandLink>
-						<h:commandLink title="Nova movimentação" action="#{managedBean.novaMovimentacao}">
-	     					<h:graphicImage id="imgNewMovimentacao" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
-	     				</h:commandLink>
-     				</h:panelGroup>				
-				</h:panelGrid>
-				
-				<h:dataTable id="tableMovimentacao" value="#{managedBean.movimentacoesInvestimento}" var="item">
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Data"/>
-						</f:facet>
-						<h:outputText value="#{item.data}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:converter converterId="dateConverter"/>
-						</h:outputText>
-					</h:column>
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Histórico"/>
-						</f:facet>
-						<h:commandLink value="#{item.historico}" action="#{managedBean.editarMovimentacao}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right; text-decoration: underline' : 'color: #FF0000; text-align: right; text-decoration: underline' }">
-							<f:setPropertyActionListener value="#{item}" target="#{managedBean.movimentacao}"/>
-						</h:commandLink>													
-					</h:column>
-					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
-						<f:facet name="header">
-							<h:outputText value="Documento"/>
-						</f:facet>
-						<h:outputText value="#{item.documento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }"/>							
-					</h:column>
-					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
-						<f:facet name="header">
-							<h:outputText value="Ações/Cotas"/>
-						</f:facet>
-						<h:outputText value="#{item.cotas}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:convertNumber minFractionDigits="2" maxFractionDigits="6" />
-						</h:outputText>
-					</h:column>
-					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
-						<f:facet name="header">
-							<h:outputText value="Valor"/>
-						</f:facet>
-						<h:outputText value="#{item.valor}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-						</h:outputText>
-					</h:column>
-					<h:column rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
-						<f:facet name="header">
-							<h:outputText value="Valor"/>
-						</f:facet>
-						<h:outputText value="#{item.valorCota}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
-						</h:outputText>
-					</h:column>	
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="IR"/>
-						</f:facet>
-						<h:outputText value="#{item.impostoRenda}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-						</h:outputText>
-					</h:column>	
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="IOF" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}"/>
-							<h:outputText value="Tarifas" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
-						</f:facet>
-						<h:outputText value="#{item.iof}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
-						</h:outputText>
-					</h:column>	
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Total"/>
-						</f:facet>
-						<h:outputText value="#{item.valorTotalRendaVariavel}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
-						</h:outputText>
-						<h:outputText value="#{item.valorTotalRendaFixa}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
-							<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
-						</h:outputText>
-					</h:column>		
-				</h:dataTable>
-
-			</p:tab>
-			<p:tab title="Cotação" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
-				<ui:include src="/pages/Investimento/cotacaoInvestimento.xhtml"/>
-			</p:tab>
-		</p:tabView>
 	</ui:define>
 
 </ui:composition>
