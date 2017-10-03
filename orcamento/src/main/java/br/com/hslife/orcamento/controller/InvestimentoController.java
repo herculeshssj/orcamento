@@ -212,11 +212,11 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 				entity.investimentoInicial(entity.getInicioInvestimento(), investimentoInicial);
 			
 			retorno = super.save();
+			
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
 		
-		initializeEntity();
 		return retorno;
 	}
 	

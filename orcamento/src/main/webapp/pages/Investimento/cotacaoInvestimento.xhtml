@@ -57,7 +57,10 @@
 
 	<ui:param name="managedBean" value="#{investimentoMB}" />
 
-	<h:panelGrid columns="2">
+	<h:panelGrid columns="2" rendered="#{managedBean.entity.id != null}">
+		<f:facet name="header">
+			<h:outputText value="Informações da bolsa"/>
+		</f:facet>
 	
 		<label>Symbol:</label>
 		<h:outputText value="#{managedBean.infoCotacao.symbol}"/>
@@ -82,10 +85,12 @@
 		
 		<label>Quote Previous Close:</label>
 		<h:outputText value="#{managedBean.infoCotacao.quotePrevClose}"/>
+		
+		<f:facet name="footer">
+			<h:outputText value="Powered by Yahoo! Finance API v3.11"/>
+		</f:facet>
 			
 	</h:panelGrid>
-	
-	<h6><i>Powered by Yahoo! Finance API v3.11</i></h6>
 
 </ui:composition>
 </html>

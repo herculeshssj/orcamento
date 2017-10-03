@@ -90,7 +90,7 @@ public class Investimento extends EntityPersistence {
 	@Column(length=50, nullable=false)
 	private String descricao;
 	
-	@Column(length=14, nullable=false)
+	@Column(length=14, nullable=true)
 	private String cnpj;
 	
 	@Column(nullable=false)
@@ -139,14 +139,14 @@ public class Investimento extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Código da ação", this.ticker, 10);
-		EntityPersistenceUtil.validaTamanhoExatoCampoStringObrigatorio("CNPJ", this.cnpj, 14);
+		EntityPersistenceUtil.validaTamanhoExatoCampoStringOpcional("CNPJ", this.cnpj, 14);
 		EntityPersistenceUtil.validaCampoNulo("Início do investimento", this.inicioInvestimento);
 		EntityPersistenceUtil.validaCampoNulo("Categoria de Investimento", this.categoriaInvestimento);
 		
 		try {
 			CNPJValidator validatorCnpj = new CNPJValidator();
 			
-			if (this.getCnpj() != null && !this.getCnpj().trim().isEmpty()) {
+			if (this.getCnpj() != null && !this.getCnpj().trim().isEmpty() && this.getCnpj().length() != 0) {
 				validatorCnpj.assertValid(this.getCnpj());				
 			}			
 			
@@ -156,7 +156,10 @@ public class Investimento extends EntityPersistence {
 	}
 	
 	public String getCnpjFormatado() {
-		return Util.formatarCNPJ(this.cnpj);
+		if (this.cnpj != null && this.cnpj.length() != 0)
+			return Util.formatarCNPJ(this.cnpj);
+		else
+			return this.cnpj;
 	}
 	
 	public void movimentarInvestimento(MovimentacaoInvestimento movimentacao) {

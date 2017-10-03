@@ -62,8 +62,10 @@ public class EntityPersistenceUtil {
 	}
 	
 	public static void validaTamanhoExatoCampoStringOpcional(String nomeCampo, String campo, int tamanho) {
-		if (campo != null && campo.trim().length() != tamanho) {
-			throw new ValidationException("Campo '" + nomeCampo + "' aceita exatamente "+ tamanho + " caracteres!");
+		if (campo != null & campo.trim().length() != 0) {
+			if (campo.length() != tamanho) {
+				throw new ValidationException("Campo '" + nomeCampo + "' aceita exatamente "+ tamanho + " caracteres!");
+			}
 		}		
 	}
 	
