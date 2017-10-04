@@ -64,6 +64,7 @@ public class InfoCotacao {
 	private BigDecimal quoteBid;
 	private BigDecimal quotePrice;
 	private BigDecimal quotePrevClose;
+	private BigDecimal quoteOpen;
 	
 	private static final Logger logger = LogManager.getLogger(InfoCotacao.class);
 	
@@ -91,6 +92,7 @@ public class InfoCotacao {
 			this.quoteBid = stock.getQuote().getBid();
 			this.quotePrice = stock.getQuote().getPrice();
 			this.quotePrevClose = stock.getQuote().getPreviousClose();
+			this.quoteOpen = stock.getQuote().getOpen();
 			
 		} catch (Exception e) {
 			logger.catching(e);
@@ -131,5 +133,9 @@ public class InfoCotacao {
 
 	public static Logger getLogger() {
 		return logger;
+	}
+
+	public BigDecimal getQuoteOpen() {
+		return quoteOpen;
 	}
 }

@@ -62,28 +62,31 @@
 			<h:outputText value="Informações da bolsa"/>
 		</f:facet>
 	
-		<label>Symbol:</label>
+		<label>Símbolo:</label>
 		<h:outputText value="#{managedBean.infoCotacao.symbol}"/>
 		
-		<label>Name:</label>
+		<label>Nome:</label>
 		<h:outputText value="#{managedBean.infoCotacao.name}"/>
 		
-		<label>Currency:</label>
+		<label>Moeda:</label>
 		<h:outputText value="#{managedBean.infoCotacao.currency}"/>
 		
-		<label>Stock Exchange:</label>
+		<label>Bolsa:</label>
 		<h:outputText value="#{managedBean.infoCotacao.stockExchange}"/>
 		
-		<label>Quote Ask:</label>
-		<h:outputText value="#{managedBean.infoCotacao.quoteAsk}"/>
-		
-		<label>Quote Bid:</label>
-		<h:outputText value="#{managedBean.infoCotacao.quoteBid}"/>
-		
-		<label>Quote Price:</label>
+		<label>Compra:</label>
 		<h:outputText value="#{managedBean.infoCotacao.quotePrice}"/>
 		
-		<label>Quote Previous Close:</label>
+		<label>Venda:</label>
+		<h:outputText value="#{managedBean.infoCotacao.quoteAsk}"/>
+		
+		<label>Mínimo:</label>
+		<h:outputText value="#{managedBean.infoCotacao.quoteBid}"/>
+		
+		<label>Abertura:</label>
+		<h:outputText value="#{managedBean.infoCotacao.quoteOpen}"/>
+		
+		<label>Fechamento:</label>
 		<h:outputText value="#{managedBean.infoCotacao.quotePrevClose}"/>
 		
 		<f:facet name="footer">
