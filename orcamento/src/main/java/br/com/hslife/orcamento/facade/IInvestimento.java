@@ -47,7 +47,6 @@
 package br.com.hslife.orcamento.facade;
 
 import java.util.List;
-import java.util.Set;
 
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
@@ -57,6 +56,6 @@ public interface IInvestimento extends ICRUDService<Investimento>{
 	
 	public List<Investimento> buscarPorConta(Conta conta);
 	
-	public Set<Conta> gerarCarteiraInvestimento(Usuario usuario);
+	public List<Conta> gerarCarteiraInvestimento(Usuario usuario);
 	
 }

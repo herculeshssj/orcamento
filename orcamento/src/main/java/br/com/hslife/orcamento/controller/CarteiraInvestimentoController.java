@@ -46,8 +46,8 @@
 
 package br.com.hslife.orcamento.controller;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -71,7 +71,7 @@ public class CarteiraInvestimentoController extends AbstractController {
 	@Autowired
 	private IInvestimento service;
 	
-	private Set<Conta> contas = new HashSet<>();
+	private List<Conta> contas = new ArrayList<>();
 	
 	public CarteiraInvestimentoController() {
 		moduleTitle = "Carteira de Investimentos";
@@ -101,7 +101,7 @@ public class CarteiraInvestimentoController extends AbstractController {
 		return service;
 	}
 
-	public Set<Conta> getContas() {
+	public List<Conta> getContas() {
 		return contas;
 	}
 }

@@ -47,8 +47,8 @@
 package br.com.hslife.orcamento.entity;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -178,7 +178,7 @@ public class Conta extends EntityPersistence {
 	/*** Atributos usados para a Carteira de Investimentos ***/
 	
 	@Transient
-	private Set<CategoriaInvestimento> categoriasInvestimento = new HashSet<>();
+	private List<CategoriaInvestimento> categoriasInvestimento = new ArrayList<>();
 	
 	/*** Atributos usados para a Carteira de Investimentos ***/
 	
@@ -442,11 +442,11 @@ public class Conta extends EntityPersistence {
 		this.fechamentoAutomatico = fechamentoAutomatico;
 	}
 
-	public Set<CategoriaInvestimento> getCategoriasInvestimento() {
+	public List<CategoriaInvestimento> getCategoriasInvestimento() {
 		return categoriasInvestimento;
 	}
 
-	public void setCategoriasInvestimento(Set<CategoriaInvestimento> categoriasInvestimento) {
+	public void setCategoriasInvestimento(List<CategoriaInvestimento> categoriasInvestimento) {
 		this.categoriasInvestimento = categoriasInvestimento;
 	}
 }

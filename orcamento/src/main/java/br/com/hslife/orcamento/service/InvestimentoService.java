@@ -46,14 +46,12 @@
 
 package br.com.hslife.orcamento.service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -95,41 +93,40 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 	}
 	
 	@Override
-	public Set<Conta> gerarCarteiraInvestimento(Usuario usuario) {
-		// Instancia uma lista de contas investimentos que será populada a partir dos investimentos do usuário
-		Set<Conta> contasInvestimento = new HashSet<>();
+	public List<Conta> gerarCarteiraInvestimento(Usuario usuario) {
+		// Instancia uma lista de contas investimento
+		List<Conta> contasInvestimento = new ArrayList<>();
 		
-		// Traz todos os investimentos ativos do usuário
+		// Traz todos os investimentos do usuário
 		List<Investimento> investimentos = getRepository().findByUsuario(usuario);
 		
-		// Traz todas as categorias de investimento
-		List<CategoriaInvestimento> categoriasInvestimento = getCategoriaInvestimentoRepository().findAll();
-		
-		// Itera todos os investimentos existentes e popula a lista de contas
-		for (Investimento i : investimentos) {
-			contasInvestimento.add(i.getConta());
-		}
-		
-		// Adiciona as categorias de investimentos para cada conta
-		for (Conta c : contasInvestimento) {
-			c.setCategoriasInvestimento(new HashSet<>(categoriasInvestimento));
-		}
-		
-		// Itera todos os investimentos colocando-os nas respectivas contas e categorias
+		// Itera os investimentos para adicioná-los na lista de contas nas suas respectivas categorias
 		for (Investimento investimento : investimentos) {
-			for (Conta conta : contasInvestimento) {
-				if (conta.equals(investimento.getConta())) {
-					for (CategoriaInvestimento categoria : conta.getCategoriasInvestimento()) {
-						if (conta.equals(investimento.getConta()) && categoria.equals(investimento.getCategoriaInvestimento())) {
-							categoria.getInvestimentos().add(investimento);
-						}
-					}
-				}
+			
+			// Verifica se o investimento está inativo
+			if (!investimento.isAtivo()) {
+				continue;
 			}
+			
+			// Verifica se existe a conta está cadastrada
+			int indexConta = contasInvestimento.indexOf(investimento.getConta());
+			if (indexConta < 0) {
+				contasInvestimento.add(investimento.getConta());
+				indexConta = contasInvestimento.indexOf(investimento.getConta());
+			}
+			
+			// Verifica se a categoria de investimento está cadastrada
+			int indexCategoria = contasInvestimento.get(indexConta).getCategoriasInvestimento().indexOf(investimento.getCategoriaInvestimento());
+			if (indexCategoria < 0) {
+				contasInvestimento.get(indexConta).getCategoriasInvestimento().add(investimento.getCategoriaInvestimento());
+				indexCategoria = contasInvestimento.get(indexConta).getCategoriasInvestimento().indexOf(investimento.getCategoriaInvestimento());
+			}
+			
+			// Adiciona o investimento na categoria
+			contasInvestimento.get(indexConta).getCategoriasInvestimento().get(indexCategoria).getInvestimentos().add(investimento);
+			
 		}
-		
-		// TODO continuar
-		
+			
 		// Retorna a lista de contas populada
 		return contasInvestimento;
 	}

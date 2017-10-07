@@ -50,6 +50,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -69,5 +70,12 @@ public class InvestimentoRepository extends AbstractCRUDRepository<Investimento>
 	@SuppressWarnings("unchecked")
 	public List<Investimento> findByUsuario(Usuario usuario) {
 		return getQuery("FROM Investimento i WHERE i.conta.usuario.id = " + usuario.getId() + " ORDER BY i.descricao ASC").list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Investimento> findByContaAndCategoriaInvestimento(Conta conta, CategoriaInvestimento categoriaInvestimento) {
+		return getQuery("FROM Investimento i WHERE i.conta.id = " 
+				+ conta.getId() + " AND i.categoriaInvestimento.id = " 
+				+ categoriaInvestimento.getId() + " ORDER BY i.descricao ASC").list();
 	}
 }

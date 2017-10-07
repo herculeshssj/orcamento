@@ -62,17 +62,11 @@
 	<ui:define name="tabela">
 	
 		<h:dataTable width="100%" value="#{managedBean.contas}" var="conta" style="font-size: 16px;">
-			<f:facet name="header">
-				<h:outputText value="Descrição" />
-			</f:facet>
 			<h:column>
-				<h:outputText value="#{conta.label}"/>
+				<h4><strong><h:outputText value="#{conta.label}"/></strong></h4>
 				<h:dataTable width="100%" value="#{conta.categoriasInvestimento}" var="categoria" style="font-size: 16px;">
-					<f:facet name="header">
-						<h:outputText value="Descrição" />
-					</f:facet>
 					<h:column>
-						<h:outputText value="#{categoria.label}"/>
+						<h5><em><h:outputText value="#{categoria.label}"/></em></h5>
 						<h:dataTable width="100%" value="#{categoria.investimentos}" var="investimento" style="font-size: 16px;">
 							<f:facet name="header">
 								<h:outputText value="Descrição" />
@@ -85,14 +79,8 @@
 							</f:facet>
 						</h:dataTable>
 					</h:column>
-					<f:facet name="footer">
-						<h:outputText value="Total" />
-					</f:facet>
 				</h:dataTable>
 			</h:column>
-			<f:facet name="footer">
-				<h:outputText value="Total" />
-			</f:facet>
 		</h:dataTable>
 	
 	</ui:define>

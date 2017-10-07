@@ -46,8 +46,8 @@
 
 package br.com.hslife.orcamento.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -86,7 +86,7 @@ public class CategoriaInvestimento extends EntityPersistence {
 	/*** Atributos usados para a Carteira de Investimento ***/
 	
 	@Transient
-	private Set<Investimento> investimentos = new HashSet<>();
+	private List<Investimento> investimentos = new ArrayList<>();
 	
 	/*** Atributos usados para a Carteira de Investimento ***/
 	
@@ -142,11 +142,11 @@ public class CategoriaInvestimento extends EntityPersistence {
 		this.tipoInvestimento = tipoInvestimento;
 	}
 
-	public Set<Investimento> getInvestimentos() {
+	public List<Investimento> getInvestimentos() {
 		return investimentos;
 	}
 
-	public void setInvestimentos(Set<Investimento> investimentos) {
+	public void setInvestimentos(List<Investimento> investimentos) {
 		this.investimentos = investimentos;
 	}
 }
