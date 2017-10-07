@@ -73,7 +73,6 @@ import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.model.InfoCotacao;
-import br.com.hslife.orcamento.rest.json.InvestimentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -303,11 +302,6 @@ public class Investimento extends EntityPersistence {
 			return this.getSaldoCapitalizado();
 		else
 			return this.getTotalCotas() * this.getPrecoMedio();
-	}
-	
-	@Override
-	public InvestimentoJson toJson() {
-		return new InvestimentoJson();
 	}
 	
 	public Long getId() {

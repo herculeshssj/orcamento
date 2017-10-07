@@ -60,7 +60,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.rest.json.MovimentacaoInvestimentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -139,11 +138,6 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 	
 	public double getValorTotalRendaFixa() {
 		return valor - (iof +  impostoRenda + compensacaoImpostoRenda);
-	}
-
-	@Override
-	public MovimentacaoInvestimentoJson toJson() {
-		return new MovimentacaoInvestimentoJson();
 	}
 	
 	public Long getId() {

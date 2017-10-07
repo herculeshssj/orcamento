@@ -53,7 +53,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.MontadoraJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -86,11 +85,6 @@ public class Montadora extends EntityPersistence {
 		
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
 		
-	}
-
-	@Override
-	public MontadoraJson toJson() {
-		return new MontadoraJson();
 	}
 
 	public Long getId() {

@@ -58,7 +58,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.rest.json.MeioPagamentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -115,11 +114,6 @@ public class MeioPagamento extends EntityPersistence {
 	@Override
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
-	}
-
-	@Override
-	public MeioPagamentoJson toJson() {
-		return new MeioPagamentoJson();
 	}
 	
 	public Long getId() {

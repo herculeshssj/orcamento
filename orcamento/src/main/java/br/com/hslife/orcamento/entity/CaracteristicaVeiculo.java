@@ -53,7 +53,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.CaracteristicaVeiculoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -86,14 +85,7 @@ public class CaracteristicaVeiculo extends EntityPersistence {
 	
 	@Override
 	public void validate() {
-		
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
-		
-	}
-
-	@Override
-	public CaracteristicaVeiculoJson toJson() {
-		return new CaracteristicaVeiculoJson();
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);	
 	}
 	
 	public Long getId() {

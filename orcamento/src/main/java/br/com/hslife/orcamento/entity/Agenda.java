@@ -67,7 +67,6 @@ import br.com.hslife.orcamento.enumeration.PrioridadeTarefa;
 import br.com.hslife.orcamento.enumeration.TipoAgendamento;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.AgendaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -247,11 +246,6 @@ public class Agenda extends EntityPersistence {
 				return new StringBuilder().append(Util.formataDataHora(inicio, Util.DATAHORA)).append("\nà\n").append(Util.formataDataHora(fim, Util.DATAHORA)).toString();
 			}
 		}				
-	}
-	
-	@Override
-	public AgendaJson toJson() {
-		return new AgendaJson();
 	}
 	
 	public Long getId() {

@@ -62,7 +62,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import br.com.hslife.orcamento.rest.json.DespensaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -109,11 +108,6 @@ public class Despensa extends EntityPersistence {
 		} else {
 			return Integer.toString(itensDespensa.size());
 		}
-	}
-	
-	@Override
-	public DespensaJson toJson() {
-		return new DespensaJson();
 	}
 
 	public Long getId() {

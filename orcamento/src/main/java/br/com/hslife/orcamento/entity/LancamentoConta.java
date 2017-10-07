@@ -77,7 +77,6 @@ import org.hibernate.annotations.SortType;
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.rest.json.LancamentoContaJson;
 import br.com.hslife.orcamento.util.DetalheLancamentoComparator;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
@@ -319,11 +318,6 @@ public class LancamentoConta extends EntityPersistence {
 	
 	public boolean isHasDetalhes() {
 		return this.detalhes != null && !this.detalhes.isEmpty();
-	}
-
-	@Override
-	public LancamentoContaJson toJson() {
-		return new LancamentoContaJson();
 	}
 	
 	public void setId(Long id) {

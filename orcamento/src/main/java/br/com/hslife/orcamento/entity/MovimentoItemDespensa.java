@@ -60,7 +60,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.OperacaoDespensa;
-import br.com.hslife.orcamento.rest.json.MovimentoItemDespensaJson;
 
 @Entity
 @Table(name="movimentoitemdespensa")
@@ -102,12 +101,7 @@ public class MovimentoItemDespensa extends EntityPersistence {
 	public void validate() {
 				
 	}
-	
-	@Override
-	public MovimentoItemDespensaJson toJson() {
-		return new MovimentoItemDespensaJson();
-	}
-	
+
 	public void setValor(double valor) {
 		this.valor = Math.abs(valor);
 	}

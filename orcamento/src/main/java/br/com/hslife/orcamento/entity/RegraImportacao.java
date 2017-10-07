@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.RegraImportacaoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -147,11 +146,6 @@ public class RegraImportacao extends EntityPersistence {
 		}
 	}
 
-	@Override
-	public RegraImportacaoJson toJson() {
-		return new RegraImportacaoJson();
-	}
-	
 	public Long getId() {
 		return id;
 	}

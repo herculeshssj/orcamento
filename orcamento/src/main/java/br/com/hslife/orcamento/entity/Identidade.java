@@ -65,7 +65,6 @@ import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoIdentidade;
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.IdentidadeJson;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -255,11 +254,6 @@ public class Identidade extends EntityPersistence {
 				throw new ValidationException("Todos os campos da carteira de trabalho são obrigatórios!");
 			}
 		}
-	}
-	
-	@Override
-	public IdentidadeJson toJson() {
-		return new IdentidadeJson();
 	}
 
 	public void setId(Long id) {

@@ -58,7 +58,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoTratamento;
-import br.com.hslife.orcamento.rest.json.TratamentoSaudeJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -101,11 +100,6 @@ public class TratamentoSaude extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 100);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de tratamento", this.tipoTratamento);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Periodicidade", this.periodicidade, 50);
-	}
-
-	@Override
-	public TratamentoSaudeJson toJson() {
-		return new TratamentoSaudeJson();
 	}
 	
 	public Long getId() {

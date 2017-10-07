@@ -66,7 +66,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 
-import br.com.hslife.orcamento.rest.json.RelatorioCustomizadoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.RelatorioColunaComparator;
 
@@ -116,11 +115,6 @@ public class RelatorioCustomizado extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Consulta SQL", this.consultaSQL);
 	}
 	
-	@Override
-	public RelatorioCustomizadoJson toJson() {
-		return new RelatorioCustomizadoJson();
-	}
-
 	public Long getId() {
 		return id;
 	}

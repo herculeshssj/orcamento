@@ -53,7 +53,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.CombustivelJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -90,11 +89,6 @@ public class Combustivel extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Distribuidora", descricao, 50);
 		
-	}
-
-	@Override
-	public CombustivelJson toJson() {
-		return new CombustivelJson();
 	}
 
 	public Long getId() {

@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.PatrimonioJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -135,11 +134,6 @@ public class Patrimonio extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Grupo de lançamento", this.grupoLancamento);
 		EntityPersistenceUtil.validaCampoNulo("Favorecido", this.favorecido);
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
-	}
-
-	@Override
-	public PatrimonioJson toJson() {
-		return new PatrimonioJson();
 	}
 	
 	public Long getId() {

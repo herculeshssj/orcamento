@@ -73,7 +73,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
-import br.com.hslife.orcamento.rest.json.FaturaCartaoJson;
 
 @Entity
 @Table(name="faturacartao")
@@ -322,11 +321,6 @@ public class FaturaCartao extends EntityPersistence {
 			}
 		}
 		return moeda.getValorConversao();
-	}
-	
-	@Override
-	public FaturaCartaoJson toJson() {
-		return new FaturaCartaoJson();
 	}
 
 	public Long getId() {

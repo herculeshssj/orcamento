@@ -61,7 +61,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
-import br.com.hslife.orcamento.rest.json.UsuarioJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -188,11 +187,6 @@ public class Usuario extends EntityPersistence {
 		public Usuario build() {
 			return new Usuario(this);
 		}
-	}
-	
-	@Override
-	public UsuarioJson toJson() {
-		return new UsuarioJson();
 	}
 
 	public Long getId() {

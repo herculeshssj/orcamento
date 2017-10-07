@@ -66,7 +66,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.ItemDespensaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -143,11 +142,6 @@ public class ItemDespensa extends EntityPersistence {
 		if (this.quantidadeVerde < 0 || this.quantidadeAmarelo < 0 || this.quantidadeVermelho < 0) {
 			throw new ValidationException("Quantidade 'Verde', 'Amarelo' ou 'Vermelho' não pode ser menor que 0!");
 		}
-	}
-	
-	@Override
-	public ItemDespensaJson toJson() {
-		return new ItemDespensaJson();
 	}
 
 	public Long getId() {

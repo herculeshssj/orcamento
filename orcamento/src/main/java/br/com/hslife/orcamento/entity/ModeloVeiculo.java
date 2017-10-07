@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.ModeloVeiculoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -122,11 +121,6 @@ public class ModeloVeiculo extends EntityPersistence {
 		
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
 		
-	}
-
-	@Override
-	public ModeloVeiculoJson toJson() {
-		return new ModeloVeiculoJson();
 	}
 
 	public Long getId() {

@@ -70,7 +70,6 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.rest.json.DividaTerceiroJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -214,11 +213,6 @@ public class DividaTerceiro extends EntityPersistence {
 		} else {
 			return this.dataNegociacao;
 		}
-	}
-	
-	@Override
-	public DividaTerceiroJson toJson() {
-		return new DividaTerceiroJson();
 	}
 
 	public Long getId() {

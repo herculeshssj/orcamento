@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.ModeloDocumentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -109,11 +108,6 @@ public class ModeloDocumento extends EntityPersistence {
 		modelo.setUsuario(this.usuario);
 		
 		return modelo;
-	}
-
-	@Override
-	public ModeloDocumentoJson toJson() {
-		return new ModeloDocumentoJson();
 	}
 	
 	public void setId(Long id) {

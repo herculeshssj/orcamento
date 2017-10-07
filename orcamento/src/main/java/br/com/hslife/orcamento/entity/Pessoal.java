@@ -60,7 +60,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.PessoalJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -218,11 +217,6 @@ public class Pessoal extends EntityPersistence {
 		public Pessoal build() {
 			return new Pessoal(this);
 		}
-	}
-	
-	@Override
-	public PessoalJson toJson() {
-		return new PessoalJson();
 	}
 	
 	public Long getId() {

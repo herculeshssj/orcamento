@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.TaxaConversaoJson;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
@@ -140,11 +139,6 @@ public class TaxaConversao extends EntityPersistence {
 	@Override
 	public void validate() {
 		
-	}
-	
-	@Override
-	public TaxaConversaoJson toJson() {
-		return new TaxaConversaoJson();
 	}
 
 	public Long getId() {

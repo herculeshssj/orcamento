@@ -57,7 +57,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.DetalheOrcamentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -115,11 +114,6 @@ public class DetalheLancamento extends EntityPersistence {
 			data.setSeconds(0);
 		}
 		this.data = data;
-	}
-	
-	@Override
-	public DetalheOrcamentoJson toJson() {
-		return new DetalheOrcamentoJson();
 	}
 
 	public Long getId() {

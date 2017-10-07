@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.BenfeitoriaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -125,11 +124,6 @@ public class Benfeitoria extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Data de início", this.dataInicio);
 		EntityPersistenceUtil.validaCampoNulo("Detalhes da benfeitoria", this.detalheBenfeitoria);
-	}
-	
-	@Override
-	public BenfeitoriaJson toJson() {
-		return new BenfeitoriaJson();
 	}
 
 	public Long getId() {

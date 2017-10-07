@@ -58,7 +58,6 @@ import javax.persistence.Table;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.ContaConjuntaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -114,11 +113,6 @@ public class ContaConjunta extends EntityPersistence {
 		} catch (InvalidStateException ise) {
 			throw new ValidationException(ise);
 		}	
-	}
-	
-	@Override
-	public ContaConjuntaJson toJson() {
-		return new ContaConjuntaJson();
 	}
 
 	public Long getId() {

@@ -68,7 +68,6 @@ import br.com.hslife.orcamento.enumeration.Bandeira;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.rest.json.CartaoCreditoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -196,11 +195,6 @@ public class CartaoCredito extends EntityPersistence {
 	
 	public void setLimiteCartao(double limiteCartao) {
 		this.limiteCartao = Math.abs(limiteCartao);
-	}
-
-	@Override
-	public CartaoCreditoJson toJson() {
-		return new CartaoCreditoJson();
 	}
 	
 	public void setId(Long id) {

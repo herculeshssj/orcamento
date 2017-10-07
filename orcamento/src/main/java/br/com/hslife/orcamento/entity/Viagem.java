@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.ViagemJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -124,11 +123,6 @@ public class Viagem extends EntityPersistence {
 		
 		EntityPersistenceUtil.validaCampoNulo("Veículo", this.veiculo);
 		
-	}
-
-	@Override
-	public ViagemJson toJson() {
-		return new ViagemJson();
 	}
 
 	public Long getId() {

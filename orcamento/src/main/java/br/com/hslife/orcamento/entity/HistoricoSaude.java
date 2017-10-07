@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.HistoricoSaudeJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -104,11 +103,6 @@ public class HistoricoSaude extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Quadro clínico", this.quadroClinico);
 		EntityPersistenceUtil.validaCampoNulo("Diagnóstico", this.diagnostico);
 		EntityPersistenceUtil.validaCampoNulo("Tratamento", this.tratamento);
-	}
-	
-	@Override
-	public HistoricoSaudeJson toJson() {
-		return new HistoricoSaudeJson();
 	}
 
 	public Long getId() {

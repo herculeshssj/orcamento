@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.TelefoneJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -161,11 +160,6 @@ public class Telefone extends EntityPersistence {
 		public Telefone build() {
 			return new Telefone(this);
 		}
-	}
-	
-	@Override
-	public TelefoneJson toJson() {
-		return new TelefoneJson();
 	}
 	
 	public Long getId() {

@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.LancamentoVeiculoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -123,11 +122,6 @@ public class LancamentoVeiculo extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Data de pagamento", this.dataPagamento);
 				
 		EntityPersistenceUtil.validaCampoNulo("Tipo de lançamento", this.tipoLancamentoVeiculo);
-	}
-
-	@Override
-	public LancamentoVeiculoJson toJson() {
-		return new LancamentoVeiculoJson();
 	}
 
 	public Long getId() {

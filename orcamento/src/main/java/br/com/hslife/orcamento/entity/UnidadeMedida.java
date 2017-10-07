@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.UnidadeMedidaJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -121,11 +120,6 @@ public class UnidadeMedida extends EntityPersistence {
 		public UnidadeMedida build() {
 			return new UnidadeMedida(this);
 		}
-	}
-	
-	@Override
-	public UnidadeMedidaJson toJson() {
-		return new UnidadeMedidaJson();
 	}
 
 	public Long getId() {

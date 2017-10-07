@@ -59,7 +59,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.hslife.orcamento.rest.json.SeguroJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -118,11 +117,6 @@ public class Seguro extends EntityPersistence {
 		
 		EntityPersistenceUtil.validaCampoNulo("Data de aquisição", this.dataAquisicao);
 		
-	}
-
-	@Override
-	public SeguroJson toJson() {
-		return new SeguroJson();
 	}
 
 	public Long getId() {

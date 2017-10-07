@@ -60,7 +60,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
-import br.com.hslife.orcamento.rest.json.CategoriaInvestimentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -107,11 +106,6 @@ public class CategoriaInvestimento extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de investimento", this.tipoInvestimento);
-	}
-	
-	@Override
-	public CategoriaInvestimentoJson toJson() {
-		return new CategoriaInvestimentoJson();
 	}
 
 	public Long getId() {

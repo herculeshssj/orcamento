@@ -63,7 +63,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.rest.json.ItemGrupoLancamentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -125,11 +124,6 @@ public class ItemGrupoLancamento extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
 		EntityPersistenceUtil.validaCampoNulo("Data", this.data);
 		EntityPersistenceUtil.validaCampoNulo("Valor", this.valor);
-	}
-	
-	@Override
-	public ItemGrupoLancamentoJson toJson() {
-		return new ItemGrupoLancamentoJson();
 	}
 	
 	public Long getId() {

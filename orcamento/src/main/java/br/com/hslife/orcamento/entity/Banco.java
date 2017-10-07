@@ -46,9 +46,6 @@
 
 package br.com.hslife.orcamento.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -59,7 +56,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.rest.json.BancoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -152,27 +148,6 @@ public class Banco extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Número", this.numero, 5);
-	}
-	
-	@Override
-	public BancoJson toJson() {
-		BancoJson json = new BancoJson();
-		json.setAtivo(this.ativo);
-		json.setId(this.getId());
-		json.setNome(this.nome);
-		json.setNumero(this.getNumero());
-		json.setPadrao(this.padrao);
-		json.setUsuario(this.usuario.getLogin());
-		json.setUsuarioId(this.usuario.getId());
-		return json;
-	}
-	
-	public static List<BancoJson> toListJson(List<Banco> listEntity) {
-		List<BancoJson> listJson = new ArrayList<>();
-		for (Banco banco : listEntity) {			
-			listJson.add(banco.toJson());
-		}
-		return listJson;
 	}
 	
 	public void setId(Long id) {

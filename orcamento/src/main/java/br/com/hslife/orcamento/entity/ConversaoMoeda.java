@@ -55,8 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.ConversaoMoedaJson;
-
 @Entity
 @Table(name="conversaomoeda")
 public class ConversaoMoeda extends EntityPersistence {
@@ -96,11 +94,6 @@ public class ConversaoMoeda extends EntityPersistence {
 	@Override
 	public void validate() {
 		
-	}
-	
-	@Override
-	public ConversaoMoedaJson toJson() {
-		return new ConversaoMoedaJson();
 	}
 
 	public Long getId() {

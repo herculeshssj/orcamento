@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.hslife.orcamento.rest.json.CategoriaDocumentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -91,11 +90,6 @@ public class CategoriaDocumento extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Usuário", this.usuario);
-	}
-	
-	@Override
-	public CategoriaDocumentoJson toJson() {
-		return new CategoriaDocumentoJson();
 	}
 
 	public void setId(Long id) {
