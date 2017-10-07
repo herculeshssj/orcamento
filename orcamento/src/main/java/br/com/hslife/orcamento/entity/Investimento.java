@@ -67,6 +67,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
@@ -74,6 +75,7 @@ import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.rest.json.InvestimentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
@@ -120,6 +122,13 @@ public class Investimento extends EntityPersistence {
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento;
+	
+	/*** Atributos para o resumo Carteira de Investimento ***/
+	
+	@Transient
+	private InfoCotacao infoCotacao;
+	
+	/*** Atributos para o resumo Carteira de Investimento ***/
 	
 	public Investimento() {
 		resumosInvestimento = new LinkedList<>();
@@ -286,6 +295,50 @@ public class Investimento extends EntityPersistence {
 		return true;
 	}
 	
+	/*
+	 * Obtém o total de cotas do investimento variável
+	 */
+	public double getTotalCotas() {
+		int cotas = 0;
+		if (this.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
+			for (MovimentacaoInvestimento movimentacao : this.getMovimentacoesInvestimento()) {
+				if (movimentacao.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+					cotas += movimentacao.getCotas();
+				}
+			}
+		}
+		
+		return cotas;
+	}
+	
+	public double getPrecoMedio() {
+		double precoMedio = 0.0;
+		if (this.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
+			double totalGasto = 0.0;
+			double totalCotas = 0;
+			
+			for (MovimentacaoInvestimento movimentacao : this.getMovimentacoesInvestimento()) {
+				if (movimentacao.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+					totalGasto += movimentacao.getValorTotalRendaVariavel();
+					totalCotas += movimentacao.getCotas();
+				} else {
+					totalGasto -= movimentacao.getValorTotalRendaVariavel();
+					totalCotas -= movimentacao.getCotas();
+				}
+			}
+			
+			// Verifica se as variáveis são zero para não ocorrer divisão por zero
+			if (totalGasto != 0 & totalCotas != 0)
+				precoMedio = Util.arredondar(totalGasto / totalCotas);
+		}
+		
+		return precoMedio;
+	}
+
+	public double getValorInvestimento() {
+		return this.getTotalCotas() * this.getPrecoMedio();
+	}
+	
 	@Override
 	public InvestimentoJson toJson() {
 		return new InvestimentoJson();
@@ -377,5 +430,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setTicker(String ticker) {
 		this.ticker = ticker;
+	}
+
+	public InfoCotacao getInfoCotacao() {
+		return infoCotacao;
+	}
+
+	public void setInfoCotacao(InfoCotacao infoCotacao) {
+		this.infoCotacao = infoCotacao;
 	}
 }

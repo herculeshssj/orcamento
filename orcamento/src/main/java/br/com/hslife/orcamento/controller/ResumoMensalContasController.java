@@ -316,9 +316,9 @@ public class ResumoMensalContasController extends AbstractController {
 		Set<Conta> contas = new HashSet<>();
 		try {			
 			if (getOpcoesSistema().getExibirContasInativas()) {
-				contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), null));				
+				contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), null));				
 			} else {
-				contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.CARTAO, TipoConta.POUPANCA, TipoConta.OUTROS}, getUsuarioLogado(), true));
+				contas.addAll(contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", null, getUsuarioLogado(), true));
 			}
 			
 			// Traz as contas compartilhadas para com o usuário atualmente logado

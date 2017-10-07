@@ -55,7 +55,9 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.facade.IInvestimento;
+import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.repository.CategoriaInvestimentoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.InvestimentoRepository;
@@ -124,6 +126,11 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 			
 			// Adiciona o investimento na categoria
 			contasInvestimento.get(indexConta).getCategoriasInvestimento().get(indexCategoria).getInvestimentos().add(investimento);
+			
+			// Obtém a cotação dos investimentos de renda variável
+			if (investimento.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
+				investimento.setInfoCotacao(new InfoCotacao(investimento.getTicker()));
+			}
 			
 		}
 			
