@@ -50,8 +50,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -73,7 +71,6 @@ import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.rest.json.InvestimentoJson;
@@ -118,9 +115,6 @@ public class Investimento extends EntityPersistence {
 	private CategoriaInvestimento categoriaInvestimento;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
-	private List<ResumoInvestimento> resumosInvestimento;
-	
-	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento;
 	
 	/*** Atributos para o resumo Carteira de Investimento ***/
@@ -134,7 +128,6 @@ public class Investimento extends EntityPersistence {
 	/*** Atributos para o resumo Carteira de Investimento ***/
 	
 	public Investimento() {
-		resumosInvestimento = new LinkedList<>();
 		movimentacoesInvestimento = new LinkedHashSet<>();		
 	}
 	
@@ -202,34 +195,6 @@ public class Investimento extends EntityPersistence {
 		}
 	}
 	
-	public void criaResumoInvestimento(Date data) {
-		// A partir de um objeto Calendar, pega o mês e ano do Date para
-		// passar ao método em questão
-		Calendar temp = Calendar.getInstance();
-		temp.setTime(data);
-		
-		// Chama o método propriamente dito
-		this.criaResumoInvestimento(temp.get(Calendar.MONTH) + 1, temp.get(Calendar.YEAR));
-	}
-	
-	public void criaResumoInvestimento(int mes, int ano) {
-		// Cria um novo resumo
-		ResumoInvestimento resumo = new ResumoInvestimento(mes, ano);
-		this.criarResumoInvestimento(resumo);
-	}
-	
-	public void criarResumoInvestimento(ResumoInvestimento resumo) {
-		// Verifica se existe resumo de investimento para o mês e ano informado
-		if (existeResumoInvestimento(resumo.getMes(), resumo.getAno())) {
-			// Lança um BusinessException, pois não se pode criar um resumo com
-			// mês/ano informados
-			throw new BusinessException("Não é possível criar! Já existe resumo com o mês/ano informados!");
-		}
-		
-		// Insere o resumo no List
-		this.resumosInvestimento.add(resumo);
-	}
-	
 	public void investimentoInicial(Date inicioInvestimento, double valorInicial) {
 		// Verifica se a data não é nula e o valor inicial é maior que zero.
 		if (inicioInvestimento == null) 
@@ -239,31 +204,10 @@ public class Investimento extends EntityPersistence {
 			throw new ValidationException("Valor inicial deve ser maior que zero!");
 		
 		// Por se tratar de um investimento inicial, o List e o Set são reiniciados
-		resumosInvestimento = new LinkedList<>();
 		movimentacoesInvestimento = new LinkedHashSet<>();
-		
-		// Cria um novo resumo
-		this.criaResumoInvestimento(inicioInvestimento);
 		
 		// Cria uma nova movimentação
 		this.movimentarInvestimento(TipoLancamento.RECEITA, "APLICAÇÃO", inicioInvestimento, valorInicial);
-	}
-	
-	private boolean existeResumoInvestimento(int mes, int ano) {		
-		if (this.buscarResumoInvestimento(mes, ano) != null)
-			return true;
-		
-		return false;
-	}
-	
-	public ResumoInvestimento buscarResumoInvestimento(int mes, int ano) {
-		// Itera todo o list de resumo, retornando aquele que tem o mês e ano selecionados
-		// Caso não encontre, retorna nulo
-		for (ResumoInvestimento resumo : this.resumosInvestimento) {
-			if (resumo.getMes() == mes & resumo.getAno() == ano)
-				return resumo;
-		}
-		return null;
 	}
 	
 	public Set<MovimentacaoInvestimento> buscarMovimentacoesInvestimento(Integer mes, int ano) {
@@ -412,14 +356,6 @@ public class Investimento extends EntityPersistence {
 
 	public void setMovimentacoesInvestimento(Set<MovimentacaoInvestimento> movimentacoesInvestimento) {
 		this.movimentacoesInvestimento = movimentacoesInvestimento;
-	}
-
-	public List<ResumoInvestimento> getResumosInvestimento() {
-		return resumosInvestimento;
-	}
-
-	public void setResumosInvestimento(List<ResumoInvestimento> resumosInvestimento) {
-		this.resumosInvestimento = resumosInvestimento;
 	}
 
 	public String getObservacao() {

@@ -71,7 +71,6 @@ import br.com.hslife.orcamento.facade.ICategoriaInvestimento;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.model.InfoCotacao;
-import br.com.hslife.orcamento.model.ResumoInvestimento;
 import br.com.hslife.orcamento.util.Util;
 
 @Component("investimentoMB")
@@ -94,7 +93,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	private Conta contaSelecionada;
 	private TipoInvestimento tipoSelecionado;
-	private ResumoInvestimento resumo;
 	private MovimentacaoInvestimento movimentacao;
 	private double investimentoInicial;
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento = new HashSet<>();
@@ -133,7 +131,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		entity = new Investimento();		
 		tipoSelecionado = null;
 		movimentacao = null;
-		resumo = null;
 		movimentacoesInvestimento = new LinkedHashSet<>();
 		investimentoInicial = 0;
 	}
@@ -148,7 +145,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		// Limpa as variáveis usadas para os dados do resumo e 
 		// movimentação
 		movimentacao = null;
-		resumo = new ResumoInvestimento(entity);
 		movimentacoesInvestimento = new LinkedHashSet<>();
 		
 		// Obtém a cotação do investimento
@@ -363,14 +359,6 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public void setTipoSelecionado(TipoInvestimento tipoSelecionado) {
 		this.tipoSelecionado = tipoSelecionado;
-	}
-
-	public ResumoInvestimento getResumo() {
-		return resumo;
-	}
-
-	public void setResumo(ResumoInvestimento resumo) {
-		this.resumo = resumo;
 	}
 
 	public MovimentacaoInvestimento getMovimentacao() {
