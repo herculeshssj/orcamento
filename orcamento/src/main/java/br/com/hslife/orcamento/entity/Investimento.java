@@ -128,6 +128,9 @@ public class Investimento extends EntityPersistence {
 	@Transient
 	private InfoCotacao infoCotacao;
 	
+	@Transient
+	private double percentualInvestimento;
+	
 	/*** Atributos para o resumo Carteira de Investimento ***/
 	
 	public Investimento() {
@@ -334,9 +337,28 @@ public class Investimento extends EntityPersistence {
 		
 		return precoMedio;
 	}
+	
+	public double getSaldoCapitalizado() {
+		double saldo = 0.0;
+		
+		if (this.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.FIXO)) {
+			for (MovimentacaoInvestimento movimentacao : this.getMovimentacoesInvestimento()) {
+				if (movimentacao.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+					saldo += movimentacao.getValorTotalRendaFixa();
+				} else {
+					saldo -= movimentacao.getValorTotalRendaFixa();
+				}
+			}
+		}
+		
+		return saldo;
+	}
 
 	public double getValorInvestimento() {
-		return this.getTotalCotas() * this.getPrecoMedio();
+		if (this.categoriaInvestimento.getTipoInvestimento().equals(TipoInvestimento.FIXO))
+			return this.getSaldoCapitalizado();
+		else
+			return this.getTotalCotas() * this.getPrecoMedio();
 	}
 	
 	@Override
@@ -438,5 +460,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setInfoCotacao(InfoCotacao infoCotacao) {
 		this.infoCotacao = infoCotacao;
+	}
+
+	public double getPercentualInvestimento() {
+		return percentualInvestimento;
+	}
+
+	public void setPercentualInvestimento(double percentualInvestimento) {
+		this.percentualInvestimento = percentualInvestimento;
 	}
 }

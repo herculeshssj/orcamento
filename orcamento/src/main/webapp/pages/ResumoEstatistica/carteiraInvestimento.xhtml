@@ -128,6 +128,14 @@
 									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 								</h:outputText>
 							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="%"/>
+								</f:facet>
+								<h:outputText value="#{investimento.percentualInvestimento}">
+									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+								</h:outputText>
+							</h:column>
 						</h:dataTable>
 					</h:column>
 				</h:dataTable>

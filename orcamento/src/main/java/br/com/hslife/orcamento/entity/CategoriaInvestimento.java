@@ -62,6 +62,7 @@ import javax.persistence.Transient;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.rest.json.CategoriaInvestimentoJson;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 
 @Entity
@@ -88,6 +89,9 @@ public class CategoriaInvestimento extends EntityPersistence {
 	@Transient
 	private List<Investimento> investimentos = new ArrayList<>();
 	
+	@Transient
+	private double totalInvestimento = 0.0;
+	
 	/*** Atributos usados para a Carteira de Investimento ***/
 	
 	public CategoriaInvestimento() {
@@ -112,6 +116,31 @@ public class CategoriaInvestimento extends EntityPersistence {
 
 	public Long getId() {
 		return id;
+	}
+	
+	/*
+	 * Calcula o percentual de cada investimento contido na categoria.
+	 * Usado no resumo Carteira de Investimento
+	 */
+	public void calcularPercentuaisInvestimento() {
+		if (this.investimentos != null && !this.investimentos.isEmpty()) {
+			// Calcula o total investido
+			for (Investimento i : this.investimentos) {
+				this.totalInvestimento += i.getValorInvestimento();
+			}
+			
+			// Seta em cada investimento o seu respectivo percentual
+			for (Investimento in : this.investimentos) {
+				
+				double valorInvestimento = in.getValorInvestimento();
+				
+				// Previne problemas com operação com zero
+				if (this.totalInvestimento != 0 & valorInvestimento != 0) {
+					in.setPercentualInvestimento(Util.arredondar( (valorInvestimento / this.totalInvestimento) * 100 ));
+				}
+				
+			}
+		}
 	}
 
 	public void setId(Long id) {
@@ -148,5 +177,9 @@ public class CategoriaInvestimento extends EntityPersistence {
 
 	public void setInvestimentos(List<Investimento> investimentos) {
 		this.investimentos = investimentos;
+	}
+
+	public double getTotalInvestimento() {
+		return totalInvestimento;
 	}
 }

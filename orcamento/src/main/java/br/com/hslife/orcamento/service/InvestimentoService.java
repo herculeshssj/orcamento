@@ -52,6 +52,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.Usuario;
@@ -132,6 +133,13 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 				investimento.setInfoCotacao(new InfoCotacao(investimento.getTicker()));
 			}
 			
+		}
+		
+		// Calcula os percentuais de investimentos
+		for (Conta conta : contasInvestimento) {
+			for (CategoriaInvestimento categoria : conta.getCategoriasInvestimento()) {
+				categoria.calcularPercentuaisInvestimento();
+			}
 		}
 			
 		// Retorna a lista de contas populada
