@@ -73,4 +73,5 @@ public interface IResumoEstatistica {
 	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, FaturaCartao faturaCartao);
 	
 	public ResumoMensalContas gerarRelatorioResumoMensalContas(Conta conta, Date dataInicio, Date dataFim);
+	
 }

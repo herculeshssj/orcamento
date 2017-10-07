@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.entity;
 
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -173,6 +174,13 @@ public class Conta extends EntityPersistence {
 	@Transient
 	private double totalCreditoPanoramaCadastro;
 	/*** Atributos usado pelo Panorama dos Cadastros ***/
+	
+	/*** Atributos usados para a Carteira de Investimentos ***/
+	
+	@Transient
+	private Set<CategoriaInvestimento> categoriasInvestimento = new HashSet<>();
+	
+	/*** Atributos usados para a Carteira de Investimentos ***/
 	
 	public Conta() {
 		ativo = true;
@@ -432,5 +440,13 @@ public class Conta extends EntityPersistence {
 
 	public void setFechamentoAutomatico(boolean fechamentoAutomatico) {
 		this.fechamentoAutomatico = fechamentoAutomatico;
+	}
+
+	public Set<CategoriaInvestimento> getCategoriasInvestimento() {
+		return categoriasInvestimento;
+	}
+
+	public void setCategoriasInvestimento(Set<CategoriaInvestimento> categoriasInvestimento) {
+		this.categoriasInvestimento = categoriasInvestimento;
 	}
 }

@@ -46,14 +46,20 @@
 
 package br.com.hslife.orcamento.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.facade.IInvestimento;
+import br.com.hslife.orcamento.repository.CategoriaInvestimentoRepository;
+import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.InvestimentoRepository;
 
 @Service("investimentoService")
@@ -62,13 +68,69 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 	@Autowired
 	private InvestimentoRepository repository;
 	
+	@Autowired
+	private ContaRepository contaRepository;
+	
+	@Autowired
+	private CategoriaInvestimentoRepository categoriaInvestimentoRepository;
+	
 	public InvestimentoRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return this.repository;
 	}
 
+	public ContaRepository getContaRepository() {
+		this.contaRepository.setSessionFactory(this.sessionFactory);
+		return contaRepository;
+	}
+
+	public CategoriaInvestimentoRepository getCategoriaInvestimentoRepository() {
+		this.categoriaInvestimentoRepository.setSessionFactory(this.sessionFactory);
+		return categoriaInvestimentoRepository;
+	}
+
 	@Override
 	public List<Investimento> buscarPorConta(Conta conta) {
 		return getRepository().findByConta(conta);
+	}
+	
+	@Override
+	public Set<Conta> gerarCarteiraInvestimento(Usuario usuario) {
+		// Instancia uma lista de contas investimentos que será populada a partir dos investimentos do usuário
+		Set<Conta> contasInvestimento = new HashSet<>();
+		
+		// Traz todos os investimentos ativos do usuário
+		List<Investimento> investimentos = getRepository().findByUsuario(usuario);
+		
+		// Traz todas as categorias de investimento
+		List<CategoriaInvestimento> categoriasInvestimento = getCategoriaInvestimentoRepository().findAll();
+		
+		// Itera todos os investimentos existentes e popula a lista de contas
+		for (Investimento i : investimentos) {
+			contasInvestimento.add(i.getConta());
+		}
+		
+		// Adiciona as categorias de investimentos para cada conta
+		for (Conta c : contasInvestimento) {
+			c.setCategoriasInvestimento(new HashSet<>(categoriasInvestimento));
+		}
+		
+		// Itera todos os investimentos colocando-os nas respectivas contas e categorias
+		for (Investimento investimento : investimentos) {
+			for (Conta conta : contasInvestimento) {
+				if (conta.equals(investimento.getConta())) {
+					for (CategoriaInvestimento categoria : conta.getCategoriasInvestimento()) {
+						if (conta.equals(investimento.getConta()) && categoria.equals(investimento.getCategoriaInvestimento())) {
+							categoria.getInvestimentos().add(investimento);
+						}
+					}
+				}
+			}
+		}
+		
+		// TODO continuar
+		
+		// Retorna a lista de contas populada
+		return contasInvestimento;
 	}
 }

@@ -46,6 +46,9 @@
 
 package br.com.hslife.orcamento.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -54,6 +57,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.rest.json.CategoriaInvestimentoJson;
@@ -78,6 +82,13 @@ public class CategoriaInvestimento extends EntityPersistence {
 	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoInvestimento tipoInvestimento;
+	
+	/*** Atributos usados para a Carteira de Investimento ***/
+	
+	@Transient
+	private Set<Investimento> investimentos = new HashSet<>();
+	
+	/*** Atributos usados para a Carteira de Investimento ***/
 	
 	public CategoriaInvestimento() {
 		ativo = true;
@@ -129,5 +140,13 @@ public class CategoriaInvestimento extends EntityPersistence {
 
 	public void setTipoInvestimento(TipoInvestimento tipoInvestimento) {
 		this.tipoInvestimento = tipoInvestimento;
+	}
+
+	public Set<Investimento> getInvestimentos() {
+		return investimentos;
+	}
+
+	public void setInvestimentos(Set<Investimento> investimentos) {
+		this.investimentos = investimentos;
 	}
 }

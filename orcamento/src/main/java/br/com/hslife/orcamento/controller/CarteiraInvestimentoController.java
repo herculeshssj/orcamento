@@ -44,30 +44,64 @@
 
 ***/
 
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.controller;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.springframework.stereotype.Repository;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Investimento;
-import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.facade.IInvestimento;
 
-@Repository
-public class InvestimentoRepository extends AbstractCRUDRepository<Investimento> {
+@Component("carteiraInvestimentoMB")
+@Scope("request")
+public class CarteiraInvestimentoController extends AbstractController {
 	
-	public InvestimentoRepository() {
-		super(new Investimento());
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3683231219048865775L;
+	
+	@Autowired
+	private IInvestimento service;
+	
+	private Set<Conta> contas = new HashSet<>();
+	
+	public CarteiraInvestimentoController() {
+		moduleTitle = "Carteira de Investimentos";
+	}
+
+	@Override
+	protected void initializeEntity() {
+		
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Investimento> findByConta(Conta conta) {
-		return getQuery("FROM Investimento i WHERE i.conta.id = " + conta.getId() + " ORDER BY i.descricao ASC").list();
+	@Override
+	@PostConstruct
+	public String startUp() {
+		carregarCarteiraInvestimento();
+		return "/pages/ResumoEstatistica/carteiraInvestimento";
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Investimento> findByUsuario(Usuario usuario) {
-		return getQuery("FROM Investimento i WHERE i.conta.usuario.id = " + usuario.getId() + " ORDER BY i.descricao ASC").list();
+	private void carregarCarteiraInvestimento() {
+		try {
+			contas = getService().gerarCarteiraInvestimento(getUsuarioLogado());
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+	}
+
+	public IInvestimento getService() {
+		return service;
+	}
+
+	public Set<Conta> getContas() {
+		return contas;
 	}
 }
