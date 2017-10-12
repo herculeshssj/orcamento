@@ -48,12 +48,12 @@ package br.com.hslife.orcamento.util;
 
 import java.util.Comparator;
 
-import br.com.hslife.orcamento.entity.ItemGrupoLancamento;
+import br.com.hslife.orcamento.entity.ItemMeta;
 
-public class ItemGrupoLancamentoComparator implements Comparator<ItemGrupoLancamento>{
+public class ItemMetaComparator implements Comparator<ItemMeta>{
 
 	@Override
-	public int compare(ItemGrupoLancamento oneEntity, ItemGrupoLancamento otherEntity) {
+	public int compare(ItemMeta oneEntity, ItemMeta otherEntity) {
 		try {
 			
 			if (oneEntity != null && otherEntity != null) {

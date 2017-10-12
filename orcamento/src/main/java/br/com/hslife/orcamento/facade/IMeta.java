@@ -48,11 +48,11 @@ package br.com.hslife.orcamento.facade;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.GrupoLancamento;
+import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Usuario;
 
-public interface IGrupoLancamento extends ICRUDService<GrupoLancamento>{
+public interface IMeta extends ICRUDService<Meta>{
 	
-	public List<GrupoLancamento> buscarTodosDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
+	public List<Meta> buscarTodosDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
 	
 }

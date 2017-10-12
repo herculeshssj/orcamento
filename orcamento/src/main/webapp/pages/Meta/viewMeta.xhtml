@@ -56,38 +56,38 @@
 
 <ui:composition template="/templates/visualizar.xhtml">
 
-	<ui:param name="managedBean" value="#{grupoLancamentoController}" />
+	<ui:param name="managedBean" value="#{metaController}" />
 
 	<ui:define name="campos">
 			
 		<h:panelGrid columns="2">
 			<h:panelGroup>
-				<label for="frmFormEntity:txtDescricao">Descrição:</label>
+				<strong><label for="frmFormEntity:txtDescricao">Descrição:</label></strong>
 				<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
 			</h:panelGroup>
 			<h:panelGroup>
-				<label>Moeda:</label>
+				<strong><label>Moeda:</label></strong>
 				<h:outputText id="txtMoeda" value="#{managedBean.entity.moeda.label}"/>
 			</h:panelGroup>
 			<h:panelGroup>
-				<label for="frmFormEntity:txtPrevisaoReceita">Previsão de receita:</label>
+				<strong><label for="frmFormEntity:txtPrevisaoReceita">Previsão de receita:</label></strong>
 				<h:outputText id="txtPrevisaoReceita" value="#{managedBean.entity.previsaoReceita}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 			</h:panelGroup>
 			<h:panelGroup>
-				<label for="frmFormEntity:txtPrevisaoDespesa">Previsão de despesa:</label>
+				<strong><label for="frmFormEntity:txtPrevisaoDespesa">Previsão de despesa:</label></strong>
 				<h:outputText id="txtPrevisaoDespesa" value="#{managedBean.entity.previsaoDespesa}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 			</h:panelGroup>
 			<h:panelGroup>
-				<label for="frmFormEntity:txtMeta">Meta:</label>
-				<h:outputText id="txtMeta" value="#{managedBean.entity.meta}"/>
+				<strong><label for="frmFormEntity:txtObjetivo">Objetivo:</label></strong>
+				<h:outputText id="txtObjetivo" value="#{managedBean.entity.objetivo}"/>
 			</h:panelGroup>
 			<h:panelGroup>
-				<label for="frmFormEntity:txtDetalheMeta">Detalhes da meta:</label>
-				<h:outputText id="txtDetalheMeta" value="#{managedBean.entity.detalheMeta}"/>
+				<strong><label for="frmFormEntity:txtDetalheObjetivo">Detalhes do objetivo:</label></strong>
+				<h:outputText id="txtDetalheObjetivo" value="#{managedBean.entity.detalheObjetivo}"/>
 			</h:panelGroup>
 		</h:panelGrid>
 	

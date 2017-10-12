@@ -67,13 +67,13 @@ import org.hibernate.annotations.SortType;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
-import br.com.hslife.orcamento.util.ItemGrupoLancamentoComparator;
+import br.com.hslife.orcamento.util.ItemMetaComparator;
 import br.com.hslife.orcamento.util.Util;
 
 @Entity
-@Table(name="grupolancamento")
+@Table(name="meta")
 @SuppressWarnings("serial")
-public class GrupoLancamento extends EntityPersistence {
+public class Meta extends EntityPersistence {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -95,10 +95,10 @@ public class GrupoLancamento extends EntityPersistence {
 	private double previsaoDespesa;
 	
 	@Column(length=50, nullable=true)
-	private String meta;
+	private String objetivo;
 	
 	@Column(columnDefinition="text", nullable=true)
-	private String detalheMeta;
+	private String detalheObjetivo;
 	
 	@Column
 	private boolean ativo;
@@ -111,11 +111,11 @@ public class GrupoLancamento extends EntityPersistence {
 	@JoinColumn(name="idUsuario", nullable=false)
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy="grupoLancamento", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	@Sort(type=SortType.COMPARATOR, comparator=ItemGrupoLancamentoComparator.class)
-	private List<ItemGrupoLancamento> itens; 
+	@OneToMany(mappedBy="meta", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	@Sort(type=SortType.COMPARATOR, comparator=ItemMetaComparator.class)
+	private List<ItemMeta> itens; 
 	
-	public GrupoLancamento() {
+	public Meta() {
 		ativo = true;
 		itens = new ArrayList<>();
 	}
@@ -134,7 +134,7 @@ public class GrupoLancamento extends EntityPersistence {
 		this.totalReceita = 0.0;
 		this.totalDespesa = 0.0;
 		
-		for (ItemGrupoLancamento item : this.itens) {
+		for (ItemMeta item : this.itens) {
 			if (item.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
 				this.totalReceita += item.getValor();
 			} else {
@@ -227,11 +227,11 @@ public class GrupoLancamento extends EntityPersistence {
 		this.usuario = usuario;
 	}
 
-	public List<ItemGrupoLancamento> getItens() {
+	public List<ItemMeta> getItens() {
 		return itens;
 	}
 
-	public void setItens(List<ItemGrupoLancamento> itens) {
+	public void setItens(List<ItemMeta> itens) {
 		this.itens = itens;
 	}
 
@@ -251,19 +251,19 @@ public class GrupoLancamento extends EntityPersistence {
 		this.previsaoDespesa = previsaoDespesa;
 	}
 
-	public String getMeta() {
-		return meta;
+	public String getObjetivo() {
+		return objetivo;
 	}
 
-	public void setMeta(String meta) {
-		this.meta = meta;
+	public void setObjetivo(String objetivo) {
+		this.objetivo = objetivo;
 	}
 
-	public String getDetalheMeta() {
-		return detalheMeta;
+	public String getDetalheObjetivo() {
+		return detalheObjetivo;
 	}
 
-	public void setDetalheMeta(String detalheMeta) {
-		this.detalheMeta = detalheMeta;
+	public void setDetalheObjetivo(String detalheObjetivo) {
+		this.detalheObjetivo = detalheObjetivo;
 	}	
 }

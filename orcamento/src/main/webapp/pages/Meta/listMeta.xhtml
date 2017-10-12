@@ -56,7 +56,7 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{grupoLancamentoController}" />
+	<ui:param name="managedBean" value="#{metaController}" />
 	<ui:param name="colunaPesquisa" value="4" />
 	
 	<ui:define name="parametro_pesquisa">		
@@ -74,9 +74,9 @@
 				<h:outputText value="Descrição" />
 			</f:facet>
 			<h:outputText value="#{item.descricao} " />
-			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20" rendered="#{not empty item.meta}"/>
-			<p:tooltip for="imgInfo" rendered="#{not empty item.meta}">
-				<h:outputText value="Meta: #{item.meta}"/><br/>
+			<h:graphicImage id="imgInfo" value="/resources/images/svg/info.svg" height="20" width="20" rendered="#{not empty item.objetivo}"/>
+			<p:tooltip for="imgInfo" rendered="#{not empty item.objetivo}">
+				<h:outputText value="Meta: #{item.objetivo}"/><br/>
 			</p:tooltip>
 		</h:column>
 

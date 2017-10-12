@@ -66,9 +66,9 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
-@Table(name="itemgrupolancamento")
+@Table(name="itemmeta")
 @SuppressWarnings("serial")
-public class ItemGrupoLancamento extends EntityPersistence {
+public class ItemMeta extends EntityPersistence {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -89,25 +89,17 @@ public class ItemGrupoLancamento extends EntityPersistence {
 	private double valor;
 	
 	@ManyToOne
-	@JoinColumn(name="idGrupoLancamento")
-	private GrupoLancamento grupoLancamento;
-	
-	@ManyToOne
-	@JoinColumn(name="idLancamentoConta")
-	private LancamentoConta lancamentoConta;
+	@JoinColumn(name="idMeta", nullable=false)
+	private Meta meta;
 	
 	@Transient
 	private boolean selecionado;
 	
-	@Transient
-	private String uuid;
-	
-	public ItemGrupoLancamento() {
+	public ItemMeta() {
 		
 	}
 	
-	public ItemGrupoLancamento(LancamentoConta lancamento, String descricao, TipoLancamento tipo, Date data, double valor) {
-		this.lancamentoConta = lancamento;
+	public ItemMeta(String descricao, TipoLancamento tipo, Date data, double valor) {
 		this.descricao = descricao;
 		this.tipoLancamento = tipo;
 		this.data = data;
@@ -158,22 +150,6 @@ public class ItemGrupoLancamento extends EntityPersistence {
 		this.valor = valor;
 	}
 
-	public GrupoLancamento getGrupoLancamento() {
-		return grupoLancamento;
-	}
-
-	public void setGrupoLancamento(GrupoLancamento grupoLancamento) {
-		this.grupoLancamento = grupoLancamento;
-	}
-
-	public LancamentoConta getLancamentoConta() {
-		return lancamentoConta;
-	}
-
-	public void setLancamentoConta(LancamentoConta lancamentoConta) {
-		this.lancamentoConta = lancamentoConta;
-	}
-
 	public Date getData() {
 		return data;
 	}
@@ -190,11 +166,11 @@ public class ItemGrupoLancamento extends EntityPersistence {
 		this.selecionado = selecionado;
 	}
 
-	public String getUuid() {
-		return uuid;
+	public Meta getMeta() {
+		return meta;
 	}
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
+	public void setMeta(Meta meta) {
+		this.meta = meta;
 	}
 }

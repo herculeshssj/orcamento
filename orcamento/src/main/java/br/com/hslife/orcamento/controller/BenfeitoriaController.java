@@ -59,7 +59,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.entity.Benfeitoria;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.GrupoLancamento;
+import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -67,7 +67,7 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IBenfeitoria;
 import br.com.hslife.orcamento.facade.ICategoriaDocumento;
 import br.com.hslife.orcamento.facade.IFavorecido;
-import br.com.hslife.orcamento.facade.IGrupoLancamento;
+import br.com.hslife.orcamento.facade.IMeta;
 import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IPatrimonio;
 import br.com.hslife.orcamento.model.OrcamentoBenfeitoria;
@@ -97,7 +97,7 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	private ICategoriaDocumento categoriaDocumentoService;
 	
 	@Autowired
-	private IGrupoLancamento grupoLancamentoService;
+	private IMeta grupoLancamentoService;
 	
 	private Patrimonio patrimonioSelecionado;
 	
@@ -218,7 +218,7 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 		return new ArrayList<>();
 	}
 	
-	public List<GrupoLancamento> getListaGrupoLancamento() {
+	public List<Meta> getListaGrupoLancamento() {
 		try {
 			return getGrupoLancamentoService().buscarTodosDescricaoEAtivoPorUsuario(null, true, getUsuarioLogado());
 		} catch (ValidationException | BusinessException e) {
@@ -269,7 +269,7 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 		return categoriaDocumentoService;
 	}
 
-	public IGrupoLancamento getGrupoLancamentoService() {
+	public IMeta getGrupoLancamentoService() {
 		return grupoLancamentoService;
 	}
 

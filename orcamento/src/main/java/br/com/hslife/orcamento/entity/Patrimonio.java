@@ -107,7 +107,7 @@ public class Patrimonio extends EntityPersistence {
 	
 	@ManyToOne
 	@JoinColumn(name="idGrupoLancamento", nullable=false)
-	private GrupoLancamento grupoLancamento;
+	private Meta grupoLancamento;
 	
 	@ManyToOne
 	@JoinColumn(name="idMoeda", nullable=false)
@@ -224,11 +224,11 @@ public class Patrimonio extends EntityPersistence {
 		this.favorecido = favorecido;
 	}
 
-	public GrupoLancamento getGrupoLancamento() {
+	public Meta getGrupoLancamento() {
 		return grupoLancamento;
 	}
 
-	public void setGrupoLancamento(GrupoLancamento grupoLancamento) {
+	public void setGrupoLancamento(Meta grupoLancamento) {
 		this.grupoLancamento = grupoLancamento;
 	}
 

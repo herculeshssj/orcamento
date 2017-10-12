@@ -44,41 +44,31 @@
 
 ***/
 
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import br.com.hslife.orcamento.entity.GrupoLancamento;
+import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.facade.IMeta;
+import br.com.hslife.orcamento.repository.MetaRepository;
 
-@Repository
-public class GrupoLancamentoRepository extends AbstractCRUDRepository<GrupoLancamento> {
+@Service
+public class MetaService extends AbstractCRUDService<Meta> implements IMeta {
 	
-	public GrupoLancamentoRepository() {
-		super(new GrupoLancamento());
+	@Autowired
+	private MetaRepository repository;
+	
+	public MetaRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
+		return this.repository;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<GrupoLancamento> findAllDescricaoAndAtivoByUsuario(String descricao, Boolean ativo, Usuario usuario) {
-		hqlParameters.clear();
-		
-		StringBuilder hql = new StringBuilder().append("FROM GrupoLancamento grupo WHERE 1=1");
-		
-		if (descricao != null && !descricao.isEmpty()) {
-			hql.append(" AND grupo.descricao LIKE :descricao");
-			hqlParameters.put("descricao", "%"+descricao.toLowerCase()+"%");
-		}
-		
-		if (ativo != null) {
-			hql.append(" AND grupo.ativo = :ativo");
-			hqlParameters.put("ativo", ativo);
-		}
-		
-		hql.append(" AND grupo.usuario.id = :idUsuario ORDER BY grupo.descricao ASC");
-		hqlParameters.put("idUsuario", usuario.getId());
-		
-		return getQueryApplyingParameters(hql.toString()).list();
+	@Override
+	public List<Meta> buscarTodosDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario) {
+		return getRepository().findAllDescricaoAndAtivoByUsuario(descricao, ativo, usuario);
 	}
 }
