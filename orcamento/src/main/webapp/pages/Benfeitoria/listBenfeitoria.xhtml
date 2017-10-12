@@ -102,6 +102,8 @@
 					<label>Detalhes da benfeitoria:</label>
 					<h:outputText value="#{benfeitoria.detalheBenfeitoria}"/>
 					
+					<h:outputText value="Situação:" rendered="#{benfeitoria.dataFim != null}"/>
+					<h:graphicImage id="imgApprove" title="Benfeitoria realizada" value="/resources/images/svg/approval.svg" height="20" width="20" rendered="#{benfeitoria.dataFim != null}"/>
 				</p:panelGrid>
 				
 				<h:panelGroup>
