@@ -75,6 +75,7 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
@@ -190,14 +191,19 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 			saldoAtual.setMoedaConta(conta.getMoeda());
 			saldoAtual.setTipoConta(conta.getTipoConta());
 			
+			// Seta o tipo de cartão
+			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
+				saldoAtual.setTipoCartao(conta.getCartaoCredito().getTipoCartao());
+			}
+			
 			// Define a situação da conta
 			saldoAtual.setAtivo(conta.isAtivo());
 			
 			// Declara o critério de busca
 			CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
 			
-			// Verifica se a conta é do tipo CARTAO
-			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
+			// Verifica se a conta é do tipo CARTAO e de CREDITO
+			if (conta.getTipoConta().equals(TipoConta.CARTAO) && conta.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO)) {
 				// Seta o saldo do período com o limite do cartão
 				saldoAtual.setSaldoPeriodo(conta.getCartaoCredito().getLimiteCartao());
 				

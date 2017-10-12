@@ -56,6 +56,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
@@ -121,35 +122,35 @@ public class SaldoAtualContasController extends AbstractController {
 	}
 
 	public List<SaldoAtualConta> getLimiteCartaoCredito() {
-		List<SaldoAtualConta> $ = new ArrayList<>();
+		List<SaldoAtualConta> saldoAtualConta = new ArrayList<>();
 		for (SaldoAtualConta saldo : listEntity) 
-			if (saldo.isAtivo() && saldo.getTipoConta().equals(TipoConta.CARTAO)) 
-				$.add(saldo);
-		return $;
+			if (saldo.isAtivo() && saldo.getTipoConta().equals(TipoConta.CARTAO) && saldo.getTipoCartao().equals(TipoCartao.CREDITO)) 
+				saldoAtualConta.add(saldo);
+		return saldoAtualConta;
 	}
 	
 	public List<SaldoAtualConta> getContasAtivas() {
-		List<SaldoAtualConta> $ = new ArrayList<>();
+		List<SaldoAtualConta> saldoAtualConta = new ArrayList<>();
 		for (SaldoAtualConta saldo : listEntity) 
-			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) 
-				$.add(saldo);
-		return $;				
+			if (saldo.isAtivo() && (saldo.getTipoCartao() == null || !saldo.getTipoCartao().equals(TipoCartao.CREDITO))) 
+				saldoAtualConta.add(saldo);
+		return saldoAtualConta;				
 	}
 
 	public double getSaldoTotalContas() {
-		double $ = 0.0;
+		double resultado = 0.0;
 		for (SaldoAtualConta saldo : listEntity) 
 			if (saldo.isAtivo() && !saldo.getTipoConta().equals(TipoConta.CARTAO)) 
-				$ += saldo.getSaldoAtual();
-		return $;
+				resultado += saldo.getSaldoAtual();
+		return resultado;
 	}
 
 	public List<SaldoAtualConta> getContasInativas() {		
-		List<SaldoAtualConta> $ = new ArrayList<>();
+		List<SaldoAtualConta> saldoAtualConta = new ArrayList<>();
 		for (SaldoAtualConta saldo : listEntity) 
 			if (!saldo.isAtivo()) 
-				$.add(saldo);
-		return $;			
+				saldoAtualConta.add(saldo);
+		return saldoAtualConta;			
 	}
 	
 	public Moeda getMoedaPadrao() {

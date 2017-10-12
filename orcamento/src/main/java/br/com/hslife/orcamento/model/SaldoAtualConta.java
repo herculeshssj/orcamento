@@ -47,9 +47,12 @@
 package br.com.hslife.orcamento.model;
 
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.enumeration.TipoCartao;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 
 public class SaldoAtualConta {
+	
+	private TipoCartao tipoCartao;
 	
 	private TipoConta tipoConta;
 	
@@ -119,5 +122,13 @@ public class SaldoAtualConta {
 
 	public void setMoedaConta(Moeda moedaConta) {
 		this.moedaConta = moedaConta;
+	}
+
+	public TipoCartao getTipoCartao() {
+		return tipoCartao;
+	}
+
+	public void setTipoCartao(TipoCartao tipoCartao) {
+		this.tipoCartao = tipoCartao;
 	}
 }
