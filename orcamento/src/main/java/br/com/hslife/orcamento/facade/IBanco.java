@@ -49,15 +49,13 @@ package br.com.hslife.orcamento.facade;
 import java.util.List;
 
 import br.com.hslife.orcamento.entity.Banco;
-import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IBanco extends ICRUDService<Banco>{
 	
-	public List<Banco> buscarPorUsuario(Usuario usuario);
+	public List<Banco> buscarPorNome(String nome);
 	
-	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario); 
+	public Banco buscarPadrao();
 	
-	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
-
-	public List<Banco> buscarAtivosPorUsuario(Usuario usuario);
+	public List<Banco> buscarPorNomeEAtivo(String nome, boolean ativo);
+	
 }

@@ -239,7 +239,7 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	
 	public List<Banco> getListaBanco() {
 		try {
-			List<Banco> resultado = bancoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			List<Banco> resultado = getBancoService().buscarPorNomeEAtivo("", true);
 			// Lógica para incluir o banco inativo da entidade na combo
 			if (resultado != null && entity.getBanco() != null) {
 				if (!resultado.contains(entity.getBanco())) {
@@ -273,6 +273,14 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	
 	public ICartaoCredito getService() {
 		return service;
+	}
+
+	public IBanco getBancoService() {
+		return bancoService;
+	}
+
+	public IMoeda getMoedaService() {
+		return moedaService;
 	}
 
 	public void setService(ICartaoCredito service) {

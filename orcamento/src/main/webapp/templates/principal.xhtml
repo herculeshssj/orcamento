@@ -126,9 +126,11 @@
 			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-cadastros has-dropdown not-click">
 				<a href="#">Cadastros</a>
 				<ul class="dropdown">
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
 					<li id="menu-item-3184" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/Banco/listBanco.faces">Bancos</a>
 					</li>
+					</h:panelGroup>
 					<li id="menu-item-3190" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/CartaoCredito/listCartaoCredito.faces">Cartão de Crédito</a>
 					</li>

@@ -51,8 +51,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -79,10 +77,6 @@ public class Banco extends EntityPersistence {
 	@Column 
 	private boolean ativo;
 	
-	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
-	
 	@Transient
 	private Long usuarioID;
 	
@@ -95,7 +89,6 @@ public class Banco extends EntityPersistence {
 		this.numero = builder.numero;
 		this.padrao = builder.padrao;
 		this.ativo = builder.ativo;
-		this.usuario = builder.usuario;
 	}
 
 	public static class Builder {
@@ -103,7 +96,6 @@ public class Banco extends EntityPersistence {
 		private String numero;
 		private boolean padrao;
 		private boolean ativo;
-		private Usuario usuario;
 		
 		public Builder nome(String nome) {
 			this.nome = nome;
@@ -122,11 +114,6 @@ public class Banco extends EntityPersistence {
 		
 		public Builder ativo(boolean ativo) {
 			this.ativo = ativo;
-			return this;
-		}
-		
-		public Builder usuario(Usuario usuario) {
-			this.usuario = usuario;
 			return this;
 		}
 		
@@ -184,14 +171,6 @@ public class Banco extends EntityPersistence {
 
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public Long getUsuarioID() {

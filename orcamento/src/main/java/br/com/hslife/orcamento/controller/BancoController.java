@@ -86,16 +86,10 @@ public class BancoController extends AbstractCRUDController<Banco> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarPorNomeUsuarioEAtivo(nomeBanco, getUsuarioLogado(), somenteAtivos);
+			listEntity = getService().buscarPorNomeEAtivo(nomeBanco, somenteAtivos);
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
-	}
-	
-	@Override
-	public String save() {
-		entity.setUsuario(getUsuarioLogado());
-		return super.save();
 	}
 	
 	public IBanco getService() {

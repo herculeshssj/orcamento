@@ -49,16 +49,14 @@ package br.com.hslife.orcamento.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.hslife.orcamento.entity.Banco;
-import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.repository.BancoRepository;
 
-@Service("bancoService")
+@Service
 public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	
 	@Autowired
@@ -72,7 +70,7 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	@Override
 	public void cadastrar(Banco entity) {
 		if (entity.isPadrao()) {
-			getRepository().updateAllToNotDefault(entity.getUsuario());
+			getRepository().updateAllToNotDefault();
 		}
 		super.cadastrar(entity);
 	}
@@ -80,7 +78,7 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	@Override
 	public void alterar(Banco entity) {
 		if (entity.isPadrao()) {
-			getRepository().updateAllToNotDefault(entity.getUsuario());
+			getRepository().updateAllToNotDefault();
 		}
 		super.alterar(entity);
 	}
@@ -89,30 +87,23 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	public void excluir(Banco entity) {
 		try {
 			super.excluir(entity);
-		} catch (DataIntegrityViolationException dive) {
-			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", dive);
 		} catch (Exception e) {
 			throw new BusinessException("Não é possível excluir! Existem vínculos existentes com o registro!", e);
 		}
 	}
 
 	@Override
-	public List<Banco> buscarPorUsuario(Usuario usuario) {
-		return getRepository().findByUsuario(usuario);
-	}
-
-	@Override
-	public List<Banco> buscarPorNomeEUsuario(String nome, Usuario usuario) {
-		return getRepository().findByNomeAndUsuario(nome, usuario);
+	public List<Banco> buscarPorNomeEAtivo(String nome, boolean ativo) {
+		return getRepository().findByNomeAndAtivo(nome, ativo);
 	}
 	
 	@Override
-	public List<Banco> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo) {
-		return getRepository().findByNomeUsuarioAndAtivo(nome, usuario, ativo);
+	public Banco buscarPadrao() {
+		return getRepository().findDefault();
 	}
 	
 	@Override
-	public List<Banco> buscarAtivosPorUsuario(Usuario usuario) {
-		return getRepository().findActiveByUsuario(usuario);
+	public List<Banco> buscarPorNome(String nome) {
+		return getRepository().findByNome(nome);
 	}
 }

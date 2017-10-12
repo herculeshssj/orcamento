@@ -105,7 +105,7 @@ public class EntityComboUtil {
 	
 	public List<Banco> getListaBanco() {
 		try {
-			return bancoService.buscarPorUsuario(usuarioComponent.getUsuarioLogado());
+			return bancoService.buscarTodos();
 		} catch (BusinessException | ValidationException be) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}

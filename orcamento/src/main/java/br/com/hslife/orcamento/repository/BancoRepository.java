@@ -56,7 +56,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Banco;
-import br.com.hslife.orcamento.entity.Usuario;
 
 @Repository
 public class BancoRepository extends AbstractCRUDRepository<Banco> {
@@ -66,32 +65,15 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Banco> findByNomeAndUsuario(String nome, Usuario usuario) {
+	public List<Banco> findByNome(String nome) {
 		Criteria criteria = getSession().createCriteria(Banco.class);
 		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Banco> findByUsuario(Usuario usuario) {
+	public Banco findDefault() {
 		Criteria criteria = getSession().createCriteria(Banco.class);
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
-		return criteria.addOrder(Order.asc("nome")).list();
-	}
-	
-	public void updateAllToNotDefault(Usuario usuario) {
-		String sql = "update banco set padrao = false where idUsuario = " + usuario.getId();
-		
-		Query query = getSession().createSQLQuery(sql);
-		
-		query.executeUpdate();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Banco findDefaultByUsuario(Usuario usuario) {
-		Criteria criteria = getSession().createCriteria(Banco.class);
-		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		criteria.add(Restrictions.eq("padrao", true));
 		List<Banco> resultado = criteria.list();
 		if (resultado != null && resultado.size() >= 1) {
@@ -100,17 +82,18 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Banco> findByNomeUsuarioAndAtivo(String nome, Usuario usuario, boolean ativo) {
-		String hql = "FROM Banco banco WHERE banco.nome LIKE '%" + nome + "%' AND banco.usuario.id = :idUsuario AND banco.ativo = :ativo ORDER BY banco.nome ASC";
-		Query query = getSession().createQuery(hql).setLong("idUsuario", usuario.getId()).setBoolean("ativo", ativo);
-		return query.list();
+	public void updateAllToNotDefault() {
+		String sql = "update banco set padrao = false";
+		
+		Query query = getSession().createSQLQuery(sql);
+		
+		query.executeUpdate();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Banco> findActiveByUsuario(Usuario usuario) {
-		return getQuery("FROM Banco banco WHERE banco.usuario.id = :idUsuario AND banco.ativo = true ORDER BY banco.nome ASC")
-				.setLong("idUsuario", usuario.getId())
-				.list();
+	public List<Banco> findByNomeAndAtivo(String nome, boolean ativo) {
+		String hql = "FROM Banco banco WHERE banco.nome LIKE '%" + nome + "%' AND banco.ativo = :ativo ORDER BY banco.nome ASC";
+		Query query = getSession().createQuery(hql).setBoolean("ativo", ativo);
+		return query.list();
 	}
 }

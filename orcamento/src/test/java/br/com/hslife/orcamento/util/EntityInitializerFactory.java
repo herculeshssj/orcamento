@@ -88,7 +88,6 @@ public class EntityInitializerFactory {
 				.nome("Banco de teste")
 				.numero("000")
 				.padrao(false)
-				.usuario(usuario)
 				.build();
 	}
 	
