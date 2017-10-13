@@ -59,4 +59,7 @@ alter table itemmeta drop FOREIGN KEY fk_lancamentoconta_itemgrupolancamento;
 alter table itemmeta drop column idLancamentoConta;
 
 -- Renomeia as FKs
+alter table itemmeta drop FOREIGN key fk_grupolancamento_itemgrupolancamento;
+alter table itemmeta drop index fk_grupolancamento_itemgrupolancamento;
 alter table itemmeta change column `idGrupoLancamento` `idMeta` bigint not null;
+alter table itemmeta add constraint fk_meta_itemmeta FOREIGN key (idMeta) REFERENCES meta (id);
