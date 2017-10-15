@@ -78,9 +78,9 @@
     </dependency>
     
     <dependency>
-    		<groupId>org.flywaydb</groupId>
-    		<artifactId>flyway-core</artifactId>
-    		<version>4.1.2</version>
+    	<groupId>org.flywaydb</groupId>
+    	<artifactId>flyway-core</artifactId>
+    	<version>4.2.0</version>
     </dependency>
     
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
@@ -493,7 +493,21 @@
   </dependencies>
 
   <build>
-    <finalName>orcamento</finalName>  
+    <finalName>orcamento</finalName>
+    
+    <plugins>
+    	<plugin>
+    		<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-maven-plugin</artifactId>
+			<version>4.2.0</version>
+			<configuration>
+				<url>jdbc:mysql://localhost:3306/orcamento</url>
+				<user>orcamento</user>
+				<password>d1nh31r0</password>
+			</configuration>
+    	</plugin>
+    </plugins>
+      
   </build>
   
 </project>
