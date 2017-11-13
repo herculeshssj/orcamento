@@ -59,6 +59,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.InfoCotacaoComponent;
 import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
@@ -90,6 +91,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Autowired
 	private ICategoriaInvestimento categoriaInvestimentoService;
+	
+	@Autowired
+	private InfoCotacaoComponent infoCotacaoComponent;
 	
 	private Conta contaSelecionada;
 	private TipoInvestimento tipoSelecionado;
@@ -287,7 +291,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	}
 	
 	private void obterCotacao() {
-		this.infoCotacao = new InfoCotacao(entity.getTicker());
+		this.infoCotacao = getInfoCotacaoComponent().invokeAPI(entity.getTicker());
 	}
 	
 	public void atualizaListaInvestimento() {
@@ -439,5 +443,13 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public InfoCotacao getInfoCotacao() {
 		return infoCotacao;
+	}
+
+	public void setInfoCotacao(InfoCotacao infoCotacao) {
+		this.infoCotacao = infoCotacao;
+	}
+
+	public InfoCotacaoComponent getInfoCotacaoComponent() {
+		return infoCotacaoComponent;
 	}
 }

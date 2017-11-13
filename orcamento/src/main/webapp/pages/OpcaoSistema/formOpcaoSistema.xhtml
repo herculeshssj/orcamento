@@ -178,6 +178,22 @@
 		
 		<hr/>
 		
+		<h:panelGroup rendered="#{managedBean.usuarioLogado.login == 'admin'}">
+		<fieldset>
+			<legend>Configurações de investimentos</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Alpha Vantage API Key:
+				<h:inputText value="#{managedBean.opcoesGlobalAdmin['ALPHA_VANTAGE_API_KEY']}"/>
+			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+		
 		<h:panelGroup>
 		<fieldset>
 			<legend>Configurações de despensa</legend>

@@ -57,40 +57,38 @@
 
 	<ui:param name="managedBean" value="#{investimentoMB}" />
 
-	<h:panelGrid columns="2" rendered="#{managedBean.entity.id != null}">
+	<h:panelGrid columns="2" rendered="#{managedBean.entity.id != null and managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
 		<f:facet name="header">
 			<h:outputText value="Informações da bolsa"/>
 		</f:facet>
 	
-		<label>Símbolo:</label>
-		<h:outputText value="#{managedBean.infoCotacao.symbol}"/>
-		
-		<label>Nome:</label>
-		<h:outputText value="#{managedBean.infoCotacao.name}"/>
-		
-		<label>Moeda:</label>
-		<h:outputText value="#{managedBean.infoCotacao.currency}"/>
-		
-		<label>Bolsa:</label>
-		<h:outputText value="#{managedBean.infoCotacao.stockExchange}"/>
-		
-		<label>Compra:</label>
-		<h:outputText value="#{managedBean.infoCotacao.quotePrice}"/>
-		
-		<label>Venda:</label>
-		<h:outputText value="#{managedBean.infoCotacao.quoteAsk}"/>
+		<label>Abertura:</label>
+		<h:outputText value="#{managedBean.infoCotacao.open}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:outputText>
 		
 		<label>Mínimo:</label>
-		<h:outputText value="#{managedBean.infoCotacao.quoteBid}"/>
+		<h:outputText value="#{managedBean.infoCotacao.low}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:outputText>
 		
-		<label>Abertura:</label>
-		<h:outputText value="#{managedBean.infoCotacao.quoteOpen}"/>
+		<label>Máximo:</label>
+		<h:outputText value="#{managedBean.infoCotacao.high}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:outputText>
 		
 		<label>Fechamento:</label>
-		<h:outputText value="#{managedBean.infoCotacao.quotePrevClose}"/>
+		<h:outputText value="#{managedBean.infoCotacao.close}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:outputText>
+		
+		<label>Volume:</label>
+		<h:outputText value="#{managedBean.infoCotacao.volume}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:outputText>
 		
 		<f:facet name="footer">
-			<h:outputText value="Powered by Yahoo! Finance API v3.11"/>
+			<h:outputText value="Powered by Alpha Vantage API. Todos os direitos reservados a Alpha Vantage Inc."/>
 		</f:facet>
 			
 	</h:panelGrid>

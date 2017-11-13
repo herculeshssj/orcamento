@@ -52,13 +52,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.InfoCotacaoComponent;
 import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.facade.IInvestimento;
-import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.repository.CategoriaInvestimentoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.InvestimentoRepository;
@@ -75,6 +75,9 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 	@Autowired
 	private CategoriaInvestimentoRepository categoriaInvestimentoRepository;
 	
+	@Autowired
+	private InfoCotacaoComponent infoCotacaoComponent;
+	
 	public InvestimentoRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return this.repository;
@@ -88,6 +91,10 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 	public CategoriaInvestimentoRepository getCategoriaInvestimentoRepository() {
 		this.categoriaInvestimentoRepository.setSessionFactory(this.sessionFactory);
 		return categoriaInvestimentoRepository;
+	}
+
+	public InfoCotacaoComponent getInfoCotacaoComponent() {
+		return infoCotacaoComponent;
 	}
 
 	@Override
@@ -130,7 +137,10 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 			
 			// Obtém a cotação dos investimentos de renda variável
 			if (investimento.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
-				investimento.setInfoCotacao(new InfoCotacao(investimento.getTicker()));
+				investimento.setInfoCotacao(getInfoCotacaoComponent().invokeAPI(investimento.getTicker()));
+				
+				// Calcula o valor atualizado do investimento
+				investimento.setValorInvestimentoAtualizado(investimento.getTotalCotas() * investimento.getInfoCotacao().getClose().doubleValue());
 			}
 			
 		}

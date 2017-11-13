@@ -265,13 +265,27 @@
 	    <version>2.1.7</version>
 	</dependency>
 	
-	<!-- https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl -->
+	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 	<dependency>
-	    <groupId>org.codehaus.jackson</groupId>
-	    <artifactId>jackson-mapper-asl</artifactId>
-	    <version>1.9.13</version>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-core</artifactId>
+	    <version>2.9.2</version>
 	</dependency>
 	
+	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.9.2</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-annotations</artifactId>
+	    <version>2.9.2</version>
+	</dependency>
+
 	<!-- https://mvnrepository.com/artifact/org.javassist/javassist -->
 	<dependency>
 	    <groupId>org.javassist</groupId>
@@ -481,15 +495,7 @@
 	    <artifactId>javax.servlet-api</artifactId>
 	    <version>3.0.1</version>
 	</dependency>
-	
-	<!-- https://mvnrepository.com/artifact/com.yahoofinance-api/YahooFinanceAPI -->
-	<dependency>
-	    <groupId>com.yahoofinance-api</groupId>
-	    <artifactId>YahooFinanceAPI</artifactId>
-	    <version>3.11.0</version>
-	</dependency>
-
-	
+		
   </dependencies>
 
   <build>

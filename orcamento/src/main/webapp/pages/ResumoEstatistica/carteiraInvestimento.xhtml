@@ -90,17 +90,9 @@
 							</h:column>
 							<h:column rendered="#{categoria.tipoInvestimento == 'VARIAVEL'}">
 								<f:facet name="header">
-									<h:outputText value="Compra"/>
+									<h:outputText value="Abertura"/>
 								</f:facet>
-								<h:outputText value="#{investimento.infoCotacao.quotePrice}">
-									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-								</h:outputText>
-							</h:column>
-							<h:column rendered="#{categoria.tipoInvestimento == 'VARIAVEL'}">
-								<f:facet name="header">
-									<h:outputText value="Venda"/>
-								</f:facet>
-								<h:outputText value="#{investimento.infoCotacao.quoteAsk}">
+								<h:outputText value="#{investimento.infoCotacao.open}">
 									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 								</h:outputText>
 							</h:column>
@@ -108,15 +100,15 @@
 								<f:facet name="header">
 									<h:outputText value="Mínimo"/>
 								</f:facet>
-								<h:outputText value="#{investimento.infoCotacao.quoteBid}">
+								<h:outputText value="#{investimento.infoCotacao.low}">
 									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 								</h:outputText>
 							</h:column>
 							<h:column rendered="#{categoria.tipoInvestimento == 'VARIAVEL'}">
 								<f:facet name="header">
-									<h:outputText value="Abertura"/>
+									<h:outputText value="Máximo"/>
 								</f:facet>
-								<h:outputText value="#{investimento.infoCotacao.quoteOpen}">
+								<h:outputText value="#{investimento.infoCotacao.high}">
 									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 								</h:outputText>
 							</h:column>
@@ -124,7 +116,15 @@
 								<f:facet name="header">
 									<h:outputText value="Fechamento"/>
 								</f:facet>
-								<h:outputText value="#{investimento.infoCotacao.quotePrevClose}">
+								<h:outputText value="#{investimento.infoCotacao.close}">
+									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+								</h:outputText>
+							</h:column>
+							<h:column rendered="#{categoria.tipoInvestimento == 'VARIAVEL'}">
+								<f:facet name="header">
+									<h:outputText value="Valor"/>
+								</f:facet>
+								<h:outputText value="#{investimento.valorInvestimentoAtualizado}">
 									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 								</h:outputText>
 							</h:column>
@@ -142,7 +142,7 @@
 			</h:column>
 		</h:dataTable>
 		
-		<em><h:outputText value="Powered by Yahoo! Finance API v3.11"/></em>
+		<em><h:outputText value="Powered by Alpha Vantage API. Todos os direitos reservados a Alpha Vantage Inc."/></em>
 	
 	</ui:define>
 	

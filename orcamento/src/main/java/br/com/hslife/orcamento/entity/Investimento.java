@@ -124,6 +124,9 @@ public class Investimento extends EntityPersistence {
 	@Transient
 	private double percentualInvestimento;
 	
+	@Transient
+	private double valorInvestimentoAtualizado;
+	
 	/*** Atributos para o resumo Carteira de Investimento ***/
 	
 	public Investimento() {
@@ -398,5 +401,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setPercentualInvestimento(double percentualInvestimento) {
 		this.percentualInvestimento = percentualInvestimento;
+	}
+
+	public double getValorInvestimentoAtualizado() {
+		return valorInvestimentoAtualizado;
+	}
+
+	public void setValorInvestimentoAtualizado(double valorInvestimentoAtualizado) {
+		this.valorInvestimentoAtualizado = valorInvestimentoAtualizado;
 	}
 }

@@ -410,4 +410,16 @@ public class OpcaoSistemaComponent {
 		
 		return quantidade;
 	}
+	
+	public String getAlphaVantageApiKey() {
+		String apiKey = "demo"; // valor padrão
+		
+		OpcaoSistema opcaoSistema = getService().buscarOpcaoGlobalAdminPorChave("ALPHA_VANTAGE_API_KEY");
+		
+		if (opcaoSistema != null) {
+			apiKey = opcaoSistema.getValor();
+		}
+		
+		return apiKey;
+	}
 }

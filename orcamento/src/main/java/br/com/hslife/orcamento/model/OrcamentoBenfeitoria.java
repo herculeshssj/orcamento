@@ -51,8 +51,9 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.json.JSONObject;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @XmlRootElement
 @JsonAutoDetect
