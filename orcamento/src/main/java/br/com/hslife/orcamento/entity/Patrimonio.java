@@ -106,10 +106,6 @@ public class Patrimonio extends EntityPersistence {
 	private Favorecido favorecido;
 	
 	@ManyToOne
-	@JoinColumn(name="idGrupoLancamento", nullable=false)
-	private Meta grupoLancamento;
-	
-	@ManyToOne
 	@JoinColumn(name="idMoeda", nullable=false)
 	private Moeda moeda;
 	
@@ -131,7 +127,6 @@ public class Patrimonio extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Detalhes da aquisição", this.detalheEntradaPatrimonio);
 		EntityPersistenceUtil.validaCampoNulo("Data de aquisição", this.dataEntrada);
-		EntityPersistenceUtil.validaCampoNulo("Grupo de lançamento", this.grupoLancamento);
 		EntityPersistenceUtil.validaCampoNulo("Favorecido", this.favorecido);
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
 	}
@@ -222,14 +217,6 @@ public class Patrimonio extends EntityPersistence {
 
 	public void setFavorecido(Favorecido favorecido) {
 		this.favorecido = favorecido;
-	}
-
-	public Meta getGrupoLancamento() {
-		return grupoLancamento;
-	}
-
-	public void setGrupoLancamento(Meta grupoLancamento) {
-		this.grupoLancamento = grupoLancamento;
 	}
 
 	public Moeda getMoeda() {

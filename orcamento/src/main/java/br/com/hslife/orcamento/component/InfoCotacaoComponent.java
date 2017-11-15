@@ -83,12 +83,16 @@ public class InfoCotacaoComponent {
 				return info;
 			}
 			
+			// Verifica se o API KEY foi informado
+			if (getOpcaoSistemaComponent().getAlphaVantageApiKey().equals("demo")) {
+				logger.warn("API KEY não informado. API não invocada");
+				return info;
+			}
+			
 			// Invoca a API usando o RestTemplate
 			ResponseEntity<String> resposta = new RestTemplate()
 					.getForEntity("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + ticker + "&apikey=" 
 			+ getOpcaoSistemaComponent().getAlphaVantageApiKey(), String.class);
-			
-			
 			
 			// Verifica se a resposta foi código 200
 			if (resposta.getStatusCode().equals(HttpStatus.OK)) {
