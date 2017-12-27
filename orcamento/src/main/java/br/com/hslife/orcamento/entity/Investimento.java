@@ -253,6 +253,8 @@ public class Investimento extends EntityPersistence {
 			for (MovimentacaoInvestimento movimentacao : this.getMovimentacoesInvestimento()) {
 				if (movimentacao.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
 					cotas += movimentacao.getCotas();
+				} else {
+					cotas -= movimentacao.getCotas();
 				}
 			}
 		}
