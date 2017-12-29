@@ -152,7 +152,7 @@
     
     <ui:define name="outras_opcoes">
     
-    		<h:panelGrid columns="3">
+    		<h:panelGrid columns="4">
     		
     			<b>Despesas Fixas:</b>
     			<h:panelGroup>
@@ -167,6 +167,7 @@
 	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 	    			</h:outputText>
     			</h:panelGroup>
+    			<h:outputText />
     			
     			<b>Parcelamentos:</b>
     			<h:panelGroup>
@@ -181,7 +182,30 @@
 	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 	    			</h:outputText>
 	    		</h:panelGroup>
-    		
+	    		<h:outputText />
+	    		
+	    		<b>Total:</b>
+    			<h:panelGroup>
+	    			<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " style="color: #0000FF;"/>
+	    			<h:outputText value="#{managedBean.totalReceita}" style="color: #0000FF;">
+	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	    			</h:outputText>
+	    		</h:panelGroup>
+	    		<h:panelGroup>
+    				<h:outputText value="#{managedBean.opcoesSistema.moedaPadrao.simboloMonetario} " style="color: #FF0000;"/>
+	    			<h:outputText value="#{managedBean.totalDespesa}" style="color: #FF0000;">
+	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	    			</h:outputText>
+	    		</h:panelGroup>
+	    		<h:panelGroup>	    			
+	    			<h:outputText value="#{managedBean.percentualOrcamentoComprometido}">
+	    				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+	    			</h:outputText>
+	    			<h:outputText value="% " />
+	    			<h:graphicImage id="imgInfoOrcamento" value="/resources/images/svg/info.svg" height="20" width="20"/>
+	    			<p:tooltip for="imgInfoOrcamento" value="Percentual do orçamento comprometido"/>
+	    		</h:panelGroup>
+	    		    		
     		</h:panelGrid>
     
     </ui:define>

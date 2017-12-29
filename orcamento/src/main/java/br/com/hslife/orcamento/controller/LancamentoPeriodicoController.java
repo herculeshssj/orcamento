@@ -554,6 +554,18 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 		return valor;
 	}
 	
+	public double getTotalReceita() {
+		return this.getTotalFixoReceita() + this.getTotalParceladoReceita();
+	}
+	
+	public double getTotalDespesa() {
+		return this.getTotalFixoDespesa() + this.getTotalParceladoDespesa();
+	}
+	
+	public double getPercentualOrcamentoComprometido() {
+		return ( this.getTotalDespesa() / this.getTotalReceita() ) * 100;
+	}
+	
 	public List<Conta> getListaConta() {
 		try {
 			if (getOpcoesSistema().getExibirContasInativas()) {
