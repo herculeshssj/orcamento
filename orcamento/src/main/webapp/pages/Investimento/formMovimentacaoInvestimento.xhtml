@@ -152,11 +152,11 @@
 			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
      	</h:commandLink>				
 		<p:spacer width="20" />
-		<h:commandLink id="lnkOk" title="Salvar dados" action="#{managedBean.salvarDadosInvestimento}">
+		<h:commandLink id="lnkOk" title="Salvar dados" action="#{managedBean.salvarDadosInvestimento}" rendered="#{managedBean.entity.ativo}">
 			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
 		</h:commandLink>
-		<p:spacer width="20" />
-		<h:commandLink title="Excluir" action="#{managedBean.excluirMovimentacao}">
+		<p:spacer width="20" rendered="#{managedBean.entity.ativo}"/>
+		<h:commandLink title="Excluir" action="#{managedBean.excluirMovimentacao}"  rendered="#{managedBean.entity.ativo}">
 			<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 			<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
 		</h:commandLink>

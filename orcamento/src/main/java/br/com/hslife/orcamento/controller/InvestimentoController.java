@@ -137,6 +137,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		movimentacao = null;
 		movimentacoesInvestimento = new LinkedHashSet<>();
 		investimentoInicial = 0;
+		listEntity = new ArrayList<>();
 	}
 	
 	@Override
@@ -238,6 +239,23 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 			errorMessage(be.getMessage());
 		}
 		return null;
+	}
+	
+	public void reativarInvestimento() {
+		// Verifica se existe investimento selecionado
+		if (idEntity == null || idEntity < 0) {
+			warnMessage("Nenhum investimento foi selecionado!");
+			return;
+		}
+		
+		try {
+			entity.setTerminoInvestimento(null);
+			super.save();
+			infoMessage("O investimento foi reativado.");
+			initializeEntity();
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
 	}
 
 	public void selecionarMovimentacoesInvestimento() {

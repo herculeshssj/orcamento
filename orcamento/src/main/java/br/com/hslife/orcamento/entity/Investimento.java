@@ -135,7 +135,7 @@ public class Investimento extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return this.descricao + (this.isAtivo() ? "" : " - INATIVO");
+		return (this.isAtivo() ? "" : "[INATIVO] ") + this.descricao;
 	}
 
 	@Override

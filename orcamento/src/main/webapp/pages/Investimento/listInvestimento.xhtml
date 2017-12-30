@@ -88,6 +88,10 @@
 				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>
+			<h:commandLink title="Reativar investimetno" action="#{managedBean.reativarInvestimento}" rendered="#{!managedBean.entity.ativo}">
+				<h:graphicImage id="imgActivate" height="48" width="48" value="/resources/images/svg/approve.svg"/>
+				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
+			</h:commandLink>
 		</h:panelGroup>
 	</ui:define>
 	
@@ -158,7 +162,7 @@
 					<p:commandLink title="Pesquisar" actionListener="#{managedBean.selecionarMovimentacoesInvestimento}" update="tableMovimentacao">
 						<h:graphicImage id="imgSearchMovimentacao" height="48" width="48" value="/resources/images/svg/search.svg"/>
 					</p:commandLink>
-					<h:commandLink title="Nova movimentação" action="#{managedBean.novaMovimentacao}">
+					<h:commandLink title="Nova movimentação" action="#{managedBean.novaMovimentacao}" rendered="#{managedBean.entity.ativo}">
 	    					<h:graphicImage id="imgNewMovimentacao" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
 	    				</h:commandLink>
 	   				</h:panelGroup>				
