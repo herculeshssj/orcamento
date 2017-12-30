@@ -1,6 +1,12 @@
 Orçamento Doméstico
 ===================
 
+[![Jenkins](https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg)]()
+[![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)]()
+[![AUR](https://img.shields.io/aur/license/yaourt.svg)]()
+[![Conda](https://img.shields.io/conda/pn/conda-forge/python.svg)]()
+
+
 Controle de orçamento doméstico familiar
 -----------------------------------------
 
