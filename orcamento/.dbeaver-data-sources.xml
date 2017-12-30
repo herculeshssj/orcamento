@@ -17,8 +17,13 @@
 			</network-handler>
 		</connection>
 	</data-source>
-	<data-source id="mysql5-15db029743f-937938be17a9038" provider="mysql" driver="mysql5" name="MySQL - orcamentotest" save-password="true" show-system-objects="true" read-only="false">
-		<connection host="localhost" port="3306" server="" database="orcamentotest" url="jdbc:mysql://localhost:3306/orcamentotest" user="orcamento" password="F1UIKBISVkZl8w==" type="dev">
+	<data-source id="mariaDB-160a76ad5a2-6694dfa803b34f36" provider="mysql" driver="mariaDB" name="MariaDB - mysql" save-password="true" show-system-objects="true" read-only="false">
+		<connection host="localhost" port="3306" server="" database="mysql" url="jdbc:mysql://localhost:3306/mysql" user="root" password="AQsJNCGi" type="dev">
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="port" value="22"/>
+				<property name="authType" value="PASSWORD"/>
+			</network-handler>
 			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="false">
 				<property name="socks-port" value="1080"/>
 			</network-handler>
@@ -27,11 +32,7 @@
 				<property name="ssl.verify.server" value="true"/>
 				<property name="ssl.require" value="false"/>
 			</network-handler>
-			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="false">
-				<property name="sshConnectTimeout" value="10000"/>
-				<property name="port" value="22"/>
-				<property name="authType" value="PASSWORD"/>
-			</network-handler>
 		</connection>
 	</data-source>
+	<filters/>
 </data-sources>
