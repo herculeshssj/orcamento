@@ -109,15 +109,21 @@ Segue abaixo os passos para poder baixar e executar o projeto.
 Após instalar o MariaDB, acesse via console ou usando uma ferramenta gráfica de administração e execute os seguintes comandos:
 
 ```sql
--- Criação da base de dados
+-- Criação das base de dados
 create database orcamento;
+create database orcamentotest;
 
 -- Criação do usuário para acessar a base
 create user 'orcamento'@'%' identified by 'd1nh31r0';
 grant all privileges on orcamento.* to 'orcamento'@'%';
+grant all privileges on orcamento.* to 'orcamentotest'@'%';
 
 -- Criação da base de dados
 use orcamento;
+source /caminho/para/o/workspace/eclipse/orcamento/src/main/resources/script-create-all-db.sql;
+
+-- Criação da base de dados de test
+use orcamentotest;
 source /caminho/para/o/workspace/eclipse/orcamento/src/main/resources/script-create-all-db.sql;
 ``` 
 
