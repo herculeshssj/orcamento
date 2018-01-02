@@ -53,6 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.ResultadoScript;
 import br.com.hslife.orcamento.entity.Script;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -76,7 +77,9 @@ public class ScriptController extends AbstractCRUDController<Script>{
 	private IUsuario usuarioService;
 	
 	private String nomeScript;
-	private boolean somenteAtivos;
+	private boolean somenteAtivos = true;
+	private Long idResultadoScript;
+	private ResultadoScript resultadoScript;
 	
 	public ScriptController() {
 		super(new Script());
@@ -97,6 +100,50 @@ public class ScriptController extends AbstractCRUDController<Script>{
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
 		}
+	}
+	
+	public String verDetalhesExecucao() {
+		try {
+			resultadoScript = getService().buscarResultadoPorID(idResultadoScript);
+			return "/pages/Script/verDetalhesExecucao";
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return "";
+	}
+	
+	public List<ResultadoScript> getUltimasExecucoes() {
+		List<ResultadoScript> resultados = new ArrayList<>();
+		try {
+			 // Traz todos os scripts ativos
+			List<Script> scriptsAtivos = getService().buscarPorNomeEAtivo("", true);
+			
+			// Itera os script ativos em busca da última execução de cada um deles
+			for (Script script : scriptsAtivos) {
+				// Verifica se o script possui um usuário setado a ele para saber se o 
+				// usuário logado pode acessar suas informações
+				boolean podeTrazer = false;
+				if (script.getUsuario() != null) {
+					if (script.getUsuario().equals(getUsuarioLogado())) {
+						podeTrazer = true;
+					}
+				} else {
+					// Verifica se o usuário atualmente logado é o admin
+					if (getUsuarioLogado().getLogin().equals("admin")) {
+						podeTrazer = true;
+					}
+				}
+				
+				// Traz o resultado da última execução
+				if (podeTrazer) {
+					resultados.add(getService().buscarUltimoResultadoScript(script));
+				}
+					
+			}
+		} catch (BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return resultados;
 	}
 
 	public List<Usuario> getListaUsuario() {
@@ -130,5 +177,21 @@ public class ScriptController extends AbstractCRUDController<Script>{
 
 	public IUsuario getUsuarioService() {
 		return usuarioService;
+	}
+
+	public Long getIdResultadoScript() {
+		return idResultadoScript;
+	}
+
+	public void setIdResultadoScript(Long idResultadoScript) {
+		this.idResultadoScript = idResultadoScript;
+	}
+
+	public ResultadoScript getResultadoScript() {
+		return resultadoScript;
+	}
+
+	public void setResultadoScript(ResultadoScript resultadoScript) {
+		this.resultadoScript = resultadoScript;
 	}
 }

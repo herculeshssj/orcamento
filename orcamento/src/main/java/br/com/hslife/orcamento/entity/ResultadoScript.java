@@ -91,7 +91,7 @@ public class ResultadoScript extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return "Script executado em " + Util.formataDataHora(inicioExecucao, Util.DATAHORA);
+		return "Executado em " + Util.formataDataHora(inicioExecucao, Util.DATAHORA);
 	}
 
 	@Override

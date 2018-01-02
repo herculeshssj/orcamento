@@ -63,25 +63,40 @@
 		<h:panelGrid columns="2">
 			
 			<label for="frmFormEntity:txtNome">Nome:</label>
-			<h:outputText id="txtNome" value="#{managedBean.entity.nome}" />
+			<h:outputText id="txtNome" value="#{managedBean.resultadoScript.script.nome}" />
 			
 			<label for="frmFormEntity:txtDescricao">Descrição:</label>
-			<h:outputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+			<h:outputText id="txtDescricao" value="#{managedBean.resultadoScript.script.descricao}"/>
 			
 			<label>Notificar</label>
-			<h:selectBooleanCheckbox value="#{managedBean.entity.notificar}" disabled="true"/>
+			<h:selectBooleanCheckbox value="#{managedBean.resultadoScript.script.notificar}" disabled="true"/>
 					
 			<label>Ativo</label>
-			<h:selectBooleanCheckbox value="#{managedBean.entity.ativo}" disabled="true"/>
+			<h:selectBooleanCheckbox value="#{managedBean.resultadoScript.script.ativo}" disabled="true"/>
 		
 			<label>Usuário vinculado:</label>
-			<h:outputText value="#{managedBean.entity.usuario.label}"/>
+			<h:outputText value="#{managedBean.resultadoScript.script.usuario.label}"/>
 			
-			<label for="frmFormEntity:txtScript">Script:</label>
-			<h:inputTextarea id="txtScript" value="#{managedBean.entity.script}" disabled="true"/>			
+			<label>Início da execução:</label>
+			<h:outputText value="#{managedBean.resultadoScript.inicioExecucao}"/>
+			
+			<label>Término da execução;</label>
+			<h:outputText value="#{managedBean.resultadoScript.terminoExecucao}"/>
+			
+			<label>Duração:</label>
+			<h:outputText value="#{managedBean.resultadoScript.tempoExecucao}" />
 				
 		</h:panelGrid>
 		
+		<hr />
+		
+		<h5>Resultado</h5>
+		
+		<h:outputText value="#{managedBean.resultadoScript.resultado}" escape="false" />
+		
+	</ui:define>
+	
+	<ui:define name="acoes">
 	</ui:define>
 	
 </ui:composition>

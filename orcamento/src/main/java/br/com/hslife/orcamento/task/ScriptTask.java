@@ -46,6 +46,8 @@
 
 package br.com.hslife.orcamento.task;
 
+import java.util.Date;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -56,6 +58,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
+import br.com.hslife.orcamento.entity.ResultadoScript;
+import br.com.hslife.orcamento.entity.Script;
+import br.com.hslife.orcamento.repository.ResultadoScriptRepository;
+import br.com.hslife.orcamento.repository.ScriptRepository;
+import groovy.lang.GroovyShell;
 
 @Component
 @Transactional(propagation=Propagation.REQUIRED)
@@ -68,6 +75,12 @@ public class ScriptTask {
 	
 	@Autowired
 	private OpcaoSistemaComponent component;
+	
+	@Autowired
+	private ScriptRepository repository;
+	
+	@Autowired
+	private ResultadoScriptRepository resultadoScriptRepository;
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
@@ -77,11 +90,53 @@ public class ScriptTask {
 		return component;
 	}
 
+	public ScriptRepository getRepository() {
+		this.repository.setSessionFactory(sessionFactory);
+		return repository;
+	}
+
+	public ResultadoScriptRepository getResultadoScriptRepository() {
+		this.resultadoScriptRepository.setSessionFactory(sessionFactory);
+		return resultadoScriptRepository;
+	}
+
 	@Scheduled(fixedDelay=3600000)
 	public void executarScripts() {
 		try {
-			//TODO implementar
+			
 			System.out.println("Agendador das rotinas automatizadas pronto.");
+			
+			// Obtém todos os scripts ativos e itera a lista de scripts, executando cada um em sequência
+			for (Script script : getRepository().findByNomeAndAtivo("", true)) {
+				
+				System.out.println("Executando o script '" + script.getNome() + "'...");
+				
+				// Instancia um novo objeto ResultadoScript
+				ResultadoScript resultadoScript = new ResultadoScript();
+				
+				// Seta os atributos antes da execução
+				resultadoScript.setScript(script);
+				resultadoScript.setInicioExecucao(new Date());
+				
+				try {
+					GroovyShell shell = new GroovyShell();
+					Object resultado = shell.evaluate(script.getScript());
+					resultadoScript.setResultado(resultado.toString());
+				} catch (Throwable t) {
+					resultadoScript.setResultado(t.getMessage());
+				}
+				
+				// Seta o tempo gasto após a execução
+				resultadoScript.setTerminoExecucao(new Date());
+				
+				// Grava o resultado da execução do script
+				getResultadoScriptRepository().save(resultadoScript);
+			
+				System.out.println("Execução do script '" + script.getNome() + "' concluída.");
+			}
+			
+			System.out.println("Concluído a execução das rotinas automatizadas.");
+			
 		} catch (Exception e) {
 			logger.catching(e);
 			e.printStackTrace();

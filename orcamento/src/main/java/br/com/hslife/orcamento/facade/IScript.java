@@ -55,7 +55,9 @@ public interface IScript extends ICRUDService<Script> {
 	
 	public List<Script> buscarPorNomeEAtivo(String nome, boolean ativo);
 	
-	public ResultadoScript buscarUltimoResultadoScript();
+	public ResultadoScript buscarUltimoResultadoScript(Script script);
 	
 	public List<ResultadoScript> buscarPorScript(Script script);
+	
+	public ResultadoScript buscarResultadoPorID(Long id);
 }

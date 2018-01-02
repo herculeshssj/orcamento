@@ -82,12 +82,17 @@ public class ScriptService extends AbstractCRUDService<Script> implements IScrip
 	}
 
 	@Override
-	public ResultadoScript buscarUltimoResultadoScript() {
-		return getResultadoScriptRepository().findLastResultadoScript();
+	public ResultadoScript buscarUltimoResultadoScript(Script script) {
+		return getResultadoScriptRepository().findLastResultadoScript(script);
 	}
 
 	@Override
 	public List<ResultadoScript> buscarPorScript(Script script) {
 		return getResultadoScriptRepository().findByScript(script);
+	}
+	
+	@Override
+	public ResultadoScript buscarResultadoPorID(Long id) {
+		return getResultadoScriptRepository().findById(id);
 	}
 }

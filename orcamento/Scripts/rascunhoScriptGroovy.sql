@@ -28,4 +28,6 @@ alter table script add column ativo boolean not null;
 
 
 
-select * from resultadoscript where terminoExecucao = (select max(terminoExecucao) from resultadoscript);
+select * from resultadoscript where idSCript = 1 and terminoExecucao = (select max(terminoExecucao) from resultadoscript where idscript = 1);
+
+select * from script;

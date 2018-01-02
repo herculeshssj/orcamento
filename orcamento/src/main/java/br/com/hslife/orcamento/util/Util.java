@@ -493,6 +493,6 @@ public class Util {
         segundos -= horas * 3600;
         int minutos = (int) Math.floor(segundos / 60);
         segundos -= minutos * 60;
-        return horas + "h " + minutos + "m";
+        return horas + "h " + minutos + "m " + segundos + "s";
 	}
 }

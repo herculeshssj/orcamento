@@ -60,8 +60,9 @@ public class ResultadoScriptRepository extends AbstractCRUDRepository<ResultadoS
 		super(new ResultadoScript());
 	}
 	
-	public ResultadoScript findLastResultadoScript() {
-		return (ResultadoScript)getQuery("FROM ResultadoScript resultado WHERE resultado.terminoExecucao = (SELECT MAX(res.terminoExecucao) FROM ResultadoScript res)")
+	public ResultadoScript findLastResultadoScript(Script script) {
+		return (ResultadoScript)getQuery("FROM ResultadoScript resultado WHERE resultado.script.id = :idScript AND resultado.terminoExecucao = (SELECT MAX(res.terminoExecucao) FROM ResultadoScript res WHERE res.script.id = :idScript)")
+				.setLong("idScript", script.getId())
 				.uniqueResult();
 	}
 	

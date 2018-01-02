@@ -72,7 +72,8 @@
 		<label>Ativo</label>
 	
 		<label>Usuário vinculado:</label>
-		<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.usuario}" converter="entityConverter">									
+		<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.usuario}" converter="entityConverter">
+			<f:selectItem itemLabel="Nenhum" />									
 			<f:selectItems value="#{managedBean.listaUsuario}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>	
 		

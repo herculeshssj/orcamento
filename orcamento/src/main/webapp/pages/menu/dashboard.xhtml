@@ -199,6 +199,40 @@
 			  		</h:column>
 		  		</h:dataTable>
 	  		</h:panelGroup>
+	  		
+	  		<h:panelGroup rendered="#{not empty scriptMB.ultimasExecucoes}">
+		  		<h5>Rotinas automatizadas</h5>
+				
+				<h:dataTable value="#{scriptMB.ultimasExecucoes}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Rotina"/>
+						</f:facet>
+						<h:outputText value="#{item.script.label}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Informações"/>
+						</f:facet>
+						<h:outputText value="#{item.label}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Tempo de execução"/>
+						</f:facet>
+						<h:outputText value="#{item.tempoExecucao}" />
+			  		</h:column>
+			  		<h:column style="text-align: center; vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="Ações"/>
+						</f:facet>
+						<h:commandLink title="Ver detalhes da execução" action="#{scriptMB.verDetalhesExecucao}">
+							<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
+							<f:setPropertyActionListener value="#{item.id}" target="#{scriptMB.idResultadoScript}"/>
+						</h:commandLink>
+			  		</h:column>
+		  		</h:dataTable>
+	  		</h:panelGroup>
   		
   		</h:form>
      
