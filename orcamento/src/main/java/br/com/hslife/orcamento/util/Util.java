@@ -472,4 +472,27 @@ public class Util {
     	
     	return "{}";
 	}
+    
+    public static String tempoTranscorrido(Date inicio, Date fim) {
+		return Util.tempoTranscorrido(inicio.getTime(), fim.getTime());
+	}
+	
+    /**
+     * Retorna as horas e minutos transcorridos entre as datas informadas.
+     * 
+     * @author eprioli
+     * @param inicio
+     * @param fim
+     * @return
+     */
+	public static String tempoTranscorrido(long inicio, long fim) {
+		long segundos = (fim - inicio) / 1000;		
+		int dias = (int) Math.floor(segundos / 86400);
+        segundos -= dias * 86400;
+        int horas = (int) Math.floor(segundos / 3600);
+        segundos -= horas * 3600;
+        int minutos = (int) Math.floor(segundos / 60);
+        segundos -= minutos * 60;
+        return horas + "h " + minutos + "m";
+	}
 }

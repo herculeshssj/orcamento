@@ -298,6 +298,11 @@
 					</li>
 					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
 					<li id="menu-item-8185" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+						<a href="#{request.contextPath}/pages/Script/listScript.faces">Rotinas automatizadas</a>
+					</li>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
+					<li id="menu-item-8186" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
 						<a href="#{request.contextPath}/pages/Usuario/listUsuario.faces">Usuários</a>
 					</li>
 					</h:panelGroup>					
