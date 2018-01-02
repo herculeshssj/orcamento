@@ -136,7 +136,9 @@ public class ScriptController extends AbstractCRUDController<Script>{
 				
 				// Traz o resultado da última execução
 				if (podeTrazer) {
-					resultados.add(getService().buscarUltimoResultadoScript(script));
+					ResultadoScript resultado = getService().buscarUltimoResultadoScript(script);
+					if (resultado != null && resultado.getResultado() != null)
+						resultados.add(resultado);
 				}
 					
 			}

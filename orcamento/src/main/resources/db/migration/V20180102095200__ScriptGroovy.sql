@@ -63,7 +63,7 @@ create table resultadoscript (
 	idScript bigint not null,
 	inicioExecucao DATETIME not null,
 	terminoExecucao datetime not null,
-	resultado LONGTEXT not null,
+	resultado LONGTEXT null,
 	primary key (id)
 ) Engine=InnoDB;
 

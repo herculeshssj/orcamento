@@ -26,8 +26,10 @@ alter table resultadoscript add constraint fk_resultadoscript_script FOREIGN KEY
 alter table script add column notificar boolean not null;
 alter table script add column ativo boolean not null;
 
+alter table resultadoscript change column `resultado` `resultado` LONGTEXT null;
 
 
-select * from resultadoscript where idSCript = 1 and terminoExecucao = (select max(terminoExecucao) from resultadoscript where idscript = 1);
+
+select * from resultadoscript where idSCript = 2 and terminoExecucao = (select max(terminoExecucao) from resultadoscript where idscript = 2);
 
 select * from script;

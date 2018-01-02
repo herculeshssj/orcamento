@@ -82,11 +82,11 @@ public class ResultadoScript extends EntityPersistence {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date terminoExecucao;
 	
-	@Column(columnDefinition="longtext", nullable=false)
+	@Column(columnDefinition="longtext", nullable=true)
 	private String resultado;
 	
 	public ResultadoScript() {
-	
+		resultado = null;
 	}
 	
 	@Override
