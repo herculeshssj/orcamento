@@ -95,6 +95,7 @@ public class DeleteLogTask {
 			Query hqlAuditoria = session.createQuery("DELETE FROM Auditoria auditoria WHERE auditoria.dataHora <= :periodo");
 			Query hqlLogs = session.createQuery("DELETE FROM Logs log WHERE log.logDate <= :periodo");
 			Query hqlLogRequisicao = session.createQuery("DELETE FROM LogRequisicao log WHERE log.dataHora <= :periodo");
+			Query hqlResultadoScript = session.createQuery("DELETE FROM ResultadoScript script WHERE script.terminoExecucao <= :periodo");
 			
 			// Exclui o log de auditoria
 			hqlAuditoria
@@ -108,6 +109,11 @@ public class DeleteLogTask {
 			
 			// Exclui os logs de requisição
 			hqlLogRequisicao
+				.setDate("periodo", periodo.getDataPeriodo(quantidade))
+				.executeUpdate();
+			
+			// Exclui os logs de execução dos scripts
+			hqlResultadoScript
 				.setDate("periodo", periodo.getDataPeriodo(quantidade))
 				.executeUpdate();
 			

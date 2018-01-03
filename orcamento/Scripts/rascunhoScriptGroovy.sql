@@ -33,3 +33,6 @@ alter table resultadoscript change column `resultado` `resultado` LONGTEXT null;
 select * from resultadoscript where idSCript = 2 and terminoExecucao = (select max(terminoExecucao) from resultadoscript where idscript = 2);
 
 select * from script;
+
+
+select * from resultadoscript;
