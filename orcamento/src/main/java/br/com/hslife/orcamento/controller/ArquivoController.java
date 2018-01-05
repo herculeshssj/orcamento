@@ -257,7 +257,7 @@ public class ArquivoController extends AbstractController {
 	public List<SelectItem> getListaContainer() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (Container status : Container.values()) {
-			if (status.equals(Container.DIVIDATERCEIROS) || status.equals(Container.PAGAMENTODIVIDATERCEIRO))
+			if (status.equals(Container.DIVIDATERCEIROS) || status.equals(Container.PAGAMENTODIVIDATERCEIRO) || status.equals(Container.DOCUMENTOS))
 				continue;
 			listaSelectItem.add(new SelectItem(status, status.toString()));
 		}

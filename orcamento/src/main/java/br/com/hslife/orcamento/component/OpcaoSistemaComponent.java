@@ -114,9 +114,6 @@ public class OpcaoSistemaComponent {
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_FATURACARTAO", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO", Integer.valueOf(1));
-		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS", Integer.valueOf(1));
-		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_DIVIDATERCEIRO", Integer.valueOf(1));
-		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_PAGAMENTODIVIDATERCEIRO", Integer.valueOf(1));
 		opcoesUsuario.put("CONTROLAR_ESTOQUE_DESPENSA", Boolean.TRUE);
 		getService().salvarOpcoesUser(opcoesUsuario, entity);
 	}
