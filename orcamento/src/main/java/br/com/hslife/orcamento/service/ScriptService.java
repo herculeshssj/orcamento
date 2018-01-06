@@ -75,6 +75,19 @@ public class ScriptService extends AbstractCRUDService<Script> implements IScrip
 		resultadoScriptRepository.setSessionFactory(this.sessionFactory);
 		return resultadoScriptRepository;
 	}
+	
+	@Override
+	public void excluir(Script entity) {
+		Script script = getRepository().findById(entity.getId());
+		
+		// Exclui todos os resultados do script
+		for (ResultadoScript resultado : getResultadoScriptRepository().findByScript(script)) {
+			getResultadoScriptRepository().delete(resultado);
+		}
+		
+		// Exclui o script
+		super.excluir(script);
+	}
 
 	@Override
 	public List<Script> buscarPorNomeEAtivo(String nome, boolean ativo) {
