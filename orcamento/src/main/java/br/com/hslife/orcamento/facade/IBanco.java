@@ -54,8 +54,6 @@ public interface IBanco extends ICRUDService<Banco>{
 	
 	public List<Banco> buscarPorNome(String nome);
 	
-	public Banco buscarPadrao();
-	
 	public List<Banco> buscarPorNomeEAtivo(String nome, boolean ativo);
 	
 }

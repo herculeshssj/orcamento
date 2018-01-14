@@ -87,7 +87,6 @@ public class EntityInitializerFactory {
 				.ativo(true)
 				.nome("Banco de teste")
 				.numero("000")
-				.padrao(false)
 				.build();
 	}
 	

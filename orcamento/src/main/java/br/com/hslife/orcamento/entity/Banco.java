@@ -71,9 +71,6 @@ public class Banco extends EntityPersistence {
 	@Column(length=5, nullable=false)
 	private String numero;
 	
-	@Column
-	private boolean padrao;
-	
 	@Column 
 	private boolean ativo;
 	
@@ -87,14 +84,12 @@ public class Banco extends EntityPersistence {
 	private Banco(Builder builder) {
 		this.nome = builder.nome;
 		this.numero = builder.numero;
-		this.padrao = builder.padrao;
 		this.ativo = builder.ativo;
 	}
 
 	public static class Builder {
 		private String nome;
 		private String numero;
-		private boolean padrao;
 		private boolean ativo;
 		
 		public Builder nome(String nome) {
@@ -104,11 +99,6 @@ public class Banco extends EntityPersistence {
 		
 		public Builder numero(String numero) {
 			this.numero = numero;
-			return this;
-		}
-		
-		public Builder padrao(boolean padrao) {
-			this.padrao = padrao;
 			return this;
 		}
 		
@@ -155,14 +145,6 @@ public class Banco extends EntityPersistence {
 
 	public void setNumero(String numero) {
 		this.numero = numero;
-	}
-
-	public boolean isPadrao() {
-		return padrao;
-	}
-
-	public void setPadrao(boolean padrao) {
-		this.padrao = padrao;
 	}
 
 	public boolean isAtivo() {

@@ -68,22 +68,6 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	}
 	
 	@Override
-	public void cadastrar(Banco entity) {
-		if (entity.isPadrao()) {
-			getRepository().updateAllToNotDefault();
-		}
-		super.cadastrar(entity);
-	}
-	
-	@Override
-	public void alterar(Banco entity) {
-		if (entity.isPadrao()) {
-			getRepository().updateAllToNotDefault();
-		}
-		super.alterar(entity);
-	}
-	
-	@Override
 	public void excluir(Banco entity) {
 		try {
 			super.excluir(entity);
@@ -95,11 +79,6 @@ public class BancoService extends AbstractCRUDService<Banco> implements IBanco {
 	@Override
 	public List<Banco> buscarPorNomeEAtivo(String nome, boolean ativo) {
 		return getRepository().findByNomeAndAtivo(nome, ativo);
-	}
-	
-	@Override
-	public Banco buscarPadrao() {
-		return getRepository().findDefault();
 	}
 	
 	@Override

@@ -98,7 +98,7 @@
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>								
 	  		<p:spacer width="10"/>			
-			<h:commandLink title="Excluir" action="#{managedBean.view}" rendered="#{!item.padrao}">
+			<h:commandLink title="Excluir" action="#{managedBean.view}">
 				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>

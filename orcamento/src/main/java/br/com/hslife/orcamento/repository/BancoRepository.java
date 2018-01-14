@@ -72,25 +72,6 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Banco findDefault() {
-		Criteria criteria = getSession().createCriteria(Banco.class);
-		criteria.add(Restrictions.eq("padrao", true));
-		List<Banco> resultado = criteria.list();
-		if (resultado != null && resultado.size() >= 1) {
-			return resultado.get(0);
-		}
-		return null;
-	}
-	
-	public void updateAllToNotDefault() {
-		String sql = "update banco set padrao = false";
-		
-		Query query = getSession().createSQLQuery(sql);
-		
-		query.executeUpdate();
-	}
-	
-	@SuppressWarnings("unchecked")
 	public List<Banco> findByNomeAndAtivo(String nome, boolean ativo) {
 		String hql = "FROM Banco banco WHERE banco.nome LIKE '%" + nome + "%' AND banco.ativo = :ativo ORDER BY banco.nome ASC";
 		Query query = getSession().createQuery(hql).setBoolean("ativo", ativo);

@@ -4,7 +4,7 @@ update banco set padrao = false where padrao is null;
 
 insert into banco (numero, nome, ativo, padrao) select '002', 'Banco Central do Brasil', true, false from banco where numero = '002' HAVING count(*) = 0;
 
-
+alter table banco drop column padrao;
 
 insert into banco (numero, nome, ativo, padrao) select '001', 'Banco do Brasil', true, false from banco where numero = '001' HAVING count(*) = 0;
 insert into banco (numero, nome, ativo, padrao) select '002', 'Banco Central do Brasil', true, false from banco where numero = '002' HAVING count(*) = 0;
