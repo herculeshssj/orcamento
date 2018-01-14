@@ -1,5 +1,6 @@
 -- Exclusão das bases
 drop database orcamentotest;
+drop database orcamento;
 
 -- Criação da base de dados
 create database orcamento;

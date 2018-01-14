@@ -115,6 +115,7 @@ public class OpcaoSistemaComponent {
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_FATURACARTAO", Integer.valueOf(1));
 		opcoesUsuario.put("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO", Integer.valueOf(1));
 		opcoesUsuario.put("CONTROLAR_ESTOQUE_DESPENSA", Boolean.TRUE);
+		opcoesUsuario.put("SALDO_FATURA_ABERTA", Boolean.FALSE);
 		getService().salvarOpcoesUser(opcoesUsuario, entity);
 	}
 	
@@ -138,6 +139,7 @@ public class OpcaoSistemaComponent {
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_LIMITE_ANOS_PANORAMA", this.getLimiteAnosPanorama());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("RESUMO_FORMA_AGRUPAMENTO_PAGAMENTOS", this.getFormaAgrupamentoPagamento());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("CONTROLAR_ESTOQUE_DESPENSA", this.getControlarEstoqueItemDespensa());
+		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("SALDO_FATURA_ABERTA", this.getExibirSaldoFaturaAberta());
 		cacheUsuarioOpcoesSistema.get(usuarioLogado).put("MOEDA_PADRAO", moedaPadrao);
 	}
 
@@ -418,5 +420,26 @@ public class OpcaoSistemaComponent {
 		}
 		
 		return apiKey;
+	}
+	
+	public Boolean getExibirSaldoFaturaAberta() {
+		Usuario usuarioLogado = getUsuarioComponent().getUsuarioLogado();
+		try {
+			// Verifica se o valor existe no cache
+			if (recuperaParametroCacheUsuario(usuarioLogado, "SALDO_FATURA_ABERTA") != null) {
+				return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "SALDO_FATURA_ABERTA"));
+			} else {
+				OpcaoSistema opcao = buscarPorChaveEUsuario("SALDO_FATURA_ABERTA", usuarioLogado);
+				if (opcao != null) {
+					setarParametroCacheUsuario(usuarioLogado, "SALDO_FATURA_ABERTA", Boolean.valueOf(opcao.getValor()));
+					return Boolean.valueOf((Boolean)recuperaParametroCacheUsuario(usuarioLogado, "SALDO_FATURA_ABERTA"));
+				}
+			}
+		} catch (ApplicationException be) {
+			logger.catching(be);
+		} catch (Exception e) {
+			logger.catching(e);
+		}
+		return false; // valor padrão
 	}
 }
