@@ -563,7 +563,7 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	}
 	
 	public double getPercentualOrcamentoComprometido() {
-		return ( this.getTotalDespesa() / this.getTotalReceita() ) * 100;
+		return ( this.getTotalDespesa() / this.getTotalReceita() == 0 ? 1 : this.getTotalReceita() ) * 100;
 	}
 	
 	public List<Conta> getListaConta() {

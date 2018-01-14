@@ -176,6 +176,13 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 		return (Conta)criteria.uniqueResult();
 	}
 	
+	public boolean existsContaCorrentePoupanca() {
+		BigInteger resultConta = (BigInteger) getSession().createSQLQuery("select count(id) from conta where tipoConta in ('CORRENTE', 'POUPANCA', 'OUTROS') and ativo = true").uniqueResult();
+		if (resultConta.longValue() != 0)
+			return true;
+		return false;
+	}
+	
 	public boolean existsLinkages(Conta conta) {
 		boolean result = false;
 		

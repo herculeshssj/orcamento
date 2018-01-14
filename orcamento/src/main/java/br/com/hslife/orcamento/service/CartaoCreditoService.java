@@ -91,6 +91,17 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		this.faturaCartaoRepository.setSessionFactory(this.sessionFactory);
 		return faturaCartaoRepository;
 	}
+	
+	@Override
+	public void validar(CartaoCredito entity) {
+		super.validar(entity);
+		
+		// Verifica se existe conta corrente/poupança para registrar as faturas
+		// dos cartões de crédito
+		if (entity.getTipoCartao().equals(TipoCartao.CREDITO))
+			if (!getContaRepository().existsContaCorrentePoupanca()) 
+				throw new BusinessException("Não existem contas corrente/poupança para registrar os pagamentos das faturas!");
+	}
 
 	@Override
 	public void cadastrar(CartaoCredito entity) {
@@ -145,7 +156,7 @@ public class CartaoCreditoService extends AbstractCRUDService<CartaoCredito> imp
 		}
 		
 		novaFatura.setDataVencimento(vencimento.getTime());
-		novaFatura.setMes(vencimento.get(Calendar.MONTH));
+		novaFatura.setMes(vencimento.get(Calendar.MONTH) + 1);
 		novaFatura.setAno(vencimento.get(Calendar.YEAR));
 		
 		getFaturaCartaoRepository().save(novaFatura);
