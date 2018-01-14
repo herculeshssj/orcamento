@@ -155,9 +155,6 @@
 				Exibir meios de pagamento:
 				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['CONTA_EXIBIR_MEIO_PAGAMENTO']}"/>
 				
-				Exibir saldo das faturas abertas nos lançamentos:
-				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['SALDO_FATURA_ABERTA']}"/>
-				
 			</h:panelGrid>
 			
 		</fieldset>	
@@ -173,7 +170,28 @@
 			
 				Quantidade máxima de registros exibidos na busca:
 				<h:inputText value="#{managedBean.opcoesUser['LANCAMENTO_LIMITE_QUANTIDADE_REGISTROS']}"/>
+				
+				Exibir saldo das faturas abertas nos lançamentos:
+				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['SALDO_FATURA_ABERTA']}"/>
 			
+			</h:panelGrid>
+			
+		</fieldset>	
+		</h:panelGroup>
+		
+		<hr/>
+		
+		<h:panelGroup>
+		<fieldset>
+			<legend>Configurações de fatura do cartão</legend>
+			
+			<h:panelGrid columns="2">
+			
+				Conta padrão para pagamento das faturas:
+				<h:selectOneMenu value="#{managedBean.opcoesUser['FATURA_CONTA_PADRAO_PAGAMENTO']}">
+					<f:selectItems value="#{managedBean.opcaoFaturaComponent.listaContaPadrao}" />
+				</h:selectOneMenu>
+				
 			</h:panelGrid>
 			
 		</fieldset>	

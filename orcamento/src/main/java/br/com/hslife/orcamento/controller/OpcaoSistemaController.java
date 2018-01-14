@@ -55,6 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.OpcaoFaturaComponent;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
@@ -71,6 +72,9 @@ public class OpcaoSistemaController extends AbstractController {
 
 	@Autowired
 	private IOpcaoSistema service;
+	
+	@Autowired
+	private OpcaoFaturaComponent opcaoFaturaComponent;
 	
 	private Map<String, Object> opcoesGlobalAdmin = new HashMap<String, Object>();
 	private Map<String, Object> opcoesUser = new HashMap<String, Object>();
@@ -130,6 +134,10 @@ public class OpcaoSistemaController extends AbstractController {
 
 	public IOpcaoSistema getService() {
 		return service;
+	}
+	
+	public OpcaoFaturaComponent getOpcaoFaturaComponent() {
+		return opcaoFaturaComponent;
 	}
 
 	public void setService(IOpcaoSistema service) {
