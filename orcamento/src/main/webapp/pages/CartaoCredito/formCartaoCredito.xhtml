@@ -141,6 +141,30 @@
 				<h:outputText value=" / " />
 				<h:inputText value="#{managedBean.entity.anoValidade}" size="4" disabled="#{!managedBean.entity.ativo}"/>
 			</h:panelGrid>	
+			
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.tipoCartao == 'CREDITO'}">
+				<f:facet name="header">
+					<h:outputText value="Valores padrão para pagamento da fatura do cartão" />
+				</f:facet>
+				
+				<label>Categoria de débito padrão:</label>
+				<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoria}"  converter="entityConverter">
+					<f:selectItem itemLabel="Selecione uma categoria"/>
+					<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+		
+				<label>Favorecido:</label>
+				<h:selectOneMenu id="txtFavorecido" value="#{managedBean.entity.favorecido}" converter="entityConverter">
+					<f:selectItem itemLabel="Selecione um favorecido"/>
+					<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+		
+				<h:outputText value="Meio de pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/>
+				<h:selectOneMenu id="txtMeioPagamento" value="#{managedBean.entity.meioPagamento}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+					<f:selectItem itemLabel="Selecione um meio de pagamento"/>
+					<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				</h:selectOneMenu>
+			</h:panelGrid>
 		
 		</p:outputPanel>		
 

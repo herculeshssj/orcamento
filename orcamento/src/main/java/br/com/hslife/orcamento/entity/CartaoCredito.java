@@ -137,6 +137,18 @@ public class CartaoCredito extends EntityPersistence {
 	@Column(length=40, nullable=true)
 	private String numeroCartaoDebito;
 	
+	@ManyToOne
+	@JoinColumn(name="idCategoria", nullable=true)
+	private Categoria categoria;
+	
+	@ManyToOne
+	@JoinColumn(name="idFavorecido", nullable=true)
+	private Favorecido favorecido;
+	
+	@ManyToOne
+	@JoinColumn(name="idMeioPagamento", nullable=true)
+	private MeioPagamento meioPagamento;
+	
 	@Transient
 	private int mesValidade;
 	
@@ -351,5 +363,29 @@ public class CartaoCredito extends EntityPersistence {
 
 	public void setMoeda(Moeda moeda) {
 		this.moeda = moeda;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public Favorecido getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(Favorecido favorecido) {
+		this.favorecido = favorecido;
+	}
+
+	public MeioPagamento getMeioPagamento() {
+		return meioPagamento;
+	}
+
+	public void setMeioPagamento(MeioPagamento meioPagamento) {
+		this.meioPagamento = meioPagamento;
 	}
 }

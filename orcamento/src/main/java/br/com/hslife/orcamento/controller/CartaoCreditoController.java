@@ -56,12 +56,19 @@ import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.CartaoCredito;
+import br.com.hslife.orcamento.entity.Categoria;
+import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.enumeration.TipoCartao;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.IBanco;
 import br.com.hslife.orcamento.facade.ICartaoCredito;
+import br.com.hslife.orcamento.facade.ICategoria;
+import br.com.hslife.orcamento.facade.IFavorecido;
+import br.com.hslife.orcamento.facade.IMeioPagamento;
 import br.com.hslife.orcamento.facade.IMoeda;
 
 @Component("cartaoCreditoMB")
@@ -81,6 +88,15 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	
 	@Autowired
 	private IMoeda moedaService;
+	
+	@Autowired
+	private ICategoria categoriaService;
+	
+	@Autowired
+	private IFavorecido favorecidoService;
+	
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
 	
 	private boolean somenteAtivos = true;
 	private CartaoCredito novoCartao;
@@ -117,6 +133,23 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 	@SuppressWarnings("deprecation")
 	@Override
 	public String save() {
+		// Verifica se a categoria, favorecido e meio de pagamento para o lançamento de pagamento da fatura 
+		// foram selecionados
+		if (getOpcoesSistema().getExibirSaldoFaturaAberta()) {
+			if (entity.getCategoria() == null) {
+				warnMessage("Informe a categoria de débito!");
+				return "";
+			}
+			if (entity.getFavorecido() == null) {
+				warnMessage("Informe o favorecido!");
+				return "";
+			}
+			if (getOpcoesSistema().getExibirMeioPagamento() && entity.getMeioPagamento() == null) {
+				warnMessage("Informe o meio de pagamento!");
+				return "";
+			}
+		}
+		
 		Date validade = new Date(entity.getAnoValidade() - 1900, entity.getMesValidade() - 1, entity.getDiaVencimentoFatura());
 		entity.setUsuario(getUsuarioLogado());
 		entity.setValidade(validade);
@@ -271,6 +304,45 @@ public class CartaoCreditoController extends AbstractCRUDController<CartaoCredit
 		return new ArrayList<>();
 	}
 	
+	public List<Categoria> getListaCategoria() {
+		try {
+			return getCategoriaService().buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());			
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		} 
+		return new ArrayList<Categoria>();
+	}
+	
+	public List<Favorecido> getListaFavorecido() {
+		try {
+			return getFavorecidoService().buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public List<MeioPagamento> getListaMeioPagamento() {
+		try {
+			return getMeioPagamentoService().buscarAtivosPorUsuario(getUsuarioLogado());
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		return new ArrayList<>();
+	}
+	
+	public ICategoria getCategoriaService() {
+		return categoriaService;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
+	}
+
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
+	}
+
 	public ICartaoCredito getService() {
 		return service;
 	}
