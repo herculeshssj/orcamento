@@ -125,7 +125,7 @@ public class FaturaCartao extends EntityPersistence {
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
 	
-	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=false)
+	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=false, cascade=CascadeType.ALL)
 	@JoinColumn(name="idLancamento", nullable=true)
 	private LancamentoConta lancamentoPagamento;
 	

@@ -59,8 +59,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.service.ContaService;
+import br.com.hslife.orcamento.service.OpcaoSistemaService;
 
 @Component
 @Transactional(propagation=Propagation.SUPPORTS)
@@ -72,12 +75,19 @@ public class OpcaoFaturaComponent {
 	private ContaService contaService;
 	
 	@Autowired
+	private OpcaoSistemaService opcaoSistemaService;
+	
+	@Autowired
 	private UsuarioComponent usuarioComponent;
 	
 	public UsuarioComponent getUsuarioComponent() {
 		return usuarioComponent;
 	}
 	
+	public OpcaoSistemaService getOpcaoSistemaService() {
+		return opcaoSistemaService;
+	}
+
 	public ContaService getContaService() {
 		return contaService;
 	}
@@ -98,5 +108,24 @@ public class OpcaoFaturaComponent {
 		}
 		
 		return new ArrayList<>();
+	}
+	
+	public Conta getContaPadrao() {
+		OpcaoSistema opcao = getOpcaoSistemaService().buscarOpcaoUsuarioPorChave("FATURA_CONTA_PADRAO_PAGAMENTO", getUsuarioComponent().getUsuarioLogado());
+		
+		if (opcao == null) {
+			// Lança uma exceção caso não exista conta válida para retornar
+			throw new BusinessException("Não existe conta válida para registrar o saldo da fatura!");
+		}
+		
+		Conta conta = getContaService().buscarPorID(Long.parseLong(opcao.getValor()));
+		
+		if (conta == null || !conta.isAtivo()) {
+			// Lança uma exceção caso não exista conta válida para retornar
+			throw new BusinessException("Não existe conta válida para registrar o saldo da fatura!");
+		}
+		
+		// Retorna a conta
+		return conta;
 	}
 }

@@ -67,6 +67,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.OpcaoFaturaComponent;
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.CartaoCredito;
 import br.com.hslife.orcamento.entity.Categoria;
@@ -132,6 +133,9 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	
 	@Autowired
 	private IMeioPagamento meioPagamentoService;
+	
+	@Autowired
+	private OpcaoFaturaComponent opcaoFaturaComponent;
 	
 	private Moeda moedaPadrao;
 	private boolean faturaFechada;
@@ -290,7 +294,65 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		
 		entity.adicionarTodosLancamentos(lancamentosAdicionados);
 		
+		lancamentoSaldoFaturaCartao();
+		
 		return super.save();
+	}
+	
+	/*
+	 * Retorna o lançamento que representa o saldo atual da fatura do cartão
+	 */
+	private void lancamentoSaldoFaturaCartao() {
+		LancamentoConta saldoFatura = null;
+		
+		// Verifica se a opção do sistema está ativada
+		if (getOpcoesSistema().getExibirSaldoFaturaAberta()) {
+			
+			// Verifica se a fatura já possui um lançamento vinculado a ela
+			if (entity.getLancamentoPagamento() != null) {
+				// Calcula o valor da fatura
+				calculaValorConversao();
+				
+				// Atualiza o valor do lançamento
+				entity.getLancamentoPagamento().setValorPago(totalFatura + entity.getSaldoDevedor());
+			} else {
+				/** Cria um novo lançamento e vincula a fatura **/
+				
+				// Traz a conta para setar no lançamento
+				Conta conta = opcaoFaturaComponent.getContaPadrao();
+								
+				// Calcula o valor da fatura
+				calculaValorConversao();
+				
+				// Instancia o objeto e preenche com as informações contidas na fatura
+				// e no cartão de crédito
+				saldoFatura = new LancamentoConta();
+				saldoFatura.setValorPago(totalFatura + entity.getSaldoDevedor());
+				saldoFatura.setConta(conta);
+				
+				// Data de vencimento da fatura
+				Calendar vencimento = Calendar.getInstance();
+				// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
+				if (entity.getConta().getCartaoCredito().getDiaFechamentoFatura() < entity.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
+					vencimento.set(Calendar.DAY_OF_MONTH, entity.getConta().getCartaoCredito().getDiaVencimentoFatura());
+				} else {
+					vencimento.set(Calendar.DAY_OF_MONTH, entity.getConta().getCartaoCredito().getDiaVencimentoFatura());
+					vencimento.add(Calendar.MONTH, 1);
+				}
+				saldoFatura.setDataPagamento(vencimento.getTime());
+				
+				saldoFatura.setCategoria(entity.getConta().getCartaoCredito().getCategoria());
+				saldoFatura.setFavorecido(entity.getConta().getCartaoCredito().getFavorecido());
+				saldoFatura.setMeioPagamento(entity.getConta().getCartaoCredito().getMeioPagamento());
+				saldoFatura.setMoeda(conta.getMoeda());
+				saldoFatura.setTipoLancamento(TipoLancamento.DESPESA);
+				saldoFatura.setDescricao(entity.getLabel());
+				saldoFatura.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
+				saldoFatura.setSaldoFatura(true);
+				
+				entity.setLancamentoPagamento(saldoFatura);
+			}
+		}
 	}
 	
 	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws ApplicationException {
