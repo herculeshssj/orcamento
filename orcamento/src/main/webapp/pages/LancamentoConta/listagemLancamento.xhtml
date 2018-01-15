@@ -119,7 +119,7 @@
 	  			<h:outputText value="Vínculos" />
 	   		</f:facet>
      		<h:column style="text-align: center; vertical-align: middle;">
-     			<h:selectBooleanCheckbox value="#{item.selecionado}"/>
+     			<h:selectBooleanCheckbox value="#{item.selecionado}" rendered="#{item.editavel}"/>
      		</h:column>
      		<h:column style="vertical-align: middle;">
      			<h:outputText value="#{item.dataPagamento}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: left' : 'color: #FF0000; text-align: left' }">

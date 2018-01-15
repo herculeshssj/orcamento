@@ -282,7 +282,11 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			
 			// Adiciona o saldo anterior na listagem, e adiciona os demais lançamentos encontrados
 			listEntity.add(saldoAnterior);
-			listEntity.addAll(getService().buscarPorCriterioBusca(criterioBusca));
+			for (LancamentoConta l : getService().buscarPorCriterioBusca(criterioBusca)) {
+				if (l.isSaldoFatura())
+					l.setEditavel(false);
+				listEntity.add(l);
+			}
 			
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());

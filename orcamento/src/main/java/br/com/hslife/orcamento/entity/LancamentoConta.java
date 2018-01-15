@@ -185,6 +185,9 @@ public class LancamentoConta extends EntityPersistence {
 	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamentoComparator.class)
 	private SortedSet<DetalheLancamento> detalhes;
 	
+	@Column
+	private boolean saldoFatura = false;
+	
 	public LancamentoConta() {
 		conta = new Conta();
 		tipoLancamento = TipoLancamento.DESPESA;
@@ -526,5 +529,13 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setEditavel(boolean editavel) {
 		this.editavel = editavel;
+	}
+
+	public boolean isSaldoFatura() {
+		return saldoFatura;
+	}
+
+	public void setSaldoFatura(boolean saldoFatura) {
+		this.saldoFatura = saldoFatura;
 	}
 }

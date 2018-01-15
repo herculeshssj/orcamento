@@ -8,3 +8,9 @@ alter table cartaocredito add constraint fk_categoria_meiopagamento foreign key 
 
 
 select * from cartaocredito;
+
+
+alter table lancamentoconta add column saldoFatura boolean default false;
+
+select * from faturacartao;
+
