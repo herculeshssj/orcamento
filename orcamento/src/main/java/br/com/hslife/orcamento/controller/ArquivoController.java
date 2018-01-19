@@ -190,7 +190,7 @@ public class ArquivoController extends AbstractController {
 				warnMessage("Anexe um arquivo!");
 				return;
 			}
-			
+			entity.setAttribute("arquivo");
 			getService().salvarAnexo(entidadeSelecionada.getId(), container, entity);
 			
 			infoMessage("Anexo salvo com sucesso!");
