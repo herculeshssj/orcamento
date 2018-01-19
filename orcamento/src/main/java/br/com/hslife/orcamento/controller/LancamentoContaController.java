@@ -165,6 +165,16 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 	}
 
 	@Override
+	public List<LancamentoConta> getListEntity() {
+		if (listEntity != null)
+			for (LancamentoConta l : listEntity) {
+				if (l.isSaldoFatura())
+					l.setEditavel(false);
+			}
+		return listEntity;
+	}
+	
+	@Override
 	protected void initializeEntity() {
 		entity = new LancamentoConta();
 		
@@ -283,8 +293,6 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			// Adiciona o saldo anterior na listagem, e adiciona os demais lançamentos encontrados
 			listEntity.add(saldoAnterior);
 			for (LancamentoConta l : getService().buscarPorCriterioBusca(criterioBusca)) {
-				if (l.isSaldoFatura())
-					l.setEditavel(false);
 				listEntity.add(l);
 			}
 			

@@ -200,87 +200,75 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			warnMessage("Selecione o cartão!");
 			return;
 		}
-		try {
+		
+		if (statusFatura == null) {
+		
+			int contFaturas = 1;
 			
-			if (statusFatura == null) {
+			listEntity = new ArrayList<FaturaCartao>();
+			mapFaturasEncontradas.clear();
 			
-				int contFaturas = 1;
-				
-				listEntity = new ArrayList<FaturaCartao>();
-				mapFaturasEncontradas.clear();
-				
-				for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
-					if (contFaturas <= 5) { 
-						listEntity.add(fatura);
-						
-						// Adiciona os detalhes da fatura no Map						
-						mapFaturasEncontradas.put(fatura.getLabel(), new ArrayList<LancamentoConta>(fatura.getDetalheFatura()));
-						
-						// Ordena os detalhes da fatura
-						Collections.sort(mapFaturasEncontradas.get(fatura.getLabel()), new DetalheFaturaComparator());
-						
-						// Adiciona os detalhes da fatura no List detalhesFaturaCartao para realizar o 
-						// cálculo dos totais
-						detalhesFaturaCartao.clear();
-						detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
-						this.calcularSaldoCompraSaqueParceladoPorMoeda();
-						
-						// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
-						// o valor registrado durante o fechamento da fatura
-						if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
-								|| fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
-							for (Moeda m : moedas) {
-								m.setTaxaConversao(m.getValorConversao());
-							}
-						} else {
-							for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
-								moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
-							}	
-						}						
-						
-						this.calculaValorConversao();
-						
-						// Adiciona as moedas com seus totais no map correspondente
-						mapMoedasEncontradas.put(fatura.getLabel(), new ArrayList<Moeda>(moedas));
-						
-						contFaturas++;
-					} 
-				}
-				
-				// Seta o idEntity com o ID da fatura do final do list
-				if (listEntity != null && listEntity.size() > 0)
-					idEntity = listEntity.get(0).getId();
-			
-			} else {
-				
-				listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
-				
+			for (FaturaCartao fatura : getService().buscarTodosPorContaOrdenadoPorMesEAno(cartaoSelecionado.getConta())) {
+				if (contFaturas <= 5) { 
+					listEntity.add(fatura);
+					
+					// Adiciona os detalhes da fatura no Map						
+					mapFaturasEncontradas.put(fatura.getLabel(), new ArrayList<LancamentoConta>(fatura.getDetalheFatura()));
+					
+					// Ordena os detalhes da fatura
+					Collections.sort(mapFaturasEncontradas.get(fatura.getLabel()), new DetalheFaturaComparator());
+					
+					// Adiciona os detalhes da fatura no List detalhesFaturaCartao para realizar o 
+					// cálculo dos totais
+					detalhesFaturaCartao.clear();
+					detalhesFaturaCartao.addAll(fatura.getDetalheFatura());
+					this.calcularSaldoCompraSaqueParceladoPorMoeda();
+					
+					// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
+					// o valor registrado durante o fechamento da fatura
+					if (fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+							|| fatura.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
+						for (Moeda m : moedas) {
+							m.setTaxaConversao(m.getValorConversao());
+						}
+					} else {
+						for (ConversaoMoeda conversao : fatura.getConversoesMoeda()) {
+							moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
+						}	
+					}						
+					
+					this.calculaValorConversao();
+					
+					// Adiciona as moedas com seus totais no map correspondente
+					mapMoedasEncontradas.put(fatura.getLabel(), new ArrayList<Moeda>(moedas));
+					
+					contFaturas++;
+				} 
 			}
-
-		} catch (ApplicationException be) {
-			errorMessage(be.getMessage());
+			
+			// Seta o idEntity com o ID da fatura do final do list
+			if (listEntity != null && listEntity.size() > 0)
+				idEntity = listEntity.get(0).getId();
+		
+		} else {
+			listEntity = getService().buscarPorCartaoCreditoEStatusFatura(cartaoSelecionado, statusFatura);
 		}
 	}
 	
 	@Override
 	public String edit() {
-		try {
-			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-			String idFatura = fParams.get("idEdicaoFatura");
-			
-			entity = getService().buscarPorID(Long.parseLong(idFatura));
-			lancamentosAdicionados.clear();
-			lancamentosAdicionados.addAll(entity.getDetalheFatura());
-			detalhesFaturaCartao.clear();
-			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
-			this.calcularSaldoCompraSaqueParceladoPorMoeda();
-			operation = "edit";
-			actionTitle = " - Editar";
-			return goToFormPage;
-		} catch (ApplicationException be) {
-			errorMessage(be.getMessage());
-		}
-		return "";
+		Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String idFatura = fParams.get("idEdicaoFatura");
+		
+		entity = getService().buscarPorID(Long.parseLong(idFatura));
+		lancamentosAdicionados.clear();
+		lancamentosAdicionados.addAll(entity.getDetalheFatura());
+		detalhesFaturaCartao.clear();
+		detalhesFaturaCartao.addAll(entity.getDetalheFatura());
+		this.calcularSaldoCompraSaqueParceladoPorMoeda();
+		operation = "edit";
+		actionTitle = " - Editar";
+		return goToFormPage;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -310,8 +298,20 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			
 			// Verifica se a fatura já possui um lançamento vinculado a ela
 			if (entity.getLancamentoPagamento() != null) {
-				// Calcula o valor da fatura
-				calculaValorConversao();
+				this.calcularSaldoCompraSaqueParceladoPorMoeda();
+				// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
+				// o valor registrado durante o fechamento da fatura
+				if (entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+						|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
+					for (Moeda m : moedas) {
+						m.setTaxaConversao(m.getValorConversao());
+					}
+				} else {
+					for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
+						moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
+					}	
+				}
+				this.calculaValorConversao();
 				
 				// Atualiza o valor do lançamento
 				entity.getLancamentoPagamento().setValorPago(totalFatura + entity.getSaldoDevedor());
@@ -322,31 +322,43 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 				Conta conta = opcaoFaturaComponent.getContaPadrao();
 								
 				// Calcula o valor da fatura
-				calculaValorConversao();
+				this.calcularSaldoCompraSaqueParceladoPorMoeda();
+				// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
+				// o valor registrado durante o fechamento da fatura
+				if (entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+						|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
+					for (Moeda m : moedas) {
+						m.setTaxaConversao(m.getValorConversao());
+					}
+				} else {
+					for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
+						moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
+					}	
+				}
+				this.calculaValorConversao();
 				
 				// Instancia o objeto e preenche com as informações contidas na fatura
 				// e no cartão de crédito
 				saldoFatura = new LancamentoConta();
 				saldoFatura.setValorPago(totalFatura + entity.getSaldoDevedor());
 				saldoFatura.setConta(conta);
+				saldoFatura.setDataPagamento(entity.getDataVencimento());
+								
+				saldoFatura.setCategoria(entity.getConta().getCartaoCredito().getCategoria() == null 
+						? getCategoriaService().buscarCategoria("", TipoCategoria.DEBITO, getUsuarioLogado()) 
+								: entity.getConta().getCartaoCredito().getCategoria());
 				
-				// Data de vencimento da fatura
-				Calendar vencimento = Calendar.getInstance();
-				// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
-				if (entity.getConta().getCartaoCredito().getDiaFechamentoFatura() < entity.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
-					vencimento.set(Calendar.DAY_OF_MONTH, entity.getConta().getCartaoCredito().getDiaVencimentoFatura());
-				} else {
-					vencimento.set(Calendar.DAY_OF_MONTH, entity.getConta().getCartaoCredito().getDiaVencimentoFatura());
-					vencimento.add(Calendar.MONTH, 1);
-				}
-				saldoFatura.setDataPagamento(vencimento.getTime());
+				saldoFatura.setFavorecido(entity.getConta().getCartaoCredito().getFavorecido() == null
+						? getFavorecidoService().buscarFavorecido("", getUsuarioLogado())
+								: entity.getConta().getCartaoCredito().getFavorecido());
 				
-				saldoFatura.setCategoria(entity.getConta().getCartaoCredito().getCategoria());
-				saldoFatura.setFavorecido(entity.getConta().getCartaoCredito().getFavorecido());
-				saldoFatura.setMeioPagamento(entity.getConta().getCartaoCredito().getMeioPagamento());
+				saldoFatura.setMeioPagamento(entity.getConta().getCartaoCredito().getMeioPagamento() == null
+						? getMeioPagamentoService().buscarMeioPagamento("", getUsuarioLogado()) 
+								: entity.getConta().getCartaoCredito().getMeioPagamento());
+				
 				saldoFatura.setMoeda(conta.getMoeda());
 				saldoFatura.setTipoLancamento(TipoLancamento.DESPESA);
-				saldoFatura.setDescricao(entity.getLabel());
+				saldoFatura.setDescricao(entity.getConta().getCartaoCredito().getLabel() + " - " + entity.getLabel());
 				saldoFatura.setStatusLancamentoConta(StatusLancamentoConta.REGISTRADO);
 				saldoFatura.setSaldoFatura(true);
 				
@@ -355,7 +367,7 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 		}
 	}
 	
-	private void calcularSaldoCompraSaqueParceladoPorMoeda() throws ApplicationException {
+	private void calcularSaldoCompraSaqueParceladoPorMoeda() {
 
 		/* Pegando os totais para mostrar na fatura */
 		moedas = moedaService.buscarPorUsuario(getUsuarioLogado());
@@ -443,34 +455,26 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	public void adicionarLancamento() {
-		try {
-			for (LancamentoConta l : lancamentosEncontrados) {
-				if (l.isSelecionado() && l.getFaturaCartao() == null) {
-					lancamentosAdicionados.add(l);
-				}
+		for (LancamentoConta l : lancamentosEncontrados) {
+			if (l.isSelecionado() && l.getFaturaCartao() == null) {
+				lancamentosAdicionados.add(l);
 			}
-			lancamentosEncontrados.removeAll(lancamentosAdicionados);
-			detalhesFaturaCartao.clear();
-			detalhesFaturaCartao.addAll(lancamentosAdicionados);
-			this.calcularSaldoCompraSaqueParceladoPorMoeda();
-		} catch (ApplicationException be) {
-			errorMessage(be.getMessage());
 		}
+		lancamentosEncontrados.removeAll(lancamentosAdicionados);
+		detalhesFaturaCartao.clear();
+		detalhesFaturaCartao.addAll(lancamentosAdicionados);
+		this.calcularSaldoCompraSaqueParceladoPorMoeda();
 	}
 	
 	public void excluirLancamento() {
-		try {
-			for (Iterator<LancamentoConta> i = lancamentosAdicionados.iterator(); i.hasNext();) {
-				if (i.next().isSelecionado()) {
-					i.remove();
-				}
+		for (Iterator<LancamentoConta> i = lancamentosAdicionados.iterator(); i.hasNext();) {
+			if (i.next().isSelecionado()) {
+				i.remove();
 			}
-			detalhesFaturaCartao.clear();
-			detalhesFaturaCartao.addAll(lancamentosAdicionados);
-			this.calcularSaldoCompraSaqueParceladoPorMoeda();			
-		} catch (ApplicationException be) {
-			errorMessage(be.getMessage());
 		}
+		detalhesFaturaCartao.clear();
+		detalhesFaturaCartao.addAll(lancamentosAdicionados);
+		this.calcularSaldoCompraSaqueParceladoPorMoeda();			
 	}
 	
 	public void pesquisarLancamento() {
@@ -521,35 +525,29 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	public String fecharFaturaView() {
-		try {
-			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-			String idFatura = fParams.get("idFecharFatura");
-			if (idFatura != null && !idFatura.equals(idFecharFatura)) 
-				idFecharFatura = idFatura;
-			
-			faturaSelecionada = getService().buscarPorID(Long.parseLong(idFecharFatura));
-			detalhesFaturaCartao.clear();
-			detalhesFaturaCartao.addAll(faturaSelecionada.getDetalheFatura());
-			this.calcularSaldoCompraSaqueParceladoPorMoeda();
-			
-			Calendar fechamento = Calendar.getInstance();
-			fechamento.setTime(faturaSelecionada.getDataVencimento());
-			// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
-			if (faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura() < faturaSelecionada.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
-				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
-			} else {
-				fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
-				fechamento.add(Calendar.MONTH, -1);
-			}			
-			faturaSelecionada.setDataFechamento(fechamento.getTime());
-			this.calculaValorConversao();
-			actionTitle = " - Fechar fatura";
-			return "/pages/FaturaCartao/fecharFatura";
-		} catch (ApplicationException be) {
-			errorMessage(be.getMessage());
-		}
+		Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String idFatura = fParams.get("idFecharFatura");
+		if (idFatura != null && !idFatura.equals(idFecharFatura)) 
+			idFecharFatura = idFatura;
 		
-		return "";
+		faturaSelecionada = getService().buscarPorID(Long.parseLong(idFecharFatura));
+		detalhesFaturaCartao.clear();
+		detalhesFaturaCartao.addAll(faturaSelecionada.getDetalheFatura());
+		this.calcularSaldoCompraSaqueParceladoPorMoeda();
+		
+		Calendar fechamento = Calendar.getInstance();
+		fechamento.setTime(faturaSelecionada.getDataVencimento());
+		// Fechamento < Vencimento = mesmo mês; Fechamento >= Vencimento = mês seguinte
+		if (faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura() < faturaSelecionada.getConta().getCartaoCredito().getDiaVencimentoFatura()) {
+			fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
+		} else {
+			fechamento.set(Calendar.DAY_OF_MONTH, faturaSelecionada.getConta().getCartaoCredito().getDiaFechamentoFatura());
+			fechamento.add(Calendar.MONTH, -1);
+		}			
+		faturaSelecionada.setDataFechamento(fechamento.getTime());
+		this.calculaValorConversao();
+		actionTitle = " - Fechar fatura";
+		return "/pages/FaturaCartao/fecharFatura";
 	}
 	
 	public String confirmarFechamento() {
@@ -694,35 +692,30 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	}
 	
 	public String detalheFatura() {		
-		try {			
-			Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-			String idFatura = fParams.get("idDetalheFatura");
-			
-			entity = getService().buscarPorID(Long.parseLong(idFatura));
-			lancamentosEncontrados.clear();
-			lancamentosEncontrados.addAll(entity.getDetalheFatura());
-			detalhesFaturaCartao.clear(); 
-			detalhesFaturaCartao.addAll(entity.getDetalheFatura());
-			this.calcularSaldoCompraSaqueParceladoPorMoeda();
-			// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
-			// o valor registrado durante o fechamento da fatura
-			if (entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
-					|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
-				for (Moeda m : moedas) {
-					m.setTaxaConversao(m.getValorConversao());
-				}
-			} else {
-				for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
-					moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
-				}	
+		Map<String, String> fParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String idFatura = fParams.get("idDetalheFatura");
+		
+		entity = getService().buscarPorID(Long.parseLong(idFatura));
+		lancamentosEncontrados.clear();
+		lancamentosEncontrados.addAll(entity.getDetalheFatura());
+		detalhesFaturaCartao.clear(); 
+		detalhesFaturaCartao.addAll(entity.getDetalheFatura());
+		this.calcularSaldoCompraSaqueParceladoPorMoeda();
+		// Determina a partir do status da fatura se será usado o valor de conversão da moeda ou 
+		// o valor registrado durante o fechamento da fatura
+		if (entity.getStatusFaturaCartao().equals(StatusFaturaCartao.ABERTA) 
+				|| entity.getStatusFaturaCartao().equals(StatusFaturaCartao.FUTURA)) {
+			for (Moeda m : moedas) {
+				m.setTaxaConversao(m.getValorConversao());
 			}
-			this.calculaValorConversao();
-			actionTitle = " - Detalhes";
-			return "/pages/FaturaCartao/detalheFatura";			
-		} catch (ApplicationException be) {
-			errorMessage(be.getMessage());
+		} else {
+			for (ConversaoMoeda conversao : entity.getConversoesMoeda()) {
+				moedas.get(moedas.indexOf(conversao.getMoeda())).setTaxaConversao(conversao.getTaxaConversao());							
+			}	
 		}
-		return "";
+		this.calculaValorConversao();
+		actionTitle = " - Detalhes";
+		return "/pages/FaturaCartao/detalheFatura";			
 	}
 	
 	public void calculaValorConversao() {
@@ -987,5 +980,17 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 	public void setSelecionarTodosLancamentosAdicionados(
 			boolean selecionarTodosLancamentosAdicionados) {
 		this.selecionarTodosLancamentosAdicionados = selecionarTodosLancamentosAdicionados;
+	}
+
+	public ICategoria getCategoriaService() {
+		return categoriaService;
+	}
+
+	public IFavorecido getFavorecidoService() {
+		return favorecidoService;
+	}
+
+	public IMeioPagamento getMeioPagamentoService() {
+		return meioPagamentoService;
 	}
 }

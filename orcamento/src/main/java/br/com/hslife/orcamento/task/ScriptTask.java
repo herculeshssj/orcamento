@@ -104,12 +104,12 @@ public class ScriptTask {
 	public void executarScripts() {
 		try {
 			
-			System.out.println("Agendador das rotinas automatizadas pronto.");
+			logger.debug("Agendador das rotinas automatizadas pronto.");
 			
 			// Obtém todos os scripts ativos e itera a lista de scripts, executando cada um em sequência
 			for (Script script : getRepository().findByNomeAndAtivo("", true)) {
 				
-				System.out.println("Executando o script '" + script.getNome() + "'...");
+				logger.debug("Executando o script '" + script.getNome() + "'...");
 				
 				// Instancia um novo objeto ResultadoScript
 				ResultadoScript resultadoScript = new ResultadoScript();
@@ -132,10 +132,10 @@ public class ScriptTask {
 				// Grava o resultado da execução do script
 				getResultadoScriptRepository().save(resultadoScript);
 			
-				System.out.println("Execução do script '" + script.getNome() + "' concluída.");
+				logger.debug("Execução do script '" + script.getNome() + "' concluída.");
 			}
 			
-			System.out.println("Concluído a execução das rotinas automatizadas.");
+			logger.debug("Concluído a execução das rotinas automatizadas.");
 			
 		} catch (Exception e) {
 			logger.catching(e);

@@ -186,6 +186,14 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 			faturaCartao.setStatusFaturaCartao(StatusFaturaCartao.QUITADA);
 		}
 		
+		// Caso exista algum lançamento vinculado a fatura, quebra o vínculo
+		Long idLancamentoPagamento = null;
+		if (faturaCartao.getLancamentoPagamento() != null) {
+			// Guarda o ID do lançamento de pagamento
+			idLancamentoPagamento = faturaCartao.getLancamentoPagamento().getId();
+			faturaCartao.setLancamentoPagamento(null);
+		}
+			
 		// Salva a fatura do cartão
 		getRepository().update(faturaCartao);
 		
@@ -236,6 +244,12 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 			FaturaCartao novaFatura = getRepository().findNextFaturaCartaoFutura(entity.getConta());
 			novaFatura.setStatusFaturaCartao(StatusFaturaCartao.ABERTA);
 			getRepository().update(novaFatura);
+		}
+		
+		// Por fim, exclui o lançamento de pagamento vinculado a fatura aberta 
+		if (idLancamentoPagamento != null) {
+			LancamentoConta l = getLancamentoContaRepository().findById(idLancamentoPagamento);
+			getLancamentoContaRepository().delete(l);
 		}
 	}
 	

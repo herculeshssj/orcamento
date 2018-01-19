@@ -14,3 +14,10 @@ alter table lancamentoconta add column saldoFatura boolean default false;
 
 select * from faturacartao;
 
+
+select * from opcaosistema;
+select * from faturacartao;
+
+update faturacartao set idArquivo = null;
+update lancamentoconta set idArquivo = null;
+update lancamentoperiodico set idArquivo = null;
