@@ -18,10 +18,10 @@ Destinado a controlar as despesas domésticas de uma família. Tem opções para
 
 * Oracle Java JDK SE 8 ou OpenJDK 8 (qualquer update);
 * Eclipse Neon 4.6 ou superior;
-* Git 1.9 ou superior;
-* Tomcat 8.0.30 ou superior (ainda não compatível com o Tomcat 8.5 e Tomcat 9);
-* MariaBD 10 ou superior;
-* astah Community 6 ou superior;
+* Git 2.0 ou superior;
+* Tomcat 8.5.24 ou superior;
+* MariaDB 10 ou superior;
+* astah Community 6.5 ou superior;
 * Pencil 2.0.6 ou superior;
 * Windows, Linux ou Mac, qualquer versão capaz de rodar os softwares acima.
 
