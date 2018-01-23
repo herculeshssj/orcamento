@@ -3,7 +3,7 @@ Orçamento Doméstico
 
 [![Jenkins](https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg)]()
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)]()
-[![AUR](https://img.shields.io/aur/license/yaourt.svg)]()
+[![License (LGPL version 3.0)](https://img.shields.io/badge/license-GNU%20LGPL%20version%203.0-green.svg)](http://opensource.org/licenses/LGPL-3.0)
 [![Conda](https://img.shields.io/conda/pn/conda-forge/python.svg)]()
 
 
