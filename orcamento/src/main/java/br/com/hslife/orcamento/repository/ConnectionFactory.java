@@ -73,7 +73,7 @@ public class ConnectionFactory {
  
     private ConnectionFactory() {
     	try {
-    		Class.forName("com.mysql.jdbc.Driver");
+    		Class.forName("org.mariadb.jdbc.Driver");
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
@@ -83,7 +83,7 @@ public class ConnectionFactory {
         properties.setProperty("password", "d1nh31r0"); // or get properties from some configuration file
  
         DriverManagerConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-                "jdbc:mysql://localhost:3306/orcamento?autoReconnect=true", properties
+                "jdbc:mariadb://localhost:3306/orcamento?autoReconnect=true", properties
         );
         
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
