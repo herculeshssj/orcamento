@@ -141,7 +141,7 @@
 
 	<error-page>
 		<error-code>404</error-code>
-		<location>/erro404.jsp</location>
+		<location>/naoEncontrado.faces</location>
 	</error-page>
 
 	<!-- Session idle timeout in minutes -->
