@@ -89,7 +89,8 @@ public class UsuarioComponent {
 	            	login = ((User)authentication.getPrincipal()).getUsername();
 	            }
 	        }
-	        return getService().buscarPorLogin(login);
+	        Usuario u = getService().buscarPorLogin(login); 
+	        return u;
 		} catch (Throwable t) {
         	logger.catching(t);
         	throw new RuntimeException(t);

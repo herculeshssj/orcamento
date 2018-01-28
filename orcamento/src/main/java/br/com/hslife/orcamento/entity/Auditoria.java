@@ -60,7 +60,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.json.JSONObject;
@@ -84,10 +83,10 @@ public class Auditoria implements Serializable {
 	@Column(nullable=false)
 	private String usuario;
 	
-	@Transient
+	@Column(length=255, nullable=false)
 	private String ip;
 	
-	@Transient
+	@Column(length=255, nullable=false)
 	private String browser;
 	
 	@Column(nullable=false)

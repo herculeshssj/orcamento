@@ -89,7 +89,6 @@ public class LogRequisicaoFilter implements Filter {
 		System.out.println("Finalizado o log das requisições.");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		try {

@@ -61,4 +61,5 @@ public interface IAuditoria {
 	
 	public void excluir(Auditoria auditoria);
 
+	public void salvar(Auditoria auditoria);
 }

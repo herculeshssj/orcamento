@@ -67,6 +67,10 @@ public class AuditoriaRepository extends AbstractRepository {
 		getSession().delete(entity);
 	}
 	
+	public void save(Auditoria entity) {
+		getSession().persist(entity);
+	}
+	
 	public Auditoria findById(Long id) {
 		Criteria criteria = getSession().createCriteria(Auditoria.class).setFetchMode("dadosAuditoria", FetchMode.JOIN);
 		criteria.add(Restrictions.eq("id", id));

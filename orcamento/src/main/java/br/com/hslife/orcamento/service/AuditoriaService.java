@@ -90,4 +90,8 @@ public class AuditoriaService implements IAuditoria {
 	public void excluir(Auditoria auditoria) {
 		getRepository().delete(auditoria);
 	}
+	
+	public void salvar(Auditoria auditoria) {
+		getRepository().save(auditoria);
+	}
 }
