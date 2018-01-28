@@ -7,6 +7,7 @@ desc auditoria;
 select * from auditoria order by id desc limit 100;
 select * from logrequisicao order by dataHora desc limit 100;
 
+SELECT * FROM usuario;
 
 
 /***** SQL definitivo da atualização das bibliotecas *****/

@@ -189,7 +189,9 @@
 						<f:facet name="header">
 							<h:outputText value="Entrou em"/>
 						</f:facet>
-						<h:outputText value="#{item.dataEntrada}" />
+						<h:outputText value="#{item.dataEntrada}">
+							<f:converter converterId="dateConverter"/>
+						</h:outputText>
 			  		</h:column>
 			  		<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
