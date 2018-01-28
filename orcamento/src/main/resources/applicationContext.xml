@@ -54,17 +54,17 @@
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-						http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 						http://www.springframework.org/schema/context
-						http://www.springframework.org/schema/context/spring-context-3.1.xsd
+						http://www.springframework.org/schema/context/spring-context-4.3.xsd
 						http://www.springframework.org/schema/tx
-						http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+						http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 						http://www.springframework.org/schema/aop
-						http://www.springframework.org/schema/aop/spring-aop-3.1.xsd						
+						http://www.springframework.org/schema/aop/spring-aop-4.3.xsd						
 						http://www.springframework.org/schema/security 
-						http://www.springframework.org/schema/security/spring-security-3.1.xsd
+						http://www.springframework.org/schema/security/spring-security-4.2.xsd
 						http://www.springframework.org/schema/task
-						http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+						http://www.springframework.org/schema/task/spring-task-4.3.xsd">
 						
 	<!-- General -->
 	<context:component-scan base-package="br.com.hslife.orcamento" />
@@ -84,7 +84,7 @@
 		<property name="password" value="${jdbc.password}" />
     </bean>
         
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan">
         	<array>
@@ -101,7 +101,7 @@
         </property>
     </bean>
     
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     
@@ -114,7 +114,7 @@
  	<sec:http auto-config="true">
  		<sec:access-denied-handler error-page="/acessoNegado.faces"/>
 	    <sec:form-login login-page="/login.faces" authentication-failure-url="/erroLogin.faces"	authentication-success-handler-ref="startupUserParametersHandler"/>
-	    <sec:intercept-url pattern="/pages/**" access="ROLE_USER,ROLE_ADMIN" />
+	    <sec:intercept-url pattern="/pages/**" access="hasRole('USER') and hasRole('ADMIN')" />
 	    <sec:logout delete-cookies="JSESSIONID" />
 	    <sec:remember-me key="uniqueAndSecret" token-validity-seconds="86400"/>	    
 	</sec:http>
@@ -127,10 +127,4 @@
 	            authorities-by-username-query="select login as username, tipoUsuario as authority from usuario where login=?" />
 	    </sec:authentication-provider>
 	</sec:authentication-manager>
-	
-	<!-- application.wadl -->
-	<!--
-		Referência: https://stackoverflow.com/questions/31893335/spring-mvc-autowire-requestmappinghandlermapping 
-	 -->
-	<bean name="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 </beans>

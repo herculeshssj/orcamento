@@ -54,14 +54,16 @@ import org.hibernate.StatelessSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.enumeration.PeriodoLogs;
+import br.com.hslife.orcamento.exception.ApplicationException;
 
 @Component
-@Transactional(propagation=Propagation.REQUIRED)
+@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.DEFAULT, rollbackFor={ApplicationException.class}, readOnly=false)
 public class DeleteLogTask {
 	
 	private static final Logger logger = LogManager.getLogger(DeleteLogTask.class);
@@ -90,7 +92,8 @@ public class DeleteLogTask {
 			Integer quantidade = getComponent().getLogNumPeriodo();
 			
 			StatelessSession session = getSessionFactory().openStatelessSession();
-			
+			// FIXME mover as consultas para o repositório. Aqui no Task, injetar o LogService para realizar esta operação
+			// FIXME atualizar as interfaces. Query e Criteria estão depreciadas
 			// Definição dos deletes
 			Query hqlAuditoria = session.createQuery("DELETE FROM Auditoria auditoria WHERE auditoria.dataHora <= :periodo");
 			Query hqlLogs = session.createQuery("DELETE FROM Logs log WHERE log.logDate <= :periodo");
