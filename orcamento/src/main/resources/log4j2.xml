@@ -58,7 +58,7 @@
 		</JDBC>
 	</Appenders>
 	<Loggers>
-		<Root level="debug">
+		<Root level="error">
 			<AppenderRef ref="databaseAppender" />
 		</Root>
 	</Loggers>
