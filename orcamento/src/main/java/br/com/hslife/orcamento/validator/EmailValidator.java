@@ -49,11 +49,14 @@ package br.com.hslife.orcamento.validator;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 import br.com.hslife.orcamento.util.Util;
 
+//FIXME remover este validator. A validação na entidade é melhor
+@FacesValidator("emailValidator")
 public class EmailValidator implements Validator {
 
 	@Override

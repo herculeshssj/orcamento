@@ -50,9 +50,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.convert.FacesConverter;
 
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 
+//FIXME remover este converter. Ele não é mais necessário
+@FacesConverter("usuarioRoleConverter")
 public class UsuarioRoleConverter implements Converter{
 	
 	@Override
