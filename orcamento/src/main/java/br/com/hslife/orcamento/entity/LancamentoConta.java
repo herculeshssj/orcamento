@@ -71,8 +71,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.SortComparator;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
@@ -181,8 +180,8 @@ public class LancamentoConta extends EntityPersistence {
 	@Transient
 	private boolean editavel = true;
 	
-	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
-	@Sort(type=SortType.COMPARATOR, comparator=DetalheLancamentoComparator.class)
+	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)
+	@SortComparator(DetalheLancamentoComparator.class)
 	private SortedSet<DetalheLancamento> detalhes;
 	
 	@Column

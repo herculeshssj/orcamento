@@ -62,8 +62,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.SortComparator;
 
 import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -112,7 +111,7 @@ public class Meta extends EntityPersistence {
 	private Usuario usuario;
 	
 	@OneToMany(mappedBy="meta", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	@Sort(type=SortType.COMPARATOR, comparator=ItemMetaComparator.class)
+	@SortComparator(ItemMetaComparator.class)
 	private List<ItemMeta> itens; 
 	
 	public Meta() {
