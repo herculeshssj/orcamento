@@ -9,6 +9,8 @@ select * from logrequisicao order by dataHora desc limit 100;
 
 SELECT * FROM usuario;
 
+select * from arquivo;
+
 
 /***** SQL definitivo da atualização das bibliotecas *****/
 

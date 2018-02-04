@@ -70,8 +70,12 @@ import br.com.hslife.orcamento.enumeration.Container;
 
 @Entity
 @Table(name="arquivo")
-@SuppressWarnings("serial")
 public class Arquivo extends EntityPersistence {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3525039093524704725L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -133,14 +137,11 @@ public class Arquivo extends EntityPersistence {
 	
 	public boolean isPrazoExpirado() {
 		switch(this.container) {
-			case DOCUMENTOS : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DOCUMENTOS"));
 			case FATURACARTAO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_FATURACARTAO"));
 			case LANCAMENTOCONTA : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOCONTA"));
 			case LANCAMENTOPERIODICO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO"));
-			case DIVIDATERCEIROS : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_DIVIDATERCEIRO"));
-			case PAGAMENTODIVIDATERCEIRO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_PAGAMENTODIVIDATERCEIRO"));
+			default : return false;
 		}
-		return false;
 	}
 
 	public void setId(Long id) {

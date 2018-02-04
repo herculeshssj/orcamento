@@ -73,7 +73,7 @@ import br.com.hslife.orcamento.repository.FaturaCartaoRepository;
 import br.com.hslife.orcamento.repository.LancamentoContaRepository;
 import br.com.hslife.orcamento.repository.LancamentoPeriodicoRepository;
 
-@Service("arquivoService")
+@Service
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
 public class ArquivoService implements IArquivo {
 	
@@ -133,6 +133,16 @@ public class ArquivoService implements IArquivo {
 	}
 	
 	@Override
+	public void salvar(Arquivo arquivo) {
+		getRepository().save(arquivo);
+	}
+	
+	@Override
+	public Arquivo buscarPorID(Long id) {
+		return getRepository().findByID(id);
+	}
+	
+	@Override
 	public void excluir(Arquivo arquivo) {
 		switch (arquivo.getContainer()) {
 			case DOCUMENTOS :
@@ -178,7 +188,7 @@ public class ArquivoService implements IArquivo {
 					anexo = new AnexoEntidade();
 					anexo.setId(d.getId());
 					anexo.setDescricao(d.getLabel());
-					anexo.setContemAnexo(d.getArquivo() == null ? false : true);
+					//anexo.setContemAnexo(d.getArquivo() == null ? false : true);
 					listaAnexos.add(anexo);
 				}
 				break;
@@ -222,7 +232,7 @@ public class ArquivoService implements IArquivo {
 		switch (container) {
 			case DOCUMENTOS:
 				Documento d = getDocumentoRepository().findById(idEntity);
-				d.setArquivo(anexo);
+				//d.setArquivo(anexo);
 				documentoRepository.update(d);
 				break;
 			case FATURACARTAO: 

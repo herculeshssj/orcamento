@@ -180,7 +180,7 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 			errorMessage(be.getMessage());
 		}
 	}
-	
+	/*
 	public void baixarArquivo() {		
 		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 		try {			
@@ -194,7 +194,7 @@ public class SaudeController extends AbstractCRUDController<Saude> {
 			errorMessage(e.getMessage());
 		}		
 	}
-	
+	*/
 	public List<Documento> getListaDocumentos() {
 		try {
 			if (entity.getCategoriaDocumento() != null) {

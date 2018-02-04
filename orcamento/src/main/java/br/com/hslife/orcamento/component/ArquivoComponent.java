@@ -46,49 +46,37 @@
 
 package br.com.hslife.orcamento.component;
 
-import java.util.List;
-
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import br.com.hslife.orcamento.entity.Autosalvamento;
-import br.com.hslife.orcamento.exception.ApplicationException;
-import br.com.hslife.orcamento.repository.AutosalvamentoRepository;
+import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.facade.IArquivo;
 
 @Component
-@Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})
-public class AutosalvamentoComponent {
-	// FIXME mover estes recursos para um serviço. Esses detalhes de comunicação com a base não pode ficar nos componentes.
-	@Autowired
-	public SessionFactory sessionFactory;
+public class ArquivoComponent {
 	
 	@Autowired
-	private AutosalvamentoRepository repository;
-	
-	public AutosalvamentoRepository getRepository() {
-		this.repository.setSessionFactory(sessionFactory);
-		return repository;
+	private IArquivo service;
+
+	public IArquivo getService() {
+		return service;
 	}
 	
-	public void salvar(Long idEntidade, String entidade, String atributo, String conteudo) {
-		getRepository().save(new Autosalvamento(
-				idEntidade,
-				entidade,
-				atributo,
-				conteudo));
+	public Long carregarArquivo(Arquivo entity) {
+		getService().salvar(entity);
+		return entity.getId();
 	}
 	
-	public Autosalvamento buscarUltimoSalvamento(Long idEntidade, String entidade, String atributo) {
-		return getRepository().findLastSalvamento(idEntidade, entidade, atributo);
-	}
-	
-	public void excluirTodosSalvamentos(Long idEntidade, String entidade, String atributo) {
-		List<Autosalvamento> salvamentos = getRepository().findAll(idEntidade, entidade, atributo);
-		for (Autosalvamento s : salvamentos) {
-			getRepository().delete(s);
+	public Arquivo buscarArquivo(Long idArquivo) {
+		Arquivo arquivo = getService().buscarPorID(idArquivo);
+		if (arquivo == null || arquivo.getDados() == null || arquivo.getDados().length == 0) {
+			return null;
+		} else {
+			return arquivo;
 		}
+	}
+	
+	public void excluirArquivo(Long idArquivo) {
+		getService().excluir(getService().buscarPorID(idArquivo));
 	}
 }

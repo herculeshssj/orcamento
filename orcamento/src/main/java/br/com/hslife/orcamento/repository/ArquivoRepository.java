@@ -66,6 +66,7 @@ public class ArquivoRepository extends AbstractRepository {
 	
 	@SuppressWarnings("unchecked")
 	public List<Arquivo> findByCriterioArquivo(CriterioArquivo criterio) {
+		// FIXME refatorar o método
 		Criteria criteria = getSession().createCriteria(Arquivo.class);
 		
 		if (criterio.getNome() != null && !criterio.getNome().isEmpty()) {
@@ -93,9 +94,20 @@ public class ArquivoRepository extends AbstractRepository {
 		getSession().delete(arquivo);
 	}
 	
+	public void save(Arquivo arquivo) {
+		getSession().persist(arquivo);
+	}
+	
+	public Arquivo findByID(Long id) {
+		return (Arquivo)getSession()
+				.createQuery("SELECT arquivo FROM Arquivo arquivo WHERE arquivo.id = :id")
+				.setParameter("id", id)
+				.uniqueResult();
+	}
+	
 	public boolean deleteFromLancamentoConta(Arquivo arquivo) {
-		LancamentoConta lancamento = (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.arquivo.id = :idArquivo")
-				.setLong("idArquivo", arquivo.getId())
+		LancamentoConta lancamento = (LancamentoConta)getSession().createQuery("SELECT lancamento FROM LancamentoConta lancamento WHERE lancamento.arquivo.id = :idArquivo")
+				.setParameter("idArquivo", arquivo.getId())
 				.uniqueResult();
 		
 		if (lancamento == null)
@@ -108,8 +120,8 @@ public class ArquivoRepository extends AbstractRepository {
 	}
 	
 	public boolean deleteFromFaturaCartao(Arquivo arquivo) {
-		FaturaCartao fatura = (FaturaCartao)getQuery("FROM FaturaCartao fatura WHERE fatura.arquivo.id = :idArquivo")
-				.setLong("idArquivo", arquivo.getId())
+		FaturaCartao fatura = (FaturaCartao)getSession().createQuery("SELECT fatura FROM FaturaCartao fatura WHERE fatura.arquivo.id = :idArquivo")
+				.setParameter("idArquivo", arquivo.getId())
 				.uniqueResult();
 		
 		if (fatura == null)
@@ -122,8 +134,8 @@ public class ArquivoRepository extends AbstractRepository {
 	}
 	
 	public boolean deleteFromDocumento(Arquivo arquivo) {
-		Documento documento = (Documento)getQuery("FROM Documento documento WHERE documento.arquivo.id = :idArquivo")
-				.setLong("idArquivo", arquivo.getId())
+		Documento documento = (Documento)getSession().createQuery("SELECT documento FROM Documento documento WHERE documento.arquivo.id = :idArquivo")
+				.setParameter("idArquivo", arquivo.getId())
 				.uniqueResult();
 		
 		if (documento == null)
@@ -135,8 +147,8 @@ public class ArquivoRepository extends AbstractRepository {
 	}
 	
 	public boolean deleteFromLancamentoPeriodico(Arquivo arquivo) {
-		LancamentoPeriodico lancamento = (LancamentoPeriodico)getQuery("FROM LancamentoPeriodico lancamento WHERE lancamento.arquivo.id = :idArquivo")
-				.setLong("idArquivo", arquivo.getId())
+		LancamentoPeriodico lancamento = (LancamentoPeriodico)getSession().createQuery("SELECT lancamento FROM LancamentoPeriodico lancamento WHERE lancamento.arquivo.id = :idArquivo")
+				.setParameter("idArquivo", arquivo.getId())
 				.uniqueResult();
 		
 		if (lancamento == null)

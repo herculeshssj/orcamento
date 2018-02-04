@@ -48,24 +48,23 @@ package br.com.hslife.orcamento.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="documento")
-@SuppressWarnings("serial")
 public class Documento extends EntityPersistence {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 708354366322548717L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -77,17 +76,15 @@ public class Documento extends EntityPersistence {
 	@Column
 	private String descricao;
 	
-	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=true)
-	@JoinColumn(name="idArquivo", nullable=false)
-	@Cascade(CascadeType.ALL)
-	private Arquivo arquivo;
+	@Column(name="idArquivo", nullable=false)
+	private Long idArquivo;
 	
 	@ManyToOne
 	@JoinColumn(name="idCategoriaDocumento", nullable=false)
 	private CategoriaDocumento categoriaDocumento;
 	
 	public Documento() {
-		arquivo = new Arquivo();
+		//arquivo = new Arquivo();
 	}
 
 	public Long getId() {
@@ -103,6 +100,7 @@ public class Documento extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome do documento", this.nome, 50);
 		EntityPersistenceUtil.validaCampoNulo("Categoria de documento", this.categoriaDocumento);
+		EntityPersistenceUtil.validaCampoNulo("Anexe um arquivo", this.idArquivo);
 	}
 
 	public void setId(Long id) {
@@ -125,19 +123,19 @@ public class Documento extends EntityPersistence {
 		this.nome = nome;
 	}
 
-	public Arquivo getArquivo() {
-		return arquivo;
-	}
-
-	public void setArquivo(Arquivo arquivo) {
-		this.arquivo = arquivo;
-	}
-
 	public CategoriaDocumento getCategoriaDocumento() {
 		return categoriaDocumento;
 	}
 
 	public void setCategoriaDocumento(CategoriaDocumento categoriaDocumento) {
 		this.categoriaDocumento = categoriaDocumento;
+	}
+
+	public Long getIdArquivo() {
+		return idArquivo;
+	}
+
+	public void setIdArquivo(Long idArquivo) {
+		this.idArquivo = idArquivo;
 	}
 }

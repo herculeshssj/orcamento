@@ -58,9 +58,13 @@ public interface IArquivo {
 	
 	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio);
 	
+	public void salvar(Arquivo arquivo);
+	
 	public void excluir(Arquivo arquivo);
 
 	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container);
 	
 	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo);
+	
+	public Arquivo buscarPorID(Long id);
 }

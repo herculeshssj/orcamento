@@ -107,8 +107,14 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 	}
 	
 	@Override
+	public String create() {
+		entity.setCategoriaDocumento(categoriaSelecionada);
+		return super.create();
+	}
+	
+	@Override
 	public String save() {
-		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
+		if (entity.getIdArquivo() == null) {
 			warnMessage("Anexe um arquivo!");
 			return "";
 		}
@@ -117,28 +123,30 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 	
 	public void carregarArquivo(FileUploadEvent event) {
 		if (event.getFile() != null) {
-			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
-			entity.getArquivo().setDados(event.getFile().getContents());
-			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
-			entity.getArquivo().setContentType(event.getFile().getContentType());
-			entity.getArquivo().setTamanho(event.getFile().getSize());
-			entity.getArquivo().setContainer(Container.DOCUMENTOS);
-			entity.getArquivo().setUsuario(getUsuarioLogado());
-			entity.getArquivo().setAttribute("arquivo");
+			Arquivo arquivo = new Arquivo();
+			arquivo.setDados(event.getFile().getContents());
+			arquivo.setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			arquivo.setContentType(event.getFile().getContentType());
+			arquivo.setTamanho(event.getFile().getSize());
+			arquivo.setContainer(Container.DOCUMENTOS);
+			arquivo.setUsuario(getUsuarioLogado());
+			arquivo.setAttribute("arquivo");
+			entity.setIdArquivo(getArquivoComponent().carregarArquivo(arquivo));
 		} 
 	}
 	
 	public void baixarArquivo() {
-		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
+		Arquivo arquivo = getArquivoComponent().buscarArquivo(entity.getIdArquivo()); 
+		if (arquivo == null) {
 			warnMessage("Nenhum arquivo adicionado!");
 		} else {
 			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 			try {			
-				response.setContentType(entity.getArquivo().getContentType());
-				response.setHeader("Content-Disposition","attachment; filename=" + entity.getArquivo().getNomeArquivo());
-				response.setContentLength(entity.getArquivo().getDados().length);
+				response.setContentType(arquivo.getContentType());
+				response.setHeader("Content-Disposition","attachment; filename=" + arquivo.getNomeArquivo());
+				response.setContentLength(arquivo.getDados().length);
 				ServletOutputStream output = response.getOutputStream();
-				output.write(entity.getArquivo().getDados(), 0, entity.getArquivo().getDados().length);
+				output.write(arquivo.getDados(), 0, arquivo.getDados().length);
 				FacesContext.getCurrentInstance().responseComplete();
 			} catch (Exception e) {
 				errorMessage(e.getMessage());

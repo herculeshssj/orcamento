@@ -54,6 +54,7 @@ import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.component.ArquivoComponent;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.component.UsuarioComponent;
 import br.com.hslife.orcamento.entity.Moeda;
@@ -74,6 +75,9 @@ public abstract class AbstractController implements Serializable {
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
+	
+	@Autowired
+	private ArquivoComponent arquivoComponent;
 	
 	protected abstract void initializeEntity();
 	
@@ -110,6 +114,10 @@ public abstract class AbstractController implements Serializable {
 		return getOpcoesSistema().getMoedaPadrao();
 	}
 	
+	public ArquivoComponent getArquivoComponent() {
+		return arquivoComponent;
+	}
+
 	public void infoMessage(String mensage) {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensage, null));
 	}
