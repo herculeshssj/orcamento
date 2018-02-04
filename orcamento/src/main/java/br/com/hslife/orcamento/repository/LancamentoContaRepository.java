@@ -109,7 +109,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 				.list();		
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<LancamentoConta> findByCriterioBusca(CriterioBuscaLancamentoConta criterioBusca) {
 		Criteria criteria = getSession().createCriteria(LancamentoConta.class, "lancamento")
 				.createAlias("lancamento.conta", "con");
@@ -119,7 +119,10 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			
 		}
 		
-		return criteria.setMaxResults(criterioBusca.getLimiteResultado()).addOrder(Order.asc("dataPagamento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();	
+		if (criterioBusca.getLimiteResultado() == 0)
+			return criteria.addOrder(Order.asc("lancamento.dataPagamento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		else
+			return criteria.setMaxResults(criterioBusca.getLimiteResultado()).addOrder(Order.asc("lancamento.dataPagamento")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
 	
 	public LancamentoConta findLastLancamentoContaByConta(Conta conta) {

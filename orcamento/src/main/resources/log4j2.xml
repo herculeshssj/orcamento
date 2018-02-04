@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
 <!--
   
   	Copyright (c) 2012 - 2021 Hércules S. S. José
@@ -58,7 +61,7 @@
 		</JDBC>
 	</Appenders>
 	<Loggers>
-		<Root level="error">
+		<Root>
 			<AppenderRef ref="databaseAppender" />
 		</Root>
 	</Loggers>
