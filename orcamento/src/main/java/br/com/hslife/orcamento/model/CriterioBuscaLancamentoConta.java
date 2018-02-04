@@ -47,6 +47,7 @@
 package br.com.hslife.orcamento.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +183,7 @@ public class CriterioBuscaLancamentoConta {
 			if (hibernateCriterions.containsKey("conta"))
 				hibernateCriterions.remove("conta");
 			
-			hibernateCriterions.put("tipoConta", Restrictions.in("con.tipoConta", tipoConta));
+			hibernateCriterions.put("tipoConta", Restrictions.in("con.tipoConta", Arrays.asList(tipoConta)));
 		}
 	}
 	
@@ -206,7 +207,7 @@ public class CriterioBuscaLancamentoConta {
 		hibernateCriterions.remove("statusLancamentoConta");
 		
 		if (statusLancamentoConta != null && statusLancamentoConta.length > 0 && this.containsValidObjects(statusLancamentoConta)) {
-			hibernateCriterions.put("statusLancamentoConta", Restrictions.in("lancamento.statusLancamentoConta", statusLancamentoConta));
+			hibernateCriterions.put("statusLancamentoConta", Restrictions.in("lancamento.statusLancamentoConta", Arrays.asList(statusLancamentoConta)));
 		}
 	}
 
