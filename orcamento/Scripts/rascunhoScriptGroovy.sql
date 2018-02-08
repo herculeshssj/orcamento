@@ -35,4 +35,5 @@ select * from resultadoscript where idSCript = 2 and terminoExecucao = (select m
 select * from script;
 
 
-select * from resultadoscript;
+select * from resultadoscript order by terminoExecucao desc;
+select count(*) from resultadoscript;

@@ -55,19 +55,19 @@
 
 <ui:composition template="/templates/listagem.xhtml">
 
-	<ui:param name="managedBean" value="#{carteiraInvestimentoMB}" />
+	<ui:param name="managedBean" value="#{carteiraInvestimentoController}" />
 	
 	<ui:define name="pesquisa"></ui:define>
 	
 	<ui:define name="tabela">
 	
-		<h:dataTable width="100%" value="#{managedBean.contas}" var="conta" style="font-size: 16px;">
+		<h:dataTable id="tableConta" width="100%" value="#{managedBean.contas}" var="conta" style="font-size: 16px;">
 			<h:column>
 				<h4><strong><h:outputText value="#{conta.label}"/></strong></h4>
-				<h:dataTable width="100%" value="#{conta.categoriasInvestimento}" var="categoria" style="font-size: 16px;">
+				<h:dataTable id="tableCategoria" width="100%" value="#{conta.categoriasInvestimento}" var="categoria" style="font-size: 16px;">
 					<h:column>
 						<h5><em><h:outputText value="#{categoria.label}"/></em></h5>
-						<h:dataTable width="100%" value="#{categoria.investimentos}" var="investimento" style="font-size: 16px;">
+						<h:dataTable id="tableInvestimento" width="100%" value="#{categoria.investimentos}" var="investimento" style="font-size: 16px;">
 							<h:column rendered="#{categoria.tipoInvestimento == 'FIXO'}">
 								<f:facet name="header">
 									<h:outputText value="Descrição"/>
@@ -135,6 +135,15 @@
 								<h:outputText value="#{investimento.percentualInvestimento}">
 									<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 								</h:outputText>
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value=""/>
+								</f:facet>
+								<p:commandLink title="Atualizar com informações da bolsa" image="/resources/images/circular.png" action="#{managedBean.atualizarTicker}" update="@form" rendered="#{categoria.tipoInvestimento == 'VARIAVEL'}">
+									<f:setPropertyActionListener value="#{investimento}" target="#{managedBean.investimento}"/>
+									<h:graphicImage id="imgUpdate" height="32" width="32" value="/resources/images/svg/synchronize.svg"/>
+								</p:commandLink>
 							</h:column>
 						</h:dataTable>
 					</h:column>

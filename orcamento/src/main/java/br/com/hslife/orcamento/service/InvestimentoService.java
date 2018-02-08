@@ -59,6 +59,7 @@ import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.facade.IInvestimento;
+import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.repository.CategoriaInvestimentoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.InvestimentoRepository;
@@ -137,10 +138,9 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 			
 			// Obtém a cotação dos investimentos de renda variável
 			if (investimento.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
-				investimento.setInfoCotacao(getInfoCotacaoComponent().invokeAPI(investimento.getTicker()));
-				
-				// Calcula o valor atualizado do investimento
-				investimento.setValorInvestimentoAtualizado(investimento.getTotalCotas() * investimento.getInfoCotacao().getClose().doubleValue());
+				investimento.setInfoCotacao(new InfoCotacao());
+				// Calcula o valor do investimento usando o preço médio
+				investimento.setValorInvestimentoAtualizado(investimento.getTotalCotas() * investimento.getPrecoMedio());
 			}
 			
 		}

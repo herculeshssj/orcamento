@@ -49,18 +49,18 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.component.InfoCotacaoComponent;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IInvestimento;
 
-@Component("carteiraInvestimentoMB")
-@Scope("request")
+@Component
+@Scope("session")
 public class CarteiraInvestimentoController extends AbstractController {
 	
 	/**
@@ -71,7 +71,12 @@ public class CarteiraInvestimentoController extends AbstractController {
 	@Autowired
 	private IInvestimento service;
 	
+	@Autowired
+	private InfoCotacaoComponent infoCotacaoComponent;
+	
 	private List<Conta> contas = new ArrayList<>();
+	
+	private Investimento investimento;
 	
 	public CarteiraInvestimentoController() {
 		moduleTitle = "Carteira de Investimentos";
@@ -83,7 +88,6 @@ public class CarteiraInvestimentoController extends AbstractController {
 	}
 	
 	@Override
-	@PostConstruct
 	public String startUp() {
 		carregarCarteiraInvestimento();
 		return "/pages/ResumoEstatistica/carteiraInvestimento";
@@ -96,6 +100,11 @@ public class CarteiraInvestimentoController extends AbstractController {
 			errorMessage(be.getMessage());
 		}
 	}
+	
+	public void atualizarTicker() {
+		investimento.setInfoCotacao(getInfoCotacaoComponent().invokeAPI(investimento.getTicker()));
+		investimento.setValorInvestimentoAtualizado(investimento.getTotalCotas() * investimento.getInfoCotacao().getClose().doubleValue());
+	}
 
 	public IInvestimento getService() {
 		return service;
@@ -103,5 +112,17 @@ public class CarteiraInvestimentoController extends AbstractController {
 
 	public List<Conta> getContas() {
 		return contas;
+	}
+
+	public InfoCotacaoComponent getInfoCotacaoComponent() {
+		return infoCotacaoComponent;
+	}
+
+	public Investimento getInvestimento() {
+		return investimento;
+	}
+
+	public void setInvestimento(Investimento investimento) {
+		this.investimento = investimento;
 	}
 }
