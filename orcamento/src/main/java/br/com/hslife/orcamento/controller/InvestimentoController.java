@@ -313,10 +313,14 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	}
 	
 	public void atualizaListaInvestimento() {
-		if (contaSelecionada != null)
+		if (contaSelecionada != null) {
 			listEntity = getService().buscarPorConta(contaSelecionada);
-		else
+			
+			// Ordena os investimentos de acordo com o método getLabel()
+			listEntity.sort((i1, i2) -> i1.getLabel().compareTo(i2.getLabel()));
+		} else {
 			listEntity = new ArrayList<>();
+		}
 	}
 	
 	public void atualizaInvestimentoInicial() {
