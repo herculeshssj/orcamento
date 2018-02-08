@@ -64,18 +64,23 @@ public class InvestimentoRepository extends AbstractCRUDRepository<Investimento>
 	
 	@SuppressWarnings("unchecked")
 	public List<Investimento> findByConta(Conta conta) {
-		return getQuery("FROM Investimento i WHERE i.conta.id = " + conta.getId() + " ORDER BY i.descricao ASC").list();
+		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.id = :idConta ORDER BY i.descricao ASC")
+				.setParameter("idConta", conta.getId())
+				.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Investimento> findByUsuario(Usuario usuario) {
-		return getQuery("FROM Investimento i WHERE i.conta.usuario.id = " + usuario.getId() + " ORDER BY i.descricao ASC").list();
+		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.usuario.id = :idUsuario ORDER BY i.descricao ASC")
+				.setParameter("idUsuario", usuario.getId())
+				.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Investimento> findByContaAndCategoriaInvestimento(Conta conta, CategoriaInvestimento categoriaInvestimento) {
-		return getQuery("FROM Investimento i WHERE i.conta.id = " 
-				+ conta.getId() + " AND i.categoriaInvestimento.id = " 
-				+ categoriaInvestimento.getId() + " ORDER BY i.descricao ASC").list();
+		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.id = :idConta AND i.categoriaInvestimento.id = :idCategoria ORDER BY i.descricao ASC")
+				.setParameter("idConta", conta.getId())
+				.setParameter("idCategoria", categoriaInvestimento.getId())
+				.getResultList();
 	}
 }
