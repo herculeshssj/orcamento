@@ -347,6 +347,10 @@
  
   </dependencies>
   
+  <build>
+  		<finalName>orcamento</finalName>	
+  </build>
+  
   <profiles>
   
   	<!-- ***** INFORMAÇÃO IMPORTANTE SOBRE O FLYWAY *****
@@ -363,7 +367,6 @@
   	<profile>
   		<id>test</id>
   		<build>
-  			<finalName>orcamento</finalName>
   			<plugins>
   				<plugin>
   					<groupId>org.flywaydb</groupId>
@@ -384,7 +387,6 @@
   	<profile>
   		<id>production</id>
   		<build>
-  			<finalName>orcamento</finalName>
   			<plugins>
   				<plugin>
   					<groupId>org.flywaydb</groupId>
