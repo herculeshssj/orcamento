@@ -363,6 +363,7 @@
   	<profile>
   		<id>test</id>
   		<build>
+  			<finalName>orcamento</finalName>
   			<plugins>
   				<plugin>
   					<groupId>org.flywaydb</groupId>
@@ -383,6 +384,7 @@
   	<profile>
   		<id>production</id>
   		<build>
+  			<finalName>orcamento</finalName>
   			<plugins>
   				<plugin>
   					<groupId>org.flywaydb</groupId>
