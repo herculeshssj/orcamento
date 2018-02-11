@@ -317,7 +317,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 			listEntity = getService().buscarPorConta(contaSelecionada);
 			
 			// Ordena os investimentos de acordo com o método getLabel()
-			listEntity.sort((i1, i2) -> i1.getLabel().compareTo(i2.getLabel()));
+			listEntity.sort((i1, i2) -> i1.getLabel().compareTo(i2.getLabel())); // FIXME não sou compatível com o Cobertura
 		} else {
 			listEntity = new ArrayList<>();
 		}
