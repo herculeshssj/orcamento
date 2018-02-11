@@ -118,7 +118,7 @@ public class InfoCotacaoComponent {
 					info.setVolume(new BigDecimal(dayNode.get("5. volume").asDouble()));
 					
 					// Interrompe a iteração
-					break;
+					break; // FIXME substituir o for por do..while. Só interessa o primeiro item da iteração, os demais não são importantes.
 				}
 				
 			} else {

@@ -73,7 +73,7 @@ public class RegraImportacaoRepository extends AbstractCRUDRepository<RegraImpor
 		Criteria criteria = getSession().createCriteria(RegraImportacao.class);
 		criteria.add(Restrictions.eq("conta.id", regra.getConta().getId()));
 		
-		if (regra.getTexto() != null || !regra.getTexto().isEmpty()) {
+		if (regra.getTexto() != null || !regra.getTexto().isEmpty()) { //FIXME regra pode ser null. Consertar.
 			criteria.add(Restrictions.eq("texto", regra.getTexto()));
 		}
 		
