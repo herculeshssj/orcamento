@@ -346,23 +346,60 @@
 	</dependency>
  
   </dependencies>
-
-  <build>
-    <finalName>orcamento</finalName>
-    
-    <plugins>
-    	<plugin>
-    		<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-maven-plugin</artifactId>
-			<version>4.2.0</version>
-			<configuration>
-				<url>jdbc:mysql://localhost:3306/orcamento</url>
-				<user>orcamento</user>
-				<password>d1nh31r0</password>
-			</configuration>
-    	</plugin>
-    </plugins>
-      
-  </build>
   
+  <profiles>
+  
+  	<!-- ***** INFORMAÇÃO IMPORTANTE SOBRE O FLYWAY *****
+  	
+  	Could not find schema history table `orcamentotest`.`flyway_schema_history`,
+  	but found `orcamentotest`.`schema_version` instead. You are seeing this 
+  	message because Flyway changed its default for flyway.table in version 5.0.0
+  	to flyway_schema_history and you are still relying on the old default
+  	(schema_version). Set flyway.table=schema_version in your configuration to
+  	fix this. This fallback mechanism will be removed in Flyway 6.0.0. 
+  	
+  	 -->
+  
+  	<profile>
+  		<id>test</id>
+  		<build>
+  			<plugins>
+  				<plugin>
+  					<groupId>org.flywaydb</groupId>
+  					<artifactId>flyway-maven-plugin</artifactId>
+  					<version>5.0.6</version>
+  					<configuration>
+  						<driver>${env.jdbcDriver}</driver>
+  						<url>${env.jdbcUrlTest}</url>
+						<user>${env.jdbcUsername}</user>
+						<password>${env.jdbcPassword}</password>
+						<table>schema_version</table>
+  					</configuration>
+  				</plugin>
+  			</plugins>
+  		</build>
+  	</profile>
+  	
+  	<profile>
+  		<id>production</id>
+  		<build>
+  			<plugins>
+  				<plugin>
+  					<groupId>org.flywaydb</groupId>
+  					<artifactId>flyway-maven-plugin</artifactId>
+  					<version>5.0.6</version>
+  					<configuration>
+  						<driver>${env.jdbcDriver}</driver>
+  						<url>${env.jdbcUrl}</url>
+						<user>${env.jdbcUsername}</user>
+						<password>${env.jdbcPassword}</password>
+						<table>schema_version</table>
+  					</configuration>
+  				</plugin>
+  			</plugins>
+  		</build>
+  	</profile>
+  	
+  </profiles>
+
 </project>
