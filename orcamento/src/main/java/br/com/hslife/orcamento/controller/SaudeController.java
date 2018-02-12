@@ -49,10 +49,6 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

@@ -9,7 +9,7 @@
 
     modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
 
-    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+    ada pela Fundação do Software Livre (FSF); na versão 3.0 da
 
     Licença.
     
@@ -63,33 +63,33 @@ import br.com.hslife.orcamento.model.LancamentoPanoramaCadastro;
 
 public interface ILancamentoConta extends ICRUDService<LancamentoConta> {
 	
-	public List<LancamentoConta> buscarPorCriterioBusca(CriterioBuscaLancamentoConta criterioBusca);
+	 List<LancamentoConta> buscarPorCriterioBusca(CriterioBuscaLancamentoConta criterioBusca);
 	
-	public double calcularSaldoLancamentos(List<LancamentoConta> lancamentos);
+	 double calcularSaldoLancamentos(List<LancamentoConta> lancamentos);
 	
-	public boolean existeVinculoFaturaCartao(LancamentoConta lancamento);
+	 boolean existeVinculoFaturaCartao(LancamentoConta lancamento);
 	
-	public List<LancamentoConta> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity);
+	 List<LancamentoConta> buscarPagamentosNaoPagosPorLancamentoPeriodico(LancamentoPeriodico entity);
 	
-	public List<LancamentoConta> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity);
+	 List<LancamentoConta> buscarPagamentosPagosPorLancamentoPeriodico(LancamentoPeriodico entity);
 	
-	public List<LancamentoConta> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, StatusLancamentoConta pago);
+	 List<LancamentoConta> buscarPagamentosPorLancamentoPeriodicoEPago(LancamentoPeriodico lancamento, StatusLancamentoConta pago);
 	
-	public List<LancamentoConta> buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico tipo, Usuario usuario); 
+	 List<LancamentoConta> buscarTodosPagamentosPagosLancamentosAtivosPorTipoLancamentoEUsuario(TipoLancamentoPeriodico tipo, Usuario usuario); 
 	
-	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, StatusLancamentoConta pago);
+	 List<LancamentoConta> buscarPagamentosPorTipoLancamentoEUsuarioEPago(TipoLancamentoPeriodico tipo, Usuario usuario, StatusLancamentoConta pago);
 	
-	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamentoConta pago);
+	 List<LancamentoConta> buscarPagamentosPorTipoLancamentoEContaEPago(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamentoConta pago);
 	
-	public List<LancamentoConta> buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamentoConta pago);
+	 List<LancamentoConta> buscarPagamentosPorTipoLancamentoETipoContaEPago(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamentoConta pago);
 	
-	public List<LancamentoConta> gerarPrevisaoProximosPagamentos(LancamentoPeriodico lancamentoPeriodico, int quantidadePeriodos);
+	 List<LancamentoConta> gerarPrevisaoProximosPagamentos(LancamentoPeriodico lancamentoPeriodico, int quantidadePeriodos);
 	
-	public LancamentoConta buscarUltimoPagamentoPeriodoGerado(LancamentoPeriodico lancamentoPeriodico);
+	 LancamentoConta buscarUltimoPagamentoPeriodoGerado(LancamentoPeriodico lancamentoPeriodico);
 	
-	public List<LancamentoConta> buscarPorLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico);
+	 List<LancamentoConta> buscarPorLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico);
 	
-	public List<LancamentoPanoramaCadastro> buscarLancamentoParaPanoramaCadastro(Conta conta, CadastroSistema cadastro, Long idAgrupamento);
+	 List<LancamentoPanoramaCadastro> buscarLancamentoParaPanoramaCadastro(Conta conta, CadastroSistema cadastro, Long idAgrupamento);
 	
-	public BigDecimal buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento);
+	 BigDecimal buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(Conta conta, Date dataInicio, Date dataFim, StatusLancamentoConta[] statusLancamento);
 }

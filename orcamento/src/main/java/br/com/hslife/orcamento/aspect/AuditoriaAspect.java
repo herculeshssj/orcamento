@@ -29,9 +29,9 @@
 
 	projeto no endereco https://github.com/herculeshssj/orcamento ou escreva
 
-	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
 
-	Boston, MA  02110-1301, USA.
+	Floor, Boston, MA  02110-1301, USA.
 
 
 	Para mais informações sobre o programa Orçamento Doméstico e seu autor
@@ -66,7 +66,7 @@ import br.com.hslife.orcamento.facade.IAuditoria;
 @Component
 public class AuditoriaAspect {
 	
-	private static final Logger logger = LogManager.getLogger(AuditoriaAspect.class);
+	private static final Logger LOGGER = LogManager.getLogger(AuditoriaAspect.class);
 	
 	@Autowired
 	private UsuarioComponent usuarioComponent;
@@ -88,8 +88,13 @@ public class AuditoriaAspect {
 		return auditoriaService;
 	}
 
+	/**
+	 * 
+	 * @param entity
+	 * @param transacao
+	 */
 	private void salvarInformacoesAuditoria(final EntityPersistence entity,
-			String transacao) {
+			final String transacao) {
 		try {
 			Auditoria auditoria = new Auditoria();
 			auditoria.setTransacao(transacao);
@@ -123,7 +128,7 @@ public class AuditoriaAspect {
 			
 			getAuditoriaService().salvar(auditoria);
 		} catch (Throwable t) {
-			logger.catching(t);
+			LOGGER.catching(t);
 			t.printStackTrace();
 		}
 	}
@@ -133,7 +138,7 @@ public class AuditoriaAspect {
 	 * @param entity
 	 */
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..save(..)) && args(entity)")
-	public void afterSave(final EntityPersistence entity) {
+	public final void afterSave(final EntityPersistence entity) {
 		this.salvarInformacoesAuditoria(entity, "INSERT");
 	}
 	
@@ -142,7 +147,7 @@ public class AuditoriaAspect {
 	 * @param entity
 	 */
 	@AfterReturning("execution(public void br.com.hslife.orcamento.repository..update(..)) && args(entity)")
-	public void afterUpdate(final EntityPersistence entity) {
+	public final void afterUpdate(final EntityPersistence entity) {
 		this.salvarInformacoesAuditoria(entity, "UPDATE");
 	}
 	
@@ -151,7 +156,7 @@ public class AuditoriaAspect {
 	 * @param entity
 	 */
 	@AfterReturning(pointcut="execution(public void br.com.hslife.orcamento.repository..delete(..)) && args(entity)")
-	public void beforeDelete(final EntityPersistence entity) {
+	public final void beforeDelete(final EntityPersistence entity) {
 		this.salvarInformacoesAuditoria(entity, "DELETE");
 	}
 }
