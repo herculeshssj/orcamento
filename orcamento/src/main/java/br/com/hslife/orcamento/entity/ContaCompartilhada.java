@@ -29,7 +29,7 @@
 
 	projeto no endereco https://github.com/herculeshssj/orcamento ou escreva
 
-	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth
+	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
 
 	Floor, Boston, MA  02110-1301, USA.
 
@@ -42,9 +42,9 @@
 
 	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
-***/
+***/package br.com.hslife.orcamento.entity;
 
-package br.com.hslife.orcamento.entity;import java.util.Calendar;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;

@@ -29,7 +29,7 @@
 
 	projeto no endereco https://github.com/herculeshssj/orcamento ou escreva
 
-	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth
+	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
 
 	Floor, Boston, MA  02110-1301, USA.
 
@@ -42,7 +42,8 @@
 
 	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
-***/package br.com.hslife.orcamento.enumeration;
+***/
+package br.com.hslife.orcamento.enumeration;
 
 public enum StatusLancamentoConta {
 	AGENDADO("Agendado"), QUITADO("Quitado"), REGISTRADO("Registrado");
