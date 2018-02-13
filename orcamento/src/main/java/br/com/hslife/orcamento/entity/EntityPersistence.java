@@ -50,6 +50,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.logging.log4j.LogManager;
@@ -62,11 +65,27 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	
 	private static final Logger logger = LogManager.getLogger(EntityPersistence.class);
 	
-	public abstract Long getId();
-	
 	public abstract String getLabel();
 	
 	public abstract void validate();
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	@Override
 	public int hashCode() {

@@ -53,6 +53,7 @@ import java.util.TreeSet;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Categoria;
+import br.com.hslife.orcamento.entity.Combustivel;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
@@ -80,70 +81,45 @@ public class EntityInitializerFactory {
 	private EntityInitializerFactory() {
 		// Classe não pode ser inicializada.
 	}
-	
+
+	public static Combustivel createCombustivel() {
+		return new Combustivel.Builder().descricao("Combustível teste").distribuidora("Distribuidora de teste").build();
+	}
+
 	public static Banco createBanco(Usuario usuario) {
-		return new Banco.Builder()
-				.ativo(true)
-				.nome("Banco de teste")
-				.numero("000")
-				.build();
+		return new Banco.Builder().ativo(true).nome("Banco de teste").numero("000").build();
 	}
-	
+
 	public static Usuario createUsuario() {
-		return new Usuario.Builder()
-			.email("contato@hslife.com.br")
-			.login("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA))
-			.nome("Usuário de Teste - " + Util.formataDataHora(new Date(), Util.DATAHORA))
-			.senha(Util.SHA256("teste"))
-			.tokenID(Util.SHA256(new Date().toString()))
-			.build();
+		return new Usuario.Builder().email("contato@hslife.com.br")
+				.login("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA))
+				.nome("Usuário de Teste - " + Util.formataDataHora(new Date(), Util.DATAHORA))
+				.senha(Util.SHA256("teste")).tokenID(Util.SHA256(new Date().toString())).build();
 	}
-	
+
 	public static UnidadeMedida createUnidadeMedida(Usuario usuario) {
-		return new UnidadeMedida.Builder()
-				.descricao("Unidade de Medida de teste")
-				.sigla("UMT")
-				.usuario(usuario)
+		return new UnidadeMedida.Builder().descricao("Unidade de Medida de teste").sigla("UMT").usuario(usuario)
 				.build();
 	}
-	
+
 	public static Telefone createTelefone(Usuario usuario) {
-		return new Telefone.Builder()
-				.descricao("Telefone de teste")
-				.ddd("021")
-				.numero("1234-5678")
-				.ramal("901")
-				.usuario(usuario)
-				.build();
+		return new Telefone.Builder().descricao("Telefone de teste").ddd("021").numero("1234-5678").ramal("901")
+				.usuario(usuario).build();
 	}
-	
+
 	public static RegraImportacao createRegraImportacao(Conta conta, String texto) {
-		return new RegraImportacao.Builder()
-				.texto(texto)
-				.idCategoria(1l)
-				.idFavorecido(1l)
-				.idMeioPagamento(1l)
-				.conta(conta)
-				.build();
+		return new RegraImportacao.Builder().texto(texto).idCategoria(1l).idFavorecido(1l).idMeioPagamento(1l)
+				.conta(conta).build();
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static Pessoal createPessoal(Usuario usuario) {
-		return new Pessoal.Builder()
-				.dataNascimento(new Date(1980-1900, 1, 1))
-				.escolaridade("Superior")
-				.estadoCivil("Casado")
-				.etnia("Afrobrasileira")
-				.filiacaoMae("Mãe do usuário")
-				.filiacaoPai("Pai do usuário")
-				.genero('M')
-				.nacionalidade("Brasileira")
-				.naturalidade("Rio de Janeiro")
-				.tipoSanguineo("O+")
-				.usuario(usuario)
-				.build();
+		return new Pessoal.Builder().dataNascimento(new Date(1980 - 1900, 1, 1)).escolaridade("Superior")
+				.estadoCivil("Casado").etnia("Afrobrasileira").filiacaoMae("Mãe do usuário")
+				.filiacaoPai("Pai do usuário").genero('M').nacionalidade("Brasileira").naturalidade("Rio de Janeiro")
+				.tipoSanguineo("O+").usuario(usuario).build();
 	}
-	
+
 	// Cria uma nova instância de RelatorioCustomizado
 	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario) {
 		RelatorioCustomizado entity = new RelatorioCustomizado();
@@ -151,7 +127,7 @@ public class EntityInitializerFactory {
 		entity.setDescricao("Relatório customizado para testes");
 		entity.setConsultaSQL("SELECT * FROM lancamentoconta");
 		entity.setUsuario(usuario);
-		
+
 		SortedSet<RelatorioColuna> colunas = new TreeSet<>();
 		for (int i = 0; i < 3; i++) {
 			RelatorioColuna coluna = new RelatorioColuna();
@@ -161,7 +137,7 @@ public class EntityInitializerFactory {
 			colunas.add(coluna);
 		}
 		entity.setColunasRelatorio(colunas);
-		
+
 		Set<RelatorioParametro> parametros = new LinkedHashSet<>();
 		for (int i = 0; i < 3; i++) {
 			RelatorioParametro parametro = new RelatorioParametro();
@@ -171,11 +147,12 @@ public class EntityInitializerFactory {
 			parametros.add(parametro);
 		}
 		entity.setParametrosRelatorio(parametros);
-		
+
 		return entity;
 	}
-	
-	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario, String consultaSQL, SortedSet<RelatorioColuna> colunas, Set<RelatorioParametro> parametros) {
+
+	public static RelatorioCustomizado createRelatorioCustomizado(Usuario usuario, String consultaSQL,
+			SortedSet<RelatorioColuna> colunas, Set<RelatorioParametro> parametros) {
 		RelatorioCustomizado entity = new RelatorioCustomizado();
 		entity.setNome("Relatório de teste");
 		entity.setDescricao("Relatório customizado para testes");
@@ -185,7 +162,7 @@ public class EntityInitializerFactory {
 		entity.setParametrosRelatorio(parametros);
 		return entity;
 	}
-	
+
 	public static Conta createConta(Usuario usuario, Moeda moeda) {
 		Conta conta = new Conta();
 		conta.setDescricao("Conta de teste");
@@ -196,7 +173,7 @@ public class EntityInitializerFactory {
 		conta.setMoeda(moeda);
 		return conta;
 	}
-	
+
 	public static Moeda createMoeda(Usuario usuario) {
 		Moeda moeda = new Moeda();
 		moeda.setAtivo(true);
@@ -209,14 +186,14 @@ public class EntityInitializerFactory {
 		moeda.setSimboloMonetario("R$");
 		return moeda;
 	}
-	
+
 	public static ContaCompartilhada createContaCompartilhada(Conta conta, Usuario usuario) {
 		ContaCompartilhada contaCompartilhada = new ContaCompartilhada();
 		contaCompartilhada.setConta(conta);
 		contaCompartilhada.setUsuario(usuario);
 		return contaCompartilhada;
 	}
-	
+
 	@Deprecated
 	public static Usuario initializeUsuario() {
 		Usuario usuario = new Usuario();
@@ -227,7 +204,7 @@ public class EntityInitializerFactory {
 		usuario.setTipoUsuario(TipoUsuario.ROLE_USER);
 		return usuario;
 	}
-	
+
 	@Deprecated
 	public static Telefone initializeTelefone(Usuario usuario) {
 		Telefone telefone = new Telefone();
@@ -238,7 +215,7 @@ public class EntityInitializerFactory {
 		telefone.setUsuario(usuario);
 		return telefone;
 	}
-	
+
 	@Deprecated
 	public static Moeda initializeMoeda(Usuario usuario) {
 		Moeda moeda = new Moeda();
@@ -252,7 +229,7 @@ public class EntityInitializerFactory {
 		moeda.setSimboloMonetario("R$");
 		return moeda;
 	}
-	
+
 	@Deprecated
 	public static Conta initializeConta(Usuario usuario, Moeda moeda) {
 		Conta conta = new Conta();
@@ -264,7 +241,7 @@ public class EntityInitializerFactory {
 		conta.setMoeda(moeda);
 		return conta;
 	}
-	
+
 	@Deprecated
 	public static RegraImportacao initializeRegraImportacao(Conta conta) {
 		RegraImportacao regra = new RegraImportacao();
@@ -275,7 +252,7 @@ public class EntityInitializerFactory {
 		regra.setConta(conta);
 		return regra;
 	}
-	
+
 	public static Categoria initializeCategoria(Usuario usuario, TipoCategoria tipoCategoria, boolean padrao) {
 		Categoria categoria = new Categoria();
 		categoria.setAtivo(true);
@@ -285,7 +262,7 @@ public class EntityInitializerFactory {
 		categoria.setUsuario(usuario);
 		return categoria;
 	}
-	
+
 	public static Favorecido initializeFavorecido(Usuario usuario, TipoPessoa tipoPessoa, boolean padrao) {
 		Favorecido favorecido = new Favorecido();
 		favorecido.setAtivo(true);
@@ -295,7 +272,7 @@ public class EntityInitializerFactory {
 		favorecido.setUsuario(usuario);
 		return favorecido;
 	}
-	
+
 	public static MeioPagamento initializeMeioPagamento(Usuario usuario, boolean padrao) {
 		MeioPagamento meioPagamento = new MeioPagamento();
 		meioPagamento.setAtivo(true);
@@ -304,7 +281,7 @@ public class EntityInitializerFactory {
 		meioPagamento.setUsuario(usuario);
 		return meioPagamento;
 	}
-	
+
 	public static ModeloDocumento initializeModeloDocumento(Usuario usuario) {
 		ModeloDocumento modelo = new ModeloDocumento();
 		modelo.setDescricao("Modelo de documento de teste");
@@ -312,9 +289,9 @@ public class EntityInitializerFactory {
 		modelo.setUsuario(usuario);
 		return modelo;
 	}
-	
+
 	public static DividaTerceiro initializeDividaTerceiro(Usuario usuario, Favorecido favorecido, Moeda moeda) {
-		DividaTerceiro divida = new DividaTerceiro();		
+		DividaTerceiro divida = new DividaTerceiro();
 		divida.setDataNegociacao(new Date());
 		divida.setFavorecido(favorecido);
 		divida.setJustificativa("Justificativa da dívida de teste");
@@ -324,7 +301,7 @@ public class EntityInitializerFactory {
 		divida.setUsuario(usuario);
 		divida.setValorDivida(1000);
 		divida.setMoeda(moeda);
-		
+
 		PagamentoDividaTerceiro pagamento;
 		for (int i = 0; i < 3; i++) {
 			pagamento = new PagamentoDividaTerceiro();
@@ -334,7 +311,7 @@ public class EntityInitializerFactory {
 			pagamento.setValorPago(100);
 			divida.getPagamentos().add(pagamento);
 		}
-		
+
 		return divida;
 	}
 }

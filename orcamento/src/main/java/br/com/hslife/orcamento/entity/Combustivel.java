@@ -47,9 +47,6 @@
 package br.com.hslife.orcamento.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -63,10 +60,6 @@ public class Combustivel extends EntityPersistence {
 	 */
 	private static final long serialVersionUID = -2439009219066040079L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;	
-	
 	@Column(length=50, nullable=false)	
 	private String descricao;
 	
@@ -79,23 +72,37 @@ public class Combustivel extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return this.descricao + "[" + this.distribuidora + "]";
+		return this.descricao + " [" + this.distribuidora + "]";
 	}
 		
 	@Override
 	public void validate() {
-		
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Distribuidora", descricao, 50);
-		
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Distribuidora", this.distribuidora, 50);
 	}
-
-	public Long getId() {
-		return id;
+	
+	private Combustivel(Builder builder) {
+		this.descricao = builder.descricao;
+		this.distribuidora = builder.distribuidora;
 	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public static class Builder {
+		private String descricao;
+		private String distribuidora;
+		
+		public Builder descricao(String descricao) {
+			this.descricao = descricao;
+			return this;
+		}
+		
+		public Builder distribuidora(String distribuidora) {
+			this.distribuidora = distribuidora;
+			return this;
+		}
+		
+		public Combustivel build() {
+			return new Combustivel(this);
+		}
 	}
 
 	public String getDescricao() {
