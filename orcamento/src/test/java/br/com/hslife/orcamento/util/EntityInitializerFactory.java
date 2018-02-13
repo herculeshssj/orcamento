@@ -1,6 +1,6 @@
 /***
 
-Copyright (c) 2012 - 2021 Hércules S. S. José
+	Copyright (c) 2012 - 2021 Hércules S. S. José
 
 	Este arquivo é parte do programa Orçamento Doméstico.
 
