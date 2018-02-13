@@ -43,7 +43,6 @@
 	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
-
 package br.com.hslife.orcamento.facade;
 
 import java.util.List;
