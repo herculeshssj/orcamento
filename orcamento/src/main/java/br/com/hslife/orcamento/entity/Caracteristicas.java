@@ -1,6 +1,6 @@
 /***
 
-	Copyright (c) 2012 - 2021 Hércules S. S. José
+Copyright (c) 2012 - 2021 Hércules S. S. José
 
 	Este arquivo é parte do programa Orçamento Doméstico.
 
@@ -29,7 +29,7 @@
 
 	projeto no endereco https://github.com/herculeshssj/orcamento ou escreva
 
-	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth
 
 	Floor, Boston, MA  02110-1301, USA.
 
@@ -42,8 +42,9 @@
 
 	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
-***/package br.com.hslife.orcamento.entity;
+***/
 
+package br.com.hslife.orcamento.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
