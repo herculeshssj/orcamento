@@ -45,37 +45,32 @@
 ***/
 package br.com.hslife.orcamento.controller;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.faces.context.FacesContext;
 
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-public class CombustivelControllerTest extends AbstractTestControllers {
+public abstract class FacesContextMock extends FacesContext {
 	
-	@Autowired
-	private CombustivelController controller;
-	
-	@Before
-	public void initializeEntities() {		
-		// Inicializa as entidades		
-		controller.setCurrentFacesContext(FacesContextMock.mockFacesContext());
-		controller.setEntity(EntityInitializerFactory.createCombustivel());
+	private FacesContextMock() {
 		
-		// Salva as entidades pertinentes antes de iniciar os testes
 	}
 	
-	@Test
-	public void salvarEBuscarTodos() {
-		// Salva a entidade instanciada e verifica se a listagem de resultados
-		// retorna mais de um resultado 
-		controller.save();
-		
-		controller.setDescricaoCombustivel("");
-		controller.find();
-		if (controller.getListEntity() == null || controller.getListEntity().size() == 0) {
-			Assert.fail("Entidade não salva e tabela vazia!");
+	private static final Release RELEASE = new Release();
+	
+	private static class Release implements Answer<Void> {
+		@Override
+		public Void answer(InvocationOnMock invocation) throws Throwable {
+			setCurrentInstance(null);
+			return null;
 		}
+	}
+
+	public static FacesContext mockFacesContext() {
+		FacesContext context = Mockito.mock(FacesContext.class);
+		setCurrentInstance(context);
+		Mockito.doAnswer(RELEASE).when(context).release();
+		return context;
 	}
 }

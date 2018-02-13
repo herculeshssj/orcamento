@@ -78,6 +78,8 @@ public abstract class AbstractController implements Serializable {
 	@Autowired
 	private ArquivoComponent arquivoComponent;
 	
+	private FacesContext facesContext;
+	
 	protected abstract void initializeEntity();
 	
 	public abstract String startUp();
@@ -116,21 +118,21 @@ public abstract class AbstractController implements Serializable {
 	public ArquivoComponent getArquivoComponent() {
 		return arquivoComponent;
 	}
-
-	public void infoMessage(String mensage) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensage, null));
+	
+	public void infoMessage(String mensage) {		
+		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensage, null));
 	}
 	
 	public void warnMessage(String mensage) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, mensage, null));
+		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, mensage, null));
 	}
 	
 	public void errorMessage(String mensage) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, mensage, null));
+		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, mensage, null));
 	}
 	
 	public void fatalErrorMessage(String mensage) {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, mensage, null));
+		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, mensage, null));
 	}
 
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {
@@ -139,5 +141,21 @@ public abstract class AbstractController implements Serializable {
 
 	public void setOpcaoSistemaComponent(OpcaoSistemaComponent opcaoSistemaComponent) {
 		this.opcaoSistemaComponent = opcaoSistemaComponent;
+	}
+	
+	public FacesContext getCurrentFacesContext() {
+		if (this.facesContext == null) {
+			return FacesContext.getCurrentInstance();
+		} else {
+			return this.facesContext;
+		}
+	}
+	
+	public void setCurrentFacesContext(FacesContext context) {
+		if (context == null) {
+			this.facesContext = FacesContext.getCurrentInstance();
+		} else {
+			this.facesContext = context;
+		}
 	}
 }
