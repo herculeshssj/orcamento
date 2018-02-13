@@ -60,27 +60,27 @@ import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 
 public interface ILancamentoPeriodico extends ICRUDService<LancamentoPeriodico> {
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento);
+	List<LancamentoPeriodico> buscarPorTipoLancamentoContaEStatusLancamento(TipoLancamentoPeriodico tipo, Conta conta, StatusLancamento statusLancamento);
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamento statusLancamento);
+	List<LancamentoPeriodico> buscarPorTipoLancamentoETipoContaEStatusLancamento(TipoLancamentoPeriodico tipo, TipoConta tipoConta, StatusLancamento statusLancamento);
 	
-	public void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus);
+	void alterarStatusLancamento(LancamentoPeriodico entity, StatusLancamento novoStatus);
 	
-	public void registrarPagamento(LancamentoConta pagamentoPeriodo);
+	void registrarPagamento(LancamentoConta pagamentoPeriodo);
 	
-	public List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario);
+	List<LancamentoPeriodico> buscarPorTipoLancamentoEStatusLancamentoPorUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario);
 	
-	public void mesclarLancamentos(LancamentoConta pagamentoPeriodo, LancamentoConta lancamentoAMesclar);
+	void mesclarLancamentos(LancamentoConta pagamentoPeriodo, LancamentoConta lancamentoAMesclar);
 	
-	public void vincularLancamentos(LancamentoPeriodico lancamentoPeriodico, List<LancamentoConta> lancamentosAVincular);
+	void vincularLancamentos(LancamentoPeriodico lancamentoPeriodico, List<LancamentoConta> lancamentosAVincular);
 
-	public void removerLancamentos(List<LancamentoConta> lancamentosARemover);
+	void removerLancamentos(List<LancamentoConta> lancamentosARemover);
 		
-	public void gerarParcelas(LancamentoPeriodico lancamentoPeriodico);
+	void gerarParcelas(LancamentoPeriodico lancamentoPeriodico);
 	
-	public void gerarMensalidade(LancamentoPeriodico entity);
+	void gerarMensalidade(LancamentoPeriodico entity);
 	
-	public List<LancamentoPeriodico> buscarDescricaoEDataAquisicaoPorUsuario(String descricao, Date dataInicio, Date dataFim, Usuario usuario);
+	List<LancamentoPeriodico> buscarDescricaoEDataAquisicaoPorUsuario(String descricao, Date dataInicio, Date dataFim, Usuario usuario);
 	
-	public void reclassificarLancamento(LancamentoPeriodico entity, Map<String, ? super EntityPersistence> parametros);
+	void reclassificarLancamento(LancamentoPeriodico entity, Map<String, ? super EntityPersistence> parametros);
 }
