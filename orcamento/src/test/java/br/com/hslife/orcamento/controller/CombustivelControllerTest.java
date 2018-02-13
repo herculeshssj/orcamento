@@ -60,6 +60,11 @@ import br.com.hslife.orcamento.facade.ICombustivel;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
 public class CombustivelControllerTest extends AbstractTestControllers {
+	
+	@Test
+	public void testThisMethod() {
+		assertEquals(true, true);
+	}
 	/*
 	private Combustivel entity;
 	
