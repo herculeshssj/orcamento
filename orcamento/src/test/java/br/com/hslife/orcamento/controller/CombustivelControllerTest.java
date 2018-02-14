@@ -50,6 +50,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.entity.Combustivel;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
 public class CombustivelControllerTest extends AbstractTestControllers {
@@ -66,6 +67,9 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 		// Salva as entidades pertinentes antes de iniciar os testes
 	}
 	
+	/*
+	 * Salva uma instância e verifica se ela está salva na base
+	 */
 	@Test
 	public void salvarEBuscarTodos() {
 		// Salva a entidade instanciada e verifica se a listagem de resultados
@@ -75,6 +79,44 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 		controller.setDescricaoCombustivel("");
 		controller.find();
 		if (controller.getListEntity() == null || controller.getListEntity().size() == 0) {
+			Assert.fail("Entidade não salva e tabela vazia!");
+		}
+	}
+	
+	/*
+	 * Salva 10 instâncias e verifica se todas foram gravadas na base
+	 */
+	@Test
+	public void listarTodos() {
+		for (int i = 0; i < 10; i++) {
+			Combustivel c = EntityInitializerFactory.createCombustivel();
+			c.setDescricao(c.getDescricao() + i);
+			controller.setEntity(c);
+			controller.save();
+		}
+		
+		controller.setDescricaoCombustivel("");
+		controller.find();
+		if (controller.getListEntity() == null || controller.getListEntity().size() != 10) {
+			Assert.fail("Nem todas as entidades foram salvas na base!");
+		}
+	}
+	
+	/*
+	 * Salva 10 instâncias e verifica se uma instância em particular foi salva
+	 */
+	@Test
+	public void buscarUmCombustivel() {
+		for (int i = 0; i < 10; i++) {
+			Combustivel c = EntityInitializerFactory.createCombustivel();
+			c.setDescricao(c.getDescricao() + i);
+			controller.setEntity(c);
+			controller.save();
+		}
+		
+		controller.setDescricaoCombustivel("5");
+		controller.find();
+		if (controller.getListEntity() == null || controller.getListEntity().size() != 1) {
 			Assert.fail("Entidade não salva e tabela vazia!");
 		}
 	}
