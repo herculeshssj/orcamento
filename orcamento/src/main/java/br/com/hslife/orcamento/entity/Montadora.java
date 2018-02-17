@@ -55,11 +55,6 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="montadora")
 public class Montadora extends EntityPersistence {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7024424966496163998L;	
-	
 	@Column(length=50, nullable=false)	
 	private String descricao;
 	

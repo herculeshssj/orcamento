@@ -55,11 +55,6 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="combustivel")
 public class Combustivel extends EntityPersistence {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2439009219066040079L;
-
 	@Column(length=50, nullable=false)	
 	private String descricao;
 	
@@ -105,18 +100,30 @@ public class Combustivel extends EntityPersistence {
 		}
 	}
 
+	/**
+	 * @return the descricao
+	 */
 	public String getDescricao() {
 		return descricao;
 	}
 
+	/**
+	 * @param descricao the descricao to set
+	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
+	/**
+	 * @return the distribuidora
+	 */
 	public String getDistribuidora() {
 		return distribuidora;
 	}
 
+	/**
+	 * @param distribuidora the distribuidora to set
+	 */
 	public void setDistribuidora(String distribuidora) {
 		this.distribuidora = distribuidora;
 	}	

@@ -45,13 +45,10 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 
 package br.com.hslife.orcamento.entity;
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -64,25 +61,16 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="seguro")
 public class Seguro extends EntityPersistence {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1501961895495821801L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;	
-	
 	@Column(length=50, nullable=false)	
 	private String descricao;
 
 	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)	
-	private Date dataAquisicao;
+	private Calendar dataAquisicao;
 	
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)	
-	private Date validade;
+	private Calendar validade;
 	
 	@Column(length=100, nullable=true)
 	private String cobertura;
@@ -111,82 +99,119 @@ public class Seguro extends EntityPersistence {
 		
 	@Override
 	public void validate() {
-		
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
-		
 		EntityPersistenceUtil.validaCampoNulo("Data de aquisição", this.dataAquisicao);
-		
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getDescricao() {
+	/**
+	 * @return the descricao
+	 */
+	public final String getDescricao() {
 		return descricao;
 	}
 
-	public void setDescricao(String descricao) {
+	/**
+	 * @param descricao the descricao to set
+	 */
+	public final void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
-	public Date getDataAquisicao() {
+	/**
+	 * @return the dataAquisicao
+	 */
+	public final Calendar getDataAquisicao() {
 		return dataAquisicao;
 	}
 
-	public void setDataAquisicao(Date dataAquisicao) {
+	/**
+	 * @param dataAquisicao the dataAquisicao to set
+	 */
+	public final void setDataAquisicao(Calendar dataAquisicao) {
 		this.dataAquisicao = dataAquisicao;
 	}
 
-	public Date getValidade() {
+	/**
+	 * @return the validade
+	 */
+	public final Calendar getValidade() {
 		return validade;
 	}
 
-	public void setValidade(Date validade) {
+	/**
+	 * @param validade the validade to set
+	 */
+	public final void setValidade(Calendar validade) {
 		this.validade = validade;
 	}
 
-	public String getCobertura() {
+	/**
+	 * @return the cobertura
+	 */
+	public final String getCobertura() {
 		return cobertura;
 	}
 
-	public void setCobertura(String cobertura) {
+	/**
+	 * @param cobertura the cobertura to set
+	 */
+	public final void setCobertura(String cobertura) {
 		this.cobertura = cobertura;
 	}
 
-	public double getValorCobertura() {
+	/**
+	 * @return the valorCobertura
+	 */
+	public final double getValorCobertura() {
 		return valorCobertura;
 	}
 
-	public void setValorCobertura(double valorCobertura) {
+	/**
+	 * @param valorCobertura the valorCobertura to set
+	 */
+	public final void setValorCobertura(double valorCobertura) {
 		this.valorCobertura = valorCobertura;
 	}
 
-	public double getValorSeguro() {
+	/**
+	 * @return the valorSeguro
+	 */
+	public final double getValorSeguro() {
 		return valorSeguro;
 	}
 
-	public void setValorSeguro(double valorSeguro) {
+	/**
+	 * @param valorSeguro the valorSeguro to set
+	 */
+	public final void setValorSeguro(double valorSeguro) {
 		this.valorSeguro = valorSeguro;
 	}
 
-	public String getObservacao() {
+	/**
+	 * @return the observacao
+	 */
+	public final String getObservacao() {
 		return observacao;
 	}
 
-	public void setObservacao(String observacao) {
+	/**
+	 * @param observacao the observacao to set
+	 */
+	public final void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
 
-	public Usuario getUsuario() {
+	/**
+	 * @return the usuario
+	 */
+	public final Usuario getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	/**
+	 * @param usuario the usuario to set
+	 */
+	public final void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
 }

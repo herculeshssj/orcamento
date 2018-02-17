@@ -68,7 +68,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	 * Controller que está sendo testado
 	 */
 	@Autowired
-	private MontadoraController controller;
+	private CombustivelController controller;
 	
 	/*
 	 * Inicializa as variáveis e objetos para executar ao longo dos testes
@@ -82,7 +82,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 		login();
 		
 		// Inicializa as entidades		
-		controller.setEntity(EntityInitializerFactory.createMontadora());
+		controller.setEntity(EntityInitializerFactory.createCombustivel());
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
 	}
@@ -102,7 +102,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	 */
 	@Test
 	public void moduleTitle() {
-		assertEquals("Montadoras", controller.getModuleTitle());
+		assertEquals("Combustíveis", controller.getModuleTitle());
 	}
 	
 	/*
@@ -119,7 +119,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	 */
 	@Test
 	public void buscarTodosCadastrados() {
-		controller.setDescricaoMontadora("");
+		controller.setDescricaoCombustivel("");
 		
 		controller.find();
 		
@@ -136,8 +136,9 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 			
 			assertEquals(controller.goToFormPage, result);
 			
-			controller.setEntity(EntityInitializerFactory.createMontadora());
+			controller.setEntity(EntityInitializerFactory.createCombustivel());
 			controller.getEntity().setDescricao(controller.getEntity().getDescricao() + i);
+			controller.getEntity().setDistribuidora("Distribuidora de teste");
 			result = controller.save();
 			
 			assertEquals(controller.goToListPage, result);
@@ -151,12 +152,12 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	public void buscarRegistros() {
 		this.cadastrarRegistros();
 		
-		controller.setDescricaoMontadora("");
+		controller.setDescricaoCombustivel("");
 		controller.find();
 		
 		assertEquals(10, controller.getListEntity().size());
 		
-		controller.setDescricaoMontadora("5");
+		controller.setDescricaoCombustivel("5");
 		controller.find();
 		
 		assertEquals(1, controller.getListEntity().size());
@@ -169,7 +170,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	public void editarRegistro() {
 		this.cadastrarRegistros();
 		
-		controller.setDescricaoMontadora("5");
+		controller.setDescricaoCombustivel("5");
 		controller.find();
 		assertEquals(1, controller.getListEntity().size());
 		
@@ -181,7 +182,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 		result = controller.save();
 		assertEquals(controller.goToListPage, result);
 		
-		controller.setDescricaoMontadora("[ALTERADO]");
+		controller.setDescricaoCombustivel("[ALTERADO]");
 		controller.find();
 		
 		assertEquals(1, controller.getListEntity().size());
@@ -194,7 +195,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	public void excluirRegistro() {
 		this.editarRegistro();
 		
-		controller.setDescricaoMontadora("[ALTERADO]");
+		controller.setDescricaoCombustivel("[ALTERADO]");
 		controller.find();
 		
 		assertEquals(1, controller.getListEntity().size());
@@ -206,7 +207,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 		result = controller.delete();
 		assertEquals(controller.goToListPage, result);
 		
-		controller.setDescricaoMontadora("[ALTERADO]");
+		controller.setDescricaoCombustivel("[ALTERADO]");
 		controller.find();
 		
 		assertEquals(0, controller.getListEntity().size());
@@ -219,7 +220,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	public void voltar() {
 		this.cadastrarRegistros();
 		
-		controller.setDescricaoMontadora("5");
+		controller.setDescricaoCombustivel("5");
 		controller.find();
 		assertEquals(1, controller.getListEntity().size());
 		
@@ -238,7 +239,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 	public void buscaAvancada() {
 		String result = controller.advancedSearch();
 		assertEquals(controller.goToSearchPage, result);
-		controller.setDescricaoMontadora("");
+		controller.setDescricaoCombustivel("");
 		
 		result = controller.search();
 		assertEquals(controller.goToListPage, result);
