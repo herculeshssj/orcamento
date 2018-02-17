@@ -67,40 +67,61 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+/**
+ * Responsável por prover métodos comuns a todas as classes de teste.
+ * 
+ * @author herculeshssj
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/spring-config-junit.xml"})
+@ContextConfiguration(locations = { "classpath:/spring-config-junit.xml" })
 @WebAppConfiguration
-public abstract class AbstractTestControllers extends AbstractTransactionalJUnit4SpringContextTests {
-	
+public abstract class AbstractTestControllers
+		extends AbstractTransactionalJUnit4SpringContextTests {
+
+	/*
+	 * Mock do Spring MVC
+	 */
 	private MockMvc mockMvc;
-	
+
+	/*
+	 * Filtro do Spring Security
+	 */
 	@Autowired
 	private FilterChainProxy springSecurityFilterChain;
-	
+
+	/*
+	 * Mock de Servlet para tratar as requisições
+	 */
 	@Autowired
 	private MockHttpServletRequest request;
-	
+
+	/*
+	 * Contexto do Spring para uma aplicação Web
+	 */
 	@Autowired
 	private WebApplicationContext webAppContext;
-	
+
+	/*
+	 * Inicializa o contexto do Spring Security para disponibilizar para as
+	 * classes de teste.
+	 */
 	protected void login() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext)
-				.addFilters(springSecurityFilterChain)
-				.build();
-		
-		HttpSession session = mockMvc.perform(post("/login")
-				.param("username", "teste")
-				.param("password", "teste"))
-				.andDo(print())
-				.andExpect(status().isFound())
-				.andExpect(redirectedUrl("/"))
-				.andReturn()
-				.getRequest()
+				.addFilters(springSecurityFilterChain).build();
+
+		HttpSession session = mockMvc
+				.perform(post("/login").param("username", "teste")
+						.param("password", "teste"))
+				.andDo(print()).andExpect(status().isFound())
+				.andExpect(redirectedUrl("/")).andReturn().getRequest()
 				.getSession();
-		
+
 		request.setSession(session);
-		
-		SecurityContext securityContext = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+
+		SecurityContext securityContext = (SecurityContext) session
+				.getAttribute(
+						HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 		SecurityContextHolder.setContext(securityContext);
 	}
 }

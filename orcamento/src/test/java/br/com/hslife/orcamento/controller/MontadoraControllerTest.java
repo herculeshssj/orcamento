@@ -51,13 +51,28 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
+/**
+ * Classe responsável por realizar os testes unitários do controller em 
+ * questão. As rotinas são padronizadas pois ele herda diretamente de
+ * AbstractCRUDController.
+ * 
+ * @author herculeshssj
+ *
+ */
 public class MontadoraControllerTest extends AbstractTestControllers {
 	
+	/*
+	 * Controller que está sendo testado
+	 */
 	@Autowired
 	private MontadoraController controller;
 	
+	/*
+	 * Inicializa as variáveis e objetos para executar ao longo dos testes
+	 */
 	@Before
 	public void initializeEntities() throws Exception {
 		// Inicializa o FacesContext
@@ -80,6 +95,23 @@ public class MontadoraControllerTest extends AbstractTestControllers {
 		String result = controller.startUp();
 		
 		assertEquals(controller.goToListPage, result);
+	}
+	
+	/*
+	 * Verifica o título do módulo
+	 */
+	@Test
+	public void moduleTitle() {
+		assertEquals("Montadoras", controller.getModuleTitle());
+	}
+	
+	/*
+	 * Verifica o usuário logado
+	 */
+	public void usuarioLogado() {
+		Usuario usuario = controller.getUsuarioLogado();
+		assertEquals("teste", usuario.getLogin());
+		assertEquals(usuario, controller.getCurrentFacesContext().getExternalContext().getSessionMap().get("usuarioLogado"));
 	}
 	
 	/*
@@ -178,5 +210,39 @@ public class MontadoraControllerTest extends AbstractTestControllers {
 		controller.find();
 		
 		assertEquals(0, controller.getListEntity().size());
+	}
+	
+	/*
+	 * Testa o voltar para a tela de listagem
+	 */
+	@Test
+	public void voltar() {
+		this.cadastrarRegistros();
+		
+		controller.setDescricaoMontadora("5");
+		controller.find();
+		assertEquals(1, controller.getListEntity().size());
+		
+		controller.setIdEntity(controller.getListEntity().get(0).getId());
+		String result = controller.edit();
+		assertEquals(controller.goToFormPage, result);
+		
+		result = controller.cancel();
+		assertEquals(controller.goToListPage, result);
+	}
+	
+	/*
+	 * Testa a tela de busca avançada
+	 */
+	@Test
+	public void buscaAvancada() {
+		String result = controller.advancedSearch();
+		assertEquals(controller.goToSearchPage, result);
+		controller.setDescricaoMontadora("");
+		
+		result = controller.search();
+		assertEquals(controller.goToListPage, result);
+		
+		assertEquals(true, controller.getListEntity().isEmpty());
 	}
 }

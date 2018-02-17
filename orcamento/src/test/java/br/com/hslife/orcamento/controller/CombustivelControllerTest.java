@@ -45,79 +45,204 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.controller;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.hslife.orcamento.entity.Combustivel;
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
+/**
+ * Classe responsável por realizar os testes unitários do controller em 
+ * questão. As rotinas são padronizadas pois ele herda diretamente de
+ * AbstractCRUDController.
+ * 
+ * @author herculeshssj
+ *
+ */
 public class CombustivelControllerTest extends AbstractTestControllers {
 	
+	/*
+	 * Controller que está sendo testado
+	 */
 	@Autowired
-	private CombustivelController controller;
+	private MontadoraController controller;
 	
+	/*
+	 * Inicializa as variáveis e objetos para executar ao longo dos testes
+	 */
 	@Before
-	public void initializeEntities() {		
-		// Inicializa as entidades		
+	public void initializeEntities() throws Exception {
+		// Inicializa o FacesContext
 		controller.setCurrentFacesContext(FacesContextMock.mockFacesContext());
-		controller.setEntity(EntityInitializerFactory.createCombustivel());
+				
+		// Efetua o login do usuário
+		login();
+		
+		// Inicializa as entidades		
+		controller.setEntity(EntityInitializerFactory.createMontadora());
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
 	}
 	
 	/*
-	 * Salva uma instância e verifica se ela está salva na base
+	 * Entra no módulo
 	 */
 	@Test
-	public void salvarEBuscarTodos() {
-		// Salva a entidade instanciada e verifica se a listagem de resultados
-		// retorna mais de um resultado 
-		controller.save();
+	public void startUp() {
+		String result = controller.startUp();
 		
-		controller.setDescricaoCombustivel("");
+		assertEquals(controller.goToListPage, result);
+	}
+	
+	/*
+	 * Verifica o título do módulo
+	 */
+	@Test
+	public void moduleTitle() {
+		assertEquals("Montadoras", controller.getModuleTitle());
+	}
+	
+	/*
+	 * Verifica o usuário logado
+	 */
+	public void usuarioLogado() {
+		Usuario usuario = controller.getUsuarioLogado();
+		assertEquals("teste", usuario.getLogin());
+		assertEquals(usuario, controller.getCurrentFacesContext().getExternalContext().getSessionMap().get("usuarioLogado"));
+	}
+	
+	/*
+	 * Pesquisa todos os registros cadastrados
+	 */
+	@Test
+	public void buscarTodosCadastrados() {
+		controller.setDescricaoMontadora("");
+		
 		controller.find();
-		if (controller.getListEntity() == null || controller.getListEntity().size() == 0) {
-			Assert.fail("Entidade não salva e tabela vazia!");
+		
+		assertEquals(true, controller.getListEntity().isEmpty());
+	}
+	
+	/*
+	 * Realiza o cadastro de 10 registros
+	 */
+	@Test
+	public void cadastrarRegistros() {
+		for (int i = 0; i < 10; i++) {
+			String result = controller.create();
+			
+			assertEquals(controller.goToFormPage, result);
+			
+			controller.setEntity(EntityInitializerFactory.createMontadora());
+			controller.getEntity().setDescricao(controller.getEntity().getDescricao() + i);
+			result = controller.save();
+			
+			assertEquals(controller.goToListPage, result);
 		}
 	}
 	
 	/*
-	 * Salva 10 instâncias e verifica se todas foram gravadas na base
+	 * Realiza buscas pelos registros cadastrados
 	 */
 	@Test
-	public void listarTodos() {
-		for (int i = 0; i < 10; i++) {
-			Combustivel c = EntityInitializerFactory.createCombustivel();
-			c.setDescricao(c.getDescricao() + i);
-			controller.setEntity(c);
-			controller.save();
-		}
+	public void buscarRegistros() {
+		this.cadastrarRegistros();
 		
-		controller.setDescricaoCombustivel("");
+		controller.setDescricaoMontadora("");
 		controller.find();
-		if (controller.getListEntity() == null || controller.getListEntity().size() != 10) {
-			Assert.fail("Nem todas as entidades foram salvas na base!");
-		}
+		
+		assertEquals(10, controller.getListEntity().size());
+		
+		controller.setDescricaoMontadora("5");
+		controller.find();
+		
+		assertEquals(1, controller.getListEntity().size());
 	}
 	
 	/*
-	 * Salva 10 instâncias e verifica se uma instância em particular foi salva
+	 * Edita um registro em particular
 	 */
 	@Test
-	public void buscarUmCombustivel() {
-		for (int i = 0; i < 10; i++) {
-			Combustivel c = EntityInitializerFactory.createCombustivel();
-			c.setDescricao(c.getDescricao() + i);
-			controller.setEntity(c);
-			controller.save();
-		}
+	public void editarRegistro() {
+		this.cadastrarRegistros();
 		
-		controller.setDescricaoCombustivel("5");
+		controller.setDescricaoMontadora("5");
 		controller.find();
-		if (controller.getListEntity() == null || controller.getListEntity().size() != 1) {
-			Assert.fail("Entidade não salva e tabela vazia!");
-		}
+		assertEquals(1, controller.getListEntity().size());
+		
+		controller.setIdEntity(controller.getListEntity().get(0).getId());
+		String result = controller.edit();
+		assertEquals(controller.goToFormPage, result);
+		
+		controller.getEntity().setDescricao(controller.getEntity().getDescricao() + "[ALTERADO]");
+		result = controller.save();
+		assertEquals(controller.goToListPage, result);
+		
+		controller.setDescricaoMontadora("[ALTERADO]");
+		controller.find();
+		
+		assertEquals(1, controller.getListEntity().size());
+	}
+	
+	/*
+	 * Exclui um registro em particular
+	 */
+	@Test
+	public void excluirRegistro() {
+		this.editarRegistro();
+		
+		controller.setDescricaoMontadora("[ALTERADO]");
+		controller.find();
+		
+		assertEquals(1, controller.getListEntity().size());
+		
+		controller.setIdEntity(controller.getListEntity().get(0).getId());
+		String result = controller.view();
+		assertEquals(controller.goToViewPage, result);
+		
+		result = controller.delete();
+		assertEquals(controller.goToListPage, result);
+		
+		controller.setDescricaoMontadora("[ALTERADO]");
+		controller.find();
+		
+		assertEquals(0, controller.getListEntity().size());
+	}
+	
+	/*
+	 * Testa o voltar para a tela de listagem
+	 */
+	@Test
+	public void voltar() {
+		this.cadastrarRegistros();
+		
+		controller.setDescricaoMontadora("5");
+		controller.find();
+		assertEquals(1, controller.getListEntity().size());
+		
+		controller.setIdEntity(controller.getListEntity().get(0).getId());
+		String result = controller.edit();
+		assertEquals(controller.goToFormPage, result);
+		
+		result = controller.cancel();
+		assertEquals(controller.goToListPage, result);
+	}
+	
+	/*
+	 * Testa a tela de busca avançada
+	 */
+	@Test
+	public void buscaAvancada() {
+		String result = controller.advancedSearch();
+		assertEquals(controller.goToSearchPage, result);
+		controller.setDescricaoMontadora("");
+		
+		result = controller.search();
+		assertEquals(controller.goToListPage, result);
+		
+		assertEquals(true, controller.getListEntity().isEmpty());
 	}
 }
