@@ -53,23 +53,23 @@ import br.com.hslife.orcamento.enumeration.TipoCartao;
 
 public interface ICartaoCredito extends ICRUDService<CartaoCredito> {
 	
-	public List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+	List<CartaoCredito> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<CartaoCredito> buscarPorUsuario(Usuario usuario);
+	List<CartaoCredito> buscarPorUsuario(Usuario usuario);
 	
-	public void desativarCartoes();
+	void desativarCartoes();
 	
-	public void substituirCartao(CartaoCredito entity);
+	void substituirCartao(CartaoCredito entity);
 	
-	public List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario);
+	List<CartaoCredito> buscarSomenteCreditoPorUsuario(Usuario usuario);
 	
-	public List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario);
+	List<CartaoCredito> buscarAtivosSomenteCreditoPorUsuario(Usuario usuario);
 	
-	public void ativarCartao(CartaoCredito entity);
+	void ativarCartao(CartaoCredito entity);
 	
-	public void desativarCartao(CartaoCredito entity);
+	void desativarCartao(CartaoCredito entity);
 	
-	public List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo);
+	List<CartaoCredito> buscarDescricaoOuTipoCartaoOuAtivoPorUsuario(String descricao, TipoCartao tipoCartao, Usuario usuario, Boolean ativo);
 	
-	public void repararInconsistênciaFatura(CartaoCredito cartaoCredito);
+	void repararInconsistênciaFatura(CartaoCredito cartaoCredito);
 }

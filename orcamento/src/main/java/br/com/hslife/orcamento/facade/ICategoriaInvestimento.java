@@ -52,6 +52,6 @@ import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 
 public interface ICategoriaInvestimento extends ICRUDService<CategoriaInvestimento>{
 	
-	public List<CategoriaInvestimento> buscarPorDescricaoETipoEAtivo(String descricao, TipoInvestimento tipo, Boolean ativo);
+	List<CategoriaInvestimento> buscarPorDescricaoETipoEAtivo(String descricao, TipoInvestimento tipo, Boolean ativo);
 
 }

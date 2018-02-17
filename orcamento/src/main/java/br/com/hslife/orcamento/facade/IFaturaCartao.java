@@ -58,29 +58,29 @@ import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 
 public interface IFaturaCartao extends ICRUDService<FaturaCartao>{ 	
 	
-	public List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta);
+	List<FaturaCartao> buscarTodosPorCartaoCredito(Conta conta);
 	
-	public List<FaturaCartao> buscarTodos();
+	List<FaturaCartao> buscarTodos();
 	
-	public void fecharFatura(FaturaCartao fatura, List<Moeda> conversoes);
+	void fecharFatura(FaturaCartao fatura, List<Moeda> conversoes);
 	
-	public void reabrirFatura(FaturaCartao faturaCartao);
+	void reabrirFatura(FaturaCartao faturaCartao);
 	
-	public double saldoDevedorUltimaFatura(CartaoCredito cartao);
+	double saldoDevedorUltimaFatura(CartaoCredito cartao);
 	
-	public void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta conta, double valorAQuitar, Date dataPagamento);
+	void quitarFaturaDebitoConta(FaturaCartao faturaCartao, Conta conta, double valorAQuitar, Date dataPagamento);
 	
-	public void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento);
+	void quitarFaturaParcelamento(FaturaCartao faturaCartao, int quantParcelas, Date dataParcelamento);
 	
-	public void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta);
+	void quitarFaturaLancamentoSelecionado(FaturaCartao faturaCartao, LancamentoConta lancamentoConta);
 	
-	public List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario);
+	List<FaturaCartao> buscarTodosPorUsuario(Usuario usuario);
 	
-	public List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura);
+	List<FaturaCartao> buscarPorCartaoCreditoEStatusFatura(CartaoCredito cartao, StatusFaturaCartao statusFatura);
 	
-	public List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta);
+	List<FaturaCartao> buscarTodosPorContaOrdenadoPorMesEAno(Conta conta);
 	
-	public List<FaturaCartao> buscarTodosPorContaEAnoOrdenadosPorMesAno(Conta conta, int ano);
+	List<FaturaCartao> buscarTodosPorContaEAnoOrdenadosPorMesAno(Conta conta, int ano);
 	
-	public FaturaCartao buscarFaturaPagaPorLancamentoConta(LancamentoConta lancamentoConta);
+	FaturaCartao buscarFaturaPagaPorLancamentoConta(LancamentoConta lancamentoConta);
 }

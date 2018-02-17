@@ -56,17 +56,17 @@ public interface IMeioPagamento extends ICRUDService<MeioPagamento> {
 	 * Buscar um meio de pagamento a partir dos parâmetros informados.
 	 * Caso não encontre, o meio de pagamento padrão é retornado.
 	 */
-	public MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario);
+	MeioPagamento buscarMeioPagamento(String descricaoMeioPagamento, Usuario usuario);
 	
-	public List<MeioPagamento> buscarPorUsuario(Usuario usuario);
+	List<MeioPagamento> buscarPorUsuario(Usuario usuario);
 	
-	public List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+	List<MeioPagamento> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 
-	public List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario);
+	List<MeioPagamento> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
+	List<MeioPagamento> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
+	List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
 	
-	public List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios);
+	List<MeioPagamento> buscarDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, List<Usuario> usuarios);
 }

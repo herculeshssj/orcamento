@@ -51,16 +51,16 @@ import br.com.hslife.orcamento.entity.EntityPersistence;
 
 public interface ICRUDService<E extends EntityPersistence> {
 	
-	public void cadastrar(E entity);
+	void cadastrar(E entity);
 	
-	public void alterar(E entity);
+	void alterar(E entity);
 	
-	public void excluir(E entity);
+	void excluir(E entity);
 	
-	public E buscarPorID(Long id);
+	E buscarPorID(Long id);
 	
-	public void validar(E entity);
+	void validar(E entity);
 	
-	public List<E> buscarTodos();
+	List<E> buscarTodos();
 
 }

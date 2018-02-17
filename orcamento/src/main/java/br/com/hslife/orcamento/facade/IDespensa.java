@@ -52,8 +52,8 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IDespensa extends ICRUDService<Despensa> {
 	
-	public List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+	List<Despensa> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<Despensa> buscarTodosPorUsuario(Usuario usuario);
+	List<Despensa> buscarTodosPorUsuario(Usuario usuario);
 
 }

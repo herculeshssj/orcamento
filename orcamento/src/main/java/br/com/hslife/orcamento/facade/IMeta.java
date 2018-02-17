@@ -52,6 +52,6 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IMeta extends ICRUDService<Meta>{
 	
-	public List<Meta> buscarTodosDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
+	List<Meta> buscarTodosDescricaoEAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
 	
 }

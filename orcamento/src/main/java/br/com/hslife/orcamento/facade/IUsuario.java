@@ -54,21 +54,21 @@ import br.com.hslife.orcamento.exception.BusinessException;
 
 public interface IUsuario extends ICRUDService<Usuario> {
 	
-	public List<Usuario> getListaUsuarios();
+	List<Usuario> getListaUsuarios();
 	
-	public Usuario buscarPorLogin(String login);
+	Usuario buscarPorLogin(String login);
 	
-	public List<Usuario> buscarTodosPorLogin(String login);
+	List<Usuario> buscarTodosPorLogin(String login);
 	
-	public void efetuarRegistro(Usuario entity) throws ApplicationException;
+	void efetuarRegistro(Usuario entity) throws ApplicationException;
 	
-	public void recuperarSenha(Usuario entity) throws ApplicationException, BusinessException;
+	void recuperarSenha(Usuario entity) throws ApplicationException, BusinessException;
 	
-	public void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException;	
+	void enviarMensagemParaAdmin(String assuntoMensagem, String mensagem) throws ApplicationException;	
 	
-	public void enviarMensagemParaAdmin(String rementente, String emailRemetente, String assuntoMensagem, String mensagem) throws ApplicationException;
+	void enviarMensagemParaAdmin(String rementente, String emailRemetente, String assuntoMensagem, String mensagem) throws ApplicationException;
 	
-	public Usuario buscarPorTokenID(String token);
+	Usuario buscarPorTokenID(String token);
 	
-	public void gerarTokenID(Usuario usuario);
+	void gerarTokenID(Usuario usuario);
 }

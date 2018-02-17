@@ -54,21 +54,21 @@ import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
 
 public interface IMovimentacaoLancamento {
 	
-	public void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta);
+	void moverLancamentos(List<LancamentoConta> lancamentos, Conta conta);
 	
-	public void excluirLancamentos(List<LancamentoConta> lancamentos);
+	void excluirLancamentos(List<LancamentoConta> lancamentos);
 	
-	public void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento);
+	void duplicarLancamentos(List<LancamentoConta> lancamentos, Conta conta, int quantidade, IncrementoClonagemLancamento incremento);
 	
-	public void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros);
+	void transferirLancamentos(LancamentoConta lancamentoATransferir, Map<String, Object> parametros);
 	
-	public void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
+	void alterarPropriedades(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
 	
-	public void removerVinculos(List<LancamentoConta> lancamentos);
+	void removerVinculos(List<LancamentoConta> lancamentos);
 	
-	public void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
+	void mesclarLancamento(List<LancamentoConta> lancamentos, Map<String, Object> parametros);
 	
-	public void dividirLancamento(LancamentoConta lancamento, int quantidade);
+	void dividirLancamento(LancamentoConta lancamento, int quantidade);
 	
-	public void salvarDetalhamentoLancamento(LancamentoConta lancamento);
+	void salvarDetalhamentoLancamento(LancamentoConta lancamento);
 }

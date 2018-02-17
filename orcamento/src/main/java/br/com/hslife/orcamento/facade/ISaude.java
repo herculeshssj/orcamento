@@ -54,13 +54,13 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface ISaude extends ICRUDService<Saude>{
 	
-	public List<Saude> buscarTodosAtivosPorUsuario(Usuario usuario);
+	List<Saude> buscarTodosAtivosPorUsuario(Usuario usuario);
 	
-	public void salvarTratamentoSaude(TratamentoSaude tratamento);
+	void salvarTratamentoSaude(TratamentoSaude tratamento);
 	
-	public void excluirTratamentoSaude(TratamentoSaude tratamento);
+	void excluirTratamentoSaude(TratamentoSaude tratamento);
 	
-	public void salvarHistoricoSaude(HistoricoSaude historico);
+	void salvarHistoricoSaude(HistoricoSaude historico);
 	
-	public void excluirHistoricoSaude(HistoricoSaude historico);
+	void excluirHistoricoSaude(HistoricoSaude historico);
 }

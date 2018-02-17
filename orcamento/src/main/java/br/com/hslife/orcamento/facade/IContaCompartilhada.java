@@ -53,15 +53,15 @@ import br.com.hslife.orcamento.exception.ApplicationException;
 
 public interface IContaCompartilhada {
 	
-	public void compartilharConta(ContaCompartilhada conta) throws ApplicationException;
+	void compartilharConta(ContaCompartilhada conta) throws ApplicationException;
 
-	public void habilitarCompartilhamento(String hash);
+	void habilitarCompartilhamento(String hash);
 	
-	public List<ContaCompartilhada> buscarTodosPorUsuarioLogado(Usuario usuarioLogado);
+	List<ContaCompartilhada> buscarTodosPorUsuarioLogado(Usuario usuarioLogado);
 	
-	public List<ContaCompartilhada> buscarTodosPorUsuario(Usuario usuario);
+	List<ContaCompartilhada> buscarTodosPorUsuario(Usuario usuario);
 	
-	public void reenviarConvite(ContaCompartilhada conta) throws ApplicationException;
+	void reenviarConvite(ContaCompartilhada conta) throws ApplicationException;
 	
-	public void excluirCompartilhamento(ContaCompartilhada conta);
+	void excluirCompartilhamento(ContaCompartilhada conta);
 }

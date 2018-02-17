@@ -54,21 +54,21 @@ import br.com.hslife.orcamento.model.UsuarioLogado;
 
 public interface ILog {
 	
-	public List<Logs> buscarPorCriterios(CriterioLog criterioBusca);
+	List<Logs> buscarPorCriterios(CriterioLog criterioBusca);
 
-	public List<String> buscarTodosNiveis();
+	List<String> buscarTodosNiveis();
 	
-	public List<String> buscarTodosLoggers();
+	List<String> buscarTodosLoggers();
 	
-	public Logs buscarPorID(Long id);
+	Logs buscarPorID(Long id);
 	
-	public void excluir(Logs logs);
+	void excluir(Logs logs);
 	
-	public void alterar(Logs logs);
+	void alterar(Logs logs);
 	
-	public Logs buscarExcecaoMaisRecente();
+	Logs buscarExcecaoMaisRecente();
 	
-	public List<UsuarioLogado> buscarTodosUsuarioLogado();
+	List<UsuarioLogado> buscarTodosUsuarioLogado();
 	
-	public void salvarLogRequisicao(LogRequisicao logRequisicao);
+	void salvarLogRequisicao(LogRequisicao logRequisicao);
 }

@@ -57,21 +57,21 @@ public interface ICategoria extends ICRUDService<Categoria> {
 	 * Buscar uma categoria a partir dos parâmetros informados.
 	 * Caso não encontre, a categoria padrão é retornada.
 	 */
-	public Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario);
+	Categoria buscarCategoria(String descricaoCategoria, TipoCategoria tipoCategoria, Usuario usuario);
 	
-	public List<Categoria> buscarPorUsuario(Usuario usuario);
+	List<Categoria> buscarPorUsuario(Usuario usuario);
 	
-	public List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+	List<Categoria> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario);
+	List<Categoria> buscarPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario);
 	
-	public List<Categoria> buscarAtivosPorUsuario(Usuario usuario);
+	List<Categoria> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
+	List<Categoria> buscarPorDescricaoUsuarioEAtivo(String descricao, Usuario usuario, boolean ativo);
 	
-	public List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario);
+	List<Categoria> buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria tipoCategoria, Usuario usuario);
 	
-	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, Usuario usuario);
+	List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, Usuario usuario);
 	
-	public List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, List<Usuario> usuarios);
+	List<Categoria> buscarTipoCategoriaEDescricaoEAtivoPorUsuario(TipoCategoria tipoCategoria, String descricao, Boolean ativo, List<Usuario> usuarios);
 }

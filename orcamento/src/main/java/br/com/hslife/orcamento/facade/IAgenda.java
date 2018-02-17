@@ -54,13 +54,13 @@ import br.com.hslife.orcamento.model.CriterioAgendamento;
 
 public interface IAgenda extends ICRUDService<Agenda> {
 	
-	public List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim);
+	List<Agenda> buscarAgendamentoLancamentosAgendados(Conta conta, Date dataInicio, Date dataFim);
 	
-	public List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca);
+	List<Agenda> buscarPorCriterioAgendamento(CriterioAgendamento criterioBusca);
 	
-	public Long contarAgendamentosDeHojeComAlerta();
+	Long contarAgendamentosDeHojeComAlerta();
 	
-	public List<Agenda> buscarAgendamentosDoDia();
+	List<Agenda> buscarAgendamentosDoDia();
 	
-	public List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta);
+	List<Agenda> buscarAgendamentoPorOuDataInicioOuDataFimEAlerta(Date inicio, Date fim, boolean emiteAlerta);
 }

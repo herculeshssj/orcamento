@@ -53,7 +53,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IRelatorioCustomizado extends ICRUDService<RelatorioCustomizado> {
 	
-	public List<RelatorioCustomizado> buscarNomePorUsuario(String nome, Usuario usuario);
+	List<RelatorioCustomizado> buscarNomePorUsuario(String nome, Usuario usuario);
 	
-	public List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues);
+	List<Map<String, Object>> processarRelatorioCustomizado(RelatorioCustomizado entity, Map<String, Object> parameterValues);
 }

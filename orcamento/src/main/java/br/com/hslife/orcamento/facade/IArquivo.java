@@ -52,18 +52,17 @@ import br.com.hslife.orcamento.enumeration.Container;
 import br.com.hslife.orcamento.model.AnexoEntidade;
 import br.com.hslife.orcamento.model.CriterioArquivo;
 
-
 public interface IArquivo {
 	
-	public List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio);
+	List<Arquivo> buscarPorCriterioArquivo(CriterioArquivo criterio);
 	
-	public void salvar(Arquivo arquivo);
+	void salvar(Arquivo arquivo);
 	
-	public void excluir(Arquivo arquivo);
+	void excluir(Arquivo arquivo);
 
-	public List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container);
+	List<AnexoEntidade> buscarEntidadesPorDescricao(String descricao, Container container);
 	
-	public void salvarAnexo(Long idEntity, Container container, Arquivo anexo);
+	void salvarAnexo(Long idEntity, Container container, Arquivo anexo);
 	
-	public Arquivo buscarPorID(Long id);
+	Arquivo buscarPorID(Long id);
 }

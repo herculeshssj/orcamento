@@ -52,13 +52,13 @@ import br.com.hslife.orcamento.model.CriterioAuditoria;
 
 public interface IAuditoria {
 	
-	public Auditoria buscarPorId(Long id);
+	Auditoria buscarPorId(Long id);
 	
-	public List<Auditoria> buscarPorCriterios(CriterioAuditoria criterio);
+	List<Auditoria> buscarPorCriterios(CriterioAuditoria criterio);
 	
-	public List<String> buscarClasses();
+	List<String> buscarClasses();
 	
-	public void excluir(Auditoria auditoria);
+	void excluir(Auditoria auditoria);
 
-	public void salvar(Auditoria auditoria);
+	void salvar(Auditoria auditoria);
 }

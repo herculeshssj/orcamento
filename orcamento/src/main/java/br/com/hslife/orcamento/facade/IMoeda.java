@@ -52,17 +52,17 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IMoeda extends ICRUDService<Moeda>{
 	
-	public List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario);
+	List<Moeda> buscarPorNomeEUsuario(String nome, Usuario usuario);
 	
-	public List<Moeda> buscarPorUsuario(Usuario usuario);
+	List<Moeda> buscarPorUsuario(Usuario usuario);
 	
-	public Moeda buscarPadraoPorUsuario(Usuario usuario);
+	Moeda buscarPadraoPorUsuario(Usuario usuario);
 	
-	public List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
+	List<Moeda> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
 
-	public List<Moeda> buscarAtivosPorUsuario(Usuario usuario);
+	List<Moeda> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario);
+	List<String> buscarTodosCodigoMonetarioPorUsuario(Usuario usuario);
 	
-	public Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario);
+	Moeda buscarCodigoMonetarioPorUsuario(String codigoMonetario, Usuario usuario);
 }

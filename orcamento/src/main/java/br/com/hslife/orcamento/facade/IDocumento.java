@@ -53,14 +53,14 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IDocumento extends ICRUDService<Documento> {
 	
-	public List<Documento> buscarPorNomeEUsuario(String nome, Usuario usuario);
+	List<Documento> buscarPorNomeEUsuario(String nome, Usuario usuario);
 	
-	public List<Documento> buscarPorUsuario(Usuario usuario);
+	List<Documento> buscarPorUsuario(Usuario usuario);
 	
-	public List<Documento> buscarPorCategoriaDocumento(CategoriaDocumento categoriaDocumento);
+	List<Documento> buscarPorCategoriaDocumento(CategoriaDocumento categoriaDocumento);
 	
-	public List<Documento> buscarPorCategoriaDocumentoEUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario);
+	List<Documento> buscarPorCategoriaDocumentoEUsuario(CategoriaDocumento categoriaDocumento, Usuario usuario);
 	
-	public List<Documento> buscarPorNomeECategoriaDocumentoPorUsuario(String nome, CategoriaDocumento categoria, Usuario usuario);
+	List<Documento> buscarPorNomeECategoriaDocumentoPorUsuario(String nome, CategoriaDocumento categoria, Usuario usuario);
 
 }

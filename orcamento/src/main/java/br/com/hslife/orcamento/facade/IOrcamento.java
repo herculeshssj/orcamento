@@ -53,16 +53,16 @@ import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
 
 public interface IOrcamento extends ICRUDService<Orcamento>{
 	
-	public List<Orcamento> buscarTodosPorUsuario(Usuario usuario);
+	List<Orcamento> buscarTodosPorUsuario(Usuario usuario);
 	
-	public List<Orcamento> buscarTodosAtivosInativosPorUsuario(boolean ativo, Usuario usuario);
+	List<Orcamento> buscarTodosAtivosInativosPorUsuario(boolean ativo, Usuario usuario);
 	
-	public List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario);
+	List<Orcamento> buscarAbrangeciaPorUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario);
 	
-	public List<Orcamento> buscarAbrangenciaAtivosInativosPorUsuario(AbrangenciaOrcamento abrangencia, boolean ativo, Usuario usuario);
+	List<Orcamento> buscarAbrangenciaAtivosInativosPorUsuario(AbrangenciaOrcamento abrangencia, boolean ativo, Usuario usuario);
 	
-	public void atualizarValores(Orcamento entity);
+	void atualizarValores(Orcamento entity);
 	
-	public void gerarOrcamento(Orcamento entity);
+	void gerarOrcamento(Orcamento entity);
 	
 }

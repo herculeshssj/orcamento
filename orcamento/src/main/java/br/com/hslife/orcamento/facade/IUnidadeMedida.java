@@ -53,8 +53,8 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IUnidadeMedida extends ICRUDService<UnidadeMedida> {
 	
-	public List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
+	List<UnidadeMedida> buscarPorDescricaoEUsuario(String descricao, Usuario usuario);
 	
-	public List<UnidadeMedida> buscarPorUsuario(Usuario usuario);
+	List<UnidadeMedida> buscarPorUsuario(Usuario usuario);
 	
 }

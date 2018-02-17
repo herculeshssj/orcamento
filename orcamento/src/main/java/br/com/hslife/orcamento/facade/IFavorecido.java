@@ -59,31 +59,31 @@ public interface IFavorecido extends ICRUDService<Favorecido> {
 	 * Buscar um favorecido a partir dos parâmetros informados.
 	 * Caso não encontre, o favorecido padrão é retornado.
 	 */
-	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario);
+	Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario);
 	
-	public List<Favorecido> buscarPorUsuario(Usuario usuario);
+	List<Favorecido> buscarPorUsuario(Usuario usuario);
 	
-	public List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario);
+	List<Favorecido> buscarPorNomeEUsuario(String nome, Usuario usuario);
 	
-	public List<Favorecido> buscarAtivosPorUsuario(Usuario usuario);
+	List<Favorecido> buscarAtivosPorUsuario(Usuario usuario);
 	
-	public List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
+	List<Favorecido> buscarPorNomeUsuarioEAtivo(String nome, Usuario usuario, boolean ativo);
 	
-	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario);
+	List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Usuario usuario);
 	
-	public List<Favorecido> buscarTipoPessoaENomeEAtivoEFinanceiroPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Boolean financeiro, Usuario usuario);
+	List<Favorecido> buscarTipoPessoaENomeEAtivoEFinanceiroPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, Boolean financeiro, Usuario usuario);
 	
-	public List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, List<Usuario> usuarios);
+	List<Favorecido> buscarTipoPessoaENomeEAtivoPorUsuario(TipoPessoa tipoPessoa, String nome, Boolean ativo, List<Usuario> usuarios);
 	
-	public List<Endereco> buscarEnderecos(Favorecido favorecido);
+	List<Endereco> buscarEnderecos(Favorecido favorecido);
 	
-	public List<Telefone> buscarTelefones(Favorecido favorecido);
+	List<Telefone> buscarTelefones(Favorecido favorecido);
 	
-	public void salvarEndereco(Endereco entity);
+	void salvarEndereco(Endereco entity);
 	
-	public void excluirEndereco(Endereco entity);
+	void excluirEndereco(Endereco entity);
 	
-	public void salvarTelefone(Telefone entity);
+	void salvarTelefone(Telefone entity);
 	
-	public void excluirTelefone(Telefone entity);
+	void excluirTelefone(Telefone entity);
 }

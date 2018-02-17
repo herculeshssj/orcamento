@@ -56,29 +56,29 @@ import br.com.hslife.orcamento.model.InfoOFX;
 
 public interface IImportacaoLancamento {
 	
-	public LancamentoImportado buscarPorID(Long id);
+	LancamentoImportado buscarPorID(Long id);
 
-	public List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta);
+	List<LancamentoImportado> buscarLancamentoImportadoPorConta(Conta conta);
 
-	public void atualizarLancamentoImportado(LancamentoImportado entity);
+	void atualizarLancamentoImportado(LancamentoImportado entity);
 	
-	public void excluirLancamentoImportado(LancamentoImportado entity);
+	void excluirLancamentoImportado(LancamentoImportado entity);
 	
-	public void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
+	void  processarArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
 	
-	public void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException; 
+	void processarArquivoCSVImportado(Arquivo arquivo, Conta conta) throws ApplicationException; 
 	
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados);
+	List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados);
 	
-	public List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados, boolean quitarAutomaticamente);
+	List<LancamentoConta> buscarLancamentoContaACriarAtualizar(Conta conta, List<LancamentoImportado> lancamentosImportados, boolean quitarAutomaticamente);
 	
-	public void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos);
+	void processarLancamentos(Conta conta, List<LancamentoConta> lancamentos);
 	
-	public void importarLancamento(LancamentoImportado entity);
+	void importarLancamento(LancamentoImportado entity);
 	
-	public void importarLancamento(LancamentoImportado entity, boolean quitarAutomaticamente);
+	void importarLancamento(LancamentoImportado entity, boolean quitarAutomaticamente);
 	
-	public InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
+	InfoOFX obterInformacaoArquivoImportado(Arquivo arquivo, Conta conta) throws ApplicationException;
 	
-	public void apagarLancamentosImportados(Conta conta);
+	void apagarLancamentosImportados(Conta conta);
 }

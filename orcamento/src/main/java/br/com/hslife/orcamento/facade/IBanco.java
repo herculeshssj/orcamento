@@ -51,8 +51,8 @@ import br.com.hslife.orcamento.entity.Banco;
 
 public interface IBanco extends ICRUDService<Banco>{
 	
-	public List<Banco> buscarPorNome(String nome);
+	List<Banco> buscarPorNome(String nome);
 	
-	public List<Banco> buscarPorNomeEAtivo(String nome, boolean ativo);
+	List<Banco> buscarPorNomeEAtivo(String nome, boolean ativo);
 	
 }

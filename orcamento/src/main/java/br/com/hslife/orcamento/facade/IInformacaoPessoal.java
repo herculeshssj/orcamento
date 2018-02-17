@@ -54,19 +54,19 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IInformacaoPessoal {
 	
-	public void salvarDadosPessoais(Pessoal pessoal); 
+	void salvarDadosPessoais(Pessoal pessoal); 
 	
-	public void salvarEndereco(Endereco entity);
+	void salvarEndereco(Endereco entity);
 	
-	public void excluirEndereco(Endereco entity);
+	void excluirEndereco(Endereco entity);
 	
-	public void salvarTelefone(Telefone entity);
+	void salvarTelefone(Telefone entity);
 	
-	public void excluirTelefone(Telefone entity);
+	void excluirTelefone(Telefone entity);
 	
-	public Pessoal buscarDadosPessoais(Usuario usuario);
+	Pessoal buscarDadosPessoais(Usuario usuario);
 	
-	public List<Endereco> buscarEnderecos(Usuario usuario);
+	List<Endereco> buscarEnderecos(Usuario usuario);
 	
-	public List<Telefone> buscarTelefones(Usuario usuario);
+	List<Telefone> buscarTelefones(Usuario usuario);
 }

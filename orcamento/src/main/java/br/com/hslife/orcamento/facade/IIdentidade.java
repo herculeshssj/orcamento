@@ -53,8 +53,8 @@ import br.com.hslife.orcamento.enumeration.TipoIdentidade;
 
 public interface IIdentidade extends ICRUDService<Identidade> {
 
-	public void salvarDocumentos(List<Identidade> documentos);
+	void salvarDocumentos(List<Identidade> documentos);
 	
-	public Identidade buscarPorUsuarioETipoIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade);
+	Identidade buscarPorUsuarioETipoIdentidade(Usuario usuario, TipoIdentidade tipoIdentidade);
 	
 }

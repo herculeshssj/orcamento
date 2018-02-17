@@ -53,8 +53,8 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IInvestimento extends ICRUDService<Investimento>{
 	
-	public List<Investimento> buscarPorConta(Conta conta);
+	List<Investimento> buscarPorConta(Conta conta);
 	
-	public List<Conta> gerarCarteiraInvestimento(Usuario usuario);
+	List<Conta> gerarCarteiraInvestimento(Usuario usuario);
 	
 }

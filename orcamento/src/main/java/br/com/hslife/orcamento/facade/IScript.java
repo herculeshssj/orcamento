@@ -52,11 +52,11 @@ import br.com.hslife.orcamento.entity.Script;
 
 public interface IScript extends ICRUDService<Script> {
 	
-	public List<Script> buscarPorNomeEAtivo(String nome, boolean ativo);
+	List<Script> buscarPorNomeEAtivo(String nome, boolean ativo);
 	
-	public ResultadoScript buscarUltimoResultadoScript(Script script);
+	ResultadoScript buscarUltimoResultadoScript(Script script);
 	
-	public List<ResultadoScript> buscarPorScript(Script script);
+	List<ResultadoScript> buscarPorScript(Script script);
 	
-	public ResultadoScript buscarResultadoPorID(Long id);
+	ResultadoScript buscarResultadoPorID(Long id);
 }

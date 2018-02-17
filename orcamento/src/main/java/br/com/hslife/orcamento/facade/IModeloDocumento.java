@@ -52,6 +52,6 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IModeloDocumento extends ICRUDService<ModeloDocumento> {
 	
-	public List<ModeloDocumento> buscarDescricaoOuAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
+	List<ModeloDocumento> buscarDescricaoOuAtivoPorUsuario(String descricao, Boolean ativo, Usuario usuario);
 
 }

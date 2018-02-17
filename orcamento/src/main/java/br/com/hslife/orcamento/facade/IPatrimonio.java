@@ -52,6 +52,6 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IPatrimonio extends ICRUDService<Patrimonio> {
 	
-	public List<Patrimonio> buscarTodosPorUsuario(Usuario usuario);
+	List<Patrimonio> buscarTodosPorUsuario(Usuario usuario);
 	
 }

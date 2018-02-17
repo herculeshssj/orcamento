@@ -53,8 +53,8 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IBenfeitoria extends ICRUDService<Benfeitoria> {
 	
-	public List<Benfeitoria> buscarTodosPorUsuario(Usuario usuario);
+	List<Benfeitoria> buscarTodosPorUsuario(Usuario usuario);
 	
-	public List<Benfeitoria> buscarTodosPorPatrimonioEBenfeitoria(Patrimonio patrimonio, Usuario usuario);
+	List<Benfeitoria> buscarTodosPorPatrimonioEBenfeitoria(Patrimonio patrimonio, Usuario usuario);
 	
 }

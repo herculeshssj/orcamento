@@ -56,18 +56,18 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 
 public interface IDividaTerceiro extends ICRUDService<DividaTerceiro>{
 	
-	public List<DividaTerceiro> buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(Favorecido favorecido, 
+	List<DividaTerceiro> buscarFavorecidoOuTipoCategoriaOuStatusDividaPorUsuario(Favorecido favorecido, 
 			TipoCategoria tipoCategoria, StatusDivida statusDivida, Usuario usuario);
 	
-	public void vigorarDividaTerceiro(DividaTerceiro entity);
+	void vigorarDividaTerceiro(DividaTerceiro entity);
 	
-	public void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa);
+	void renegociarDividaTerceiro(DividaTerceiro entity, String justificativa);
 	
-	public void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento);
+	void registrarPagamentoDivida(DividaTerceiro entity, PagamentoDividaTerceiro pagamento);
 	
-	public void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa);
+	void encerrarDividaTerceiro(DividaTerceiro entity, String justificativa);
 	
-	public void quitarDividaTerceiro(DividaTerceiro entity);
+	void quitarDividaTerceiro(DividaTerceiro entity);
 	
-	public List<DividaTerceiro> buscarDividaTerceiroAtrasado(int dias);
+	List<DividaTerceiro> buscarDividaTerceiroAtrasado(int dias);
 }

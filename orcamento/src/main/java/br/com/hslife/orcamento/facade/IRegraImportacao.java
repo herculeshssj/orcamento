@@ -53,9 +53,9 @@ import br.com.hslife.orcamento.entity.RegraImportacao;
 
 public interface IRegraImportacao extends ICRUDService<RegraImportacao>{
 
-	public List<RegraImportacao> buscarTodosPorConta(Conta conta);
+	List<RegraImportacao> buscarTodosPorConta(Conta conta);
 	
-	public LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento);
+	LancamentoConta processarRegras(Conta conta, LancamentoConta lancamento);
 
-	public List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos);
+	List<LancamentoConta> processarRegras(Conta conta, List<LancamentoConta> lancamentos);
 }

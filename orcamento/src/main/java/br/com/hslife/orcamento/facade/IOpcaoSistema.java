@@ -53,21 +53,21 @@ import br.com.hslife.orcamento.entity.Usuario;
 
 public interface IOpcaoSistema {
 	
-	public void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema);
+	void salvarOpcoesGlobalAdmin(Map<String, Object> opcoesSistema);
 	
-	public List<OpcaoSistema> buscarOpcoesGlobalAdmin();
+	List<OpcaoSistema> buscarOpcoesGlobalAdmin();
 	
-	public void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario);
+	void salvarOpcoesUser(Map<String, Object> opcoesSistema, Usuario usuario);
 	
-	public Map<String, Object> buscarMapOpcoesGlobalAdmin();
+	Map<String, Object> buscarMapOpcoesGlobalAdmin();
 	
-	public Map<String, Object> buscarMapOpcoesUser(Usuario usuario);
+	Map<String, Object> buscarMapOpcoesUser(Usuario usuario);
 
-	public Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu);
+	Map<String, Object> buscarOpcoesGlobalAdminPorCDU(String cdu);
 	
-	public OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario);
+	OpcaoSistema buscarOpcaoUsuarioPorChave(String chave, Usuario usuario);
 	
-	public List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario); 
+	List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario); 
 	
-	public OpcaoSistema buscarOpcaoGlobalAdminPorChave(String chave);
+	OpcaoSistema buscarOpcaoGlobalAdminPorChave(String chave);
 }
