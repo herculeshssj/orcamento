@@ -282,6 +282,11 @@
 								<a href="#{request.contextPath}/pages/Combustivel/listCombustivel.faces">Combustível</a>
 							</li>
 							</h:panelGroup>
+							<h:panelGroup rendered="#{usuarioMB.usuarioLogado.login == 'admin'}">
+							<li id="menu-item-11439-1-1" class="menu-item menu-item-main-menu menu-item-page-markup-and-formatting">
+								<a href="#{request.contextPath}/pages/Montadora/listMontadora.faces">Montadora</a>
+							</li>
+							</h:panelGroup>
 						</ul>
 					</li>
 				</ul>
