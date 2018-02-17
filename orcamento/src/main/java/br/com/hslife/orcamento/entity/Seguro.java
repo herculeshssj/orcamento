@@ -96,7 +96,7 @@ public class Seguro extends EntityPersistence {
 	public String getLabel() {
 		return this.descricao;
 	}
-		
+	
 	@Override
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);

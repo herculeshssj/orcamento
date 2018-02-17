@@ -63,8 +63,20 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	
 	private static final Logger LOGGER = LogManager.getLogger(EntityPersistence.class);
 	
+	/**
+	 * Retorna uma representação mais amigável da entidade, útil
+	 * para exibição em tela.
+	 * 
+	 * @return texto simplificado da entidade
+	 */
 	public abstract String getLabel();
 	
+	/**
+	 * Realiza a validação dos atributos da entidade.
+	 * 
+	 * @throws lança um ValidationException caso o atributo não corresponda
+	 * às regras implementadas 
+	 */
 	public abstract void validate();
 	
 	@Id
