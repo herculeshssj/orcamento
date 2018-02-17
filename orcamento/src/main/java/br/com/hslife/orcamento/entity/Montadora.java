@@ -47,9 +47,6 @@
 package br.com.hslife.orcamento.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
@@ -61,18 +58,31 @@ public class Montadora extends EntityPersistence {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7024424966496163998L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;	
+	private static final long serialVersionUID = 7024424966496163998L;	
 	
 	@Column(length=50, nullable=false)	
 	private String descricao;
 	
 	public Montadora() {
 
-	}	
+	}
+	
+	private Montadora(Builder builder) {
+		this.descricao = builder.descricao;
+	}
+	
+	public static class Builder {
+		private String descricao;
+		
+		public Builder descricao(String descricao) {
+			this.descricao = descricao;
+			return this;
+		}
+
+		public Montadora build() {
+			return new Montadora(this);
+		}
+	}
 	
 	@Override
 	public String getLabel() {
@@ -81,24 +91,20 @@ public class Montadora extends EntityPersistence {
 	
 	@Override
 	public void validate() {
-		
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
-		
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	/**
+	 * @return the descricao
+	 */
 	public String getDescricao() {
 		return descricao;
 	}
 
+	/**
+	 * @param descricao the descricao to set
+	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}	
+	}
 }

@@ -61,6 +61,7 @@ import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Montadora;
 import br.com.hslife.orcamento.entity.PagamentoDividaTerceiro;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.RegraImportacao;
@@ -82,6 +83,10 @@ public class EntityInitializerFactory {
 		// Classe não pode ser inicializada.
 	}
 
+	public static Montadora createMontadora() {
+		return new Montadora.Builder().descricao("Montadora de teste").build();
+	}
+ 	
 	public static Combustivel createCombustivel() {
 		return new Combustivel.Builder().descricao("Combustível teste").distribuidora("Distribuidora de teste").build();
 	}

@@ -45,15 +45,62 @@
 ***/
 package br.com.hslife.orcamento.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import javax.servlet.http.HttpSession;
+
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/spring-config-junit.xml"})
 @WebAppConfiguration
 public abstract class AbstractTestControllers extends AbstractTransactionalJUnit4SpringContextTests {
-
+	
+	private MockMvc mockMvc;
+	
+	@Autowired
+	private FilterChainProxy springSecurityFilterChain;
+	
+	@Autowired
+	private MockHttpServletRequest request;
+	
+	@Autowired
+	private WebApplicationContext webAppContext;
+	
+	protected void login() throws Exception {
+		mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext)
+				.addFilters(springSecurityFilterChain)
+				.build();
+		
+		HttpSession session = mockMvc.perform(post("/login")
+				.param("username", "teste")
+				.param("password", "teste"))
+				.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl("/"))
+				.andReturn()
+				.getRequest()
+				.getSession();
+		
+		request.setSession(session);
+		
+		SecurityContext securityContext = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+		SecurityContextHolder.setContext(securityContext);
+	}
 }

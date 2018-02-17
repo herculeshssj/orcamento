@@ -43,17 +43,38 @@
 	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.entity;
 
-import br.com.hslife.orcamento.entity.EntityPersistence;
+import static org.junit.Assert.assertEquals;
 
-public interface IRepository<E extends EntityPersistence> {
+import org.junit.Before;
+import org.junit.Test;
 
-	void save(final E entity);
+import br.com.hslife.orcamento.exception.ValidationException;
+
+public class MontadoraTest {
+
+	private Montadora entity = new Montadora();
+
+	@Before
+	public void setUp() throws Exception {
+		entity.setDescricao("Montadora de teste");
+	}
 	
-	void update(final E entity);
+	@Test(expected=ValidationException.class)
+	public void testValidateDescricao() {
+		entity.setDescricao("     ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ          ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ     ");
+		entity.validate();
+	}
 	
-	void delete(final E entity);
+	@Test
+	public void testLabel() {
+		assertEquals("Montadora de teste", entity.getLabel());
+	}
 	
-	E findById(final Long id);
+	@Test
+	public void testBuilder() {
+		Montadora montadora = new Montadora.Builder().descricao("Montadora de teste").build();
+		assertEquals(entity.getDescricao(), montadora.getDescricao());
+	}
 }

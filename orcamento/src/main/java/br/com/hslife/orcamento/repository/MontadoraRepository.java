@@ -45,15 +45,21 @@
 ***/
 package br.com.hslife.orcamento.repository;
 
-import br.com.hslife.orcamento.entity.EntityPersistence;
+import java.util.List;
 
-public interface IRepository<E extends EntityPersistence> {
+import org.springframework.stereotype.Repository;
 
-	void save(final E entity);
+import br.com.hslife.orcamento.entity.Montadora;
+
+@Repository
+public class MontadoraRepository extends AbstractCRUDRepository<Montadora>{
 	
-	void update(final E entity);
+	public MontadoraRepository() {
+		super(new Montadora());
+	}
 	
-	void delete(final E entity);
-	
-	E findById(final Long id);
+	public List<Montadora> findbyDescricao(String descricao) {
+		return getSession().createQuery("SELECT montadora FROM Montadora montadora WHERE montadora.descricao LIKE '%" 
+				+ descricao + "%' ORDER BY montadora.descricao ASC", Montadora.class).getResultList();
+	}
 }

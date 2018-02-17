@@ -43,17 +43,30 @@
 	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.service;
 
-import br.com.hslife.orcamento.entity.EntityPersistence;
+import java.util.List;
 
-public interface IRepository<E extends EntityPersistence> {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-	void save(final E entity);
+import br.com.hslife.orcamento.entity.Montadora;
+import br.com.hslife.orcamento.facade.IMontadora;
+import br.com.hslife.orcamento.repository.MontadoraRepository;
+
+@Service
+public class MontadoraService extends AbstractCRUDService<Montadora> implements IMontadora {
+
+	@Autowired
+	private MontadoraRepository repository;
 	
-	void update(final E entity);
-	
-	void delete(final E entity);
-	
-	E findById(final Long id);
+	public MontadoraRepository getRepository() {
+		this.repository.setSessionFactory(this.sessionFactory);
+		return repository;
+	}
+
+	@Override
+	public List<Montadora> buscarPorDescricao(String descricao) {
+		return getRepository().findbyDescricao(descricao);
+	}
 }
