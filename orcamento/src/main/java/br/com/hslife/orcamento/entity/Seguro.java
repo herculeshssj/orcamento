@@ -57,8 +57,10 @@ import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
+
 @Entity
 @Table(name="seguro")
+@SuppressWarnings("serial")
 public class Seguro extends EntityPersistence {
 	
 	@Column(length=50, nullable=false)	
@@ -90,7 +92,73 @@ public class Seguro extends EntityPersistence {
 	
 	public Seguro() {
 
-	}	
+	}
+	
+	private Seguro(Builder builder) {
+		this.descricao = builder.descricao;
+		this.dataAquisicao = builder.dataAquisicao;
+		this.validade = builder.validade;
+		this.cobertura = builder.cobertura;
+		this.valorCobertura = builder.valorCobertura;
+		this.valorSeguro = builder.valorSeguro;
+		this.observacao = builder.observacao;
+		this.usuario = builder.usuario;
+	}
+	
+	public static class Builder {
+		private String descricao;	
+		private Calendar dataAquisicao;	
+		private Calendar validade;
+		private String cobertura;
+		private double valorCobertura;	
+		private double valorSeguro;	
+		private String observacao;
+		private Usuario usuario;
+		
+		public Builder descricao(String descricao) {
+			this.descricao = descricao;
+			return this;
+		}
+		
+		public Builder dataAquisicao(Calendar dataAquisicao) {
+			this.dataAquisicao = dataAquisicao;
+			return this;
+		}
+		
+		public Builder validade(Calendar validade) {
+			this.validade = validade;
+			return this;
+		}
+		
+		public Builder cobertura(String cobertura) {
+			this.cobertura = cobertura;
+			return this;
+		}
+		
+		public Builder valorCobertura(double valorCobertura) {
+			this.valorCobertura = valorCobertura;
+			return this;
+		}
+		
+		public Builder valorSegura(double valorSeguro) {
+			this.valorSeguro = valorSeguro;
+			return this;
+		}
+
+		public Builder observacao(String observacao) {
+			this.observacao = observacao;
+			return this;
+		}
+		
+		public Builder usuario(Usuario usuario) {
+			this.usuario = usuario;
+			return this;
+		}
+		
+		public Seguro build() {
+			return new Seguro(this);
+		}
+	}
 	
 	@Override
 	public String getLabel() {

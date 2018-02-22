@@ -45,6 +45,7 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 
 package br.com.hslife.orcamento.entity;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,8 +59,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
+@SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class EntityPersistence implements Comparable<EntityPersistence> {
+public abstract class EntityPersistence implements Comparable<EntityPersistence>, Serializable {
 	
 	private static final Logger LOGGER = LogManager.getLogger(EntityPersistence.class);
 	
