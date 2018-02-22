@@ -9,4 +9,4 @@ create database orcamentotest;
 -- Criação do usuário para acessar a base
 create user 'orcamento'@'%' identified by 'd1nh31r0';
 grant all privileges on orcamento.* to 'orcamento'@'%';
-grant all privileges on orcamento.* to 'orcamentotest'@'%';
+grant all privileges on orcamentotest.* to 'orcamento'@'%';
