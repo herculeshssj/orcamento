@@ -760,22 +760,23 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 		// Determina a data de início do período
 		if (dataInicio == null) {
 			criterioBusca.setDataInicio(conta.getDataAbertura());
+		} else {
+			criterioBusca.setDataInicio(dataInicio);
 		}
 		
 		// Determina a data de fim do período
 		if (dataFim == null) {
 			criterioBusca.setDataFim(new Date());
+		} else {
+			criterioBusca.setDataFim(dataFim);
 		}
-		
-		criterioBusca.setDataInicio(dataInicio);
-		criterioBusca.setDataFim(dataFim);
 		
 		// Realiza a busca
 		List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterioBusca);
 		
 		// Determina a data de término do período anterior
 		Calendar dataPeriodoAnterior = Calendar.getInstance();
-		dataPeriodoAnterior.setTime(dataInicio);
+		dataPeriodoAnterior.setTime(criterioBusca.getDataInicio());
 		dataPeriodoAnterior.add(Calendar.DAY_OF_YEAR, -1);
 		
 		// Calcula o saldo do periodo anterior

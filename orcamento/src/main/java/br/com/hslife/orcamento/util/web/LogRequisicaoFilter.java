@@ -114,6 +114,7 @@ public class LogRequisicaoFilter implements Filter {
 				
 				if (sessao != null) {
 					logRequisicao.setSessaoID(sessao.getId());
+					logRequisicao.setSessaoCriadaEm(new Date(sessao.getCreationTime()));
 				}
 				
 				if (sessao != null) {
@@ -128,7 +129,6 @@ public class LogRequisicaoFilter implements Filter {
 				logRequisicao.setIp(request.getRemoteAddr());
 				logRequisicao.setMetodo(req.getMethod());
 				logRequisicao.setParams(Util.gerarJsonArray(request.getParameterMap()));
-				logRequisicao.setSessaoCriadaEm(new Date(sessao.getCreationTime()));
 				logRequisicao.setDataHora(new Date());
 				logRequisicao.setUuid(UUID.randomUUID().toString());
 				logRequisicao.setUserAgent(req.getHeader("User-Agent"));

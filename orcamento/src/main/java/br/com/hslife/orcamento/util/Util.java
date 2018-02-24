@@ -75,9 +75,6 @@ public class Util {
 	public static final String HORA = "hora";
 	public static final String DATABASE = "database";
 	public static final String DATABASE_DATA = "database_data";
-	
-	public static final String[] meses = {"JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL",
-			"MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"};
 		
 	private Util() {
 		// Esta classe não pode ser instanciada

@@ -63,6 +63,7 @@ import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.MovimentacaoInvestimento;
+import br.com.hslife.orcamento.enumeration.MesesDoAno;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
 import br.com.hslife.orcamento.exception.BusinessException;
@@ -71,7 +72,6 @@ import br.com.hslife.orcamento.facade.ICategoriaInvestimento;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.model.InfoCotacao;
-import br.com.hslife.orcamento.util.Util;
 
 @Component("investimentoMB")
 @Scope("session")
@@ -328,8 +328,8 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	public List<SelectItem> getListaMeses() {
 		List<SelectItem> meses = new ArrayList<>();
-		for (int i = 0; i < 12; i++) {
-			meses.add(new SelectItem(Integer.valueOf(i + 1), Util.meses[i]));
+		for (MesesDoAno mes : MesesDoAno.values()) {
+			meses.add(new SelectItem(mes.getNumeroMes(), mes.toString()));
 		}
 		return meses;
 	}

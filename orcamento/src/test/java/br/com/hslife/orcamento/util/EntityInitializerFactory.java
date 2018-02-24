@@ -58,6 +58,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
@@ -93,6 +94,10 @@ public class EntityInitializerFactory {
 
 	public static Banco createBanco(Usuario usuario) {
 		return new Banco.Builder().ativo(true).nome("Banco de teste").numero("000").build();
+	}
+	
+	public static Investimento createInvestimento() { // TODO implementar o Builder para gerar uma instância de investimento
+		return new Investimento();
 	}
 
 	public static Usuario createUsuario() {
