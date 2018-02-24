@@ -43,64 +43,32 @@ para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 -
 Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
+package br.com.hslife.orcamento.util;
 
-package br.com.hslife.orcamento.entity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.Date;
 
-import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.model.InfoOFX;
 
-@SuppressWarnings("serial")
-@Entity
-@Table(name="montadora")
-public class Montadora extends EntityPersistence {
-	
-	@Column(length=50, nullable=false)	
-	private String descricao;
-	
-	public Montadora() {
+public class VOInitializerFactory {
 
-	}
-	
-	private Montadora(Builder builder) {
-		this.descricao = builder.descricao;
-	}
-	
-	public static class Builder {
-		private String descricao;
-		
-		public Builder descricao(String descricao) {
-			this.descricao = descricao;
-			return this;
-		}
-
-		public Montadora build() {
-			return new Montadora(this);
-		}
-	}
-	
-	@Override
-	public String getLabel() {
-		return descricao;
-	}
-	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
+	private VOInitializerFactory() {
+		// Classe não pode ser inicializada.
 	}
 
-	/**
-	 * @return the descricao
-	 */
-	public String getDescricao() {
-		return descricao;
-	}
-
-	/**
-	 * @param descricao the descricao to set
-	 */
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public static InfoOFX createInfoOFX() {
+		return new InfoOFX.Builder()
+				.bancoID("001")
+				.nomeBanco("Banco do Brasil")
+				.idioma("BR")
+				.agencia("001")
+				.conta("0001-X")
+				.tipoConta("CHECKING")
+				.dataArquivo(new Date())
+				.moedaPadrao("BRL")
+				.quantidadeTransacao(10)
+				.balancoFinal(1000.0)
+				.inicioTransacoes(new Date())
+				.fimTransacoes(new Date())
+				.build();
 	}
 }

@@ -95,4 +95,8 @@ public class ContaCompartilhadaTest {
 		assertEquals(dataAtual.get(Calendar.MINUTE), dataAtualTest.get(Calendar.MINUTE));
 	}
 
+	@Test
+	public void testGetLabel() {
+		assertEquals("Conta de teste [" + usuario.getLabel() + "]", entity.getLabel());
+	}
 }

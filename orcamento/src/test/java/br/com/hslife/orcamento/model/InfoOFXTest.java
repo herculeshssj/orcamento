@@ -43,64 +43,48 @@ para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 -
 Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
+package br.com.hslife.orcamento.model;
 
-package br.com.hslife.orcamento.entity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
-import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import org.junit.Before;
+import org.junit.Test;
 
-@SuppressWarnings("serial")
-@Entity
-@Table(name="montadora")
-public class Montadora extends EntityPersistence {
+import br.com.hslife.orcamento.util.VOInitializerFactory;
+
+public class InfoOFXTest {
+
+	private InfoOFX model;
+	private String jsonObject;
 	
-	@Column(length=50, nullable=false)	
-	private String descricao;
-	
-	public Montadora() {
-
+	@Before
+	public void initialize() {
+		model = VOInitializerFactory.createInfoOFX();
+		jsonObject = model.gerarJson();
 	}
 	
-	private Montadora(Builder builder) {
-		this.descricao = builder.descricao;
-	}
-	
-	public static class Builder {
-		private String descricao;
+	@Test
+	public void testGerarJson() {
+		String json = model.gerarJson();
 		
-		public Builder descricao(String descricao) {
-			this.descricao = descricao;
-			return this;
-		}
-
-		public Montadora build() {
-			return new Montadora(this);
-		}
+		InfoOFX modelTest = new InfoOFX();
+		modelTest.lerJson(json);
+		
+		assertEquals(model, modelTest);
 	}
 	
-	@Override
-	public String getLabel() {
-		return descricao;
+	@Test
+	public void testObjetosIguais() {
+		InfoOFX modelTest = new InfoOFX();
+		modelTest.lerJson(jsonObject);
+		
+		assertTrue(modelTest.equals(model));
 	}
 	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
-	}
-
-	/**
-	 * @return the descricao
-	 */
-	public String getDescricao() {
-		return descricao;
-	}
-
-	/**
-	 * @param descricao the descricao to set
-	 */
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	@Test
+	public void testHashCode() {
+		assertFalse(new Object().hashCode() == model.hashCode());
 	}
 }

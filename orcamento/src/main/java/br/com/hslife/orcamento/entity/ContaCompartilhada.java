@@ -50,9 +50,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -64,19 +61,11 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="contacompartilhada")
 public class ContaCompartilhada extends EntityPersistence {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3344743833251916049L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
 	private Conta conta;
@@ -115,18 +104,18 @@ public class ContaCompartilhada extends EntityPersistence {
 	public boolean isHashExpirado() {
 		// Se não houver hash e nem data definida significa que o
 		// compartilhamento é válido
-		if (this.dataGeracaoHash == null && this.hashAutorizacao == null) {
-			return false;
+		if (this.dataGeracaoHash != null && this.hashAutorizacao != null) {
+			Calendar temp = Calendar.getInstance();
+			temp.setTime(this.dataGeracaoHash);
+			temp.add(Calendar.DAY_OF_YEAR, 1);
+			
+			if (temp.getTime().before(new Date())) 
+				return true;
+			else
+				return false;
 		}
 		
-		Calendar temp = Calendar.getInstance();
-		temp.setTime(this.dataGeracaoHash);
-		temp.add(Calendar.DAY_OF_YEAR, 1);
-		
-		if (temp.getTime().before(new Date())) 
-			return true;
-		else
-			return false;
+		return false;
 	}
 	
 	public void validate() {
@@ -141,15 +130,7 @@ public class ContaCompartilhada extends EntityPersistence {
 	
 	@Override
 	public String getLabel() {
-		return "";
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		return this.conta.getDescricao() + " [" + this.usuario.getLabel() + "]";
 	}
 
 	public Conta getConta() {

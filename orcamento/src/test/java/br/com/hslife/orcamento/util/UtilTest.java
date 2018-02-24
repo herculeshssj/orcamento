@@ -43,64 +43,23 @@ para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 -
 Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
+package br.com.hslife.orcamento.util;
 
-package br.com.hslife.orcamento.entity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import static org.junit.Assert.assertEquals;
 
-import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import org.junit.Test;
 
-@SuppressWarnings("serial")
-@Entity
-@Table(name="montadora")
-public class Montadora extends EntityPersistence {
+public class UtilTest {
 	
-	@Column(length=50, nullable=false)	
-	private String descricao;
-	
-	public Montadora() {
-
-	}
-	
-	private Montadora(Builder builder) {
-		this.descricao = builder.descricao;
-	}
-	
-	public static class Builder {
-		private String descricao;
+	@Test
+	public void testEhVazio() {
 		
-		public Builder descricao(String descricao) {
-			this.descricao = descricao;
-			return this;
-		}
-
-		public Montadora build() {
-			return new Montadora(this);
-		}
-	}
-	
-	@Override
-	public String getLabel() {
-		return descricao;
-	}
-	
-	@Override
-	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
-	}
-
-	/**
-	 * @return the descricao
-	 */
-	public String getDescricao() {
-		return descricao;
-	}
-
-	/**
-	 * @param descricao the descricao to set
-	 */
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+		String string1 = null;
+		String string2 = "";
+		String string3 = "STRING";
+		
+		assertEquals(true, Util.eVazio(string1));
+		assertEquals(true, Util.eVazio(string2));
+		assertEquals(false, Util.eVazio(string3));
 	}
 }

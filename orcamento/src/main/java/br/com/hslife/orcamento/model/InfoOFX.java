@@ -48,8 +48,11 @@ package br.com.hslife.orcamento.model;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.json.JSONObject;
+
+import br.com.hslife.orcamento.util.Util;
 
 public class InfoOFX {
 	
@@ -78,6 +81,112 @@ public class InfoOFX {
 	private Date fimTransacoes;
 	
 	public InfoOFX() {
+		
+	}
+	
+	private InfoOFX(Builder builder) {
+		this.bancoID = builder.bancoID;		
+		this.nomeBanco = builder.nomeBanco;
+		this.idioma = builder.idioma;
+		this.agencia = builder.agencia;
+		this.conta = builder.conta;
+		this.tipoConta = builder.tipoConta;
+		this.dataArquivo = builder.dataArquivo;
+		this.moedaPadrao = builder.moedaPadrao;
+		this.quantidadeTransacao = builder.quantidadeTransacao;
+		this.balancoFinal = builder.balancoFinal;
+		this.inicioTransacoes = builder.inicioTransacoes;
+		this.fimTransacoes = builder.fimTransacoes;
+	}
+	
+	public static class Builder {
+		private String bancoID;
+		
+		public Builder bancoID(String bancoID) {
+			this.bancoID = bancoID;
+			return this;
+		}
+		
+		private String nomeBanco;
+		
+		public Builder nomeBanco(String nomeBanco) {
+			this.nomeBanco = nomeBanco;
+			return this;
+		}
+		
+		private String idioma;
+		
+		public Builder idioma(String idioma) {
+			this.idioma = idioma;
+			return this;
+		}
+		
+		private String agencia;
+		
+		public Builder agencia(String agencia) {
+			this.agencia = agencia;
+			return this;
+		}
+		
+		private String conta;
+		
+		public Builder conta(String conta) {
+			this.conta = conta;
+			return this;
+		}
+		
+		private String tipoConta;
+		
+		public Builder tipoConta(String tipoConta) {
+			this.tipoConta = tipoConta;
+			return this;
+		}
+		
+		private Date dataArquivo;
+		
+		public Builder dataArquivo(Date dataArquivo) {
+			this.dataArquivo = dataArquivo;
+			return this;
+		}
+		
+		private String moedaPadrao;
+		
+		public Builder moedaPadrao(String moedaPadrao) {
+			this.moedaPadrao = moedaPadrao;
+			return this;
+		}
+		
+		private int quantidadeTransacao;
+		
+		public Builder quantidadeTransacao(int quantidadeTransacao) {
+			this.quantidadeTransacao = quantidadeTransacao;
+			return this;
+		}
+		
+		private double balancoFinal;
+		
+		public Builder balancoFinal(double balancoFinal) {
+			this.balancoFinal = balancoFinal;
+			return this;
+		}
+		
+		private Date inicioTransacoes;
+		
+		public Builder inicioTransacoes(Date inicioTransacoes) {
+			this.inicioTransacoes = inicioTransacoes;
+			return this;
+		}
+		
+		private Date fimTransacoes;
+		
+		public Builder fimTransacoes(Date fimTransacoes) {
+			this.fimTransacoes = fimTransacoes;
+			return this;
+		}
+		
+		public InfoOFX build() {
+			return new InfoOFX(this);
+		}
 		
 	}
 	
@@ -121,18 +230,29 @@ public class InfoOFX {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(this.bancoID, 
+				this.nomeBanco, 
+				this.idioma, 
+				this.agencia, 
+				this.conta, 
+				this.tipoConta, 
+				this.moedaPadrao);
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof InfoOFX) {
 			
 			InfoOFX other = (InfoOFX)obj;
 			
-			return (other.getBancoID() != null ? other.getBancoID().equalsIgnoreCase(this.bancoID) : other.getBancoID() == this.bancoID)
-					&& (other.getNomeBanco() != null ? other.getNomeBanco().equalsIgnoreCase(this.nomeBanco) : other.getNomeBanco() == this.nomeBanco)
-					&& (other.getIdioma() != null ? other.getIdioma().equalsIgnoreCase(this.idioma) : other.getIdioma() == this.idioma)
-					&& (other.getAgencia() != null ? other.getAgencia().equalsIgnoreCase(this.agencia) : other.getAgencia() == this.agencia)
-					&& (other.getConta() != null ? other.getConta().equalsIgnoreCase(this.conta) : other.getConta() == this.conta)
-					&& (other.getTipoConta() != null ? other.getTipoConta().equalsIgnoreCase(this.tipoConta) : other.getTipoConta() == this.tipoConta)
-					&& (other.getMoedaPadrao() != null ? other.getMoedaPadrao().equalsIgnoreCase(this.moedaPadrao) : other.getMoedaPadrao() == this.moedaPadrao);
+			return (!Util.eVazio(other.getBancoID()) && other.getBancoID().equalsIgnoreCase(this.bancoID))
+					&& (!Util.eVazio(other.getNomeBanco()) && other.getNomeBanco().equalsIgnoreCase(this.nomeBanco))
+					&& (!Util.eVazio(other.getIdioma()) && other.getIdioma().equalsIgnoreCase(this.idioma))
+					&& (!Util.eVazio(other.getAgencia()) && other.getAgencia().equalsIgnoreCase(this.agencia))
+					&& (!Util.eVazio(other.getConta()) && other.getConta().equalsIgnoreCase(this.conta))
+					&& (!Util.eVazio(other.getTipoConta()) && other.getTipoConta().equalsIgnoreCase(this.tipoConta))
+					&& (!Util.eVazio(other.getMoedaPadrao()) && other.getMoedaPadrao().equalsIgnoreCase(this.moedaPadrao));
 		}
 		
 		return false;

@@ -51,12 +51,13 @@ import javax.persistence.Table;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="combustivel")
 public class Combustivel extends EntityPersistence {
 
 	@Column(length=50, nullable=false)	
-	private String descricao;
+	protected String descricao;
 	
 	@Column(length=50, nullable=false)
 	private String distribuidora;
@@ -103,14 +104,14 @@ public class Combustivel extends EntityPersistence {
 	/**
 	 * @return the descricao
 	 */
-	public String getDescricao() {
+	public final String getDescricao() {
 		return descricao;
 	}
 
 	/**
 	 * @param descricao the descricao to set
 	 */
-	public void setDescricao(String descricao) {
+	public final void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
