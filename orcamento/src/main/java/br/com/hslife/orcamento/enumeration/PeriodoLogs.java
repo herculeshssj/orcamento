@@ -68,24 +68,35 @@ public enum PeriodoLogs {
 		return this.descricao;
 	}
 	
-	/*
-	 * Retrocede a data atual para a quantidade do períiodo
+	/**
+	 * Retrocede a data atual para a quantidade do período
 	 * indicado na instância
+	 * 
+	 * @param quantidade
 	 */
 	public Date getDataPeriodo(int quantidade) {
-		Calendar temp = Calendar.getInstance();
-		
+		return getDataPeriodo(quantidade, Calendar.getInstance());
+	}
+	
+	/**
+	 * Retrocede a data atual para a quantidade do período
+	 * indicado na instância
+	 * 
+	 * @param quantidade
+	 * @param dataAtual
+	 */
+	public Date getDataPeriodo(int quantidade, Calendar dataAtual) {
 		switch (this) {
-			case DIA : temp.add(Calendar.DAY_OF_YEAR, -quantidade); break;
-			case MES : temp.add(Calendar.MONTH, -quantidade); break;
-			case ANO : temp.add(Calendar.YEAR, -quantidade); break;
-			case BIMESTRE : temp.add(Calendar.MONTH, -(quantidade * 2)); break;
-			case TRIMESTRE : temp.add(Calendar.MONTH, -(quantidade * 3)); break;
-			case QUADRIMESTRE : temp.add(Calendar.MONTH, -(quantidade * 4)); break;
-			case SEMESTRE : temp.add(Calendar.MONTH, -(quantidade * 6)); break;
+			case DIA : dataAtual.add(Calendar.DAY_OF_YEAR, -quantidade); break;
+			case MES : dataAtual.add(Calendar.MONTH, -quantidade); break;
+			case ANO : dataAtual.add(Calendar.YEAR, -quantidade); break;
+			case BIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 2)); break;
+			case TRIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 3)); break;
+			case QUADRIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 4)); break;
+			case SEMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 6)); break;
 			default: throw new IllegalArgumentException("Valor incorreto!");
 		}
 		
-		return temp.getTime();
+		return dataAtual.getTime();
 	}
 }

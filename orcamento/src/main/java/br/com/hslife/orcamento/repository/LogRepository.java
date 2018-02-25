@@ -48,6 +48,8 @@ package br.com.hslife.orcamento.repository;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.TemporalType;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
@@ -101,6 +103,10 @@ public class LogRepository extends AbstractRepository {
 		getSession().save(entity);
 	}
 	
+	public void saveLogs(Logs entity) {
+		getSession().save(entity);
+	}
+	
 	public Logs findMostRecentException() {
 		return (Logs)getQuery("FROM Logs log WHERE log.logLevel = 'ERROR' AND log.sendToAdmin = false ORDER BY log.logDate DESC").setMaxResults(1).uniqueResult();
 	}
@@ -116,5 +122,39 @@ public class LogRepository extends AbstractRepository {
 				.setDate("dataEntrada", dataAtual.getTime())
 				.setResultTransformer(new AliasToBeanResultTransformer(UsuarioLogado.class))
 				.list();
+	}
+
+	public void deleteLogs(Calendar periodo) {
+		getSession()
+			.createNativeQuery("delete from logs where date <= ?")
+			.setParameter(1, periodo, TemporalType.TIMESTAMP)
+			.executeUpdate();		
+	}
+
+	public List<Logs> findAllLogs() {
+		return getSession().createQuery("SELECT log FROM Logs log", Logs.class).getResultList();
+	}
+
+	public void deleteAllLogs() {
+		getSession()
+			.createNativeQuery("delete from logs")
+			.executeUpdate();
+	}
+
+	public void deleteAllLogRequisicao() {
+		getSession()
+		.createNativeQuery("delete from logrequisicao")
+		.executeUpdate();
+	}
+
+	public void deleteLogRequisicao(Calendar periodo) {
+		getSession()
+			.createNativeQuery("delete from logrequisicao where dataHora <= ?")
+			.setParameter(1, periodo, TemporalType.TIMESTAMP)
+			.executeUpdate();
+	}
+
+	public List<LogRequisicao> findAllLogRequisicao() {
+		return getSession().createQuery("SELECT log FROM LogRequisicao log", LogRequisicao.class).getResultList();
 	}
 }

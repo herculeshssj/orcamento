@@ -45,11 +45,13 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Categoria;
@@ -59,6 +61,8 @@ import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DividaTerceiro;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Investimento;
+import br.com.hslife.orcamento.entity.LogRequisicao;
+import br.com.hslife.orcamento.entity.Logs;
 import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.ModeloDocumento;
 import br.com.hslife.orcamento.entity.Moeda;
@@ -323,5 +327,33 @@ public class EntityInitializerFactory {
 		}
 
 		return divida;
+	}
+
+	public static Logs createLog() {
+		Logs log = new Logs();
+		log.setLogDate(Calendar.getInstance().getTime());
+		log.setLogException("printStackTrace");
+		log.setLogger(log.getClass().getName());
+		log.setLogLevel("ERROR");
+		log.setLogMessage("error");
+		log.setSendToAdmin(false);
+		return log;
+	}
+
+	public static LogRequisicao createLogRequisicao() {
+		LogRequisicao log = new LogRequisicao();
+		log.setDataHora(Calendar.getInstance().getTime());
+		log.setIp("127.0.0.1");
+		log.setMetodo("GET");
+		log.setParams("param: []");
+		log.setQueryString("/test");
+		log.setSessaoCriadaEm(Calendar.getInstance().getTime());
+		log.setSessaoID(Util.SHA1("teste"));
+		log.setUrl("http://localhost");
+		log.setTempo(10);
+		log.setUserAgent("Internal browser");
+		log.setUsuario("teste");
+		log.setUuid(UUID.randomUUID().toString());
+		return log;
 	}
 }

@@ -43,28 +43,25 @@ para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 -
 Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.entity;
 
-import org.hibernate.SessionFactory;
-import org.junit.runner.RunWith;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/spring-config-junit.xml"})
-@Transactional
-public abstract class AbstractTestRepositories extends AbstractTransactionalJUnit4SpringContextTests {
+import br.com.hslife.orcamento.component.AbstractTestComponents;
+import br.com.hslife.orcamento.enumeration.PeriodoLogs;
+import br.com.hslife.orcamento.enumeration.TipoAgendamento;
+import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.task.DeleteLogTask;
+import br.com.hslife.orcamento.util.Util;
 
-	@Autowired
-	private SessionFactory sessionFactory;
+public class DeleteLogTaskTest extends AbstractTestComponents {
 
-	/**
-	 * @return the sessionFactory
-	 */
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
 }
