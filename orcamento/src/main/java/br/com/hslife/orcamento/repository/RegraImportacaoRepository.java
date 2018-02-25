@@ -69,25 +69,28 @@ public class RegraImportacaoRepository extends AbstractCRUDRepository<RegraImpor
 	}
 	
 	public RegraImportacao findEqualEntity(RegraImportacao regra) {
-		Criteria criteria = getSession().createCriteria(RegraImportacao.class);
-		criteria.add(Restrictions.eq("conta.id", regra.getConta().getId()));
-		
-		if (regra.getTexto() != null || !regra.getTexto().isEmpty()) { //FIXME regra pode ser null. Consertar.
-			criteria.add(Restrictions.eq("texto", regra.getTexto()));
+		if (regra != null) {
+			Criteria criteria = getSession().createCriteria(RegraImportacao.class);
+			criteria.add(Restrictions.eq("conta.id", regra.getConta().getId()));
+			
+			if (regra.getTexto() != null || !regra.getTexto().isEmpty()) {
+				criteria.add(Restrictions.eq("texto", regra.getTexto()));
+			}
+			
+			if (regra.getIdCategoria() != null) {
+				criteria.add(Restrictions.eq("idCategoria", regra.getIdCategoria()));
+			}
+			
+			if (regra.getIdFavorecido() != null) {
+				criteria.add(Restrictions.eq("idFavorecido", regra.getIdFavorecido()));
+			}
+			
+			if (regra.getIdMeioPagamento() != null) {
+				criteria.add(Restrictions.eq("idMeioPagamento", regra.getIdMeioPagamento()));
+			}
+			
+			return (RegraImportacao)criteria.setMaxResults(1).uniqueResult();
 		}
-		
-		if (regra.getIdCategoria() != null) {
-			criteria.add(Restrictions.eq("idCategoria", regra.getIdCategoria()));
-		}
-		
-		if (regra.getIdFavorecido() != null) {
-			criteria.add(Restrictions.eq("idFavorecido", regra.getIdFavorecido()));
-		}
-		
-		if (regra.getIdMeioPagamento() != null) {
-			criteria.add(Restrictions.eq("idMeioPagamento", regra.getIdMeioPagamento()));
-		}
-		
-		return (RegraImportacao)criteria.setMaxResults(1).uniqueResult();
+		return null;
 	}
 }
