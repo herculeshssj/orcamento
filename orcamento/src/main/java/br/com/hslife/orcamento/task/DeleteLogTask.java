@@ -101,19 +101,19 @@ public class DeleteLogTask {
 			// Recupera a quantidade do período
 			Integer quantidade = getComponent().getLogNumPeriodo();
 			
-			StatelessSession session = getSessionFactory().openStatelessSession();
+			//StatelessSession session = getSessionFactory().openStatelessSession();
 			// FIXME mover as consultas para o repositório. Aqui no Task, injetar o LogService para realizar esta operação
 			// FIXME atualizar as interfaces. Query e Criteria estão depreciadas
 			// Definição dos deletes
-			Query hqlAuditoria = session.createQuery("DELETE FROM Auditoria auditoria WHERE auditoria.dataHora <= :periodo");
-			Query hqlLogs = session.createQuery("DELETE FROM Logs log WHERE log.logDate <= :periodo");
-			Query hqlLogRequisicao = session.createQuery("DELETE FROM LogRequisicao log WHERE log.dataHora <= :periodo");
-			Query hqlResultadoScript = session.createQuery("DELETE FROM ResultadoScript script WHERE script.terminoExecucao <= :periodo");
+			//Query hqlAuditoria = session.createQuery("DELETE FROM Auditoria auditoria WHERE auditoria.dataHora <= :periodo");
+			//Query hqlLogs = session.createQuery("DELETE FROM Logs log WHERE log.logDate <= :periodo");
+			//Query hqlLogRequisicao = session.createQuery("DELETE FROM LogRequisicao log WHERE log.dataHora <= :periodo");
+			//Query hqlResultadoScript = session.createQuery("DELETE FROM ResultadoScript script WHERE script.terminoExecucao <= :periodo");
 			
 			// Exclui o log de auditoria
-			hqlAuditoria
-				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-				.executeUpdate();
+//			hqlAuditoria
+//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
+//				.executeUpdate();
 			
 			// Exclui os logs de erros
 			getLogService().excluirLogs(periodo.getPeriodo(quantidade));
@@ -128,9 +128,9 @@ public class DeleteLogTask {
 //				.executeUpdate();
 			
 			// Exclui os logs de execução dos scripts
-			hqlResultadoScript
-				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-				.executeUpdate();
+//			hqlResultadoScript
+//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
+//				.executeUpdate();
 			
 		} catch (Exception e) {
 			logger.catching(e);

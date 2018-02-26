@@ -46,7 +46,6 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.enumeration;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public enum PeriodoLogs { 
 	DIA("Dia(s)"), 
@@ -66,38 +65,6 @@ public enum PeriodoLogs {
 	@Override
 	public String toString() {		
 		return this.descricao;
-	}
-	
-	/**
-	 * Retrocede a data atual para a quantidade do período
-	 * indicado na instância
-	 * 
-	 * @param quantidade
-	 */
-	public Date getDataPeriodo(int quantidade) {
-		return getDataPeriodo(quantidade, Calendar.getInstance());
-	}
-	
-	/**
-	 * Retrocede a data atual para a quantidade do período
-	 * indicado na instância
-	 * 
-	 * @param quantidade
-	 * @param dataAtual
-	 */
-	public Date getDataPeriodo(int quantidade, Calendar dataAtual) {
-		switch (this) {
-			case DIA : dataAtual.add(Calendar.DAY_OF_YEAR, -quantidade); break;
-			case MES : dataAtual.add(Calendar.MONTH, -quantidade); break;
-			case ANO : dataAtual.add(Calendar.YEAR, -quantidade); break;
-			case BIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 2)); break;
-			case TRIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 3)); break;
-			case QUADRIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 4)); break;
-			case SEMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 6)); break;
-			default: throw new IllegalArgumentException("Valor incorreto!");
-		}
-		
-		return dataAtual.getTime();
 	}
 	
 	/**
