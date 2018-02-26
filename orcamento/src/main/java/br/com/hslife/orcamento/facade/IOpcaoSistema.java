@@ -70,4 +70,6 @@ public interface IOpcaoSistema {
 	List<OpcaoSistema> buscarOpcoesUserPorCasoUso(String casoDeUso, Usuario usuario); 
 	
 	OpcaoSistema buscarOpcaoGlobalAdminPorChave(String chave);
+	
+	void salvarOpcaoSistema(OpcaoSistema opcaoSistema);
 }

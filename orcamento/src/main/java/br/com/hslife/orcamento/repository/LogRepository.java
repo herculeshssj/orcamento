@@ -64,8 +64,7 @@ import br.com.hslife.orcamento.model.UsuarioLogado;
 @Repository
 public class LogRepository extends AbstractRepository {
 	
-	@SuppressWarnings("unchecked")
-	public List<Logs> findByCriteriosLog(CriterioLog criterioBusca) {
+	public List<Logs> findByCriteriosLog(CriterioLog criterioBusca) { // TODO refatorar
 		Criteria criteria = getSession().createCriteria(Logs.class);
 		
 		for (Criterion criterion : criterioBusca.buildCriteria()) {
@@ -76,19 +75,15 @@ public class LogRepository extends AbstractRepository {
 	}
 	
 	public Logs findByID(Long id) {
-		return (Logs)getQuery("FROM Logs log WHERE log.id = :idLog")
-				.setLong("idLog", id)
-				.uniqueResult();
+		return getSession().createQuery("SELECT log FROM Logs log WHERE log.id = :idLog", Logs.class).setParameter("idLog", id).getSingleResult();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<String> findAllLevel() {
-		return getQuery("SELECT DISTINCT log.logLevel FROM Logs log").list();
+		return getSession().createQuery("SELECT DISTINCT log.logLevel FROM Logs log", String.class).getResultList();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<String> findAllLogger() {
-		return getQuery("SELECT DISTINCT log.logger FROM Logs log").list();
+		return getSession().createQuery("SELECT DISTINCT log.logger FROM Logs log", String.class).getResultList();
 	}
 	
 	public void delete(Logs entity) {
@@ -108,11 +103,16 @@ public class LogRepository extends AbstractRepository {
 	}
 	
 	public Logs findMostRecentException() {
-		return (Logs)getQuery("FROM Logs log WHERE log.logLevel = 'ERROR' AND log.sendToAdmin = false ORDER BY log.logDate DESC").setMaxResults(1).uniqueResult();
+		return getSession()
+				.createQuery("SELECT log FROM Logs log WHERE log.logLevel = :level AND log.sendToAdmin = :send ORDER BY log.logDate DESC", Logs.class)
+				.setParameter("level", "ERROR")
+				.setParameter("send", false)
+				.setMaxResults(1)
+				.getSingleResult();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UsuarioLogado> findAllUsuarioLogado() {
+	public List<UsuarioLogado> findAllUsuarioLogado() { //TODO refatorar
 		// Data atual menos 30 minutos
 		Calendar dataAtual = Calendar.getInstance();
 		dataAtual.add(Calendar.MINUTE, -30);

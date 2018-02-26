@@ -45,6 +45,7 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.service;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -120,5 +121,40 @@ public class LogService implements ILog {
 	@Override
 	public void salvarLogRequisicao(LogRequisicao logRequisicao) {
 		getRepository().saveLog(logRequisicao);		
+	}
+	
+	@Override
+	public void salvarLogs(Logs logs) {
+		getRepository().saveLogs(logs);
+	}
+	
+	@Override
+	public void excluirTodosLogRequisicao() {
+		getRepository().deleteAllLogRequisicao();
+	}
+	
+	@Override
+	public void excluirTodosLogs() {
+		getRepository().deleteAllLogs();
+	}
+	
+	@Override
+	public List<Logs> buscarTodosLogs() {
+		return getRepository().findAllLogs();
+	}
+	
+	@Override
+	public List<LogRequisicao> buscarTodosLogRequisicao() {
+		return getRepository().findAllLogRequisicao();
+	}
+	
+	@Override
+	public void excluirLogRequisicao(Calendar periodo) {
+		getRepository().deleteLogRequisicao(periodo);
+	}
+	
+	@Override
+	public void excluirLogs(Calendar periodo) {
+		getRepository().deleteLogs(periodo);
 	}
 }

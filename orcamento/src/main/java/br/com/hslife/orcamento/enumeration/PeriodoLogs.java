@@ -99,4 +99,36 @@ public enum PeriodoLogs {
 		
 		return dataAtual.getTime();
 	}
+	
+	/**
+	 * Retrocede a data atual para a quantidade do período
+	 * indicado na instância
+	 * 
+	 * @param quantidade
+	 */
+	public Calendar getPeriodo(int quantidade) {
+		return getPeriodo(quantidade, Calendar.getInstance());
+	}
+	
+	/**
+	 * Retrocede a data atual para a quantidade do período
+	 * indicado na instância
+	 * 
+	 * @param quantidade
+	 * @param dataAtual
+	 */
+	public Calendar getPeriodo(int quantidade, Calendar dataAtual) {
+		switch (this) {
+			case DIA : dataAtual.add(Calendar.DAY_OF_YEAR, -quantidade); break;
+			case MES : dataAtual.add(Calendar.MONTH, -quantidade); break;
+			case ANO : dataAtual.add(Calendar.YEAR, -quantidade); break;
+			case BIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 2)); break;
+			case TRIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 3)); break;
+			case QUADRIMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 4)); break;
+			case SEMESTRE : dataAtual.add(Calendar.MONTH, -(quantidade * 6)); break;
+			default: throw new IllegalArgumentException("Valor incorreto!");
+		}
+		
+		return dataAtual;
+	}
 }

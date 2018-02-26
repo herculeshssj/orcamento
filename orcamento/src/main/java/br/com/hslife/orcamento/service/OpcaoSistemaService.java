@@ -224,4 +224,9 @@ public class OpcaoSistemaService implements IOpcaoSistema {
 	public OpcaoSistema buscarOpcaoGlobalAdminPorChave(String chave) {
 		return getRepository().findOpcaoGlobalAdminByChave(chave);
 	}
+	
+	@Override
+	public void salvarOpcaoSistema(OpcaoSistema opcaoSistema) {
+		getRepository().save(opcaoSistema);
+	}
 }

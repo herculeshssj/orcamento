@@ -43,7 +43,7 @@ para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 -
 Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.service;
 
 import static org.junit.Assert.assertEquals;
 
@@ -56,28 +56,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.entity.LogRequisicao;
 import br.com.hslife.orcamento.entity.Logs;
+import br.com.hslife.orcamento.facade.ILog;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
-public class LogRepositoryTest extends AbstractTestRepositories {
+public class LogServiceTest extends AbstractTestServices {
 	
 	private Logs logs;
 	private LogRequisicao logRequisicao;
 	
 	@Autowired
-	private LogRepository repository;
+	private ILog service;
 	
 	@Before
 	public void initializeEntities() {
-		// Seta o sessionFactory nos repositórios
-		repository.setSessionFactory(getSessionFactory());
-		
 		// Inicializa as entidades
 		logs = EntityInitializerFactory.createLog();
 		logRequisicao = EntityInitializerFactory.createLogRequisicao();
 		
 		// Exclui todos os registros existentes
-		repository.deleteAllLogs();
-		repository.deleteAllLogRequisicao();
+		service.excluirTodosLogs();
+		service.excluirTodosLogRequisicao();
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
 		Calendar temp = Calendar.getInstance();
@@ -85,35 +83,35 @@ public class LogRepositoryTest extends AbstractTestRepositories {
 		for (int i = 0; i < 1000; i++) {
 			logRequisicao.setDataHora(temp.getTime());
 			logs.setLogDate(temp.getTime());
-			repository.saveLog(logRequisicao);
-			repository.saveLogs(logs);
+			service.salvarLogRequisicao(logRequisicao);
+			service.salvarLogs(logs);
 		}
 	}
 	
 	@Test
 	public void testFindByID() {
-		List<Logs> logs = repository.findAllLogs();
+		List<Logs> logs = service.buscarTodosLogs();
 		Logs logsTest = logs.get(0);
 		
-		this.logs = repository.findByID(logsTest.getId());
+		this.logs = service.buscarPorID(logsTest.getId());
 		assertEquals(logsTest, this.logs);
 	}
 	
 	@Test
 	public void testFindAllLevels() {
-		List<String> levels = repository.findAllLevel();
+		List<String> levels = service.buscarTodosNiveis();
 		assertEquals(1, levels.size());
 	}
 	
 	@Test
 	public void testFindAllLoggers() {
-		List<String> levels = repository.findAllLogger();
+		List<String> levels = service.buscarTodosLoggers();
 		assertEquals(1, levels.size());
 	}
 	
 	@Test
 	public void testFindMostRecentException() {
-		Logs logsTest = repository.findMostRecentException();
+		Logs logsTest = service.buscarExcecaoMaisRecente();
 		assertEquals("ERROR", logsTest.getLogLevel());
 		assertEquals(false, logsTest.isSendToAdmin());
 	}
@@ -123,12 +121,12 @@ public class LogRepositoryTest extends AbstractTestRepositories {
 		Calendar temp = Calendar.getInstance();
 		temp.add(Calendar.DAY_OF_YEAR, -180);
 		
-		repository.deleteLogs(temp);
+		service.excluirLogs(temp);
 		
-		assertEquals(0, repository.findAllLogs().size());
+		assertEquals(0, service.buscarTodosLogs().size());
 		
-		repository.deleteLogRequisicao(temp);
+		service.excluirLogRequisicao(temp);
 		
-		assertEquals(0, repository.findAllLogRequisicao().size());
+		assertEquals(0, service.buscarTodosLogRequisicao().size());
 	}
 }

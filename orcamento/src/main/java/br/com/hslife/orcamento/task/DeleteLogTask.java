@@ -45,21 +45,41 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.task;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
+import br.com.hslife.orcamento.enumeration.PeriodoLogs;
+import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.ILog;
 
 @Component
+@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.DEFAULT, rollbackFor={ApplicationException.class}, readOnly=false)
 public class DeleteLogTask {
+	
+	private static final Logger logger = LogManager.getLogger(DeleteLogTask.class);
 	
 	@Autowired
 	private ILog logService;
 	
 	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
 	private OpcaoSistemaComponent component;
+
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
 
 	public OpcaoSistemaComponent getComponent() {
 		return component;
@@ -72,11 +92,8 @@ public class DeleteLogTask {
 		return logService;
 	}
 
-
-
 	@Scheduled(fixedDelay=3600000)
 	public void excluirLogs() {
-		/*
 		try {
 			// Recupera o período setado nas opções do sistema
 			PeriodoLogs periodo = getComponent().getLogPeriodo();
@@ -99,14 +116,16 @@ public class DeleteLogTask {
 				.executeUpdate();
 			
 			// Exclui os logs de erros
-			hqlLogs
-				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-				.executeUpdate();
+			getLogService().excluirLogs(periodo.getPeriodo(quantidade));
+//			hqlLogs
+//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
+//				.executeUpdate();
 			
 			// Exclui os logs de requisição
-			hqlLogRequisicao
-				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-				.executeUpdate();
+			getLogService().excluirLogRequisicao(periodo.getPeriodo(quantidade));
+//			hqlLogRequisicao
+//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
+//				.executeUpdate();
 			
 			// Exclui os logs de execução dos scripts
 			hqlResultadoScript
@@ -117,6 +136,5 @@ public class DeleteLogTask {
 			logger.catching(e);
 			e.printStackTrace();
 		}
-		*/
 	}
 }
