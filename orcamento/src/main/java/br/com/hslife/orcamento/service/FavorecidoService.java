@@ -155,7 +155,7 @@ public class FavorecidoService extends AbstractCRUDService<Favorecido> implement
 	
 	public Favorecido buscarFavorecido(String nomeFavorecido, Usuario usuario) {		
 		// Verifica se o favorecido informado existe na base de dados
-		List<Favorecido> favorecidos = getRepository().findByNomeAndUsuario(nomeFavorecido, usuario);
+		List<Favorecido> favorecidos = getRepository().findByNomeAndUsuario(nomeFavorecido == null ? "" : nomeFavorecido, usuario);
 		Favorecido favorecidoEncontrado = null;
 		for (Favorecido f : favorecidos) {
 			if (nomeFavorecido != null && !nomeFavorecido.trim().isEmpty() && f.getNome().contains(nomeFavorecido)) {

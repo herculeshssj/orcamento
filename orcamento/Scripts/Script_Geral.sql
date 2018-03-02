@@ -24,3 +24,7 @@ update lancamentoperiodico set idArquivo = null;
 
 
 desc auditoria;
+
+SELECT * FROM conta;
+{"bancoid":"0104","tipoconta":"CHECKING","moedapadrao":"BRL","conta":"000471947","idioma":"POR"}
+{"bancoid":"0104","tipoconta":"CHECKING","moedapadrao":"BRL","conta":"000471947","idioma":"POR"}

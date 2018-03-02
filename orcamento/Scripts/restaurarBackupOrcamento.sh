@@ -54,6 +54,7 @@ docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'upda
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update dividaterceiro set idArquivoTermoQuitacao = null' orcamento
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update pagamentodividaterceiro set idArquivoComprovante = null' orcamento
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update usuario set senha = sha2(login, 256)' orcamento
+docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update logs set sendToAdmin = true where sendToAdmin = false' orcamento
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update faturacartao set idArquivo = null' orcamentotest
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update lancamentoconta set idArquivo = null' orcamentotest
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update lancamentoperiodico set idArquivo = null' orcamentotest
@@ -61,4 +62,5 @@ docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'upda
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update dividaterceiro set idArquivoTermoQuitacao = null' orcamentotest
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update pagamentodividaterceiro set idArquivoComprovante = null' orcamentotest
 docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update usuario set senha = sha2(login, 256)' orcamentotest
+docker exec -i mariadb-container /usr/bin/mysql -u root --password=root -e 'update logs set sendToAdmin = true where sendToAdmin = false' orcamentotest
 echo "Operação concluída!"

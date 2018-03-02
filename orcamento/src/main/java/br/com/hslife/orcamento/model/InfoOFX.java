@@ -52,8 +52,6 @@ import java.util.Objects;
 
 import org.json.JSONObject;
 
-import br.com.hslife.orcamento.util.Util;
-
 public class InfoOFX {
 	
 	private String bancoID;
@@ -246,16 +244,20 @@ public class InfoOFX {
 			
 			InfoOFX other = (InfoOFX)obj;
 			
-			return (!Util.eVazio(other.getBancoID()) && other.getBancoID().equalsIgnoreCase(this.bancoID))
-					&& (!Util.eVazio(other.getNomeBanco()) && other.getNomeBanco().equalsIgnoreCase(this.nomeBanco))
-					&& (!Util.eVazio(other.getIdioma()) && other.getIdioma().equalsIgnoreCase(this.idioma))
-					&& (!Util.eVazio(other.getAgencia()) && other.getAgencia().equalsIgnoreCase(this.agencia))
-					&& (!Util.eVazio(other.getConta()) && other.getConta().equalsIgnoreCase(this.conta))
-					&& (!Util.eVazio(other.getTipoConta()) && other.getTipoConta().equalsIgnoreCase(this.tipoConta))
-					&& (!Util.eVazio(other.getMoedaPadrao()) && other.getMoedaPadrao().equalsIgnoreCase(this.moedaPadrao));
+			return compareValues(this.bancoID, other.getBancoID()) 
+					&& compareValues(this.nomeBanco, other.getNomeBanco())
+					&& compareValues(this.idioma, other.getIdioma())
+					&& compareValues(this.agencia, other.getAgencia())
+					&& compareValues(this.conta, other.getConta())
+					&& compareValues(this.tipoConta, other.getTipoConta())
+					&& compareValues(this.moedaPadrao, other.getMoedaPadrao());
 		}
 		
 		return false;
+	}
+	
+	private boolean compareValues(String one, String other) {
+		return other != null ? other.equalsIgnoreCase(one) : other == one;
 	}
 	
 	public String getBancoID() {
