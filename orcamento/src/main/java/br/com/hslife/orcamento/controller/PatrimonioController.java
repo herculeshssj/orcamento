@@ -48,6 +48,9 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -136,9 +139,17 @@ public class PatrimonioController extends AbstractCRUDController<Patrimonio> {
 	
 	public List<Favorecido> getListaFavorecido() {
 		try {
-			return getFavorecidoService().buscarAtivosPorUsuario(getUsuarioLogado());
+			List<Favorecido> resultado = favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o favorecido inativo da entidade na combo
+			if (resultado != null && entity.getFavorecido() != null) {
+				if (!resultado.contains(entity.getFavorecido())) {
+					entity.getFavorecido().setAtivo(true);
+					resultado.add(entity.getFavorecido());
+				}
+			}
+			return resultado;
 		} catch (ValidationException | BusinessException be) {
-			errorMessage(be.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
 	}

@@ -50,6 +50,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -228,9 +231,17 @@ public class BenfeitoriaController extends AbstractCRUDController<Benfeitoria> {
 	
 	public List<Favorecido> getListaFavorecido() {
 		try {
-			return getFavorecidoService().buscarAtivosPorUsuario(getUsuarioLogado());
+			List<Favorecido> resultado = favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+			// Lógica para incluir o favorecido inativo da entidade na combo
+			if (resultado != null && entity.getFavorecido() != null) {
+				if (!resultado.contains(entity.getFavorecido())) {
+					entity.getFavorecido().setAtivo(true);
+					resultado.add(entity.getFavorecido());
+				}
+			}
+			return resultado;
 		} catch (ValidationException | BusinessException be) {
-			errorMessage(be.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, be.getMessage(), null));
 		}
 		return new ArrayList<>();
 	}
