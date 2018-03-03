@@ -49,27 +49,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoOpcaoSistema;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="opcaosistema")
 public class OpcaoSistema extends EntityPersistence {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1170322496528587954L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column(length=100, nullable=false)
 	private String chave;
@@ -114,15 +103,7 @@ public class OpcaoSistema extends EntityPersistence {
 	public void validate() {
 				
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public String getChave() {
 		return chave;
 	}

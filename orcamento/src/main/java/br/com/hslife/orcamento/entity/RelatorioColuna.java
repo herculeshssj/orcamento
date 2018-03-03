@@ -49,9 +49,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoDado;
@@ -61,10 +58,6 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="relatoriocoluna")
 @SuppressWarnings("serial")
 public class RelatorioColuna extends EntityPersistence {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column
 	private int ordem;
@@ -103,14 +96,6 @@ public class RelatorioColuna extends EntityPersistence {
 		if (this.formatar) {
 			EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Máscara de formatação", this.mascaraFormatacao, 50);
 		}
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public int getOrdem() {

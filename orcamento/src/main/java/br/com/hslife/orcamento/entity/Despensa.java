@@ -50,9 +50,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -66,11 +63,7 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Entity
 @Table(name="despensa")
 @SuppressWarnings("serial")
-public class Despensa extends EntityPersistence {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;	
+public class Despensa extends EntityPersistence {	
 	
 	@Column(length=50, nullable=false)	
 	private String descricao;
@@ -107,14 +100,6 @@ public class Despensa extends EntityPersistence {
 		} else {
 			return Integer.toString(itensDespensa.size());
 		}
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getDescricao() {

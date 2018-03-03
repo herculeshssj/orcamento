@@ -47,9 +47,6 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -59,18 +56,10 @@ import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="contaconjunta")
 public class ContaConjunta extends EntityPersistence {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4985362480514630008L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
@@ -112,14 +101,6 @@ public class ContaConjunta extends EntityPersistence {
 		} catch (InvalidStateException ise) {
 			throw new ValidationException(ise);
 		}	
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Conta getConta() {

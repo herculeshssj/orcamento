@@ -51,9 +51,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -69,10 +66,6 @@ import br.com.hslife.orcamento.util.Util;
 @Table(name="pagamentodividaterceiro")
 @SuppressWarnings("serial")
 public class PagamentoDividaTerceiro extends EntityPersistence {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column(nullable=false, precision=18, scale=2)
 	private double valorPago;
@@ -119,14 +112,6 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 	
 	public double getValorPagoConvertido() {
 		return Util.arredondar(this.valorPago * this.taxaConversao);
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public double getValorPago() {

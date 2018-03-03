@@ -49,9 +49,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -60,18 +57,10 @@ import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.util.Util;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="taxaconversao")
 public class TaxaConversao extends EntityPersistence {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6634243511386828754L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name="idMoedaOrigem", nullable=false)
@@ -138,14 +127,6 @@ public class TaxaConversao extends EntityPersistence {
 	@Override
 	public void validate() {
 		
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Moeda getMoedaOrigem() {

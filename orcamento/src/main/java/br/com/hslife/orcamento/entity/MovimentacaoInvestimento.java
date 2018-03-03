@@ -51,9 +51,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,10 +62,6 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="movimentacaoinvestimento")
 @SuppressWarnings("serial")
 public class MovimentacaoInvestimento extends EntityPersistence {
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
@@ -137,14 +130,6 @@ public class MovimentacaoInvestimento extends EntityPersistence {
 	
 	public double getValorTotalRendaFixa() {
 		return valor - (iof +  impostoRenda + compensacaoImpostoRenda);
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Date getData() {

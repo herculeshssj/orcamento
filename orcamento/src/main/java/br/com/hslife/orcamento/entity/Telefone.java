@@ -160,14 +160,6 @@ public class Telefone extends EntityPersistence {
 			return new Telefone(this);
 		}
 	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Usuario getUsuario() {
 		return usuario;

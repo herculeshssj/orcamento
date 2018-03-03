@@ -59,9 +59,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -73,18 +70,10 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="faturacartao")
 public class FaturaCartao extends EntityPersistence {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6519549583113012538L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column(precision=18, scale=2)
 	private double valorFatura;
@@ -320,14 +309,6 @@ public class FaturaCartao extends EntityPersistence {
 			}
 		}
 		return moeda.getValorConversao();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public double getValorFatura() {

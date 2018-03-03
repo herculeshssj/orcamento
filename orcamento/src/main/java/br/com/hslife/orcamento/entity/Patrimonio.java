@@ -49,9 +49,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -64,10 +61,6 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="patrimonio")
 @SuppressWarnings("serial")
 public class Patrimonio extends EntityPersistence {
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column(length=50, nullable=false)
 	private String descricao;
@@ -128,14 +121,6 @@ public class Patrimonio extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Data de aquisição", this.dataEntrada);
 		EntityPersistenceUtil.validaCampoNulo("Favorecido", this.favorecido);
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.moeda);
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getDescricao() {
