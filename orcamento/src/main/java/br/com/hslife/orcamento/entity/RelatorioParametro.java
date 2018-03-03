@@ -49,6 +49,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.enumeration.TipoDado;
@@ -58,6 +61,10 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="relatorioparametro")
 @SuppressWarnings("serial")
 public class RelatorioParametro extends EntityPersistence {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(length=50, nullable=false)
 	private String nomeParametro;
@@ -83,6 +90,14 @@ public class RelatorioParametro extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome do parâmetro", this.nomeParametro, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Texto de exibição", this.textoExibicao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de dado", this.tipoDado);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTextoExibicao() {

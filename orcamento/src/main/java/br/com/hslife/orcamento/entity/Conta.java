@@ -58,6 +58,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -72,10 +75,18 @@ import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name="conta")
 public class Conta extends EntityPersistence {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1397450215030944411L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(length=50, nullable=false)
 	private String descricao;
@@ -214,6 +225,14 @@ public class Conta extends EntityPersistence {
 
 	public void setBanco(Banco banco) {
 		this.banco = banco;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getAgencia() {

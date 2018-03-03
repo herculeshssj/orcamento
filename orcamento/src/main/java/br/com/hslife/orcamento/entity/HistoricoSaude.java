@@ -49,6 +49,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -62,6 +65,10 @@ import br.com.hslife.orcamento.util.Util;
 @Table(name="historicosaude")
 @SuppressWarnings("serial")
 public class HistoricoSaude extends EntityPersistence {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)
@@ -95,6 +102,14 @@ public class HistoricoSaude extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Quadro clínico", this.quadroClinico);
 		EntityPersistenceUtil.validaCampoNulo("Diagnóstico", this.diagnostico);
 		EntityPersistenceUtil.validaCampoNulo("Tratamento", this.tratamento);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getDataConsulta() {

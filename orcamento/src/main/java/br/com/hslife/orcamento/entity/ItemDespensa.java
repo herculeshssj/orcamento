@@ -53,6 +53,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -67,7 +70,11 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Entity
 @Table(name="itemdespensa")
 @SuppressWarnings("serial")
-public class ItemDespensa extends EntityPersistence {	
+public class ItemDespensa extends EntityPersistence {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;	
 	
 	@Column(length=50, nullable=false)	
 	private String descricao;
@@ -134,6 +141,14 @@ public class ItemDespensa extends EntityPersistence {
 		if (this.quantidadeVerde < 0 || this.quantidadeAmarelo < 0 || this.quantidadeVermelho < 0) {
 			throw new ValidationException("Quantidade 'Verde', 'Amarelo' ou 'Vermelho' não pode ser menor que 0!");
 		}
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescricao() {

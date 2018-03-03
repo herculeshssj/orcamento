@@ -49,6 +49,9 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -61,6 +64,10 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="moeda")
 @SuppressWarnings("serial")
 public class Moeda extends EntityPersistence {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(nullable=false, length=50)
 	private String nome;
@@ -123,6 +130,10 @@ public class Moeda extends EntityPersistence {
 		saldoCredito = 0.0;
 		saldoDebito = 0.0;
 		valorConversao = 1.0000;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	@Override
@@ -188,6 +199,10 @@ public class Moeda extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public List<LancamentoConta> getLancamentos() {

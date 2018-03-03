@@ -52,6 +52,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -70,6 +73,10 @@ import br.com.hslife.orcamento.util.Util;
 @Table(name="agenda")
 @SuppressWarnings("serial")
 public class Agenda extends EntityPersistence {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(length=200, nullable=false)
 	private String descricao;
@@ -240,6 +247,10 @@ public class Agenda extends EntityPersistence {
 		}				
 	}
 	
+	public Long getId() {
+		return id;
+	}
+	
 	public String getDescricao() {
 		return descricao;
 	}
@@ -286,6 +297,10 @@ public class Agenda extends EntityPersistence {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getInicio() {

@@ -56,6 +56,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -77,6 +80,10 @@ import br.com.hslife.orcamento.util.Util;
 @Table(name="orcamento")
 @SuppressWarnings("serial")
 public class Orcamento extends EntityPersistence {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;	
 	
 	@Column(length=50, nullable=false)	
 	private String descricao;
@@ -172,6 +179,10 @@ public class Orcamento extends EntityPersistence {
 			EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		}
 	}
+
+	public Long getId() {
+		return id;
+	}
 	
 	/**
 	 * Altera o status do orçamento de ativo para inativo, e vice-versa
@@ -255,6 +266,10 @@ public class Orcamento extends EntityPersistence {
 		}
 		
 		return novoOrcamento;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescricao() {

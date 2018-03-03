@@ -54,6 +54,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
@@ -64,10 +67,18 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.Container;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name="arquivo")
 public class Arquivo extends EntityPersistence {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3525039093524704725L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column
 	private String nomeArquivo;
@@ -104,6 +115,10 @@ public class Arquivo extends EntityPersistence {
 	public Arquivo() {
 		dataCriacao = new Date();
 	}
+
+	public Long getId() {
+		return id;
+	}
 	
 	@Override
 	public String getLabel() {
@@ -126,6 +141,10 @@ public class Arquivo extends EntityPersistence {
 			case LANCAMENTOPERIODICO : return this.container.isPrazoExpirado(this.dataCriacao, this.opcoesSistema.get("ARQUIVO_TEMPO_GUARDA_LANCAMENTOPERIODICO"));
 			default : return false;
 		}
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public byte[] getDados() {

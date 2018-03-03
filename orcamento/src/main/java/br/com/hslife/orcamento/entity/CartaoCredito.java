@@ -51,6 +51,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -70,6 +73,10 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="cartaocredito")
 @SuppressWarnings("serial")
 public class CartaoCredito extends EntityPersistence {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(length=50, nullable=false)
 	private String descricao;
@@ -188,6 +195,10 @@ public class CartaoCredito extends EntityPersistence {
 		this.setConta(conta);
 		return this.getConta();
 	}
+
+	public Long getId() {
+		return id;
+	}
 	
 	public void setLimiteSaque(double limiteSaque) {
 		this.limiteSaque = Math.abs(limiteSaque);
@@ -195,6 +206,10 @@ public class CartaoCredito extends EntityPersistence {
 	
 	public void setLimiteCartao(double limiteCartao) {
 		this.limiteCartao = Math.abs(limiteCartao);
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public double getLimiteCartao() {

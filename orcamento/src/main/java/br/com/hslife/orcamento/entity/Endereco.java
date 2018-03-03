@@ -47,6 +47,9 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -57,6 +60,10 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="endereco")
 @SuppressWarnings("serial")
 public class Endereco extends EntityPersistence {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(length=50, nullable=false)
 	private String descricao;
@@ -220,6 +227,14 @@ public class Endereco extends EntityPersistence {
 		public Endereco build() {
 			return new Endereco(this);
 		}
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescricao() {

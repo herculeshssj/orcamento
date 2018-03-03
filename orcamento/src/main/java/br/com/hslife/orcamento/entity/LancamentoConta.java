@@ -58,6 +58,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -75,10 +78,18 @@ import br.com.hslife.orcamento.enumeration.TipoLancamento;
 import br.com.hslife.orcamento.util.DetalheLancamentoComparator;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name="lancamentoconta")
 public class LancamentoConta extends EntityPersistence {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2880755953845455507L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(nullable=true)
@@ -220,6 +231,10 @@ public class LancamentoConta extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Conta", this.conta);
 		EntityPersistenceUtil.validaCampoNulo("Data de pagamento", this.dataPagamento);
 	}
+
+	public Long getId() {
+		return id;
+	}
 	
 	public List<LancamentoConta> clonarLancamentos(int quantidade, IncrementoClonagemLancamento incremento) {
 		List<LancamentoConta> lancamentos = new ArrayList<LancamentoConta>();
@@ -304,6 +319,10 @@ public class LancamentoConta extends EntityPersistence {
 	
 	public boolean isHasDetalhes() {
 		return this.detalhes != null && !this.detalhes.isEmpty();
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getDataPagamento() {

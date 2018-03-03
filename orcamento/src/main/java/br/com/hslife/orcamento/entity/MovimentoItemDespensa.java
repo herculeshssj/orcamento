@@ -51,6 +51,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -61,6 +64,10 @@ import br.com.hslife.orcamento.enumeration.OperacaoDespensa;
 @Table(name="movimentoitemdespensa")
 @SuppressWarnings("serial")
 public class MovimentoItemDespensa extends EntityPersistence {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable=false)
 	private int quantidade;
@@ -79,6 +86,10 @@ public class MovimentoItemDespensa extends EntityPersistence {
 		dataOperacao = new Date();
 		quantidade = 1;
 	}
+
+	public Long getId() {
+		return id;
+	}
 	
 	@Override
 	public String getLabel() {
@@ -92,6 +103,10 @@ public class MovimentoItemDespensa extends EntityPersistence {
 
 	public void setValor(double valor) {
 		this.valor = Math.abs(valor);
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public int getQuantidade() {

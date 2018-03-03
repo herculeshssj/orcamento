@@ -100,6 +100,14 @@ public class TratamentoSaude extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Tipo de tratamento", this.tipoTratamento);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("Periodicidade", this.periodicidade, 50);
 	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getDescricao() {
 		return descricao;

@@ -51,6 +51,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -65,6 +68,10 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 @Table(name="itemmeta")
 @SuppressWarnings("serial")
 public class ItemMeta extends EntityPersistence {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(length=200, nullable=false)
 	private String descricao;
@@ -108,6 +115,14 @@ public class ItemMeta extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 200);
 		EntityPersistenceUtil.validaCampoNulo("Data", this.data);
 		EntityPersistenceUtil.validaCampoNulo("Valor", this.valor);
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescricao() {

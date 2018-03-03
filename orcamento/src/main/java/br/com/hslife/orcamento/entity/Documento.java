@@ -47,16 +47,27 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name="documento")
 public class Documento extends EntityPersistence {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 708354366322548717L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(length=50, nullable=false)
 	private String nome;
@@ -74,6 +85,10 @@ public class Documento extends EntityPersistence {
 	public Documento() {
 		//arquivo = new Arquivo();
 	}
+
+	public Long getId() {
+		return id;
+	}
 	
 	@Override
 	public String getLabel() {
@@ -85,6 +100,10 @@ public class Documento extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome do documento", this.nome, 50);
 		EntityPersistenceUtil.validaCampoNulo("Categoria de documento", this.categoriaDocumento);
 		EntityPersistenceUtil.validaCampoNulo("Anexe um arquivo", this.idArquivo);
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescricao() {
