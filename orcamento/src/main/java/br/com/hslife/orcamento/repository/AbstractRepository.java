@@ -56,6 +56,7 @@ public abstract class AbstractRepository {
 	
 	protected SessionFactory sessionFactory;
 	
+	@Deprecated
 	protected Map<String, Object> hqlParameters = new HashMap<>();
 
 	public void setSessionFactory(final SessionFactory sessionFactory) {
@@ -66,10 +67,12 @@ public abstract class AbstractRepository {
 		return this.sessionFactory.getCurrentSession();
 	}
 	
+	@Deprecated
 	protected Query getQuery(String hql) {
 		return getSession().createQuery(hql);
 	}
 	
+	@Deprecated
 	protected Query getQueryApplyingParameters(String hql) {
 		Query query = getSession().createQuery(hql);
 		

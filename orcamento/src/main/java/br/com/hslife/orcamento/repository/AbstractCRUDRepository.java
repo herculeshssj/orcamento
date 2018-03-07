@@ -71,13 +71,13 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	
 	@SuppressWarnings("unchecked")
 	public E findById(Long id) {
-		return (E) getQuery("FROM " + entity.getClass().getSimpleName() + " as entity WHERE entity.id = :idEntity")
-				.setLong("idEntity", id)
+		return (E)getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e WHERE e.id = :idEntity")
+				.setParameter("idEntity", id)
 				.uniqueResult();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<E> findAll() {
-		return getQuery("FROM " + entity.getClass().getSimpleName() + " as entity").list();
+		return getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e").getResultList();
 	}
 }
