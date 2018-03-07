@@ -115,6 +115,9 @@ public class Investimento extends EntityPersistence {
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento;
 	
+	@OneToMany(mappedBy="investimento")	
+	private Set<Dividendo> dividendos;
+	
 	/*** Atributos para o resumo Carteira de Investimento ***/
 	
 	@Transient
@@ -230,6 +233,27 @@ public class Investimento extends EntityPersistence {
 		}
 		
 		return movimentacoes;
+	}
+	
+	public Set<Dividendo> buscarDividendos(Integer mes, int ano) {
+		Set<Dividendo> dividendos = new LinkedHashSet<>();
+		
+		// Itera o set de dividendos, adicionando os lançamentos cuja data de pagamento pertence ao mês/ano informados
+		Calendar temp = Calendar.getInstance();
+		for (Dividendo dividendo : this.dividendos) {
+			temp.setTime(dividendo.getDataPagamento());
+			
+			if (mes == null || mes == 0) {
+				// Busca somente pelo ano
+				if (temp.get(Calendar.YEAR) == ano)
+					dividendos.add(dividendo);
+			} else {
+				if ((temp.get(Calendar.MONTH) + 1) == mes && temp.get(Calendar.YEAR) == ano) 
+					dividendos.add(dividendo);
+			}
+		}
+		
+		return dividendos;
 	}
 	
 	/**
@@ -410,5 +434,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setValorInvestimentoAtualizado(double valorInvestimentoAtualizado) {
 		this.valorInvestimentoAtualizado = valorInvestimentoAtualizado;
+	}
+
+	public Set<Dividendo> getDividendos() {
+		return dividendos;
+	}
+
+	public void setDividendos(Set<Dividendo> dividendos) {
+		this.dividendos = dividendos;
 	}
 }

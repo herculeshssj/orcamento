@@ -145,6 +145,82 @@
 		
 		<hr />
 		
+		<h:panelGrid columns="1" rendered="#{managedBean.entity.id != null and managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
+			<f:facet name="header">
+				<h:outputText value="Dividendos / Rendimentos"/>
+			</f:facet>
+			<h:panelGrid columns="4">
+				<label>Mês / Ano:</label>
+				<h:selectOneMenu value="#{managedBean.mesDividendo}">
+					<f:selectItem itemLabel="Todos"/>
+					<f:selectItems value="#{managedBean.listaMeses}"/>
+				</h:selectOneMenu>
+				<h:selectOneMenu value="#{managedBean.anoDividendo}">
+					<f:selectItems value="#{managedBean.listaAnos}"/>
+				</h:selectOneMenu>
+				<h:panelGroup>
+					<p:commandLink title="Pesquisar" actionListener="#{managedBean.selecionarDividendos}" update="tableDividendo">
+						<h:graphicImage id="imgSearchDividendo" height="48" width="48" value="/resources/images/svg/search.svg"/>
+					</p:commandLink>
+					<h:commandLink title="Novo dividendo" action="#{managedBean.novoDividendo}" rendered="#{managedBean.entity.ativo}">
+	    				<h:graphicImage id="imgNewDividendo" height="48" width="48" value="/resources/images/svg/add_image.svg"/>
+	    			</h:commandLink>
+	   			</h:panelGroup>				
+			</h:panelGrid>
+			<h:dataTable id="tableDividendo" value="#{managedBean.dividendosInvestimento}" var="item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Histórico"/>
+					</f:facet>
+					<h:commandLink value="#{item.label}" action="#{managedBean.editarDividendo}" style="text-decoration: underline">
+						<f:setPropertyActionListener value="#{item}" target="#{managedBean.dividendo}"/>
+					</h:commandLink>													
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Fechamento"/>
+					</f:facet>
+					<h:outputText value="#{item.dataFechamento}">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Pagamento"/>
+					</f:facet>
+					<h:outputText value="#{item.dataPagamento}">
+						<f:converter converterId="dateConverter"/>
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Valor por ação/cota"/>
+					</f:facet>
+					<h:outputText value="#{item.valorUnitario}">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="IR"/>
+					</f:facet>
+					<h:outputText value="#{item.ir}">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Valor pago"/>
+					</f:facet>
+					<h:outputText value="#{item.valorPago}">
+						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
+					</h:outputText>
+				</h:column>
+			</h:dataTable>
+		</h:panelGrid>
+		
+		<hr />
+		
 		<h:panelGrid columns="1" rendered="#{managedBean.entity.id != null}">
 			<f:facet name="header">
 				<h:outputText value="Movimentações do Investimento" />

@@ -43,26 +43,25 @@ para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 -
 Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
-package br.com.hslife.orcamento.facade;
+package br.com.hslife.orcamento.repository;
 
 import java.util.List;
-import java.util.Set;
 
-import br.com.hslife.orcamento.entity.Conta;
+import org.springframework.stereotype.Repository;
+
 import br.com.hslife.orcamento.entity.Dividendo;
 import br.com.hslife.orcamento.entity.Investimento;
-import br.com.hslife.orcamento.entity.Usuario;
 
-public interface IInvestimento extends ICRUDService<Investimento>{
+@Repository
+public class DividendoRepository extends AbstractCRUDRepository<Dividendo>{
 	
-	List<Investimento> buscarPorConta(Conta conta);
-	
-	List<Conta> gerarCarteiraInvestimento(Usuario usuario);
+	public DividendoRepository() {
+		super(new Dividendo());
+	}
 
-	void salvarDividendo(Dividendo dividendo);
-
-	Set<Dividendo> buscarTodosDividendosPorInvestimento(Investimento entity);
-
-	void excluirDividendo(Dividendo dividendo);
-	
+	public List<Dividendo> findAllByInvestimento(Investimento entity) {
+		return getSession().createQuery("SELECT d FROM Dividendo d WHERE d.investimento.id = :idInvestimento ORDER BY d.dataPagamento ASC", Dividendo.class)
+				.setParameter("idInvestimento", entity.getId())
+				.getResultList();
+	}	
 }

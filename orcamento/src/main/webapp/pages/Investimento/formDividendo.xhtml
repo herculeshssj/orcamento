@@ -1,0 +1,146 @@
+<!--
+  
+  	Copyright (c) 2012 - 2021 Hércules S. S. José
+
+    Este arquivo é parte do programa Orçamento Doméstico.
+    
+
+    Orçamento Doméstico é um software livre; você pode redistribui-lo e/ou
+
+    modificá-lo dentro dos termos da Licença Pública Geral Menor GNU como
+
+    publicada pela Fundação do Software Livre (FSF); na versão 3.0 da
+
+    Licença.
+    
+
+    Este programa é distribuído na esperança que possa ser útil, mas SEM
+
+    NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO a qualquer
+    
+    MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral Menor GNU
+    
+    em português para maiores detalhes.
+    
+
+    Você deve ter recebido uma cópia da Licença Pública Geral Menor GNU sob
+	
+	o nome de "LICENSE" junto com este programa, se não, acesse o site do
+    
+    projeto no endereco https://github.com/herculeshssj/orcamento-maven ou 
+	
+	escreva para a Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth 
+	
+	Floor, Boston, MA  02110-1301, USA.
+    
+
+    Para mais informações sobre o programa Orçamento Doméstico e seu autor
+	
+	entre em contato pelo e-mail herculeshssj@outlook.com, ou ainda escreva
+
+    para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 - 
+	
+	Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/formulario.xhtml">
+
+	<ui:param name="managedBean" value="#{investimentoMB}" />
+	
+	<ui:define name="campos">
+	
+		<h:panelGrid columns="2">
+			<f:facet name="header">
+				<h:outputText value="Dados do Investimento" />
+			</f:facet>
+			
+			<label>Descrição:</label>
+			<h:outputText value="#{managedBean.entity.label}"/>
+			
+			<label>Conta:</label>
+			<h:outputText value="#{managedBean.entity.conta.label}"/>
+			
+			<label>Categoria de investimento:</label>
+			<h:outputText value="#{managedBean.entity.categoriaInvestimento.label}"/>
+			
+			<label>Tipo de investimento:</label>
+			<h:outputText value="#{managedBean.entity.categoriaInvestimento.tipoInvestimento}"/>
+			
+			<label>CNPJ:</label>
+			<h:outputText value="#{managedBean.entity.cnpjFormatado}"/>
+			
+			<h:outputText value="Código da ação:" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
+			<h:outputText value="#{managedBean.entity.ticker}" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}"/>
+			
+			<label>Início do investimento:</label>
+			<h:outputText value="#{managedBean.entity.inicioInvestimento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+			<label>Término do investimento:</label>
+			<h:outputText value="#{managedBean.entity.terminoInvestimento}">
+				<f:converter converterId="dateConverter"/>
+			</h:outputText>
+			
+		</h:panelGrid>
+		
+		<hr/>
+		
+		<label for="frmListEntity:txtDataFechamento">Data de fechamento:</label>
+		<p:inputMask id="txtDataFechamento" size="9" mask="99/99/9999" value="#{managedBean.dividendo.dataFechamento}">
+	    	<f:converter converterId="dateConverter"/>
+	    </p:inputMask>
+	    
+	    <label for="frmFormEntity:txtCotas">Ações / Cotas apuradas:</label>
+		<h:inputText id="txtCotas" value="#{managedBean.dividendo.quantAcoesApuradas}" >
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+		
+		<label for="frmFormEntity:txtValorCotas">Valor por ação/cota apurado:</label>
+		<h:inputText id="txtValorCotas" value="#{managedBean.dividendo.valorUnitario}" >
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+	    
+	    <label for="frmListEntity:txtDataPagamento">Data de pagamento:</label>
+		<p:inputMask id="txtDataPagamento" size="9" mask="99/99/9999" value="#{managedBean.dividendo.dataPagamento}">
+	    	<f:converter converterId="dateConverter"/>
+	    </p:inputMask>
+	    
+	    <label for="frmFormEntity:txtIr">IR:</label>
+		<h:inputText id="txtIr" value="#{managedBean.dividendo.ir}" >
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+	    
+	    <label for="frmFormEntity:txtValorPago">Valor pago:</label>
+		<h:inputText id="txtValorPago" value="#{managedBean.dividendo.valorPago}" >
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+
+	</ui:define>
+	
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.voltarInvestimento}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+     	</h:commandLink>				
+		<p:spacer width="20" />
+		<h:commandLink id="lnkOk" title="Salvar dados" action="#{managedBean.salvarDividendo}" rendered="#{managedBean.entity.ativo}">
+			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		</h:commandLink>
+		<p:spacer width="20" rendered="#{managedBean.entity.ativo}"/>
+		<h:commandLink title="Excluir" action="#{managedBean.excluirDividendo}" rendered="#{managedBean.entity.ativo}">
+			<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
+		</h:commandLink>
+	</ui:define>
+
+</ui:composition>
+</html>

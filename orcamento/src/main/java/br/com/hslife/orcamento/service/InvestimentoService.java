@@ -46,7 +46,9 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,7 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.component.InfoCotacaoComponent;
 import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Dividendo;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
@@ -61,13 +64,17 @@ import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.repository.CategoriaInvestimentoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
+import br.com.hslife.orcamento.repository.DividendoRepository;
 import br.com.hslife.orcamento.repository.InvestimentoRepository;
 
-@Service("investimentoService")
+@Service
 public class InvestimentoService extends AbstractCRUDService<Investimento> implements IInvestimento {
 	
 	@Autowired
 	private InvestimentoRepository repository;
+	
+	@Autowired
+	private DividendoRepository dividendoRepository;
 	
 	@Autowired
 	private ContaRepository contaRepository;
@@ -95,6 +102,11 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 
 	public InfoCotacaoComponent getInfoCotacaoComponent() {
 		return infoCotacaoComponent;
+	}
+
+	public DividendoRepository getDividendoRepository() {
+		this.dividendoRepository.setSessionFactory(this.sessionFactory);
+		return dividendoRepository;
 	}
 
 	@Override
@@ -153,5 +165,23 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 			
 		// Retorna a lista de contas populada
 		return contasInvestimento;
+	}
+
+	@Override
+	public void salvarDividendo(Dividendo dividendo) {
+		if (dividendo.getId() == null) 
+			getDividendoRepository().save(dividendo);
+		else 
+			getDividendoRepository().update(dividendo);
+	}
+
+	@Override
+	public Set<Dividendo> buscarTodosDividendosPorInvestimento(Investimento entity) {
+		return new LinkedHashSet<>(getDividendoRepository().findAllByInvestimento(entity));
+	}
+
+	@Override
+	public void excluirDividendo(Dividendo dividendo) {
+		getDividendoRepository().delete(dividendo);
 	}
 }

@@ -61,6 +61,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.component.InfoCotacaoComponent;
 import br.com.hslife.orcamento.entity.CategoriaInvestimento;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.Dividendo;
 import br.com.hslife.orcamento.entity.Investimento;
 import br.com.hslife.orcamento.entity.MovimentacaoInvestimento;
 import br.com.hslife.orcamento.enumeration.MesesDoAno;
@@ -72,6 +73,7 @@ import br.com.hslife.orcamento.facade.ICategoriaInvestimento;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.model.InfoCotacao;
+import br.com.hslife.orcamento.util.EntityLabelComparator;
 
 @Component("investimentoMB")
 @Scope("session")
@@ -101,11 +103,15 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento = new HashSet<>();
 	private Investimento investimentoSelecionado;
 	private InfoCotacao infoCotacao;
+	private Dividendo dividendo;
+	private Set<Dividendo> dividendosInvestimento;
 	
 	private int mesResumo;
 	private int anoResumo;
 	private Integer mesMovimentacao;
 	private int anoMovimentacao;
+	private Integer mesDividendo;
+	private int anoDividendo;
 	
 	private OperacaoInvestimento operacaoInvestimento;
 	
@@ -123,10 +129,11 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		int ano = temp.get(Calendar.YEAR);
 		
 		// Já deixa marcado o mês/ano atual no resumo e na movimentação
-		mesResumo = mes; //remover
-		anoResumo = ano; //remover
 		mesMovimentacao = mes;
 		anoMovimentacao = ano;
+		
+		mesDividendo = mes;
+		anoDividendo = ano;
 	}
 	
 	@Override
@@ -137,6 +144,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		movimentacoesInvestimento = new LinkedHashSet<>();
 		investimentoInicial = 0;
 		listEntity = new ArrayList<>();
+		dividendosInvestimento = new LinkedHashSet<>();
 	}
 	
 	@Override
@@ -261,6 +269,11 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		movimentacoesInvestimento = entity.buscarMovimentacoesInvestimento(mesMovimentacao, anoMovimentacao);
 	}
 	
+	public void selecionarDividendos() {
+		entity.setDividendos(getService().buscarTodosDividendosPorInvestimento(entity));
+		dividendosInvestimento = entity.buscarDividendos(mesDividendo, anoDividendo);
+	}
+	
 	public String voltarInvestimento() {
 		actionTitle = "";
 		find();
@@ -283,6 +296,45 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	public String excluirMovimentacao() {
 		operacaoInvestimento = OperacaoInvestimento.EXCLUIR_MOVIMENTACAO;
 		return this.salvarDadosInvestimento();
+	}
+	
+	public String novoDividendo() {
+		dividendo = new Dividendo();
+		actionTitle = " - Novo dividendo";
+		return "/pages/Investimento/formDividendo";
+	}
+	
+	public String salvarDividendo() {
+		try {
+			dividendo.setInvestimento(entity);
+			dividendo.validate();
+			getService().salvarDividendo(dividendo);
+			infoMessage("Dados do investimento salvos com sucesso!");
+			initializeEntity();
+			return this.voltarInvestimento();
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
+		return "";
+	}
+	
+	public String editarDividendo() {
+		actionTitle = " - Editar dividendo";
+		return "/pages/Investimento/formDividendo";
+	}
+	
+	public String excluirDividendo() {
+		try {
+			getService().excluirDividendo(dividendo);
+			infoMessage("Dados do investimento salvos com sucesso!");
+			initializeEntity();
+			return this.voltarInvestimento();
+		} catch (ValidationException | BusinessException be) {
+			errorMessage(be.getMessage());
+		}
+		
+		return "";
 	}
 
 	public String salvarDadosInvestimento() {
@@ -316,7 +368,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 			listEntity = getService().buscarPorConta(contaSelecionada);
 			
 			// Ordena os investimentos de acordo com o método getLabel()
-			listEntity.sort((i1, i2) -> i1.getLabel().compareTo(i2.getLabel())); // FIXME não sou compatível com o Cobertura
+			listEntity.sort(new EntityLabelComparator());
 		} else {
 			listEntity = new ArrayList<>();
 		}
@@ -472,5 +524,37 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public InfoCotacaoComponent getInfoCotacaoComponent() {
 		return infoCotacaoComponent;
+	}
+
+	public Dividendo getDividendo() {
+		return dividendo;
+	}
+
+	public void setDividendo(Dividendo dividendo) {
+		this.dividendo = dividendo;
+	}
+
+	public Set<Dividendo> getDividendosInvestimento() {
+		return dividendosInvestimento;
+	}
+
+	public void setDividendosInvestimento(Set<Dividendo> dividendosInvestimento) {
+		this.dividendosInvestimento = dividendosInvestimento;
+	}
+
+	public Integer getMesDividendo() {
+		return mesDividendo;
+	}
+
+	public void setMesDividendo(Integer mesDividendo) {
+		this.mesDividendo = mesDividendo;
+	}
+
+	public int getAnoDividendo() {
+		return anoDividendo;
+	}
+
+	public void setAnoDividendo(int anoDividendo) {
+		this.anoDividendo = anoDividendo;
 	}
 }
