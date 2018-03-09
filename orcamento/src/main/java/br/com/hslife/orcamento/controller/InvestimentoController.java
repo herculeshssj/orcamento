@@ -158,6 +158,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		// movimentação
 		movimentacao = null;
 		movimentacoesInvestimento = new LinkedHashSet<>();
+		dividendosInvestimento = new LinkedHashSet<>();
 		
 		// Obtém a cotação do investimento
 		if (entity != null 
