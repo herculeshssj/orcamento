@@ -59,11 +59,10 @@ public class MetaRepository extends AbstractCRUDRepository<Meta> {
 		super(new Meta());
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Meta> findAllDescricaoAndAtivoByUsuario(String descricao, Boolean ativo, Usuario usuario) {
 		hqlParameters.clear();
 		
-		StringBuilder hql = new StringBuilder().append("FROM Meta meta WHERE 1=1");
+		StringBuilder hql = new StringBuilder().append("SELECT meta FROM Meta meta WHERE 1=1");
 		
 		if (descricao != null && !descricao.isEmpty()) {
 			hql.append(" AND meta.descricao LIKE :descricao");

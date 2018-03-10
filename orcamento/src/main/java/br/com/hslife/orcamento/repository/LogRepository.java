@@ -62,7 +62,7 @@ import br.com.hslife.orcamento.model.CriterioLog;
 import br.com.hslife.orcamento.model.UsuarioLogado;
 
 @Repository
-public class LogRepository extends AbstractRepository {
+public class LogRepository extends AbstractRepository { //FIXME cada log no meu próprio repositório
 	
 	public List<Logs> findByCriteriosLog(CriterioLog criterioBusca) { // TODO refatorar
 		Criteria criteria = getSession().createCriteria(Logs.class);

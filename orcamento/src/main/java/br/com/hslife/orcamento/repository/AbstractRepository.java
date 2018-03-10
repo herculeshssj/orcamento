@@ -54,6 +54,7 @@ import org.hibernate.SessionFactory;
 
 public abstract class AbstractRepository {
 	
+	// FIXME remover os métodos depreciados
 	protected SessionFactory sessionFactory;
 	
 	@Deprecated

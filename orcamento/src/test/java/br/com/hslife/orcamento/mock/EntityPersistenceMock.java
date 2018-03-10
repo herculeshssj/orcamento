@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Random;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
+import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.util.Util;
@@ -33,5 +34,12 @@ public class EntityPersistenceMock {
 		usuario.setSenha(Util.MD5(UtilsMock.mockString(8)));
 		usuario.setTipoUsuario(TipoUsuario.ROLE_USER);
 		return usuario;
+	}
+
+	public static Meta mockMeta() {
+		Meta meta = new Meta();
+		meta.setUsuario(EntityPersistenceMock.mockUsuario());
+		meta.setDescricao(UtilsMock.mockString(50));
+		return meta; // TODO gerar os valores falsos e criar o builder na entidade
 	}
 }

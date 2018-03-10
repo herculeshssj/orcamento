@@ -65,14 +65,12 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 		super(new Agenda());
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Agenda> findByUsuario(Usuario usuario) {
 		Criteria criteria = getSession().createCriteria(Agenda.class);
 		criteria.add(Restrictions.eq("usuario.id", usuario.getId()));
 		return criteria.addOrder(Order.asc("descricao")).list();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Agenda> findByCriterioAgendamento(CriterioAgendamento criterioBusca) {
 		Criteria criteria = getSession().createCriteria(Agenda.class);
 		
@@ -100,7 +98,7 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 	}
 	
 	public long countAgendamentoByDataInicioAndDataFimAndAlertaAndUsuario(Date inicio, Date fim, boolean emiteAlerta, Usuario usuario) {
-		return (Long)getQuery("SELECT COUNT(*) FROM Agenda agenda WHERE agenda.inicio >= :inicio AND agenda.fim <= :fim AND agenda.emitirAlerta = :alerta AND agenda.usuario.id = :idUsuario")
+		return (Long)getQueryNoType("SELECT COUNT(*) FROM Agenda agenda WHERE agenda.inicio >= :inicio AND agenda.fim <= :fim AND agenda.emitirAlerta = :alerta AND agenda.usuario.id = :idUsuario")
 				.setTimestamp("inicio", inicio)
 				.setTimestamp("fim", fim)
 				.setBoolean("alerta", emiteAlerta)
@@ -109,7 +107,7 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 	}
 	
 	public long countAgendamentoByDataInicioOrDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta, Usuario usuario) {
-		return (Long)getQuery("SELECT COUNT(*) FROM Agenda agenda WHERE ((agenda.inicio BETWEEN :inicio AND :fim) OR (agenda.fim BETWEEN :inicio AND :fim)) AND agenda.emitirAlerta = :alerta AND agenda.usuario.id = :idUsuario")
+		return (Long)getQueryNoType("SELECT COUNT(*) FROM Agenda agenda WHERE ((agenda.inicio BETWEEN :inicio AND :fim) OR (agenda.fim BETWEEN :inicio AND :fim)) AND agenda.emitirAlerta = :alerta AND agenda.usuario.id = :idUsuario")
 				.setTimestamp("inicio", inicio)
 				.setTimestamp("fim", fim)
 				.setBoolean("alerta", emiteAlerta)
@@ -117,7 +115,6 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 				.uniqueResult();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Agenda> findAgendamentoByDataInicioAndDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta) {
 		return (List<Agenda>)getQuery("FROM Agenda agenda WHERE agenda.inicio >= :inicio AND agenda.fim <= :fim AND agenda.emitirAlerta = :alerta")
 				.setTimestamp("inicio", inicio)
@@ -126,7 +123,6 @@ public class AgendaRepository extends AbstractCRUDRepository<Agenda> {
 				.list();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Agenda> findAgendamentoByOrDataInicioOrDataFimAndAlerta(Date inicio, Date fim, boolean emiteAlerta) {
 		return (List<Agenda>)getQuery("FROM Agenda agenda WHERE ((agenda.inicio BETWEEN :inicio AND :fim) OR (agenda.fim BETWEEN :inicio AND :fim)) AND agenda.emitirAlerta = :alerta")
 				.setTimestamp("inicio", inicio)

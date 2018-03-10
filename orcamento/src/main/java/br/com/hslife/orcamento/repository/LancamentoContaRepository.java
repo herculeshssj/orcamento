@@ -99,7 +99,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			break;
 		}
 		
-		return getQuery("SELECT lancamento.tipoLancamento as tipoLancamento, lancamento.dataPagamento as dataPagamento, lancamento.valorPago as valorPago, "
+		return getQueryNoType("SELECT lancamento.tipoLancamento as tipoLancamento, lancamento.dataPagamento as dataPagamento, lancamento.valorPago as valorPago, "
 				+ "taxa.valorMoedaDestino as valorMoedaDestino FROM LancamentoConta lancamento LEFT JOIN lancamento.taxaConversao taxa WHERE "
 				+ "lancamento.conta.id = :idConta AND " + agrupamento)
 				.setLong("idConta", conta.getId())

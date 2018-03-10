@@ -45,13 +45,20 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.hibernate.query.Query;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
 
 public abstract class AbstractCRUDRepository<E extends EntityPersistence> extends AbstractRepository implements IRepository<E>{
 	
+	protected Map<String, Object> hqlParameters = new HashMap<>();
+	
 	private E entity;
+	private Class<E> clazz;
 	
 	public AbstractCRUDRepository(E entity) {
 		this.entity = entity;
@@ -79,5 +86,35 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	@SuppressWarnings("unchecked")
 	public List<E> findAll() {
 		return getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e").getResultList();
+	}
+	
+	protected Query<E> getQuery(String hql) {
+		return getSession().createQuery(hql, clazz);
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	protected Query getQueryNoType(String hql) {
+		return getSession().createQuery(hql);
+	}
+	
+	protected Query<E> getQueryApplyingParameters(String hql) {
+		Query<E> query = getSession().createQuery(hql, clazz);
+		
+		for (String s : hqlParameters.keySet()) {
+			query.setParameter(s, hqlParameters.get(s));
+		}
+		
+		return query;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	protected Query getQueryNoTypeApplyingParameters(String hql) {
+		Query query = getSession().createQuery(hql);
+		
+		for (String s : hqlParameters.keySet()) {
+			query.setParameter(s, hqlParameters.get(s));
+		}
+		
+		return query;
 	}
 }
