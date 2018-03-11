@@ -234,7 +234,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAllUsuariosByFechamentoAutomatico(boolean fechaAutomaticamente) {
-		return getQuery("FROM Conta conta WHERE conta.fechamentoAutomatico = :valor")
+		return getQueryNoType("FROM Conta conta WHERE conta.fechamentoAutomatico = :valor")
 				.setBoolean("valor", fechaAutomaticamente)
 				.list();
 	}

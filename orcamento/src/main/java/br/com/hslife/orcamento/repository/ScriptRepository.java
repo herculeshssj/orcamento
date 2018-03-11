@@ -47,7 +47,6 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Script;
@@ -59,10 +58,9 @@ public class ScriptRepository extends AbstractCRUDRepository<Script> {
 		super(new Script());
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Script> findByNomeAndAtivo(String nome, boolean ativo) {
-		String hql = "FROM Script script WHERE script.nome LIKE '%" + nome + "%' AND script.ativo = :ativo ORDER BY script.nome ASC";
-		Query query = getSession().createQuery(hql).setBoolean("ativo", ativo);
-		return query.list();
+		return getSession().createQuery("FROM Script script WHERE script.nome LIKE '%" + nome + "%' AND script.ativo = :ativo ORDER BY script.nome ASC", Script.class)
+				.setParameter("ativo", ativo)
+				.getResultList();
 	}
 }

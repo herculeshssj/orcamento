@@ -179,118 +179,6 @@ public class Seguro extends EntityPersistence {
 	}
 
 	/**
-	 * @return the descricao
-	 */
-	public final String getDescricao() {
-		return descricao;
-	}
-
-	/**
-	 * @param descricao the descricao to set
-	 */
-	public final void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	/**
-	 * @return the dataAquisicao
-	 */
-	public final Calendar getDataAquisicao() {
-		return dataAquisicao;
-	}
-
-	/**
-	 * @param dataAquisicao the dataAquisicao to set
-	 */
-	public final void setDataAquisicao(Calendar dataAquisicao) {
-		this.dataAquisicao = dataAquisicao;
-	}
-
-	/**
-	 * @return the validade
-	 */
-	public final Calendar getValidade() {
-		return validade;
-	}
-
-	/**
-	 * @param validade the validade to set
-	 */
-	public final void setValidade(Calendar validade) {
-		this.validade = validade;
-	}
-
-	/**
-	 * @return the cobertura
-	 */
-	public final String getCobertura() {
-		return cobertura;
-	}
-
-	/**
-	 * @param cobertura the cobertura to set
-	 */
-	public final void setCobertura(String cobertura) {
-		this.cobertura = cobertura;
-	}
-
-	/**
-	 * @return the valorCobertura
-	 */
-	public final double getValorCobertura() {
-		return valorCobertura;
-	}
-
-	/**
-	 * @param valorCobertura the valorCobertura to set
-	 */
-	public final void setValorCobertura(double valorCobertura) {
-		this.valorCobertura = valorCobertura;
-	}
-
-	/**
-	 * @return the valorSeguro
-	 */
-	public final double getValorSeguro() {
-		return valorSeguro;
-	}
-
-	/**
-	 * @param valorSeguro the valorSeguro to set
-	 */
-	public final void setValorSeguro(double valorSeguro) {
-		this.valorSeguro = valorSeguro;
-	}
-
-	/**
-	 * @return the observacao
-	 */
-	public final String getObservacao() {
-		return observacao;
-	}
-
-	/**
-	 * @param observacao the observacao to set
-	 */
-	public final void setObservacao(String observacao) {
-		this.observacao = observacao;
-	}
-
-	/**
-	 * @return the usuario
-	 */
-	public final Usuario getUsuario() {
-		return usuario;
-	}
-
-	/**
-	 * @param usuario the usuario to set
-	 */
-	public final void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	/**
 	 * @return the id
 	 */
 	public Long getId() {
@@ -302,5 +190,117 @@ public class Seguro extends EntityPersistence {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the descricao
+	 */
+	public String getDescricao() {
+		return descricao;
+	}
+
+	/**
+	 * @param descricao the descricao to set
+	 */
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	/**
+	 * @return the dataAquisicao
+	 */
+	public Calendar getDataAquisicao() {
+		return dataAquisicao;
+	}
+
+	/**
+	 * @param dataAquisicao the dataAquisicao to set
+	 */
+	public void setDataAquisicao(Calendar dataAquisicao) {
+		this.dataAquisicao = dataAquisicao;
+	}
+
+	/**
+	 * @return the validade
+	 */
+	public Calendar getValidade() {
+		return validade;
+	}
+
+	/**
+	 * @param validade the validade to set
+	 */
+	public void setValidade(Calendar validade) {
+		this.validade = validade;
+	}
+
+	/**
+	 * @return the cobertura
+	 */
+	public String getCobertura() {
+		return cobertura;
+	}
+
+	/**
+	 * @param cobertura the cobertura to set
+	 */
+	public void setCobertura(String cobertura) {
+		this.cobertura = cobertura;
+	}
+
+	/**
+	 * @return the valorCobertura
+	 */
+	public double getValorCobertura() {
+		return valorCobertura;
+	}
+
+	/**
+	 * @param valorCobertura the valorCobertura to set
+	 */
+	public void setValorCobertura(double valorCobertura) {
+		this.valorCobertura = valorCobertura;
+	}
+
+	/**
+	 * @return the valorSeguro
+	 */
+	public double getValorSeguro() {
+		return valorSeguro;
+	}
+
+	/**
+	 * @param valorSeguro the valorSeguro to set
+	 */
+	public void setValorSeguro(double valorSeguro) {
+		this.valorSeguro = valorSeguro;
+	}
+
+	/**
+	 * @return the observacao
+	 */
+	public String getObservacao() {
+		return observacao;
+	}
+
+	/**
+	 * @param observacao the observacao to set
+	 */
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	/**
+	 * @return the usuario
+	 */
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	/**
+	 * @param usuario the usuario to set
+	 */
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }

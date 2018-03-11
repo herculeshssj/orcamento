@@ -109,20 +109,6 @@ public class Combustivel extends EntityPersistence {
 	}
 
 	/**
-	 * @return the descricao
-	 */
-	public final String getDescricao() {
-		return descricao;
-	}
-
-	/**
-	 * @param descricao the descricao to set
-	 */
-	public final void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	/**
 	 * @return the distribuidora
 	 */
 	public String getDistribuidora() {
@@ -148,5 +134,19 @@ public class Combustivel extends EntityPersistence {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the descricao
+	 */
+	public String getDescricao() {
+		return descricao;
+	}
+
+	/**
+	 * @param descricao the descricao to set
+	 */
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}	
 }

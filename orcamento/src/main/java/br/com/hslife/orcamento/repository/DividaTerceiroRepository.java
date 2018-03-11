@@ -82,7 +82,7 @@ public class DividaTerceiroRepository extends AbstractCRUDRepository<DividaTerce
 		
 		hql.append("divida.usuario.id = :idUsuario ORDER BY divida.dataNegociacao DESC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		
 		if (favorecido != null) {
 			hqlQuery.setLong("idFavorecido", favorecido.getId());
