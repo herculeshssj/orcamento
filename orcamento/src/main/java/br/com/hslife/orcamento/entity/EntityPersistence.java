@@ -50,9 +50,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.logging.log4j.LogManager;
@@ -80,24 +77,11 @@ public abstract class EntityPersistence implements Comparable<EntityPersistence>
 	 * às regras implementadas 
 	 */
 	public abstract void validate();
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
 
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+	public abstract Long getId();
 
 	@Override
 	public int hashCode() {

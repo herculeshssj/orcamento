@@ -64,6 +64,11 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 		this.entity = entity;
 	}
 	
+	public AbstractCRUDRepository(E entity, Class<E> clazz) {
+		this.entity = entity;
+		this.clazz = clazz;
+	}
+	
 	public void save(E entity) {
 		getSession().persist(entity);
 	}

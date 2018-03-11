@@ -56,7 +56,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 public class MetaRepository extends AbstractCRUDRepository<Meta> {
 	
 	public MetaRepository() {
-		super(new Meta());
+		super(new Meta(), Meta.class);
 	}
 	
 	public List<Meta> findAllDescricaoAndAtivoByUsuario(String descricao, Boolean ativo, Usuario usuario) {

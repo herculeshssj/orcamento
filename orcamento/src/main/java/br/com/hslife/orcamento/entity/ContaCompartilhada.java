@@ -50,6 +50,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -65,6 +68,10 @@ import br.com.hslife.orcamento.util.Util;
 @Entity
 @Table(name="contacompartilhada")
 public class ContaCompartilhada extends EntityPersistence {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
@@ -179,5 +186,19 @@ public class ContaCompartilhada extends EntityPersistence {
 
 	public void setEmailUsuario(String emailUsuario) {
 		this.emailUsuario = emailUsuario;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

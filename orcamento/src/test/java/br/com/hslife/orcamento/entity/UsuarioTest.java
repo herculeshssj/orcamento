@@ -45,14 +45,20 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.entity;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class UsuarioTest {
 	
-	private Usuario entity = EntityInitializerFactory.createUsuario();
+	private Usuario entity;
+	
+	@Before
+	public void setUp() {
+		entity = EntityPersistenceMock.mockUsuario();
+	}
 
 	@Test(expected=ValidationException.class)
 	public void testValidateNome() {

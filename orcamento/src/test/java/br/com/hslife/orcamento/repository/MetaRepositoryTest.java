@@ -70,17 +70,22 @@ public class MetaRepositoryTest extends AbstractTestRepositories {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@Autowired
+	private MoedaRepository moedaRepository;
+	
 	@Before
 	public void initializeEntities() {
 		// Seta o sessionFactory nos repositórios
 		repository.setSessionFactory(sessionFactory);
 		usuarioRepository.setSessionFactory(sessionFactory);
+		moedaRepository.setSessionFactory(sessionFactory);
 		
 		// Inicializa as entidades
 		entity = EntityPersistenceMock.mockMeta();
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
 		usuarioRepository.save(entity.getUsuario());
+		moedaRepository.save(entity.getMoeda());
 		repository.save(entity);
 	}
 	
@@ -95,11 +100,7 @@ public class MetaRepositoryTest extends AbstractTestRepositories {
 		listaMeta = repository.findAllDescricaoAndAtivoByUsuario(entity.getDescricao(), true, entity.getUsuario());
 		assertEquals(1, listaMeta.size());
 		
-		for (int i = 0; i < 3; i++) {
-			repository.save(EntityPersistenceMock.mockMeta());
-		}
-		
 		listaMeta = repository.findAllDescricaoAndAtivoByUsuario(null, true, entity.getUsuario());
-		assertEquals(4, listaMeta.size());
+		assertEquals(1, listaMeta.size());
 	}
 }

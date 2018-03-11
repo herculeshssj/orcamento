@@ -80,7 +80,7 @@ import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
-import br.com.hslife.orcamento.enumeration.TipoUsuario;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class EntityInitializerFactory {
 
@@ -104,11 +104,9 @@ public class EntityInitializerFactory {
 		return new Investimento();
 	}
 
+	@Deprecated
 	public static Usuario createUsuario() {
-		return new Usuario.Builder().email("contato@hslife.com.br")
-				.login("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA))
-				.nome("Usuário de Teste - " + Util.formataDataHora(new Date(), Util.DATAHORA))
-				.senha(Util.SHA256("teste")).tokenID(Util.SHA256(new Date().toString())).build();
+		return EntityPersistenceMock.mockUsuario();
 	}
 
 	public static UnidadeMedida createUnidadeMedida(Usuario usuario) {
@@ -210,13 +208,7 @@ public class EntityInitializerFactory {
 
 	@Deprecated
 	public static Usuario initializeUsuario() {
-		Usuario usuario = new Usuario();
-		usuario.setEmail("contato@hslife.com.br");
-		usuario.setLogin("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA));
-		usuario.setNome("Usuário de Teste - PessoalRepository");
-		usuario.setSenha(Util.SHA1("teste"));
-		usuario.setTipoUsuario(TipoUsuario.ROLE_USER);
-		return usuario;
+		return EntityPersistenceMock.mockUsuario();
 	}
 
 	@Deprecated
@@ -232,16 +224,7 @@ public class EntityInitializerFactory {
 
 	@Deprecated
 	public static Moeda initializeMoeda(Usuario usuario) {
-		Moeda moeda = new Moeda();
-		moeda.setAtivo(true);
-		moeda.setCodigoMonetario("BRL");
-		moeda.setNome("Real");
-		moeda.setPadrao(true);
-		moeda.setPais("Brasil");
-		moeda.setSiglaPais("BR");
-		moeda.setUsuario(usuario);
-		moeda.setSimboloMonetario("R$");
-		return moeda;
+		return EntityPersistenceMock.mockMoeda(usuario);
 	}
 
 	@Deprecated
