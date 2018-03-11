@@ -63,7 +63,7 @@ public class RegraImportacaoRepository extends AbstractCRUDRepository<RegraImpor
 	
 	@SuppressWarnings("unchecked")
 	public List<RegraImportacao> findAllByConta(Conta conta) {
-		return getQuery("FROM RegraImportacao regra WHERE regra.conta.id = :idConta")
+		return getQueryNoType("FROM RegraImportacao regra WHERE regra.conta.id = :idConta")
 				.setLong("idConta", conta.getId())
 				.list();
 	}

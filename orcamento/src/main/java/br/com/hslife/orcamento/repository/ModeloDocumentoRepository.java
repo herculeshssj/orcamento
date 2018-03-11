@@ -76,7 +76,7 @@ public class ModeloDocumentoRepository extends AbstractCRUDRepository<ModeloDocu
 		
 		hql.append("modelo.usuario.id = :idUsuario ORDER BY modelo.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 
 		if (ativo != null) {
 			hqlQuery.setParameter("ativo", ativo);

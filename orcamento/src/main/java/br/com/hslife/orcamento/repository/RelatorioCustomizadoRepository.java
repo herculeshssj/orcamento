@@ -74,7 +74,7 @@ public class RelatorioCustomizadoRepository extends AbstractCRUDRepository<Relat
 		
 		hql.append("relatorio.usuario.id = :idUsuario ORDER BY relatorio.nome ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		
 		hqlQuery.setParameter("idUsuario", usuario.getId());
 		
