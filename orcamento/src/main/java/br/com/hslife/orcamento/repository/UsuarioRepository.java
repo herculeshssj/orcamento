@@ -81,6 +81,6 @@ public class UsuarioRepository extends AbstractCRUDRepository<Usuario> {
 	}
 	
 	public Usuario findByTokenID(String token) {
-		return (Usuario)getQuery("FROM Usuario u WHERE u.tokenID = :token").setString("token", token).uniqueResult();
+		return (Usuario)getQueryNoType("FROM Usuario u WHERE u.tokenID = :token").setString("token", token).uniqueResult();
 	}
 }

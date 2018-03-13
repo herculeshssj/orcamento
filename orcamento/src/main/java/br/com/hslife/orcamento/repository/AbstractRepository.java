@@ -48,16 +48,14 @@ package br.com.hslife.orcamento.repository;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 public abstract class AbstractRepository {
-	
-	// FIXME remover os métodos depreciados
+
 	protected SessionFactory sessionFactory;
 	
-	@Deprecated
 	protected Map<String, Object> hqlParameters = new HashMap<>();
 
 	public void setSessionFactory(final SessionFactory sessionFactory) {
@@ -68,13 +66,13 @@ public abstract class AbstractRepository {
 		return this.sessionFactory.getCurrentSession();
 	}
 	
-	@Deprecated
-	protected Query getQuery(String hql) {
+	@SuppressWarnings({ "rawtypes" })
+	protected Query getQueryNoType(String hql) {
 		return getSession().createQuery(hql);
 	}
 	
-	@Deprecated
-	protected Query getQueryApplyingParameters(String hql) {
+	@SuppressWarnings({ "rawtypes" })
+	protected Query getQueryNoTypeApplyingParameters(String hql) {
 		Query query = getSession().createQuery(hql);
 		
 		for (String s : hqlParameters.keySet()) {

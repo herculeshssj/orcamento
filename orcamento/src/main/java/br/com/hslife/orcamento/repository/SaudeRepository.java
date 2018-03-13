@@ -61,7 +61,7 @@ public class SaudeRepository extends AbstractCRUDRepository<Saude> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Saude> findAllEnableByUsuario(Usuario usuario) {
-		return getQuery("FROM Saude saude WHERE saude.usuario.id = :idUsuario AND saude.ativo = :ativo ")
+		return getQueryNoType("FROM Saude saude WHERE saude.usuario.id = :idUsuario AND saude.ativo = :ativo ")
 				.setLong("idUsuario", usuario.getId())
 				.setBoolean("ativo", true)
 				.list();

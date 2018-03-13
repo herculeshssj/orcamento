@@ -48,6 +48,7 @@ package br.com.hslife.orcamento.repository;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.TemporalType;
 
 import org.hibernate.Criteria;
@@ -62,7 +63,7 @@ import br.com.hslife.orcamento.model.CriterioLog;
 import br.com.hslife.orcamento.model.UsuarioLogado;
 
 @Repository
-public class LogRepository extends AbstractRepository { //FIXME cada log no meu próprio repositório
+public class LogRepository extends AbstractRepository {
 	
 	public List<Logs> findByCriteriosLog(CriterioLog criterioBusca) { // TODO refatorar
 		Criteria criteria = getSession().createCriteria(Logs.class);
@@ -117,7 +118,7 @@ public class LogRepository extends AbstractRepository { //FIXME cada log no meu 
 		Calendar dataAtual = Calendar.getInstance();
 		dataAtual.add(Calendar.MINUTE, -30);
 		
-		return getQuery("SELECT DISTINCT log.usuario as usuario, log.ip as ip, log.sessaoCriadaEm as dataEntrada, log.sessaoID as sessaoID "
+		return getSession().createQuery("SELECT DISTINCT log.usuario as usuario, log.ip as ip, log.sessaoCriadaEm as dataEntrada, log.sessaoID as sessaoID "
 				+ "FROM LogRequisicao log WHERE log.dataHora >= :dataEntrada AND log.usuario <> ''")
 				.setDate("dataEntrada", dataAtual.getTime())
 				.setResultTransformer(new AliasToBeanResultTransformer(UsuarioLogado.class))

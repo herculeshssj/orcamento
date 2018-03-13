@@ -97,24 +97,8 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 		return getSession().createQuery(hql, clazz);
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
-	protected Query getQueryNoType(String hql) {
-		return getSession().createQuery(hql);
-	}
-	
 	protected Query<E> getQueryApplyingParameters(String hql) {
 		Query<E> query = getSession().createQuery(hql, clazz);
-		
-		for (String s : hqlParameters.keySet()) {
-			query.setParameter(s, hqlParameters.get(s));
-		}
-		
-		return query;
-	}
-	
-	@SuppressWarnings({ "rawtypes" })
-	protected Query getQueryNoTypeApplyingParameters(String hql) {
-		Query query = getSession().createQuery(hql);
 		
 		for (String s : hqlParameters.keySet()) {
 			query.setParameter(s, hqlParameters.get(s));
