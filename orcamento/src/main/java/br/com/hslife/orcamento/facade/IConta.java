@@ -53,6 +53,8 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 
 public interface IConta extends ICRUDService<Conta> {
+	
+	List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario,	Boolean ativo);
 
 	List<Conta> buscarTodos();
 
@@ -80,9 +82,6 @@ public interface IConta extends ICRUDService<Conta> {
 	List<Conta> buscarSomenteTipoCartaoAtivosPorUsuario(Usuario usuario);
 
 	Conta buscarPorCartaoCredito(CartaoCredito cartao);
-
-	List<Conta> buscarDescricaoOuTipoContaOuAtivoPorUsuario(String descricao, 
-			TipoConta[] tipoConta, Usuario usuario,	Boolean ativo);
 
 	List<Conta> buscarTodosUsuarioPorFechamentoAutomatico(
 			boolean fechaAutomaticamente);

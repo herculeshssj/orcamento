@@ -97,12 +97,18 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 		return getSession().createQuery(hql, clazz);
 	}
 	
+	protected Query<E> getQueryApplyingParameters(StringBuilder hql) {
+		return this.getQueryApplyingParameters(hql.toString());
+	}
+	
 	protected Query<E> getQueryApplyingParameters(String hql) {
 		Query<E> query = getSession().createQuery(hql, clazz);
 		
 		for (String s : hqlParameters.keySet()) {
 			query.setParameter(s, hqlParameters.get(s));
 		}
+		
+		hqlParameters.clear();
 		
 		return query;
 	}

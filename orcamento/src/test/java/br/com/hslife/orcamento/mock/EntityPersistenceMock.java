@@ -3,9 +3,11 @@ package br.com.hslife.orcamento.mock;
 import java.util.Date;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
+import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.util.Util;
 
 public class EntityPersistenceMock {
@@ -45,5 +47,16 @@ public class EntityPersistenceMock {
 				.login("usuario_" + Util.formataDataHora(new Date(), Util.DATAHORA))
 				.nome("Usuário de Teste - " + Util.formataDataHora(new Date(), Util.DATAHORA))
 				.senha(Util.SHA256("teste")).tokenID(Util.SHA256(new Date().toString())).build();
+	}
+
+	public static Conta mockConta() {
+		Conta conta = new Conta();
+		conta.setDescricao("Conta de teste");
+		conta.setDataAbertura(new Date());
+		conta.setSaldoInicial(100);
+		conta.setTipoConta(TipoConta.CORRENTE);
+		conta.setUsuario(EntityPersistenceMock.mockUsuario());
+		conta.setMoeda(EntityPersistenceMock.mockMoeda(conta.getUsuario()));
+		return conta;
 	}
 }

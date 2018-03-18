@@ -89,12 +89,12 @@ public abstract class AbstractController implements Serializable {
 	}
 	
 	public Usuario getUsuarioLogado() {
-		if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
+		if (getCurrentFacesContext().getExternalContext().getSessionMap().get("usuarioLogado") == null) {
 			Usuario u = new Usuario();
 			try {
 				u = usuarioComponent.getUsuarioLogado();
 				u.setSenha(null);
-				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", u);
+				getCurrentFacesContext().getExternalContext().getSessionMap().put("usuarioLogado", u);
 			} catch (Exception e) {
 				errorMessage(e.getMessage());
 			}
@@ -102,9 +102,9 @@ public abstract class AbstractController implements Serializable {
 		
 		// Aplica as configurações de locale para pt_BR
 		// Tentativa de definir o pt_BR para a aplicação inteira independente das configurações do servidor de aplicação
-		FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale("pt", "BR")); 
+		getCurrentFacesContext().getViewRoot().setLocale(new Locale("pt", "BR")); 
 		
-		return (Usuario)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+		return (Usuario)getCurrentFacesContext().getExternalContext().getSessionMap().get("usuarioLogado");
 	}
 	
 	public OpcaoSistemaComponent getOpcoesSistema() {

@@ -46,10 +46,10 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.repository;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -65,7 +65,36 @@ import br.com.hslife.orcamento.enumeration.TipoConta;
 public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	public ContaRepository() {
-		super(new Conta());
+		super(new Conta(), Conta.class);
+	}
+	
+	public List<Conta> findDescricaoOrTipoContaOrAtivoByUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("SELECT conta FROM Conta conta WHERE ");
+		if (descricao != null) {
+			hql.append("conta.descricao LIKE '%");
+			hql.append(descricao);
+			hql.append("%' AND ");
+		}
+		if (tipoConta != null && tipoConta.length != 0) {
+			hql.append("conta.tipoConta IN (:tipo) AND ");
+		}
+		if (ativo != null) {
+			hql.append("conta.ativo = :ativo AND ");
+		}
+		
+		hql.append("conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC");
+		
+		if (tipoConta != null && tipoConta.length != 0) {
+			hqlParameters.put("tipo", Arrays.asList(tipoConta));
+		}
+		if (ativo != null) {
+			hqlParameters.put("ativo", ativo);
+		}
+		
+		hqlParameters.put("idUsuario", usuario.getId());
+		
+		return getQueryApplyingParameters(hql).getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -200,37 +229,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Conta> findDescricaoOrTipoContaOrAtivoByUsuario(String descricao, TipoConta[] tipoConta, Usuario usuario, Boolean ativo) {
-		StringBuilder hql = new StringBuilder();
-		hql.append("FROM Conta conta WHERE ");
-		if (descricao != null) {
-			hql.append("conta.descricao LIKE '%");
-			hql.append(descricao);
-			hql.append("%' AND ");
-		}
-		if (tipoConta != null && tipoConta.length != 0) {
-			hql.append("conta.tipoConta IN (:tipo) AND ");
-		}
-		if (ativo != null) {
-			hql.append("conta.ativo = :ativo AND ");
-		}
-		
-		hql.append("conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC");
-		
-		Query hqlQuery = getQuery(hql.toString());
-		
-		if (tipoConta != null && tipoConta.length != 0) {
-			hqlQuery.setParameterList("tipo", tipoConta);
-		}
-		if (ativo != null) {
-			hqlQuery.setBoolean("ativo", ativo);
-		}
-		
-		hqlQuery.setLong("idUsuario", usuario.getId());
-		
-		return hqlQuery.list();
-	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAllUsuariosByFechamentoAutomatico(boolean fechaAutomaticamente) {
