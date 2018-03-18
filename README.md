@@ -54,14 +54,14 @@ create database orcamento;
 create database orcamentotest;
 
 -- Criação do usuário para acessar a base
-create user 'orcamento'@'%' identified by 'senha'; -- informe uma senha para o usuário "orcamento"
+create user 'orcamento'@'%' identified by 'd1nh31r0';
 grant all privileges on orcamento.* to 'orcamento'@'%';
 grant all privileges on orcamento.* to 'orcamentotest'@'%';
 ```
 
 Ainda na linha de comando ou na ferramenta de administração, rode o script "script-create-all-db.sql". O script encontra-se no repositório do projeto, em _orcamento/src/main/resources_.
 
-*Configuração do Eclipse*
+*Configuração do servidores de aplicação*
 
 Para aqueles que desejarem utilizar o Tomcat como servidor para rodar o projeto, adicione o Tomcat no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Tomcat 8.5, e, na tela seguinte, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
 
@@ -73,110 +73,32 @@ Após o Eclipse reiniciar, adicione o Wildfly no Eclipse pelo menu *Window -> Pr
 
 Depois clique na view *Server*, clique em *New -> Server* e selecione o Wildfly 10. Na tela seguinte mantenha as opções mostradas e clique em *Finnish*.
 
+*Configuração do Maven*
 
+Antes de iniciar o sistema pelo Eclipse, é necessário aplicar as alterações na base que foram realizadas desde a inclusão da biblioteca Flyway. Para realizar esta operação, vá no menu *Run -> Run Configurations...*. No item "Maven Build", crie dois perfis de execução, um para a base "orcamento" e outro para a base "orcamentotest". Selecione o projeto na linha "Base directory", e nos alvos Maven (Goals), digite "flyway:baseline" primeiramente. Preencha o campo "Profiles" com:
 
+|Profile   |Base         |
+|----------|-------------|
+|production|orcamento    |
+|test      |orcamentotest|
 
+Vá na aba "Environment" e inclua as seguintes variáveis de ambiente:
 
+|Variable    |Value                                      |
+|------------|-------------------------------------------|
+|jdbcDriver  |org.mariadb.jdbc.Driver                    |
+|jdbcUrl     |jdbc:mariadb://localhost:3306/orcamento    |
+|jdbcUrlTest |jdbc:mariadb://localhost:3306/orcamentotest|
+|jdbcUsername|orcamento                                  |
+|jdbcPassword|d1nh31r0                                   |
 
+Clique no botão "Run" para preparar ambas as bases para trabalhar com o Flyway.
 
+Volte nos dois perfis Maven e substitua "flyway:baseline" por "flyway:migrate". Execute cada um dos perfis para atualizar as bases de dados.
 
+*Executando o projeto*
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Instalação do Tomcat
-
-A instalação do Tomcat não tem mistério, basta baixar e descompactar o arquivo zipado para o diretório desejado.
-
-Adicione no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral, vai em *Server -> Runtime Environment*. Clique em *Add*, selecione o Tomcat 8, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
-
-Depois clique na view *Server* e clique em *New -> Server*. Selecione o Tomcat 8 e clique em *Finnish*.
-
-### Instalação do MariaDB
-
-O projeto utiliza o MariaDB como servidor de banco de dados. Para realizar a instalação no Windows ou Mac, baixe e instale o programa de instalação do site do MariaDB.org.
-
-Para realizar a instalação do MariaDB, execute os seguintes comandos:
-
-``
-sudo apt-get install mariadb-server
-``
-
-Durante a instalação execute o seguinte comando para poder configurar adequadamente o MariaDB:
-
-``
-sudo mysql_secure_installation
-``
-
-Pode-se usar também um container Docker. Para criar um container MariaDB use o seguinte comando:
-
-``
-docker run --name mariadb-container -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root mariadb:latest
-``
-
-Use um software como DBeaver para se conectar ao MariaDB.
-
-### Configuração do projeto
-
-Segue abaixo os passos para poder baixar e executar o projeto.
-
-### Configuração do MariaDB
-
-Após instalar o MariaDB, acesse via console ou usando uma ferramenta gráfica de administração e execute os seguintes comandos:
-
-```sql
--- Criação das base de dados
-create database orcamento;
-create database orcamentotest;
-
--- Criação do usuário para acessar a base
-create user 'orcamento'@'%' identified by 'd1nh31r0';
-grant all privileges on orcamento.* to 'orcamento'@'%';
-grant all privileges on orcamento.* to 'orcamentotest'@'%';
-
--- Criação da base de dados
-use orcamento;
-source /caminho/para/o/workspace/eclipse/orcamento/src/main/resources/script-create-all-db.sql;
-
--- Criação da base de dados de test
-use orcamentotest;
-source /caminho/para/o/workspace/eclipse/orcamento/src/main/resources/script-create-all-db.sql;
-``` 
-
-### Configuração do projeto no Eclipse
-
-Efetue o clone tanto do projeto para um diretório de sua preferência usando o comando:
-
-``
-git clone https://github.com/herculeshssj/orcamento
-``
-
-No Eclipse, abra a perspectiva Git. Clique em *Add an existing Git repository*. Selecione o diretório onde foi realizado o clone do repositório, e clique em *Finnish*.
-
-Após isso clique no repositório e selecione *Import Projects from Git Repository*. Marque o projeto "orcamento/orcamento". Clique em *Next*, e na próxima tela em *Finnish*.
-
-O projeto precisa ser compilado antes que possa ser executado. Para isso clique com o botão direito em cima do projeto, escolha *Run As -> Maven Build*. Na janela que se abre, digite "clean install" na linha "Goal", e depois clique em *Run*.
-
-O projeto contém as mudanças mais recentes feitas na base de dados. Assim, é necessário atualizar a base antes de executar o projeto Orçamento. Para atualizar a base, vá em *Run As -> Maven Build...*. Na linha "Goal", digite "flyway:baseline", e em seguida clique em *Run*. Após finalizar, vá novamente em *Run As -> Maven Build...* e altere a linha "Goal" para "flyway:migrate".
-
-Atualizado as bases, clique com botão direito em cima do projeto, escolha *Run As -> Run on Server*. Na tela que se abre, selecione o Tomcat configurado e clique em *Finnish*.
+Atualizado as bases, clique com botão direito em cima do projeto, escolha *Run As -> Run on Server*. Na tela que se abre, selecione o Tomcat 8.5 ou Wildfly 10.x e clique em *Finnish*.
 
 Acesse o sistema pela URL http://localhost:8080/orcamento/ usando as seguintes credenciais:
 
