@@ -62,14 +62,14 @@ public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Orcamento> findAllByUsuario(Usuario usuario) {
-		return getQuery("FROM Orcamento orcamento WHERE orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
+		return getQueryNoType("FROM Orcamento orcamento WHERE orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
 				.setLong("idUsuario", usuario.getId())
 				.list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Orcamento> findAllEnableDisableByUsuario(boolean ativo, Usuario usuario) {
-		return getQuery("FROM Orcamento orcamento WHERE orcamento.ativo = :ativo AND orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
+		return getQueryNoType("FROM Orcamento orcamento WHERE orcamento.ativo = :ativo AND orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
 				.setBoolean("ativo", ativo)
 				.setLong("idUsuario", usuario.getId())
 				.list();
@@ -77,7 +77,7 @@ public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Orcamento> findAbrangenciaByUsuario(AbrangenciaOrcamento abrangencia, Usuario usuario) {
-		return getQuery("FROM Orcamento orcamento WHERE orcamento.abrangenciaOrcamento = :abrangencia AND orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
+		return getQueryNoType("FROM Orcamento orcamento WHERE orcamento.abrangenciaOrcamento = :abrangencia AND orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
 				.setParameter("abrangencia", abrangencia)
 				.setLong("idUsuario", usuario.getId())
 				.list();
@@ -85,7 +85,7 @@ public class OrcamentoRepository extends AbstractCRUDRepository<Orcamento> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Orcamento> findAbrangenciaEnableDisableByUsuario(AbrangenciaOrcamento abrangencia, boolean ativo, Usuario usuario) {
-		return getQuery("FROM Orcamento orcamento WHERE orcamento.abrangenciaOrcamento = :abrangencia and orcamento.ativo = :ativo "
+		return getQueryNoType("FROM Orcamento orcamento WHERE orcamento.abrangenciaOrcamento = :abrangencia and orcamento.ativo = :ativo "
 				+ "AND orcamento.usuario.id = :idUsuario ORDER BY orcamento.descricao ASC")
 				.setParameter("abrangencia", abrangencia)
 				.setBoolean("ativo", ativo)

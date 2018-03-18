@@ -67,7 +67,7 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 	
 	@Override
 	public LancamentoPeriodico findById(Long id) {
-		return (LancamentoPeriodico) getQuery("FROM LancamentoPeriodico as entity LEFT JOIN FETCH entity.pagamentos WHERE entity.id = :idEntity")
+		return (LancamentoPeriodico) getQueryNoType("FROM LancamentoPeriodico as entity LEFT JOIN FETCH entity.pagamentos WHERE entity.id = :idEntity")
 				.setLong("idEntity", id)
 				.uniqueResult();
 	}
@@ -84,7 +84,7 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 		}
 		hql.append("periodico.statusLancamento = :status ORDER BY periodico.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipo != null) {
 			hqlQuery.setParameter("tipo", tipo);
 		}
@@ -98,7 +98,7 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoPeriodico> findByTipoLancamentoAndStatusLancamentoByUsuario(TipoLancamentoPeriodico tipo, StatusLancamento status, Usuario usuario) {
-		return getQuery("FROM LancamentoPeriodico periodico WHERE periodico.tipoLancamentoPeriodico = :tipo AND periodico.statusLancamento = :status AND periodico.usuario.id = :idUsuario ORDER BY periodico.descricao ASC")
+		return getQueryNoType("FROM LancamentoPeriodico periodico WHERE periodico.tipoLancamentoPeriodico = :tipo AND periodico.statusLancamento = :status AND periodico.usuario.id = :idUsuario ORDER BY periodico.descricao ASC")
 				.setParameter("tipo", tipo)
 				.setParameter("status", status)
 				.setLong("idUsuario", usuario.getId())
@@ -117,7 +117,7 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 		}
 		hql.append("periodico.statusLancamento = :status ORDER BY periodico.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipo != null) {
 			hqlQuery.setParameter("tipo", tipo);
 		}
@@ -131,7 +131,7 @@ public class LancamentoPeriodicoRepository extends AbstractCRUDRepository<Lancam
 
 	@SuppressWarnings("unchecked")
 	public List<LancamentoPeriodico> findByDescricaoAndUsuario(String descricao, Usuario usuarioLogado) {
-		return getQuery("FROM LancamentoPeriodico lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
+		return getQueryNoType("FROM LancamentoPeriodico lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
 				.setLong("idUsuario", usuarioLogado.getId())
 				.list();
 	}

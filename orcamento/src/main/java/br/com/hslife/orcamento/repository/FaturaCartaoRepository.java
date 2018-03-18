@@ -135,14 +135,14 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 	
 	@SuppressWarnings("unchecked")
 	public List<FaturaCartao> findAllByContaOrderedByMesAndAno(Conta conta) {
-		return getQuery("FROM FaturaCartao f WHERE f.conta.id = :idConta ORDER BY f.ano DESC, f.mes DESC")
+		return getQueryNoType("FROM FaturaCartao f WHERE f.conta.id = :idConta ORDER BY f.ano DESC, f.mes DESC")
 				.setLong("idConta", conta.getId())
 				.list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<FaturaCartao> findAllByContaAndAnoOrderedByMesAndAno(Conta conta, int ano) {
-		return getQuery("FROM FaturaCartao f WHERE f.conta.id = :idConta AND f.ano = :ano ORDER BY f.ano DESC, f.mes DESC")
+		return getQueryNoType("FROM FaturaCartao f WHERE f.conta.id = :idConta AND f.ano = :ano ORDER BY f.ano DESC, f.mes DESC")
 				.setLong("idConta", conta.getId())
 				.setInteger("ano", ano)
 				.list();
@@ -180,7 +180,7 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 	
 	@SuppressWarnings("unchecked")
 	public List<FaturaCartao> findByContaAndStatusFatura(Conta conta, StatusFaturaCartao statusFatura) {
-		return getQuery("FROM FaturaCartao fatura WHERE fatura.conta.id = :idConta AND fatura.statusFaturaCartao = :statusFatura ORDER BY fatura.dataVencimento DESC")
+		return getQueryNoType("FROM FaturaCartao fatura WHERE fatura.conta.id = :idConta AND fatura.statusFaturaCartao = :statusFatura ORDER BY fatura.dataVencimento DESC")
 				.setLong("idConta", conta.getId())
 				.setParameter("statusFatura", statusFatura)
 				.list();
@@ -188,7 +188,7 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 	
 	@SuppressWarnings("unchecked")
 	public List<FaturaCartao> findByContaAndDataVencimento(Conta conta, Date dataVencimento) {
-		return getQuery("FROM FaturaCartao fatura WHERE fatura.conta.id = :idConta AND fatura.dataVencimento = :vencimento ORDER BY fatura.dataVencimento DESC")
+		return getQueryNoType("FROM FaturaCartao fatura WHERE fatura.conta.id = :idConta AND fatura.dataVencimento = :vencimento ORDER BY fatura.dataVencimento DESC")
 				.setLong("idConta", conta.getId())
 				.setDate("vencimento", dataVencimento)
 				.list();

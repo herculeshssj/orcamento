@@ -157,7 +157,7 @@ public class CartaoCreditoRepository extends AbstractCRUDRepository<CartaoCredit
 		
 		hql.append("cartao.usuario.id = :idUsuario ORDER BY cartao.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		
 		if (tipo != null) {
 			hqlQuery.setParameter("tipo", tipo);

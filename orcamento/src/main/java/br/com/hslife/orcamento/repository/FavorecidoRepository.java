@@ -135,7 +135,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 		
 		hql.append("favorecido.usuario.id = :idUsuario ORDER BY favorecido.nome ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipoPessoa != null) {
 			hqlQuery.setParameter("tipo", tipoPessoa);
 		}
@@ -166,7 +166,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 		
 		hql.append("favorecido.usuario.id IN (:idUsuario) ORDER BY favorecido.nome ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipoPessoa != null) {
 			hqlQuery.setParameter("tipo", tipoPessoa);
 		}
@@ -208,7 +208,7 @@ public class FavorecidoRepository extends AbstractCRUDRepository<Favorecido> {
 		
 		hql.append("favorecido.usuario.id = :idUsuario ORDER BY favorecido.nome ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipoPessoa != null) {
 			hqlQuery.setParameter("tipo", tipoPessoa);
 		}

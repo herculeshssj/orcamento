@@ -137,7 +137,7 @@ public class ContaRepository extends AbstractCRUDRepository<Conta> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Conta> findAllAtivosByUsuario(Usuario usuario) {
-		return getQuery("FROM Conta conta WHERE conta.ativo = :ativo AND conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC")
+		return getQueryNoType("FROM Conta conta WHERE conta.ativo = :ativo AND conta.usuario.id = :idUsuario ORDER BY conta.descricao ASC")
 				.setBoolean("ativo", true)
 				.setLong("idUsuario", usuario.getId())
 				.list(); 

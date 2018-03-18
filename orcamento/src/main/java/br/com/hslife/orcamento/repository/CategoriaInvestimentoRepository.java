@@ -78,7 +78,7 @@ public class CategoriaInvestimentoRepository extends AbstractCRUDRepository<Cate
 		
 		hql.append("ORDER BY categoria.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipo != null) {
 			hqlQuery.setParameter("tipo", tipo);
 		}

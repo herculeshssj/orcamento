@@ -132,12 +132,12 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	public LancamentoConta findByHash(String hash) {
-		return (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.hashImportacao = :hash").setString("hash", hash).setMaxResults(1).uniqueResult();
+		return (LancamentoConta)getQueryNoType("FROM LancamentoConta lancamento WHERE lancamento.hashImportacao = :hash").setString("hash", hash).setMaxResults(1).uniqueResult();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void deleteAllLancamentoContaAfterDateByConta(Date dataPagamento, Conta conta) {
-		Query query = getQuery("FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.dataPagamento > :data")
+		Query query = getQueryNoType("FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.dataPagamento > :data")
 				.setLong("idConta", conta.getId())
 				.setDate("data", dataPagamento);
 		
@@ -181,27 +181,27 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.statusLancamentoConta = 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
+		return getQueryNoType("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.statusLancamentoConta = 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findByLancamentoPeriodico(LancamentoPeriodico lancamento) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
+		return getQueryNoType("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findNotPagosByLancamentoPeriodico(LancamentoPeriodico lancamento) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.statusLancamentoConta <> 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
+		return getQueryNoType("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento AND pagamento.statusLancamentoConta <> 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamento.getId())
 				.list();
 	}
 	
 	public LancamentoConta findLastGeneratedPagamentoPeriodo(LancamentoPeriodico lancamentoPeriodico) {
-		return (LancamentoConta)getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
+		return (LancamentoConta)getQueryNoType("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC")
 				.setLong("idLancamento", lancamentoPeriodico.getId())
 				.setMaxResults(1)
 				.uniqueResult();
@@ -209,7 +209,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findAllPagamentosPagosActivedLancamentosByTipoLancamentoAndUsuario(TipoLancamentoPeriodico tipo, Usuario usuario) {
-		return getQuery("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.statusLancamentoConta = 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
+		return getQueryNoType("FROM LancamentoConta pagamento WHERE pagamento.lancamentoPeriodico.tipoLancamentoPeriodico = :tipo AND pagamento.lancamentoPeriodico.statusLancamento = :status AND pagamento.lancamentoPeriodico.usuario.id = :idUsuario AND pagamento.statusLancamentoConta = 'QUITADO' ORDER BY pagamento.dataVencimento DESC")
 				.setParameter("status", StatusLancamento.ATIVO)
 				.setParameter("tipo", tipo)
 				.setLong("idUsuario", usuario.getId())
@@ -226,7 +226,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		
 		hql.append("pagamento.lancamentoPeriodico.id = :idLancamento ORDER BY pagamento.dataVencimento DESC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (pago != null) {
 			hqlQuery.setParameter("pago", pago);
 		}
@@ -249,7 +249,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		
 		hql.append("pagamento.lancamentoPeriodico.usuario.id = :idUsuario ORDER BY pagamento.dataVencimento DESC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (pago != null) {
 			hqlQuery.setParameter("pago", pago);
 		}
@@ -275,7 +275,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		
 		hql.append("pagamento.lancamentoPeriodico.conta.id = :idConta ORDER BY pagamento.dataVencimento DESC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (pago != null) {
 			hqlQuery.setParameter("pago", pago);
 		}
@@ -301,7 +301,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 		
 		hql.append("pagamento.lancamentoPeriodico.conta.tipoConta = :tipoConta ORDER BY pagamento.dataVencimento DESC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (pago != null) {
 			hqlQuery.setParameter("pago", pago);
 		}
@@ -315,14 +315,14 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	}
 	
 	public LancamentoConta findLancamentoByParcelaAndLancamentoPeriodico(int parcela, LancamentoPeriodico lancamentoPeriodico) {
-		return (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.parcela = :parcela AND lancamento.lancamentoPeriodico.id = :idLancamento")
+		return (LancamentoConta)getQueryNoType("FROM LancamentoConta lancamento WHERE lancamento.parcela = :parcela AND lancamento.lancamentoPeriodico.id = :idLancamento")
 				.setInteger("parcela", parcela)
 				.setLong("idLancamento", lancamentoPeriodico.getId())
 				.uniqueResult();
 	}
 	
 	public LancamentoConta findLancamentoByPeriodoAndAnoAndLancamentoPeriodico(int periodo, int ano, LancamentoPeriodico lancamentoPeriodico) {
-		return (LancamentoConta)getQuery("FROM LancamentoConta lancamento WHERE lancamento.periodo = :periodo AND lancamento.ano = :ano AND lancamento.lancamentoPeriodico.id = :idLancamento")
+		return (LancamentoConta)getQueryNoType("FROM LancamentoConta lancamento WHERE lancamento.periodo = :periodo AND lancamento.ano = :ano AND lancamento.lancamentoPeriodico.id = :idLancamento")
 				.setInteger("periodo", periodo)
 				.setInteger("ano", ano)
 				.setLong("idLancamento", lancamentoPeriodico.getId())
@@ -332,14 +332,14 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 	
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findAllWithoutFatura(Conta conta) {
-		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.faturaCartao IS NULL")
+		return getQueryNoType("FROM LancamentoConta lancamento WHERE lancamento.conta.id = :idConta AND lancamento.faturaCartao IS NULL")
 				.setLong("idConta", conta.getId())
 				.list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<LancamentoConta> findByDescricaoAndUsuario(String descricao, Usuario usuarioLogado) {
-		return getQuery("FROM LancamentoConta lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
+		return getQueryNoType("FROM LancamentoConta lancamento WHERE lancamento.descricao LIKE '%" + descricao + "%' AND lancamento.conta.usuario.id = :idUsuario")
 				.setLong("idUsuario", usuarioLogado.getId())
 				.list();
 	}

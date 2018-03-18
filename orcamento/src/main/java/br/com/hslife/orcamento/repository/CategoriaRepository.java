@@ -146,7 +146,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 		
 		hql.append("categoria.usuario.id = :idUsuario ORDER BY categoria.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipoCategoria != null) {
 			hqlQuery.setParameter("tipo", tipoCategoria);
 		}
@@ -177,7 +177,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 		
 		hql.append("categoria.usuario.id IN (:idUsuario) ORDER BY categoria.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (tipoCategoria != null) {
 			hqlQuery.setParameter("tipo", tipoCategoria);
 		}

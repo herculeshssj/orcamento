@@ -114,7 +114,7 @@ public class DocumentoRepository extends AbstractCRUDRepository<Documento>{
 		
 		hql.append("documento.categoriaDocumento.usuario.id = :idUsuario ORDER BY documento.nome ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		if (categoriaDocumento != null) {
 			hqlQuery.setParameter("tipo", categoriaDocumento);
 		}

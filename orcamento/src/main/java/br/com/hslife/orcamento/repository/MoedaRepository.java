@@ -102,7 +102,7 @@ public class MoedaRepository extends AbstractCRUDRepository<Moeda> {
 	}
 	
 	public Moeda findCodigoMoedaByUsuario(String codigo, Usuario usuario) {
-		return (Moeda)getQuery("FROM Moeda moeda WHERE moeda.codigoMonetario = :codigo AND moeda.usuario.id = :idUsuario")
+		return (Moeda)getQueryNoType("FROM Moeda moeda WHERE moeda.codigoMonetario = :codigo AND moeda.usuario.id = :idUsuario")
 				.setString("codigo", codigo)
 				.setLong("idUsuario", usuario.getId())
 				.setMaxResults(1)

@@ -131,7 +131,7 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 		
 		hql.append("meioPagamento.usuario.id = :idUsuario ORDER BY meioPagamento.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		
 		if (ativo != null) {
 			hqlQuery.setParameter("ativo", ativo);
@@ -158,7 +158,7 @@ public class MeioPagamentoRepository extends AbstractCRUDRepository<MeioPagament
 		
 		hql.append("meioPagamento.usuario.id IN (:idUsuario) ORDER BY meioPagamento.descricao ASC");
 		
-		Query hqlQuery = getQuery(hql.toString());
+		Query hqlQuery = getQueryNoType(hql.toString());
 		
 		if (ativo != null) {
 			hqlQuery.setParameter("ativo", ativo);
