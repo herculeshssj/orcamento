@@ -211,7 +211,7 @@ public class FaturaCartaoRepository extends AbstractCRUDRepository<FaturaCartao>
 	} 
 	
 	public FaturaCartao findFaturaPagaByLancamentoConta(LancamentoConta lancamentoConta) {
-		return (FaturaCartao)getQuery("FROM FaturaCartao fatura WHERE fatura.lancamentoPagamento.id = :idLancamento")
+		return (FaturaCartao)getQueryNoType("FROM FaturaCartao fatura WHERE fatura.lancamentoPagamento.id = :idLancamento")
 				.setLong("idLancamento", lancamentoConta.getId())
 				.uniqueResult();
 	}

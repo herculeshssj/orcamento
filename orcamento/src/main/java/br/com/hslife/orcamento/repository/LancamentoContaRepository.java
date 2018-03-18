@@ -374,7 +374,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			hqlCreditos.append(" AND lancamento.statusLancamentoConta IN (:status)");
 		}
 		
-		Query hqlQueryCredito = getQuery(hqlCreditos.toString());
+		Query hqlQueryCredito = getQueryNoType(hqlCreditos.toString());
 		hqlQueryCredito.setLong("idConta", conta.getId());
 		hqlQueryCredito.setParameter("tipo", TipoLancamento.RECEITA);
 		
@@ -409,7 +409,7 @@ public class LancamentoContaRepository extends AbstractCRUDRepository<Lancamento
 			hqlDebitos.append(" AND lancamento.statusLancamentoConta IN (:status)");
 		}
 		
-		Query hqlQueryDebito = getQuery(hqlDebitos.toString());
+		Query hqlQueryDebito = getQueryNoType(hqlDebitos.toString());
 		hqlQueryDebito.setLong("idConta", conta.getId());
 		hqlQueryDebito.setParameter("tipo", TipoLancamento.DESPESA);
 		

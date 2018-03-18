@@ -122,7 +122,7 @@ public class CategoriaRepository extends AbstractCRUDRepository<Categoria> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Categoria> findActiveByTipoCategoriaAndUsuario(TipoCategoria tipoCategoria, Usuario usuario) {
-		return getQuery("FROM Categoria categoria WHERE categoria.tipoCategoria = :tipoCategoria AND categoria.usuario.id = :idUsuario AND categoria.ativo = true ORDER BY categoria.descricao ASC")
+		return getQueryNoType("FROM Categoria categoria WHERE categoria.tipoCategoria = :tipoCategoria AND categoria.usuario.id = :idUsuario AND categoria.ativo = true ORDER BY categoria.descricao ASC")
 				.setParameter("tipoCategoria", tipoCategoria)
 				.setLong("idUsuario", usuario.getId())
 				.list();
