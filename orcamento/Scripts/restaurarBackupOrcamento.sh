@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "***** Script de restauração da base. Exclusivo do desenvolvedor do projeto *****"
+echo ""
 echo "Excluindo os arquivos existentes..."
 echo ""
 rm -rf ~/Downloads/orcamento-estrutura.sql.bz2

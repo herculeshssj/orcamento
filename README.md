@@ -10,63 +10,96 @@ Orçamento Doméstico
 Controle de orçamento doméstico familiar
 -----------------------------------------
 
-Destinado a controlar as despesas domésticas de uma família. Tem opções para controlar contas a pagar e receber, pagamentos, lançamentos bancários, saldos de contas, realizar fechamento de períodos e categorizar as informações. Permite que mais de uma pessoa possa gerenciar suas despesas, compartilhando com uma ou mais pessoas. Pode gerenciar as contas de micros empresas que buscam um sistema simples de controle de despesas.
+Destinado a controlar as despesas domésticas de uma família. Tem opções para controlar contas a pagar e receber, pagamentos, lançamentos bancários, saldos de contas, realizar fechamento de períodos, categorizar as informações, registrar os investimentos e acompanhar alguns itens do lar, como despensa e saúde. Permite que mais de uma pessoa possa gerenciar suas despesas, compartilhando com uma ou mais pessoas. Pode gerenciar também as contas de micros empresas que buscam um sistema simples de controle de despesas.
 
-### Ambiente de desenvolvimento
+# Ambiente de desenvolvimento
 
 *Requisitos:*
 
 * Oracle Java JDK SE 8 ou OpenJDK 8 (qualquer update);
 * Eclipse Neon 4.6 ou superior;
 * Git 2.0 ou superior;
-* Tomcat 8.5.24 ou superior;
+* Tomcat 8.5 ou Wildfly 10;
 * MariaDB 10 ou superior;
-* astah Community 6.5 ou superior;
-* Pencil 2.0.6 ou superior;
+* astah Community 7.0 ou superior;
+* Pencil 3.0 ou superior;
 * Windows, Linux ou Mac, qualquer versão capaz de rodar os softwares acima.
 
 *Links de download:*
 
 * *Java JDK SE 8*: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 * *Eclipse Neon*: http://www.eclipse.org/neon/
-* *Github for Windows/Mac*: https://github.com/ 
-* *Tomcat 8*: http://tomcat.apache.org/download-80.cgi
+* *Git*: https://git-scm.com/downloads 
+* *Tomcat 8.5*: http://tomcat.apache.org/download-80.cgi
+* *Wildfly 10*: http://wildfly.org/downloads/
 * *MariaDB 10*: https://downloads.mariadb.org
 * *astah Community*: http://astah.net/editions/community
 * *Pencil*: http://pencil.evolus.vn/Downloads.html
 
-### Instalação do Java
+*Obs:* Siga as instruções de instalação e configuração básica disponíveis no site de cada ferramenta. 
 
-A instalação do Java no Windows e Mac OS X não tem mistério. Basta baixar o pacote de acordo com a versão do SO e realizar a instalação através do assistente. O projeto é compatível com o OpenJDK 8,
+*Git*
 
-Para instalar o OpenJDK no Ubuntu, por exemplo, utilize os seguintes comandos:
+Realize o clone do projeto via linha de comando, ou através do Eclipse, pela Perspectiva "Git". 
 
-``
-sudo apt-get update && sudo apt-get install openjdk-8-jdk
-``
+Após realizar o clone do repositório, adicione o projeto no Eclipse (caso tenha feito o clone via linha de comando), e use a opção "Import Projects..." para importar o projeto. Não esqueça de deixar marcado somente o projeto "orcamento/orcamento", que ele é a versão Maven mais recente do projeto.
 
-Não esqueça de rodar os seguintes comandos após a instalação do Java em ambiente Linux:
+*Configuração do MariaDB*
 
-``
-sudo update-alternatives --config java
-sudo update-alternatives --config javac
-``
+Após instalar o MariaDB, acesse-o via linha de comando ou usando uma ferramenta gráfica de administração e execute os seguintes comandos:
 
-### Instalação do Eclipse Neon
+```sql
+-- Criação das base de dados
+create database orcamento;
+create database orcamentotest;
 
-A instalação do Eclipse Neon não tem mistério. Após realizar a instalação do Java, baixe o arquivo compactado do Eclipse Neon JavaEE de acordo com o SO e descompacte em uma pasta de sua preferência.
+-- Criação do usuário para acessar a base
+create user 'orcamento'@'%' identified by 'senha'; -- informe uma senha para o usuário "orcamento"
+grant all privileges on orcamento.* to 'orcamento'@'%';
+grant all privileges on orcamento.* to 'orcamentotest'@'%';
+```
 
-### Instalação do GIT
+Ainda na linha de comando ou na ferramenta de administração, rode o script "script-create-all-db.sql". O script encontra-se no repositório do projeto, em _orcamento/src/main/resources_.
 
-Para realizar a instalação do Git no Windows utiliza-se geralmente a ferramenta disponibiliza pelo Github.
+*Configuração do Eclipse*
 
-Para realizar a instalação do Git no Linux, execute o seguinte comando:
+Para aqueles que desejarem utilizar o Tomcat como servidor para rodar o projeto, adicione o Tomcat no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Tomcat 8.5, e, na tela seguinte, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
 
-``
-sudo apt-get install git
-``
+Depois clique na view *Server* e clique em *New -> Server*. Selecione o Tomcat 8.5 e clique em *Finnish*.
 
-Para realizar a instalação do Git no Mac, pode-se instalar a ferramenta disponibilizada pelo Github, ou utilizar o Xcode.
+Para aqueles que desejarem utilzar o Wildfly com oservidor para rodar o projeto, instale antes o JBoss Tools pelo Eclipse Marketplace. Dos componentes disponíveis para instalar, escolha somente "JBoss AS, WildFly & EAP Server Tools". Prossiga com a instalação.
+
+Após o Eclipse reiniciar, adicione o Wildfly no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Wildfly 10.x. Na tela seguinte, selecione o local de instalação do Wildfly, mantendo as opções mostradas na tela. Clique em *Finnish*.
+
+Depois clique na view *Server*, clique em *New -> Server* e selecione o Wildfly 10. Na tela seguinte mantenha as opções mostradas e clique em *Finnish*.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Instalação do Tomcat
 
