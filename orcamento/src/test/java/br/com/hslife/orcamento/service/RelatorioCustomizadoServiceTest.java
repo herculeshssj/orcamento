@@ -79,6 +79,7 @@ import br.com.hslife.orcamento.facade.ILancamentoConta;
 import br.com.hslife.orcamento.facade.IMoeda;
 import br.com.hslife.orcamento.facade.IRelatorioCustomizado;
 import br.com.hslife.orcamento.facade.IUsuario;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 import br.com.hslife.orcamento.util.EntityInitializerFactory;
 
 public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
@@ -103,7 +104,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 	
 	@Before
 	public void initializeTestEnvironment() throws ApplicationException {
-		usuario = EntityInitializerFactory.createUsuario();
+		usuario = EntityPersistenceMock.mockUsuario();
 		usuarioService.cadastrar(usuario);
 		
 		relatorio = EntityInitializerFactory.createRelatorioCustomizado(usuario);
@@ -310,7 +311,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 		Moeda moeda = EntityInitializerFactory.createMoeda(usuario);
 		moedaService.cadastrar(moeda);
 		
-		Conta conta = EntityInitializerFactory.createConta(usuario, moeda);
+		Conta conta = EntityPersistenceMock.mockConta(usuario, moeda);
 		contaService.cadastrar(conta);
 		
 		for (int i = 1; i <= 5; i++) {

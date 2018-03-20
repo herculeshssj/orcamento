@@ -59,4 +59,15 @@ public class EntityPersistenceMock {
 		conta.setMoeda(EntityPersistenceMock.mockMoeda(conta.getUsuario()));
 		return conta;
 	}
+	
+	public static Conta mockConta(Usuario usuario, Moeda moeda) {
+		Conta conta = new Conta();
+		conta.setDescricao("Conta de teste");
+		conta.setDataAbertura(new Date());
+		conta.setSaldoInicial(100);
+		conta.setTipoConta(TipoConta.CORRENTE);
+		conta.setUsuario(usuario);
+		conta.setMoeda(moeda);
+		return conta;
+	}
 }
