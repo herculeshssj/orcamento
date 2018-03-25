@@ -53,6 +53,8 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,7 +99,7 @@ public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
 		assertEquals(modelo.getId(), modeloTest.getId());
 	}
 	
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		modeloDocumentoRepository.save(modelo);
 		

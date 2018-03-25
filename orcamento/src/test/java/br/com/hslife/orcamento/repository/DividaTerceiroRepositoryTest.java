@@ -53,6 +53,8 @@ import static org.junit.Assert.fail;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -121,7 +123,7 @@ public class DividaTerceiroRepositoryTest extends AbstractTestRepositories {
 		}
 	}
 	
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		dividaTerceiroRepository.save(dividaTerceiro);
 		

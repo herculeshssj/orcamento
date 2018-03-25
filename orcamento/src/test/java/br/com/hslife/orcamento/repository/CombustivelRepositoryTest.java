@@ -47,9 +47,10 @@ package br.com.hslife.orcamento.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.hibernate.SessionFactory;
 import org.junit.Before;
@@ -89,15 +90,14 @@ public class CombustivelRepositoryTest extends AbstractTestRepositories {
 		assertEquals(entity.getId(), entityTest.getId());
 	}
 	
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		repository.save(entity);
 		
 		// Testa o método em questão
 		repository.delete(entity);
 		
-		Combustivel entityTest = repository.findById(entity.getId());
-		assertNull(entityTest);
+		repository.findById(entity.getId());
 	}
 	
 	@Test

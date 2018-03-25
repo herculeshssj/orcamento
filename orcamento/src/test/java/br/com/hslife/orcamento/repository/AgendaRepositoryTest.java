@@ -52,6 +52,8 @@ import static org.junit.Assert.assertNull;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -143,7 +145,7 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		assertEquals(agenda.getUsuario(), agendaTest.getUsuario());
 	}
 
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		agendaRepository.save(agenda);
 		

@@ -52,6 +52,8 @@ import static org.junit.Assert.assertNull;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -135,7 +137,7 @@ public class TelefoneRepositoryTest extends AbstractTestRepositories {
 		assertEquals(telefone.getUsuario(), telefoneTest.getUsuario());
 	}
 
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		telefoneRepository.save(telefone);
 				

@@ -48,11 +48,11 @@ package br.com.hslife.orcamento.entity;
 import org.junit.Test;
 
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class TelefoneTest {
 	
-	private Telefone entity = EntityInitializerFactory.createTelefone(EntityInitializerFactory.createUsuario());
+	private Telefone entity = EntityPersistenceMock.mockTelefone(EntityPersistenceMock.mockUsuario());
 	
 	@Test(expected=ValidationException.class)
 	public void testValidateDescricao() {

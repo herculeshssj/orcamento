@@ -55,6 +55,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,7 +69,7 @@ import br.com.hslife.orcamento.entity.RelatorioParametro;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoDado;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories {
 	
@@ -92,10 +94,10 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 		relatorioCustomizadoRepository.setSessionFactory(sessionFactory);
 		categoriaRepository.setSessionFactory(sessionFactory);
 		
-		usuario = EntityInitializerFactory.createUsuario();
+		usuario  = EntityPersistenceMock.mockUsuario();
 		usuarioRepository.save(usuario);
 		
-		relatorio = EntityInitializerFactory.createRelatorioCustomizado(usuario);
+		relatorio = EntityPersistenceMock.mockRelatorioCustomizado(usuario);
 	}
 	
 	@Test
@@ -107,7 +109,7 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 		assertEquals(relatorio.getId(), relatorioTest.getId());
 	}
 	
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		relatorioCustomizadoRepository.save(relatorio);
 		

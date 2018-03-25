@@ -118,30 +118,14 @@
  		<sec:form-login login-page="/login.faces" authentication-failure-url="/erroLogin.faces" />
  		<sec:access-denied-handler error-page="/acessoNegado.faces"/>
  		<sec:csrf disabled="true"/>
- 	<!-- 
- 		<sec:access-denied-handler error-page="/acessoNegado.faces"/>
-	    <sec:form-login login-page="/login.faces" authentication-failure-url="/erroLogin.faces"	authentication-success-handler-ref="startupUserParametersHandler"/>
-	    <sec:intercept-url pattern="/pages/**" access="hasRole('USER') and hasRole('ADMIN')" />
-	    <sec:logout delete-cookies="JSESSIONID" />
-	    <sec:remember-me key="uniqueAndSecret" token-validity-seconds="86400"/>
-	    -->	    
+ 		<sec:logout delete-cookies="JSESSIONID"/>
+ 		<sec:remember-me key="uniqueAndSecret" token-validity-seconds="86400"/>	    
 	</sec:http>
-	<!-- 
-	<bean id="springSecurityUserDetailsService" class="br.com.hslife.orcamento.security.SpringSecurityUserDetailsService" />
-	-->
+	
 	<sec:authentication-manager>
 		<sec:authentication-provider user-service-ref="springSecurityUserDetailsService">
 			<sec:password-encoder hash="sha-256"/>
 		</sec:authentication-provider>
-		
-	<!-- 
-	    <sec:authentication-provider>
-	    	<sec:password-encoder hash="sha-256"/>
-	        <sec:jdbc-user-service data-source-ref="dataSource"
-	            users-by-username-query="select login as username, senha as password, case ativo when 1 then 'true' else 'false' end as enabled from usuario where login=?"
-	            authorities-by-username-query="select login as username, tipoUsuario as role from usuario where login=?" />
-	    </sec:authentication-provider>
-	    -->
 	</sec:authentication-manager>
 	
 </beans>

@@ -52,6 +52,8 @@ import static org.junit.Assert.assertNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,7 +141,7 @@ public class RegraImportacaoServiceTest extends AbstractTestServices {
 		assertEquals(regra.getIdMeioPagamento(), regraTest.getIdMeioPagamento());
 	}
 	
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testExcluir() throws ApplicationException {
 		// Realiza o cadastro da regra
 		regraImportacaoService.cadastrar(regra);

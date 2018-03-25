@@ -47,9 +47,10 @@ package br.com.hslife.orcamento.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.hibernate.SessionFactory;
 import org.junit.Before;
@@ -148,15 +149,15 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 		assertEquals(endereco.getDescricao(),enderecoTest.getDescricao());
 	}
 
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		enderecoRepository.save(endereco);
 				
 		// Testa o método em questão
 		enderecoRepository.delete(endereco);
 		
-		Endereco enderecoTest = enderecoRepository.findById(endereco.getId());
-		assertNull(enderecoTest);
+		enderecoRepository.findById(endereco.getId());
+		//assertNull(enderecoTest);
 	}
 
 	@Test

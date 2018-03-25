@@ -53,6 +53,8 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +109,7 @@ public class ModeloDocumentoServiceTest extends AbstractTestServices {
 		assertEquals(modelo.getConteudo(), modeloTest.getConteudo());
 	}
 	
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testExcluir() throws ApplicationException {
 		modeloDocumentoService.cadastrar(modelo);
 		

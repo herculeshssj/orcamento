@@ -85,7 +85,7 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	public E findById(Long id) {
 		return (E)getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e WHERE e.id = :idEntity")
 				.setParameter("idEntity", id)
-				.uniqueResult();
+				.getSingleResult();
 	}
 	
 	@SuppressWarnings("unchecked")

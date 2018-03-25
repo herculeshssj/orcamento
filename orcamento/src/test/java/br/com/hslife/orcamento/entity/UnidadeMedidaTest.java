@@ -48,11 +48,12 @@ package br.com.hslife.orcamento.entity;
 import org.junit.Test;
 
 import br.com.hslife.orcamento.exception.ValidationException;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class UnidadeMedidaTest {
 	
-	private UnidadeMedida entity = EntityInitializerFactory.createUnidadeMedida(EntityInitializerFactory.createUsuario());
+	private UnidadeMedida entity = EntityPersistenceMock.mockUnidadeMedida(EntityPersistenceMock.mockUsuario());
+	
 	
 	@Test(expected=ValidationException.class)
 	public void testValidateDescricao() {

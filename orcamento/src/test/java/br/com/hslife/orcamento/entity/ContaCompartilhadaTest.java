@@ -52,7 +52,7 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 import br.com.hslife.orcamento.util.Util;
 
 public class ContaCompartilhadaTest {
@@ -63,11 +63,11 @@ public class ContaCompartilhadaTest {
 	
 	@Before
 	public void setUp() {
-		usuario = EntityInitializerFactory.createUsuario();
-		Moeda moeda = EntityInitializerFactory.createMoeda(usuario);
-		conta = EntityInitializerFactory.createConta(usuario, moeda);
+		usuario = EntityPersistenceMock.mockUsuario();
+		Moeda moeda = EntityPersistenceMock.mockMoeda(usuario);
+		conta = EntityPersistenceMock.mockConta(usuario, moeda);
 		
-		entity = EntityInitializerFactory.createContaCompartilhada(conta, usuario);
+		entity = EntityPersistenceMock.mockContaCompartilhada(conta, usuario);
 	}
 
 	@Test

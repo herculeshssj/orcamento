@@ -49,6 +49,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -111,7 +113,7 @@ public class RegraImportacaoRepositoryTest extends AbstractTestRepositories {
 		assertEquals(regra.getId(), regraTest.getId());
 	}
 	
-	@Test
+	@Test(expected=NoResultException.class)
 	public void testDelete() {
 		regraImportacaoRepository.save(regra);
 		

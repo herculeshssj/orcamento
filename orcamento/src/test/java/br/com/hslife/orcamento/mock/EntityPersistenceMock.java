@@ -1,13 +1,26 @@
 package br.com.hslife.orcamento.mock;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Conta;
+import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Pessoal;
+import br.com.hslife.orcamento.entity.RelatorioColuna;
+import br.com.hslife.orcamento.entity.RelatorioCustomizado;
+import br.com.hslife.orcamento.entity.RelatorioParametro;
+import br.com.hslife.orcamento.entity.Telefone;
+import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.util.Util;
 
 public class EntityPersistenceMock {
@@ -69,5 +82,72 @@ public class EntityPersistenceMock {
 		conta.setUsuario(usuario);
 		conta.setMoeda(moeda);
 		return conta;
+	}
+	
+	public static RelatorioCustomizado mockRelatorioCustomizado(Usuario usuario, String consultaSQL,
+			SortedSet<RelatorioColuna> colunas, Set<RelatorioParametro> parametros) {
+		RelatorioCustomizado entity = new RelatorioCustomizado();
+		entity.setNome("Relatório de teste");
+		entity.setDescricao("Relatório customizado para testes");
+		entity.setConsultaSQL(consultaSQL);
+		entity.setUsuario(usuario);
+		entity.setColunasRelatorio(colunas);
+		entity.setParametrosRelatorio(parametros);
+		return entity;
+	}
+	
+	// Cria uma nova instância de RelatorioCustomizado
+	public static RelatorioCustomizado mockRelatorioCustomizado(Usuario usuario) {
+		RelatorioCustomizado entity = new RelatorioCustomizado();
+		entity.setNome("Relatório de teste");
+		entity.setDescricao("Relatório customizado para testes");
+		entity.setConsultaSQL("SELECT * FROM lancamentoconta");
+		entity.setUsuario(usuario);
+
+		SortedSet<RelatorioColuna> colunas = new TreeSet<>();
+		for (int i = 0; i < 3; i++) {
+			RelatorioColuna coluna = new RelatorioColuna();
+			coluna.setNomeColuna("coluna" + i);
+			coluna.setTextoExibicao("Coluna " + i);
+			coluna.setTipoDado(TipoDado.STRING);
+			colunas.add(coluna);
+		}
+		entity.setColunasRelatorio(colunas);
+
+		Set<RelatorioParametro> parametros = new LinkedHashSet<>();
+		for (int i = 0; i < 3; i++) {
+			RelatorioParametro parametro = new RelatorioParametro();
+			parametro.setNomeParametro("parametro" + i);
+			parametro.setTextoExibicao("Parâmetro " + i);
+			parametro.setTipoDado(TipoDado.STRING);
+			parametros.add(parametro);
+		}
+		entity.setParametrosRelatorio(parametros);
+
+		return entity;
+	}
+	
+	public static UnidadeMedida mockUnidadeMedida(Usuario usuario) {
+		return new UnidadeMedida.Builder().descricao("Unidade de Medida de teste").sigla("UMT").usuario(usuario)
+				.build();
+	}
+	
+	public static Telefone mockTelefone(Usuario usuario) {
+		return new Telefone.Builder().descricao("Telefone de teste").ddd("021").numero("1234-5678").ramal("901")
+				.usuario(usuario).build();
+	}
+	
+	public static Pessoal mockPessoal(Usuario usuario) {
+		return new Pessoal.Builder().dataNascimento(Calendar.getInstance().getTime()).escolaridade("Superior")
+				.estadoCivil("Casado").etnia("Afrobrasileira").filiacaoMae("Mãe do usuário")
+				.filiacaoPai("Pai do usuário").genero('M').nacionalidade("Brasileira").naturalidade("Rio de Janeiro")
+				.tipoSanguineo("O+").usuario(usuario).build();
+	}
+	
+	public static ContaCompartilhada mockContaCompartilhada(Conta conta, Usuario usuario) {
+		ContaCompartilhada contaCompartilhada = new ContaCompartilhada();
+		contaCompartilhada.setConta(conta);
+		contaCompartilhada.setUsuario(usuario);
+		return contaCompartilhada;
 	}
 }
