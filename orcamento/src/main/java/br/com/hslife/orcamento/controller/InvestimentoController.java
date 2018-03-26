@@ -145,6 +145,8 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		investimentoInicial = 0;
 		listEntity = new ArrayList<>();
 		dividendosInvestimento = new LinkedHashSet<>();
+		investimentoSelecionado = null;
+		contaSelecionada = null;
 	}
 	
 	@Override

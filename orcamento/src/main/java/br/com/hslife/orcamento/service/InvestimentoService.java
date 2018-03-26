@@ -108,6 +108,20 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 		this.dividendoRepository.setSessionFactory(this.sessionFactory);
 		return dividendoRepository;
 	}
+	
+	@Override
+	public void excluir(Investimento entity) {
+		// Exclui os dividendos
+		if (entity.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.VARIAVEL)) {
+			for (Dividendo d : getDividendoRepository().findAllByInvestimento(entity)) {
+				getDividendoRepository().delete(d);
+			}
+		}
+		
+		// Exclui o investimento com suas respectivas movimentações.
+		Investimento i = getRepository().findById(entity.getId());
+		super.excluir(i);
+	}
 
 	@Override
 	public List<Investimento> buscarPorConta(Conta conta) {
