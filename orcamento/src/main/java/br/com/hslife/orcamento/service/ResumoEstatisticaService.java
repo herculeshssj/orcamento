@@ -50,13 +50,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,11 +69,8 @@ import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.ConversaoMoeda;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.entity.LancamentoConta;
-import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IContaCompartilhada;
@@ -91,7 +86,6 @@ import br.com.hslife.orcamento.model.PanoramaCadastro;
 import br.com.hslife.orcamento.model.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
-import br.com.hslife.orcamento.model.SaldoAtualConta;
 import br.com.hslife.orcamento.util.LancamentoContaUtil;
 import br.com.hslife.orcamento.util.Util;
 
@@ -164,103 +158,6 @@ public class ResumoEstatisticaService implements IResumoEstatistica {
 	}
 	
 	/*** Implementação dos métodos da interface ***/
-	
-	@Override
-	public List<SaldoAtualConta> gerarSaldoAtualContas(boolean agendado, Usuario usuario) {
-		// Declaração dos objetos
-		List<SaldoAtualConta> saldoAtualContas = new ArrayList<>();
-		SaldoAtualConta saldoAtual = new SaldoAtualConta();
-		
-		// Resgata todas as contas do usuário
-		Set<Conta> contas = new HashSet<>(getContaService().buscarDescricaoOuTipoContaOuAtivoPorUsuario(null, new TipoConta[]{}, usuario, null));
-		
-		// Traz as contas compartilhadas para com o usuário atualmente logado
-		List<ContaCompartilhada> contasCompartilhadas = getContaCompartilhadaService().buscarTodosPorUsuario(usuario);
-		
-		// Acrescenta no Set as contas compartilhadas dos demais usuários
-		for (ContaCompartilhada contaCompartilhada : contasCompartilhadas) {
-			contas.add(contaCompartilhada.getConta());
-		}
-		
-		// Itera todas as contas do usuário
-		for (Conta conta : contas) {
-			
-			// Define a descrição da conta
-			saldoAtual.setDescricaoConta(conta.getDescricao());
-			saldoAtual.setMoedaConta(conta.getMoeda());
-			saldoAtual.setTipoConta(conta.getTipoConta());
-			
-			// Seta o tipo de cartão
-			if (conta.getTipoConta().equals(TipoConta.CARTAO)) {
-				saldoAtual.setTipoCartao(conta.getCartaoCredito().getTipoCartao());
-			}
-			
-			// Define a situação da conta
-			saldoAtual.setAtivo(conta.isAtivo());
-			
-			// Declara o critério de busca
-			CriterioBuscaLancamentoConta criterio = new CriterioBuscaLancamentoConta();
-			
-			// Verifica se a conta é do tipo CARTAO e de CREDITO
-			if (conta.getTipoConta().equals(TipoConta.CARTAO) && conta.getCartaoCredito().getTipoCartao().equals(TipoCartao.CREDITO)) {
-				// Seta o saldo do período com o limite do cartão
-				saldoAtual.setSaldoPeriodo(conta.getCartaoCredito().getLimiteCartao());
-				
-				// Traz todos os lançamentos do cartão que ainda não foram quitados
-				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.AGENDADO});
-				
-				// Seta a conta
-				criterio.setConta(conta);
-			} else {
-				// Traz o saldo do período anterior
-				BigDecimal saldoPeriodoAnterior = new BigDecimal("0.0");
-				if (agendado) {
-					saldoPeriodoAnterior = getLancamentoContaService()
-							.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, Util.ultimoDiaMesAnterior(), 
-									new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-				} else {
-					saldoPeriodoAnterior = getLancamentoContaService()
-							.buscarSaldoPeriodoByContaAndPeriodoAndStatusLancamento(conta, null, Util.ultimoDiaMesAnterior(), 
-									new StatusLancamentoConta[]{StatusLancamentoConta.QUITADO, StatusLancamentoConta.REGISTRADO});
-				}
-				
-				if (saldoPeriodoAnterior.signum() == 1)
-					saldoAtual.setSaldoPeriodo(saldoPeriodoAnterior.doubleValue());
-				else
-					saldoAtual.setSaldoPeriodo(saldoPeriodoAnterior.doubleValue() * -1);
-			}
-			
-			// Se a opção de agendado estiver marcada, traz os lançamentos agendados
-			if (agendado)
-				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.AGENDADO, StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-			else 
-				criterio.setStatusLancamentoConta(new StatusLancamentoConta[]{StatusLancamentoConta.REGISTRADO, StatusLancamentoConta.QUITADO});
-			
-			criterio.setConta(conta);
-			
-			// Traz os lançamentos da data de fechamento em diante
-			Calendar temp = Calendar.getInstance();
-			temp.setTime(Util.ultimoDiaMesAnterior());
-			temp.add(Calendar.DAY_OF_YEAR, 1);
-			criterio.setDataInicio(temp.getTime());
-			
-			List<LancamentoConta> lancamentos = getLancamentoContaService().buscarPorCriterioBusca(criterio);
-			
-			// Calcula o saldo dos lançamentos e registra no saldo atual
-			saldoAtual.setSaldoRegistrado(LancamentoContaUtil.calcularSaldoLancamentosComConversao(lancamentos));
-			
-			// Calcula o saldo atual da conta
-			saldoAtual.setSaldoAtual(saldoAtual.getSaldoPeriodo() + saldoAtual.getSaldoRegistrado());
-			
-			// Adiciona na lista de saldos da conta
-			saldoAtualContas.add(saldoAtual);
-			saldoAtual = new SaldoAtualConta();
-			
-		}
-		
-		// Retorna a lista de saldos atuais
-		return saldoAtualContas;
-	}
 	
 	@Override
 	public List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano) {
