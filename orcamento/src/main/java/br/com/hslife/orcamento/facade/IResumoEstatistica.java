@@ -52,15 +52,12 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
 import br.com.hslife.orcamento.enumeration.CadastroSistema;
 import br.com.hslife.orcamento.model.CriterioBuscaLancamentoConta;
-import br.com.hslife.orcamento.model.PanoramaLancamentoCartao;
 import br.com.hslife.orcamento.model.PanoramaLancamentoConta;
 import br.com.hslife.orcamento.model.ResumoMensalContas;
 
 public interface IResumoEstatistica {
 	
 	List<PanoramaLancamentoConta> gerarRelatorioPanoramaLancamentoConta(CriterioBuscaLancamentoConta criterioBusca, int ano);
-	
-	List<PanoramaLancamentoCartao> gerarRelatorioPanoramaLancamentoCartao(CriterioBuscaLancamentoConta criterioBusca, int ano);
 	
 	List<Conta> gerarRelatorioPanoramaCadastro(CadastroSistema cadastro, Long idRegistro);
 	

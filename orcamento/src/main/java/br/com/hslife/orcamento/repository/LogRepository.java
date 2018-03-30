@@ -48,7 +48,6 @@ package br.com.hslife.orcamento.repository;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TemporalType;
 
 import org.hibernate.Criteria;
@@ -109,7 +108,7 @@ public class LogRepository extends AbstractRepository {
 				.setParameter("level", "ERROR")
 				.setParameter("send", false)
 				.setMaxResults(1)
-				.getSingleResult();
+				.uniqueResult();
 	}
 	
 	@SuppressWarnings("unchecked")
