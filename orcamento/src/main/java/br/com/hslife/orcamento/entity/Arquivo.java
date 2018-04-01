@@ -115,6 +115,57 @@ public class Arquivo extends EntityPersistence {
 	public Arquivo() {
 		dataCriacao = new Date();
 	}
+	
+	private Arquivo(Builder builder) {
+		this.nomeArquivo = builder.nomeArquivo;
+		this.contentType = builder.contentType;
+		this.tamanho = builder.tamanho;
+		this.dataCriacao = builder.dataCriacao;
+		this.container = builder.container;
+		this.attribute = builder.attribute;
+		this.usuario = builder.usuario;
+		this.dados = builder.dados;
+	}
+	
+	public static class Builder {
+		private String nomeArquivo;
+		private String contentType;
+		private long tamanho;
+		private Date dataCriacao = new Date();
+		private Container container = Container.DOCUMENTOS;
+		private String attribute = "arquivo";
+		private Usuario usuario;
+		private byte[] dados;
+		
+		public Builder nomeArquivo(String valor) {
+			this.nomeArquivo = valor;
+			return this;
+		}
+		
+		public Builder contentType(String valor) {
+			this.contentType = valor;
+			return this;
+		}
+		
+		public Builder tamanho(long valor) {
+			this.tamanho = valor;
+			return this;
+		}
+		
+		public Builder usuario(Usuario valor) {
+			this.usuario = valor;
+			return this;
+		}
+		
+		public Builder dados(byte[] valor) {
+			this.dados = valor;
+			return this;
+		}
+		
+		public Arquivo build() {
+			return new Arquivo(this);
+		}
+	}
 
 	public Long getId() {
 		return id;

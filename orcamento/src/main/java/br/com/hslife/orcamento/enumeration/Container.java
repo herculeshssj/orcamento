@@ -54,7 +54,9 @@ public enum Container {
 	LANCAMENTOPERIODICO("LancamentoPeriodico"), 
 	FATURACARTAO("FaturaCartao"), 
 	DIVIDATERCEIROS("DividaTerceiro"),
-	PAGAMENTODIVIDATERCEIRO("PagamentoDividaTerceiro");
+	PAGAMENTODIVIDATERCEIRO("PagamentoDividaTerceiro"),
+	SEGURO("Seguro"),
+	RESGATESEGURO("ResgateSeguro");
 	
 	private String descricao;
 	

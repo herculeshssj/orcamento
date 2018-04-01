@@ -49,6 +49,7 @@ import org.junit.Test;
 
 import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
 import br.com.hslife.orcamento.mock.EntityPersistenceMock;
+import static org.junit.Assert.assertEquals;
 
 public class EntityPersistenceMockTest {
 
@@ -79,6 +80,32 @@ public class EntityPersistenceMockTest {
 		if (epm.get(EntityPersistenceEnum.USUARIO) instanceof Usuario) {
 			Usuario usuario = (Usuario) epm.get(EntityPersistenceEnum.USUARIO);
 			usuario.validate();
+		}
+	}
+	
+	@Test
+	public void testComFavorecido() {
+		
+		EntityPersistenceMock epm = new EntityPersistenceMock()
+				.criarUsuario()
+				.comFavorecido(false);
+		
+		if (epm.get(EntityPersistenceEnum.FAVORECIDO) instanceof Favorecido) {
+			Favorecido favorecido = (Favorecido)epm.get(EntityPersistenceEnum.FAVORECIDO);
+			favorecido.validate();
+		}
+	}
+	
+	@Test
+	public void testComArquivoEmMaos() {
+		EntityPersistenceMock epm = new EntityPersistenceMock()
+				.criarUsuario()
+				.comArquivoEmMaos();
+		
+		if (epm.get(EntityPersistenceEnum.ARQUIVO) instanceof Arquivo) {
+			Arquivo arquivo = (Arquivo)epm.get(EntityPersistenceEnum.ARQUIVO);
+			assertEquals(8192l, arquivo.getTamanho());
+			assertEquals("text/html", arquivo.getContentType());
 		}
 	}
 }

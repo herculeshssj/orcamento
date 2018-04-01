@@ -9,10 +9,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.EntityPersistence;
+import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Pessoal;
@@ -25,6 +27,7 @@ import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoDado;
+import br.com.hslife.orcamento.enumeration.TipoPessoa;
 import br.com.hslife.orcamento.util.Util;
 
 public class EntityPersistenceMock {
@@ -65,6 +68,34 @@ public class EntityPersistenceMock {
 		
 		// Salva no Map e retorna o mock
 		mapEntidade.put(EntityPersistenceEnum.MOEDA, moeda);
+		return this;
+	}
+	
+	public EntityPersistenceMock comFavorecido(boolean padrao) {
+		// Popula a entidade
+		Favorecido favorecido = new Favorecido();
+		favorecido.setNome(UtilsMock.mockStringComEspaco(20));
+		favorecido.setTipoPessoa(TipoPessoa.FISICA);
+		favorecido.setPadrao(padrao);
+		favorecido.setCpfCnpj(UtilsMock.mockCPF());
+		favorecido.setUsuario((Usuario)this.get(EntityPersistenceEnum.USUARIO));
+		
+		// Salva no Map e retorna o mock
+		mapEntidade.put(EntityPersistenceEnum.FAVORECIDO, favorecido);		
+		return this;
+	}
+	
+	public EntityPersistenceMock comArquivoEmMaos() {
+		Arquivo arquivo = new Arquivo.Builder()
+				.contentType("text/html")
+				.dados("<html><body><h1>Hello World!</h1></body></html>".getBytes())
+				.nomeArquivo(UtilsMock.mockString(10))
+				.tamanho(8192l)
+				.usuario((Usuario)this.get(EntityPersistenceEnum.USUARIO))
+				.build();
+		
+		// Salva no Map e retorna o mock
+		mapEntidade.put(EntityPersistenceEnum.ARQUIVO, arquivo);		
 		return this;
 	}
 
