@@ -158,23 +158,8 @@ public class Usuario extends EntityPersistence {
 			return this;
 		}
 		
-		public Builder dataCriacao(Date dataCriacao) {
-			this.dataCriacao = dataCriacao;
-			return this;
-		}
-		
 		public Builder email(String email) {
 			this.email = email;
-			return this;
-		}
-		
-		public Builder tipoUsuario(TipoUsuario tipoUsuario) {
-			this.tipoUsuario = tipoUsuario;
-			return this;
-		}
-		
-		public Builder ativo(boolean ativo) {
-			this.ativo = ativo;
 			return this;
 		}
 		

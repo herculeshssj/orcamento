@@ -131,7 +131,73 @@ public class Moeda extends EntityPersistence {
 		saldoDebito = 0.0;
 		valorConversao = 1.0000;
 	}
+	
+	private Moeda(Builder builder) {
+		this.nome = builder.nome;
+		this.pais = builder.pais;
+		this.siglaPais = builder.siglaPais;
+		this.simboloMonetario = builder.simboloMonetario;
+		this.codigoMonetario = builder.codigoMonetario;
+		this.padrao = builder.padrao;
+		this.ativo = builder.ativo;
+		this.usuario = builder.usuario;
+	}
 
+	public static class Builder {
+		private String nome;
+		private String pais;
+		private String siglaPais;
+		private String simboloMonetario;
+		private String codigoMonetario;
+		private boolean padrao;
+		private boolean ativo;
+		private Usuario usuario;
+		
+		public Builder nome(String valor) {
+			this.nome = valor;
+			return this;
+		}
+		
+		public Builder pais(String valor) {
+			this.pais = valor;
+			return this;
+		}
+		
+		public Builder siglaPais(String valor) {
+			this.siglaPais = valor;
+			return this;
+		}
+		
+		public Builder simboloMonetario(String valor) {
+			this.simboloMonetario = valor;
+			return this;
+		}
+		
+		public Builder codigoMonetario(String valor) {
+			this.codigoMonetario = valor;
+			return this;
+		}
+		
+		public Builder padrao(boolean valor) {
+			this.padrao = valor;
+			return this;
+		}
+		
+		public Builder ativo(boolean valor) {
+			this.ativo = valor;
+			return this;
+		}
+		
+		public Builder usuario(Usuario valor) {
+			this.usuario = valor;
+			return this;
+		}
+		
+		public Moeda build() {
+			return new Moeda(this);
+		}
+	}
+	
 	public Long getId() {
 		return id;
 	}
