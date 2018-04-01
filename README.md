@@ -67,7 +67,7 @@ Para aqueles que desejarem utilizar o Tomcat como servidor para rodar o projeto,
 
 Depois clique na view *Server* e clique em *New -> Server*. Selecione o Tomcat 8.5 e clique em *Finnish*.
 
-Para aqueles que desejarem utilzar o Wildfly com oservidor para rodar o projeto, instale antes o JBoss Tools pelo Eclipse Marketplace. Dos componentes disponíveis para instalar, escolha somente "JBoss AS, WildFly & EAP Server Tools". Prossiga com a instalação.
+Para aqueles que desejarem utilzar o Wildfly como servidor para rodar o projeto, instale antes o JBoss Tools pelo Eclipse Marketplace. Dos componentes disponíveis para instalar, escolha somente "JBoss AS, WildFly & EAP Server Tools". Prossiga com a instalação.
 
 Após o Eclipse reiniciar, adicione o Wildfly no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Wildfly 10.x. Na tela seguinte, selecione o local de instalação do Wildfly, mantendo as opções mostradas na tela. Clique em *Finnish*.
 
