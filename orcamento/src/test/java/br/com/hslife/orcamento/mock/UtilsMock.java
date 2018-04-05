@@ -79,4 +79,8 @@ public class UtilsMock {
         }  
         return iniciais + calcDigVerif(iniciais);  
     }
+    
+    public static double mockDouble() {
+    	return new Random().nextDouble();
+    }
 }

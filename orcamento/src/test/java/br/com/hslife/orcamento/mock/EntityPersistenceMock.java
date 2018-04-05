@@ -17,6 +17,7 @@ import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.entity.Favorecido;
 import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Moeda;
+import br.com.hslife.orcamento.entity.Patrimonio;
 import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
@@ -96,6 +97,24 @@ public class EntityPersistenceMock {
 		
 		// Salva no Map e retorna o mock
 		mapEntidade.put(EntityPersistenceEnum.ARQUIVO, arquivo);		
+		return this;
+	}
+	
+	public EntityPersistenceMock ePossuiImovel() {
+		Patrimonio patrimonio = new Patrimonio.Builder()
+				.categoriaDocumento(new CategoriaDocumento(UtilsMock.mockString(30), (Usuario)this.get(EntityPersistenceEnum.USUARIO)))
+				.dataEntrada(Calendar.getInstance().getTime())
+				.descricao(UtilsMock.mockString(30))
+				.favorecido((Favorecido)this.get(EntityPersistenceEnum.FAVORECIDO))
+				//.meioPagamento(new MeioPagamento()) // TODO mock de Meio de Pagamento
+				.moeda((Moeda)this.get(EntityPersistenceEnum.MOEDA))
+				.usuario((Usuario)this.get(EntityPersistenceEnum.USUARIO))
+				.valorPatrimonio(UtilsMock.mockDouble())
+				.detalheEntradaPatrimonio(UtilsMock.mockString(1000))
+				.build();
+				
+		// Salva no Map e retorna o mock
+		mapEntidade.put(EntityPersistenceEnum.PATRIMONIO, patrimonio);		
 		return this;
 	}
 

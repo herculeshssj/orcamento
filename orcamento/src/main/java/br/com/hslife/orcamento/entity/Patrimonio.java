@@ -70,17 +70,17 @@ public class Patrimonio extends EntityPersistence {
 	private Long id;
 	
 	@Column(length=50, nullable=false)
-	private String descricao;
+	protected String descricao;
 	
 	@Column(columnDefinition="text", nullable=false)
 	private String detalheEntradaPatrimonio;
 	
 	@Column(nullable=false, precision=18, scale=2)
-	private double valorPatrimonio;
+	protected double valorPatrimonio;
 	
 	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)	
-	private Date dataEntrada;
+	protected Date dataEntrada;
 	
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)
@@ -94,26 +94,100 @@ public class Patrimonio extends EntityPersistence {
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
+	protected Usuario usuario;
 	
 	@ManyToOne
 	@JoinColumn(name="idCategoriaDocumento", nullable=true)
-	private CategoriaDocumento categoriaDocumento;
+	protected CategoriaDocumento categoriaDocumento;
 	
 	@ManyToOne
 	@JoinColumn(name="idFavorecido", nullable=false)
-	private Favorecido favorecido;
+	protected Favorecido favorecido;
 	
 	@ManyToOne
 	@JoinColumn(name="idMoeda", nullable=false)
-	private Moeda moeda;
+	protected Moeda moeda;
 	
 	@ManyToOne
 	@JoinColumn(name="idMeioPagamento", nullable=true)
-	private MeioPagamento meioPagamento;
+	protected MeioPagamento meioPagamento;
 	
 	public Patrimonio() {
 		ativo = false;
+	}
+	
+	public Patrimonio(Builder builder) {
+		this.descricao = builder.descricao;
+		this.valorPatrimonio = builder.valorPatrimonio;
+		this.dataEntrada = builder.dataEntrada;
+		this.usuario = builder.usuario;
+		this.categoriaDocumento = builder.categoriaDocumento;
+		this.favorecido = builder.favorecido;
+		this.moeda = builder.moeda;
+		this.meioPagamento = builder.meioPagamento;
+		this.detalheEntradaPatrimonio = builder.detalheEntradaPatrimonio;
+	}
+	
+	public static class Builder {
+		
+		private String descricao;
+		private double valorPatrimonio;
+		private Date dataEntrada;
+		private Usuario usuario;
+		private CategoriaDocumento categoriaDocumento;
+		private Favorecido favorecido;
+		private Moeda moeda;
+		private MeioPagamento meioPagamento;
+		private String detalheEntradaPatrimonio;
+	
+		public Builder descricao(String valor) {
+			this.descricao = valor;
+			return this;
+		}
+		
+		public Builder valorPatrimonio(double valor) {
+			this.valorPatrimonio = valor;
+			return this;
+		}
+		
+		public Builder dataEntrada(Date valor) {
+			this.dataEntrada = valor;
+			return this;
+		}
+		
+		public Builder usuario(Usuario valor) {
+			this.usuario = valor;
+			return this;
+		}
+		
+		public Builder categoriaDocumento(CategoriaDocumento valor) {
+			this.categoriaDocumento = valor;
+			return this;
+		}
+		
+		public Builder favorecido(Favorecido valor) {
+			this.favorecido = valor;
+			return this;
+		}
+		
+		public Builder moeda(Moeda valor) {
+			this.moeda = valor;
+			return this;
+		}
+		
+		public Builder meioPagamento(MeioPagamento valor) {
+			this.meioPagamento = valor;
+			return this;
+		}
+		
+		public Builder detalheEntradaPatrimonio(String valor) {
+			this.detalheEntradaPatrimonio = valor;
+			return this;
+		}
+	
+		public Patrimonio build() {
+			return new Patrimonio(this);
+		}
 	}
 
 	@Override

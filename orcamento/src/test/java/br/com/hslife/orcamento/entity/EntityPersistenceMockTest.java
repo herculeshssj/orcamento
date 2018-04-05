@@ -108,4 +108,17 @@ public class EntityPersistenceMockTest {
 			assertEquals("text/html", arquivo.getContentType());
 		}
 	}
+	
+	public void testEPossuiImovel() {
+		EntityPersistenceMock epm = new EntityPersistenceMock()
+				.criarUsuario()
+				.comFavorecido(true)
+				.comMoedaPadrao()
+				.ePossuiImovel();
+		
+		if (epm.get(EntityPersistenceEnum.PATRIMONIO) instanceof Patrimonio) {
+			Patrimonio patrimonio = (Patrimonio)epm.get(EntityPersistenceEnum.PATRIMONIO);
+			patrimonio.validate();
+		}
+	}
 }

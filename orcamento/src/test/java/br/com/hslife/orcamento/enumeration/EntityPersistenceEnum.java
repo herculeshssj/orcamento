@@ -5,5 +5,6 @@ public enum EntityPersistenceEnum {
 	ARQUIVO,
 	FAVORECIDO,
 	MOEDA,
+	PATRIMONIO,
 	USUARIO;
 }

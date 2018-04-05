@@ -75,6 +75,11 @@ public class CategoriaDocumento extends EntityPersistence {
 	public CategoriaDocumento() {
 		
 	}
+	
+	public CategoriaDocumento(String descricao, Usuario usuario) {
+		this.descricao = descricao;
+		this.usuario = usuario;
+	}
 
 	public Long getId() {
 		return id;
