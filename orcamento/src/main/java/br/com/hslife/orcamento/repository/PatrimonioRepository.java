@@ -56,17 +56,12 @@ import br.com.hslife.orcamento.entity.Usuario;
 public class PatrimonioRepository extends AbstractCRUDRepository<Patrimonio> {
 	
 	public PatrimonioRepository() {
-		super(new Patrimonio());
+		super(new Patrimonio(), Patrimonio.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Patrimonio> findAllByUsuario(Usuario usuario) {
-		hqlParameters.clear();
-		
-		StringBuilder hql = new StringBuilder().append("FROM Patrimonio p WHERE p.usuario.id = :idUsuario");
-		
-		hqlParameters.put("idUsuario", usuario.getId());
-		
-		return getQueryApplyingParameters(hql.toString()).list();
+		return getSession().createQuery("SELECT p FROM Patrimonio p WHERE p.usuario.id = :idUsuario", Patrimonio.class)
+				.setParameter("idUsuario", usuario.getId())
+				.getResultList();
 	}
 }
