@@ -122,7 +122,13 @@
     	<artifactId>flyway-core</artifactId>
     	<version>5.0.6</version>
     </dependency>
-  
+    
+	<dependency>
+	    <groupId>com.zaxxer</groupId>
+	    <artifactId>HikariCP</artifactId>
+	    <version>2.7.9</version>
+	</dependency>
+
 	<!-- Hibernate -->
 	<dependency>
 	    <groupId>org.hibernate</groupId>
@@ -130,6 +136,12 @@
 	    <version>5.2.16.Final</version>
 	</dependency>
 	
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-hikaricp</artifactId>
+	    <version>5.2.16.Final</version>
+	</dependency>
+
 	<dependency>
 	    <groupId>org.hibernate</groupId>
 	    <artifactId>hibernate-ehcache</artifactId>
