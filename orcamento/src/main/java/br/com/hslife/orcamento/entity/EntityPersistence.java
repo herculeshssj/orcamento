@@ -56,9 +56,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-@SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class EntityPersistence implements Comparable<EntityPersistence>, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8755844239005706031L;
 	
 	private static final Logger LOGGER = LogManager.getLogger(EntityPersistence.class);
 	

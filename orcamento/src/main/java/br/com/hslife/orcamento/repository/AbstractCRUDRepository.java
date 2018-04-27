@@ -49,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.query.Query;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
@@ -83,9 +85,15 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	
 	@SuppressWarnings("unchecked")
 	public E findById(Long id) {
-		return (E)getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e WHERE e.id = :idEntity")
-				.setParameter("idEntity", id)
-				.getSingleResult();
+		// O método getSingleResult do JPA não retorna null, ele lança uma exceção.
+		// O método foi adaptado para simular o método uniqueResult() do Hibernate
+		try {
+			return (E)getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e WHERE e.id = :idEntity")
+					.setParameter("idEntity", id)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -102,7 +110,9 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	}
 	
 	protected Query<E> getQueryApplyingParameters(String hql) {
-		Query<E> query = getSession().createQuery(hql, clazz);
+		Query<E> query = getSession()
+				.createQuery(hql, clazz)
+				.setHint("org.hibernate.cacheable", true);
 		
 		for (String s : hqlParameters.keySet()) {
 			query.setParameter(s, hqlParameters.get(s));

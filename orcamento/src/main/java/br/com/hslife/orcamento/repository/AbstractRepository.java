@@ -67,11 +67,13 @@ public abstract class AbstractRepository {
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
+	@Deprecated
 	protected Query getQueryNoType(String hql) {
 		return getSession().createQuery(hql);
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
+	@Deprecated
 	protected Query getQueryNoTypeApplyingParameters(String hql) {
 		Query query = getSession().createQuery(hql);
 		

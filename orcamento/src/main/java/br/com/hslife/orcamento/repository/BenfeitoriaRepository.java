@@ -57,25 +57,23 @@ import br.com.hslife.orcamento.entity.Usuario;
 public class BenfeitoriaRepository extends AbstractCRUDRepository<Benfeitoria> {
 	
 	public BenfeitoriaRepository() {
-		super(new Benfeitoria());
+		super(new Benfeitoria(), Benfeitoria.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Benfeitoria> findAllByUsuario(Usuario usuario) {
 		hqlParameters.clear();
 		
-		StringBuilder hql = new StringBuilder().append("FROM Benfeitoria b WHERE b.patrimonio.usuario.id = :idUsuario ORDER BY b.descricao ASC");
+		StringBuilder hql = new StringBuilder().append("SELECT b FROM Benfeitoria b WHERE b.patrimonio.usuario.id = :idUsuario ORDER BY b.descricao ASC");
 		
 		hqlParameters.put("idUsuario", usuario.getId());
 		
 		return getQueryApplyingParameters(hql.toString()).list();
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public List<Benfeitoria> findAllByPatrimonioAndUsuario(Patrimonio patrimonio, Usuario usuario) {
 		hqlParameters.clear();
 		
-		StringBuilder hql = new StringBuilder().append("FROM Benfeitoria b WHERE b.patrimonio.id = :idPatrimonio AND b.patrimonio.usuario.id = :idUsuario ORDER BY b.descricao ASC");
+		StringBuilder hql = new StringBuilder().append("SELECT b FROM Benfeitoria b WHERE b.patrimonio.id = :idPatrimonio AND b.patrimonio.usuario.id = :idUsuario ORDER BY b.descricao ASC");
 		
 		hqlParameters.put("idPatrimonio", patrimonio.getId());
 		hqlParameters.put("idUsuario", usuario.getId());

@@ -64,9 +64,13 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="usuario")
-@SuppressWarnings("serial")
 public class Usuario extends EntityPersistence {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1222259191108302012L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
