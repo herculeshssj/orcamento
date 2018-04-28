@@ -80,7 +80,7 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	}
 	
 	public void delete(E entity) {
-		getSession().delete(entity);
+		getSession().remove(entity);
 	}
 	
 	@SuppressWarnings("unchecked")

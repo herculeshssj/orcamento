@@ -47,6 +47,8 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -105,16 +107,17 @@ public class ArquivoRepository extends AbstractRepository {
 	}
 	
 	public boolean deleteFromLancamentoConta(Arquivo arquivo) {
-		LancamentoConta lancamento = (LancamentoConta)getSession().createQuery("SELECT lancamento FROM LancamentoConta lancamento WHERE lancamento.arquivo.id = :idArquivo")
-				.setParameter("idArquivo", arquivo.getId())
-				.uniqueResult();
-		
-		if (lancamento == null)
-			return false;
-		else {
-			lancamento.setArquivo(null);
+		try {
+			LancamentoConta lancamento = getSession().createQuery("SELECT lancamento FROM LancamentoConta lancamento WHERE lancamento.idArquivo = :idArquivo", LancamentoConta.class)
+					.setParameter("idArquivo", arquivo.getId())
+					.getSingleResult();
+			
+			lancamento.setIdArquivo(null);
 			getSession().update(lancamento);
 			return true;
+		
+		} catch (NoResultException e) {
+			return false;
 		}
 	}
 	

@@ -61,9 +61,22 @@ public class ArquivoComponent {
 		return service;
 	}
 	
-	public Long carregarArquivo(Arquivo entity) {
+	public Long carregarArquivo(Arquivo entity) {		
 		getService().salvar(entity);
 		return entity.getId();
+	}
+	
+	public Long substituirArquivo(Arquivo novoArquivo, Long arquivoAnterior) {
+		// Verifica se o arquivo anterior existe
+		Arquivo a = this.buscarArquivo(arquivoAnterior);
+		if (a != null) {
+			// Exclui o arquivo anterior
+			this.excluirArquivo(arquivoAnterior);
+		}
+		
+		// Salva o novo arquivo
+		this.carregarArquivo(novoArquivo);
+		return novoArquivo.getId();
 	}
 	
 	public Arquivo buscarArquivo(Long idArquivo) {

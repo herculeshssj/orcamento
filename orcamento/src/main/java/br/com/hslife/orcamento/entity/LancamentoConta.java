@@ -161,9 +161,8 @@ public class LancamentoConta extends EntityPersistence {
 	@Column
 	private int parcela;
 		
-	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL , orphanRemoval=true)
-	@JoinColumn(name="idArquivo", nullable=true)
-	private Arquivo arquivo;
+	@Column(name="idArquivo", nullable=true)
+	private Long idArquivo;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="idFaturaCartao", nullable=true)
@@ -185,6 +184,9 @@ public class LancamentoConta extends EntityPersistence {
 	
 	@Column
 	private boolean saldoFatura = false;
+	
+	@Transient
+	private Arquivo arquivo;
 	
 	public LancamentoConta() {
 		conta = new Conta();
@@ -314,7 +316,7 @@ public class LancamentoConta extends EntityPersistence {
 	}
 	
 	public boolean isPossuiAnexo() {
-		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
+		return this.getIdArquivo() != null;
 	}
 	
 	public boolean isHasDetalhes() {
@@ -415,14 +417,6 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setMeioPagamento(MeioPagamento meioPagamento) {
 		this.meioPagamento = meioPagamento;
-	}
-
-	public Arquivo getArquivo() {
-		return arquivo;
-	}
-
-	public void setArquivo(Arquivo arquivo) {
-		this.arquivo = arquivo;
 	}
 
 	public boolean isSelecionado() {
@@ -535,5 +529,33 @@ public class LancamentoConta extends EntityPersistence {
 
 	public void setSaldoFatura(boolean saldoFatura) {
 		this.saldoFatura = saldoFatura;
+	}
+
+	/**
+	 * @return the idArquivo
+	 */
+	public Long getIdArquivo() {
+		return idArquivo;
+	}
+
+	/**
+	 * @param idArquivo the idArquivo to set
+	 */
+	public void setIdArquivo(Long idArquivo) {
+		this.idArquivo = idArquivo;
+	}
+
+	/**
+	 * @return the arquivo
+	 */
+	public Arquivo getArquivo() {
+		return arquivo;
+	}
+
+	/**
+	 * @param arquivo the arquivo to set
+	 */
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
 	}
 }

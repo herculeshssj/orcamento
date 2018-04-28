@@ -54,6 +54,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hslife.orcamento.component.ArquivoComponent;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.FaturaCartao;
@@ -94,6 +95,9 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	
 	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
+	
+	@Autowired
+	private ArquivoComponent arquivoComponent;
 
 	public OpcaoSistemaComponent getOpcaoSistemaComponent() {
 		return opcaoSistemaComponent;
@@ -112,6 +116,13 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 	public FaturaCartaoRepository getFaturaCartaoRepository() {
 		this.faturaCartaoRepository.setSessionFactory(this.sessionFactory);
 		return faturaCartaoRepository;
+	}
+
+	/**
+	 * @return the arquivoComponent
+	 */
+	public ArquivoComponent getArquivoComponent() {
+		return arquivoComponent;
 	}
 
 	public IMoeda getMoedaService() {
@@ -221,7 +232,16 @@ public class LancamentoContaService extends AbstractCRUDService<LancamentoConta>
 		if (entity.getLancamentoPeriodico() != null && entity.getLancamentoPeriodico().getTipoLancamentoPeriodico().equals(TipoLancamentoPeriodico.PARCELADO)) {
 			throw new BusinessException("Este lançamento não pode ser excluído pois representa uma parcela!");
 		}
-		super.excluir(entity);
+		
+		// Exclui o arquivo anexado no lançamento, caso exista
+		if (entity.getIdArquivo() != null) {
+			getArquivoComponent().excluirArquivo(entity.getIdArquivo());
+		}
+		
+		// Exclui a entidade. É necessário fazer esta nova busca em virtude
+		// da busca anteriormente realizada para excluir o vínculo entre o arquivo
+		// e a entidade
+		super.excluir(getRepository().findById(entity.getId()));
 	}
 	
 	@Override

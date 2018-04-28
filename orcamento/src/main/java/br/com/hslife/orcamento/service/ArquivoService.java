@@ -175,6 +175,9 @@ public class ArquivoService implements IArquivo {
 			default :
 				throw new BusinessException("A exclusão não está disponível para este arquivo!");
 		}
+		
+		// Exclui o arquivo 
+		getRepository().delete(arquivo);
 	}
 	
 	@Override
@@ -187,7 +190,6 @@ public class ArquivoService implements IArquivo {
 					anexo = new AnexoEntidade();
 					anexo.setId(d.getId());
 					anexo.setDescricao(d.getLabel());
-					//anexo.setContemAnexo(d.getArquivo() == null ? false : true);
 					listaAnexos.add(anexo);
 				}
 				break;
@@ -207,7 +209,7 @@ public class ArquivoService implements IArquivo {
 					anexo = new AnexoEntidade();
 					anexo.setId(l.getId());
 					anexo.setDescricao(l.getLabel());
-					anexo.setContemAnexo(l.getArquivo() == null ? false : true);
+					anexo.setContemAnexo(l.isPossuiAnexo());
 					listaAnexos.add(anexo);
 				}
 				break;
@@ -231,7 +233,8 @@ public class ArquivoService implements IArquivo {
 		switch (container) {
 			case DOCUMENTOS:
 				Documento d = getDocumentoRepository().findById(idEntity);
-				//d.setArquivo(anexo);
+				getRepository().save(anexo);
+				d.setIdArquivo(anexo.getId());
 				documentoRepository.update(d);
 				break;
 			case FATURACARTAO: 
@@ -241,7 +244,8 @@ public class ArquivoService implements IArquivo {
 				break;
 			case LANCAMENTOCONTA:
 				LancamentoConta l = getLancamentoContaRepository().findById(idEntity);
-				l.setArquivo(anexo);
+				getRepository().save(anexo);
+				l.setIdArquivo(anexo.getId());
 				lancamentoContaRepository.update(l);
 				break;
 			case LANCAMENTOPERIODICO:

@@ -130,7 +130,10 @@ public class DocumentoController extends AbstractCRUDController<Documento>{
 			arquivo.setContainer(Container.DOCUMENTOS);
 			arquivo.setUsuario(getUsuarioLogado());
 			arquivo.setAttribute("arquivo");
-			entity.setIdArquivo(getArquivoComponent().carregarArquivo(arquivo));
+			if (entity.getIdArquivo() == null)
+				entity.setIdArquivo(getArquivoComponent().carregarArquivo(arquivo));
+			else
+				entity.setIdArquivo(getArquivoComponent().substituirArquivo(arquivo, entity.getIdArquivo()));
 		} 
 	}
 	
