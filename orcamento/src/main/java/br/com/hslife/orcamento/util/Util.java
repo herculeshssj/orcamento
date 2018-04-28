@@ -80,6 +80,14 @@ public class Util {
 		// Esta classe não pode ser instanciada
 	}
 	
+	public static String concatenar(String... strings) {
+		StringBuilder s = new StringBuilder();
+		for (int i = 0; i < strings.length; i++) {
+			s.append(strings[i]);
+		}
+		return s.toString();
+	}
+	
 	public static String MD5(String texto) {
         String sen = "";
         MessageDigest md = null;
