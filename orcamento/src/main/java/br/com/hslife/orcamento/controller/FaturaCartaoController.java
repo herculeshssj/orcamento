@@ -412,43 +412,49 @@ public class FaturaCartaoController extends AbstractCRUDController<FaturaCartao>
 			}
 		}
 	}
-	
+
 	public void carregarArquivo(FileUploadEvent event) {
 		if (event.getFile() != null) {
-			if (entity.getArquivo() == null) entity.setArquivo(new Arquivo());
-			entity.getArquivo().setDados(event.getFile().getContents());
-			entity.getArquivo().setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
-			entity.getArquivo().setContentType(event.getFile().getContentType());
-			entity.getArquivo().setTamanho(event.getFile().getSize());	
-			entity.getArquivo().setContainer(Container.FATURACARTAO);
-			entity.getArquivo().setUsuario(getUsuarioLogado());
-			entity.getArquivo().setAttribute("arquivo");
-		} 
+			Arquivo arquivo = new Arquivo();
+			arquivo.setDados(event.getFile().getContents());
+			arquivo.setNomeArquivo(event.getFile().getFileName().replace(" ", "."));
+			arquivo.setContentType(event.getFile().getContentType());
+			arquivo.setTamanho(event.getFile().getSize());
+			arquivo.setContainer(Container.FATURACARTAO);
+			arquivo.setUsuario(getUsuarioLogado());
+			arquivo.setAttribute("arquivo");
+			if (entity.getIdArquivo() == null)
+				entity.setIdArquivo(getArquivoComponent().carregarArquivo(arquivo));
+			else
+				entity.setIdArquivo(getArquivoComponent().substituirArquivo(arquivo, entity.getIdArquivo()));
+		}
 	}
-	
+
 	public void baixarArquivo() {
-		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
+		Arquivo arquivo = getArquivoComponent().buscarArquivo(entity.getIdArquivo());
+		if (arquivo == null) {
 			warnMessage("Nenhum arquivo adicionado!");
 		} else {
 			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-			try {			
-				response.setContentType(entity.getArquivo().getContentType());
-				response.setHeader("Content-Disposition","attachment; filename=" + entity.getArquivo().getNomeArquivo());
-				response.setContentLength(entity.getArquivo().getDados().length);
+			try {
+				response.setContentType(arquivo.getContentType());
+				response.setHeader("Content-Disposition", "attachment; filename=" + arquivo.getNomeArquivo());
+				response.setContentLength(arquivo.getDados().length);
 				ServletOutputStream output = response.getOutputStream();
-				output.write(entity.getArquivo().getDados(), 0, entity.getArquivo().getDados().length);
+				output.write(arquivo.getDados(), 0, arquivo.getDados().length);
 				FacesContext.getCurrentInstance().responseComplete();
 			} catch (Exception e) {
 				errorMessage(e.getMessage());
 			}
 		}
 	}
-	
+
 	public void excluirArquivo() {
-		if (entity.getArquivo() == null || entity.getArquivo().getDados() == null || entity.getArquivo().getDados().length == 0) {
+		if (entity.getIdArquivo() == null) {
 			warnMessage("Nenhum arquivo adicionado!");
 		} else {
-			entity.setArquivo(new Arquivo());
+			getArquivoComponent().excluirArquivo(entity.getIdArquivo());
+			entity.setIdArquivo(null);
 			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
 		}
 	}

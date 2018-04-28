@@ -146,7 +146,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=true)
 	private Moeda moeda;
 
-	@Column
+	@Column(nullable = true)
 	private Long idArquivo;
 	
 	@ManyToOne

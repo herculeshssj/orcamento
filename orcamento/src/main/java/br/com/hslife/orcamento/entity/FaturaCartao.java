@@ -133,10 +133,9 @@ public class FaturaCartao extends EntityPersistence {
 	
 	@OneToMany(mappedBy="faturaCartao", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=false)
 	private Set<LancamentoConta> detalheFatura;
-	
-	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	@JoinColumn(name="idArquivo", nullable=true)
-	private Arquivo arquivo;
+
+	@Column(nullable = true)
+	private Long idArquivo;
 	
 	@Transient
 	private Categoria categoriaSelecionada;
@@ -226,7 +225,7 @@ public class FaturaCartao extends EntityPersistence {
 	}
 	
 	public boolean isPossuiAnexo() {
-		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
+		return this.idArquivo != null;
 	}
 	
 	/**
@@ -418,14 +417,6 @@ public class FaturaCartao extends EntityPersistence {
 		this.detalheFatura = detalheFatura;
 	}
 
-	public Arquivo getArquivo() {
-		return arquivo;
-	}
-
-	public void setArquivo(Arquivo arquivo) {
-		this.arquivo = arquivo;
-	}
-
 	public double getSaldoDevedor() {
 		return saldoDevedor;
 	}
@@ -480,5 +471,13 @@ public class FaturaCartao extends EntityPersistence {
 
 	public void setMeioPagamentoSelecionado(MeioPagamento meioPagamentoSelecionado) {
 		this.meioPagamentoSelecionado = meioPagamentoSelecionado;
+	}
+
+	public Long getIdArquivo() {
+		return idArquivo;
+	}
+
+	public void setIdArquivo(Long idArquivo) {
+		this.idArquivo = idArquivo;
 	}
 }

@@ -120,18 +120,34 @@ public class ArquivoRepository extends AbstractRepository {
 			return false;
 		}
 	}
+
+	public boolean deleteFromLancamentoPeriodico(Arquivo arquivo) {
+		try {
+			LancamentoPeriodico lancamento = getSession().createQuery("SELECT lancamento FROM LancamentoPeriodico lancamento WHERE lancamento.idArquivo = :idArquivo", LancamentoPeriodico.class)
+					.setParameter("idArquivo", arquivo.getId())
+					.getSingleResult();
+
+			lancamento.setIdArquivo(null);
+			getSession().update(lancamento);
+			return true;
+
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
 	
 	public boolean deleteFromFaturaCartao(Arquivo arquivo) {
-		FaturaCartao fatura = (FaturaCartao)getSession().createQuery("SELECT fatura FROM FaturaCartao fatura WHERE fatura.arquivo.id = :idArquivo")
-				.setParameter("idArquivo", arquivo.getId())
-				.uniqueResult();
-		
-		if (fatura == null)
-			return false;
-		else {
-			fatura.setArquivo(null);
+		try {
+			FaturaCartao fatura = getSession().createQuery("SELECT fatura FROM FaturaCartao fatura WHERE fatura.idArquivo = :idArquivo", FaturaCartao.class)
+					.setParameter("idArquivo", arquivo.getId())
+					.getSingleResult();
+
+			fatura.setIdArquivo(null);
 			getSession().update(fatura);
 			return true;
+
+		} catch (NoResultException e) {
+			return false;
 		}
 	}
 	
@@ -148,18 +164,5 @@ public class ArquivoRepository extends AbstractRepository {
 		}
 	}
 	
-	public boolean deleteFromLancamentoPeriodico(Arquivo arquivo) {
-		try {
-			LancamentoPeriodico lancamento = getSession().createQuery("SELECT lancamento FROM LancamentoPeriodico lancamento WHERE lancamento.idArquivo = :idArquivo", LancamentoPeriodico.class)
-					.setParameter("idArquivo", arquivo.getId())
-					.getSingleResult();
 
-			lancamento.setIdArquivo(null);
-			getSession().update(lancamento);
-			return true;
-
-		} catch (NoResultException e) {
-			return false;
-		}
-	}
 }

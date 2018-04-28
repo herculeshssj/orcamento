@@ -199,7 +199,7 @@ public class ArquivoService implements IArquivo {
 						anexo = new AnexoEntidade();
 						anexo.setId(f.getId());
 						anexo.setDescricao(f.getLabel());
-						anexo.setContemAnexo(f.getArquivo() == null ? false : true);
+						anexo.setContemAnexo(f.isPossuiAnexo());
 						listaAnexos.add(anexo);
 					}					
 				}
@@ -218,7 +218,7 @@ public class ArquivoService implements IArquivo {
 					anexo = new AnexoEntidade();
 					anexo.setId(l.getId());
 					anexo.setDescricao(l.getLabel());
-					anexo.setContemAnexo(l.getArquivo() == null ? false : true);
+					anexo.setContemAnexo(l.isPossuiAnexo());
 					listaAnexos.add(anexo);
 				}
 				break;
@@ -239,7 +239,8 @@ public class ArquivoService implements IArquivo {
 				break;
 			case FATURACARTAO: 
 				FaturaCartao f = getFaturaCartaoRepository().findById(idEntity);
-				f.setArquivo(anexo);
+				getRepository().save(anexo);
+				f.setIdArquivo(anexo.getId());
 				faturaCartaoRepository.update(f);
 				break;
 			case LANCAMENTOCONTA:
@@ -250,7 +251,8 @@ public class ArquivoService implements IArquivo {
 				break;
 			case LANCAMENTOPERIODICO:
 				LancamentoPeriodico lp = getLancamentoPeriodicoRepository().findById(idEntity);
-				lp.setArquivo(anexo);
+				getRepository().save(anexo);
+				lp.setIdArquivo(anexo.getId());
 				lancamentoPeriodicoRepository.update(lp);
 				break;
 			default :
