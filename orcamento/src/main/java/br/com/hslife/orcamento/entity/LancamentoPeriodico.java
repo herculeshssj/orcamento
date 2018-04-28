@@ -145,10 +145,9 @@ public class LancamentoPeriodico extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idMoeda", nullable=true)
 	private Moeda moeda;
-	
-	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	@JoinColumn(name="idArquivo", nullable=true)
-	private Arquivo arquivo;
+
+	@Column
+	private Long idArquivo;
 	
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
@@ -163,6 +162,9 @@ public class LancamentoPeriodico extends EntityPersistence {
 	
 	@Transient
 	private boolean selecionado;
+
+	@Transient
+	private Arquivo arquivo;
 	
 	public LancamentoPeriodico() {
 		statusLancamento = StatusLancamento.ATIVO;
@@ -191,7 +193,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	}
 	
 	public boolean isPossuiAnexo() {
-		return this.getArquivo() != null && this.getArquivo().getDados() != null && this.getArquivo().getDados().length != 0;
+		return this.idArquivo != null;
 	}
 	
 	public Long getId() {
@@ -369,5 +371,13 @@ public class LancamentoPeriodico extends EntityPersistence {
 
 	public void setSelecionado(boolean selecionado) {
 		this.selecionado = selecionado;
+	}
+
+	public Long getIdArquivo() {
+		return idArquivo;
+	}
+
+	public void setIdArquivo(Long idArquivo) {
+		this.idArquivo = idArquivo;
 	}
 }

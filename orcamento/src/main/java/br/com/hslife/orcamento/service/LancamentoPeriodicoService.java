@@ -50,6 +50,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import br.com.hslife.orcamento.component.ArquivoComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,9 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	@Autowired
 	private FechamentoPeriodoService fechamentoPeriodoService;
 
+	@Autowired
+	private ArquivoComponent arquivoComponent;
+
 	public LancamentoPeriodicoRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
 		return repository;
@@ -92,6 +96,10 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 	public LancamentoContaRepository getLancamentoContaRepository() {
 		this.lancamentoContaRepository.setSessionFactory(this.sessionFactory);
 		return lancamentoContaRepository;
+	}
+
+	public ArquivoComponent getArquivoComponent() {
+		return arquivoComponent;
 	}
 
 	public FechamentoPeriodoService getFechamentoPeriodoService() {
@@ -125,8 +133,16 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 				throw new BusinessException("Não é possível excluir! Existem pagamentos registrados!");
 			}
 		}
-		// Exclui o lançamento e todos os seus pagamentos
-		super.excluir(entity);
+
+		// Exclui o arquivo anexado no lançamento, caso exista
+		if (entity.getIdArquivo() != null) {
+			getArquivoComponent().excluirArquivo(entity.getIdArquivo());
+		}
+
+		// Exclui a entidade. É necessário fazer esta nova busca em virtude
+		// da busca anteriormente realizada para excluir o vínculo entre o arquivo
+		// e a entidade
+		super.excluir(getRepository().findById(entity.getId()));
 	}
 	
 	@Override

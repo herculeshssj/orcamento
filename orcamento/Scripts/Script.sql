@@ -3,6 +3,11 @@ show tables;
 desc lancamentoconta;
 
 select * from lancamentoconta order by id desc;
+
+select * from documento order by id desc;
+
+
+select * from lancamentoperiodico order by id desc;
 select * from arquivo order by id desc;
 
 select * from dividaterceiro;

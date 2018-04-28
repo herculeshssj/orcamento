@@ -149,16 +149,17 @@ public class ArquivoRepository extends AbstractRepository {
 	}
 	
 	public boolean deleteFromLancamentoPeriodico(Arquivo arquivo) {
-		LancamentoPeriodico lancamento = (LancamentoPeriodico)getSession().createQuery("SELECT lancamento FROM LancamentoPeriodico lancamento WHERE lancamento.arquivo.id = :idArquivo")
-				.setParameter("idArquivo", arquivo.getId())
-				.uniqueResult();
-		
-		if (lancamento == null)
-			return false;
-		else {
-			lancamento.setArquivo(null);
+		try {
+			LancamentoPeriodico lancamento = getSession().createQuery("SELECT lancamento FROM LancamentoPeriodico lancamento WHERE lancamento.idArquivo = :idArquivo", LancamentoPeriodico.class)
+					.setParameter("idArquivo", arquivo.getId())
+					.getSingleResult();
+
+			lancamento.setIdArquivo(null);
 			getSession().update(lancamento);
 			return true;
+
+		} catch (NoResultException e) {
+			return false;
 		}
 	}
 }
