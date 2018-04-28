@@ -99,8 +99,8 @@ public class ConnectionFactory {
 				while (true) {
 					try {
 						Connection conn = dataSource.getConnection();
-						conn.createStatement().execute("SELECT 1");
-						Thread.sleep(3600000);
+						conn.createStatement().execute("SELECT max(date) from logs");
+						Thread.sleep(60);
 					} catch (Exception e) {
 						logger.catching(e);
 					}
