@@ -90,7 +90,6 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 		try {
 			return (E)getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e WHERE e.id = :idEntity")
 					.setParameter("idEntity", id)
-					.setCacheable(true)
 					.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
@@ -99,11 +98,11 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	
 	@SuppressWarnings("unchecked")
 	public List<E> findAll() {
-		return getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e").setCacheable(true).getResultList();
+		return getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e").getResultList();
 	}
 	
 	protected Query<E> getQuery(String hql) {
-		return getSession().createQuery(hql, clazz).setCacheable(true);
+		return getSession().createQuery(hql, clazz);
 	}
 	
 	protected Query<E> getQueryApplyingParameters(StringBuilder hql) {
@@ -112,8 +111,7 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 	
 	protected Query<E> getQueryApplyingParameters(String hql) {
 		Query<E> query = getSession()
-				.createQuery(hql, clazz)
-				.setCacheable(true);
+				.createQuery(hql, clazz);
 		
 		for (String s : hqlParameters.keySet()) {
 			query.setParameter(s, hqlParameters.get(s));
