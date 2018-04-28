@@ -407,6 +407,17 @@
 						<table>schema_version</table>
   					</configuration>
   				</plugin>
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>1.2.1.Final</version>
+					<configuration>
+						<hostname>${env.wildflyHostname}</hostname>
+						<port>${env.wildflyPort}</port>
+						<username>${env.wildflyUsername}</username>
+						<password>${env.wildflyPassword}</password>
+					</configuration>
+				</plugin>
   			</plugins>
   		</build>
   	</profile>
