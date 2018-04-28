@@ -70,6 +70,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortComparator;
 
 import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
@@ -80,6 +82,7 @@ import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="lancamentoconta")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class LancamentoConta extends EntityPersistence {
 
 	/**

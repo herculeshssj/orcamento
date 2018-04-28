@@ -176,6 +176,12 @@
 	
 	<dependency>
 	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context-support</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>${spring.version}</version>
 	</dependency>
@@ -335,7 +341,19 @@
 	    <artifactId>poi</artifactId>
 	    <version>3.17</version>
 	</dependency>
-	  
+	
+	<dependency>
+	    <groupId>net.sf.ehcache</groupId>
+	    <artifactId>ehcache</artifactId>
+	    <version>2.10.5</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.google.guava</groupId>
+	    <artifactId>guava</artifactId>
+	    <version>24.1-jre</version>
+	</dependency>
+
 	<!-- Testing -->
     <dependency>
 	    <groupId>junit</groupId>

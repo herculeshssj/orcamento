@@ -59,11 +59,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
 @Table(name="usuario")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class Usuario extends EntityPersistence {
 	
 	/**

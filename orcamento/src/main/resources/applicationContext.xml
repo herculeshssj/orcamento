@@ -132,6 +132,7 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     
+    <!-- Transaction Manager -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     
     <!-- Task Scheduler -->
@@ -152,5 +153,5 @@
 			<sec:password-encoder hash="sha-256"/>
 		</sec:authentication-provider>
 	</sec:authentication-manager>
-	
+		
 </beans>
