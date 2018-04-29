@@ -109,7 +109,7 @@ public class RelatorioCustomizadoRepositoryTest extends AbstractTestRepositories
 		assertEquals(relatorio.getId(), relatorioTest.getId());
 	}
 	
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		relatorioCustomizadoRepository.save(relatorio);
 		

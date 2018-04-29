@@ -51,8 +51,6 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +83,7 @@ public class CombustivelServiceTest extends AbstractTestServices {
 		assertEquals(entity.getId(), entityTest.getId());
 	}
 	
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		service.cadastrar(entity);
 		

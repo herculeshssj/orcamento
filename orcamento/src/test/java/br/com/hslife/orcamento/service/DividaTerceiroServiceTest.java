@@ -53,8 +53,6 @@ import static org.junit.Assert.fail;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +152,7 @@ public class DividaTerceiroServiceTest extends AbstractTestServices {
 		}
 	}
 	
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testExcluir() throws ApplicationException {
 		dividaTerceiroService.cadastrar(dividaTerceiro);
 		

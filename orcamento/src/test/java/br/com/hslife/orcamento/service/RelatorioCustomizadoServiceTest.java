@@ -61,8 +61,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.persistence.NoResultException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,7 +191,7 @@ public class RelatorioCustomizadoServiceTest extends AbstractTestServices {
 		assertEquals(3, i);
 	}
 	
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testExcluir() throws ApplicationException {
 		relatorioCustomizadoService.cadastrar(relatorio);
 		

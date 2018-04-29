@@ -99,7 +99,7 @@ public class ModeloDocumentoRepositoryTest extends AbstractTestRepositories {
 		assertEquals(modelo.getId(), modeloTest.getId());
 	}
 	
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		modeloDocumentoRepository.save(modelo);
 		

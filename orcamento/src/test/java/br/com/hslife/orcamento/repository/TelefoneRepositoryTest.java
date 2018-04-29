@@ -137,7 +137,7 @@ public class TelefoneRepositoryTest extends AbstractTestRepositories {
 		assertEquals(telefone.getUsuario(), telefoneTest.getUsuario());
 	}
 
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		telefoneRepository.save(telefone);
 				
