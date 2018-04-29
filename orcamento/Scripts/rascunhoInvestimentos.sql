@@ -11,3 +11,9 @@ select * from movimentacaoinvestimento order by id desc;
 
 select * from logs order by id desc;
 
+show tables;
+select * from fii;
+select * from movimentacao_fii;
+
+select * from info_fii;
+select * from rendimento_fii;

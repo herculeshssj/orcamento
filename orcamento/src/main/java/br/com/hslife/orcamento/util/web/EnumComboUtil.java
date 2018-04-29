@@ -50,27 +50,9 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import br.com.hslife.orcamento.enumeration.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import br.com.hslife.orcamento.enumeration.Abrangencia;
-import br.com.hslife.orcamento.enumeration.Bandeira;
-import br.com.hslife.orcamento.enumeration.CadastroSistema;
-import br.com.hslife.orcamento.enumeration.FormaPagamentoFatura;
-import br.com.hslife.orcamento.enumeration.IncrementoClonagemLancamento;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
-import br.com.hslife.orcamento.enumeration.PeriodoLogs;
-import br.com.hslife.orcamento.enumeration.StatusDivida;
-import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoCartao;
-import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.enumeration.TipoConta;
-import br.com.hslife.orcamento.enumeration.TipoDado;
-import br.com.hslife.orcamento.enumeration.TipoInvestimento;
-import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.enumeration.TipoPessoa;
-import br.com.hslife.orcamento.enumeration.TipoTermoDividaTerceiro;
-import br.com.hslife.orcamento.enumeration.TipoTratamento;
 
 @Component("enumCombo")
 @Scope("application")
@@ -234,6 +216,14 @@ public class EnumComboUtil {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
 		for (PeriodoLancamento enumeration : PeriodoLancamento.values()) {
 			if (enumeration.equals(PeriodoLancamento.FIXO)) continue;
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+
+	public List<SelectItem> getListaTipoDivida() {
+		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
+		for (TipoDivida enumeration : TipoDivida.values()) {
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;

@@ -69,8 +69,10 @@ import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoDivida;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
+import org.apache.poi.ss.formula.functions.FinanceLib;
 
 @Entity
 @Table(name="dividaterceiro")
@@ -82,7 +84,7 @@ public class DividaTerceiro extends EntityPersistence {
 	private Long id;
 	
 	@Column(nullable=false, precision=18, scale=2)
-	private double valorDivida;
+	private double valorDivida; // ou principal, para os empréstimos
 	
 	@Temporal(TemporalType.DATE)
 	@Column(nullable=false)
@@ -104,7 +106,11 @@ public class DividaTerceiro extends EntityPersistence {
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name="idArquivoTermoQuitacao", nullable=true)
 	private Arquivo arquivoTermoQuitacao;
-	
+
+	@Column(length=10, nullable=false)
+	@Enumerated(EnumType.STRING)
+	private TipoDivida tipoDivida;
+
 	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private StatusDivida statusDivida;
@@ -112,6 +118,18 @@ public class DividaTerceiro extends EntityPersistence {
 	@Column(length=10, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoCategoria tipoCategoria;
+
+	@Column
+	private boolean emprestimo;
+
+	@Column
+	private int quantParcelas;
+
+	@Column(precision=18, scale=2)
+	private double taxaJuros;
+
+	@Column(precision=18, scale=2)
+	private double valorParcela; // Entra o cálculo presente em FinanceTest.testCalcularPrestacao()
 	
 	@ManyToOne
 	@JoinColumn(name="idMoeda", nullable=false)
@@ -133,10 +151,12 @@ public class DividaTerceiro extends EntityPersistence {
 	
 	public DividaTerceiro() {		
 		this.statusDivida = StatusDivida.REGISTRADO;
+		this.setTipoDivida(TipoDivida.TERCEIROS);
 	}
 	
 	@Override
 	public void validate() {
+        EntityPersistenceUtil.validaCampoNulo("Tipo de dívida", this.tipoDivida);
 		EntityPersistenceUtil.validaCampoNulo("Data da negociação", this.dataNegociacao);
 		EntityPersistenceUtil.validaCampoNulo("Justificativa", this.justificativa);
 		EntityPersistenceUtil.validaCampoNulo("Categoria da dívida", this.tipoCategoria);
@@ -212,6 +232,81 @@ public class DividaTerceiro extends EntityPersistence {
 		} else {
 			return this.dataNegociacao;
 		}
+	}
+
+    /**
+     * Retorna o valor da parcela a partir do principal (valor da dívida), a taxa de juros
+     * e a quantidade de parcelas.
+     *
+     * O método retorna o valor calcular se e somente se os campos necessários forem diferentes
+     * de zero, e a dívida de terceiro for empréstimo.
+     *
+     * @return o valor da parcela
+     */
+	public double calcularValorParcela() {
+	    double valorFuturo = 0.0;
+	    if (this.emprestimo) {
+
+	        if (this.valorDivida > 0 && this.quantParcelas > 0 && this.taxaJuros > 0) {
+                // Calcula a prestação
+                this.valorParcela = Util.arredondar(FinanceLib.pmt(this.taxaJuros/100, quantParcelas, -valorDivida, valorFuturo, false));
+            }
+        }
+
+        return this.valorParcela;
+    }
+
+	/**
+	 * Retorna a quantidade de parcelas pagas baseado na quantidade de pagamentos realizados
+	 * @return quantidade de parcelas pagas
+	 */
+	public int getQuantParcelasPagas() {
+	    if (this.emprestimo) {
+            int quantidade = 0;
+            if (this.pagamentos != null) {
+                // Percorre a lista de pagamentos contabilizando aqueles cujo valor é igual ao
+                // valor da parcela
+                for (PagamentoDividaTerceiro pagamento : this.pagamentos) {
+                    if (pagamento.getValorPago() == this.valorParcela) {
+                        quantidade++;
+                    }
+                }
+                // Retorna a quantidade de parcelas
+                return quantidade;
+            }
+        }
+		return 0;
+	}
+
+	/**
+	 * Retorna a quantidade de parcelas a pagar do empréstimo baseado na quantidade de pagamentos
+	 * realizados
+	 * @return quantidade de parcelas a pagar
+	 */
+	public int getQuantParcelasAPagar() {
+		if (this.emprestimo) {
+		    return this.quantParcelas - this.getQuantParcelasPagas();
+        }
+        return 0;
+	}
+
+	/**
+	 * Retorna o saldo devedor do empréstimo usando o cálculo de valor presente (PV),
+     * como exemplificado em FinanceTest.testCalcularSaldoDevedor()
+	 * @return saldo devedor do empréstimo
+	 */
+	public double getSaldoDevedor() {
+        double valorFuturo = 0.0;
+		if (this.emprestimo) {
+
+		    if (this.taxaJuros > 0 && this.getQuantParcelasAPagar() > 0 && this.valorParcela > 0) {
+		        // Calcula o valor presente para determinar o saldo devedor atual
+                return Util.arredondar(FinanceLib.pv(this.taxaJuros/100, this.getQuantParcelasAPagar(), -this.valorParcela, valorFuturo, false));
+            }
+
+        }
+
+        return 0.0;
 	}
 
 	public Long getId() {
@@ -333,4 +428,44 @@ public class DividaTerceiro extends EntityPersistence {
 	public void setArquivoTermoQuitacao(Arquivo arquivoTermoQuitacao) {
 		this.arquivoTermoQuitacao = arquivoTermoQuitacao;
 	}
+
+    public TipoDivida getTipoDivida() {
+        return tipoDivida;
+    }
+
+    public void setTipoDivida(TipoDivida tipoDivida) {
+        this.tipoDivida = tipoDivida;
+    }
+
+    public boolean isEmprestimo() {
+        return emprestimo;
+    }
+
+    public void setEmprestimo(boolean emprestimo) {
+        this.emprestimo = emprestimo;
+    }
+
+    public int getQuantParcelas() {
+        return quantParcelas;
+    }
+
+    public void setQuantParcelas(int quantParcelas) {
+        this.quantParcelas = quantParcelas;
+    }
+
+    public double getTaxaJuros() {
+        return taxaJuros;
+    }
+
+    public void setTaxaJuros(double taxaJuros) {
+        this.taxaJuros = taxaJuros;
+    }
+
+    public double getValorParcela() {
+        return valorParcela;
+    }
+
+    public void setValorParcela(double valorParcela) {
+        this.valorParcela = valorParcela;
+    }
 }

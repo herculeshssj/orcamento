@@ -45,19 +45,20 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.entity;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.exception.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.ValidationException;
+import java.util.Date;
 
-public class DividaTerceiroTest {
+import static org.junit.Assert.assertEquals;
+
+public class DividaTerceiroEmprestimoTest {
 
 	private DividaTerceiro entity;
+
+	private static final double DELTA = 1e-15;
 
 	@Before
 	public void setUp() throws Exception {
@@ -78,87 +79,59 @@ public class DividaTerceiroTest {
 		entity.setJustificativa("Justificativa da dívida de teste");
 		entity.setTermoDivida("Termo da dívida de teste");
 		entity.setTermoQuitacao("Termo de quitação da dívida de teste");
-		entity.setTipoCategoria(TipoCategoria.CREDITO);
+		entity.setTipoCategoria(TipoCategoria.DEBITO);
 		entity.setUsuario(usuario);
 		entity.setValorDivida(1000);
 		entity.setMoeda(moeda);
-		
+	}
+
+	private void configurarEmprestimo() {
+		entity.setEmprestimo(true);
+		entity.setQuantParcelas(24);
+		entity.setTaxaJuros(4.75);
+		entity.calcularValorParcela();
+
 		PagamentoDividaTerceiro pagamento;
-		for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < 12; ++i) {
 			pagamento = new PagamentoDividaTerceiro();
 			pagamento.setComprovantePagamento("Comprovante de pagamento da dívida de teste " + i);
 			pagamento.setDataPagamento(new Date());
 			pagamento.setDividaTerceiro(entity);
-			pagamento.setValorPago(100);
+			if (i % 2 == 0)
+				pagamento.setValorPago(entity.getValorParcela());
+			else
+				pagamento.setValorPago(75);
 			entity.getPagamentos().add(pagamento);
 		}
 	}
 
-	@Test(expected=ValidationException.class)
-	public void testValidateDataNegociacao() {
-		entity.setDataNegociacao(null);
-		entity.validate();
-	}
-
-	@Test(expected=ValidationException.class)
-	public void testValidateJustificativa() {
-		entity.setJustificativa(null);
-		entity.validate();
-	}
-	
-	@Test(expected=ValidationException.class)
-	public void testValidateTamanhoJustificativa() {
-		StringBuilder s = new StringBuilder(10000);
-		for (int i = 0; i < 10000; ++i) 
-			s.append("a");
-		entity.setJustificativa(s.toString());
-		entity.validate();
-	}
-
-	@Test(expected=ValidationException.class)
-	public void testValidateCategoria() {
-		entity.setTipoCategoria(null);
-		entity.validate();
-	}
-
-	@Test(expected=ValidationException.class)
-	public void testValidateFavorecido() {
-		entity.setFavorecido(null);
-		entity.validate();
-	}
-
-	@Test(expected=ValidationException.class)
-	public void testValidateMoeda() {
-		entity.setMoeda(null);
-		entity.validate();
-	}
-
-	@Test(expected=ValidationException.class)
-	public void testValidateTipoDivida() {
-		entity.setTipoDivida(null);
-		entity.validate();
+	@Test
+	public void testCalcularValorParcela() {
+		assertEquals(0, entity.getValorParcela(), DELTA);
+		entity.setEmprestimo(true);
+		entity.calcularValorParcela();
+		assertEquals(0, entity.getValorParcela(), DELTA);
+		entity.setQuantParcelas(24);
+		entity.setTaxaJuros(4.75);
+		entity.calcularValorParcela();
+		assertEquals(70.72, entity.getValorParcela(), DELTA);
 	}
 
 	@Test
-	public void testLabel() {
-		assertEquals("Crédito com Favorecido de teste no valor de R$ 1000.0 - Registrado", entity.getLabel());
+	public void testQuantParcelasPagas() {
+		configurarEmprestimo();
+		assertEquals(6, entity.getQuantParcelasPagas());
 	}
 
 	@Test
-	public void testTotalPago() {
-		assertEquals(300.0, entity.getTotalPago(), 0);
+	public void testQuantParcelasAPagar() {
+		configurarEmprestimo();
+		assertEquals(18, entity.getQuantParcelasAPagar());
 	}
 
 	@Test
-	public void testTotalAPagar() {
-		assertEquals(700.0, entity.getTotalAPagar(), 0);
-	}
-	
-	@Test(expected=ValidationException.class)
-	public void testValidateDataPagamento() {
-		for (PagamentoDividaTerceiro pagamento : entity.getPagamentos()) { 
-			pagamento.setDataPagamento(null);
-			pagamento.validate();
-		}		
+	public void testSaldoDevedor() {
+		configurarEmprestimo();
+		assertEquals(843.07, entity.getSaldoDevedor(), DELTA);
 	}
 }
