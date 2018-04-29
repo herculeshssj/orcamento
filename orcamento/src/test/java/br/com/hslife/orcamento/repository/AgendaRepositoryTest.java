@@ -145,7 +145,7 @@ public class AgendaRepositoryTest extends AbstractTestRepositories {
 		assertEquals(agenda.getUsuario(), agendaTest.getUsuario());
 	}
 
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		agendaRepository.save(agenda);
 		

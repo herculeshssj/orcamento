@@ -90,7 +90,7 @@ public class CombustivelRepositoryTest extends AbstractTestRepositories {
 		assertEquals(entity.getId(), entityTest.getId());
 	}
 	
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		repository.save(entity);
 		

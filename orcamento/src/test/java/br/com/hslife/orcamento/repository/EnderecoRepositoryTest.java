@@ -50,8 +50,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -149,7 +147,7 @@ public class EnderecoRepositoryTest extends AbstractTestRepositories {
 		assertEquals(endereco.getDescricao(),enderecoTest.getDescricao());
 	}
 
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		enderecoRepository.save(endereco);
 				

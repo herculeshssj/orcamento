@@ -152,7 +152,7 @@ public class PessoalRepositoryTest extends AbstractTestRepositories {
 		assertEquals(pessoal.getNaturalidade(), pessoalTest.getNaturalidade());
 	}
 
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		pessoalRepository.save(pessoal);
 		

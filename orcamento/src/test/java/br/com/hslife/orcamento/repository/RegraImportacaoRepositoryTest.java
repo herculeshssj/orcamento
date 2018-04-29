@@ -113,7 +113,7 @@ public class RegraImportacaoRepositoryTest extends AbstractTestRepositories {
 		assertEquals(regra.getId(), regraTest.getId());
 	}
 	
-	@Test(expected=NoResultException.class)
+	@Test
 	public void testDelete() {
 		regraImportacaoRepository.save(regra);
 		
