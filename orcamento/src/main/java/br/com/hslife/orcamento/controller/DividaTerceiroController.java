@@ -147,7 +147,7 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			errorMessage(be.getMessage());
 		}
 	}
-	
+
 	@Override
 	public String save() {
 		if (entity.isEmprestimo())
@@ -180,6 +180,10 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			errorMessage(be.getMessage());
 		}
 	}
+
+	public void calcularValorParcela() {
+	    entity.calcularValorParcela();
+    }
 	
 	public String vigorarDividaTerceiroView() {
 		try {
@@ -248,6 +252,8 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			actionTitle = " - Renegociar dívida";
 			operation = "vigorar";
 			entity.setDataNegociacao(new Date());
+			if (entity.isEmprestimo())
+			    entity.setValorDivida(entity.getTotalAPagar());
 			return "/pages/DividaTerceiro/renegociarDivida";
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());
@@ -286,6 +292,12 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 		}
 		
 		try {
+            if (!entity.isEmprestimo()) {
+                entity.setQuantParcelas(0);
+                entity.setTaxaJuros(0.0);
+                entity.setValorParcela(0.0);
+            }
+
 			// renegocia a dívida
 			getService().renegociarDividaTerceiro(entity, novaJustificativa);
 			

@@ -77,6 +77,7 @@
 	    <label for="frmFormEntity:txtValorDivida">Valor da dívida:</label>
 	    <h:inputText id="txtValorDivida" value="#{managedBean.entity.valorDivida}" size="10">
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			<p:ajax update="txtValorParcela" event="keydown" listener="#{managedBean.calcularValorParcela}"/>
 		</h:inputText>
 			
 		<label>Moeda:</label>
@@ -101,11 +102,14 @@
 				</f:facet>
 
 				<label for="frmFormEntity:txtQuantParcelas">Quantidade de parcelar:</label>
-				<h:inputText id="txtQuantParcelas" value="#{managedBean.entity.quantParcelas}"/>
+				<h:inputText id="txtQuantParcelas" value="#{managedBean.entity.quantParcelas}">
+					<p:ajax update="txtValorParcela" event="keydown" listener="#{managedBean.calcularValorParcela}"/>
+				</h:inputText>
 
 				<label for="frmFormEntity:txtTaxaJuros">Taxa de juros:</label>
 				<h:inputText id="txtTaxaJuros" value="#{managedBean.entity.taxaJuros}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					<p:ajax update="txtValorParcela" event="keydown" listener="#{managedBean.calcularValorParcela}"/>
 				</h:inputText>
 
 				<label for="frmFormEntity:txtValorParcela">Valor da parcela:</label>

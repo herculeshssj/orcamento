@@ -128,6 +128,12 @@ public class DividaTerceiroService extends AbstractCRUDService<DividaTerceiro> i
 		novaDivida.setTipoCategoria(entity.getTipoCategoria());
 		novaDivida.setUsuario(entity.getUsuario());
 		novaDivida.setValorDivida(entity.getValorDivida());
+		novaDivida.setEmprestimo(entity.isEmprestimo());
+		if (novaDivida.isEmprestimo()){
+			novaDivida.setValorParcela(entity.getValorParcela());
+			novaDivida.setTaxaJuros(entity.getTaxaJuros());
+			novaDivida.setQuantParcelas(entity.getQuantParcelas());
+		}
 		getRepository().save(novaDivida);
 	}
 	

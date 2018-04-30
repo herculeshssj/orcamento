@@ -99,17 +99,17 @@
 			</f:facet>
 
 			<label>Quantidade de parcelas:</label>
-			<h:outputText id="txtQuantParcelas" value="#{managedBean.entity.quantParcelas}"/>
+			<h:outputText id="txtQuantParcelasInfo" value="#{managedBean.entity.quantParcelas}"/>
 
 			<label>Taxa de juros:</label>
-			<h:outputText id="txtTaxaJuros" value="#{managedBean.entity.taxaJuros}">
+			<h:outputText id="txtTaxaJurosInfo" value="#{managedBean.entity.taxaJuros}">
 				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 
 			<label>Valor da parcela:</label>
 			<h:panelGroup>
 				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
-				<h:outputText id="txtValorParcela" value="#{managedBean.entity.valorParcela}">
+				<h:outputText id="txtValorParcelaInfo" value="#{managedBean.entity.valorParcela}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 			</h:panelGroup>
@@ -128,12 +128,46 @@
 	     	
 	    <label for="frmFormEntity:txtValorDivida">Valor da dívida renegociada:</label>
 	    <h:inputText id="txtValorDivida" value="#{managedBean.entity.valorDivida}" size="10">
-			<f:convertNumber type="currency" pattern="###.##"/>
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			<p:ajax update="txtValorParcela" event="keydown" listener="#{managedBean.calcularValorParcela}"/>
 		</h:inputText>
 			
 		<label for="frmFormEntity:txtJustificativa">Justificativa para renegociar:</label>
 		<h:inputTextarea id="txtJustificativa" value="#{managedBean.novaJustificativa}" />
-			
+
+		<h:selectBooleanCheckbox value="#{managedBean.entity.emprestimo}">
+			<p:ajax update="pnlEmprestimo"/>
+		</h:selectBooleanCheckbox>
+		<label>É um novo empréstimo</label>
+
+		<p:outputPanel id="pnlEmprestimo">
+
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.emprestimo}">
+
+				<f:facet name="header">
+					<h:outputText value="Informações do empréstimo" />
+				</f:facet>
+
+				<label for="frmFormEntity:txtQuantParcelas">Quantidade de parcelar:</label>
+				<h:inputText id="txtQuantParcelas" value="#{managedBean.entity.quantParcelas}">
+					<p:ajax update="txtValorParcela" event="keydown" listener="#{managedBean.calcularValorParcela}"/>
+				</h:inputText>
+
+				<label for="frmFormEntity:txtTaxaJuros">Taxa de juros:</label>
+				<h:inputText id="txtTaxaJuros" value="#{managedBean.entity.taxaJuros}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+					<p:ajax update="txtValorParcela" event="keydown" listener="#{managedBean.calcularValorParcela}"/>
+				</h:inputText>
+
+				<label for="frmFormEntity:txtValorParcela">Valor da parcela:</label>
+				<h:outputText id="txtValorParcela" value="#{managedBean.entity.valorParcela}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+
+			</h:panelGrid>
+
+		</p:outputPanel>
+
 		<hr />
 		
 		<ui:include src="selecaoTipoTermo.xhtml"/>
