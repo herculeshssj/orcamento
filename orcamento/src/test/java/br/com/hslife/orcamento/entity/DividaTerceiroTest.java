@@ -133,12 +133,6 @@ public class DividaTerceiroTest {
 		entity.validate();
 	}
 
-	@Test(expected=ValidationException.class)
-	public void testValidateTipoDivida() {
-		entity.setTipoDivida(null);
-		entity.validate();
-	}
-
 	@Test
 	public void testLabel() {
 		assertEquals("Crédito com Favorecido de teste no valor de R$ 1000.0 - Registrado", entity.getLabel());

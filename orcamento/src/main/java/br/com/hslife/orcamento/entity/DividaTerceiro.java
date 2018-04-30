@@ -177,9 +177,13 @@ public class DividaTerceiro extends EntityPersistence {
 	public double getTotalPago() {
 		double total = 0;
 		
-		if (pagamentos != null) {
-			for (int i = 0; i < pagamentos.size(); i++) {
-				total += pagamentos.get(i).getValorPago() * pagamentos.get(i).getTaxaConversao();
+		if (this.emprestimo) {
+			return this.valorDivida - this.getSaldoDevedor();
+		} else {
+			if (pagamentos != null) {
+				for (int i = 0; i < pagamentos.size(); i++) {
+					total += pagamentos.get(i).getValorPago() * pagamentos.get(i).getTaxaConversao();
+				}
 			}
 		}
 		
