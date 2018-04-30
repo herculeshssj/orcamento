@@ -111,7 +111,7 @@
 				<h:outputText value="Informações do empréstimo" />
 			</f:facet>
 
-			<label>Quantidade de parcelar:</label>
+			<label>Quantidade de parcelas:</label>
 			<h:outputText id="txtQuantParcelas" value="#{managedBean.entity.quantParcelas}"/>
 
 			<label>Taxa de juros:</label>
@@ -140,12 +140,12 @@
 		</p:inputMask>
 		
 	    <label for="frmFormEntity:txtValorPago">Valor pago:</label>
-	    <p:inputText id="txtValorPago" value="#{managedBean.pagamentoDivida.valorPago}" size="10">
-			<f:convertNumber type="currency" pattern="###.##"/>
+	    <p:inputText id="txtValorPago" value="#{managedBean.pagamentoDivida.valorPago}" size="10" disabled="#{managedBean.entity.emprestimo}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		</p:inputText>
 			
 		<label>Moeda:</label>
-		<h:selectOneMenu value="#{managedBean.moedaSelecionada}" converter="entityConverter">
+		<h:selectOneMenu value="#{managedBean.moedaSelecionada}" converter="entityConverter" disabled="#{managedBean.entity.emprestimo}">
 			<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			<p:ajax event="change" update="pnlRegistrarPagamento" />			
 		</h:selectOneMenu>

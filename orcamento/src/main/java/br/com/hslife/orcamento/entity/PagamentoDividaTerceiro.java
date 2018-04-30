@@ -109,12 +109,14 @@ public class PagamentoDividaTerceiro extends EntityPersistence {
 
 	@Override
 	public String getLabel() {
-		return "Pagamento no valor de "
-				+ this.dividaTerceiro.getMoeda().getSimboloMonetario()
-				+ " "
-				+ Util.arredondar(this.valorPago * this.taxaConversao) 
-				+ " efetuado em " 
-				+ Util.formataDataHora(this.dataPagamento, Util.DATA);
+		return Util.concatenar(
+				"Pagamento no valor de ",
+				this.dividaTerceiro.getMoeda().getSimboloMonetario(),
+				" ",
+				Double.toString(Util.arredondar(this.valorPago * this.taxaConversao)),
+				", efetuado em ",
+				Util.formataDataHora(this.dataPagamento, Util.DATA)
+		);
 	}
 	
 	public double getValorPagoConvertido() {

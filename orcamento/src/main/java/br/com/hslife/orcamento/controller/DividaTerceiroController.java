@@ -325,6 +325,9 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 			operation = "pagamento";
 			moedaSelecionada = entity.getMoeda();
 			pagamentoDivida = new PagamentoDividaTerceiro();
+			if (entity.isEmprestimo()) {
+				pagamentoDivida.setValorPago(entity.getValorParcela());
+			}
 			return "/pages/DividaTerceiro/registrarPagamento";
 		} catch (ValidationException | BusinessException be) {
 			errorMessage(be.getMessage());

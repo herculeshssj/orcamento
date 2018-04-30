@@ -268,7 +268,10 @@ public class Util {
     		return false;
     	}    	
     }  
-    
+
+    /*
+     * Monta uma string com várias linhas.
+     */
     public static String montarString(String[] strings) {
     	StringBuilder messageBuilder = new StringBuilder();
 		for (String s : strings) {
