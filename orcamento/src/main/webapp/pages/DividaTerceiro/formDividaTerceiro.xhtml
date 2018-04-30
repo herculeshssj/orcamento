@@ -76,7 +76,7 @@
 	     	
 	    <label for="frmFormEntity:txtValorDivida">Valor da dívida:</label>
 	    <h:inputText id="txtValorDivida" value="#{managedBean.entity.valorDivida}" size="10">
-			<f:convertNumber type="currency" pattern="###.##"/>
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		</h:inputText>
 			
 		<label>Moeda:</label>
@@ -86,6 +86,36 @@
 			
 		<label for="frmFormEntity:txtJustificativa">Justificativa:</label>
 		<h:inputTextarea id="txtJustificativa" value="#{managedBean.entity.justificativa}"/>
+
+		<h:selectBooleanCheckbox value="#{managedBean.entity.emprestimo}">
+			<p:ajax update="pnlEmprestimo"/>
+		</h:selectBooleanCheckbox>
+		<label>É um empréstimo</label>
+
+		<p:outputPanel id="pnlEmprestimo">
+
+			<h:panelGrid columns="2" rendered="#{managedBean.entity.emprestimo}">
+
+				<f:facet name="header">
+					<h:outputText value="Informações do empréstimo" />
+				</f:facet>
+
+				<label for="frmFormEntity:txtQuantParcelas">Quantidade de parcelar:</label>
+				<h:inputText id="txtQuantParcelas" value="#{managedBean.entity.quantParcelas}"/>
+
+				<label for="frmFormEntity:txtTaxaJuros">Taxa de juros:</label>
+				<h:inputText id="txtTaxaJuros" value="#{managedBean.entity.taxaJuros}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:inputText>
+
+				<label for="frmFormEntity:txtValorParcela">Valor da parcela:</label>
+				<h:outputText id="txtValorParcela" value="#{managedBean.entity.valorParcela}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+
+			</h:panelGrid>
+
+		</p:outputPanel>
 		
 	</ui:define>
 	

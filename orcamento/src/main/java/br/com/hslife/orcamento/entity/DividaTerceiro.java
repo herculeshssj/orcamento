@@ -107,10 +107,6 @@ public class DividaTerceiro extends EntityPersistence {
 	@JoinColumn(name="idArquivoTermoQuitacao", nullable=true)
 	private Arquivo arquivoTermoQuitacao;
 
-	@Column(length=10, nullable=false)
-	@Enumerated(EnumType.STRING)
-	private TipoDivida tipoDivida;
-
 	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	private StatusDivida statusDivida;
@@ -151,12 +147,10 @@ public class DividaTerceiro extends EntityPersistence {
 	
 	public DividaTerceiro() {		
 		this.statusDivida = StatusDivida.REGISTRADO;
-		this.setTipoDivida(TipoDivida.TERCEIROS);
 	}
 	
 	@Override
 	public void validate() {
-        EntityPersistenceUtil.validaCampoNulo("Tipo de dívida", this.tipoDivida);
 		EntityPersistenceUtil.validaCampoNulo("Data da negociação", this.dataNegociacao);
 		EntityPersistenceUtil.validaCampoNulo("Justificativa", this.justificativa);
 		EntityPersistenceUtil.validaCampoNulo("Categoria da dívida", this.tipoCategoria);
@@ -195,13 +189,17 @@ public class DividaTerceiro extends EntityPersistence {
 	public double getTotalAPagar() {
 		double total = 0;
 		
-		if (pagamentos != null) {
-			for (int i = 0; i < pagamentos.size(); i++) {
-				total += pagamentos.get(i).getValorPago() * pagamentos.get(i).getTaxaConversao();
+		if (this.emprestimo) {
+			return this.getSaldoDevedor();
+		} else {
+			if (pagamentos != null) {
+				for (int i = 0; i < pagamentos.size(); i++) {
+					total += pagamentos.get(i).getValorPago() * pagamentos.get(i).getTaxaConversao();
+				}
 			}
+
+			return Util.arredondar(this.valorDivida - total);
 		}
-		
-		return Util.arredondar(this.valorDivida - total);
 	}
 	
 	/*
@@ -428,14 +426,6 @@ public class DividaTerceiro extends EntityPersistence {
 	public void setArquivoTermoQuitacao(Arquivo arquivoTermoQuitacao) {
 		this.arquivoTermoQuitacao = arquivoTermoQuitacao;
 	}
-
-    public TipoDivida getTipoDivida() {
-        return tipoDivida;
-    }
-
-    public void setTipoDivida(TipoDivida tipoDivida) {
-        this.tipoDivida = tipoDivida;
-    }
 
     public boolean isEmprestimo() {
         return emprestimo;

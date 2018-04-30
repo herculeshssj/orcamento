@@ -101,7 +101,7 @@
 			</f:facet>
 			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
 			<h:outputText value="#{item.valorDivida}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
-				<f:convertNumber type="currency" pattern="###.##"/>
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 		</p:column>
 		
@@ -111,7 +111,7 @@
 			</f:facet>
 			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
 			<h:outputText value="#{item.totalPago}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }">
-				<f:convertNumber type="currency" pattern="###.##"/>
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 		</p:column>
 		
@@ -119,12 +119,21 @@
 			<f:facet name="header">
 				<h:outputText value="À pagar"/>
 			</f:facet>
-			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }"/>
-			<h:outputText value="#{item.totalAPagar}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida != 'QUITADO'}">
-				<f:convertNumber type="currency" pattern="###.##"/>
-			</h:outputText>
+			<h:panelGroup rendered="#{!item.emprestimo}">
+				<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida != 'QUITADO'}"/>
+				<h:outputText value="#{item.totalAPagar}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida != 'QUITADO'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{item.emprestimo}">
+				<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida != 'QUITADO'}"/>
+				<h:outputText value="#{item.saldoDevedor}" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida != 'QUITADO'}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>
+			<h:outputText value="#{item.moeda.simboloMonetario} " style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida == 'QUITADO'}"/>
 			<h:outputText value="0" style="#{item.tipoCategoria == 'CREDITO' ? 'color: #0000FF;' : 'color: #FF0000;' }" rendered="#{item.statusDivida == 'QUITADO'}">
-				<f:convertNumber type="currency" pattern="###.##"/>
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 		</p:column>
 				
@@ -190,13 +199,13 @@
 			Crédito a receber:
 			<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="color: #0000FF;"/>
 			<h:outputText value="#{managedBean.creditoAReceber}" style="color: #0000FF;">
-				<f:convertNumber type="currency" pattern="###.##"/>
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 			
 			Débito a pagar:
 			<h:outputText value="#{managedBean.moedaPadrao.simboloMonetario} " style="color: #FF0000;"/>
 			<h:outputText value="#{managedBean.debitoAPagar}" style="color: #FF0000;">
-				<f:convertNumber type="currency" pattern="###.##"/>
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 			</h:outputText>
 			
 		</h:panelGrid>

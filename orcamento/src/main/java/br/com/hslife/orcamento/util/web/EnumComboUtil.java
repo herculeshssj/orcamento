@@ -220,12 +220,4 @@ public class EnumComboUtil {
 		}
 		return listaSelectItem;
 	}
-
-	public List<SelectItem> getListaTipoDivida() {
-		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (TipoDivida enumeration : TipoDivida.values()) {
-			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
-		}
-		return listaSelectItem;
-	}
 }

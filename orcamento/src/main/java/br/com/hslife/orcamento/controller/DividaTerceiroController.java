@@ -150,6 +150,14 @@ public class DividaTerceiroController extends AbstractCRUDController<DividaTerce
 	
 	@Override
 	public String save() {
+		if (entity.isEmprestimo())
+			entity.calcularValorParcela();
+		else {
+			entity.setQuantParcelas(0);
+			entity.setTaxaJuros(0.0);
+			entity.setValorParcela(0.0);
+		}
+
 		entity.setUsuario(getUsuarioLogado());		
 		return super.save();
 	}

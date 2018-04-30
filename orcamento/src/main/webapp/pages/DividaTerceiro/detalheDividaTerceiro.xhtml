@@ -80,7 +80,7 @@
 	     	<h:panelGroup>
 	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
 		     	<h:outputText value="#{managedBean.entity.valorDivida}">
-		     		<f:convertNumber type="currency" pattern="###.##"/>
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		     	</h:outputText>
 	     	</h:panelGroup>
 			
@@ -91,7 +91,7 @@
 			<h:panelGroup>
 	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
 		     	<h:outputText value="#{managedBean.entity.totalPago}">
-		     		<f:convertNumber type="currency" pattern="###.##"/>
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		     	</h:outputText>
 	     	</h:panelGroup>
 			
@@ -99,10 +99,34 @@
 			<h:panelGroup>
 	     		<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
 		     	<h:outputText value="#{managedBean.entity.totalAPagar}">
-		     		<f:convertNumber type="currency" pattern="###.##"/>
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 		     	</h:outputText>
 	     	</h:panelGroup>
 			
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" rendered="#{managedBean.entity.emprestimo}">
+
+			<f:facet name="header">
+				<h:outputText value="Informações do empréstimo" />
+			</f:facet>
+
+			<label>Quantidade de parcelar:</label>
+			<h:outputText id="txtQuantParcelas" value="#{managedBean.entity.quantParcelas}"/>
+
+			<label>Taxa de juros:</label>
+			<h:outputText id="txtTaxaJuros" value="#{managedBean.entity.taxaJuros}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+
+			<label>Valor da parcela:</label>
+			<h:panelGroup>
+				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
+				<h:outputText id="txtValorParcela" value="#{managedBean.entity.valorParcela}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+				</h:outputText>
+			</h:panelGroup>
+
 		</h:panelGrid>
 				
 		<label>Justificativa:</label>
@@ -145,7 +169,7 @@
    		<h:commandLink id="lnkContractFile" title="Visualizar termo/contrato anexado" action="#{managedBean.visualizarTermoDividaAnexado}" rendered="#{managedBean.entity.statusDivida != 'REGISTRADO' and managedBean.entity.arquivoTermoDivida != null}">
    			<h:graphicImage id="imgContractFile" height="48" width="48" value="/resources/images/svg/briefcase.svg"/>
    		</h:commandLink>
-		&nbsp;&nbsp;&nbsp;
+		<p:spacer width="20" />
 		<h:commandLink id="lnkCertificate" title="Visualizar termo de quitação gerado" action="#{managedBean.visualizarTermoQuitacao}" target="_blank" rendered="#{managedBean.entity.statusDivida == 'QUITADO' and managedBean.entity.arquivoTermoQuitacao == null}">
 			<h:graphicImage id="imgCertificate" height="48" width="48" value="/resources/images/svg/diploma_1.svg"/>
 		</h:commandLink>
