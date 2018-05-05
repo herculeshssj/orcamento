@@ -139,15 +139,15 @@ public class Conta extends EntityPersistence {
 	@JoinColumn(name="idMoeda", nullable=false)
 	private Moeda moeda;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="idBanco", nullable=true)
 	private Banco banco;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="idCartao", nullable=true)
 	private CartaoCredito cartaoCredito;
 	
-	@OneToMany(mappedBy="conta", fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy="conta", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
 	private Set<ContaConjunta> contasConjunta = new TreeSet<>();
 	
 	/*** Atributos usado pelo Panorama dos Cadastros ***/
