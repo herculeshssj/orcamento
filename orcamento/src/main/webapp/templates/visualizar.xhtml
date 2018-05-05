@@ -44,14 +44,12 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/principal.xhtml">
 
@@ -60,30 +58,30 @@
 	</ui:define>
 
 	<ui:define name="conteudo">
-	
+
      	<h:form id="frmFormEntity">
-     	
+
      		<p:messages />
-     		
+
      		<p>
      		<ui:insert name="campos">
-     			    		
+
      		</ui:insert>
      		</p>
-     		
+
      		<ui:insert name="acoes">
 				<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
      				<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
-     			</h:commandLink>				
+     			</h:commandLink>
 				<p:spacer width="20" />
 				<h:commandLink id="lnkOk" title="Excluir registro" action="#{managedBean.delete}" rendered="#{managedBean.operation == 'delete'}">
      				<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
-     			</h:commandLink>     			
+     			</h:commandLink>
 			</ui:insert>
-     		
+
      	</h:form>
-     
+
 	</ui:define>
-	
+
 </ui:composition>
 </html>

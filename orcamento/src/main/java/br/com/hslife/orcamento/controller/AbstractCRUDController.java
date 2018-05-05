@@ -75,10 +75,10 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	
 	public AbstractCRUDController(E entity) {
 		this.entity = entity;
-		goToListPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/list", entity.getClass().getSimpleName(), "?faces-redirect=true");
-		goToFormPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/form", entity.getClass().getSimpleName(), "?faces-redirect=true");
-		goToViewPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/view", entity.getClass().getSimpleName(), "?faces-redirect=true");
-		goToSearchPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/search", entity.getClass().getSimpleName(), "?faces-redirect=true");
+		goToListPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/list", entity.getClass().getSimpleName());
+		goToFormPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/form", entity.getClass().getSimpleName());
+		goToViewPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/view", entity.getClass().getSimpleName());
+		goToSearchPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/search", entity.getClass().getSimpleName());
 	}
 	
 	protected abstract ICRUDService getService();
