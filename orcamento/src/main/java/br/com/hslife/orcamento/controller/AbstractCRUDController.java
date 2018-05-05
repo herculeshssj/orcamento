@@ -52,6 +52,7 @@ import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.facade.ICRUDService;
+import br.com.hslife.orcamento.util.Util;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class AbstractCRUDController<E extends EntityPersistence> extends AbstractController {
@@ -74,10 +75,10 @@ public abstract class AbstractCRUDController<E extends EntityPersistence> extend
 	
 	public AbstractCRUDController(E entity) {
 		this.entity = entity;
-		goToListPage = "/pages/" + entity.getClass().getSimpleName() + "/list" + entity.getClass().getSimpleName();
-		goToFormPage = "/pages/" + entity.getClass().getSimpleName() + "/form" + entity.getClass().getSimpleName();
-		goToViewPage = "/pages/" + entity.getClass().getSimpleName() + "/view" + entity.getClass().getSimpleName();
-		goToSearchPage = "/pages/" + entity.getClass().getSimpleName() + "/search" + entity.getClass().getSimpleName();
+		goToListPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/list", entity.getClass().getSimpleName(), "?faces-redirect=true");
+		goToFormPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/form", entity.getClass().getSimpleName(), "?faces-redirect=true");
+		goToViewPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/view", entity.getClass().getSimpleName(), "?faces-redirect=true");
+		goToSearchPage = Util.concatenar("/pages/", entity.getClass().getSimpleName(), "/search", entity.getClass().getSimpleName(), "?faces-redirect=true");
 	}
 	
 	protected abstract ICRUDService getService();
