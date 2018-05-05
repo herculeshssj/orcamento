@@ -121,18 +121,22 @@ public abstract class AbstractController implements Serializable {
 	
 	public void infoMessage(String mensage) {		
 		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensage, null));
+		getCurrentFacesContext().getExternalContext().getFlash().setKeepMessages(true);
 	}
 	
 	public void warnMessage(String mensage) {
 		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, mensage, null));
+		getCurrentFacesContext().getExternalContext().getFlash().setKeepMessages(true);
 	}
 	
 	public void errorMessage(String mensage) {
 		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, mensage, null));
+		getCurrentFacesContext().getExternalContext().getFlash().setKeepMessages(true);
 	}
 	
 	public void fatalErrorMessage(String mensage) {
 		getCurrentFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, mensage, null));
+		getCurrentFacesContext().getExternalContext().getFlash().setKeepMessages(true);
 	}
 
 	public void setUsuarioComponent(UsuarioComponent usuarioComponent) {

@@ -44,14 +44,12 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/formulario.xhtml">
 
@@ -62,60 +60,60 @@
 		<h:panelGrid columns="2">
 			<h:panelGroup>
 				<label for="frmFormEntity:txtDescricao">Descrição:</label>
-				<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}"/>
+				<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.ativo}"/>
 			</h:panelGroup>
 			<h:panelGroup>
 				<label>Moeda:</label>
-				<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
+				<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{!managedBean.entity.ativo}">
 					<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
 				</h:selectOneMenu>
 			</h:panelGroup>
 			<h:panelGroup>
 				<label for="frmFormEntity:txtPrevisaoReceita">Previsão de receita:</label>
-				<h:inputText id="txtPrevisaoReceita" value="#{managedBean.entity.previsaoReceita}">
+				<h:inputText id="txtPrevisaoReceita" value="#{managedBean.entity.previsaoReceita}" disabled="#{!managedBean.entity.ativo}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:inputText>
 			</h:panelGroup>
 			<h:panelGroup>
 				<label for="frmFormEntity:txtPrevisaoDespesa">Previsão de despesa:</label>
-				<h:inputText id="txtPrevisaoDespesa" value="#{managedBean.entity.previsaoDespesa}">
+				<h:inputText id="txtPrevisaoDespesa" value="#{managedBean.entity.previsaoDespesa}" disabled="#{!managedBean.entity.ativo}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:inputText>
 			</h:panelGroup>
 		</h:panelGrid>	
 		
 		<label for="frmFormEntity:txtObjetivo">Objetivo:</label>
-		<h:inputText id="txtObjetivo" value="#{managedBean.entity.objetivo}"/>
+		<h:inputText id="txtObjetivo" value="#{managedBean.entity.objetivo}" disabled="#{!managedBean.entity.ativo}"/>
 	
 		<label for="frmFormEntity:txtDetalheObjetivo">Detalhes do objetivo:</label>
-		<h:inputTextarea id="txtDetalheObjetivo" value="#{managedBean.entity.detalheObjetivo}"/>
+		<h:inputTextarea id="txtDetalheObjetivo" value="#{managedBean.entity.detalheObjetivo}" disabled="#{!managedBean.entity.ativo}"/>
 		
 		<hr/>
 
 		<h:panelGrid columns="5" id="pnlItemMeta">
 			<h:panelGroup>
 				<label for="frmFormEntity:txtDescricaoItem">Descrição</label>
-				<h:inputText id="txtDescricaoItem" value="#{managedBean.itemMeta.descricao}"/>
+				<h:inputText id="txtDescricaoItem" value="#{managedBean.itemMeta.descricao}" disabled="#{!managedBean.entity.ativo}"/>
 			</h:panelGroup>
 			<h:panelGroup>
 				<label for="frmFormEntity:txtTipoItem">Tipo</label>
-				<h:selectOneMenu id="txtTipoItem" value="#{managedBean.itemMeta.tipoLancamento}">
+				<h:selectOneMenu id="txtTipoItem" value="#{managedBean.itemMeta.tipoLancamento}" disabled="#{!managedBean.entity.ativo}">
 					<f:selectItems value="#{enumCombo.listaTipoLancamento}"/>				
 				</h:selectOneMenu>
 			</h:panelGroup>
 			<h:panelGroup>
 				<label for="frmFormEntity:txtData">Data</label>
-				<p:inputMask id="txtData" value="#{managedBean.itemMeta.data}" size="10" mask="99/99/9999">
+				<p:inputMask id="txtData" value="#{managedBean.itemMeta.data}" size="10" mask="99/99/9999" disabled="#{!managedBean.entity.ativo}">
 					<f:converter converterId="dateConverter"/>
 				</p:inputMask>
 			</h:panelGroup>
 			<h:panelGroup>
 				<label for="frmFormEntity:txtValor">Valor</label>
-				<h:inputText id="txtValor" value="#{managedBean.itemMeta.valor}">
+				<h:inputText id="txtValor" value="#{managedBean.itemMeta.valor}" disabled="#{!managedBean.entity.ativo}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:inputText>
 			</h:panelGroup>					
-			<h:commandLink id="lnkAddRow" title="Adicionar item no grupo" action="#{managedBean.adicionarItemMeta}">
+			<h:commandLink id="lnkAddRow" title="Adicionar item no grupo" action="#{managedBean.adicionarItemMeta}" rendered="#{managedBean.entity.ativo}">
      			<h:graphicImage id="imgAddRow" height="48" width="48" value="/resources/images/svg/add_row.svg"/>
      		</h:commandLink>
 		</h:panelGrid>
@@ -149,13 +147,29 @@
 				<f:facet name="header">
 					<h:outputText value="Ações" />
 				</f:facet>
-				<h:commandLink title="Excluir" action="#{managedBean.excluirItemMeta}">
+				<h:commandLink title="Excluir" action="#{managedBean.excluirItemMeta}" rendered="#{managedBean.entity.ativo}">
 					<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 					<f:setPropertyActionListener value="#{item}" target="#{managedBean.itemSelecionado}"/>
 				</h:commandLink>
 			</h:column>
 		</h:dataTable>
 		
+	</ui:define>
+
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+		</h:commandLink>
+		<p:spacer width="20" />
+
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
+			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		</h:commandLink>
+		<p:spacer width="20" />
+
+		<h:commandLink title="Encerrar meta" action="#{managedBean.encerrarMeta}" rendered="#{managedBean.entity.ativo and managedBean.operation == 'edit'}">
+			<h:graphicImage id="imgFinish" height="48" width="48" value="/resources/images/svg/disapprove.svg"/>
+		</h:commandLink>
 	</ui:define>
 
 </ui:composition>

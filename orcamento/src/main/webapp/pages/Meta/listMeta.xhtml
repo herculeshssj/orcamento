@@ -45,29 +45,31 @@
 -->
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{metaController}" />
 	<ui:param name="colunaPesquisa" value="4" />
-	
-	<ui:define name="parametro_pesquisa">		
+
+	<ui:define name="parametro_pesquisa">
 		<h:panelGroup>
 			<label for="frmListEntity:txtDescricao">Descrição:</label>
 		    <h:inputText id="txtDescricao" value="#{managedBean.descricao}"/>
-	    </h:panelGroup>	    	    
+	    </h:panelGroup>
+		<h:panelGroup>
+			<h:selectBooleanCheckbox value="#{managedBean.somenteAtivos}" />
+			<label>Somente ativos</label>
+		</h:panelGroup>
 	</ui:define>
-	
+
 	<ui:define name="pesquisa_avancada"></ui:define>
-	
+
 	<ui:define name="colunas">
 		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
@@ -98,7 +100,7 @@
 				<p:progressBar value="#{item.porcentagemReceita}" labelTemplate="{value} %" displayOnly="true"/>
 			</h:panelGroup>
 		</h:column>
-		
+
 		<h:column style="text-align: center; vertical-align: middle;">
 			<f:facet name="header">
 				<h:outputText value="Despesa" />
@@ -117,7 +119,7 @@
 				<p:progressBar value="#{item.porcentagemDespesa}" labelTemplate="{value} %" displayOnly="true"/>
 			</h:panelGroup>
 		</h:column>
-		
+
 
 	</ui:define>
 

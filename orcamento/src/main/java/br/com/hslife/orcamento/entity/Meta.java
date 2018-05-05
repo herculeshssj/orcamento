@@ -168,6 +168,11 @@ public class Meta extends EntityPersistence {
 		
 		return porcentagem;
 	}
+
+	public void encerrarMeta() {
+		if (this.ativo)
+			this.ativo = false;
+	}
 	
 	public Long getId() {
 		return id;

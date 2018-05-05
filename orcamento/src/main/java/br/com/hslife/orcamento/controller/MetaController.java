@@ -78,6 +78,7 @@ public class MetaController extends AbstractCRUDController<Meta> {
 	private IMoeda moedaService;
 	
 	private String descricao;
+	private boolean somenteAtivos = true;
 	private Long idLancamento;
 	private CriterioBuscaLancamentoConta criterioBusca = new CriterioBuscaLancamentoConta();
 	private List<ItemMeta> itensEncontrados = new ArrayList<>();
@@ -101,7 +102,7 @@ public class MetaController extends AbstractCRUDController<Meta> {
 	@Override
 	public void find() {
 		try {
-			listEntity = getService().buscarTodosDescricaoEAtivoPorUsuario(descricao, true, getUsuarioLogado());
+			listEntity = getService().buscarTodosDescricaoEAtivoPorUsuario(descricao, somenteAtivos, getUsuarioLogado());
 		} catch (ValidationException | BusinessException e) {
 			errorMessage(e.getMessage());
 		}
@@ -150,6 +151,11 @@ public class MetaController extends AbstractCRUDController<Meta> {
 		entity.recalculaTotais();
 		
 		itemSelecionado = null;
+	}
+
+	public String encerrarMeta() {
+		entity.encerrarMeta();
+		return super.save();
 	}
 	
 	public List<Moeda> getListaMoeda() {
@@ -223,5 +229,13 @@ public class MetaController extends AbstractCRUDController<Meta> {
 
 	public void setItemMeta(ItemMeta itemMeta) {
 		this.itemMeta = itemMeta;
+	}
+
+	public boolean isSomenteAtivos() {
+		return somenteAtivos;
+	}
+
+	public void setSomenteAtivos(boolean somenteAtivos) {
+		this.somenteAtivos = somenteAtivos;
 	}
 }
