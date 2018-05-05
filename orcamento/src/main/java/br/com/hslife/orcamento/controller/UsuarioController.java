@@ -132,6 +132,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	
 	public void saveUser() {
 		try {
+			entity.validate();
 			getService().alterar(entity);
 			infoMessage("Dados do usuário alterados com sucesso!");
 		} catch (ValidationException | BusinessException be) {
@@ -190,6 +191,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 
 	public void efetuarRegistro() {
 		try {
+			entity.validate();
 			getService().efetuarRegistro(entity);
 			infoMessage("Usuário registrado com sucesso!");
 			infoMessage("Senha de acesso foi enviada para o e-mail informado.");
@@ -201,6 +203,7 @@ public class UsuarioController extends AbstractCRUDController<Usuario> {
 	
 	public void recuperarSenha() {
 		try {
+			entity.validate();
 			getService().recuperarSenha(entity);
 			infoMessage("Senha alterada com sucesso!");
 			infoMessage("Senha de acesso foi envada para o e-mail cadastrado.");

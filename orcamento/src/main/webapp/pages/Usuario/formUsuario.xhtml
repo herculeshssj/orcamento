@@ -66,10 +66,8 @@
 		<h:inputText id="txtLogin" value="#{managedBean.entity.login}" disabled="#{managedBean.operation == 'edit'}" />
 		
 		<label for="frmFormEntity:txtEmail">E-Mail:</label>
-		<h:inputText id="txtEmail" value="#{managedBean.entity.email}" disabled="#{!managedBean.entity.ativo}">
-			<f:validator validatorId="emailValidator"/>
-		</h:inputText>
-		
+		<h:inputText id="txtEmail" value="#{managedBean.entity.email}" disabled="#{!managedBean.entity.ativo}"/>
+			
 		<label for="frmFormEntity:txtSenha">Senha:</label>
 		<h:inputSecret id="txtSenha" value="#{managedBean.entity.confirmaSenha}" disabled="#{!managedBean.entity.ativo}" />
 		

@@ -60,7 +60,9 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.enumeration.TipoUsuario;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="usuario")
@@ -135,6 +137,12 @@ public class Usuario extends EntityPersistence {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Nome", this.nome, 100);
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Login", this.login, 50);
 		EntityPersistenceUtil.validaTamanhoCampoStringOpcional("E-Mail", this.email, 40);
+		
+		if (this.email != null && !this.email.isEmpty()) {
+			if (Util.validaEmail(this.email)) {
+				throw new ValidationException("E-Mail informado é inválido!");
+			}
+		}
 	}
 	
 	public static class Builder {
