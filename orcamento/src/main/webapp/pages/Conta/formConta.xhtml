@@ -44,7 +44,7 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -56,53 +56,53 @@
 <ui:composition template="/templates/formulario.xhtml">
 
 	<ui:param name="managedBean" value="#{contaMB}" />
-	
+
 	<ui:define name="campos">
-	
+
 		<label>Banco:</label>
 		<h:selectOneMenu value="#{managedBean.entity.banco}" converter="entityConverter" disabled="#{!managedBean.entity.ativo}">
 			<f:selectItem itemLabel="Nenhum banco"/>
-			<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>									
+			<f:selectItems value="#{managedBean.listaBanco}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>
-		
+
 		<label>Tipo de conta:</label>
 		<h:selectOneRadio value="#{managedBean.entity.tipoConta}" disabled="#{!managedBean.entity.ativo}">
 			<f:selectItems value="#{enumCombo.listaTipoContaSemCartao}"/>
 		</h:selectOneRadio>
-		
+
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.ativo}"/>
-		
+
 		<label for="frmFormEntity:txtAgencia">Agência:</label>
 		<h:inputText id="txtAgencia" value="#{managedBean.entity.agencia}" disabled="#{!managedBean.entity.ativo}"/>
-		
+
 		<label for="frmFormEntity:txtContaCorrente">Conta corrente:</label>
 		<h:inputText id="txtContaCorrente" value="#{managedBean.entity.contaCorrente}" disabled="#{!managedBean.entity.ativo}"/>
-		
+
 		<label for="frmFormEntity:txtContaPoupanca">Conta poupança:</label>
 		<h:inputText id="txtContaPoupanca" value="#{managedBean.entity.contaPoupanca}" disabled="#{!managedBean.entity.ativo}"/>
-		
+
 		<label for="frmFormEntity:txtVariacao">Variação/Operação:</label>
 		<h:inputText id="txtVariacao" value="#{managedBean.entity.variacao}" disabled="#{!managedBean.entity.ativo}"/>
-		
+
 		<h:selectBooleanCheckbox value="#{managedBean.entity.contaConjunta}" disabled="#{!managedBean.entity.ativo}">
 			<p:ajax update="pnlContaConjunta"/>
 		</h:selectBooleanCheckbox>
 		<label>Conta conjunta</label>
-		
+
 		<h:selectBooleanCheckbox value="#{managedBean.entity.fechamentoAutomatico}" disabled="#{!managedBean.entity.ativo}"/>
 		<label>Fechamento automático do período</label>
-		
+
 		<label>Moeda:</label>
 		<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter" disabled="#{managedBean.operation != 'create'}">
 			<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 		</h:selectOneMenu>
-		
+
 		<h:panelGrid columns="2" rendered="#{managedBean.operation == 'create'}">
 			<f:facet name="header">
 					<h:outputText value="Saldo e data de abertura" />
 				</f:facet>
-			 
+
 			 <h:panelGroup>
 			 	<label for="frmFormEntity:txtSaldoInicial">Saldo inicial:</label>
 			 	<p:inputText id="txtSaldoInicial" value="#{managedBean.entity.saldoInicial}">
@@ -112,31 +112,31 @@
 					<h:outputText value="Valor negativo indica saldo negativo na conta."/>
 				</p:tooltip>
 			 </h:panelGroup>
-			 
+
 			 <h:panelGroup>
 			 	<label for="frmFormEntity:txtDataAbertura">Data de abertura:</label>
 			 	<p:inputMask id="txtDataAbertura" size="10" mask="99/99/9999" value="#{managedBean.entity.dataAbertura}">
 	    			<f:converter converterId="dateConverter"/>
 	    		</p:inputMask>
 			 </h:panelGroup>
-			 
+
 		</h:panelGrid>
-		
+
 		<h:panelGrid columns="4" rendered="#{managedBean.operation != 'create'}">
 			<f:facet name="header">
 				<h:outputText value="Saldos e datas" />
 			</f:facet>
-			
+
 			Data de abertura:
 			<h:outputText value="#{managedBean.entity.dataAbertura}">
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
-			
+
 			Data de fechamento:
 			<h:outputText value="#{managedBean.entity.dataFechamento}">
 				<f:converter converterId="dateConverter"/>
 			</h:outputText>
-			
+
 			Saldo de abertura:
 			<h:panelGroup>
 				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
@@ -144,7 +144,7 @@
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 			</h:panelGroup>
-			
+
 			Saldo de fechamento:
 			<h:panelGroup>
 				<h:outputText value="#{managedBean.entity.moeda.simboloMonetario} " />
@@ -152,40 +152,40 @@
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
 				</h:outputText>
 			</h:panelGroup>
-			
+
 		</h:panelGrid>
-		
+
 		<p:outputPanel id="pnlContaConjunta">
-		
+
 			<h:panelGrid columns="4" rendered="#{managedBean.entity.contaConjunta}">
 				<f:facet name="header">
 					<h:outputText value="Conta Conjunta" />
 				</f:facet>
-				 
+
 				 <h:panelGroup>
 				 	<label for="frmFormEntity:txtNomeContaConjunta">Nome:</label>
-				 	<h:inputText id="txtNomeContaConjunta" value="#{managedBean.contaConjunta.nome}"/>					
+				 	<h:inputText id="txtNomeContaConjunta" value="#{managedBean.contaConjunta.nome}"/>
 				 </h:panelGroup>
-				 
+
 				 <h:panelGroup>
 				 	<label for="frmFormEntity:txtCPFContaConjunta">CPF:</label>
-				 	<h:inputText id="txtCPFContaConjunta" value="#{managedBean.contaConjunta.cpf}"/>					
+				 	<h:inputText id="txtCPFContaConjunta" value="#{managedBean.contaConjunta.cpf}"/>
 				 </h:panelGroup>
-				 
-				 <h:panelGroup>			 	
+
+				 <h:panelGroup>
 				 	<h:selectBooleanCheckbox id="txtTitularContaConjunta" value="#{managedBean.contaConjunta.titular}"/>
 		    		<label for="frmFormEntity:txtTitularContaConjunta">Titular</label>
 				 </h:panelGroup>
-				 
+
 				 <p:commandLink value="Adicionar" actionListener="#{managedBean.adicionarContaConjunta}" update="msgFormEntity,pnlContaConjunta,tableContaConjunta"/>
-				 
+
 			</h:panelGrid>
-			
+
 			<h:dataTable id="tableContaConjunta" value="#{managedBean.entity.contasConjunta}" var="item" rendered="#{managedBean.entity.contaConjunta}">
 				<h:column>
 					<f:facet name="header">
 						<h:outputText value="Ordem"/>
-					</f:facet>					
+					</f:facet>
 					<h:outputText value="#{item.ordem}" style="#{item.titular ? 'font-weight: bold' : 'font-weight: normal'}"/>
 					<h:outputText value="º Titular" style="#{item.titular ? 'font-weight: bold' : 'font-weight: normal'}"/>
 				</h:column>
@@ -210,15 +210,15 @@
 					</h:commandLink>
 				</h:column>
 			</h:dataTable>
-		
+
 		</p:outputPanel>
-		
+
 	</ui:define>
-	
+
 	<ui:define name="acoes">
 		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
 			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
-     	</h:commandLink>				
+     	</h:commandLink>
 		<p:spacer width="20" />
 		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
      		<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>

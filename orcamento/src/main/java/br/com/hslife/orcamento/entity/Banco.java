@@ -54,6 +54,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
+import br.com.hslife.orcamento.util.Util;
 
 @Entity
 @Table(name="banco")
@@ -117,7 +118,7 @@ public class Banco extends EntityPersistence {
 
 	@Override
 	public String getLabel() {
-		return this.nome;
+		return Util.concatenar(this.nome, " (", this.numero, ")");
 	}
 	
 	@Override
