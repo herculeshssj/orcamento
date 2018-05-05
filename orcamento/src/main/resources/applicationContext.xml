@@ -53,6 +53,7 @@
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:cache="http://www.springframework.org/schema/cache"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 						http://www.springframework.org/schema/context
@@ -64,7 +65,9 @@
 						http://www.springframework.org/schema/security 
 						http://www.springframework.org/schema/security/spring-security-4.2.xsd
 						http://www.springframework.org/schema/task
-						http://www.springframework.org/schema/task/spring-task-4.3.xsd">
+						http://www.springframework.org/schema/task/spring-task-4.3.xsd
+						http://www.springframework.org/schema/cache
+						http://www.springframework.org/schema/cache/spring-cache-4.3.xsd">
 						
 	<!-- General -->
 	<context:component-scan base-package="br.com.hslife.orcamento" />
@@ -110,6 +113,17 @@
     
     <!-- Task Scheduler -->
     <task:annotation-driven />
+
+	<!-- Cache Manager -->
+	<cache:annotation-driven />
+
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="usuarios"/>
+			</set>
+		</property>
+	</bean>
  
  	<!-- Spring Security --> 	
  	<sec:http auto-config="true">
