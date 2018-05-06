@@ -130,7 +130,7 @@ public class Seguro extends EntityPersistence {
 	private LancamentoPeriodico lancamentoPeriodico; // terceiro e próprio
 	
 	public Seguro() {
-
+		ativo = true;
 	}
 	
 	private Seguro(Builder builder) {
@@ -276,6 +276,7 @@ public class Seguro extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Periodicidade do pagamento", this.getPeriodicidadePagamento());
 		EntityPersistenceUtil.validaCampoNulo("Tipo de prêmio do seguro", this.getPremioSeguro());
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.getMoeda());
+		EntityPersistenceUtil.validaCampoNulo("Despesa fixa", this.lancamentoPeriodico);
 	}
 
 	/**

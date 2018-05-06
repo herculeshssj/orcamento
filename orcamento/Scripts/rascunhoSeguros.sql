@@ -3,7 +3,7 @@ show tables;
 select * from seguro;
 
 desc seguro;
-
+/*
 alter table seguro add column tipoSeguro varchar(15) not null;
 alter table seguro add column periodicidadeRenovacao varchar(15) not null;
 alter table seguro add column periodicidadePagamento varchar(15) not null;
@@ -20,3 +20,4 @@ alter table seguro add constraint fk_favorecido_seguro foreign key (idFavorecido
 alter table seguro add constraint fk_arquivo_seguro foreign key (idArquivo) references arquivo (id);
 alter table seguro add constraint fk_moeda_seguro foreign key (idMoeda) references moeda (id);
 alter table seguro add constraint fk_lancamento_periodico_seguro foreign key (idLancamentoPeriodico) references lancamentoperiodico (id);
+*/

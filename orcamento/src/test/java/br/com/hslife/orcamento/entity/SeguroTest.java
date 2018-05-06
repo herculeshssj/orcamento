@@ -101,4 +101,40 @@ public class SeguroTest {
 	public void testLabel() {
 		assertEquals("Seguro de teste", entity.getLabel());
 	}
+	
+	@Test(expected=ValidationException.class)
+	public void testValidateTipoSeguro() {
+		entity.setTipoSeguro(null);
+		entity.validate();
+	}
+	
+	@Test(expected=ValidationException.class)
+	public void testValidatePeriodicidadeRenovacao() {
+		entity.setPeriodicidadeRenovacao(null);
+		entity.validate();
+	}
+	
+	@Test(expected=ValidationException.class)
+	public void testValidatePeriodicidadePagamento() {
+		entity.setPeriodicidadePagamento(null);
+		entity.validate();
+	}
+	
+	@Test(expected=ValidationException.class)
+	public void testValidatePremioSeguro() {
+		entity.setPremioSeguro(null);
+		entity.validate();
+	}
+	
+	@Test(expected=ValidationException.class)
+	public void testValidateMoeda() {
+		entity.setMoeda(null);
+		entity.validate();
+	}
+	
+	@Test(expected=ValidationException.class)
+	public void testValidateLancamentoPeriodico() {
+		entity.setLancamentoPeriodico(null);
+		entity.validate();
+	}
 }

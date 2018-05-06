@@ -16,6 +16,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Patrimonio;
@@ -23,13 +24,17 @@ import br.com.hslife.orcamento.entity.Pessoal;
 import br.com.hslife.orcamento.entity.RelatorioColuna;
 import br.com.hslife.orcamento.entity.RelatorioCustomizado;
 import br.com.hslife.orcamento.entity.RelatorioParametro;
+import br.com.hslife.orcamento.entity.Seguro;
 import br.com.hslife.orcamento.entity.Telefone;
 import br.com.hslife.orcamento.entity.UnidadeMedida;
 import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
+import br.com.hslife.orcamento.enumeration.Periodicidade;
+import br.com.hslife.orcamento.enumeration.PremioSeguro;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoDado;
 import br.com.hslife.orcamento.enumeration.TipoPessoa;
+import br.com.hslife.orcamento.enumeration.TipoSeguro;
 import br.com.hslife.orcamento.util.Util;
 
 public class EntityPersistenceMock {
@@ -126,6 +131,29 @@ public class EntityPersistenceMock {
 				
 		// Salva no Map e retorna o mock
 		mapEntidade.put(EntityPersistenceEnum.PATRIMONIO, patrimonio);		
+		return this;
+	}
+	
+	public EntityPersistenceMock ePossuiSeguro() {
+		Seguro seguro = new Seguro.Builder()
+				.descricao("Seguro de teste")
+				.dataAquisicao(Calendar.getInstance())
+				.dataRenovacao(Calendar.getInstance())
+				.cobertura("Cobertura do seguro de teste")
+				.valorCobertura(10000.0)
+				.valorSegura(1000.0)
+				.observacao("Observações do seguro de teste")
+				.tipoSeguro(TipoSeguro.TERCEIROS)
+				.periodicidadeRenovacao(Periodicidade.ANUAL)
+				.periodicidadePagamento(Periodicidade.ANUAL)
+				.premioSeguro(PremioSeguro.FIXO)
+				.lancamentoPeriodico((LancamentoPeriodico)this.get(EntityPersistenceEnum.LANCAMENTOPERIODICO))
+				.favorecido((Favorecido)this.get(EntityPersistenceEnum.FAVORECIDO))
+				.moeda((Moeda)this.get(EntityPersistenceEnum.MOEDA))
+				.usuario((Usuario)this.get(EntityPersistenceEnum.USUARIO))
+				.build();
+		
+		mapEntidade.put(EntityPersistenceEnum.SEGURO, seguro);
 		return this;
 	}
 
