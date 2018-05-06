@@ -47,17 +47,11 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.entity;
 import java.util.Calendar;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import br.com.hslife.orcamento.enumeration.Periodicidade;
+import br.com.hslife.orcamento.enumeration.PremioSeguro;
+import br.com.hslife.orcamento.enumeration.TipoSeguro;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 
@@ -68,34 +62,72 @@ public class Seguro extends EntityPersistence {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	private Long id; // terceiro e próprio
+
+	@Column(length=15, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private TipoSeguro tipoSeguro; // terceiro e próprio
+
+	@Column(length=15, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Periodicidade periodicidadeRenovacao; //terceiro e próprio
+
+	@Column(length=15, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Periodicidade periodicidadePagamento; //terceiro e próprio
+
+	@Column(length=15, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private PremioSeguro premioSeguro; //terceiro e próprio
 	
 	@Column(length=50, nullable=false)	
-	private String descricao;
+	private String descricao; // terceiro e próprio
 
 	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)	
-	private Calendar dataAquisicao;
+	private Calendar dataAquisicao; // terceiro e próprio
+
+	@Column(nullable=true)
+	@Temporal(TemporalType.DATE)
+	private Calendar dataRenovacao; // terceiro e próprio
 	
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)	
-	private Calendar validade;
+	private Calendar validade; // terceiro e próprio
 	
 	@Column(length=100, nullable=true)
-	private String cobertura;
+	private String cobertura; // terceiro e próprio
 	
-	@Column(nullable=false, precision=18, scale=2)
-	private double valorCobertura;
+	@Column(nullable=true, precision=18, scale=2)
+	private double valorCobertura; // terceiro e próprio
 	
 	@Column(nullable=false, precision=18, scale=2)	
-	private double valorSeguro;
+	private double valorSeguro; // terceiro e próprio
 
 	@Column(length=100, nullable=true)	
-	private String observacao;
-	
+	private String observacao; // terceiro e próprio
+
+	@Column(nullable = true)
+	private Long idArquivo; // terceiro e próprio
+
+	@Column
+	private boolean ativo; // terceiro e próprio
+
+	@ManyToOne
+	@JoinColumn(name="idFavorecido", nullable=true)
+	private Favorecido favorecido; // terceiro
+
+	@ManyToOne
+	@JoinColumn(name="idMoeda", nullable=false)
+	private Moeda moeda; // terceiro e próprio
+
 	@ManyToOne
 	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario;
+	private Usuario usuario; // terceiro e próprio
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
+	private LancamentoPeriodico lancamentoPeriodico; // terceiro e próprio
 	
 	public Seguro() {
 
@@ -110,8 +142,17 @@ public class Seguro extends EntityPersistence {
 		this.valorSeguro = builder.valorSeguro;
 		this.observacao = builder.observacao;
 		this.usuario = builder.usuario;
+		this.setTipoSeguro(builder.tipoSeguro);
+		this.setPeriodicidadeRenovacao(builder.periodicidadeRenovacao);
+		this.setPeriodicidadePagamento(builder.periodicidadePagamento);
+		this.setPremioSeguro(builder.premioSeguro);
+		this.setDataRenovacao(builder.dataRenovacao);
+		this.setAtivo(builder.ativo);
+		this.setMoeda(builder.moeda);
+		this.setFavorecido(builder.favorecido);
+		this.setLancamentoPeriodico(builder.lancamentoPeriodico);
 	}
-	
+
 	public static class Builder {
 		private String descricao;	
 		private Calendar dataAquisicao;	
@@ -121,6 +162,15 @@ public class Seguro extends EntityPersistence {
 		private double valorSeguro;	
 		private String observacao;
 		private Usuario usuario;
+		private TipoSeguro tipoSeguro;
+		private Periodicidade periodicidadeRenovacao;
+		private Periodicidade periodicidadePagamento;
+		private PremioSeguro premioSeguro;
+		private Calendar dataRenovacao;
+		private boolean ativo;
+		private Moeda moeda;
+		private Favorecido favorecido;
+		private LancamentoPeriodico lancamentoPeriodico;
 		
 		public Builder descricao(String descricao) {
 			this.descricao = descricao;
@@ -161,6 +211,51 @@ public class Seguro extends EntityPersistence {
 			this.usuario = usuario;
 			return this;
 		}
+
+		public Builder tipoSeguro(TipoSeguro value) {
+			this.tipoSeguro = value;
+			return this;
+		}
+
+		public Builder periodicidadeRenovacao(Periodicidade value) {
+			this.periodicidadeRenovacao = value;
+			return this;
+		}
+
+		public Builder periodicidadePagamento(Periodicidade value) {
+			this.periodicidadePagamento = value;
+			return this;
+		}
+
+		public Builder premioSeguro(PremioSeguro value) {
+			this.premioSeguro = value;
+			return this;
+		}
+
+		public Builder dataRenovacao(Calendar value) {
+			this.dataRenovacao = value;
+			return this;
+		}
+
+		public Builder ativo(boolean value) {
+			this.ativo = value;
+			return this;
+		}
+
+		public Builder moeda(Moeda value) {
+			this.moeda = value;
+			return this;
+		}
+
+		public Builder favorecido(Favorecido value) {
+			this.favorecido = value;
+			return this;
+		}
+
+		public Builder lancamentoPeriodico(LancamentoPeriodico value) {
+			this.lancamentoPeriodico = value;
+			return this;
+		}
 		
 		public Seguro build() {
 			return new Seguro(this);
@@ -176,6 +271,11 @@ public class Seguro extends EntityPersistence {
 	public void validate() {
 		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", descricao, 50);
 		EntityPersistenceUtil.validaCampoNulo("Data de aquisição", this.dataAquisicao);
+		EntityPersistenceUtil.validaCampoNulo("Tipo de seguro", this.getTipoSeguro());
+		EntityPersistenceUtil.validaCampoNulo("Periodicidade da renovação", this.getPeriodicidadeRenovacao());
+		EntityPersistenceUtil.validaCampoNulo("Periodicidade do pagamento", this.getPeriodicidadePagamento());
+		EntityPersistenceUtil.validaCampoNulo("Tipo de prêmio do seguro", this.getPremioSeguro());
+		EntityPersistenceUtil.validaCampoNulo("Moeda", this.getMoeda());
 	}
 
 	/**
@@ -302,5 +402,85 @@ public class Seguro extends EntityPersistence {
 	 */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public TipoSeguro getTipoSeguro() {
+		return tipoSeguro;
+	}
+
+	public void setTipoSeguro(TipoSeguro tipoSeguro) {
+		this.tipoSeguro = tipoSeguro;
+	}
+
+	public Periodicidade getPeriodicidadeRenovacao() {
+		return periodicidadeRenovacao;
+	}
+
+	public void setPeriodicidadeRenovacao(Periodicidade periodicidadeRenovacao) {
+		this.periodicidadeRenovacao = periodicidadeRenovacao;
+	}
+
+	public Periodicidade getPeriodicidadePagamento() {
+		return periodicidadePagamento;
+	}
+
+	public void setPeriodicidadePagamento(Periodicidade periodicidadePagamento) {
+		this.periodicidadePagamento = periodicidadePagamento;
+	}
+
+	public PremioSeguro getPremioSeguro() {
+		return premioSeguro;
+	}
+
+	public void setPremioSeguro(PremioSeguro premioSeguro) {
+		this.premioSeguro = premioSeguro;
+	}
+
+	public Calendar getDataRenovacao() {
+		return dataRenovacao;
+	}
+
+	public void setDataRenovacao(Calendar dataRenovacao) {
+		this.dataRenovacao = dataRenovacao;
+	}
+
+	public Long getIdArquivo() {
+		return idArquivo;
+	}
+
+	public void setIdArquivo(Long idArquivo) {
+		this.idArquivo = idArquivo;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public Favorecido getFavorecido() {
+		return favorecido;
+	}
+
+	public void setFavorecido(Favorecido favorecido) {
+		this.favorecido = favorecido;
+	}
+
+	public Moeda getMoeda() {
+		return moeda;
+	}
+
+	public void setMoeda(Moeda moeda) {
+		this.moeda = moeda;
+	}
+
+	public LancamentoPeriodico getLancamentoPeriodico() {
+		return lancamentoPeriodico;
+	}
+
+	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
+		this.lancamentoPeriodico = lancamentoPeriodico;
 	}
 }

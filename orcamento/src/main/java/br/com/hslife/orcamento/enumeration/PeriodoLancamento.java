@@ -45,10 +45,13 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.enumeration;
 
+import org.springframework.context.annotation.DependsOn;
+
 import java.util.Calendar;
 import java.util.Date;
 
-public enum PeriodoLancamento {
+@Deprecated
+public enum PeriodoLancamento { // Use Periodicidade
 	FIXO("Fixo"), MENSAL("Mensal"), BIMESTRAL("Bimestral"), TRIMESTRAL("Trimestral"), QUADRIMESTRAL("Quadrimestral"), SEMESTRAL("Semestral"), ANUAL("Anual");
 	
 	private String descricao;
