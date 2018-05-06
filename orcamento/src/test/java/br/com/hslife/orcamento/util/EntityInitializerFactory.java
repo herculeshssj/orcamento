@@ -93,11 +93,6 @@ public class EntityInitializerFactory {
 	public static Montadora createMontadora() {
 		return new Montadora.Builder().descricao("Montadora de teste").build();
 	}
- 	
-	@Deprecated
-	public static Combustivel createCombustivel() {
-		return new Combustivel.Builder().descricao("Combustível teste").distribuidora("Distribuidora de teste").build();
-	}
 
 	@Deprecated
 	public static Banco createBanco(Usuario usuario) {

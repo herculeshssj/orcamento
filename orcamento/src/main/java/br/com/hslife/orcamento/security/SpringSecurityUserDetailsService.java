@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -71,6 +72,7 @@ public class SpringSecurityUserDetailsService implements UserDetailsService {
 	}
 
 	@Override
+	@CacheEvict(cacheNames="usuarios", allEntries=true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Usuario usuario = getUsuarioService().buscarPorLogin(username);
 		

@@ -56,8 +56,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.entity.Combustivel;
+import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
 import br.com.hslife.orcamento.facade.ICombustivel;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class CombustivelServiceTest extends AbstractTestServices {
 	
@@ -69,7 +70,7 @@ public class CombustivelServiceTest extends AbstractTestServices {
 	@Before
 	public void initializeEntities() {		
 		// Inicializa as entidades
-		entity = EntityInitializerFactory.createCombustivel();
+		entity = (Combustivel)new EntityPersistenceMock().criaCombustivel().get(EntityPersistenceEnum.COMBUSTIVEL);
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
 	}
@@ -121,7 +122,7 @@ public class CombustivelServiceTest extends AbstractTestServices {
 	@Test
 	public void testFindByDescricao() {
 		for (int i = 0; i < 10; i++) {
-			entity = EntityInitializerFactory.createCombustivel();
+			entity = (Combustivel)new EntityPersistenceMock().criaCombustivel().get(EntityPersistenceEnum.COMBUSTIVEL);
 			entity.setDescricao(entity.getDescricao() + " - " + i);
 			service.cadastrar(entity);
 		}

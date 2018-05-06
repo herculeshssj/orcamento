@@ -51,8 +51,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.hslife.orcamento.entity.Combustivel;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 /**
  * Classe responsável por realizar os testes unitários do controller em 
@@ -82,7 +84,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 		login();
 		
 		// Inicializa as entidades		
-		controller.setEntity(EntityInitializerFactory.createCombustivel());
+		controller.setEntity((Combustivel)new EntityPersistenceMock().criaCombustivel().get(EntityPersistenceEnum.COMBUSTIVEL));
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
 	}
@@ -136,7 +138,7 @@ public class CombustivelControllerTest extends AbstractTestControllers {
 			
 			assertEquals(controller.goToFormPage, result);
 			
-			controller.setEntity(EntityInitializerFactory.createCombustivel());
+			controller.setEntity((Combustivel)new EntityPersistenceMock().criaCombustivel().get(EntityPersistenceEnum.COMBUSTIVEL));
 			controller.getEntity().setDescricao(controller.getEntity().getDescricao() + i);
 			controller.getEntity().setDistribuidora("Distribuidora de teste");
 			result = controller.save();

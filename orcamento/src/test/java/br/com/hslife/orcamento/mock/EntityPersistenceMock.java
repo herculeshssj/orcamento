@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import br.com.hslife.orcamento.entity.Arquivo;
 import br.com.hslife.orcamento.entity.CategoriaDocumento;
+import br.com.hslife.orcamento.entity.Combustivel;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.EntityPersistence;
@@ -37,6 +38,16 @@ public class EntityPersistenceMock {
 	
 	public EntityPersistence get(EntityPersistenceEnum entidade) {
 		return mapEntidade.get(entidade);
+	}
+	
+	public EntityPersistenceMock criaCombustivel() {
+		Combustivel combustivel = new Combustivel.Builder()
+				.descricao("Combustível teste")
+				.distribuidora("Distribuidora de teste")
+				.build(); 
+		
+		mapEntidade.put(EntityPersistenceEnum.COMBUSTIVEL, combustivel);
+		return this;
 	}
 	
 	public EntityPersistenceMock criarUsuario() {

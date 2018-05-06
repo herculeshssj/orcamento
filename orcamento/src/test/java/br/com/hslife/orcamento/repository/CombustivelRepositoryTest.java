@@ -50,15 +50,14 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.hslife.orcamento.entity.Combustivel;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class CombustivelRepositoryTest extends AbstractTestRepositories {
 	
@@ -76,7 +75,7 @@ public class CombustivelRepositoryTest extends AbstractTestRepositories {
 		repository.setSessionFactory(sessionFactory);
 		
 		// Inicializa as entidades
-		entity = EntityInitializerFactory.createCombustivel();
+		entity = (Combustivel)new EntityPersistenceMock().criaCombustivel().get(EntityPersistenceEnum.COMBUSTIVEL);
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
 	}
@@ -127,7 +126,7 @@ public class CombustivelRepositoryTest extends AbstractTestRepositories {
 	@Test
 	public void testFindByDescricao() {
 		for (int i = 0; i < 10; i++) {
-			entity = EntityInitializerFactory.createCombustivel();
+			entity = (Combustivel)new EntityPersistenceMock().criaCombustivel().get(EntityPersistenceEnum.COMBUSTIVEL);
 			entity.setDescricao(entity.getDescricao() + " - " + i);
 			repository.save(entity);
 		}

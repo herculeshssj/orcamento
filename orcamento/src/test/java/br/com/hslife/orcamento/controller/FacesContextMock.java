@@ -45,7 +45,9 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.controller;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -69,8 +71,12 @@ public abstract class FacesContextMock extends FacesContext {
 
 	public static FacesContext mockFacesContext() {
 		FacesContext context = Mockito.mock(FacesContext.class);
+		ExternalContext externalContext = Mockito.mock(ExternalContext.class);
+		Flash flash = Mockito.mock(Flash.class);
 		setCurrentInstance(context);
 		Mockito.doAnswer(RELEASE).when(context).release();
+		Mockito.when(context.getExternalContext()).thenReturn(externalContext);
+		Mockito.when(context.getExternalContext().getFlash()).thenReturn(flash);
 		return context;
 	}
 }
