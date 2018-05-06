@@ -104,7 +104,7 @@ public class Seguro extends EntityPersistence {
 	@Column(nullable=false, precision=18, scale=2)	
 	private double valorSeguro; // terceiro e próprio
 
-	@Column(length=100, nullable=true)	
+	@Column(nullable=true)
 	private String observacao; // terceiro e próprio
 
 	@Column(nullable = true)
