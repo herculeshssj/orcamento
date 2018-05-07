@@ -10,7 +10,7 @@ select * from investimento;
 select * from categoriainvestimento; -- FIIs é o ID 9
 select * from conta; -- Socopa é o ID 33
 
-insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimento, observacao, `idCategoriaInvestimento`, `idConta`, ticker)
+insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimento, observacao, `idCategoriaInvestimento`, `idConta`, ticker, idAdministradorInvestimento)
     select
     nome_reduzido,
     cnpj,
@@ -19,7 +19,8 @@ insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimen
     observacao,
     9,
     33,
-    ticker
+    ticker,
+    id_administrador_fii
     from
     fii;
 */
@@ -43,7 +44,7 @@ desc administradorinvestimento;
 select * from administradorinvestimento;
 select * from usuario where login = "herculeshssj";
 
-/*** SQL definitivo - Executado unicamente na base de produção ***/
+/******** SQL definitivo - Executado unicamente na base de produção ********/
 
 -- Exclusão da tabela info_fii
 drop table info_fii;
@@ -59,8 +60,12 @@ alter table administradorinvestimento add PRIMARY key (id);
 alter table administradorinvestimento change column `id_usuario` `idUsuario` bigint not null;
 alter table administradorinvestimento add CONSTRAINT fk_administradorinvestimento_usuario FOREIGN KEY (idUsuario) references usuario(id);
 
+-- Insere a FK para administradorinvestimento em investimento
+alter table investimento add column idAdministradorInvestimento bigint null;
+alter table investimento add constraint fk_administradorinvestimento_investimento foreign key (idAdministradorInvestimento) references administradorinvestimento(id);
+
 -- Insere os FIIs na tabela investimento
-insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimento, observacao, `idCategoriaInvestimento`, `idConta`, ticker)
+insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimento, observacao, `idCategoriaInvestimento`, `idConta`, ticker, idAdministradorInvestimento)
     select
     nome_reduzido,
     cnpj,
@@ -69,7 +74,8 @@ insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimen
     observacao,
     9,
     33,
-    ticker
+    ticker,
+    id_administrador_fii
     from
     fii;
 
