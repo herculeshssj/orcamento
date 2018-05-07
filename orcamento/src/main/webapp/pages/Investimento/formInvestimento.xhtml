@@ -44,14 +44,12 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/formulario.xhtml">
 
@@ -69,7 +67,7 @@
 			<f:selectItems value="#{managedBean.listaCategoriaInvestimento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			<p:ajax update="pnlInvestimentoInicialFixo,pnlInvestimentoInicialVariavel" event="change" listener="#{managedBean.atualizaInvestimentoInicial}"/>									
 		</h:selectOneMenu>
-				
+
 		<label for="frmFormEntity:txtDescricao">Descrição:</label>
 		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" />				
 		
@@ -94,6 +92,12 @@
 	    		<h:panelGroup rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'VARIAVEL'}">
 		    		<label for="frmFormEntity:txtTicker">Código da ação:</label>
 		    		<h:inputText id="txtTicker" value="#{managedBean.entity.ticker}" />
+
+					<label>Administrador do investimento:</label>
+					<h:selectOneMenu value="#{managedBean.entity.administradorInvestimento}" converter="entityConverter">
+						<f:selectItem itemLabel="Selecione um administrador" />
+						<f:selectItems value="#{managedBean.listaAdministradorInvestimento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					</h:selectOneMenu>
 			</h:panelGroup>
 	    </p:outputPanel>
 	    

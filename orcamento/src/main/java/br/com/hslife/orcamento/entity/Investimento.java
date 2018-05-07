@@ -74,6 +74,8 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name="investimento")
@@ -111,11 +113,15 @@ public class Investimento extends EntityPersistence {
 	@ManyToOne
 	@JoinColumn(name="idCategoriaInvestimento", nullable=false)
 	private CategoriaInvestimento categoriaInvestimento;
+
+	@ManyToOne
+	@JoinColumn(name="idAdministradorInvestimento", nullable=true)
+	private AdministradorInvestimento administradorInvestimento;
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=true, cascade=CascadeType.ALL)	
 	private Set<MovimentacaoInvestimento> movimentacoesInvestimento;
 	
-	@OneToMany(mappedBy="investimento")	
+	@OneToMany(mappedBy="investimento", fetch = FetchType.EAGER)
 	private Set<Dividendo> dividendos;
 	
 	/*** Atributos para o resumo Carteira de Investimento ***/
@@ -442,5 +448,13 @@ public class Investimento extends EntityPersistence {
 
 	public void setDividendos(Set<Dividendo> dividendos) {
 		this.dividendos = dividendos;
+	}
+
+	public AdministradorInvestimento getAdministradorInvestimento() {
+		return administradorInvestimento;
+	}
+
+	public void setAdministradorInvestimento(AdministradorInvestimento administradorInvestimento) {
+		this.administradorInvestimento = administradorInvestimento;
 	}
 }

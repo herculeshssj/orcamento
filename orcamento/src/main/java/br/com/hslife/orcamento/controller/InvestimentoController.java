@@ -54,16 +54,13 @@ import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
+import br.com.hslife.orcamento.entity.*;
+import br.com.hslife.orcamento.facade.IAdministradorInvestimento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.com.hslife.orcamento.component.InfoCotacaoComponent;
-import br.com.hslife.orcamento.entity.CategoriaInvestimento;
-import br.com.hslife.orcamento.entity.Conta;
-import br.com.hslife.orcamento.entity.Dividendo;
-import br.com.hslife.orcamento.entity.Investimento;
-import br.com.hslife.orcamento.entity.MovimentacaoInvestimento;
 import br.com.hslife.orcamento.enumeration.MesesDoAno;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoInvestimento;
@@ -92,6 +89,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	@Autowired
 	private ICategoriaInvestimento categoriaInvestimentoService;
+
+	@Autowired
+	private IAdministradorInvestimento administradorInvestimentoService;
 	
 	@Autowired
 	private InfoCotacaoComponent infoCotacaoComponent;
@@ -114,7 +114,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	private int anoDividendo;
 	
 	private OperacaoInvestimento operacaoInvestimento;
-	
+
 	public enum OperacaoInvestimento {
 		SALVAR_MOVIMENTACAO, EDITAR_MOVIMENTACAO, EXCLUIR_MOVIMENTACAO;
 	}
@@ -425,6 +425,10 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		return categorias;
 	}
 
+	public List<AdministradorInvestimento> getListaAdministradorInvestimento() {
+		return getAdministradorInvestimentoService().findAllByUsuario(getUsuarioLogado());
+	}
+
 	public IConta getContaService() {
 		return contaService;
 	}
@@ -559,5 +563,9 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public void setAnoDividendo(int anoDividendo) {
 		this.anoDividendo = anoDividendo;
+	}
+
+	public IAdministradorInvestimento getAdministradorInvestimentoService() {
+		return administradorInvestimentoService;
 	}
 }
