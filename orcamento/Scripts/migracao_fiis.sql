@@ -26,13 +26,15 @@ insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimen
 */
 
 -- Movimetações FIIs
+/*
 select * from movimentacao_fii;
 select * from movimentacaoinvestimento;
 select * from investimento_movimentacaoinvestimento;
+*/
 
 -- Rendimentos FIIs
-select * from rendimento_fii limit 300;
-select * from dividendo limit 300;
+select * from rendimento_fii;
+select * from dividendo;
 
 -- Informações sobre FIIs
 -- select * from info_fii;
@@ -43,6 +45,34 @@ desc administradorinvestimento;
 
 select * from administradorinvestimento;
 select * from usuario where login = "herculeshssj";
+
+select * from movimentacaoinvestimento order by id desc;
+
+select last_insert_id ();
+
+desc movimentacaoinvestimento;
+-- insert into movimentacaoinvestimento (`tipoLancamento`, `data`, historico, valor, `impostoRenda`, iof,  cotas, `valorCota`)
+
+insert into investimento_movimentacaoinvestimento (investimento_id, `movimentacoesInvestimento_id`)
+    select
+    (select i.id from investimento i inner join fii fi on fi.ticker = i.ticker where fi.id = mfi.id_fii) as id_fii,
+    mfi.id + 144 as id_movimentacao
+    from
+    movimentacao_fii mfi;
+
+select
+(select if(mfi.tipo_lancamento='CREDITO','RECEITA','DESPESA') ) as tipo_lancamento,
+mfi.data_operacao,
+(select if(mfi.tipo_lancamento='CREDITO','COMPRA','VENDA') ) as historico,
+mfi.valor,
+mfi.imposto_renda,
+mfi.taxas,
+mfi.cotas,
+mfi.valor_cota
+from
+movimentacao_fii mfi;
+
+desc investimento_movimentacaoinvestimento;
 
 /******** SQL definitivo - Executado unicamente na base de produção ********/
 
@@ -79,3 +109,24 @@ insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimen
     from
     fii;
 
+-- Insere as movimentações
+insert into movimentacaoinvestimento (`tipoLancamento`, `data`, historico, valor, `impostoRenda`, iof,  cotas, `valorCota`)
+    select
+    (select if(mfi.tipo_lancamento='CREDITO','RECEITA','DESPESA') ) as tipo_lancamento,
+    mfi.data_operacao,
+    (select if(mfi.tipo_lancamento='CREDITO','COMPRA','VENDA') ) as historico,
+    mfi.valor,
+    mfi.imposto_renda,
+    mfi.taxas,
+    mfi.cotas,
+    mfi.valor_cota
+    from
+    movimentacao_fii mfi;
+
+-- Insere o vínculo entre os investimentos e suas movimentações
+insert into investimento_movimentacaoinvestimento (investimento_id, `movimentacoesInvestimento_id`)
+    select
+    (select i.id from investimento i inner join fii fi on fi.ticker = i.ticker where fi.id = mfi.id_fii) as id_fii,
+    mfi.id + 144 as id_movimentacao
+    from
+    movimentacao_fii mfi;
