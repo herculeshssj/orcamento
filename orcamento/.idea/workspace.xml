@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="822310ea-4b2b-4e34-b726-8b11aa8a36f2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/migracao_fiis.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/migracao_fiis.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/cotacaoInvestimento.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/cotacaoInvestimento.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formDividendo.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formDividendo.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formMovimentacaoInvestimento.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formMovimentacaoInvestimento.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/viewInvestimento.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/Investimento/viewInvestimento.xhtml" afterDir="false" />
@@ -24,8 +24,8 @@
       <file leaf-file-name="migracao_fiis.sql" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Scripts/migracao_fiis.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-end-line="36" selection-end-column="24" />
+            <state relative-caret-position="131">
+              <caret line="35" selection-start-line="35" selection-end-line="35" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -67,12 +67,13 @@
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/enumeration/Bandeira.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/InvestimentoController.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formInvestimento.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/listInvestimento.xhtml" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Investimento.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formDividendo.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formMovimentacaoInvestimento.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/viewInvestimento.xhtml" />
         <option value="$PROJECT_DIR$/Scripts/migracao_fiis.sql" />
+        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/listInvestimento.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/viewInvestimento.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formMovimentacaoInvestimento.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/formDividendo.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/cotacaoInvestimento.xhtml" />
       </list>
     </option>
   </component>
@@ -355,7 +356,14 @@
       <option name="project" value="LOCAL" />
       <updated>1525727404458</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Migração das movimentações dos FIIs.">
+      <created>1525733903294</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1525733903294</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -411,7 +419,8 @@
     <MESSAGE value="Incluído botão para retornar ao início." />
     <MESSAGE value="Melhoria no código." />
     <MESSAGE value="Implementado vínculo entre administradores de investimentos e investimentos." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementado vínculo entre administradores de investimentos e investimentos." />
+    <MESSAGE value="Migração das movimentações dos FIIs." />
+    <option name="LAST_COMMIT_MESSAGE" value="Migração das movimentações dos FIIs." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/EntityPersistenceMock.java">
@@ -624,13 +633,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/formInvestimento.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="97" column="79" selection-start-line="97" selection-start-column="79" selection-end-line="97" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Investimento.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
@@ -639,39 +641,6 @@
             <element signature="e#12997#12998#0" expanded="true" />
             <element signature="e#13036#13037#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/listInvestimento.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="122" column="232" lean-forward="true" selection-start-line="121" selection-start-column="12" selection-end-line="122" selection-end-column="232" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/cotacaoInvestimento.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-588" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/formDividendo.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="85" column="232" selection-start-line="85" selection-start-column="232" selection-end-line="85" selection-end-column="232" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/formMovimentacaoInvestimento.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="85" column="232" selection-start-line="85" selection-start-column="232" selection-end-line="85" selection-end-column="232" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/viewInvestimento.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="80" column="232" selection-start-line="80" selection-start-column="232" selection-end-line="80" selection-end-column="232" />
         </state>
       </provider>
     </entry>
@@ -687,10 +656,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/viewInvestimento.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="52" column="41" selection-start-line="52" selection-start-column="41" selection-end-line="52" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/listInvestimento.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4318">
+          <caret line="323" column="22" selection-start-line="323" selection-start-column="22" selection-end-line="323" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/formMovimentacaoInvestimento.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="51" column="41" selection-start-line="51" selection-start-column="41" selection-end-line="51" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/formInvestimento.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="46" selection-start-line="46" selection-end-line="51" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/formDividendo.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="51" column="41" selection-start-line="51" selection-start-column="41" selection-end-line="51" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Investimento/cotacaoInvestimento.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Scripts/migracao_fiis.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-end-line="36" selection-end-column="24" />
+        <state relative-caret-position="131">
+          <caret line="35" selection-start-line="35" selection-end-line="35" selection-end-column="29" />
         </state>
       </provider>
     </entry>
