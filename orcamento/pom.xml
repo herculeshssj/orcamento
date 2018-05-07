@@ -424,6 +424,11 @@
 						<password>${env.wildflyPassword}</password>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>9.4.9.v20180320</version>
+				</plugin>
   			</plugins>
   		</build>
   	</profile>
@@ -435,9 +440,8 @@
   		<plugin>
   			<groupId>org.apache.maven.plugins</groupId>
         	<artifactId>maven-pmd-plugin</artifactId>
-        	<version>3.8</version>
+        	<version>3.9.0</version>
         	<configuration>
-        		<linkXref>true</linkXref>
           		<sourceEncoding>utf-8</sourceEncoding>
           		<minimumTokens>100</minimumTokens>
           		<targetJdk>1.8</targetJdk>
