@@ -1,10 +1,28 @@
+show tables;
+
 -- Administradores de FIIs
-select * from administrador_fii;
+-- select * from administrador_fii;
 
 -- FIIs
+/*
 select * from fii;
 select * from investimento;
-select * from categoriainvestimento;
+select * from categoriainvestimento; -- FIIs é o ID 9
+select * from conta; -- Socopa é o ID 33
+
+insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimento, observacao, `idCategoriaInvestimento`, `idConta`, ticker)
+    select
+    nome_reduzido,
+    cnpj,
+    inicio_investimento,
+    termino_investimento,
+    observacao,
+    9,
+    33,
+    ticker
+    from
+    fii;
+*/
 
 -- Movimetações FIIs
 select * from movimentacao_fii;
@@ -34,10 +52,24 @@ drop table info_fii;
 RENAME TABLE administrador_fii TO administradorinvestimento;
 
 -- Seta os registros de administradorinvestimento para o usuário 'herculeshssj'
-update administradorinvestimento set id_usuario = (select id from usuario where login = 'herculeshssj')
+update administradorinvestimento set id_usuario = (select id from usuario where login = 'herculeshssj');
 
 -- Realiza as mudanças na estrutura da tabela
 alter table administradorinvestimento add PRIMARY key (id);
 alter table administradorinvestimento change column `id_usuario` `idUsuario` bigint not null;
 alter table administradorinvestimento add CONSTRAINT fk_administradorinvestimento_usuario FOREIGN KEY (idUsuario) references usuario(id);
+
+-- Insere os FIIs na tabela investimento
+insert into investimento (descricao, cnpj, inicioInvestimento, terminoInvestimento, observacao, `idCategoriaInvestimento`, `idConta`, ticker)
+    select
+    nome_reduzido,
+    cnpj,
+    inicio_investimento,
+    termino_investimento,
+    observacao,
+    9,
+    33,
+    ticker
+    from
+    fii;
 
