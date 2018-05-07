@@ -47,6 +47,7 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
+import br.com.hslife.orcamento.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.MatchMode;
@@ -62,18 +63,17 @@ public class BancoRepository extends AbstractCRUDRepository<Banco> {
 	public BancoRepository() {
 		super(new Banco());
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public List<Banco> findByNome(String nome) {
-		Criteria criteria = getSession().createCriteria(Banco.class);
-		criteria.add(Restrictions.ilike("nome", nome, MatchMode.ANYWHERE));
-		return criteria.addOrder(Order.asc("nome")).list();
+		return getSession().createQuery("SELECT banco FROM Banco banco WHERE banco.nome LIKE :nome ORDER BY banco.nome ASC", Banco.class)
+				.setParameter("nome", Util.concatenar("%",nome,"%"))
+				.getResultList();
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public List<Banco> findByNomeAndAtivo(String nome, boolean ativo) {
-		String hql = "FROM Banco banco WHERE banco.nome LIKE '%" + nome + "%' AND banco.ativo = :ativo ORDER BY banco.nome ASC";
-		Query query = getSession().createQuery(hql).setBoolean("ativo", ativo);
-		return query.list();
+		return getSession().createQuery("SELECT banco FROM Banco banco WHERE banco.nome LIKE :nome AND banco.ativo = :ativo ORDER BY banco.nome ASC", Banco.class)
+				.setParameter("nome", Util.concatenar("%",nome,"%"))
+				.setParameter("ativo", ativo)
+				.getResultList();
 	}
 }
