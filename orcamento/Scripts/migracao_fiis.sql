@@ -33,10 +33,8 @@ select * from investimento_movimentacaoinvestimento;
 */
 
 -- Rendimentos FIIs
-/*
 select * from rendimento_fii;
 select * from dividendo;
-*/
 
 -- Informações sobre FIIs
 -- select * from info_fii;
