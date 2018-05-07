@@ -129,6 +129,9 @@ public class Seguro extends EntityPersistence {
 	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
 	private LancamentoPeriodico lancamentoPeriodico; // terceiro e próprio
 	
+	@Transient
+	private Conta conta; // usado para setar a conta no lançamento periódico
+	
 	public Seguro() {
 		ativo = true;
 	}
@@ -150,7 +153,6 @@ public class Seguro extends EntityPersistence {
 		this.setAtivo(builder.ativo);
 		this.setMoeda(builder.moeda);
 		this.setFavorecido(builder.favorecido);
-		this.setLancamentoPeriodico(builder.lancamentoPeriodico);
 	}
 
 	public static class Builder {
@@ -170,7 +172,6 @@ public class Seguro extends EntityPersistence {
 		private boolean ativo;
 		private Moeda moeda;
 		private Favorecido favorecido;
-		private LancamentoPeriodico lancamentoPeriodico;
 		
 		public Builder descricao(String descricao) {
 			this.descricao = descricao;
@@ -251,11 +252,6 @@ public class Seguro extends EntityPersistence {
 			this.favorecido = value;
 			return this;
 		}
-
-		public Builder lancamentoPeriodico(LancamentoPeriodico value) {
-			this.lancamentoPeriodico = value;
-			return this;
-		}
 		
 		public Seguro build() {
 			return new Seguro(this);
@@ -277,6 +273,14 @@ public class Seguro extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Tipo de prêmio do seguro", this.getPremioSeguro());
 		EntityPersistenceUtil.validaCampoNulo("Moeda", this.getMoeda());
 		EntityPersistenceUtil.validaCampoNulo("Despesa fixa", this.lancamentoPeriodico);
+	}
+	
+	/*
+	 * Gera o lançamento periódico que ficará vinculado ao seguro. Toda a gestão
+	 * do lançamento será feita pelo seguro.
+	 */
+	public void gerarDespesaFixa() {
+		// TODO implementar
 	}
 
 	/**
@@ -483,5 +487,19 @@ public class Seguro extends EntityPersistence {
 
 	public void setLancamentoPeriodico(LancamentoPeriodico lancamentoPeriodico) {
 		this.lancamentoPeriodico = lancamentoPeriodico;
+	}
+
+	/**
+	 * @return the conta
+	 */
+	public Conta getConta() {
+		return conta;
+	}
+
+	/**
+	 * @param conta the conta to set
+	 */
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 }

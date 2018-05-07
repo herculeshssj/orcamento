@@ -4,6 +4,7 @@ public enum EntityPersistenceEnum {
 
 	ARQUIVO,
 	COMBUSTIVEL,
+	CONTA,
 	FAVORECIDO,
 	LANCAMENTOPERIODICO,
 	MOEDA,

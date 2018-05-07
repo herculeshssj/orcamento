@@ -16,7 +16,6 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Patrimonio;
@@ -102,6 +101,20 @@ public class EntityPersistenceMock {
 		return this;
 	}
 	
+	public EntityPersistenceMock comContaCorrente() {
+		Conta conta = new Conta();
+		conta.setDescricao("Conta de teste");
+		conta.setDataAbertura(new Date());
+		conta.setSaldoInicial(100);
+		conta.setTipoConta(TipoConta.CORRENTE);
+		conta.setUsuario((Usuario)this.get(EntityPersistenceEnum.USUARIO));
+		conta.setMoeda((Moeda)this.get(EntityPersistenceEnum.MOEDA));
+		
+		// Salva no Map e retorna o mock
+		mapEntidade.put(EntityPersistenceEnum.CONTA, conta);
+		return this;
+	}
+	
 	public EntityPersistenceMock comArquivoEmMaos() {
 		Arquivo arquivo = new Arquivo.Builder()
 				.contentType("text/html")
@@ -147,11 +160,13 @@ public class EntityPersistenceMock {
 				.periodicidadeRenovacao(Periodicidade.ANUAL)
 				.periodicidadePagamento(Periodicidade.ANUAL)
 				.premioSeguro(PremioSeguro.FIXO)
-				.lancamentoPeriodico((LancamentoPeriodico)this.get(EntityPersistenceEnum.LANCAMENTOPERIODICO))
 				.favorecido((Favorecido)this.get(EntityPersistenceEnum.FAVORECIDO))
 				.moeda((Moeda)this.get(EntityPersistenceEnum.MOEDA))
 				.usuario((Usuario)this.get(EntityPersistenceEnum.USUARIO))
 				.build();
+		
+		// Seta a conta que será definida no lançamento periódico criado
+		seguro.setConta((Conta)this.get(EntityPersistenceEnum.CONTA));
 		
 		mapEntidade.put(EntityPersistenceEnum.SEGURO, seguro);
 		return this;
