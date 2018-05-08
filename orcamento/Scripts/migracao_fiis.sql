@@ -33,13 +33,27 @@ select * from investimento_movimentacaoinvestimento;
 */
 
 -- Rendimentos FIIs
+/*
 select * from rendimento_fii;
 select * from dividendo;
+*/
 
 -- Informações sobre FIIs
 -- select * from info_fii;
 
 /****** Rascunhos gerais *******/
+
+insert into dividendo (`idInvestimento`, `dataFechamento`, `dataPagamento`, `valorUnitario`, `valorPago`, ir, `quantAcoesApuradas`)
+select
+(select i.id from investimento i inner join fii fi on fi.ticker = i.ticker where fi.id = rfi.id_fii) as id_fii,
+rfi.data_fechamento,
+rfi.data_pagamento,
+rfi.valor_unitario,
+rfi.valor_pago,
+rfi.imposto_renda,
+rfi.quant_cotas_apuradas
+from
+rendimento_fii rfi;
 
 desc administradorinvestimento;
 
@@ -130,3 +144,22 @@ insert into investimento_movimentacaoinvestimento (investimento_id, `movimentaco
     mfi.id + 144 as id_movimentacao
     from
     movimentacao_fii mfi;
+
+-- Insere os rendimentos
+insert into dividendo (`idInvestimento`, `dataFechamento`, `dataPagamento`, `valorUnitario`, `valorPago`, ir, `quantAcoesApuradas`)
+    select
+    (select i.id from investimento i inner join fii fi on fi.ticker = i.ticker where fi.id = rfi.id_fii) as id_fii,
+    rfi.data_fechamento,
+    rfi.data_pagamento,
+    rfi.valor_unitario,
+    rfi.valor_pago,
+    rfi.imposto_renda,
+    rfi.quant_cotas_apuradas
+    from
+    rendimento_fii rfi;
+
+-- Exclui as tabelas
+drop table fii;
+drop table movimentacao_fii;
+drop table rendimento_fii;
+drop table usuario_fii;
