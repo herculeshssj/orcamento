@@ -66,13 +66,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import br.com.hslife.orcamento.enumeration.*;
 import org.hibernate.annotations.OrderBy;
 
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
-import br.com.hslife.orcamento.enumeration.StatusLancamento;
-import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity
@@ -124,7 +120,7 @@ public class LancamentoPeriodico extends EntityPersistence {
 	
 	@Column(length=10, nullable=true)
 	@Enumerated(EnumType.STRING)
-	private PeriodoLancamento periodoLancamento;
+	private Periodicidade periodoLancamento;
 	
 	@ManyToOne
 	@JoinColumn(name="idConta", nullable=false)
@@ -285,11 +281,11 @@ public class LancamentoPeriodico extends EntityPersistence {
 		this.tipoLancamentoPeriodico = tipoLancamentoPeriodico;
 	}
 
-	public PeriodoLancamento getPeriodoLancamento() {
+	public Periodicidade getPeriodoLancamento() {
 		return periodoLancamento;
 	}
 
-	public void setPeriodoLancamento(PeriodoLancamento periodoLancamento) {
+	public void setPeriodoLancamento(Periodicidade periodoLancamento) {
 		this.periodoLancamento = periodoLancamento;
 	}
 

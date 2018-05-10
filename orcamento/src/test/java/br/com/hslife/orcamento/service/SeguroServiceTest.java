@@ -43,56 +43,46 @@ para Hércules S. S. José, Rua José dos Anjos, 160 - Bl. 3 Apto. 304 -
 Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 
 ***/
-package br.com.hslife.orcamento.repository;
+package br.com.hslife.orcamento.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import org.hibernate.SessionFactory;
+import br.com.hslife.orcamento.entity.Montadora;
+import br.com.hslife.orcamento.entity.Seguro;
+import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
+import br.com.hslife.orcamento.facade.*;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
+import br.com.hslife.orcamento.util.EntityInitializerFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.hslife.orcamento.entity.Seguro;
-import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
-import br.com.hslife.orcamento.mock.EntityPersistenceMock;
+import java.util.List;
 
-public class SeguroRepositoryTest extends AbstractTestRepositories {
+import static org.junit.Assert.*;
+
+public class SeguroServiceTest extends AbstractTestServices {
 	
 	private Seguro entity;
 	
 	@Autowired
-	private SessionFactory sessionFactory;
-	
+	private ISeguro service;
+
 	@Autowired
-	private SeguroRepository repository;
-	
+	private IUsuario usuarioService;
+
 	@Autowired
-	private UsuarioRepository usuarioRepository;
-	
+	private IFavorecido favorecidoService;
+
 	@Autowired
-	private FavorecidoRepository favorecidoRepository;
-	
+	private IMoeda moedaService;
+
 	@Autowired
-	private MoedaRepository moedaRepository;
-	
+	private IConta contaService;
+
 	@Autowired
-	private ContaRepository contaRepository;
-	
-	@Autowired
-	private LancamentoPeriodicoRepository lancamentoPeriodicoRepository;
-	
+	private ILancamentoPeriodico lancamentoPeriodicoService;
+
 	@Before
 	public void initializeEntities() {
-		// Seta o sessionFactory nos repositórios
-		repository.setSessionFactory(sessionFactory);
-		usuarioRepository.setSessionFactory(sessionFactory);
-		favorecidoRepository.setSessionFactory(sessionFactory);
-		moedaRepository.setSessionFactory(sessionFactory);
-		contaRepository.setSessionFactory(sessionFactory);
-		lancamentoPeriodicoRepository.setSessionFactory(sessionFactory);
-		
 		// Inicializa as entidades
 		EntityPersistenceMock epm = new EntityPersistenceMock()
 				.criarUsuario()
@@ -101,62 +91,61 @@ public class SeguroRepositoryTest extends AbstractTestRepositories {
 				.comContaCorrente()
 				.ePossuiSeguro();
 		entity = (Seguro)epm.get(EntityPersistenceEnum.SEGURO);
-		
+
 		// Salva as entidades pertinentes antes de iniciar os testes
-		usuarioRepository.save(entity.getUsuario());
-		favorecidoRepository.save(entity.getFavorecido());
-		moedaRepository.save(entity.getMoeda());
-		contaRepository.save(entity.getConta());
+		usuarioService.cadastrar(entity.getUsuario());
+		favorecidoService.cadastrar(entity.getFavorecido());
+		moedaService.cadastrar(entity.getMoeda());
+		contaService.cadastrar(entity.getConta());
 	}
 	
 	@Test
 	public void testFindById() {
 		entity.gerarDespesaFixa();
-		lancamentoPeriodicoRepository.save(entity.getLancamentoPeriodico());
-		repository.save(entity);
+		lancamentoPeriodicoService.cadastrar(entity.getLancamentoPeriodico());
+		service.cadastrar(entity);
 		
 		// Testa o método em questão
-		Seguro entityTest = repository.findById(entity.getId());
+		Seguro entityTest = service.buscarPorID(entity.getId());
 		assertEquals(entity.getId(), entityTest.getId());
 	}
 	
 	@Test
 	public void testDelete() {
 		entity.gerarDespesaFixa();
-		lancamentoPeriodicoRepository.save(entity.getLancamentoPeriodico());
-		repository.save(entity);
+		lancamentoPeriodicoService.cadastrar(entity.getLancamentoPeriodico());
+		service.cadastrar(entity);
 		
 		// Testa o método em questão
-		repository.delete(entity);
+		service.excluir(entity);
 		
-		assertNull(repository.findById(entity.getId()));
+		Seguro entityTest = service.buscarPorID(entity.getId());
+		assertNull(entityTest);
 	}
 	
 	@Test
 	public void testUpdate() {
 		entity.gerarDespesaFixa();
-		lancamentoPeriodicoRepository.save(entity.getLancamentoPeriodico());
-		repository.save(entity);
+		lancamentoPeriodicoService.cadastrar(entity.getLancamentoPeriodico());
+		service.cadastrar(entity);
 		
 		// Altera as informações da entidade
-		entity.setDescricao("Novo seguro de teste");
+		entity.setDescricao("Novo seguro de testes");
 		
 		// Testa o método em questão
-		repository.update(entity);
+		service.alterar(entity);
 		
-		Seguro entityTest = repository.findById(entity.getId());
+		Seguro entityTest = service.buscarPorID(entity.getId());
 		assertEquals(entity.getDescricao(), entityTest.getDescricao());
 	}
 	
 	@Test
 	public void testSave() {
 		entity.gerarDespesaFixa();
-		lancamentoPeriodicoRepository.save(entity.getLancamentoPeriodico());
-		repository.save(entity);
-		
+		lancamentoPeriodicoService.cadastrar(entity.getLancamentoPeriodico());
+		service.cadastrar(entity);
+
 		// Testa o método em questão
 		assertNotNull(entity.getId());
 	}
-	
-	
 }

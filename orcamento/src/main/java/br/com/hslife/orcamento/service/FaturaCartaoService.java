@@ -49,6 +49,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.com.hslife.orcamento.enumeration.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,12 +61,6 @@ import br.com.hslife.orcamento.entity.LancamentoConta;
 import br.com.hslife.orcamento.entity.LancamentoPeriodico;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
-import br.com.hslife.orcamento.enumeration.StatusFaturaCartao;
-import br.com.hslife.orcamento.enumeration.StatusLancamento;
-import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
-import br.com.hslife.orcamento.enumeration.TipoLancamento;
-import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.exception.BusinessException;
 import br.com.hslife.orcamento.facade.IFaturaCartao;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
@@ -367,7 +362,7 @@ public class FaturaCartaoService extends AbstractCRUDService<FaturaCartao> imple
 		parcelamentoFatura.setDescricao("Parcelamento Fatura " + faturaCartao.getMes() + "/" + faturaCartao.getAno());
 		parcelamentoFatura.setDiaVencimento(faturaCartao.getConta().getCartaoCredito().getDiaFechamentoFatura());
 		parcelamentoFatura.setMoeda(faturaCartao.getConta().getMoeda());
-		parcelamentoFatura.setPeriodoLancamento(PeriodoLancamento.MENSAL);
+		parcelamentoFatura.setPeriodoLancamento(Periodicidade.MENSAL);
 		parcelamentoFatura.setStatusLancamento(StatusLancamento.ATIVO);
 		parcelamentoFatura.setTipoLancamento(TipoLancamento.DESPESA);
 		parcelamentoFatura.setTipoLancamentoPeriodico(TipoLancamentoPeriodico.PARCELADO);

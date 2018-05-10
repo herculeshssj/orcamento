@@ -49,9 +49,7 @@ import java.util.Calendar;
 
 import javax.persistence.*;
 
-import br.com.hslife.orcamento.enumeration.Periodicidade;
-import br.com.hslife.orcamento.enumeration.PremioSeguro;
-import br.com.hslife.orcamento.enumeration.TipoSeguro;
+import br.com.hslife.orcamento.enumeration.*;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 
@@ -280,7 +278,22 @@ public class Seguro extends EntityPersistence {
 	 * do lançamento será feita pelo seguro.
 	 */
 	public void gerarDespesaFixa() {
-		// TODO implementar
+		LancamentoPeriodico despesaFixa = new LancamentoPeriodico();
+
+		despesaFixa.setConta(this.conta);
+		despesaFixa.setDataAquisicao(this.dataAquisicao.getTime());
+		despesaFixa.setDescricao(this.descricao);
+		despesaFixa.setDiaVencimento(this.dataAquisicao.get(Calendar.DAY_OF_YEAR));
+		despesaFixa.setMoeda(this.moeda);
+		despesaFixa.setStatusLancamento(StatusLancamento.ATIVO);
+		despesaFixa.setTipoLancamentoPeriodico(TipoLancamentoPeriodico.FIXO);
+		despesaFixa.setPeriodoLancamento(this.periodicidadePagamento);
+		despesaFixa.setValorCompra(this.valorCobertura);
+		despesaFixa.setValorParcela(this.valorSeguro);
+		despesaFixa.setUsuario(this.usuario);
+		despesaFixa.setTipoLancamento(TipoLancamento.DESPESA);
+
+		this.lancamentoPeriodico = despesaFixa;
 	}
 
 	/**

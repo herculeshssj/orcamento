@@ -49,6 +49,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 
+import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -136,5 +138,29 @@ public class SeguroTest {
 	public void testValidateLancamentoPeriodico() {
 		entity.setLancamentoPeriodico(null);
 		entity.validate();
+	}
+
+	@Test
+	public void testGerarParcela() {
+		// Inicializa as entidades
+		EntityPersistenceMock epm = new EntityPersistenceMock()
+				.criarUsuario()
+				.comFavorecido(true)
+				.comMoedaPadrao()
+				.comContaCorrente()
+				.ePossuiSeguro();
+		entity = (Seguro)epm.get(EntityPersistenceEnum.SEGURO);
+
+		try {
+			entity.validate();
+		} catch (ValidationException ve) {
+			// Teste OK
+		}
+
+		entity.gerarDespesaFixa();
+
+		entity.validate();
+
+		entity.getLancamentoPeriodico().validate();
 	}
 }
