@@ -266,7 +266,6 @@ public class UsuarioService extends AbstractCRUDService<Usuario> implements IUsu
 	}
 	
 	@Override
-	@Cacheable("usuarios")
 	public Usuario buscarPorLogin(String login) {
 		return getRepository().findByLogin(login);
 	}
