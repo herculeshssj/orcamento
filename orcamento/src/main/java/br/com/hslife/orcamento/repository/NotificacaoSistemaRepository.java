@@ -73,4 +73,8 @@ public class NotificacaoSistemaRepository extends AbstractRepository {
     public void save(NotificacaoSistema entity) {
         getSession().persist(entity);
     }
+
+    public void update(NotificacaoSistema entity) {
+        getSession().merge(entity);
+    }
 }

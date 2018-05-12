@@ -70,19 +70,19 @@
 						<f:facet name="header">
 							<h:outputText value="Data"/>
 						</f:facet>
-						<h:outputText value="#{item.dataHoraFormatada}" />
+						<h:outputText value="#{item.dataHoraFormatada}" style="#{item.visualizado ? 'font-weight: normal;' : 'font-weight: bold;' }" />
 					</h:column>
 					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Título"/>
 						</f:facet>
-						<h:outputText value="#{item.titulo}" />
+						<h:outputText value="#{item.titulo}" style="#{item.visualizado ? 'font-weight: normal;' : 'font-weight: bold;' }" />
 					</h:column>
 					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Ações"/>
 						</f:facet>
-						<h:commandLink title="Visualizar">
+						<h:commandLink title="Visualizar" action="#{dashboardController.verNotificacao}">
 							<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
 							<f:setPropertyActionListener value="#{item}" target="#{dashboardController.notificacaoSelecionada}"/>
 						</h:commandLink>
