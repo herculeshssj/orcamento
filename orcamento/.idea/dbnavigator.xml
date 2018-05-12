@@ -23,11 +23,7 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="5f24f86e-367c-4037-8fda-85676dfd42bb">
-        <schema name="orcamento" object-types="column, function, table, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="5f24f86e-367c-4037-8fda-85676dfd42bb">
@@ -41,6 +37,7 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
+    <mapping file-url="file://$PROJECT_DIR$/Scripts/rascunhoNotificacao.sql" connection-id="5f24f86e-367c-4037-8fda-85676dfd42bb" session-id="MAIN" current-schema="ORCAMENTO" />
     <mapping file-url="file://$PROJECT_DIR$/Scripts/migracao_fiis.sql" connection-id="5f24f86e-367c-4037-8fda-85676dfd42bb" session-id="MAIN" current-schema="ORCAMENTO" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
