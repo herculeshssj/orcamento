@@ -206,7 +206,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 					proximaMensalidade.getMoeda().getValorConversao()));
 		}
 		
-		lancamentoContaRepository.save(proximaMensalidade);		
+		getLancamentoContaRepository().save(proximaMensalidade);
 		
 	}
 	
@@ -218,11 +218,11 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		lancamentoAMesclar.setDataVencimento(pagamentoPeriodo.getDataVencimento());
 		lancamentoAMesclar.setParcela(pagamentoPeriodo.getParcela());
 		lancamentoAMesclar.setPeriodo(pagamentoPeriodo.getPeriodo());
-		
-		lancamentoContaRepository.update(lancamentoAMesclar);
+
+		getLancamentoContaRepository().update(lancamentoAMesclar);
 		
 		pagamentoPeriodo.setLancamentoPeriodico(null);
-		lancamentoContaRepository.update(pagamentoPeriodo);
+		getLancamentoContaRepository().update(pagamentoPeriodo);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -234,7 +234,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 			l.setPeriodo(l.getDataPagamento().getMonth() + 1);
 			l.setAno(l.getDataPagamento().getYear() + 1900);
 			l.setDataVencimento(l.getDataPagamento());
-			lancamentoContaRepository.update(l);
+			getLancamentoContaRepository().update(l);
 		}
 	}
 	
@@ -243,7 +243,7 @@ public class LancamentoPeriodicoService extends AbstractCRUDService<LancamentoPe
 		// Remove os lançamentos selecionados do lançamento periódico informado.
 		for (LancamentoConta l : lancamentosARemover) {
 			l.setLancamentoPeriodico(null);
-			lancamentoContaRepository.update(l);
+			getLancamentoContaRepository().update(l);
 		}		
 	}
 	

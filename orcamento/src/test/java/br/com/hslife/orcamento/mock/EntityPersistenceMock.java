@@ -68,6 +68,12 @@ public class EntityPersistenceMock {
 		mapEntidade.put(EntityPersistenceEnum.USUARIO, usuario);
 		return this;
 	}
+
+	public EntityPersistenceMock criarUsuario(Usuario usuario) {
+		// Salva no Map e retorna o mock
+		mapEntidade.put(EntityPersistenceEnum.USUARIO, usuario);
+		return this;
+	}
 	
 	public EntityPersistenceMock comMoedaPadrao() {
 		// Popula a entidade

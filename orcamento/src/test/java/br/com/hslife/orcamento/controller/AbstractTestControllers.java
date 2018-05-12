@@ -52,6 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.servlet.http.HttpSession;
 
+import br.com.hslife.orcamento.component.UsuarioComponent;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -103,6 +104,12 @@ public abstract class AbstractTestControllers
 	private WebApplicationContext webAppContext;
 
 	/*
+	 * Componente para obter as informações do usuário logado em sessão
+	 */
+	@Autowired
+	private UsuarioComponent usuarioComponent;
+
+	/*
 	 * Inicializa o contexto do Spring Security para disponibilizar para as
 	 * classes de teste.
 	 */
@@ -123,5 +130,10 @@ public abstract class AbstractTestControllers
 				.getAttribute(
 						HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 		SecurityContextHolder.setContext(securityContext);
+	}
+
+
+	public UsuarioComponent getUsuarioComponent() {
+		return usuarioComponent;
 	}
 }
