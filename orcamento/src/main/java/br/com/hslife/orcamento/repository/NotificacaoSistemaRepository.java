@@ -64,4 +64,13 @@ import java.util.List;
 public class NotificacaoSistemaRepository extends AbstractRepository {
 
 
+    public List<NotificacaoSistema> findAllByUsuario(Long idUsuario) {
+        return getSession().createQuery("SELECT n FROM NotificacaoSistema n WHERE n.idUsuario = :idUsuario ORDER BY n.dataHora DESC", NotificacaoSistema.class)
+                .setParameter("idUsuario", idUsuario)
+                .getResultList();
+    }
+
+    public void save(NotificacaoSistema entity) {
+        getSession().persist(entity);
+    }
 }
