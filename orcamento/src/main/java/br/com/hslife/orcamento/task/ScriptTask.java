@@ -47,6 +47,8 @@ package br.com.hslife.orcamento.task;
 
 import java.util.Date;
 
+import br.com.hslife.orcamento.component.NotificacaoSistemaComponent;
+import br.com.hslife.orcamento.entity.NotificacaoSistema;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -74,6 +76,9 @@ public class ScriptTask {
 	
 	@Autowired
 	private OpcaoSistemaComponent component;
+
+	@Autowired
+	private NotificacaoSistemaComponent notificacaoSistemaComponent;
 	
 	@Autowired
 	private ScriptRepository repository;
@@ -99,6 +104,10 @@ public class ScriptTask {
 		return resultadoScriptRepository;
 	}
 
+	public NotificacaoSistemaComponent getNotificacaoSistemaComponent() {
+		return notificacaoSistemaComponent;
+	}
+
 	@Scheduled(fixedDelay=3600000)
 	public void executarScripts() {
 		try {
@@ -121,8 +130,10 @@ public class ScriptTask {
 					GroovyShell shell = new GroovyShell();
 					Object resultado = shell.evaluate(script.getScript());
 					resultadoScript.setResultado(resultado.toString());
+					getNotificacaoSistemaComponent().registrarNotificacao(script.getLabel(), resultado.toString(), script.getUsuario());
 				} catch (Throwable t) {
 					resultadoScript.setResultado(t.getMessage());
+					getNotificacaoSistemaComponent().registrarNotificacao("Erro na execução de script", t.getMessage(), script.getUsuario());
 				}
 				
 				// Seta o tempo gasto após a execução
@@ -141,4 +152,6 @@ public class ScriptTask {
 			e.printStackTrace();
 		}
 	}
+
+
 }

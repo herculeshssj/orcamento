@@ -45,14 +45,12 @@
 -->
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/principal.xhtml">
 
@@ -83,18 +81,18 @@
 			<p:messages />
 			
 			<label>Nome:</label>
-			<h:outputText value="#{sobreMB.usuarioLogado.nome}"/>
+			<h:outputText value="#{dashboardController.usuarioLogado.nome}"/>
 				
 			<label>E-Mail:</label>
-			<h:outputText value="#{sobreMB.usuarioLogado.email}"/>
+			<h:outputText value="#{dashboardController.usuarioLogado.email}"/>
 				
 			<label for="frmSobre:txtAssunto">Assunto:</label>
-			<h:inputText id="txtAssunto" value="#{sobreMB.assuntoMensagem}" size="50"/>
+			<h:inputText id="txtAssunto" value="#{dashboardController.assuntoMensagem}" size="50"/>
 				
 			<label for="frmSobre:txtMensagem">Mensagem:</label>
-			<h:inputTextarea id="txtMensagem" value="#{sobreMB.mensagem}" rows="5" cols="50"/>
+			<h:inputTextarea id="txtMensagem" value="#{dashboardController.mensagem}" rows="5" cols="50"/>
 				
-			<h:commandLink id="lnkSend" title="Enviar" action="#{sobreMB.enviarMensagem}">
+			<h:commandLink id="lnkSend" title="Enviar" action="#{dashboardController.enviarMensagem}">
 				<h:graphicImage id="imgSend" height="48" width="48" value="/resources/images/svg/feedback.svg"/>
 			</h:commandLink>
 		
