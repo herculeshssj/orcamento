@@ -57,4 +57,6 @@ public interface INotificacaoSistema {
     List<NotificacaoSistema> buscarTodosPorUsuario(Usuario usuario);
 
     void registrarNotificacao(String titulo, String detalhes, Usuario usuario);
+
+    void marcarComoVisualizado(NotificacaoSistema entity);
 }

@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="822310ea-4b2b-4e34-b726-8b11aa8a36f2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/component/NotificacaoSistemaComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/component/NotificacaoSistemaComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SobreController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/NotificacaoSistema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/NotificacaoSistema.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/INotificacaoSistema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/INotificacaoSistema.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/NotificacaoSistemaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/NotificacaoSistemaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/task/ScriptTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/task/ScriptTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/jdbc.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/jdbc.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/menu/dashboard.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/menu/dashboard.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/menu/sobre.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/menu/sobre.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/menu/verNotificacao.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/menu/verNotificacao.xhtml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -32,8 +26,29 @@
       <file leaf-file-name="dashboard.xhtml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/menu/dashboard.xhtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+            <state relative-caret-position="118">
+              <caret line="69" column="47" lean-forward="true" selection-start-line="69" selection-start-column="47" selection-end-line="69" selection-end-column="47" />
+              <folding>
+                <element signature="n#style#0;n#h:outputText#0;n#h:column#0;n#h:dataTable#0;n#h:panelGroup#0;n#h:form#0;n#ui:define#1;n#ui:composition#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#h:outputText#0;n#h:column#1;n#h:dataTable#0;n#h:panelGroup#0;n#h:form#0;n#ui:define#1;n#ui:composition#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#h:outputText#0;n#h:column#2;n#h:dataTable#0;n#h:panelGroup#1;n#h:form#0;n#ui:define#1;n#ui:composition#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="panoramaLancamentoConta.xhtml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/ResumoEstatistica/panoramaLancamentoConta.xhtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4337" />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="verNotificacao.xhtml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/menu/verNotificacao.xhtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="314">
+              <caret line="74" column="64" lean-forward="true" selection-start-line="74" selection-start-column="64" selection-end-line="74" selection-end-column="64" />
             </state>
           </provider>
         </entry>
@@ -41,8 +56,8 @@
       <file leaf-file-name="DashboardController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+            <state relative-caret-position="309">
+              <caret line="94" column="85" selection-start-line="94" selection-start-column="85" selection-end-line="94" selection-end-column="85" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#1927#1928#0" expanded="true" />
@@ -77,37 +92,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NotificacaoSistemaComponent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/component/NotificacaoSistemaComponent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="71" column="85" selection-start-line="71" selection-start-column="85" selection-end-line="71" selection-end-column="85" />
-              <folding>
-                <element signature="e#1973#1974#0" expanded="true" />
-                <element signature="e#2021#2022#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NotificacaoSistemaRepository.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="73" column="35" selection-start-line="73" selection-start-column="35" selection-end-line="73" selection-end-column="35" />
-              <folding>
-                <element signature="e#2268#2269#0" expanded="true" />
-                <element signature="e#2306#2307#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="INotificacaoSistema.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/INotificacaoSistema.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="58" column="77" selection-start-line="58" selection-start-column="77" selection-end-line="58" selection-end-column="77" />
+            <state relative-caret-position="180">
+              <caret line="60" column="58" selection-start-line="60" selection-start-column="58" selection-end-line="60" selection-end-column="58" />
             </state>
           </provider>
         </entry>
@@ -115,8 +104,21 @@
       <file leaf-file-name="NotificacaoSistemaService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/NotificacaoSistemaService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="384">
-              <caret line="89" column="42" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="42" />
+            <state relative-caret-position="358">
+              <caret line="93" column="45" selection-start-line="93" selection-start-column="45" selection-end-line="93" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NotificacaoSistemaRepository.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="77" column="35" selection-start-line="77" selection-start-column="35" selection-end-line="77" selection-end-column="35" />
+              <folding>
+                <element signature="e#2365#2366#0" expanded="true" />
+                <element signature="e#2392#2393#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -124,21 +126,12 @@
       <file leaf-file-name="NotificacaoSistema.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/NotificacaoSistema.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="362">
-              <caret line="94" column="27" lean-forward="true" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
+            <state relative-caret-position="-84">
+              <caret line="56" column="13" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
               <folding>
                 <element signature="e#2113#2114#0" expanded="true" />
                 <element signature="e#2148#2149#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Util.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/util/Util.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1275">
-              <caret line="148" column="25" selection-start-line="148" selection-start-column="25" selection-end-line="148" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -190,17 +183,17 @@
         <option value="$PROJECT_DIR$/src/main/webapp/pages/Investimento/cotacaoInvestimento.xhtml" />
         <option value="$PROJECT_DIR$/Scripts/rascunhoNotificacao.sql" />
         <option value="$PROJECT_DIR$/src/main/resources/db/migration/V20180512151900__NotificacaoSistema.sql" />
-        <option value="$PROJECT_DIR$/src/main/webapp/pages/menu/verNotificacao.xhtml" />
         <option value="$PROJECT_DIR$/src/main/webapp/pages/menu/sobre.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/component/NotificacaoSistemaComponent.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/INotificacaoSistema.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/NotificacaoSistemaService.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/task/ScriptTask.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java" />
         <option value="$PROJECT_DIR$/src/main/resources/jdbc.properties" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/NotificacaoSistema.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/pages/menu/verNotificacao.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/INotificacaoSistema.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/NotificacaoSistemaService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/pages/menu/dashboard.xhtml" />
       </list>
     </option>
@@ -266,6 +259,30 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="orcamento" type="462c0819:PsiDirectoryNode" />
               <item name="converter" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="orcamento" type="b2602c69:ProjectViewProjectNode" />
+              <item name="orcamento" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="orcamento" type="b2602c69:ProjectViewProjectNode" />
+              <item name="orcamento" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="orcamento" type="b2602c69:ProjectViewProjectNode" />
+              <item name="orcamento" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="menu" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -585,7 +602,14 @@
       <option name="project" value="LOCAL" />
       <updated>1526151093479</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Implementação para listar todas as notificações do usuário logado.">
+      <created>1526159097517</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1526159097517</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -644,37 +668,10 @@
     <MESSAGE value="Implementado vínculo entre administradores de investimentos e investimentos." />
     <MESSAGE value="Migração das movimentações dos FIIs." />
     <MESSAGE value="Criação das classes de NotificacaoSistema." />
-    <option name="LAST_COMMIT_MESSAGE" value="Criação das classes de NotificacaoSistema." />
+    <MESSAGE value="Implementação para listar todas as notificações do usuário logado." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementação para listar todas as notificações do usuário logado." />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/AdministradorInvestimentoController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="76" column="13" lean-forward="true" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/AdministradorInvestimentoService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="74" column="43" lean-forward="true" selection-start-line="74" selection-start-column="43" selection-end-line="74" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/AdministradorInvestimentoRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="67" column="43" selection-start-line="67" selection-start-column="43" selection-end-line="67" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/MetaRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/model/InfoOFX.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2569">
@@ -913,28 +910,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/menu/verNotificacao.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="463">
-          <caret line="52" column="41" selection-start-line="52" selection-start-column="41" selection-end-line="52" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/menu/sobre.xhtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="932">
           <caret line="103" column="7" lean-forward="true" selection-start-line="103" selection-start-column="7" selection-end-line="103" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="73" column="35" selection-start-line="73" selection-start-column="35" selection-end-line="73" selection-end-column="35" />
-          <folding>
-            <element signature="e#2268#2269#0" expanded="true" />
-            <element signature="e#2306#2307#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -946,20 +925,6 @@
             <element signature="e#1973#1974#0" expanded="true" />
             <element signature="e#2021#2022#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/INotificacaoSistema.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="58" column="77" selection-start-line="58" selection-start-column="77" selection-end-line="58" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/NotificacaoSistemaService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="89" column="42" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="42" />
         </state>
       </provider>
     </entry>
@@ -978,30 +943,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#1927#1928#0" expanded="true" />
-            <element signature="e#1945#1946#0" expanded="true" />
-            <element signature="e#2391#2392#0" expanded="true" />
-            <element signature="e#2420#2421#0" expanded="true" />
-            <element signature="e#2479#2480#0" expanded="true" />
-            <element signature="e#2524#2525#0" expanded="true" />
-            <element signature="e#2556#2557#0" expanded="true" />
-            <element signature="e#2578#2579#0" expanded="true" />
-            <element signature="e#2623#2624#0" expanded="true" />
-            <element signature="e#2654#2655#0" expanded="true" />
-            <element signature="e#2846#2847#0" expanded="true" />
-            <element signature="e#2885#2886#0" expanded="true" />
-            <element signature="e#3203#3204#0" expanded="true" />
-            <element signature="e#3239#3240#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1026,10 +967,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/ItemDespensa/formItemDespensa.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1870" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/DividaTerceiro/visualizarDocumento.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-576" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/INotificacaoSistema.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="60" column="58" selection-start-line="60" selection-start-column="58" selection-end-line="60" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/NotificacaoSistema.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="94" column="27" lean-forward="true" selection-start-line="94" selection-start-column="27" selection-end-line="94" selection-end-column="27" />
+        <state relative-caret-position="-84">
+          <caret line="56" column="13" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
           <folding>
             <element signature="e#2113#2114#0" expanded="true" />
             <element signature="e#2148#2149#0" expanded="true" />
@@ -1037,10 +995,76 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/NotificacaoSistemaService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="93" column="45" selection-start-line="93" selection-start-column="45" selection-end-line="93" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/NotificacaoSistemaRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="77" column="35" selection-start-line="77" selection-start-column="35" selection-end-line="77" selection-end-column="35" />
+          <folding>
+            <element signature="e#2365#2366#0" expanded="true" />
+            <element signature="e#2392#2393#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/DashboardController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="94" column="85" selection-start-line="94" selection-start-column="85" selection-end-line="94" selection-end-column="85" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#1927#1928#0" expanded="true" />
+            <element signature="e#1945#1946#0" expanded="true" />
+            <element signature="e#2391#2392#0" expanded="true" />
+            <element signature="e#2420#2421#0" expanded="true" />
+            <element signature="e#2479#2480#0" expanded="true" />
+            <element signature="e#2524#2525#0" expanded="true" />
+            <element signature="e#2556#2557#0" expanded="true" />
+            <element signature="e#2578#2579#0" expanded="true" />
+            <element signature="e#2623#2624#0" expanded="true" />
+            <element signature="e#2654#2655#0" expanded="true" />
+            <element signature="e#2846#2847#0" expanded="true" />
+            <element signature="e#2885#2886#0" expanded="true" />
+            <element signature="e#3203#3204#0" expanded="true" />
+            <element signature="e#3239#3240#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/AdministradorInvestimento/formAdministradorInvestimento.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="66" column="97" lean-forward="true" selection-start-line="59" selection-start-column="8" selection-end-line="66" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/menu/verNotificacao.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="74" column="64" lean-forward="true" selection-start-line="74" selection-start-column="64" selection-end-line="74" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/ResumoEstatistica/panoramaLancamentoConta.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4337" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/menu/dashboard.xhtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+        <state relative-caret-position="118">
+          <caret line="69" column="47" lean-forward="true" selection-start-line="69" selection-start-column="47" selection-end-line="69" selection-end-column="47" />
+          <folding>
+            <element signature="n#style#0;n#h:outputText#0;n#h:column#0;n#h:dataTable#0;n#h:panelGroup#0;n#h:form#0;n#ui:define#1;n#ui:composition#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h:outputText#0;n#h:column#1;n#h:dataTable#0;n#h:panelGroup#0;n#h:form#0;n#ui:define#1;n#ui:composition#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h:outputText#0;n#h:column#2;n#h:dataTable#0;n#h:panelGroup#1;n#h:form#0;n#ui:define#1;n#ui:composition#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

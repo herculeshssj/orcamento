@@ -89,4 +89,10 @@ public class NotificacaoSistemaService implements INotificacaoSistema {
 		notificacao.setIdUsuario(usuario.getId());
 		getRepository().save(notificacao);
 	}
+
+	@Override
+	public void marcarComoVisualizado(NotificacaoSistema entity) {
+		entity.setVisualizado(true);
+		getRepository().update(entity);
+	}
 }

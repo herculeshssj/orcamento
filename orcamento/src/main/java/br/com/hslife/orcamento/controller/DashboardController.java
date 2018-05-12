@@ -91,6 +91,11 @@ public class DashboardController extends AbstractController {
 		return getNotificacaoSistemaService().buscarTodosPorUsuario(getUsuarioLogado());
 	}
 
+	public String verNotificacao() {
+		getNotificacaoSistemaService().marcarComoVisualizado(notificacaoSelecionada);
+		return "/pages/menu/verNotificacao";
+	}
+
 	public void enviarMensagem() {
 		try {
 			if (assuntoMensagem.isEmpty() || mensagem.isEmpty()) {
