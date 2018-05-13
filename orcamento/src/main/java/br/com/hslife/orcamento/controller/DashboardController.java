@@ -54,6 +54,7 @@ import org.springframework.stereotype.Component;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IUsuario;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +76,7 @@ public class DashboardController extends AbstractController {
 	private String assuntoMensagem;
 	private String mensagem;
 	private NotificacaoSistema notificacaoSelecionada;
+	private int quantNotificacoes;
 
 	@Override
 	protected void initializeEntity() {
@@ -87,13 +89,27 @@ public class DashboardController extends AbstractController {
 		return null;
 	}
 
+	@PostConstruct
 	public List<NotificacaoSistema> getListaNotificacaoSistema() {
-		return getNotificacaoSistemaService().buscarTodosPorUsuario(getUsuarioLogado());
+		quantNotificacoes = 0;
+
+		List<NotificacaoSistema> listaNotificacoes = getNotificacaoSistemaService().buscarTodosPorUsuario(getUsuarioLogado());
+
+		for (NotificacaoSistema notificacao : listaNotificacoes)
+			if (!notificacao.isVisualizado())
+				quantNotificacoes++;
+
+		return listaNotificacoes;
 	}
 
 	public String verNotificacao() {
 		getNotificacaoSistemaService().marcarComoVisualizado(notificacaoSelecionada);
 		return "/pages/menu/verNotificacao";
+	}
+
+	public void eliminarNotificacoesVisualizadas() {
+		getNotificacaoSistemaService().eliminarNotificacoesVisualizadas(getUsuarioLogado());
+		infoMessage("Notificações antigas excluídas com sucesso!");
 	}
 
 	public void enviarMensagem() {
@@ -137,5 +153,13 @@ public class DashboardController extends AbstractController {
 
 	public void setNotificacaoSelecionada(NotificacaoSistema notificacaoSelecionada) {
 		this.notificacaoSelecionada = notificacaoSelecionada;
+	}
+
+	public int getQuantNotificacoes() {
+		return quantNotificacoes;
+	}
+
+	public void setQuantNotificacoes(int quantNotificacoes) {
+		this.quantNotificacoes = quantNotificacoes;
 	}
 }

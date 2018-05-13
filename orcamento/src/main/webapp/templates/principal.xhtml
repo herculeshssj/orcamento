@@ -105,24 +105,26 @@
 
 <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
 
+	<h:form id="frmMenu">
     <div class="nav_wrap row">
         <nav class="top-bar" data-topbar="" data-options="scrolltop:false;mobile_show_parent_link:true;">
             <ul class="title-area">
                 <li class="name">
-                    <a href="#{request.contextPath}/pages/menu/dashboard.faces" title="Dashboard" rel="home">Dashboard</a>                    
+                    <a href="#{request.contextPath}/pages/menu/dashboard.faces" title="Dashboard" rel="home">Dashboard
+						(<h:outputText value="#{dashboardController.quantNotificacoes}" />)</a>
                 </li>
                 
                     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
                 <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
             </ul>
             
-        <h:form id="frmMenu">
+
         <section class="top-bar-section">
         
         <ul class="left">
         	<li class="divider"></li>
 			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-agenda">
-				<a href="#{request.contextPath}/pages/Agenda/listAgenda.faces"><h:outputText value="#{agendaMB.agendaDoDia}" /></a>
+				<a href="#{request.contextPath}/pages/Agenda/listAgenda.faces">Agenda</a>
 			</li>        	
 			<li class="divider"></li>
 			<li id="menu-item-11434" class="menu-item menu-item-main-menu menu-item-cadastros has-dropdown not-click">
@@ -326,9 +328,10 @@
 		</ul>
 		
         </section>
-        </h:form>
+
         </nav>   
     </div><!-- .row -->
+	</h:form>
 
 </div><!-- end .nav_container -->
 

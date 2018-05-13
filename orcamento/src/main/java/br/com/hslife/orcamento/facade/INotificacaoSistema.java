@@ -59,4 +59,6 @@ public interface INotificacaoSistema {
     void registrarNotificacao(String titulo, String detalhes, Usuario usuario);
 
     void marcarComoVisualizado(NotificacaoSistema entity);
+
+    void eliminarNotificacoesVisualizadas(Usuario usuario);
 }

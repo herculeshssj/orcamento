@@ -95,4 +95,12 @@ public class NotificacaoSistemaService implements INotificacaoSistema {
 		entity.setVisualizado(true);
 		getRepository().update(entity);
 	}
+
+	@Override
+	public void eliminarNotificacoesVisualizadas(Usuario usuario) {
+		for (NotificacaoSistema notificacao : getRepository().findAllByUsuario(usuario.getId())) {
+			if (notificacao.isVisualizado())
+				getRepository().delete(notificacao);
+		}
+	}
 }
