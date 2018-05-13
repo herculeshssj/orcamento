@@ -77,4 +77,8 @@ public class NotificacaoSistemaRepository extends AbstractRepository {
     public void update(NotificacaoSistema entity) {
         getSession().merge(entity);
     }
+
+    public void delete(NotificacaoSistema entity) {
+        getSession().remove(entity);
+    }
 }

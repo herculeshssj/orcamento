@@ -62,10 +62,18 @@
 	
 		<h:form id="frmDashboard">
 
+			<p:messages />
+
 			<h:panelGroup rendered="#{not empty dashboardController.listaNotificacaoSistema}">
 				<h5>Notificações</h5>
 
 				<h:dataTable value="#{dashboardController.listaNotificacaoSistema}" var="item">
+					<h:column style="text-align: center; vertical-align: middle;" rendered="#{dashboardController.usuarioLogado.login == 'admin'}">
+						<f:facet name="header">
+							<h:outputText value="ID"/>
+						</f:facet>
+						<h:outputText value="#{item.id}" style="#{item.visualizado ? 'font-weight: normal;' : 'font-weight: bold;' }" />
+					</h:column>
 					<h:column style="text-align: center; vertical-align: middle;">
 						<f:facet name="header">
 							<h:outputText value="Data"/>
@@ -88,6 +96,8 @@
 						</h:commandLink>
 					</h:column>
 				</h:dataTable>
+
+				<h:commandLink value="Eliminar notificações visualizadas" action="#{dashboardController.eliminarNotificacoesVisualizadas}"/>
 			</h:panelGroup>
 		
 			<h:panelGroup rendered="#{not empty agendaMB.agendamentosDoDia}">
