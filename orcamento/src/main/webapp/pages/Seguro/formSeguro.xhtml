@@ -56,9 +56,75 @@
 	<ui:param name="managedBean" value="#{seguroController}" />
 	
 	<ui:define name="campos">
-				
-						
-		
+
+		<label>Tipo de Seguro:</label>
+		<h:selectOneRadio value="#{managedBean.entity.tipoSeguro}" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItems value="#{enumCombo.listaTipoSeguro}"/>
+		</h:selectOneRadio>
+
+		<label>Tipo de indenização do seguro:</label>
+		<h:selectOneRadio value="#{managedBean.entity.premioSeguro}" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItems value="#{enumCombo.listaPremioSeguro}"/>
+		</h:selectOneRadio>
+
+		<label for="frmFormEntity:txtDescricao">Descrição:</label>
+		<h:inputText id="txtDescricao" value="#{managedBean.entity.descricao}" disabled="#{!managedBean.entity.ativo}"/>
+
+		<label for="frmFormEntity:txtDataAquisicao">Data de aquisição:</label>
+		<p:inputMask id="txtDataAquisicao" mask="99/99/9999" value="#{managedBean.entity.dataAquisicao}" disabled="#{!managedBean.entity.ativo}">
+			<f:converter converterId="calendarConverter"/>
+		</p:inputMask>
+
+		<label for="frmFormEntity:txtValorSeguro">Valor do seguro:</label>
+		<h:inputText id="txtValorSeguro" value="#{managedBean.entity.valorSeguro}" disabled="#{!managedBean.entity.ativo}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+
+		<label>Periodicidade do pagamento:</label>
+		<h:selectOneMenu value="#{managedBean.entity.periodicidadePagamento}" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItems value="#{enumCombo.listaPeriodicidade}"/>
+		</h:selectOneMenu>
+
+		<label for="frmFormEntity:txtValorCobertura">Valor da cobertura:</label>
+		<h:inputText id="txtValorCobertura" value="#{managedBean.entity.valorCobertura}" disabled="#{!managedBean.entity.ativo}">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+		</h:inputText>
+
+		<label for="frmFormEntity:txtCobertura">Cobertura:</label>
+		<h:inputTextarea id="txtCobertura" value="#{managedBean.entity.cobertura}" disabled="#{!managedBean.entity.ativo}"/>
+
+		<label for="frmFormEntity:txtValidade">Validade:</label>
+		<p:inputMask id="txtValidade" mask="99/99/9999" value="#{managedBean.entity.validade}" disabled="#{!managedBean.entity.ativo}">
+			<f:converter converterId="calendarConverter"/>
+		</p:inputMask>
+
+		<label for="frmFormEntity:txtDataRenovacao">Data de renovação:</label>
+		<p:inputMask id="txtDataRenovacao" mask="99/99/9999" value="#{managedBean.entity.dataRenovacao}" disabled="#{!managedBean.entity.ativo}">
+			<f:converter converterId="calendarConverter"/>
+		</p:inputMask>
+
+		<label>Periodicidade da renovação:</label>
+		<h:selectOneMenu value="#{managedBean.entity.periodicidadeRenovacao}" disabled="#{!managedBean.entity.ativo}">
+			<f:selectItems value="#{enumCombo.listaPeriodicidade}"/>
+		</h:selectOneMenu>
+
+		<label for="frmFormEntity:txtObservacao">Observação:</label>
+		<h:inputTextarea id="txtObservacao" value="#{managedBean.entity.observacao}" disabled="#{!managedBean.entity.ativo}"/>
+
+		<h:panelGrid columns="1">
+			<label>Comprovante:</label>
+			<p:fileUpload fileUploadListener="#{managedBean.carregarArquivo}" mode="advanced" label="Selecione..." uploadLabel="Enviar" cancelLabel="Cancelar" auto="true" fileLimit="1" sizeLimit="16777216" invalidSizeMessage="Tamanho máximo de arquivo: 16MB" rendered="#{managedBean.entity.ativo}"/>
+			<h:panelGroup>
+				<h:commandLink title="Baixar arquivo" action="#{managedBean.baixarArquivo}" rendered="#{managedBean.entity.possuiAnexo}">
+					<h:graphicImage id="imgDownload" value="/resources/images/svg/download.svg" height="48" width="48"/>
+				</h:commandLink>
+				<p:spacer width="4" />
+				<h:commandLink title="Excluir arquivo" action="#{managedBean.excluirArquivo}" rendered="#{managedBean.entity.ativo and managedBean.entity.possuiAnexo}">
+					<h:graphicImage id="imgDeleteFile" value="/resources/images/svg/delete_row.svg" height="48" width="48"/>
+				</h:commandLink>
+			</h:panelGroup>
+		</h:panelGrid>
+
 	</ui:define>
 
 </ui:composition>

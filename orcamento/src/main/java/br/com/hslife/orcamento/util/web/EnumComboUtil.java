@@ -220,4 +220,20 @@ public class EnumComboUtil {
 		}
 		return listaSelectItem;
 	}
+
+	public List<SelectItem> getListaTipoSeguro() {
+		List<SelectItem> listaSelectItem = new ArrayList<>();
+		for (TipoSeguro enumeration : TipoSeguro.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
+
+	public List<SelectItem> getListaPremioSeguro() {
+		List<SelectItem> listaSelectItem = new ArrayList<>();
+		for (PremioSeguro enumeration : PremioSeguro.values()) {
+			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
+		}
+		return listaSelectItem;
+	}
 }

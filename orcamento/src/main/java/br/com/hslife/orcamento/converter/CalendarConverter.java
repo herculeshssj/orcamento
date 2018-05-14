@@ -67,6 +67,10 @@ public class CalendarConverter implements Converter {
 			temp.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dataSeparada[0]));
 			temp.set(Calendar.MONTH, Integer.parseInt(dataSeparada[1]) - 1);
 			temp.set(Calendar.YEAR, Integer.parseInt(dataSeparada[2]));
+			temp.set(Calendar.HOUR_OF_DAY, 0);
+			temp.set(Calendar.MINUTE, 0);
+			temp.set(Calendar.SECOND, 0);
+			temp.set(Calendar.MILLISECOND, 0);
 			return temp;
 		} catch (Exception e) {			
 			e.printStackTrace();

@@ -60,56 +60,56 @@ public class Seguro extends EntityPersistence {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id; // terceiro e próprio
+	private Long id;
 
 	@Column(length=15, nullable = false)
 	@Enumerated(EnumType.STRING)
-	private TipoSeguro tipoSeguro; // terceiro e próprio
+	private TipoSeguro tipoSeguro;
 
 	@Column(length=15, nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Periodicidade periodicidadeRenovacao; //terceiro e próprio
+	private Periodicidade periodicidadeRenovacao;
 
 	@Column(length=15, nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Periodicidade periodicidadePagamento; //terceiro e próprio
+	private Periodicidade periodicidadePagamento;
 
 	@Column(length=15, nullable = false)
 	@Enumerated(EnumType.STRING)
-	private PremioSeguro premioSeguro; //terceiro e próprio
+	private PremioSeguro premioSeguro;
 	
 	@Column(length=50, nullable=false)	
-	private String descricao; // terceiro e próprio
+	private String descricao;
 
 	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)	
-	private Calendar dataAquisicao; // terceiro e próprio
+	private Calendar dataAquisicao;
 
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)
-	private Calendar dataRenovacao; // terceiro e próprio
+	private Calendar dataRenovacao;
 	
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)	
-	private Calendar validade; // terceiro e próprio
+	private Calendar validade;
 	
 	@Column(length=100, nullable=true)
-	private String cobertura; // terceiro e próprio
+	private String cobertura;
 	
 	@Column(nullable=true, precision=18, scale=2)
-	private double valorCobertura; // terceiro e próprio
+	private double valorCobertura;
 	
 	@Column(nullable=false, precision=18, scale=2)	
-	private double valorSeguro; // terceiro e próprio
+	private double valorSeguro;
 
 	@Column(nullable=true)
-	private String observacao; // terceiro e próprio
+	private String observacao;
 
 	@Column(nullable = true)
-	private Long idArquivo; // terceiro e próprio
+	private Long idArquivo;
 
 	@Column
-	private boolean ativo; // terceiro e próprio
+	private boolean ativo;
 
 	@ManyToOne
 	@JoinColumn(name="idFavorecido", nullable=true)
@@ -294,6 +294,10 @@ public class Seguro extends EntityPersistence {
 		despesaFixa.setTipoLancamento(TipoLancamento.DESPESA);
 
 		this.lancamentoPeriodico = despesaFixa;
+	}
+
+	public boolean isPossuiAnexo() {
+		return this.idArquivo != null;
 	}
 
 	/**
