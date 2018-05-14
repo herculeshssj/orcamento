@@ -46,9 +46,12 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.facade;
 
 import br.com.hslife.orcamento.entity.Seguro;
+import br.com.hslife.orcamento.entity.Usuario;
+
+import java.util.List;
 
 public interface ISeguro extends ICRUDService<Seguro> {
 
-	
+	List<Seguro> buscarTodosPorUsuarioEAtivo(Usuario usuario, boolean ativo);
 
 }

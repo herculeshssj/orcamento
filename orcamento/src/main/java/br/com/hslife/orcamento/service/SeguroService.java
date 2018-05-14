@@ -45,6 +45,7 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.service;
 
+import br.com.hslife.orcamento.entity.Usuario;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,8 @@ import org.springframework.stereotype.Service;
 import br.com.hslife.orcamento.entity.Seguro;
 import br.com.hslife.orcamento.facade.ISeguro;
 import br.com.hslife.orcamento.repository.SeguroRepository;
+
+import java.util.List;
 
 @Service
 public class SeguroService extends AbstractCRUDService<Seguro> implements ISeguro {
@@ -81,5 +84,10 @@ public class SeguroService extends AbstractCRUDService<Seguro> implements ISegur
 
 		// Cadastra o lançamento periódico vinculado ao seguro
 		getLancamentoPeriodicoService().cadastrar(entity.getLancamentoPeriodico());
+	}
+
+	@Override
+	public List<Seguro> buscarTodosPorUsuarioEAtivo(Usuario usuario, boolean ativo) {
+		return getRepository().findAllByUsuarioAndAtivo(usuario, ativo);
 	}
 }

@@ -46,6 +46,7 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -65,6 +66,9 @@ public class SeguroController extends AbstractCRUDController<Seguro>{
 	
 	@Autowired
 	private ISeguro service;
+
+	private Seguro seguroSelecionado;
+	private boolean exibirAtivos = true;
 	
 	public SeguroController() {
 		super(new Seguro());
@@ -83,10 +87,35 @@ public class SeguroController extends AbstractCRUDController<Seguro>{
 		
 	}
 
+	@Override
+	public List<Seguro> getListEntity() {
+		return getService().buscarTodosPorUsuarioEAtivo(getUsuarioLogado(), isExibirAtivos());
+	}
+
+	public void atualizaListaSeguro() {
+		this.getListEntity();
+	}
 	/**
 	 * @return the service
 	 */
 	public ISeguro getService() {
 		return service;
+	}
+
+
+	public Seguro getSeguroSelecionado() {
+		return seguroSelecionado;
+	}
+
+	public void setSeguroSelecionado(Seguro seguroSelecionado) {
+		this.seguroSelecionado = seguroSelecionado;
+	}
+
+	public boolean isExibirAtivos() {
+		return exibirAtivos;
+	}
+
+	public void setExibirAtivos(boolean exibirAtivos) {
+		this.exibirAtivos = exibirAtivos;
 	}
 }

@@ -55,16 +55,33 @@
 <ui:composition template="/templates/listagem.xhtml">
 
 	<ui:param name="managedBean" value="#{seguroController}" />
-	<ui:param name="colunaPesquisa" value="3" />
+	<ui:param name="colunaPesquisa" value="4" />
 	
-	<ui:define name="parametro_pesquisa">		
-			    	    
+	<ui:define name="parametro_pesquisa">
+		<h:panelGroup>
+			<label>Seguro:</label>
+			<h:selectOneMenu id="txtSeguro" value="#{managedBean.seguroSelecionado}" converter="entityConverter">
+				<f:selectItem itemLabel="Selecione um seguro" />
+				<f:selectItems value="#{managedBean.listEntity}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+		</h:panelGroup>
+		<h:panelGroup>
+			<h:selectBooleanCheckbox value="#{managedBean.exibirAtivos}">
+				<p:ajax update="txtSeguro" listener="#{managedBean.atualizaListaSeguro}" />
+			</h:selectBooleanCheckbox>
+			Exibir arquivados
+		</h:panelGroup>
 	</ui:define>
 	
 	<ui:define name="pesquisa_avancada"></ui:define>
 	
 	<ui:define name="colunas">
-		
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Descrição" />
+			</f:facet>
+			<h:outputText value="#{item.descricao}" />
+		</h:column>
 	</ui:define>
 
 </ui:composition>
