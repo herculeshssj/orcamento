@@ -77,13 +77,14 @@ public class SeguroService extends AbstractCRUDService<Seguro> implements ISegur
 
 	@Override
 	public void cadastrar(Seguro entity) {
-		super.cadastrar(entity);
-
 		// Gera o lançamento periódico que representa o seguro
 		entity.gerarDespesaFixa();
 
 		// Cadastra o lançamento periódico vinculado ao seguro
 		getLancamentoPeriodicoService().cadastrar(entity.getLancamentoPeriodico());
+
+		// Salva o seguro
+		super.cadastrar(entity);
 	}
 
 	@Override

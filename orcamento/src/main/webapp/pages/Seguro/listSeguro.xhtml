@@ -82,6 +82,14 @@
 			</f:facet>
 			<h:outputText value="#{item.descricao}" />
 		</h:column>
+		<h:column style="text-align: center; vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Valor" />
+			</f:facet>
+			<h:outputText value="#{item.valorSeguro}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			</h:outputText>
+		</h:column>
 	</ui:define>
 
 </ui:composition>

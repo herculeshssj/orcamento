@@ -108,6 +108,49 @@
 			<f:selectItems value="#{enumCombo.listaPeriodicidade}"/>
 		</h:selectOneMenu>
 
+		<hr/>
+
+		<h:panelGroup rendered="#{managedBean.operation == 'create'}">
+
+			<label>Conta de pagamento:</label>
+			<h:selectOneMenu value="#{managedBean.entity.conta}" converter="entityConverter">
+				<f:selectItems value="#{managedBean.listaConta}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+				<p:ajax event="change" update="pnlMoeda"/>
+			</h:selectOneMenu>
+
+			<label>Categoria:</label>
+			<h:selectOneMenu id="txtCategoria" value="#{managedBean.entity.categoria}"  converter="entityConverter">
+				<f:selectItem itemLabel="Nenhuma categoria"/>
+				<f:selectItems value="#{managedBean.listaCategoria}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+
+			<label>Favorecido/Sacado:</label>
+			<h:selectOneMenu value="#{managedBean.entity.favorecido}" converter="entityConverter">
+				<f:selectItem itemLabel="Nenhum favorecido"/>
+				<f:selectItems value="#{managedBean.listaFavorecido}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+
+			<label><h:outputText value="Meio de Pagamento:" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}"/></label>
+			<h:selectOneMenu value="#{managedBean.entity.meioPagamento}" converter="entityConverter" rendered="#{managedBean.opcoesSistema.exibirMeioPagamento}">
+				<f:selectItem itemLabel="Nenhum meio de pagamento"/>
+				<f:selectItems value="#{managedBean.listaMeioPagamento}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+			</h:selectOneMenu>
+
+			<p:outputPanel id="pnlMoeda">
+
+				<h:panelGroup rendered="#{managedBean.entity.conta.tipoConta == 'CARTAO'}">
+					<label>Moeda:</label>
+					<h:selectOneMenu value="#{managedBean.entity.moeda}" converter="entityConverter">
+						<f:selectItems value="#{managedBean.listaMoeda}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+					</h:selectOneMenu>
+				</h:panelGroup>
+
+			</p:outputPanel>
+
+		</h:panelGroup>
+
+		<hr />
+
 		<label for="frmFormEntity:txtObservacao">Observação:</label>
 		<h:inputTextarea id="txtObservacao" value="#{managedBean.entity.observacao}" disabled="#{!managedBean.entity.ativo}"/>
 

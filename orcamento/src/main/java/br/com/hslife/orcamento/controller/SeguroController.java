@@ -48,16 +48,19 @@ package br.com.hslife.orcamento.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.hslife.orcamento.entity.Arquivo;
+import br.com.hslife.orcamento.entity.*;
 import br.com.hslife.orcamento.enumeration.Container;
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
+import br.com.hslife.orcamento.enumeration.TipoConta;
+import br.com.hslife.orcamento.exception.BusinessException;
+import br.com.hslife.orcamento.exception.ValidationException;
+import br.com.hslife.orcamento.facade.*;
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.entity.Seguro;
-import br.com.hslife.orcamento.facade.ISeguro;
-
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -73,6 +76,21 @@ public class SeguroController extends AbstractCRUDController<Seguro>{
 	
 	@Autowired
 	private ISeguro service;
+
+	@Autowired
+	private IConta contaService;
+
+	@Autowired
+	private IMoeda moedaService;
+
+	@Autowired
+	private ICategoria categoriaService;
+
+	@Autowired
+	private IFavorecido favorecidoService;
+
+	@Autowired
+	private IMeioPagamento meioPagamentoService;
 
 	private Seguro seguroSelecionado;
 	private boolean exibirAtivos = true;
@@ -147,6 +165,30 @@ public class SeguroController extends AbstractCRUDController<Seguro>{
 			entity.setIdArquivo(null);
 			infoMessage("Arquivo excluído! Salve para confirmar as alterações.");
 		}
+	}
+
+	public List<Conta> getListaConta() {
+		if (getOpcoesSistema().getExibirContasInativas()) {
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), null);
+		} else {
+			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), true);
+		}
+	}
+
+	public List<Categoria> getListaCategoria() {
+		return categoriaService.buscarAtivosPorTipoCategoriaEUsuario(TipoCategoria.DEBITO, getUsuarioLogado());
+	}
+
+	public List<Favorecido> getListaFavorecido() {
+		return favorecidoService.buscarAtivosPorUsuario(getUsuarioLogado());
+	}
+
+	public List<MeioPagamento> getListaMeioPagamento() {
+		return meioPagamentoService.buscarAtivosPorUsuario(getUsuarioLogado());
+	}
+
+	public List<Moeda> getListaMoeda() {
+		return moedaService.buscarAtivosPorUsuario(getUsuarioLogado());
 	}
 
 	/**

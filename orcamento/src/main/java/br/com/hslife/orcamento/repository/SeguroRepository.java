@@ -60,7 +60,7 @@ public class SeguroRepository extends AbstractCRUDRepository<Seguro>{
 	}
 
 	public List<Seguro> findAllByUsuarioAndAtivo(Usuario usuario, boolean ativo) {
-		return getSession().createQuery("SELECT s FROM Seguro s WHERE s.usuario.id = :idUsuario AND s.ativo = :ativo", Seguro.class)
+		return getSession().createQuery("SELECT s FROM Seguro s WHERE s.lancamentoPeriodico.usuario.id = :idUsuario AND s.ativo = :ativo", Seguro.class)
 				.setParameter("idUsuario", usuario.getId())
 				.setParameter("ativo", ativo)
 				.getResultList();

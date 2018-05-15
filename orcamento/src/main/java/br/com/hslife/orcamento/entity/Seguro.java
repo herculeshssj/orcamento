@@ -93,7 +93,7 @@ public class Seguro extends EntityPersistence {
 	@Temporal(TemporalType.DATE)	
 	private Calendar validade;
 	
-	@Column(length=100, nullable=true)
+	@Column(columnDefinition = "text", nullable=true)
 	private String cobertura;
 	
 	@Column(nullable=true, precision=18, scale=2)
@@ -111,24 +111,25 @@ public class Seguro extends EntityPersistence {
 	@Column
 	private boolean ativo;
 
-	@ManyToOne
-	@JoinColumn(name="idFavorecido", nullable=true)
-	private Favorecido favorecido; // terceiro
-
-	@ManyToOne
-	@JoinColumn(name="idMoeda", nullable=false)
-	private Moeda moeda; // terceiro e próprio
-
-	@ManyToOne
-	@JoinColumn(name="idUsuario", nullable=false)
-	private Usuario usuario; // terceiro e próprio
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idLancamentoPeriodico", nullable=false)
 	private LancamentoPeriodico lancamentoPeriodico; // terceiro e próprio
 	
 	@Transient
 	private Conta conta; // usado para setar a conta no lançamento periódico
+
+	@Transient
+	private Categoria categoria; // usado para setar a categoria no lançamento periódico
+
+	@Transient
+	private Favorecido favorecido; // usado para setar o favorecido no lançamento periódico
+
+	@Transient
+	private MeioPagamento meioPagamento; // usado para setar o meio de pagamento no lançamento periódico
+
+	@Transient
+	private Moeda moeda; // usado para setar a moeda no lançamento periódico
+
 	
 	public Seguro() {
 		ativo = true;
@@ -142,34 +143,28 @@ public class Seguro extends EntityPersistence {
 		this.valorCobertura = builder.valorCobertura;
 		this.valorSeguro = builder.valorSeguro;
 		this.observacao = builder.observacao;
-		this.usuario = builder.usuario;
 		this.setTipoSeguro(builder.tipoSeguro);
 		this.setPeriodicidadeRenovacao(builder.periodicidadeRenovacao);
 		this.setPeriodicidadePagamento(builder.periodicidadePagamento);
 		this.setPremioSeguro(builder.premioSeguro);
 		this.setDataRenovacao(builder.dataRenovacao);
 		this.setAtivo(builder.ativo);
-		this.setMoeda(builder.moeda);
-		this.setFavorecido(builder.favorecido);
 	}
 
 	public static class Builder {
 		private String descricao;	
-		private Calendar dataAquisicao;	
+		private Calendar dataAquisicao;
 		private Calendar validade;
 		private String cobertura;
 		private double valorCobertura;	
 		private double valorSeguro;	
 		private String observacao;
-		private Usuario usuario;
 		private TipoSeguro tipoSeguro;
 		private Periodicidade periodicidadeRenovacao;
 		private Periodicidade periodicidadePagamento;
 		private PremioSeguro premioSeguro;
 		private Calendar dataRenovacao;
 		private boolean ativo;
-		private Moeda moeda;
-		private Favorecido favorecido;
 		
 		public Builder descricao(String descricao) {
 			this.descricao = descricao;
@@ -205,11 +200,6 @@ public class Seguro extends EntityPersistence {
 			this.observacao = observacao;
 			return this;
 		}
-		
-		public Builder usuario(Usuario usuario) {
-			this.usuario = usuario;
-			return this;
-		}
 
 		public Builder tipoSeguro(TipoSeguro value) {
 			this.tipoSeguro = value;
@@ -240,16 +230,6 @@ public class Seguro extends EntityPersistence {
 			this.ativo = value;
 			return this;
 		}
-
-		public Builder moeda(Moeda value) {
-			this.moeda = value;
-			return this;
-		}
-
-		public Builder favorecido(Favorecido value) {
-			this.favorecido = value;
-			return this;
-		}
 		
 		public Seguro build() {
 			return new Seguro(this);
@@ -269,8 +249,6 @@ public class Seguro extends EntityPersistence {
 		EntityPersistenceUtil.validaCampoNulo("Periodicidade da renovação", this.getPeriodicidadeRenovacao());
 		EntityPersistenceUtil.validaCampoNulo("Periodicidade do pagamento", this.getPeriodicidadePagamento());
 		EntityPersistenceUtil.validaCampoNulo("Tipo de prêmio do seguro", this.getPremioSeguro());
-		EntityPersistenceUtil.validaCampoNulo("Moeda", this.getMoeda());
-		EntityPersistenceUtil.validaCampoNulo("Despesa fixa", this.lancamentoPeriodico);
 	}
 	
 	/*
@@ -281,16 +259,19 @@ public class Seguro extends EntityPersistence {
 		LancamentoPeriodico despesaFixa = new LancamentoPeriodico();
 
 		despesaFixa.setConta(this.conta);
+		despesaFixa.setCategoria(this.getCategoria());
+		despesaFixa.setFavorecido(this.favorecido);
+		despesaFixa.setMeioPagamento(this.getMeioPagamento());
 		despesaFixa.setDataAquisicao(this.dataAquisicao.getTime());
 		despesaFixa.setDescricao(this.descricao);
-		despesaFixa.setDiaVencimento(this.dataAquisicao.get(Calendar.DAY_OF_YEAR));
-		despesaFixa.setMoeda(this.moeda);
+		despesaFixa.setDiaVencimento(this.dataAquisicao.get(Calendar.DAY_OF_MONTH));
+		despesaFixa.setMoeda(this.moeda == null ? this.conta.getMoeda() : this.moeda);
 		despesaFixa.setStatusLancamento(StatusLancamento.ATIVO);
 		despesaFixa.setTipoLancamentoPeriodico(TipoLancamentoPeriodico.FIXO);
 		despesaFixa.setPeriodoLancamento(this.periodicidadePagamento);
 		despesaFixa.setValorCompra(this.valorCobertura);
 		despesaFixa.setValorParcela(this.valorSeguro);
-		despesaFixa.setUsuario(this.usuario);
+		despesaFixa.setUsuario(this.conta.getUsuario());
 		despesaFixa.setTipoLancamento(TipoLancamento.DESPESA);
 
 		this.lancamentoPeriodico = despesaFixa;
@@ -412,20 +393,6 @@ public class Seguro extends EntityPersistence {
 		this.observacao = observacao;
 	}
 
-	/**
-	 * @return the usuario
-	 */
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	/**
-	 * @param usuario the usuario to set
-	 */
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	public TipoSeguro getTipoSeguro() {
 		return tipoSeguro;
 	}
@@ -518,5 +485,21 @@ public class Seguro extends EntityPersistence {
 	 */
 	public void setConta(Conta conta) {
 		this.conta = conta;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public MeioPagamento getMeioPagamento() {
+		return meioPagamento;
+	}
+
+	public void setMeioPagamento(MeioPagamento meioPagamento) {
+		this.meioPagamento = meioPagamento;
 	}
 }

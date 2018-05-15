@@ -214,8 +214,8 @@ public class EnumComboUtil {
 	
 	public List<SelectItem> getListaPeriodicidade() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (PeriodoLancamento enumeration : PeriodoLancamento.values()) {
-			if (enumeration.equals(PeriodoLancamento.FIXO)) continue;
+		for (Periodicidade enumeration : Periodicidade.values()) {
+			if (enumeration.equals(Periodicidade.FIXO)) continue;
 			listaSelectItem.add(new SelectItem(enumeration, enumeration.toString()));
 		}
 		return listaSelectItem;
