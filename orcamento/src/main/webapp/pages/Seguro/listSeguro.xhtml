@@ -61,7 +61,7 @@
 		<h:panelGroup>
 			<label>Seguro:</label>
 			<h:selectOneMenu id="txtSeguro" value="#{managedBean.seguroSelecionado}" converter="entityConverter">
-				<f:selectItem itemLabel="Selecione um seguro" />
+				<f:selectItem itemLabel="Todos os seguros" />
 				<f:selectItems value="#{managedBean.listEntity}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>

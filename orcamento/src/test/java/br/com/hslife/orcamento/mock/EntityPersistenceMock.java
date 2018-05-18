@@ -166,9 +166,6 @@ public class EntityPersistenceMock {
 				.periodicidadeRenovacao(Periodicidade.ANUAL)
 				.periodicidadePagamento(Periodicidade.ANUAL)
 				.premioSeguro(PremioSeguro.FIXO)
-				.favorecido((Favorecido)this.get(EntityPersistenceEnum.FAVORECIDO))
-				.moeda((Moeda)this.get(EntityPersistenceEnum.MOEDA))
-				.usuario((Usuario)this.get(EntityPersistenceEnum.USUARIO))
 				.build();
 		
 		// Seta a conta que será definida no lançamento periódico criado

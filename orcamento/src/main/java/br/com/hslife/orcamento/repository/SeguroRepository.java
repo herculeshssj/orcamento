@@ -50,6 +50,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Seguro;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
@@ -57,6 +58,17 @@ public class SeguroRepository extends AbstractCRUDRepository<Seguro>{
 	
 	public SeguroRepository() {
 		super(new Seguro(), Seguro.class);
+	}
+
+	@Override
+	public Seguro findById(Long id) {
+		try {
+			return getSession().createQuery("SELECT s FROM Seguro s JOIN FETCH s.lancamentoPeriodico p JOIN FETCH p.pagamentos WHERE s.id = :idEntity", Seguro.class)
+					.setParameter("idEntity", id)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	public List<Seguro> findAllByUsuarioAndAtivo(Usuario usuario, boolean ativo) {

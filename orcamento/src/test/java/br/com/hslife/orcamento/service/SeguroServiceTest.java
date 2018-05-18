@@ -93,7 +93,7 @@ public class SeguroServiceTest extends AbstractTestServices {
 		entity = (Seguro)epm.get(EntityPersistenceEnum.SEGURO);
 
 		// Salva as entidades pertinentes antes de iniciar os testes
-		usuarioService.cadastrar(entity.getUsuario());
+		usuarioService.cadastrar(entity.getConta().getUsuario());
 		favorecidoService.cadastrar(entity.getFavorecido());
 		moedaService.cadastrar(entity.getMoeda());
 		contaService.cadastrar(entity.getConta());

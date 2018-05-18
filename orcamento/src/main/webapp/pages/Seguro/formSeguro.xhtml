@@ -170,5 +170,30 @@
 
 	</ui:define>
 
+	<ui:define name="acoes">
+		<h:commandLink id="lnkVoltar" title="Voltar" action="#{managedBean.cancel}" immediate="true">
+			<h:graphicImage id="imgBack" height="48" width="48" value="/resources/images/svg/undo.svg"/>
+		</h:commandLink>
+		<p:spacer width="20" />
+
+		<h:commandLink id="lnkOk" title="Salvar registro" action="#{managedBean.save}" rendered="#{managedBean.entity.ativo}">
+			<h:graphicImage id="imgOk" height="48" width="48" value="/resources/images/svg/ok.svg"/>
+		</h:commandLink>
+		<p:spacer width="20" rendered="#{managedBean.entity.ativo and managedBean.operation == 'edit'}"/>
+
+		<h:commandLink title="Encerrar seguro" action="#{managedBean.encerrarSeguro}" rendered="#{managedBean.entity.ativo and managedBean.operation == 'edit'}">
+			<h:graphicImage id="imgFinish" height="48" width="48" value="/resources/images/svg/disapprove.svg"/>
+			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+		</h:commandLink>
+		<p:spacer width="20" rendered="#{managedBean.entity.ativo and managedBean.operation == 'edit'}"/>
+
+		<h:commandLink title="Reativar seguro" action="#{managedBean.reativarSeguro}" rendered="#{!managedBean.entity.ativo}">
+			<h:graphicImage id="imgReactivate" height="48" width="48" value="/resources/images/svg/make_decision.svg"/>
+			<f:setPropertyActionListener value="#{item.id}" target="#{managedBean.idEntity}"/>
+		</h:commandLink>
+		<p:spacer width="20" rendered="#{!managedBean.entity.ativo}"/>
+
+	</ui:define>
+
 </ui:composition>
 </html>

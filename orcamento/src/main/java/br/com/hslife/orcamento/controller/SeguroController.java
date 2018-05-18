@@ -167,6 +167,18 @@ public class SeguroController extends AbstractCRUDController<Seguro>{
 		}
 	}
 
+	public String encerrarSeguro() {
+		getService().encerrarSeguro(entity);
+		infoMessage("Seguro encerrado com sucesso!");
+		return list();
+	}
+
+	public String reativarSeguro() {
+		getService().reativarSeguro(entity);
+		infoMessage("Seguro encerrado com sucesso!");
+		return list();
+	}
+
 	public List<Conta> getListaConta() {
 		if (getOpcoesSistema().getExibirContasInativas()) {
 			return contaService.buscarDescricaoOuTipoContaOuAtivoPorUsuario("", new TipoConta[]{TipoConta.CORRENTE, TipoConta.POUPANCA, TipoConta.OUTROS, TipoConta.CARTAO}, getUsuarioLogado(), null);

@@ -2,16 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="822310ea-4b2b-4e34-b726-8b11aa8a36f2" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/rascunhoSeguros.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/rascunhoSeguros.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Seguro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Seguro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ISeguro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ISeguro.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/SeguroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/SeguroRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/util/web/EnumComboUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/util/web/EnumComboUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V20180512224300__AlteracoesSeguro.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V20180512224300__AlteracoesSeguro.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/Seguro/formSeguro.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/Seguro/formSeguro.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/Seguro/listSeguro.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/Seguro/listSeguro.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/EntityPersistenceMock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/EntityPersistenceMock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/repository/SeguroRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/repository/SeguroRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/service/SeguroServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/service/SeguroServiceTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,37 +26,39 @@
     <SUITE FILE_PATH="coverage/orcamento$All_in_orcamento.ic" NAME="All in orcamento Coverage Results" MODIFIED="1525666429737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SeguroController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java">
+    <leaf>
+      <file leaf-file-name="formSeguro.xhtml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Seguro/formSeguro.xhtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="112" column="5" selection-start-line="112" selection-start-column="5" selection-end-line="112" selection-end-column="5" />
-              <folding>
-                <element signature="e#2261#2262#0" expanded="true" />
-                <element signature="e#2288#2289#0" expanded="true" />
-                <element signature="e#5827#5828#0" expanded="true" />
-                <element signature="e#5901#5902#0" expanded="true" />
-                <element signature="e#6518#6519#0" expanded="true" />
-                <element signature="e#6587#6588#0" expanded="true" />
-                <element signature="e#2416#2417#0" expanded="true" />
-                <element signature="e#2447#2448#0" expanded="true" />
-                <element signature="e#2510#2511#0" expanded="true" />
-                <element signature="e#2559#2560#0" expanded="true" />
-                <element signature="e#2595#2596#0" expanded="true" />
-                <element signature="e#2621#2622#0" expanded="true" />
-                <element signature="e#2675#2676#0" expanded="true" />
-                <element signature="e#2714#2715#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="579">
+              <caret line="194" lean-forward="true" selection-start-line="194" selection-end-line="194" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SeguroService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java">
+      <file leaf-file-name="SeguroController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="80" column="22" selection-start-line="80" selection-start-column="22" selection-end-line="80" selection-end-column="22" />
+            <state relative-caret-position="257">
+              <caret line="176" column="29" selection-start-line="176" selection-start-column="29" selection-end-line="176" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LancamentoPeriodico.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/LancamentoPeriodico.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-986">
+              <caret line="75" column="13" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ISeguro.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ISeguro.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="58" column="9" selection-start-line="58" selection-start-column="9" selection-end-line="58" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -63,99 +66,44 @@
       <file leaf-file-name="Seguro.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Seguro.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="266" column="81" selection-start-line="266" selection-start-column="81" selection-end-line="266" selection-end-column="81" />
-              <folding>
-                <element signature="e#8298#8299#0" expanded="true" />
-                <element signature="e#8325#8326#0" expanded="true" />
-                <element signature="e#8442#8443#0" expanded="true" />
-                <element signature="e#8483#8484#0" expanded="true" />
-                <element signature="e#8552#8553#0" expanded="true" />
-                <element signature="e#8574#8575#0" expanded="true" />
-                <element signature="e#8671#8672#0" expanded="true" />
-                <element signature="e#8702#8703#0" expanded="true" />
-                <element signature="e#9920#9921#0" expanded="true" />
-                <element signature="e#9959#9960#0" expanded="true" />
-                <element signature="e#9998#9999#0" expanded="true" />
-                <element signature="e#10025#10026#0" expanded="true" />
-                <element signature="e#10082#10083#0" expanded="true" />
-                <element signature="e#10123#10124#0" expanded="true" />
-                <element signature="e#9992#9993#0" expanded="true" />
-                <element signature="e#10015#10016#0" expanded="true" />
-                <element signature="e#10060#10061#0" expanded="true" />
-                <element signature="e#10093#10094#0" expanded="true" />
-                <element signature="e#10122#10123#0" expanded="true" />
-                <element signature="e#10141#10142#0" expanded="true" />
-                <element signature="e#10181#10182#0" expanded="true" />
-                <element signature="e#10206#10207#0" expanded="true" />
-                <element signature="e#10244#10245#0" expanded="true" />
-                <element signature="e#10268#10269#0" expanded="true" />
-                <element signature="e#10321#10322#0" expanded="true" />
-                <element signature="e#10356#10357#0" expanded="true" />
-                <element signature="e#10384#10385#0" expanded="true" />
-                <element signature="e#10403#10404#0" expanded="true" />
-                <element signature="e#10441#10442#0" expanded="true" />
-                <element signature="e#10466#10467#0" expanded="true" />
-                <element signature="e#10522#10523#0" expanded="true" />
-                <element signature="e#10555#10556#0" expanded="true" />
-                <element signature="e#10748#10749#0" expanded="true" />
-                <element signature="e#10767#10768#0" expanded="true" />
-                <element signature="e#10849#10850#0" expanded="true" />
-                <element signature="e#10874#10875#0" expanded="true" />
-                <element signature="e#10910#10911#0" expanded="true" />
-                <element signature="e#10933#10934#0" expanded="true" />
-                <element signature="e#10983#10984#0" expanded="true" />
-                <element signature="e#11016#11017#0" expanded="true" />
-                <element signature="e#11060#11061#0" expanded="true" />
-                <element signature="e#11087#11088#0" expanded="true" />
-                <element signature="e#11149#11150#0" expanded="true" />
-                <element signature="e#11190#11191#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-2675">
+              <caret line="58" column="13" selection-start-line="58" selection-start-column="13" selection-end-line="58" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="V20180512224300__AlteracoesSeguro.sql" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/db/migration/V20180512224300__AlteracoesSeguro.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="48" column="74" lean-forward="true" selection-start-line="48" selection-start-column="74" selection-end-line="48" selection-end-column="74" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EnumComboUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/util/web/EnumComboUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="216" column="48" selection-start-line="216" selection-start-column="48" selection-end-line="216" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Periodicidade.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/enumeration/Periodicidade.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rascunhoSeguros.sql" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Scripts/rascunhoSeguros.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="listSeguro.xhtml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="listSeguro.xhtml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Seguro/listSeguro.xhtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="85" column="35" lean-forward="true" selection-start-line="85" selection-start-column="35" selection-end-line="85" selection-end-column="35" />
+            <state relative-caret-position="338">
+              <caret line="63" column="57" selection-start-line="63" selection-start-column="57" selection-end-line="63" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SeguroService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="121" column="50" lean-forward="true" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ILancamentoPeriodico.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ILancamentoPeriodico.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="159">
+              <caret line="66" column="9" selection-start-line="66" selection-start-column="9" selection-end-line="66" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LancamentoPeriodicoService.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/LancamentoPeriodicoService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="344">
+              <caret line="148" column="16" selection-start-line="148" selection-start-column="16" selection-end-line="148" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -163,17 +111,8 @@
       <file leaf-file-name="SeguroRepository.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/SeguroRepository.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="66" selection-start-line="66" selection-end-line="66" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="formSeguro.xhtml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Seguro/formSeguro.xhtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="89" column="12" selection-start-line="89" selection-start-column="12" selection-end-line="89" selection-end-column="75" />
+            <state relative-caret-position="195">
+              <caret line="65" column="126" selection-start-line="65" selection-start-column="126" selection-end-line="65" selection-end-column="126" />
             </state>
           </provider>
         </entry>
@@ -228,28 +167,28 @@
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/LancamentoPeriodico.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/FaturaCartaoService.java" />
         <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/entity/SeguroTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/repository/SeguroRepositoryTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/service/SeguroServiceTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/LancamentoPeriodicoService.java" />
         <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/controller/FacesContextMock.java" />
         <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/controller/AbstractTestControllers.java" />
-        <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/EntityPersistenceMock.java" />
         <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/controller/SeguroControllerTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/UsuarioService.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/pages/Seguro/viewSeguro.xhtml" />
         <option value="$PROJECT_DIR$/src/main/webapp/pages/Orcamento/listOrcamento.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ISeguro.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/templates/principal.xhtml" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/SeguroRepository.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/pages/Seguro/formSeguro.xhtml" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/util/web/EnumComboUtil.java" />
         <option value="$PROJECT_DIR$/Scripts/rascunhoSeguros.sql" />
         <option value="$PROJECT_DIR$/src/main/resources/db/migration/V20180512224300__AlteracoesSeguro.sql" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Seguro.java" />
+        <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/service/SeguroServiceTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/repository/SeguroRepositoryTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/EntityPersistenceMock.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/pages/Seguro/listSeguro.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/webapp/pages/Seguro/formSeguro.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ISeguro.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/SeguroRepository.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java" />
       </list>
     </option>
   </component>
@@ -272,8 +211,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -373,6 +310,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -753,7 +692,14 @@
       <option name="project" value="LOCAL" />
       <updated>1526351000113</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Implementado o salvamento do seguro junto com o lançamento periódico vinculado a ele.">
+      <created>1526351037976</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1526351037976</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -792,38 +738,64 @@
     <frame x="0" y="23" width="1440" height="873" extended-state="0" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info id="DB Browser" order="2" weight="0.3297568" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info id="Image Layers" order="2" />
       <window_info anchor="bottom" id="DB Execution Console" order="7" weight="0.32860824" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" weight="0.32860824" />
       <window_info anchor="right" id="Maven Projects" order="3" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32860824" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" visible="true" weight="0.32216495" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32860824" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.2639485" />
       <window_info id="Project Explorer" order="2" />
       <window_info id="Job Explorer" order="2" />
       <window_info anchor="bottom" id="Console" order="7" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" id="Structure" order="1" side_tool="true" visible="true" weight="0.24964234" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39948454" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info id="DB Browser" order="2" weight="0.3297568" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.32860824" />
-      <window_info anchor="right" id="Palette&#9;" order="3" />
-      <window_info id="Image Layers" order="2" />
-      <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" weight="0.32216495" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32860824" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32860824" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.2639485" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39948454" />
+      <window_info anchor="bottom" id="Messages" order="8" weight="0.32860824" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="Coverage" order="4" side_tool="true" weight="0.3297568" />
     </layout>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -846,48 +818,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/AbstractRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/service/MontadoraServiceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="72" column="8" lean-forward="true" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/LancamentoPeriodicoService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2565">
-          <caret line="245" column="42" selection-start-line="245" selection-start-column="42" selection-end-line="245" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/controller/CombustivelControllerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1661">
-          <caret line="66" column="13" selection-start-line="66" selection-start-column="13" selection-end-line="66" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/service/SeguroServiceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="92" column="8" selection-start-line="92" selection-start-column="8" selection-end-line="92" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/controller/FacesContextMock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="76" column="61" selection-start-line="76" selection-start-column="61" selection-end-line="76" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/controller/MontadoraControllerTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -959,13 +889,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/EntityPersistenceMock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/UtilsMock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="585">
@@ -991,13 +914,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="65" column="5" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/repository/SeguroRepositoryTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="68" column="40" lean-forward="true" selection-start-line="68" selection-start-column="40" selection-end-line="68" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -1040,16 +956,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-965">
           <caret line="72" column="23" lean-forward="true" selection-start-line="59" selection-start-column="8" selection-end-line="72" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ISeguro.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1102,57 +1008,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/LancamentoPeriodico/formLancamentoPeriodico.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="136" column="16" selection-start-line="136" selection-start-column="16" selection-end-line="169" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/LancamentoPeriodico.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-802">
-          <caret line="75" column="13" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/SeguroRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="112" column="5" selection-start-line="112" selection-start-column="5" selection-end-line="112" selection-end-column="5" />
-          <folding>
-            <element signature="e#2261#2262#0" expanded="true" />
-            <element signature="e#2288#2289#0" expanded="true" />
-            <element signature="e#5827#5828#0" expanded="true" />
-            <element signature="e#5901#5902#0" expanded="true" />
-            <element signature="e#6518#6519#0" expanded="true" />
-            <element signature="e#6587#6588#0" expanded="true" />
-            <element signature="e#2416#2417#0" expanded="true" />
-            <element signature="e#2447#2448#0" expanded="true" />
-            <element signature="e#2510#2511#0" expanded="true" />
-            <element signature="e#2559#2560#0" expanded="true" />
-            <element signature="e#2595#2596#0" expanded="true" />
-            <element signature="e#2621#2622#0" expanded="true" />
-            <element signature="e#2675#2676#0" expanded="true" />
-            <element signature="e#2714#2715#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="80" column="22" selection-start-line="80" selection-start-column="22" selection-end-line="80" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -1188,59 +1043,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Seguro.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="266" column="81" selection-start-line="266" selection-start-column="81" selection-end-line="266" selection-end-column="81" />
-          <folding>
-            <element signature="e#8298#8299#0" expanded="true" />
-            <element signature="e#8325#8326#0" expanded="true" />
-            <element signature="e#8442#8443#0" expanded="true" />
-            <element signature="e#8483#8484#0" expanded="true" />
-            <element signature="e#8552#8553#0" expanded="true" />
-            <element signature="e#8574#8575#0" expanded="true" />
-            <element signature="e#8671#8672#0" expanded="true" />
-            <element signature="e#8702#8703#0" expanded="true" />
-            <element signature="e#9920#9921#0" expanded="true" />
-            <element signature="e#9959#9960#0" expanded="true" />
-            <element signature="e#9998#9999#0" expanded="true" />
-            <element signature="e#10025#10026#0" expanded="true" />
-            <element signature="e#10082#10083#0" expanded="true" />
-            <element signature="e#10123#10124#0" expanded="true" />
-            <element signature="e#9992#9993#0" expanded="true" />
-            <element signature="e#10015#10016#0" expanded="true" />
-            <element signature="e#10060#10061#0" expanded="true" />
-            <element signature="e#10093#10094#0" expanded="true" />
-            <element signature="e#10122#10123#0" expanded="true" />
-            <element signature="e#10141#10142#0" expanded="true" />
-            <element signature="e#10181#10182#0" expanded="true" />
-            <element signature="e#10206#10207#0" expanded="true" />
-            <element signature="e#10244#10245#0" expanded="true" />
-            <element signature="e#10268#10269#0" expanded="true" />
-            <element signature="e#10321#10322#0" expanded="true" />
-            <element signature="e#10356#10357#0" expanded="true" />
-            <element signature="e#10384#10385#0" expanded="true" />
-            <element signature="e#10403#10404#0" expanded="true" />
-            <element signature="e#10441#10442#0" expanded="true" />
-            <element signature="e#10466#10467#0" expanded="true" />
-            <element signature="e#10522#10523#0" expanded="true" />
-            <element signature="e#10555#10556#0" expanded="true" />
-            <element signature="e#10748#10749#0" expanded="true" />
-            <element signature="e#10767#10768#0" expanded="true" />
-            <element signature="e#10849#10850#0" expanded="true" />
-            <element signature="e#10874#10875#0" expanded="true" />
-            <element signature="e#10910#10911#0" expanded="true" />
-            <element signature="e#10933#10934#0" expanded="true" />
-            <element signature="e#10983#10984#0" expanded="true" />
-            <element signature="e#11016#11017#0" expanded="true" />
-            <element signature="e#11060#11061#0" expanded="true" />
-            <element signature="e#11087#11088#0" expanded="true" />
-            <element signature="e#11149#11150#0" expanded="true" />
-            <element signature="e#11190#11191#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Scripts/rascunhoSeguros.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -1248,17 +1050,122 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ICRUDService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="57" column="9" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/service/SeguroServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="95" column="8" selection-start-line="95" selection-start-column="8" selection-end-line="95" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/repository/SeguroRepositoryTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="105" column="63" selection-start-line="105" selection-start-column="63" selection-end-line="105" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/mock/EntityPersistenceMock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="167" column="48" selection-start-line="167" selection-start-column="48" selection-end-line="167" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/LancamentoPeriodico/formLancamentoPeriodico.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="658">
+          <caret line="319" column="16" lean-forward="true" selection-start-line="279" selection-start-column="4" selection-end-line="319" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/Seguro.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2675">
+          <caret line="58" column="13" selection-start-line="58" selection-start-column="13" selection-end-line="58" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/AbstractCRUDRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="95" column="9" selection-start-line="89" selection-start-column="8" selection-end-line="95" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/LancamentoContaRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="74" column="13" selection-start-line="74" selection-start-column="13" selection-end-line="74" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/LancamentoPeriodico.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-986">
+          <caret line="75" column="13" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/SeguroRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="65" column="126" selection-start-line="65" selection-start-column="126" selection-end-line="65" selection-end-column="126" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ISeguro.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="58" column="9" selection-start-line="58" selection-start-column="9" selection-end-line="58" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Seguro/formSeguro.xhtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="89" column="12" selection-start-line="89" selection-start-column="12" selection-end-line="89" selection-end-column="75" />
+        <state relative-caret-position="579">
+          <caret line="194" lean-forward="true" selection-start-line="194" selection-end-line="194" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/pages/Seguro/listSeguro.xhtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="85" column="35" lean-forward="true" selection-start-line="85" selection-start-column="35" selection-end-line="85" selection-end-column="35" />
+        <state relative-caret-position="338">
+          <caret line="63" column="57" selection-start-line="63" selection-start-column="57" selection-end-line="63" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/SeguroController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="176" column="29" selection-start-line="176" selection-start-column="29" selection-end-line="176" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/SeguroService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="121" column="50" lean-forward="true" selection-start-line="121" selection-start-column="50" selection-end-line="121" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/facade/ILancamentoPeriodico.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="66" column="9" selection-start-line="66" selection-start-column="9" selection-end-line="66" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/service/LancamentoPeriodicoService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="148" column="16" selection-start-line="148" selection-start-column="16" selection-end-line="148" selection-end-column="16" />
         </state>
       </provider>
     </entry>

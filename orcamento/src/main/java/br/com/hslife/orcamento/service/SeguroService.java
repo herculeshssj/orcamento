@@ -46,6 +46,7 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.service;
 
 import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,40 @@ public class SeguroService extends AbstractCRUDService<Seguro> implements ISegur
 
 		// Salva o seguro
 		super.cadastrar(entity);
+	}
+
+	@Override
+	public void excluir(Seguro entity) {
+		// Obtém o ID do lançamento periódico
+		Long idLancamentoPeriodico = entity.getLancamentoPeriodico().getId();
+
+		// Exclui o seguro
+		super.excluir(entity);
+
+		// Traz o lançamento periódico e depois exclui
+		getLancamentoPeriodicoService().excluir(getLancamentoPeriodicoService().buscarPorID(idLancamentoPeriodico));
+	}
+
+	@Override
+	public void encerrarSeguro(Seguro seguro) {
+		// Seta o seguro como inativo e salva
+		seguro.setAtivo(false);
+
+		super.alterar(seguro);
+
+		// Seta o lançamento periódico como encerrado e salva
+		getLancamentoPeriodicoService().alterarStatusLancamento(seguro.getLancamentoPeriodico(), StatusLancamento.ENCERRADO);
+	}
+
+	@Override
+	public void reativarSeguro(Seguro seguro) {
+		// Seta o seguro como ativo e salva
+		seguro.setAtivo(true);
+
+		super.alterar(seguro);
+
+		// Seta o lançamento periódico como ativo e salva
+		getLancamentoPeriodicoService().alterarStatusLancamento(seguro.getLancamentoPeriodico(), StatusLancamento.ATIVO);
 	}
 
 	@Override

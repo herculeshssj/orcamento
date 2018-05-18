@@ -54,4 +54,7 @@ public interface ISeguro extends ICRUDService<Seguro> {
 
 	List<Seguro> buscarTodosPorUsuarioEAtivo(Usuario usuario, boolean ativo);
 
+	void encerrarSeguro(Seguro seguro);
+
+	void reativarSeguro(Seguro seguro);
 }

@@ -103,7 +103,7 @@ public class SeguroRepositoryTest extends AbstractTestRepositories {
 		entity = (Seguro)epm.get(EntityPersistenceEnum.SEGURO);
 		
 		// Salva as entidades pertinentes antes de iniciar os testes
-		usuarioRepository.save(entity.getUsuario());
+		usuarioRepository.save(entity.getConta().getUsuario());
 		favorecidoRepository.save(entity.getFavorecido());
 		moedaRepository.save(entity.getMoeda());
 		contaRepository.save(entity.getConta());
