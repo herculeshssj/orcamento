@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="822310ea-4b2b-4e34-b726-8b11aa8a36f2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/ResgateSeguro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/ResgateSeguroRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V20180518051800__ResgateSeguro.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/UploadMB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -19,7 +17,13 @@
     <SUITE FILE_PATH="coverage/orcamento$All_in_orcamento.ic" NAME="All in orcamento Coverage Results" MODIFIED="1525666429737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="UploadMB.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/UploadMB.java">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -77,7 +81,6 @@
         <option value="$PROJECT_DIR$/src/main/webapp/pages/Seguro/viewSeguro.xhtml" />
         <option value="$PROJECT_DIR$/src/main/webapp/pages/Orcamento/listOrcamento.xhtml" />
         <option value="$PROJECT_DIR$/src/main/webapp/templates/principal.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/util/web/EnumComboUtil.java" />
         <option value="$PROJECT_DIR$/Scripts/rascunhoSeguros.sql" />
         <option value="$PROJECT_DIR$/src/main/resources/db/migration/V20180512224300__AlteracoesSeguro.sql" />
@@ -94,6 +97,9 @@
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/entity/ResgateSeguro.java" />
         <option value="$PROJECT_DIR$/src/main/resources/db/migration/V20180518051800__ResgateSeguro.sql" />
         <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/ResgateSeguroRepository.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java" />
+        <option value="$PROJECT_DIR$/Scripts/migracao_fiis.sql" />
+        <option value="$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/UploadMB.java" />
       </list>
     </option>
   </component>
@@ -115,7 +121,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -149,12 +154,31 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="orcamento" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="orcamento" type="b2602c69:ProjectViewProjectNode" />
+              <item name="orcamento" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="orcamento" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="orcamento" type="b2602c69:ProjectViewProjectNode" />
+              <item name="orcamento" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="orcamento" type="462c0819:PsiDirectoryNode" />
+              <item name="entity" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -187,7 +211,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Maven.Orcamento">
+  <component name="RunManager" selected="JUnit.All in orcamento">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
@@ -199,29 +223,6 @@
       <option name="MAIN_CLASS_NAME" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="package" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <patterns />
-    </configuration>
-    <configuration name="SeguroRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="orcamento" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="br.com.hslife.orcamento.repository.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="br.com.hslife.orcamento.repository" />
-      <option name="MAIN_CLASS_NAME" value="br.com.hslife.orcamento.repository.SeguroRepositoryTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
@@ -453,13 +454,11 @@
       <item itemvalue="Maven.Orcamento" />
       <item itemvalue="Maven.Flyway - Test" />
       <item itemvalue="Maven.Flyway - Production" />
-      <item itemvalue="JUnit.SeguroRepositoryTest" />
       <item itemvalue="JUnit.All in orcamento" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.All in orcamento" />
-        <item itemvalue="JUnit.SeguroRepositoryTest" />
       </list>
     </recent_temporary>
   </component>
@@ -588,6 +587,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -598,12 +598,12 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007153" side_tool="true" weight="0.32860824" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32860824" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32860824" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49928468" weight="0.32216495" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32860824" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2639485" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27110156" />
       <window_info id="Project Explorer" order="2" />
       <window_info id="Job Explorer" order="2" />
       <window_info anchor="bottom" id="Console" order="7" />
@@ -671,20 +671,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/AbstractCRUDController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="127" selection-start-line="127" selection-end-line="127" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/br/com/hslife/orcamento/controller/AbstractTestControllers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="135" column="4" lean-forward="true" selection-start-line="135" selection-start-column="4" selection-end-line="135" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/repository/FavorecidoRepository.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
@@ -816,13 +802,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="50" column="12" selection-start-line="50" selection-start-column="12" selection-end-line="50" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="72" column="46" selection-start-line="72" selection-start-column="46" selection-end-line="72" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -1005,32 +984,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="765">
           <caret line="99" column="4" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="4" />
-          <folding>
-            <element signature="e#2447#2448#0" expanded="true" />
-            <element signature="e#2463#2464#0" expanded="true" />
-            <element signature="e#2494#2495#0" expanded="true" />
-            <element signature="e#2513#2514#0" expanded="true" />
-            <element signature="e#2550#2551#0" expanded="true" />
-            <element signature="e#2575#2576#0" expanded="true" />
-            <element signature="e#2628#2629#0" expanded="true" />
-            <element signature="e#2665#2666#0" expanded="true" />
-            <element signature="e#2703#2704#0" expanded="true" />
-            <element signature="e#2731#2732#0" expanded="true" />
-            <element signature="e#2788#2789#0" expanded="true" />
-            <element signature="e#2831#2832#0" expanded="true" />
-            <element signature="e#2868#2869#0" expanded="true" />
-            <element signature="e#2895#2896#0" expanded="true" />
-            <element signature="e#2950#2951#0" expanded="true" />
-            <element signature="e#2991#2992#0" expanded="true" />
-            <element signature="e#3022#3023#0" expanded="true" />
-            <element signature="e#3045#3046#0" expanded="true" />
-            <element signature="e#3090#3091#0" expanded="true" />
-            <element signature="e#3123#3124#0" expanded="true" />
-            <element signature="e#3153#3154#0" expanded="true" />
-            <element signature="e#3173#3174#0" expanded="true" />
-            <element signature="e#3214#3215#0" expanded="true" />
-            <element signature="e#3241#3242#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1047,6 +1000,23 @@
           <caret line="61" column="4" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="4" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/migracao_fiis.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2460">
+          <caret line="164" column="23" selection-start-line="164" selection-start-column="23" selection-end-line="164" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/converter/CalendarConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="72" column="46" selection-start-line="72" selection-start-column="46" selection-end-line="72" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/com/hslife/orcamento/controller/UploadMB.java">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">
