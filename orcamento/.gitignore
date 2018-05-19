@@ -1,2 +1,7 @@
 /target/
 .DS_Store
+/.settings/
+/.idea/
+.project
+.classpath
+.dbeaver-data-sources.xml
