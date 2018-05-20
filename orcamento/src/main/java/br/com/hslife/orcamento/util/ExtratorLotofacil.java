@@ -262,14 +262,14 @@ public class ExtratorLotofacil {
 		for (CidadeUF cidadeUF : cidades) {
 			
 			// Busca a cidade e o UF
-			CidadeUF cidade = cidadeUfRepository.findFirstByCidadeAndUfAllIgnoreCase(cidadeUF.getCidade(), cidadeUF.getUf());
+			CidadeUF cidade = cidadeUfRepository.findFirstByCidadeAndUfAllIgnoreCase(cidadeUF.getCidade().toLowerCase(), cidadeUF.getUf().toLowerCase());
 			
 			// Caso a cidade exista, adiciona na listagem
 			if (cidade != null) {
 				listaCidades.add(cidade);
 			} else {
 				// Caso contrário, cria uma nova instância e adiciona na lista
-				listaCidades.add(new CidadeUF(cidadeUF.getCidade().trim(), cidadeUF.getUf().trim()));
+				listaCidades.add(new CidadeUF(cidadeUF.getCidade().trim().toLowerCase(), cidadeUF.getUf().trim().toLowerCase()));
 			}
 		}
 		

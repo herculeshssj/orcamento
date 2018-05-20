@@ -235,13 +235,6 @@
 	    <artifactId>slf4j-simple</artifactId>
 	    <version>1.7.25</version>
 	</dependency>
-	  
-	<!-- E-Mail -->
-	<dependency>
-	    <groupId>com.sendgrid</groupId>
-	    <artifactId>sendgrid-java</artifactId>
-	    <version>2.2.2</version> <!-- Alterar para a versão 4.1.2 -->
-	</dependency>
 	
 	<!-- AspectJ -->
 	<dependency>
@@ -267,12 +260,6 @@
 	    <groupId>org.apache.commons</groupId>
 	    <artifactId>commons-dbcp2</artifactId>
 	    <version>2.2.0</version>
-	</dependency>
-
-	<dependency>
-	    <groupId>org.apache.commons</groupId>
-	    <artifactId>commons-email</artifactId>
-	    <version>1.5</version>
 	</dependency>
 	
 	<dependency>
@@ -363,7 +350,13 @@
 	    <artifactId>jackson-annotations</artifactId>
 	    <version>2.9.4</version>
 	</dependency>
- 
+
+	<dependency>
+	  <groupId>org.json</groupId>
+	  <artifactId>json</artifactId>
+	  <version>20180130</version>
+	</dependency>
+
   </dependencies>
   
   <build>

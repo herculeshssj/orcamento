@@ -5,3 +5,4 @@
 .project
 .classpath
 .dbeaver-data-sources.xml
+*.zip

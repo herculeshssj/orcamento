@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.hslife.orcamento.component.NotificacaoSistemaComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,10 +76,10 @@ public class AgendamentoTask {
 	private static final Logger logger = LogManager.getLogger(AgendamentoTask.class);
 	
 	@Autowired
-	private EmailComponent emailComponent;
-	
-	@Autowired
 	private OpcaoSistemaComponent opcaoSistemaComponent;
+
+	@Autowired
+	private NotificacaoSistemaComponent notificacaoSistemaComponent;
 	
 	@Autowired
 	private IAgenda service;
@@ -90,12 +91,12 @@ public class AgendamentoTask {
 		return lancamentoContaService;
 	}
 
-	public EmailComponent getEmailComponent() {
-		return emailComponent;
-	}
-
 	public OpcaoSistemaComponent getOpcaoSistemaComponent() {
 		return opcaoSistemaComponent;
+	}
+
+	public NotificacaoSistemaComponent getNotificacaoSistemaComponent() {
+		return notificacaoSistemaComponent;
 	}
 
 	public IAgenda getService() {
@@ -135,12 +136,9 @@ public class AgendamentoTask {
 					mensagemEmail.append("Notas: " + (a.getNotas() == null ? "-" : a.getNotas()) + "\n\n");
 					mensagemEmail.append("Caso não queira mais receber notificações a respeito desse evento, desmarque a caixa 'Emitir Alerta' nas propriedades do agendamento.\n\n\n");
 					mensagemEmail.append("Administrador do Sistema");
-					
-					emailComponent.setDestinatario(a.getUsuario().getNome());
-					emailComponent.setEmailDestinatario(a.getUsuario().getEmail());
-					emailComponent.setAssunto("Orçamento Doméstico - Lembrete de agendamento");
-					emailComponent.setMensagem(mensagemEmail.toString());
-					emailComponent.enviarEmail();					
+
+					getNotificacaoSistemaComponent().registrarNotificacao("Lembrete de agendamento", mensagemEmail.toString(), a.getUsuario());
+
 				}
 			}
 		

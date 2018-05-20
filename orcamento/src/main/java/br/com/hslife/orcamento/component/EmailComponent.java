@@ -47,16 +47,10 @@ package br.com.hslife.orcamento.component;
 
 import java.util.Map;
 
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.sendgrid.SendGrid;
-import com.sendgrid.SendGridException;
-
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.facade.IOpcaoSistema;
 
@@ -160,7 +154,8 @@ public class Example {
 		apiKey = (String)parametros.get("EMAIL_APIKEY");
 	}
 	
-	private void enviarEmailSendGrid() throws SendGridException {
+	private void enviarEmailSendGrid() {
+		/*
 		SendGrid sendGrid;
 		// Verifica se o API KEY está preenchido
 		if (apiKey != null && !apiKey.trim().isEmpty()) {
@@ -178,9 +173,11 @@ public class Example {
 		
 		SendGrid.Response response = sendGrid.send(email);
 		logger.info("E-Mail enviado com código " + response.getCode() + ".\n\n" + response.getMessage());
+		*/
 	}
 	
-	public void enviarEmail() throws ApplicationException, EmailException, SendGridException {
+	public void enviarEmail() throws ApplicationException {
+		/*
 		// Carrega as configurações de envio de e-mail
 		this.populateParameters();
 		
@@ -211,5 +208,6 @@ public class Example {
 		email.setCharset(charset);
 		email.setSSLCheckServerIdentity(false);
 		email.send();
+		*/
 	}
 }

@@ -44,14 +44,12 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/formulario.xhtml">
 
@@ -68,7 +66,7 @@
 				Exibir as buscas realizadas:
 				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['GERAL_EXIBIR_BUSCAS_REALIZADAS']}"/>
 				
-				Notificar agendamentos por e-mail:
+				Notificar agendamentos:
 				<h:selectBooleanCheckbox value="#{managedBean.opcoesUser['NOTIFICAR_AGENDAMENTO_EMAIL']}"/>
 			
 			</h:panelGrid>
@@ -77,53 +75,7 @@
 		</h:panelGroup>
 		
 		<hr/>
-		
-		<h:panelGroup rendered="#{managedBean.usuarioLogado.login == 'admin'}">
-		<fieldset>
-			<legend>Configurações de e-mail</legend>
-			
-			<h:panelGrid columns="4">
-			
-				Servidor SMTP:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_SERVIDOR']}"/>
-				
-				Porta SMTP:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_PORTA']}"/>
-				
-				Usuário:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_USUARIO']}"/>
-				
-				Senha:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_SENHA']}"/>
-				
-				Nome do remetente:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_REMETENTE']}"/>
-				
-				E-Mail do remetente:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_EMAIL_REMETENTE']}"/>
-				
-				Usar SSL:
-				<h:selectBooleanCheckbox value="#{managedBean.opcoesGlobalAdmin['EMAIL_USAR_SSL']}"/>
-				
-				Charset:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_CHARSET']}"/>
-				
-				Método de envio:
-				<h:selectOneMenu value="#{managedBean.opcoesGlobalAdmin['EMAIL_METODO_ENVIO']}">
-					<f:selectItem itemLabel="JavaMail" itemValue="JAVAMAIL" />
-					<f:selectItem itemLabel="SendGrid" itemValue="SENDGRID" />
-				</h:selectOneMenu>
-				
-				API KEY:
-				<h:inputText value="#{managedBean.opcoesGlobalAdmin['EMAIL_APIKEY']}"/>
-			
-			</h:panelGrid>
-			
-		</fieldset>	
-		</h:panelGroup>
-		
-		<hr/>
-		
+
 		<h:panelGroup rendered="#{managedBean.usuarioLogado.login == 'admin'}">
 		<fieldset>
 			<legend>Logs de acesso </legend>
