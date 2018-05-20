@@ -1,5 +1,6 @@
 package br.com.hslife.orcamento.entity;
 
+import br.com.hslife.orcamento.util.Util;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "lotomania")
-public class Lotomania extends AbstractModel {
+public class Lotomania extends EntityPersistence {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -154,6 +155,21 @@ public class Lotomania extends AbstractModel {
 	
 	public Lotomania() {
 		this.cidadeUF = new ArrayList<>();
+	}
+
+	@Override
+	public void validate() {
+
+	}
+
+	@Override
+	public String getLabel() {
+		return Util.concatenar(
+				"Concurso ",
+				Integer.toString(this.concurso),
+				", realizado em ",
+				Util.formataDataHora(this.dataSorteio, Util.DATA)
+		);
 	}
 
 	public Long getId() {

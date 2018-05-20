@@ -1,8 +1,7 @@
 package br.com.hslife.orcamento.util;
 
-import br.com.hslife.loteria.configuration.LoteriaProperties;
-import br.com.hslife.loteria.model.LoteriaFederal;
-import br.com.hslife.loteria.repository.LoteriaFederalRepository;
+import br.com.hslife.orcamento.entity.LoteriaFederal;
+import br.com.hslife.orcamento.repository.LoteriaFederalRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,8 +37,9 @@ public class ExtratorLoteriaFederal {
 	
 	private static final Logger log = LoggerFactory.getLogger(ExtratorLoteriaFederal.class);
 
-	@Autowired
-	private LoteriaProperties properties;
+	private String urlFederal = "http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_federa.zip";
+	private String urlLotofacil = "http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_lotfac.zip";
+	private String urlLotomania = "http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_lotoma.zip";
 	
 	@Autowired
 	private LoteriaFederalRepository repository;
@@ -54,7 +54,7 @@ public class ExtratorLoteriaFederal {
 
 			// Faz o download do arquivo Zip com os resultados da Loteria
 			// Federal
-			URL url = new URL(properties.getUrlFederal());
+			URL url = new URL(urlFederal);
 
 			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL)); // gerenciamento
 																						// dos

@@ -1,11 +1,13 @@
 package br.com.hslife.orcamento.entity;
 
+import br.com.hslife.orcamento.util.Util;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="cidadeuf")
-public class CidadeUF extends AbstractModel {
+public class CidadeUF extends EntityPersistence {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -27,6 +29,20 @@ public class CidadeUF extends AbstractModel {
 	public CidadeUF(String cidade, String uf) {
 		this.cidade = cidade;
 		this.uf = uf;
+	}
+
+	@Override
+	public void validate() {
+
+	}
+
+	@Override
+	public String getLabel() {
+		return Util.concatenar(
+				this.cidade,
+				" - ",
+				this.uf
+		);
 	}
 
 	public Long getId() {

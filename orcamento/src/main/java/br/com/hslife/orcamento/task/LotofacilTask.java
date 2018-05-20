@@ -1,6 +1,6 @@
 package br.com.hslife.orcamento.task;
 
-import br.com.hslife.loteria.util.ExtratorLotofacil;
+import br.com.hslife.orcamento.util.ExtratorLotofacil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

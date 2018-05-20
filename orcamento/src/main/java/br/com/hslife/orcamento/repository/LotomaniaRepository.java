@@ -1,12 +1,23 @@
 package br.com.hslife.orcamento.repository;
 
-import br.com.hslife.loteria.model.Lotomania;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import br.com.hslife.orcamento.entity.Lotomania;
+import org.springframework.stereotype.Repository;
+import javax.persistence.NoResultException;
 
-@RepositoryRestResource(collectionResourceRel="lotomania", path="lotomania")
-public interface LotomaniaRepository extends PagingAndSortingRepository<Lotomania, Long>{
+@Repository
+public class LotomaniaRepository extends AbstractCRUDRepository<Lotomania> {
 
-	public Lotomania findFirstByConcurso(@Param("concurso") Integer concurso);
+	public LotomaniaRepository() {
+		super(new Lotomania(), Lotomania.class);
+	}
+
+	public Lotomania findFirstByConcurso(Integer concurso) {
+		try {
+			return getSession().createQuery("SELECT l FROM Lotomania l WHERE l.concurso = :concurso", Lotomania.class)
+					.setParameter("concurso", concurso)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }

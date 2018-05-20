@@ -1,9 +1,17 @@
 package br.com.hslife.orcamento.repository;
 
-import br.com.hslife.loteria.model.CidadeUF;
-import org.springframework.data.jpa.repository.JpaRepository;
+import br.com.hslife.orcamento.entity.CidadeUF;
+import org.springframework.stereotype.Repository;
 
-public interface CidadeUFRepository extends JpaRepository<CidadeUF, Long>{
+@Repository
+public class CidadeUFRepository extends AbstractCRUDRepository<CidadeUF> {
 
-	public CidadeUF findFirstByCidadeAndUfAllIgnoreCase(String cidade, String uf);
+	public CidadeUFRepository() {
+		super(new CidadeUF(), CidadeUF.class);
+	}
+
+	public CidadeUF findFirstByCidadeAndUfAllIgnoreCase(String cidade, String uf) {
+		// TODO implementar
+		return null;
+	}
 }

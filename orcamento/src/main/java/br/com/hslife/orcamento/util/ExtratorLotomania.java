@@ -1,10 +1,9 @@
 package br.com.hslife.orcamento.util;
 
-import br.com.hslife.loteria.configuration.LoteriaProperties;
-import br.com.hslife.loteria.model.CidadeUF;
-import br.com.hslife.loteria.model.Lotomania;
-import br.com.hslife.loteria.repository.CidadeUFRepository;
-import br.com.hslife.loteria.repository.LotomaniaRepository;
+import br.com.hslife.orcamento.entity.CidadeUF;
+import br.com.hslife.orcamento.entity.Lotomania;
+import br.com.hslife.orcamento.repository.CidadeUFRepository;
+import br.com.hslife.orcamento.repository.LotomaniaRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,8 +36,9 @@ public class ExtratorLotomania {
 	
 	private static final Logger log = LoggerFactory.getLogger(ExtratorLotomania.class);
 
-	@Autowired
-	private LoteriaProperties properties;
+	private String urlFederal = "http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_federa.zip";
+	private String urlLotofacil = "http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_lotfac.zip";
+	private String urlLotomania = "http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_lotoma.zip";
 	
 	@Autowired
 	private LotomaniaRepository repository;
@@ -55,7 +55,7 @@ public class ExtratorLotomania {
 			StringBuilder htmlContent = new StringBuilder();
 
 			// Faz o download do arquivo Zip com os resultados da Lotomania
-			URL url = new URL(properties.getUrlLotomania());
+			URL url = new URL(urlLotomania);
 
 			CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL)); // gerenciamento
 																						// dos

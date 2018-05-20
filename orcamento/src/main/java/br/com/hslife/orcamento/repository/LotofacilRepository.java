@@ -1,12 +1,23 @@
 package br.com.hslife.orcamento.repository;
 
-import br.com.hslife.loteria.model.Lotofacil;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import br.com.hslife.orcamento.entity.Lotofacil;
+import org.springframework.stereotype.Repository;
+import javax.persistence.NoResultException;
 
-@RepositoryRestResource(collectionResourceRel="lotofacil", path="lotofacil")
-public interface LotofacilRepository extends PagingAndSortingRepository<Lotofacil, Long>{
+@Repository
+public class LotofacilRepository extends AbstractCRUDRepository<Lotofacil> {
 
-	public Lotofacil findFirstByConcurso(@Param("concurso") Integer concurso);
+	public LotofacilRepository() {
+		super(new Lotofacil(), Lotofacil.class);
+	}
+
+	public Lotofacil findFirstByConcurso(Integer concurso) {
+		try {
+			return getSession().createQuery("SELECT l FROM Lotofacil l WHERE l.concurso = :concurso", Lotofacil.class)
+					.setParameter("concurso", concurso)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }

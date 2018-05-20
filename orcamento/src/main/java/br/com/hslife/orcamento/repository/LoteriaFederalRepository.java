@@ -1,12 +1,23 @@
 package br.com.hslife.orcamento.repository;
 
-import br.com.hslife.loteria.model.LoteriaFederal;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import br.com.hslife.orcamento.entity.LoteriaFederal;
+import org.springframework.stereotype.Repository;
+import javax.persistence.NoResultException;
 
-@RepositoryRestResource(collectionResourceRel="loteriaFederal", path="federal")
-public interface LoteriaFederalRepository extends PagingAndSortingRepository<LoteriaFederal, Long>{
+@Repository
+public class LoteriaFederalRepository extends AbstractCRUDRepository<LoteriaFederal> {
 
-	public LoteriaFederal findFirstByConcurso(@Param("concurso") Integer concurso);
+	public LoteriaFederalRepository() {
+		super(new LoteriaFederal(), LoteriaFederal.class);
+	}
+
+	public LoteriaFederal findFirstByConcurso(Integer concurso) {
+		try {
+			return getSession().createQuery("SELECT l FROM LoteriaFederal l WHERE l.concurso = :concurso", LoteriaFederal.class)
+					.setParameter("concurso", concurso)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }
