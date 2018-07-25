@@ -365,17 +365,6 @@
   
   <profiles>
   
-  	<!-- ***** INFORMAÇÃO IMPORTANTE SOBRE O FLYWAY *****
-  	
-  	Could not find schema history table `orcamentotest`.`flyway_schema_history`,
-  	but found `orcamentotest`.`schema_version` instead. You are seeing this 
-  	message because Flyway changed its default for flyway.table in version 5.0.0
-  	to flyway_schema_history and you are still relying on the old default
-  	(schema_version). Set flyway.table=schema_version in your configuration to
-  	fix this. This fallback mechanism will be removed in Flyway 6.0.0. 
-  	
-  	 -->
-  
   	<profile>
   		<id>test</id>
   		<build>
@@ -389,7 +378,6 @@
   						<url>${env.jdbcUrlTest}</url>
 						<user>${env.jdbcUsername}</user>
 						<password>${env.jdbcPassword}</password>
-						<table>schema_version</table>
   					</configuration>
   				</plugin>
   			</plugins>
@@ -409,7 +397,6 @@
   						<url>${env.jdbcUrl}</url>
 						<user>${env.jdbcUsername}</user>
 						<password>${env.jdbcPassword}</password>
-						<table>schema_version</table>
   					</configuration>
   				</plugin>
 				<plugin>
