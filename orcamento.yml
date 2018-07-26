@@ -1,0 +1,78 @@
+version: '3.3'
+
+services:
+  orcamento-db:
+    image: mariadb
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    environment:
+      MYSQL_ROOT_PASSWORD: 0rc*m4nt%
+      MYSQL_DATABASE: orcamento
+      MYSQL_USER: orcamento
+      MYSQL_PASSWORD: d1nh31r0
+    volumes:
+      - /Users/herculeshssj/Applications/Orcamento/mariadb:/var/lib/mysql
+    networks:
+      - orcamento-net
+
+  orcamento-dbadmin:
+    depends_on:
+      - orcamento-db
+    image: adminer
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    environment:
+      ADMINER_DEFAULT_SERVER: orcamento-db
+    ports:
+      - 8181:8080
+    networks:
+      - orcamento-net
+
+  orcamento-ci:
+    depends_on:
+      - orcamento-db
+    image: jenkins/jenkins
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    ports:
+      - 8282:8080
+      - 50000:50000
+    volumes:
+      - /Users/herculeshssj/Applications/Orcamento/jenkins:/var/jenkins_home
+      - /Users/herculeshssj/Applications/Orcamento/tomcat:/var/jenkins_home/webapps
+    networks:
+      - orcamento-net
+
+  orcamento-web:
+    depends_on:
+      - orcamento-db
+    image: tomcat:8.5-jre8-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    environment:
+      jdbcDriver: org.mariadb.jdbc.Driver
+      jdbcUrl: jdbc:mariadb://orcamento-db:3306/orcamento
+      jdbcUsername: orcamento
+      jdbcPassword: d1nh31r0
+    ports:
+      - 8080:8080
+    volumes:
+      - /Users/herculeshssj/Applications/Orcamento/tomcat:/usr/local/tomcat/webapps
+    networks:
+      - orcamento-net
+
+networks:
+  orcamento-net:
+    driver: overlay
