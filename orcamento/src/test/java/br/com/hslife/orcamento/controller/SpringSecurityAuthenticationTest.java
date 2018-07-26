@@ -100,8 +100,8 @@ public class SpringSecurityAuthenticationTest {
 	@Test
 	public void testLogin() throws Exception {
 		HttpSession session = mockMvc.perform(post("/login")
-				.param("username", "teste")
-				.param("password", "teste"))
+				.param("username", "admin")
+				.param("password", "admin"))
 				.andDo(print())
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl("/"))
@@ -123,6 +123,6 @@ public class SpringSecurityAuthenticationTest {
             }
         }
         
-        assertEquals("teste", login);
+        assertEquals("admin", login);
 	}
 }

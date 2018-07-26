@@ -118,8 +118,8 @@ public abstract class AbstractTestControllers
 				.addFilters(springSecurityFilterChain).build();
 
 		HttpSession session = mockMvc
-				.perform(post("/login").param("username", "teste")
-						.param("password", "teste"))
+				.perform(post("/login").param("username", "admin")
+						.param("password", "admin"))
 				.andDo(print()).andExpect(status().isFound())
 				.andExpect(redirectedUrl("/")).andReturn().getRequest()
 				.getSession();
