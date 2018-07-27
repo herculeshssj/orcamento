@@ -45,42 +45,13 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.specification;
 
-import org.springframework.stereotype.Component;
+import br.com.hslife.orcamento.entity.EntityPersistence;
 
-import br.com.hslife.orcamento.entity.Favorecido;
-import br.com.hslife.orcamento.exception.ValidationException;
-
-@Component
-public class FavorecidoSpecification extends AbstractCRUDSpecification<Favorecido> {
+public interface ICRUDSpecification<E extends EntityPersistence> extends ISpecification<E> {
 	
-	private boolean toValidate(Favorecido entity) {
-		try {
-			entity.validate();
-			return true;
-		} catch (ValidationException ve) {
-			
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isSatisfiedToSave(Favorecido entity) {
-		return this.toValidate(entity);
-	}
-
-	@Override
-	public boolean isSatisfiedToEdit(Favorecido entity) {
-		return this.toValidate(entity);
-	}
-
-	@Override
-	public boolean isSafisfiedToDelete(Favorecido entity) {
-		return this.toValidate(entity);
-	}
-
-	@Override
-	public boolean isSatisfiedBy(Favorecido entity) {
-		return this.toValidate(entity);
-	}
-
+	public boolean isSatisfiedToSave(E entity);
+	
+	public boolean isSatisfiedToEdit(E entity);
+	
+	public boolean isSafisfiedToDelete(E entity);
 }

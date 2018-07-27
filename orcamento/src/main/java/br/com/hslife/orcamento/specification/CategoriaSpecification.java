@@ -47,13 +47,13 @@ package br.com.hslife.orcamento.specification;
 
 import org.springframework.stereotype.Component;
 
-import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.Categoria;
 import br.com.hslife.orcamento.exception.ValidationException;
 
 @Component
-public class FavorecidoSpecification extends AbstractCRUDSpecification<Favorecido> {
+public class CategoriaSpecification extends AbstractCRUDSpecification<Categoria> {
 	
-	private boolean toValidate(Favorecido entity) {
+	private boolean toValidate(Categoria entity) {
 		try {
 			entity.validate();
 			return true;
@@ -64,23 +64,22 @@ public class FavorecidoSpecification extends AbstractCRUDSpecification<Favorecid
 	}
 
 	@Override
-	public boolean isSatisfiedToSave(Favorecido entity) {
+	public boolean isSatisfiedToSave(Categoria entity) {
 		return this.toValidate(entity);
 	}
 
 	@Override
-	public boolean isSatisfiedToEdit(Favorecido entity) {
+	public boolean isSatisfiedToEdit(Categoria entity) {
 		return this.toValidate(entity);
 	}
 
 	@Override
-	public boolean isSafisfiedToDelete(Favorecido entity) {
+	public boolean isSafisfiedToDelete(Categoria entity) {
 		return this.toValidate(entity);
 	}
 
 	@Override
-	public boolean isSatisfiedBy(Favorecido entity) {
+	public boolean isSatisfiedBy(Categoria entity) {
 		return this.toValidate(entity);
 	}
-
 }

@@ -55,6 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.repository.AbstractCRUDRepository;
+import br.com.hslife.orcamento.specification.ISpecification;
 
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor={
 		ApplicationException.class, 
@@ -89,5 +90,9 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	
 	public void validar(E entity) {
 		entity.validate();
+	}
+	
+	public boolean validar(ISpecification<E> specification, E e) {
+		return specification.isSatisfiedBy(e);
 	}
 }
