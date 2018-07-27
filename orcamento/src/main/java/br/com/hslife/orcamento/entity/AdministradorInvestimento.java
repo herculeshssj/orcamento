@@ -72,7 +72,7 @@ public class AdministradorInvestimento extends EntityPersistence {
 	@Column(length=14, nullable=false)
 	private String cnpj;
 	
-	@Column(name="endereco_completo", length=300)
+	@Column(length=300)
 	private String enderecoCompleto;
 	
 	@Column(length=100)
