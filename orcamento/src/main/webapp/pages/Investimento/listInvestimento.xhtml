@@ -78,11 +78,11 @@
 			<h:commandLink title="Pesquisar" action="#{managedBean.find}">
 				<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
 			</h:commandLink>
-			<h:commandLink title="Editar" action="#{managedBean.edit}">
+			<h:commandLink title="Editar" action="#{managedBean.edit}" rendered="#{managedBean.entity.id != null and managedBean.entity.ativo}">
 				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>	
-			<h:commandLink title="Excluir/Encerrar" action="#{managedBean.view}">
+			<h:commandLink title="Excluir/Encerrar" action="#{managedBean.view}" rendered="#{managedBean.entity.id != null and managedBean.entity.ativo}">
 				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{managedBean.entity.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>
