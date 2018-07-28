@@ -1,12 +1,6 @@
 Orçamento Doméstico
 ===================
 
-[![Jenkins](https://img.shields.io/jenkins/s/https/jenkins.qa.ubuntu.com/view/Precise/view/All%20Precise/job/precise-desktop-amd64_default.svg)]()
-[![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)]()
-[![License (LGPL version 3.0)](https://img.shields.io/badge/license-GNU%20LGPL%20version%203.0-green.svg)](http://opensource.org/licenses/LGPL-3.0)
-[![Conda](https://img.shields.io/conda/pn/conda-forge/python.svg)]()
-
-
 Controle de orçamento doméstico familiar
 -----------------------------------------
 
@@ -19,7 +13,7 @@ Destinado a controlar as despesas domésticas de uma família. Tem opções para
 * Oracle Java JDK SE 8 ou OpenJDK 8 (qualquer update);
 * Eclipse Neon 4.6 ou superior;
 * Git 2.0 ou superior;
-* Tomcat 8.5 ou Wildfly 10;
+* Tomcat 8.5;
 * MariaDB 10 ou superior;
 * astah Community 7.0 ou superior;
 * Pencil 3.0 ou superior;
@@ -31,7 +25,6 @@ Destinado a controlar as despesas domésticas de uma família. Tem opções para
 * *Eclipse Neon*: http://www.eclipse.org/neon/
 * *Git*: https://git-scm.com/downloads 
 * *Tomcat 8.5*: http://tomcat.apache.org/download-80.cgi
-* *Wildfly 10*: http://wildfly.org/downloads/
 * *MariaDB 10*: https://downloads.mariadb.org
 * *astah Community*: http://astah.net/editions/community
 * *Pencil*: http://pencil.evolus.vn/Downloads.html
@@ -59,23 +52,16 @@ grant all privileges on orcamento.* to 'orcamento'@'%';
 grant all privileges on orcamento.* to 'orcamentotest'@'%';
 ```
 
-Ainda na linha de comando ou na ferramenta de administração, rode o script "script-create-all-db.sql". O script encontra-se no repositório do projeto, em _orcamento/src/main/resources_.
-
 *Configuração do servidores de aplicação*
 
-Para aqueles que desejarem utilizar o Tomcat como servidor para rodar o projeto, adicione o Tomcat no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Tomcat 8.5, e, na tela seguinte, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
+Adicione o Tomcat no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Tomcat 8.5, e, na tela seguinte, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
 
 Depois clique na view *Server* e clique em *New -> Server*. Selecione o Tomcat 8.5 e clique em *Finnish*.
 
-Para aqueles que desejarem utilzar o Wildfly como servidor para rodar o projeto, instale antes o JBoss Tools pelo Eclipse Marketplace. Dos componentes disponíveis para instalar, escolha somente "JBoss AS, WildFly & EAP Server Tools". Prossiga com a instalação.
-
-Após o Eclipse reiniciar, adicione o Wildfly no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Wildfly 10.x. Na tela seguinte, selecione o local de instalação do Wildfly, mantendo as opções mostradas na tela. Clique em *Finnish*.
-
-Depois clique na view *Server*, clique em *New -> Server* e selecione o Wildfly 10. Na tela seguinte mantenha as opções mostradas e clique em *Finnish*.
 
 *Configuração do Maven*
 
-Antes de iniciar o sistema pelo Eclipse, é necessário aplicar as alterações na base que foram realizadas desde a inclusão da biblioteca Flyway. Para realizar esta operação, vá no menu *Run -> Run Configurations...*. No item "Maven Build", crie dois perfis de execução, um para a base "orcamento" e outro para a base "orcamentotest". Selecione o projeto na linha "Base directory", e nos alvos Maven (Goals), digite "flyway:baseline" primeiramente. Preencha o campo "Profiles" com:
+Antes de iniciar o sistema pelo Eclipse, é necessário aplicar as alterações na base que foram realizadas usando os recursos da biblioteca Flyway. Para realizar esta operação, vá no menu *Run -> Run Configurations...*. No item "Maven Build", crie dois perfis de execução, um para a base "orcamento" e outro para a base "orcamentotest". Selecione o projeto na linha "Base directory", e nos alvos Maven (Goals), digite "flyway:migrate" primeiramente. Preencha o campo "Profiles" com:
 
 |Profile   |Base         |
 |----------|-------------|
@@ -92,20 +78,20 @@ Vá na aba "Environment" e inclua as seguintes variáveis de ambiente:
 |jdbcUsername|orcamento                                  |
 |jdbcPassword|d1nh31r0                                   |
 
-Clique no botão "Run" para preparar ambas as bases para trabalhar com o Flyway.
-
-Volte nos dois perfis Maven e substitua "flyway:baseline" por "flyway:migrate". Execute cada um dos perfis para atualizar as bases de dados.
+Clique no botão "Run" para atualizar as bases de dados.
 
 *Executando o projeto*
 
-Atualizado as bases, clique com botão direito em cima do projeto, escolha *Run As -> Run on Server*. Na tela que se abre, selecione o Tomcat 8.5 ou Wildfly 10.x e clique em *Finnish*.
+Atualizado as bases, clique com botão direito em cima do projeto, escolha *Run As -> Run on Server*. Na tela que se abre, selecione o Tomcat 8.5 e clique em *Finnish*.
+
+Uma vez executado o projeto ele irá gerar um conjunto de erros em virtude da falta de variáveis de ambiente. Volte para o menu *Run -> Run Configurations...*. No item "Apache Tomcat" selecione o perfil criado e vá na aba "Environment" e adicione as mesmas variáveis citadas acima. Reinicie o Tomcat.
 
 Acesse o sistema pela URL http://localhost:8080/orcamento/ usando as seguintes credenciais:
 
 * *Usuário:* admin
 * *Senha:* admin
 
-**Observação:** todas as funcionalidades já estão disponíveis para o usuário comum, basta realizar o cadastro no sistema usando o usuário admin. Para habilitar o registro é necessário fornecer uma configuração de servidor de e-mail para que a senha do usuário seja enviada e ele possa logar corretamente no sistema.
+**Observação:** todas as funcionalidades já estão disponíveis para o usuário comum, basta realizar o cadastro no sistema usando o usuário admin.
 
 Sobre a HSlife
 --------------
