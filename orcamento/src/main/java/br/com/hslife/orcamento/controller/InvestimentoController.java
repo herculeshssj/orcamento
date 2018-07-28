@@ -72,6 +72,7 @@ import br.com.hslife.orcamento.facade.IConta;
 import br.com.hslife.orcamento.facade.IInvestimento;
 import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.util.EntityLabelComparator;
+import br.com.hslife.orcamento.util.Util;
 
 @Component("investimentoMB")
 @Scope("session")
@@ -429,6 +430,33 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 
 	public List<AdministradorInvestimento> getListaAdministradorInvestimento() {
 		return getAdministradorInvestimentoService().findAllByUsuario(getUsuarioLogado());
+	}
+	
+	public String getTotalDividendos() {
+		double total = 0.0;
+		for (Dividendo dividendo : dividendosInvestimento) {
+			total += dividendo.getValorPago();
+		}
+		return Util.moedaBrasil(total);
+	}
+	
+	public String getTotalCotas() {
+		double total = 0.0;
+		for (MovimentacaoInvestimento movimentacao : movimentacoesInvestimento) {
+			total += movimentacao.getCotas();
+		}
+		return Util.moedaBrasil(total);
+	}
+	
+	public String getTotalValorCotas() {
+		double total = 0.0;
+		for (MovimentacaoInvestimento movimentacao : movimentacoesInvestimento) {
+			if (entity.getCategoriaInvestimento().getTipoInvestimento().equals(TipoInvestimento.FIXO))
+				total += movimentacao.getValorTotalRendaFixa();
+			else
+				total += movimentacao.getValorTotalRendaVariavel();
+		}
+		return Util.moedaBrasil(total);
 	}
 
 	public IConta getContaService() {

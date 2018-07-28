@@ -243,7 +243,10 @@
 					<h:outputText value="#{item.valorTotalRendaFixa}" style="#{item.tipoLancamento == 'RECEITA' ? 'color: #0000FF; text-align: right' : 'color: #FF0000; text-align: right' }" rendered="#{managedBean.entity.categoriaInvestimento.tipoInvestimento == 'FIXO'}">
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="9" />
 					</h:outputText>
-				</h:column>		
+				</h:column>
+				<f:facet name="footer">
+					Ações/Cotas: <h:outputText value="#{managedBean.totalCotas}" /> | Total: <h:outputText value="#{managedBean.totalValorCotas}" /> 
+				</f:facet>		
 			</h:dataTable>
 		</h:panelGrid>
 
@@ -320,6 +323,9 @@
 						<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" />
 					</h:outputText>
 				</h:column>
+				<f:facet name="footer">
+					Total: <h:outputText value="#{managedBean.totalDividendos}" />
+				</f:facet>
 			</h:dataTable>
 		</h:panelGrid>
 	
