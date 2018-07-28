@@ -384,6 +384,10 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 		// Exibir e ocultar o campo 'Investimento Inicial' no cadastro
 	}
 	
+	public void calcularTotalDividendo() {
+		this.dividendo.setValorPago(( this.dividendo.getQuantAcoesApuradas() * this.dividendo.getValorUnitario() ) - this.dividendo.getIr()	);
+	}
+	
 	public List<SelectItem> getListaMeses() {
 		List<SelectItem> meses = new ArrayList<>();
 		for (MesesDoAno mes : MesesDoAno.values()) {

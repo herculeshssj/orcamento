@@ -105,11 +105,13 @@
 	    <label for="frmFormEntity:txtCotas">Ações / Cotas apuradas:</label>
 		<h:inputText id="txtCotas" value="#{managedBean.dividendo.quantAcoesApuradas}" >
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			<p:ajax update="txtValorPago" event="keydown" listener="#{managedBean.calcularTotalDividendo}"/>
 		</h:inputText>
 		
 		<label for="frmFormEntity:txtValorCotas">Valor por ação/cota apurado:</label>
 		<h:inputText id="txtValorCotas" value="#{managedBean.dividendo.valorUnitario}" >
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			<p:ajax update="txtValorPago" event="keydown" listener="#{managedBean.calcularTotalDividendo}"/>
 		</h:inputText>
 	    
 	    <label for="frmListEntity:txtDataPagamento">Data de pagamento:</label>
@@ -120,12 +122,13 @@
 	    <label for="frmFormEntity:txtIr">IR:</label>
 		<h:inputText id="txtIr" value="#{managedBean.dividendo.ir}" >
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+			<p:ajax update="txtValorPago" event="keydown" listener="#{managedBean.calcularTotalDividendo}"/>
 		</h:inputText>
 	    
 	    <label for="frmFormEntity:txtValorPago">Valor pago:</label>
-		<h:inputText id="txtValorPago" value="#{managedBean.dividendo.valorPago}" >
+		<h:outputText id="txtValorPago" value="#{managedBean.dividendo.valorPago}">
 			<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
-		</h:inputText>
+		</h:outputText>
 
 	</ui:define>
 	
