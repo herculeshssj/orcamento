@@ -66,6 +66,7 @@ import br.com.hslife.orcamento.repository.CategoriaInvestimentoRepository;
 import br.com.hslife.orcamento.repository.ContaRepository;
 import br.com.hslife.orcamento.repository.DividendoRepository;
 import br.com.hslife.orcamento.repository.InvestimentoRepository;
+import br.com.hslife.orcamento.specification.InvestimentoSpecification;
 
 @Service
 public class InvestimentoService extends AbstractCRUDService<Investimento> implements IInvestimento {
@@ -84,6 +85,9 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 	
 	@Autowired
 	private InfoCotacaoComponent infoCotacaoComponent;
+	
+	@Autowired
+	private InvestimentoSpecification specification;
 	
 	public InvestimentoRepository getRepository() {
 		this.repository.setSessionFactory(this.sessionFactory);
@@ -107,6 +111,21 @@ public class InvestimentoService extends AbstractCRUDService<Investimento> imple
 	public DividendoRepository getDividendoRepository() {
 		this.dividendoRepository.setSessionFactory(this.sessionFactory);
 		return dividendoRepository;
+	}
+	
+	public InvestimentoSpecification getSpecification() {
+		this.specification.setInvestimentoRepository(getRepository());
+		return specification;
+	}
+
+	@Override
+	public void cadastrar(Investimento entity) {
+		super.cadastrar(getSpecification(), entity);
+	}
+	
+	@Override
+	public void alterar(Investimento entity) {
+		super.alterar(getSpecification(), entity);
 	}
 	
 	@Override

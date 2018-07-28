@@ -48,4 +48,6 @@ package br.com.hslife.orcamento.specification;
 public interface ISpecification<T> {
 
 	public boolean isSatisfiedBy(T t);
+	
+	String getErrorMessage();
 }

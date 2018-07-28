@@ -47,6 +47,6 @@ package br.com.hslife.orcamento.specification;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
 
-public abstract class AbstractCRUDSpecification<E extends EntityPersistence> implements ICRUDSpecification<E> {
+public abstract class AbstractCRUDSpecification<E extends EntityPersistence> extends AbstractSpecification<E> implements ICRUDSpecification<E> {
 	
 }

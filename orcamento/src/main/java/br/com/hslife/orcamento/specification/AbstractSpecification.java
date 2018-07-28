@@ -47,4 +47,13 @@ package br.com.hslife.orcamento.specification;
 
 public abstract class AbstractSpecification<T> implements ISpecification<T> {
 	
+	private String errorMessage;
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 }

@@ -47,6 +47,8 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.CategoriaInvestimento;
@@ -61,25 +63,32 @@ public class InvestimentoRepository extends AbstractCRUDRepository<Investimento>
 		super(new Investimento());
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Investimento> findByConta(Conta conta) {
-		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.id = :idConta ORDER BY i.descricao ASC")
+		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.id = :idConta ORDER BY i.descricao ASC", Investimento.class)
 				.setParameter("idConta", conta.getId())
 				.getResultList();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Investimento> findByUsuario(Usuario usuario) {
-		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.usuario.id = :idUsuario ORDER BY i.descricao ASC")
+		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.usuario.id = :idUsuario ORDER BY i.descricao ASC", Investimento.class)
 				.setParameter("idUsuario", usuario.getId())
 				.getResultList();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Investimento> findByContaAndCategoriaInvestimento(Conta conta, CategoriaInvestimento categoriaInvestimento) {
-		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.id = :idConta AND i.categoriaInvestimento.id = :idCategoria ORDER BY i.descricao ASC")
+		return getSession().createQuery("SELECT i FROM Investimento i WHERE i.conta.id = :idConta AND i.categoriaInvestimento.id = :idCategoria ORDER BY i.descricao ASC", Investimento.class)
 				.setParameter("idConta", conta.getId())
 				.setParameter("idCategoria", categoriaInvestimento.getId())
 				.getResultList();
+	}
+	
+	public Investimento findByCNPJ(String cnpj) {
+		try {
+			return getSession().createQuery("SELECT i FROM Investimento i WHERE i.cnpj = :cnpj", Investimento.class)
+					.setParameter("cnpj", cnpj)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 }

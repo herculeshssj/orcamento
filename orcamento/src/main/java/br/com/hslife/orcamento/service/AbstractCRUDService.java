@@ -54,6 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.repository.AbstractCRUDRepository;
 import br.com.hslife.orcamento.specification.ICRUDSpecification;
 import br.com.hslife.orcamento.specification.ISpecification;
@@ -83,17 +84,23 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	
 	protected void cadastrar(ICRUDSpecification<E> specification, E entity) {
 		if (specification.isSatisfiedToSave(entity))
-			getRepository().save(entity);		
+			getRepository().save(entity);
+		else
+			throw new ValidationException(specification.getErrorMessage());
 	}
 
 	protected void alterar(ICRUDSpecification<E> specification, E entity) {
 		if (specification.isSatisfiedToEdit(entity))
-			getRepository().update(entity);		
+			getRepository().update(entity);
+		else
+			throw new ValidationException(specification.getErrorMessage());
 	}
 
 	protected void excluir(ICRUDSpecification<E> specification, E entity) {
 		if (specification.isSafisfiedToDelete(entity))
-			getRepository().delete(entity);		
+			getRepository().delete(entity);
+		else
+			throw new ValidationException(specification.getErrorMessage());
 	}
 
 	public E buscarPorID(Long id) {
