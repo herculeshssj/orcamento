@@ -45,6 +45,7 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -303,6 +304,7 @@ public class InvestimentoController extends AbstractCRUDController<Investimento>
 	
 	public String novoDividendo() {
 		dividendo = new Dividendo();
+		dividendo.setQuantAcoesApuradas(new BigDecimal(entity.getTotalCotas()).intValue());
 		actionTitle = " - Novo dividendo";
 		return "/pages/Investimento/formDividendo";
 	}
