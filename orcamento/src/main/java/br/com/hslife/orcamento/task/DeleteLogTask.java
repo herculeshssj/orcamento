@@ -88,37 +88,7 @@ public class DeleteLogTask {
 			getLogService().excluirLogs(periodo.getPeriodo(quantidade));
 			
 			// Exclui os logs de requisição
-			getLogService().excluirLogRequisicao(periodo.getPeriodo(quantidade));
-			
-			//StatelessSession session = getSessionFactory().openStatelessSession();
-			// FIXME mover as consultas para o repositório. Aqui no Task, injetar o LogService para realizar esta operação
-			// FIXME atualizar as interfaces. Query e Criteria estão depreciadas
-			// Definição dos deletes
-			//Query hqlAuditoria = session.createQuery("DELETE FROM Auditoria auditoria WHERE auditoria.dataHora <= :periodo");
-			//Query hqlLogs = session.createQuery("DELETE FROM Logs log WHERE log.logDate <= :periodo");
-			//Query hqlLogRequisicao = session.createQuery("DELETE FROM LogRequisicao log WHERE log.dataHora <= :periodo");
-			//Query hqlResultadoScript = session.createQuery("DELETE FROM ResultadoScript script WHERE script.terminoExecucao <= :periodo");
-			
-			// Exclui o log de auditoria
-//			hqlAuditoria
-//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-//				.executeUpdate();
-			
-		
-//			hqlLogs
-//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-//				.executeUpdate();
-			
-			
-//			hqlLogRequisicao
-//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-//				.executeUpdate();
-			
-			// Exclui os logs de execução dos scripts
-//			hqlResultadoScript
-//				.setDate("periodo", periodo.getDataPeriodo(quantidade))
-//				.executeUpdate();
-			
+			getLogService().excluirLogRequisicao(periodo.getPeriodo(quantidade));		
 		
 	}
 }

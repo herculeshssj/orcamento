@@ -47,15 +47,10 @@ package br.com.hslife.orcamento.repository;
 
 import java.util.List;
 
-import br.com.hslife.orcamento.util.Util;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import br.com.hslife.orcamento.entity.Banco;
+import br.com.hslife.orcamento.util.Util;
 
 @Repository
 public class BancoRepository extends AbstractCRUDRepository<Banco> {

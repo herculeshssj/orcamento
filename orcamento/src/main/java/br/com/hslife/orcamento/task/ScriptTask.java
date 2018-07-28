@@ -47,8 +47,6 @@ package br.com.hslife.orcamento.task;
 
 import java.util.Date;
 
-import br.com.hslife.orcamento.component.NotificacaoSistemaComponent;
-import br.com.hslife.orcamento.entity.NotificacaoSistema;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;

@@ -49,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import br.com.hslife.orcamento.component.NotificacaoSistemaComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.hslife.orcamento.component.EmailComponent;
+import br.com.hslife.orcamento.component.NotificacaoSistemaComponent;
 import br.com.hslife.orcamento.component.OpcaoSistemaComponent;
 import br.com.hslife.orcamento.entity.Agenda;
 import br.com.hslife.orcamento.entity.LancamentoConta;

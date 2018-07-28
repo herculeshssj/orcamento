@@ -74,8 +74,6 @@ import br.com.hslife.orcamento.exception.ValidationException;
 import br.com.hslife.orcamento.model.InfoCotacao;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name="investimento")

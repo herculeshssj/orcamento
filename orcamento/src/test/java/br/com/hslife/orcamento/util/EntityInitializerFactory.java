@@ -55,7 +55,6 @@ import java.util.UUID;
 
 import br.com.hslife.orcamento.entity.Banco;
 import br.com.hslife.orcamento.entity.Categoria;
-import br.com.hslife.orcamento.entity.Combustivel;
 import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.DividaTerceiro;

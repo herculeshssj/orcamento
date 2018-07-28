@@ -45,21 +45,19 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.service;
 
-import br.com.hslife.orcamento.entity.AdministradorInvestimento;
-import br.com.hslife.orcamento.entity.NotificacaoSistema;
-import br.com.hslife.orcamento.entity.Usuario;
-import br.com.hslife.orcamento.exception.ApplicationException;
-import br.com.hslife.orcamento.facade.IAdministradorInvestimento;
-import br.com.hslife.orcamento.facade.INotificacaoSistema;
-import br.com.hslife.orcamento.repository.AdministradorInvestimentoRepository;
-import br.com.hslife.orcamento.repository.NotificacaoSistemaRepository;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import br.com.hslife.orcamento.entity.NotificacaoSistema;
+import br.com.hslife.orcamento.entity.Usuario;
+import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.facade.INotificacaoSistema;
+import br.com.hslife.orcamento.repository.NotificacaoSistemaRepository;
 
 @Service
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor={ApplicationException.class})

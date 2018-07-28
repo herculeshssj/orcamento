@@ -60,15 +60,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import br.com.hslife.orcamento.enumeration.*;
 import org.hibernate.annotations.OrderBy;
 
+import br.com.hslife.orcamento.enumeration.Periodicidade;
+import br.com.hslife.orcamento.enumeration.StatusLancamento;
+import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
+import br.com.hslife.orcamento.enumeration.TipoLancamento;
+import br.com.hslife.orcamento.enumeration.TipoLancamentoPeriodico;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 
 @Entity

@@ -45,14 +45,14 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.entity;
 
-import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.exception.ValidationException;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+
+import br.com.hslife.orcamento.enumeration.TipoCategoria;
 
 public class DividaTerceiroEmprestimoTest {
 

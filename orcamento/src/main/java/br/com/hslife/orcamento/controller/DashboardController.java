@@ -45,18 +45,18 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.controller;
 
-import br.com.hslife.orcamento.entity.NotificacaoSistema;
-import br.com.hslife.orcamento.facade.INotificacaoSistema;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.com.hslife.orcamento.entity.NotificacaoSistema;
 import br.com.hslife.orcamento.exception.ApplicationException;
+import br.com.hslife.orcamento.facade.INotificacaoSistema;
 import br.com.hslife.orcamento.facade.IUsuario;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Scope("session")

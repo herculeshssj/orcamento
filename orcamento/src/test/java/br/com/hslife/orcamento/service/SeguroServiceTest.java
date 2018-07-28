@@ -45,19 +45,22 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 ***/
 package br.com.hslife.orcamento.service;
 
-import br.com.hslife.orcamento.entity.Montadora;
-import br.com.hslife.orcamento.entity.Seguro;
-import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
-import br.com.hslife.orcamento.facade.*;
-import br.com.hslife.orcamento.mock.EntityPersistenceMock;
-import br.com.hslife.orcamento.util.EntityInitializerFactory;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
-import static org.junit.Assert.*;
+import br.com.hslife.orcamento.entity.Seguro;
+import br.com.hslife.orcamento.enumeration.EntityPersistenceEnum;
+import br.com.hslife.orcamento.facade.IConta;
+import br.com.hslife.orcamento.facade.ILancamentoPeriodico;
+import br.com.hslife.orcamento.facade.IMoeda;
+import br.com.hslife.orcamento.facade.ISeguro;
+import br.com.hslife.orcamento.facade.IUsuario;
+import br.com.hslife.orcamento.mock.EntityPersistenceMock;
 
 public class SeguroServiceTest extends AbstractTestServices {
 	

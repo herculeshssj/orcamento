@@ -55,6 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.exception.ApplicationException;
 import br.com.hslife.orcamento.repository.AbstractCRUDRepository;
+import br.com.hslife.orcamento.specification.ICRUDSpecification;
 import br.com.hslife.orcamento.specification.ISpecification;
 
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor={
@@ -79,6 +80,21 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 	public void excluir(E entity) {
 		getRepository().delete(entity);		
 	}
+	
+	protected void cadastrar(ICRUDSpecification<E> specification, E entity) {
+		if (specification.isSatisfiedToSave(entity))
+			getRepository().save(entity);		
+	}
+
+	protected void alterar(ICRUDSpecification<E> specification, E entity) {
+		if (specification.isSatisfiedToEdit(entity))
+			getRepository().update(entity);		
+	}
+
+	protected void excluir(ICRUDSpecification<E> specification, E entity) {
+		if (specification.isSafisfiedToDelete(entity))
+			getRepository().delete(entity);		
+	}
 
 	public E buscarPorID(Long id) {
 		return getRepository().findById(id);
@@ -92,7 +108,7 @@ public abstract class AbstractCRUDService<E extends EntityPersistence> {
 		entity.validate();
 	}
 	
-	public boolean validar(ISpecification<E> specification, E e) {
-		return specification.isSatisfiedBy(e);
+	public boolean validar(ISpecification<E> specification, E entity) {
+		return specification.isSatisfiedBy(entity);
 	}
 }

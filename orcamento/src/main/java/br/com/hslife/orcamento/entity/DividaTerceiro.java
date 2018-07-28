@@ -67,12 +67,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.apache.poi.ss.formula.functions.FinanceLib;
+
 import br.com.hslife.orcamento.enumeration.StatusDivida;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
-import br.com.hslife.orcamento.enumeration.TipoDivida;
 import br.com.hslife.orcamento.util.EntityPersistenceUtil;
 import br.com.hslife.orcamento.util.Util;
-import org.apache.poi.ss.formula.functions.FinanceLib;
 
 @Entity
 @Table(name="dividaterceiro")

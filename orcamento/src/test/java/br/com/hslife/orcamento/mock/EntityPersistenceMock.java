@@ -16,6 +16,7 @@ import br.com.hslife.orcamento.entity.Conta;
 import br.com.hslife.orcamento.entity.ContaCompartilhada;
 import br.com.hslife.orcamento.entity.EntityPersistence;
 import br.com.hslife.orcamento.entity.Favorecido;
+import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Meta;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Patrimonio;
@@ -107,6 +108,18 @@ public class EntityPersistenceMock {
 		return this;
 	}
 	
+	public EntityPersistenceMock comMeioPagamento(boolean padrao) {
+		// Popula a entidade
+		MeioPagamento meioPagamento = new MeioPagamento();
+		meioPagamento.setDescricao(UtilsMock.mockStringComEspaco(20));
+		meioPagamento.setPadrao(padrao);
+		meioPagamento.setUsuario((Usuario)this.get(EntityPersistenceEnum.USUARIO));
+		
+		// Salva no Map e retorna o mock
+		mapEntidade.put(EntityPersistenceEnum.MEIOPAGAMENTO, meioPagamento);		
+		return this;
+	}
+	
 	public EntityPersistenceMock comContaCorrente() {
 		Conta conta = new Conta();
 		conta.setDescricao("Conta de teste");
@@ -141,7 +154,7 @@ public class EntityPersistenceMock {
 				.dataEntrada(Calendar.getInstance().getTime())
 				.descricao(UtilsMock.mockString(30))
 				.favorecido((Favorecido)this.get(EntityPersistenceEnum.FAVORECIDO))
-				//.meioPagamento(new MeioPagamento()) // TODO mock de Meio de Pagamento
+				.meioPagamento((MeioPagamento)this.get(EntityPersistenceEnum.MEIOPAGAMENTO))
 				.moeda((Moeda)this.get(EntityPersistenceEnum.MOEDA))
 				.usuario((Usuario)this.get(EntityPersistenceEnum.USUARIO))
 				.valorPatrimonio(UtilsMock.mockDouble())
