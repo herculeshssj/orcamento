@@ -96,9 +96,8 @@ public abstract class AbstractCRUDRepository<E extends EntityPersistence> extend
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<E> findAll() {
-		return getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e").getResultList();
+		return getSession().createQuery("SELECT e FROM " + entity.getClass().getSimpleName() + " e", clazz).getResultList();
 	}
 	
 	protected Query<E> getQuery(String hql) {
