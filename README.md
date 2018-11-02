@@ -11,9 +11,9 @@ Destinado a controlar as despesas domésticas de uma família. Tem opções para
 *Requisitos:*
 
 * Oracle Java JDK SE 8 ou OpenJDK 8 (qualquer update);
-* Eclipse Neon 4.6 ou superior;
+* Eclipse IDE 4.9 ou superior;
 * Git 2.0 ou superior;
-* Tomcat 8.5;
+* Tomcat 9;
 * MariaDB 10 ou superior;
 * astah Community 7.0 ou superior;
 * Pencil 3.0 ou superior;
@@ -22,9 +22,9 @@ Destinado a controlar as despesas domésticas de uma família. Tem opções para
 *Links de download:*
 
 * *Java JDK SE 8*: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-* *Eclipse Neon*: http://www.eclipse.org/neon/
+* *Eclipse IDE*: http://www.eclipse.org/downloads/
 * *Git*: https://git-scm.com/downloads 
-* *Tomcat 8.5*: http://tomcat.apache.org/download-80.cgi
+* *Tomcat 9*: https://tomcat.apache.org/download-90.cgi
 * *MariaDB 10*: https://downloads.mariadb.org
 * *astah Community*: http://astah.net/editions/community
 * *Pencil*: http://pencil.evolus.vn/Downloads.html
@@ -54,9 +54,9 @@ grant all privileges on orcamento.* to 'orcamentotest'@'%';
 
 *Configuração do servidores de aplicação*
 
-Adicione o Tomcat no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Tomcat 8.5, e, na tela seguinte, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
+Adicione o Tomcat no Eclipse pelo menu *Window -> Preferences*. Nas opções da lateral esquerda, vai em *Server -> Runtime Environment*. Clique em *Add*, escolha o Tomcat 9.0, e, na tela seguinte, selecione o diretório de instalação de Tomcat e clique em *Finnish*.
 
-Depois clique na view *Server* e clique em *New -> Server*. Selecione o Tomcat 8.5 e clique em *Finnish*.
+Depois clique na view *Server* e clique em *New -> Server*. Selecione o Tomcat 9.0 e clique em *Finnish*.
 
 
 *Configuração do Maven*
@@ -82,7 +82,7 @@ Clique no botão "Run" para atualizar as bases de dados.
 
 *Executando o projeto*
 
-Atualizado as bases, clique com botão direito em cima do projeto, escolha *Run As -> Run on Server*. Na tela que se abre, selecione o Tomcat 8.5 e clique em *Finnish*.
+Atualizado as bases, clique com botão direito em cima do projeto, escolha *Run As -> Run on Server*. Na tela que se abre, selecione o Tomcat 9.0 e clique em *Finnish*.
 
 Uma vez executado o projeto ele irá gerar um conjunto de erros em virtude da falta de variáveis de ambiente. Volte para o menu *Run -> Run Configurations...*. No item "Apache Tomcat" selecione o perfil criado e vá na aba "Environment" e adicione as mesmas variáveis citadas acima. Reinicie o Tomcat.
 
