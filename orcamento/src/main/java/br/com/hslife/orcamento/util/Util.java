@@ -46,7 +46,6 @@ Jardim Alvorada - CEP: 26261-130 - Nova Iguaçu, RJ, Brasil.
 package br.com.hslife.orcamento.util;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
@@ -89,47 +88,35 @@ public class Util {
 	}
 	
 	public static String MD5(String texto) {
-        String sen = "";
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("MD5");
-            BigInteger hash = new BigInteger(1, md.digest(texto.getBytes()));
-            sen = hash.toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }        
-        return sen;
+		return Util.criptografarTexto("MD5", texto);
     }
 
     public static String SHA1(String texto) {
-        String sen = "";
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-1");
-            BigInteger hash = new BigInteger(1, md.digest(texto.getBytes()));
-            sen = hash.toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        
-        return sen;
+    	return Util.criptografarTexto("SHA-1", texto);
     }
     
     public static String SHA256(String texto) {
-        String sen = "";
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            BigInteger hash = new BigInteger(1, md.digest(texto.getBytes()));
-            sen = hash.toString(16);
-        } catch (NullPointerException e) {
-        	e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        
-        return sen;
+    	return Util.criptografarTexto("SHA-256", texto);
     }
+    
+    public static String criptografarTexto(String algoritmo, String texto) {
+		String hashString = "";
+		
+		try {
+			MessageDigest sha1 = MessageDigest.getInstance(algoritmo);
+			byte[] hash = sha1.digest(texto.getBytes());
+			
+			StringBuffer hexString = new StringBuffer();
+			for (int i = 0; i < hash.length; i++) {
+			    hexString.append( String.format("%02x", 0xFF & hash[i]) );
+			}
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		
+		return hashString;
+	}
     
 	public static String moedaBrasil(double valor) {
 		NumberFormat formatarMoeda = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
