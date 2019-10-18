@@ -410,15 +410,13 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 		return lancamentos;
 	}
 	
-	@SuppressWarnings("resource")
 	public void exportarLancamentos() {	
 		if (listEntity == null || listEntity.isEmpty()) {
 			warnMessage("Listagem vazio. Nada a exportar.");
 		}
 		
-		try {
+		try (HSSFWorkbook excel = new HSSFWorkbook()) {
 		
-			HSSFWorkbook excel = new HSSFWorkbook(); 
 			HSSFSheet planilha = excel.createSheet("lancamentoConta");
 			
 			HSSFRow linha = planilha.createRow(0);
@@ -470,7 +468,10 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				celula.setCellValue(l.getHistorico());
 				
 				celula = linha.createCell(4);
-				celula.setCellValue(l.getValorPago());
+				if (l.getTipoLancamento().equals(TipoLancamento.RECEITA))
+					celula.setCellValue(l.getValorPago());
+				else
+					celula.setCellValue(l.getValorPago() * -1);
 				
 				celula = linha.createCell(5);
 				celula.setCellValue(l.getCategoria() == null ? "-" : l.getCategoria().getDescricao());
