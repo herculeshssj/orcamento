@@ -1,11 +1,11 @@
 package br.com.hslife.orcamento.task;
 
-import br.com.hslife.orcamento.util.ExtratorLoteriaFederal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import br.com.hslife.orcamento.util.ExtratorLoteriaFederal;
 
 @Component
 public class LoteriaFederalTask {
@@ -15,7 +15,7 @@ public class LoteriaFederalTask {
 	@Autowired
 	private ExtratorLoteriaFederal extrator;
 
-    @Scheduled(fixedRate = 3600000)
+    //@Scheduled(fixedRate = 3600000)
     public void atualizarResultados() {
     	log.info(extrator.execute());
     }
