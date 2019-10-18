@@ -128,12 +128,15 @@
 					</h:commandLink>
 					<h:commandLink title="Exportar lançamentos" action="#{managedBean.exportarLancamentos}">
 						<h:graphicImage id="imgExport" height="48" width="48" value="/resources/images/svg/export.svg"/>
-					</h:commandLink>
+					</h:commandLink>					
 					<h:commandLink title="Fechar período" action="#{managedBean.fecharPeriodoView}">
 						<h:graphicImage id="imgClose" height="48" width="48" value="/resources/images/svg/inspection.svg"/>
 					</h:commandLink>
 					<h:commandLink title="Reabrir período" action="#{managedBean.reabrirPeriodoView}">
 						<h:graphicImage id="imgReopen" height="48" width="48" value="/resources/images/svg/process.svg"/>
+					</h:commandLink>
+					<h:commandLink title="Exportar lançamentos (padrão Gnucash)" action="#{managedBean.exportarLancamentosGnucash}">
+						<h:graphicImage id="imgExportGnucash" height="48" width="48" value="/resources/images/GnuCash_logo.svg"/>
 					</h:commandLink>
 				</h:panelGroup>
 				

@@ -465,13 +465,115 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 				celula.setCellValue(l.getNumeroDocumento());
 				
 				celula = linha.createCell(3);
-				celula.setCellValue(l.getHistorico());
+				celula.setCellValue(l.getDescricao());
 				
 				celula = linha.createCell(4);
 				if (l.getTipoLancamento().equals(TipoLancamento.RECEITA))
 					celula.setCellValue(l.getValorPago());
 				else
 					celula.setCellValue(l.getValorPago() * -1);
+				
+				celula = linha.createCell(5);
+				celula.setCellValue(l.getCategoria() == null ? "-" : l.getCategoria().getDescricao());
+				
+				celula = linha.createCell(6);
+				celula.setCellValue(l.getFavorecido() ==  null ? "-" : l.getFavorecido().getNome());
+				
+				if (getOpcoesSistema().getExibirMeioPagamento()) {
+					celula = linha.createCell(7);
+					celula.setCellValue(l.getMeioPagamento() == null ? "-" : l.getMeioPagamento().getDescricao());
+					
+					celula = linha.createCell(8);
+					celula.setCellValue(l.getObservacao());
+				} else {
+					celula = linha.createCell(7);
+					celula.setCellValue(l.getObservacao());
+				}
+				
+				linhaIndex++;
+			}
+			
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-Disposition","attachment; filename=lancamentoConta.xls");
+			response.setContentLength(excel.getBytes().length);
+			ServletOutputStream output = response.getOutputStream();
+			output.write(excel.getBytes(), 0, excel.getBytes().length);
+			FacesContext.getCurrentInstance().responseComplete();
+		
+		} catch (IOException e) {
+			errorMessage(e.getMessage());
+		}
+	}
+	
+	public void exportarLancamentosGnucash() {	
+		if (listEntity == null || listEntity.isEmpty()) {
+			warnMessage("Listagem vazio. Nada a exportar.");
+		}
+		
+		try (HSSFWorkbook excel = new HSSFWorkbook()) {
+		
+			HSSFSheet planilha = excel.createSheet("lancamentoConta");
+			HSSFRow linha = planilha.createRow(0);
+			
+			HSSFCell celula = linha.createCell(0);
+			celula.setCellValue("Data");
+			
+			celula = linha.createCell(1);
+			celula.setCellValue("Número");
+			
+			celula = linha.createCell(2);
+			celula.setCellValue("Descrição");
+			
+			celula = linha.createCell(3);
+			celula.setCellValue("Depósito");
+			
+			celula = linha.createCell(4);
+			celula.setCellValue("Saque");
+			
+			celula = linha.createCell(5);
+			celula.setCellValue("Categoria");
+			
+			celula = linha.createCell(6);
+			celula.setCellValue("Favorecido");
+			
+			celula = linha.createCell(7);
+			
+			if (getOpcoesSistema().getExibirMeioPagamento()) {
+				celula.setCellValue("Meio de Pagamento");
+				
+				celula = linha.createCell(8);
+				celula.setCellValue("Observação");
+			} else {
+				celula.setCellValue("Observação");
+			}
+		
+			int linhaIndex = 1;
+			for (LancamentoConta l : listEntity) {
+				linha = planilha.createRow(linhaIndex);
+				
+				celula = linha.createCell(0);
+				celula.setCellValue(Util.formataDataHora(l.getDataPagamento(), Util.DATA));
+				
+				celula = linha.createCell(1);
+				celula.setCellValue(l.getNumeroDocumento());
+				
+				celula = linha.createCell(2);
+				celula.setCellValue(l.getDescricao());
+				
+				if (l.getTipoLancamento().equals(TipoLancamento.RECEITA)) {
+					celula = linha.createCell(3);
+					celula.setCellValue(l.getValorPago());
+					
+					celula = linha.createCell(4);
+					celula.setCellValue(0);
+				} else {
+					celula = linha.createCell(3);
+					celula.setCellValue(0);
+					
+					celula = linha.createCell(4);
+					celula.setCellValue(l.getValorPago());
+				}
 				
 				celula = linha.createCell(5);
 				celula.setCellValue(l.getCategoria() == null ? "-" : l.getCategoria().getDescricao());
