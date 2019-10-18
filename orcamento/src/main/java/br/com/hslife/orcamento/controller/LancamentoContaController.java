@@ -422,26 +422,72 @@ public class LancamentoContaController extends AbstractCRUDController<Lancamento
 			HSSFSheet planilha = excel.createSheet("lancamentoConta");
 			
 			HSSFRow linha = planilha.createRow(0);
-			
 			HSSFCell celula = linha.createCell(0);
-			celula.setCellValue("Data");
+			celula.setCellValue("Tipo");
+			
 			celula = linha.createCell(1);
-			celula.setCellValue("Histórico");
+			celula.setCellValue("Data");
+			
 			celula = linha.createCell(2);
+			celula.setCellValue("Número");
+			
+			celula = linha.createCell(3);
+			celula.setCellValue("Histórico");
+			
+			celula = linha.createCell(4);
 			celula.setCellValue("Valor");
 			
+			celula = linha.createCell(5);
+			celula.setCellValue("Categoria");
+			
+			celula = linha.createCell(6);
+			celula.setCellValue("Favorecido");
+			
+			celula = linha.createCell(7);
+			if (getOpcoesSistema().getExibirMeioPagamento()) {
+				celula.setCellValue("Meio de Pagamento");
+				
+				celula = linha.createCell(8);
+				celula.setCellValue("Observação");
+			} else {
+				celula.setCellValue("Observação");
+			}
+		
 			int linhaIndex = 1;
 			for (LancamentoConta l : listEntity) {
 				linha = planilha.createRow(linhaIndex);
 				
 				celula = linha.createCell(0);
-				celula.setCellValue(Util.formataDataHora(l.getDataPagamento(), Util.DATA));
+				celula.setCellValue(l.getTipoLancamento().toString());
 				
 				celula = linha.createCell(1);
-				celula.setCellValue(l.getDescricao());
+				celula.setCellValue(Util.formataDataHora(l.getDataPagamento(), Util.DATA));
 				
 				celula = linha.createCell(2);
+				celula.setCellValue(l.getNumeroDocumento());
+				
+				celula = linha.createCell(3);
+				celula.setCellValue(l.getHistorico());
+				
+				celula = linha.createCell(4);
 				celula.setCellValue(l.getValorPago());
+				
+				celula = linha.createCell(5);
+				celula.setCellValue(l.getCategoria() == null ? "-" : l.getCategoria().getDescricao());
+				
+				celula = linha.createCell(6);
+				celula.setCellValue(l.getFavorecido() ==  null ? "-" : l.getFavorecido().getNome());
+				
+				if (getOpcoesSistema().getExibirMeioPagamento()) {
+					celula = linha.createCell(7);
+					celula.setCellValue(l.getMeioPagamento() == null ? "-" : l.getMeioPagamento().getDescricao());
+					
+					celula = linha.createCell(8);
+					celula.setCellValue(l.getObservacao());
+				} else {
+					celula = linha.createCell(7);
+					celula.setCellValue(l.getObservacao());
+				}
 				
 				linhaIndex++;
 			}
