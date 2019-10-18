@@ -44,7 +44,7 @@
 
 ***/
 
-create table administradorinvestimento(
+create table if not exists administradorinvestimento(
 	id bigint not null auto_increment,
 	nome varchar(200) not null,
 	cnpj varchar(14) not null,
@@ -56,4 +56,4 @@ create table administradorinvestimento(
 	primary key(id)
 ) Engine=InnoDB;
 
-alter table administradorinvestimento add constraint fk_administradorinvestimento_usuario foreign key (idUsuario) references usuario(id);
+alter table administradorinvestimento add constraint fk_administradorinvestimento_usuario foreign key if not exists (idUsuario) references usuario(id);

@@ -44,6 +44,6 @@
 
 ***/
 
-alter table investimento add column idAdministradorInvestimento bigint null;
+alter table investimento add column if not exists idAdministradorInvestimento bigint null;
 
-alter table investimento add constraint fk_administradorinvestimento_investimento foreign key(idAdministradorInvestimento) references administradorinvestimento(id);
+alter table investimento add constraint fk_administradorinvestimento_investimento foreign key if not exists (idAdministradorInvestimento) references administradorinvestimento(id);
