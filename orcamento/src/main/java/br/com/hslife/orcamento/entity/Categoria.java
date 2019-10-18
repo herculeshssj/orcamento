@@ -73,7 +73,7 @@ public class Categoria extends EntityPersistence {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=50, nullable=false)
+	@Column(length=300, nullable=false)
 	private String descricao;
 	
 	@Column
@@ -116,7 +116,7 @@ public class Categoria extends EntityPersistence {
 	
 	@Override
 	public void validate() {
-		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 50);
+		EntityPersistenceUtil.validaTamanhoCampoStringObrigatorio("Descrição", this.descricao, 300);
 		EntityPersistenceUtil.validaCampoNulo("Tipo de categoria", this.tipoCategoria);
 	}
 
