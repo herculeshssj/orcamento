@@ -67,7 +67,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.Orcamento;
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.Periodicidade;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
@@ -200,7 +200,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	@Override
 	public String save() {
 		// Preenche a data de fim do período
-		if (!entity.getPeriodoLancamento().equals(PeriodoLancamento.FIXO)) {
+		if (!entity.getPeriodoLancamento().equals(Periodicidade.FIXO)) {
 			Calendar temp = Calendar.getInstance();
 			temp.setTime(entity.getInicio());
 			
@@ -511,7 +511,7 @@ public class OrcamentoController extends AbstractCRUDController<Orcamento> {
 	
 	public List<SelectItem> getListaPeriodoLancamento() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (PeriodoLancamento periodo : PeriodoLancamento.values()) {
+		for (Periodicidade periodo : Periodicidade.values()) {
 			listaSelectItem.add(new SelectItem(periodo, periodo.toString()));
 		}
 		return listaSelectItem;

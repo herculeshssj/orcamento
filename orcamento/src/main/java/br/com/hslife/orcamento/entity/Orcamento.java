@@ -68,7 +68,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.hslife.orcamento.enumeration.AbrangenciaOrcamento;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.Periodicidade;
 import br.com.hslife.orcamento.enumeration.TipoConta;
 import br.com.hslife.orcamento.enumeration.TipoOrcamento;
 import br.com.hslife.orcamento.exception.ApplicationException;
@@ -106,7 +106,7 @@ public class Orcamento extends EntityPersistence {
 	
 	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
-	private PeriodoLancamento periodoLancamento;
+	private Periodicidade periodoLancamento;
 	
 	@Column(length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
@@ -137,7 +137,7 @@ public class Orcamento extends EntityPersistence {
 		detalhes = new ArrayList<DetalheOrcamento>();
 		ativo = true;
 		tipoOrcamento = TipoOrcamento.SEMDISTINCAO;
-		periodoLancamento = PeriodoLancamento.MENSAL;
+		periodoLancamento = Periodicidade.MENSAL;
 		abrangenciaOrcamento = AbrangenciaOrcamento.CATEGORIA;
 	}	
 	
@@ -304,11 +304,11 @@ public class Orcamento extends EntityPersistence {
 		this.fim = fim;
 	}
 
-	public PeriodoLancamento getPeriodoLancamento() {
+	public Periodicidade getPeriodoLancamento() {
 		return periodoLancamento;
 	}
 
-	public void setPeriodoLancamento(PeriodoLancamento periodoLancamento) {
+	public void setPeriodoLancamento(Periodicidade periodoLancamento) {
 		this.periodoLancamento = periodoLancamento;
 	}
 

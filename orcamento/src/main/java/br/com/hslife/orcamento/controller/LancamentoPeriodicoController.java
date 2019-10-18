@@ -74,7 +74,7 @@ import br.com.hslife.orcamento.entity.MeioPagamento;
 import br.com.hslife.orcamento.entity.Moeda;
 import br.com.hslife.orcamento.entity.OpcaoSistema;
 import br.com.hslife.orcamento.enumeration.Container;
-import br.com.hslife.orcamento.enumeration.PeriodoLancamento;
+import br.com.hslife.orcamento.enumeration.Periodicidade;
 import br.com.hslife.orcamento.enumeration.StatusLancamento;
 import br.com.hslife.orcamento.enumeration.StatusLancamentoConta;
 import br.com.hslife.orcamento.enumeration.TipoCategoria;
@@ -690,8 +690,8 @@ public class LancamentoPeriodicoController extends AbstractCRUDController<Lancam
 	
 	public List<SelectItem> getListaPeriodoLancamento() {
 		List<SelectItem> listaSelectItem = new ArrayList<SelectItem>();
-		for (PeriodoLancamento periodo : PeriodoLancamento.values()) {
-			if (!periodo.equals(PeriodoLancamento.FIXO))
+		for (Periodicidade periodo : Periodicidade.values()) {
+			if (!periodo.equals(Periodicidade.FIXO))
 				listaSelectItem.add(new SelectItem(periodo, periodo.toString()));
 		}
 		return listaSelectItem;
