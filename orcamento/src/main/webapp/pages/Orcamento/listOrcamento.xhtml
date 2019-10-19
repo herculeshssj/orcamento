@@ -81,16 +81,16 @@
 				<h:graphicImage id="imgEdit" height="48" width="48" value="/resources/images/svg/edit_image.svg"/>
 				<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>								
-			&nbsp;&nbsp;&nbsp;
+			<p:spacer width="3"/>
 			<h:commandLink title="Excluir" action="#{managedBean.view}">
 				<h:graphicImage id="imgRemove" height="48" width="48" value="/resources/images/svg/remove_image.svg"/>
 				<f:setPropertyActionListener value="#{managedBean.orcamentoSelecionado.id}" target="#{managedBean.idEntity}"/>
 			</h:commandLink>
-			&nbsp;&nbsp;&nbsp;
+			<p:spacer width="3"/>
 			<h:commandLink title="Pesquisar" action="#{managedBean.find}">
 				<h:graphicImage id="imgSearch" height="48" width="48" value="/resources/images/svg/search.svg"/>
 			</h:commandLink>
-			&nbsp;&nbsp;&nbsp;
+			<p:spacer width="3"/>
 			<h:commandLink title="Atualizar" image="/resources/images/circular.png" action="#{managedBean.atualizarValores}">
 				<h:graphicImage id="imgUpdate" height="48" width="48" value="/resources/images/svg/synchronize.svg"/>
 			</h:commandLink>
@@ -108,7 +108,7 @@
 				<h:outputText value="#{managedBean.orcamentoSelecionado.conta.label}" rendered="#{managedBean.orcamentoSelecionado.tipoOrcamento == 'CONTA'}"/>
 				<h:outputText value="#{managedBean.orcamentoSelecionado.tipoConta}" rendered="#{managedBean.orcamentoSelecionado.tipoOrcamento == 'TIPOCONTA'}"/>
 			</h:panelGroup>
-			&nbsp;
+			<p:spacer width="3"/>
 			<b><h:outputText value="Abrangência: " rendered="#{managedBean.orcamentoSelecionado != null}"/></b>
 			<h:outputText value="#{managedBean.orcamentoSelecionado.abrangenciaOrcamento}" />
 		</h:panelGroup>

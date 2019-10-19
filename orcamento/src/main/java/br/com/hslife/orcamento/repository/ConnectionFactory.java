@@ -72,18 +72,16 @@ public class ConnectionFactory {
  
     private ConnectionFactory() {
     	try {
-    		Class.forName("org.mariadb.jdbc.Driver");
+    		Class.forName(System.getenv("jdbcDriver"));
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
     	
         Properties properties = new Properties();
-        properties.setProperty("user", "orcamento");
-        properties.setProperty("password", "d1nh31r0"); // or get properties from some configuration file
+        properties.setProperty("user", System.getenv("jdbcUsername"));
+        properties.setProperty("password", System.getenv("jdbcPassword")); // or get properties from some configuration file
  
-        DriverManagerConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-                "jdbc:mariadb://localhost:3306/orcamento?autoReconnect=true", properties
-        );
+        DriverManagerConnectionFactory connectionFactory = new DriverManagerConnectionFactory(System.getenv("jdbcUrl"), properties);
         
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
         ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
